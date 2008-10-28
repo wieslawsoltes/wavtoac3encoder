@@ -1,0 +1,15 @@
+﻿Files in witch program version is stored:
+
+|---------------------------------|-----------------|
+| File path                       | How many times  |
+|---------------------------------|-----------------|
+| src\EncWAVtoAC3.rc              | 4               |
+| src\stdafx.h                    | 1               |
+| installer\SetupScript.version   | 1               |
+| installer\PackageBinaries.cmd   | 1               |
+| installer\PackageSources.cmd    | 1               |
+| doc\ReadMe.txt                  | 1               |
+| doc\Changes.txt                 | 1               |
+|---------------------------------|-----------------|
+
+$Id$

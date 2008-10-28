@@ -1,0 +1,480 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Polish resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+#ifdef _WIN32
+LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
+#pragma code_page(1250)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)\r\n"
+    "LANGUAGE 21, 1\r\n"
+    "#pragma code_page(1250)\r\n"
+    "#include ""res\\EncWAVtoAC3.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Polish resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\EncWAVtoAC3.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ENCWAVTOAC3_DIALOG DIALOGEX 0, 0, 506, 293
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "WAV to AC3 Encoder"
+MENU IDR_MENU_MAIN
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Quality:",IDC_STATIC_QUALITY,14,19,28,16,SS_CENTERIMAGE
+    CTEXT           "192 kbps",IDC_STATIC_BITRATE,237,19,40,16,SS_CENTERIMAGE
+    CONTROL         "V&BR",IDC_CHECK_VBR,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,283,19,40,16
+    CONTROL         "One &per file",IDC_CHECK_FILE_PARALLEL,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,443,159,50,12
+    CONTROL         "",IDC_SLIDER_BITRATE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,45,19,191,16
+    CONTROL         "",IDC_LIST_SETTINGS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_TABSTOP,14,60,309,112,WS_EX_CLIENTEDGE
+    LTEXT           "Value:",IDC_STATIC_OPTION_VALUE,14,44,42,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_SETTING,42,44,281,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Reset curren&t",IDC_BUTTON_PRESETS_DEFAULTS,343,38,54,12
+    COMBOBOX        IDC_COMBO_PRESETS,343,21,150,64,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add &new",IDC_BUTTON_PRESET_ADD,451,38,42,12
+    PUSHBUTTON      "&Remove",IDC_BUTTON_PRESET_DEL,402,38,44,12
+    CONTROL         "&MMX",IDC_CHECK_SIMD_MMX,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,465,72,28,11
+    CONTROL         "&SSE",IDC_CHECK_SIMD_SSE,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,465,84,28,11
+    CONTROL         "SSE&2",IDC_CHECK_SIMD_SSE2,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,465,97,28,11
+    CONTROL         "SSE&3",IDC_CHECK_SIMD_SSE3,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,465,110,28,11
+    LTEXT           "Sample format:",IDC_STATIC_SAMPLE_FORMAT,343,74,48,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_RAW_SAMPLE_FORMAT,393,74,54,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Sample rate:",IDC_STATIC_SAMPLE_RATE,343,90,48,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_RAW_SAMPLE_RATE,393,90,54,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_RAW_SAMPLE_RATE,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,437,90,11,12
+    LTEXT           "Channels:",IDC_STATIC_CHANNELS,343,106,48,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_RAW_CHANNELS,393,106,54,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_RAW_CHANNELS,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,437,106,11,12
+    LTEXT           "Engine:",IDC_STATIC_ENGINE,343,143,26,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_ENGINES,375,143,118,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Threads:",IDC_STATIC_THREADS,343,159,30,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_THREADS,375,159,60,12,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN_THREADS,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,427,159,11,12
+    GROUPBOX        "Encoder Options",IDC_STATIC_SETTINGS,7,7,323,172
+    GROUPBOX        "Presets",IDC_STATIC_PRESETS,337,7,162,49
+    GROUPBOX        "RAW Audio Input",IDC_STATIC_RAW,337,60,116,65
+    GROUPBOX        "SIMD",IDC_STATIC_SIMD,459,60,40,65
+    GROUPBOX        "Parallel Encoding",IDC_STATIC_PARALLEL,337,129,162,49
+    CONTROL         "",IDC_LIST_FILES,"SysListView32",LVS_REPORT | LVS_SHAREIMAGELISTS | LVS_ALIGNLEFT | WS_TABSTOP,6,185,493,67,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "&Add files...",IDC_BUTTON_ADD,6,257,50,16
+    LTEXT           "Output path:",IDC_STATIC_OUTPUT,206,257,43,16,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_OUTPUT_PATH,252,259,154,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_BUTTON_BROWSE,411,259,29,12
+    PUSHBUTTON      "&Encode",IDC_BUTTON_ENCODE,445,257,54,16
+    CONTROL         "M&ultiple mono input",IDC_CHECK_MULTIPLE_MONO_INPUT,
+                    "Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,61,259,75,12
+    PUSHBUTTON      "MU&X Wizard...",IDC_BUTTON_MUX_WIZARD,139,257,62,16
+END
+
+IDD_ENCODING_DIALOG DIALOGEX 0, 0, 400, 265
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Encoding..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Cancel",IDCANCEL,175,243,50,14
+    LTEXT           "From:\t-",IDC_STATIC_IN_00,14,13,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_00,14,24,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_01,14,35,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_01,14,46,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_02,14,57,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_02,14,68,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_03,14,78,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_03,14,89,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_04,14,100,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_04,14,111,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_05,14,122,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_05,14,133,372,8,SS_PATHELLIPSIS
+    LTEXT           "To:\t-",IDC_STATIC_OUT,14,148,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_OUT_INFO,14,159,372,8,SS_PATHELLIPSIS
+    CONTROL         "",IDC_PROGRESS_CURRENT,"msctls_progress32",0x0,14,177,372,11,WS_EX_STATICEDGE
+    LTEXT           "Elapsed time: 00:00:00",IDC_STATIC_ELAPSED_CURRENT,14,191,136,8,SS_PATHELLIPSIS
+    CONTROL         "",IDC_PROGRESS_TOTAL,"msctls_progress32",0x0,14,204,372,11,WS_EX_STATICEDGE
+    LTEXT           "Total elapsed time: 00:00:00",IDC_STATIC_ELAPSED_TOTAL,14,218,136,8,SS_PATHELLIPSIS
+    RTEXT           "",IDC_STATIC_SIMD_INFO,150,218,236,8,SS_PATHELLIPSIS
+    CONTROL         "",IDC_LIST_MT_PROGRESS,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_TABSTOP,14,13,372,213,WS_EX_CLIENTEDGE
+    GROUPBOX        "",IDC_STATIC_GROUP_ENCODING,5,1,390,234
+END
+
+IDD_ABOUT_DIALOG DIALOGEX 0, 0, 349, 212
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About WAV to AC3 Encoder"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "OK",IDOK,292,191,50,14
+    CONTROL         132,IDC_STATIC,"Static",SS_BITMAP,7,7,335,124,WS_EX_STATICEDGE
+    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,53,145,243,23
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,180,335,2,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    LTEXT           "",IDC_STATIC_BUILD_INFO,7,191,278,14,SS_CENTERIMAGE | WS_DISABLED
+END
+
+IDD_MUX_DIALOG DIALOGEX 0, 0, 506, 218
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "WAV to AC3 Encoder - MUX Wizard"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Cancel",IDCANCEL,450,198,50,14
+    PUSHBUTTON      "FL",IDC_BUTTON_FL,14,14,30,30
+    PUSHBUTTON      "FR",IDC_BUTTON_FR,154,14,30,30
+    PUSHBUTTON      "FC",IDC_BUTTON_FC,84,14,30,30
+    PUSHBUTTON      "LFE",IDC_BUTTON_LFE,84,84,30,30
+    PUSHBUTTON      "SL",IDC_BUTTON_SL,14,154,30,30
+    PUSHBUTTON      "SR",IDC_BUTTON_SR,154,154,30,30
+    PUSHBUTTON      "&OK",IDOK,394,198,50,14
+    PUSHBUTTON      "&Import MUX",IDC_BUTTON_IMPORT,200,198,50,14
+    PUSHBUTTON      "&Export MUX",IDC_BUTTON_EXPORT,256,198,50,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FL,450,14,42,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FR,450,45,42,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FC,450,76,42,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_LFE,450,107,42,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_SL,450,138,42,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_SR,450,169,42,14
+    CTEXT           "FL",IDC_STATIC_LABEL_FL,208,14,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_FL,234,14,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    CTEXT           "FR",IDC_STATIC_LABEL_FR,208,45,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_FR,234,45,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    CTEXT           "FC",IDC_STATIC_LABEL_FC,208,76,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_FC,234,76,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    CTEXT           "LFE",IDC_STATIC_LABEL_LFE,208,107,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_LFE,234,107,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    CTEXT           "SL",IDC_STATIC_LABEL_SL,208,138,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_SL,234,138,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    CTEXT           "SR",IDC_STATIC_LABEL_SR,208,169,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "",IDC_STATIC_SR,234,169,210,14,SS_CENTERIMAGE | SS_PATHELLIPSIS,WS_EX_STATICEDGE
+    GROUPBOX        "",IDC_STATIC_CHANNELS,6,2,186,190
+    GROUPBOX        "",IDC_STATIC_FILES,200,2,300,190
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,48,29,32,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,118,29,32,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,48,169,101,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT,29,48,1,102
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT,168,48,1,102
+    COMBOBOX        IDC_COMBO_CHANNEL_CONFIG,61,200,93,86,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "+&LFE",IDC_CHECK_CHANNEL_CONFIG_LFE,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,160,200,32,12
+    LTEXT           "Channel config:",IDC_STATIC,6,200,52,12,SS_CENTERIMAGE
+    PUSHBUTTON      "S",IDC_BUTTON_S,84,127,30,30
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2,1,0,0
+ PRODUCTVERSION 2,1,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Wieslaw Soltes"
+            VALUE "FileDescription", "WAV to AC3 Encoder"
+            VALUE "FileVersion", "2.1.0.0"
+            VALUE "InternalName", "EncWAVtoAC3.exe"
+            VALUE "LegalCopyright", "WAV to AC3 Encoder (C) Wieslaw Soltes. All rights reserved."
+            VALUE "OriginalFilename", "EncWAVtoAC3.exe"
+            VALUE "ProductName", "WAV to AC3 Encoder"
+            VALUE "ProductVersion", "2.1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_MAIN MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Add &Files...",               ID_FILE_ADDFILES
+        MENUITEM "Add &Directory...",           ID_FILE_ADDDIRECTORY
+        MENUITEM SEPARATOR
+        MENUITEM "&MUX Wizard...",              ID_FILE_MUXWIZARD
+        MENUITEM SEPARATOR
+        MENUITEM "L&oad Files List...",         ID_FILE_LOADFILESLIST
+        MENUITEM "Sa&ve Files List...",         ID_FILE_SAVEFILESLIST
+        MENUITEM SEPARATOR
+        MENUITEM "&Load Presets...",            ID_FILE_LOADPRESETS
+        MENUITEM "&Save Presets...",            ID_FILE_SAVEPRESETS
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_FILE_EXIT
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "Enable &Logging",             ID_OPTIONS_ENABLELOGGING
+        MENUITEM "&Open Log File...",           ID_OPTIONS_OPENLOGFILE
+        MENUITEM "&Set Log File Path...",       ID_OPTIONS_SETLOGFILEPATH
+        MENUITEM SEPARATOR
+        MENUITEM "Disable All &Warnings",       ID_OPTIONS_DISABLEALLWARNINGS
+        MENUITEM SEPARATOR
+        MENUITEM "Save Configuration On E&xit", ID_OPTIONS_SAVECONFIGURATIONONEXIT
+        MENUITEM SEPARATOR
+        MENUITEM "Loa&d Configuration",         ID_OPTIONS_LOADCONFIGURATION
+        MENUITEM "Sav&e Configuration",         ID_OPTIONS_SAVECONFIGURATION
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Standard",                   ID_VIEW_STANDARD
+        MENUITEM "&Advanced",                   ID_VIEW_ADVANCED
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "Command-&Line Help",          ID_HELP_COMMAND_LINE
+        MENUITEM "&Website",                    ID_HELP_WEBSITE
+        MENUITEM SEPARATOR
+        MENUITEM "&About...",                   ID_HELP_ABOUT
+    END
+END
+
+IDR_MENU_LIST MENU 
+BEGIN
+    POPUP "&List"
+    BEGIN
+        MENUITEM "Add &Files...",               ID_LIST_ADDFILES
+        MENUITEM "Add &Directory...",           ID_LIST_ADDDIRECTORY
+        MENUITEM SEPARATOR
+        MENUITEM "&MUX Wizard...",              ID_LIST_MUXWIZARD
+        MENUITEM SEPARATOR
+        MENUITEM "L&oad Files List...",         ID_LIST_LOADLIST
+        MENUITEM "Sa&ve Files List...",         ID_LIST_SAVELIST
+        MENUITEM SEPARATOR
+        MENUITEM "Move &Up",                    ID_LIST_MOVEUP
+        MENUITEM "Move Dow&n",                  ID_LIST_MOVEDOWN
+        MENUITEM SEPARATOR
+        MENUITEM "Remove &Selected Files",      ID_LIST_DELFILES
+        MENUITEM "Remove &All Files",           ID_LIST_CLEARLIST
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ABOUT_BITMAP        BITMAP                  "res\\EncWAVtoAC3.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ENCWAVTOAC3_DIALOG, DIALOG
+    BEGIN
+        VERTGUIDE, 14
+        VERTGUIDE, 42
+        VERTGUIDE, 56
+        VERTGUIDE, 61
+        VERTGUIDE, 104
+        VERTGUIDE, 107
+        VERTGUIDE, 323
+        VERTGUIDE, 406
+        VERTGUIDE, 411
+        VERTGUIDE, 440
+        HORZGUIDE, 44
+        HORZGUIDE, 60
+        HORZGUIDE, 172
+        HORZGUIDE, 257
+        HORZGUIDE, 259
+        HORZGUIDE, 271
+        HORZGUIDE, 273
+    END
+
+    IDD_ENCODING_DIALOG, DIALOG
+    BEGIN
+        VERTGUIDE, 5
+        VERTGUIDE, 14
+        VERTGUIDE, 175
+        VERTGUIDE, 225
+        VERTGUIDE, 386
+        VERTGUIDE, 395
+        HORZGUIDE, 1
+        HORZGUIDE, 13
+        HORZGUIDE, 21
+        HORZGUIDE, 24
+        HORZGUIDE, 32
+        HORZGUIDE, 35
+        HORZGUIDE, 43
+        HORZGUIDE, 46
+        HORZGUIDE, 54
+        HORZGUIDE, 57
+        HORZGUIDE, 65
+        HORZGUIDE, 68
+        HORZGUIDE, 75
+        HORZGUIDE, 78
+        HORZGUIDE, 86
+        HORZGUIDE, 89
+        HORZGUIDE, 97
+        HORZGUIDE, 100
+        HORZGUIDE, 108
+        HORZGUIDE, 111
+        HORZGUIDE, 119
+        HORZGUIDE, 122
+        HORZGUIDE, 130
+        HORZGUIDE, 133
+        HORZGUIDE, 143
+        HORZGUIDE, 148
+        HORZGUIDE, 156
+        HORZGUIDE, 159
+        HORZGUIDE, 167
+        HORZGUIDE, 177
+        HORZGUIDE, 188
+        HORZGUIDE, 191
+        HORZGUIDE, 199
+        HORZGUIDE, 204
+        HORZGUIDE, 215
+        HORZGUIDE, 218
+        HORZGUIDE, 226
+        HORZGUIDE, 235
+        HORZGUIDE, 243
+        HORZGUIDE, 257
+    END
+
+    IDD_MUX_DIALOG, DIALOG
+    BEGIN
+        VERTGUIDE, 6
+        VERTGUIDE, 14
+        VERTGUIDE, 44
+        VERTGUIDE, 58
+        VERTGUIDE, 84
+        VERTGUIDE, 114
+        VERTGUIDE, 154
+        VERTGUIDE, 160
+        VERTGUIDE, 184
+        VERTGUIDE, 192
+        VERTGUIDE, 200
+        VERTGUIDE, 208
+        VERTGUIDE, 228
+        VERTGUIDE, 234
+        VERTGUIDE, 250
+        VERTGUIDE, 256
+        VERTGUIDE, 306
+        VERTGUIDE, 312
+        VERTGUIDE, 388
+        VERTGUIDE, 394
+        VERTGUIDE, 444
+        VERTGUIDE, 450
+        VERTGUIDE, 492
+        VERTGUIDE, 500
+        HORZGUIDE, 2
+        HORZGUIDE, 14
+        HORZGUIDE, 114
+        HORZGUIDE, 192
+        HORZGUIDE, 212
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+LANGUAGE 21, 1
+#pragma code_page(1250)
+#include "res\EncWAVtoAC3.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
