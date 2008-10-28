@@ -84,10 +84,7 @@ Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
 Name: {group}\{#MyAppName} ReadMe; Filename: {app}\ReadMe.txt
 Name: {group}\{#MyAppName} License; Filename: {app}\Copying.txt
 Name: {group}\{#MyAppName} Changes; Filename: {app}\Changes.txt
-Name: {group}\{#MyAppName} Manual; Filename: {app}\Manual.pdf
-
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
-
 Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
 
