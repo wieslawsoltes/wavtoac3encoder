@@ -1,0 +1,4 @@
+Aften R762=libaftendll_x86\libaften.dll
+Aften R762 SSE=libaftendll_x86_SSE\libaften.dll
+Aften R762 SSE2=libaftendll_x86_SSE2\libaften.dll
+Aften R762 SSE3=libaftendll_x86_SSE3\libaften.dll
