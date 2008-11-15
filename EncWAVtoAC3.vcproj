@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="EncWAVtoAC3"
 	ProjectGUID="{952D8A09-0CBF-4EE8-9536-389632BC5E7F}"
 	RootNamespace="EncWAVtoAC3"
@@ -394,6 +394,10 @@
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\EncWAVtoAC3EngDlg.cpp"
 				>
 			</File>
 			<File
@@ -894,6 +898,10 @@
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\EncWAVtoAC3EngDlg.h"
 				>
 			</File>
 			<File
