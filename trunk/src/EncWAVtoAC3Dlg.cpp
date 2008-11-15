@@ -23,6 +23,7 @@
 #include "EncWAVtoAC3Dlg.h"
 #include "EncWAVtoAC3WorkDlg.h"
 #include "EncWAVtoAC3MuxDlg.h"
+#include "EncWAVtoAC3EngDlg.h"
 #include "AboutDlg.h"
 #include "Utilities.h"
 #include "MyFile.h"
@@ -150,6 +151,7 @@ void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BUTTON_ADD, m_BtnAddFiles);
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
     DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
+    DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
@@ -229,6 +231,7 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_EN_KILLFOCUS(IDC_EDIT_RAW_CHANNELS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditRawChannels)
     ON_EN_KILLFOCUS(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads)
     ON_MESSAGE(WM_MY_EN_CHANGE, EditChangeComboPresets)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CEncWAVtoAC3Dlg::OnBnClickedButtonEngines)
 END_MESSAGE_MAP()
 
 void CEncWAVtoAC3Dlg::InitDialogAnchors()
@@ -241,12 +244,12 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_CHECK_VBR, AnchorTopRight);
     AddAnchor(IDC_STATIC_ENGINE, AnchorTopRight);
     AddAnchor(IDC_COMBO_ENGINES, AnchorTopRight);
+    AddAnchor(IDC_BUTTON_ENGINES, AnchorTopRight);
     AddAnchor(IDC_STATIC_THREADS, AnchorTopRight);
     AddAnchor(IDC_EDIT_THREADS, AnchorTopRight);
     AddAnchor(IDC_SPIN_THREADS, AnchorTopRight);
     AddAnchor(IDC_CHECK_FILE_PARALLEL, AnchorTopRight);
     AddAnchor(IDC_LIST_SETTINGS, AnchorTopLeft, AnchorTopRight);
-    //AddAnchor(IDC_STATIC_OPTIONS, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_STATIC_OPTION_VALUE, AnchorTopLeft);
     AddAnchor(IDC_COMBO_SETTING, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_COMBO_PRESETS, AnchorTopRight);
@@ -636,10 +639,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         ::LogOpen(&logCtx);
     }
 
-    // set default view mode (if defferent then Advanced)
-    if(this->nViewMode != VIEW_MODE_ADVANCED)
-        this->UpdateView(this->nViewMode);
-
     // load all program configuration and settings
     this->LoadAllConfiguration();
 
@@ -687,6 +686,10 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         this->szOutputPath = this->cmdLineOpt.szOutputPath;
         this->m_EdtOutPath.SetWindowText(this->szOutputPath);
     }
+
+    // set default view mode (if defferent then Advanced)
+    if(this->nViewMode != VIEW_MODE_ADVANCED)
+        this->UpdateView(this->nViewMode);
 
     // encode input files and close program
     if(this->cmdLineOpt.bEncodeAndExit == true)
@@ -1833,6 +1836,7 @@ void CEncWAVtoAC3Dlg::UpdateView(int nMode)
     this->m_CmbValue.ShowWindow(nCmdShow);
     this->m_CmbRawSampleFormat.ShowWindow(nCmdShow);
     this->m_CmbEngines.ShowWindow(nCmdShow);
+    this->m_BtnEngines.ShowWindow(nCmdShow);
     this->m_EdtThreads.ShowWindow(nCmdShow);
     this->m_EdtRawSamplerate.ShowWindow(nCmdShow);
     this->m_EdtRawChannels.ShowWindow(nCmdShow);
@@ -1855,7 +1859,7 @@ void CEncWAVtoAC3Dlg::UpdateView(int nMode)
     this->GetDlgItem(IDC_STATIC_PARALLEL)->ShowWindow(nCmdShow);
     this->GetDlgItem(IDC_STATIC_ENGINE)->ShowWindow(nCmdShow);
     this->GetDlgItem(IDC_STATIC_THREADS)->ShowWindow(nCmdShow);
-    //this->m_LstFiles.ShowWindow(nCmdShow);
+    // this->m_LstFiles.ShowWindow(nCmdShow);
     // this->m_SldBitrate.ShowWindow(nCmdShow);
     // this->m_StcBitrate.ShowWindow(nCmdShow);
     // this->m_StcQualityBitrate.ShowWindow(nCmdShow);
@@ -3647,4 +3651,12 @@ LRESULT CEncWAVtoAC3Dlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
     }
 
     return(0);
+}
+
+void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
+{
+    CEncWAVtoAC3EngDlg dlg;
+
+    // show pengines editor dialog box
+    dlg.DoModal();
 }

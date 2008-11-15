@@ -252,5 +252,7 @@ public:
     afx_msg void OnEnKillfocusEditThreads();
 public:
     afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
-    CStatic m_StcOptions;
+public:
+    CButton m_BtnEngines;
+    afx_msg void OnBnClickedButtonEngines();
 };

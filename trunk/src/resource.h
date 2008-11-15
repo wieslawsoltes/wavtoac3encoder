@@ -2,6 +2,10 @@
 // Microsoft Visual C++ generated include file.
 // Used by EncWAVtoAC3.rc
 //
+#define IDC_BUTTON_ENGINES_IMPORT       3
+#define IDC_BUTTON_ENGINES_EXPORT       4
+#define IDC_BUTTON_ENGINES_ADD          5
+#define IDC_BUTTON_ENGINES_BROWSE       7
 #define IDR_MAINFRAME                   102
 #define IDD_ENCWAVTOAC3_DIALOG          128
 #define IDD_ENCODING_DIALOG             129
@@ -10,6 +14,8 @@
 #define IDB_ABOUT_BITMAP                132
 #define IDR_MENU_LIST                   133
 #define IDD_MUX_DIALOG                  134
+#define IDD_ENGINES                     135
+#define IDD_ENGINES_DIALOG              135
 #define IDC_PROGRESS_CURRENT            1001
 #define IDC_PROGRESS_TOTAL              1002
 #define IDC_LIST_FILES                  1003
@@ -54,6 +60,7 @@
 #define IDC_EDIT_THREADS                1041
 #define IDC_SPIN_THREADS                1042
 #define IDC_LIST_MT_PROGRESS            1043
+#define IDC_BUTTON_ENGINES              1043
 #define IDC_STATIC_SIMD                 1044
 #define IDC_CHECK_SIMD_MMX              1045
 #define IDC_CHECK_SIMD_SSE              1046
@@ -105,6 +112,10 @@
 #define IDC_CHECK_CHANNEL_CONFIG_LFE    1092
 #define IDC_BUTTON_EXPORT               1093
 #define IDC_BUTTON_IMPORT               1094
+#define IDC_LIST_ENGINES                1097
+#define IDC_EDIT1                       1098
+#define IDC_EDIT2                       1099
+#define IDC_BUTTON_ENGINES_REMOVE       1100
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -141,9 +152,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        135
+#define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32804
-#define _APS_NEXT_CONTROL_VALUE         1097
+#define _APS_NEXT_CONTROL_VALUE         1101
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif
