@@ -244,26 +244,41 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("Faster encoding"), 1);
 
     /*
-    [-fes #]       Fast exponent strategy decision (default: 0)
-                       0 = higher quality encoding
-                       1 = faster encoding
+    [-exps #]      Exponent strategy search size (default: 8)
+                       1 to 32 (lower is faster, higher is better quality)
     */
-    SetEncoderOption(_T("Fast exponent strategy decision"),
-        _T("-fes"),
-        _T("By default, the exponent strategy for each channel\n")
-        _T("in a frame is decided by finding the best choice out of\n")
-        _T("5 pre-defined sets of strategies. When this fast\n")
-        _T("option is turned on, the same set is always used\n")
-        _T("for every channel in every frame, which leads to\n")
-        _T("generally lower quality but gives a significant speed\n")
-        _T("increase."),
-        0,
+    SetEncoderOption(_T("Exponent strategy search size"),
+        _T("-exps"),
+        _T("The encoder determines the best combination of\n")
+        _T("exponent strategies for a frame by searching through\n")
+        _T("a list of pre-defined exponent strategies. This option\n")
+        _T("controls the size of the list to be searched. The\n")
+        _T("value can range from 1 (lower quality but faster) to\n")
+        _T("32 (higher quality but slower). The default value is 8."),
+        7, // counted from 0 (=1) to 31 (=32)
         -1,
         _T(""),
         false);
 
-    AddEncoderOptionValue(_T("Higher quality encoding (default)"), 0);
-    AddEncoderOptionValue(_T("Faster encoding"), 1);
+    AddEncoderOptionValue(_T("1 (lower quality but faster)"), 1);
+
+    for(int i = 2; i <= 7; i++)
+    {
+        CString szTmpBuffer;
+        szTmpBuffer.Format(_T("%d"), i);
+        AddEncoderOptionValue(szTmpBuffer, i);
+    }
+
+    AddEncoderOptionValue(_T("8 (default)"), 8);
+
+    for(int i = 9; i <= 31; i++)
+    {
+        CString szTmpBuffer;
+        szTmpBuffer.Format(_T("%d"), i);
+        AddEncoderOptionValue(szTmpBuffer, i);
+    }
+
+    AddEncoderOptionValue(_T("32 (higher quality but slower)"), 32);
 
     /*
     [-pad #]       Start-of-stream padding

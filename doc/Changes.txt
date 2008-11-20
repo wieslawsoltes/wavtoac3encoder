@@ -1,5 +1,10 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 2.2:
+
+- Updated Aften sources and libraries to svn revision 832.
+- Fixed bug in UI under Windows Vista.
+
 Version 2.1:
 
 - Removed help file as it will not be used anymore.

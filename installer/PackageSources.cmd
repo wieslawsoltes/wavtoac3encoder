@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=c:\Program Files (x86)\WinRAR\WinRAR.exe
 
-set varVersion=2.1
+set varVersion=2.2
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
@@ -74,10 +74,8 @@ copy "%varBase%\%varPath%\PackageInstallers.cmd" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\PackageSources.cmd" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\SetupScript.base" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\SetupScript.version" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\SetupScript.Win32A.iss" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\SetupScript.Win32U.iss" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\SetupScript.Win64A.iss" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\SetupScript.Win64U.iss" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\SetupScript.Win32.iss" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\SetupScript.x64.iss" "%varOutput%\%varPath%"
 
 set varPath=src
 mkdir "%varOutput%\%varPath%"

@@ -21,4 +21,4 @@
 ;
 ; Set program release version
 ;
-#define ReleaseVersion "2.1"
+#define ReleaseVersion "2.2"
