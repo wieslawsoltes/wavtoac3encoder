@@ -1,4 +1,4 @@
-﻿WAV to AC3 Encoder 2.1 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 2.2 (Using Aften A/52 Audio Encoder)
 
 1) LICENSE
 
@@ -34,23 +34,22 @@ WAV to AC3 Encoder has full UNICODE and ANSI support.
 The latest sources can be obtained through Subversion. 
 The main developer of WAV to AC3 Encoder is Wiesław Šoltés. 
 
-This program is currently in still in beta stage of development.
-
 Main features:
 
-- Multi-Threaded encoding.
-- Save/Restore of all program settings.
-- Encoder presets with load/save possibility.
-- Vary fast and even faster with MT.
-- Optimized for modern CPU's.
-- High-quality of output audio files.
-- Full UNICODE and ANSI support.
-- Supports natively x86 and AMD64 architectures.
-- Many options for advanced users.
-- Often released new versions with new features.
-- Small size of installer/binary release packages.
-- Sources are available under GNU GPLv2 license.
-- Very simple to use.
+* Multi-Threaded encoding.
+* Loading and saving of all program settings.
+* Encoder presets.
+* Vary fast.
+* Optimized for modern CPU's.
+* High-quality of output audio files.
+* Full UNICODE and ANSI support.
+* Natively supports x86 and AMD64 architectures.
+* Options for advanced users.
+* Small size.
+* Sources available under GNU GPLv2 license.
+* Very simple to use. 
+
+Program actively developed. Currently still in beta version.
 
 3) CONFIGURATION
 

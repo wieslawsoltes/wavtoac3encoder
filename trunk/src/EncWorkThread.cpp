@@ -112,8 +112,8 @@ void SetAftenOptions(AftenAPI &api,
     // fba
     nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
 
-    // fes
-    nSetting++; SET_AFTEN_SETTING(s.params.expstr_fast, int)
+    // exps
+    nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
 
     // pad
     nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)

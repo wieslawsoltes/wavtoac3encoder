@@ -28,7 +28,7 @@ typedef struct
     int raw_input;
     int raw_sr;
     int raw_ch;
-    int raw_fmt;
+    enum PcmSampleFormat raw_fmt;
     int raw_order;
 } AftenOpt;
 
