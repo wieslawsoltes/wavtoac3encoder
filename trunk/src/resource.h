@@ -114,7 +114,9 @@
 #define IDC_BUTTON_IMPORT               1094
 #define IDC_LIST_ENGINES                1097
 #define IDC_EDIT1                       1098
+#define IDC_EDIT_ENGINE_NAME            1098
 #define IDC_EDIT2                       1099
+#define IDC_EDIT_ENGINE_PATH            1099
 #define IDC_BUTTON_ENGINES_REMOVE       1100
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772

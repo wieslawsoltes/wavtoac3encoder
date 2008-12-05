@@ -3657,6 +3657,14 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 {
     CEncWAVtoAC3EngDlg dlg;
 
+    // copy engines list to engines editor dialog
+    // dlg.m_EngineList = this->m_EngineList;
+
     // show pengines editor dialog box
-    dlg.DoModal();
+    if(dlg.DoModal() == IDOK)
+    {
+        // TODO: update currently loaded program engines
+
+        // ...
+    }
 }
