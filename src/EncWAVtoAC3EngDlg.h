@@ -47,8 +47,25 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);
 	DECLARE_MESSAGE_MAP()
 public:
+    ConfigList_t m_EngineList;
+public:
     CListCtrl m_LstEngines;
     CEdit m_EdtEngineName;
     CEdit m_EdtEnginePath;
+public:
+    bool LoadProgramEngines(CString szFileName);
+    bool SaveProgramEngines(CString szFileName);
+public:
     virtual BOOL OnInitDialog();
+public:
+    afx_msg void OnBnClickedOk();
+    afx_msg void OnBnClickedCancel();
+    afx_msg void OnBnClickedButtonEnginesBrowse();
+    afx_msg void OnBnClickedButtonEnginesImport();
+    afx_msg void OnBnClickedButtonEnginesExport();
+    afx_msg void OnBnClickedButtonEnginesAdd();
+    afx_msg void OnBnClickedButtonEnginesRemove();
+    afx_msg void OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnEnChangeEditEngineName();
+    afx_msg void OnEnChangeEditEnginePath();
 };
