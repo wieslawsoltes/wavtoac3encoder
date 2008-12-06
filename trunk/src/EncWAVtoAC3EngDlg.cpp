@@ -29,7 +29,7 @@ IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialog)
 CEncWAVtoAC3EngDlg::CEncWAVtoAC3EngDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CEncWAVtoAC3EngDlg::IDD, pParent)
 {
-
+    bUpdateList = true;
 }
 
 CEncWAVtoAC3EngDlg::~CEncWAVtoAC3EngDlg()
@@ -56,6 +56,7 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3EngDlg, CDialog)
     ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_ENGINES, &CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines)
     ON_EN_CHANGE(IDC_EDIT_ENGINE_NAME, &CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName)
     ON_EN_CHANGE(IDC_EDIT_ENGINE_PATH, &CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath)
+    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_ENGINES, &CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines)
 END_MESSAGE_MAP()
 
 BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
@@ -170,7 +171,24 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove()
 {
-    // TODO: Add your control notification handler code here
+    CList<int,int> list;
+    POSITION pos;
+
+    // get all selected items
+    pos = this->m_LstEngines.GetFirstSelectedItemPosition();
+    while(pos != NULL)
+    {
+        list.AddTail(this->m_LstEngines.GetNextSelectedItem(pos));
+    }
+
+    // remove all selected items
+    pos = list.GetTailPosition();
+    while(pos != NULL)
+    {
+        int nIndex = list.GetPrev(pos);
+        this->m_LstEngines.DeleteItem(nIndex);
+        this->m_EngineList.RemoveAt(m_EngineList.FindIndex(nIndex));
+    }
 }
 
 bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
@@ -195,6 +213,9 @@ bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
         this->m_LstEngines.InsertItem(i, ce.szKey);
         this->m_LstEngines.SetItemText(i, 1, ce.szData);
     }
+
+    // always selectd first item in the list
+    this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
     return true;
 }
@@ -223,23 +244,27 @@ void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pRe
 {
     LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-    static int nLastItem = -1;
-
+    if(bUpdateList == true)
+    {
     POSITION pos = m_LstEngines.GetFirstSelectedItemPosition();
     if(pos != NULL)
     {
         int nItem = m_LstEngines.GetNextSelectedItem(pos);
 
-        // update values combobox if item has changed
-        if(nLastItem != nItem)
-        {
-            ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
-            
-            this->m_EdtEngineName.SetWindowText(ce.szKey);
-            this->m_EdtEnginePath.SetWindowText(ce.szData);
+        ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
 
-            nLastItem = nItem;
-        }
+        this->m_EdtEngineName.SetWindowText(ce.szKey);
+        this->m_EdtEnginePath.SetWindowText(ce.szData);
+    }
+    else
+    {
+        this->m_EdtEngineName.SetWindowText(_T(""));
+        this->m_EdtEnginePath.SetWindowText(_T(""));
+    }
+    }
+    else
+    {
+        bUpdateList = true;
     }
 
     *pResult = 0;
@@ -247,10 +272,60 @@ void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pRe
 
 void CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName()
 {
+    POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
+    if(pos != NULL)
+    {
+        CString szText;
 
+        int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
+        this->m_EdtEngineName.GetWindowText(szText);
+
+        POSITION posEngine = this->m_EngineList.FindIndex(nIndex);
+        ConfigEntry ce = this->m_EngineList.GetAt(posEngine);
+        ce.szKey = szText;
+        this->m_EngineList.SetAt(posEngine, ce);
+
+        bUpdateList = false;
+        this->m_LstEngines.SetItemText(nIndex, 0, szText);
+    }
 }
 
 void CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath()
 {
+    POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
+    if(pos != NULL)
+    {
+        CString szText;
 
+        int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
+        this->m_EdtEnginePath.GetWindowText(szText);
+
+
+        POSITION posEngine = this->m_EngineList.FindIndex(nIndex);
+        ConfigEntry ce = this->m_EngineList.GetAt(posEngine);
+        ce.szData = szText;
+        this->m_EngineList.SetAt(posEngine, ce);
+
+        bUpdateList = false;
+        this->m_LstEngines.SetItemText(nIndex, 1, szText);
+    }
+}
+
+void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
+
+    // handle keyboard events here
+    switch(pLVKeyDow->wVKey)
+    {
+    case VK_DELETE: 
+        {
+            this->OnBnClickedButtonEnginesRemove();
+        }
+        break;
+
+    default: break;
+    };
+
+    *pResult = 0;
 }
