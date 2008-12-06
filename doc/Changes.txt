@@ -1,5 +1,9 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 2.3:
+
+- Added engines editor.
+
 Version 2.2:
 
 - Updated Aften sources and libraries to svn revision 832.
