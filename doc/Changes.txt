@@ -2,7 +2,8 @@
 
 Version 2.3:
 
-- Added engines editor.
+- Added fully featured Aften engines editor.
+- Added Advanced view check box to main window.
 
 Version 2.2:
 

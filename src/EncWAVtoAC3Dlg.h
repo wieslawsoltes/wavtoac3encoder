@@ -254,4 +254,6 @@ public:
     afx_msg void OnEnKillfocusEditThreads();
 public:
     afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnBnClickedCheckAdvancedView();
+    CMyButton m_ChkAdvancedView;
 };
