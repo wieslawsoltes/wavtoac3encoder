@@ -142,6 +142,7 @@ public:
     CMyButton m_ChkParallelFileEncoding;
     CMyButton m_ChkMultipleMonoInput;
     CMyButton m_BtnMuxWizard;
+    CMyButton m_BtnEngines;
 public:
     CSpinButtonCtrl m_SpnRawSampleRate;
     CSpinButtonCtrl m_SpnRawChannels;
@@ -221,6 +222,7 @@ public:
     afx_msg void OnBnClickedCheckMultipleMonoInput();
     afx_msg void OnBnClickedButtonPresetsDefaults();
     afx_msg void OnBnClickedButtonMuxWizard();
+    afx_msg void OnBnClickedButtonEngines();
 public:
     afx_msg void OnCbnSelchangeComboSetting();
     afx_msg void OnCbnSelchangeComboPresets();
@@ -252,7 +254,4 @@ public:
     afx_msg void OnEnKillfocusEditThreads();
 public:
     afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
-public:
-    CButton m_BtnEngines;
-    afx_msg void OnBnClickedButtonEngines();
 };

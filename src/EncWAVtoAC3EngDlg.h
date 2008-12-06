@@ -50,6 +50,8 @@ public:
     ConfigList_t m_EngineList;
     CString szCurrentFileName;
 public:
+    volatile bool bUpdateList;
+public:
     CListCtrl m_LstEngines;
     CEdit m_EdtEngineName;
     CEdit m_EdtEnginePath;
@@ -72,4 +74,5 @@ public:
 public:
     afx_msg void OnEnChangeEditEngineName();
     afx_msg void OnEnChangeEditEnginePath();
+    afx_msg void OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult);
 };
