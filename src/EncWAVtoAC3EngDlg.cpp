@@ -66,6 +66,8 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
     this->m_LstEngines.InsertColumn(0, _T("Name"), 0, 150);
     this->m_LstEngines.InsertColumn(1, _T("Path"), 0, 440);
 
+    this->InsertProgramEngines();
+
     return TRUE;
 }
 
@@ -154,12 +156,47 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd()
 {
-    // TODO: Add your control notification handler code here
+    int nSize = this->m_EngineList.GetSize();
+    ConfigEntry ce;
+
+    this->m_EdtEngineName.GetWindowText(ce.szKey);
+    this->m_EdtEnginePath.GetWindowText(ce.szData);
+
+    this->m_EngineList.AddTail(ce);
+
+    this->m_LstEngines.InsertItem(nSize, ce.szKey);
+    this->m_LstEngines.SetItemText(nSize, 1, ce.szData);
 }
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove()
 {
     // TODO: Add your control notification handler code here
+}
+
+bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
+{
+    int nSize = this->m_EngineList.GetSize();
+
+    // no engine return error
+    if(nSize == 0)
+        return false;
+
+    POSITION pos = this->m_EngineList.GetHeadPosition();
+    for(INT_PTR i = 0; i < nSize; i++)
+    {
+        ConfigEntry ce;
+
+        // get next entry in configuration list
+        ce = this->m_EngineList.GetNext(pos);
+
+        // insert all items to engines list
+        // ce.szKey  - name of engine   
+        // ce.szData - path to libaften.dll
+        this->m_LstEngines.InsertItem(i, ce.szKey);
+        this->m_LstEngines.SetItemText(i, 1, ce.szData);
+    }
+
+    return true;
 }
 
 bool CEncWAVtoAC3EngDlg::LoadProgramEngines(CString szFileName)
@@ -170,28 +207,7 @@ bool CEncWAVtoAC3EngDlg::LoadProgramEngines(CString szFileName)
 
     if(::LoadConfig(szFileName, this->m_EngineList) == true)
     {
-        int nSize = this->m_EngineList.GetSize();
-
-        // no engine return error
-        if(nSize == 0)
-            return false;
-
-        POSITION pos = this->m_EngineList.GetHeadPosition();
-        for(INT_PTR i = 0; i < nSize; i++)
-        {
-            ConfigEntry ce;
-
-            // get next entry in configuration list
-            ce = this->m_EngineList.GetNext(pos);
-
-            // insert all items to engines list
-            // ce.szKey  - name of engine   
-            // ce.szData - path to libaften.dll
-            this->m_LstEngines.InsertItem(i, ce.szKey);
-            this->m_LstEngines.SetItemText(i, 1, ce.szData);
-        }
-
-        return true;
+        return InsertProgramEngines();
     }
 
     return false;

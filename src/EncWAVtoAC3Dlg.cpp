@@ -3658,7 +3658,18 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
     CEncWAVtoAC3EngDlg dlg;
 
     // copy engines list to engines editor dialog
-    // dlg.m_EngineList = this->m_EngineList;
+    int nSize = this->m_EngineList.GetSize();
+    POSITION pos = this->m_EngineList.GetHeadPosition();
+    for(INT_PTR i = 0; i < nSize; i++)
+    {
+        ConfigEntry ce;
+
+        // get next entry in configuration list
+        ce = this->m_EngineList.GetNext(pos);
+
+        // insert all items to new engines list
+        dlg.m_EngineList.AddTail(ce);
+    }
 
     // show pengines editor dialog box
     if(dlg.DoModal() == IDOK)
