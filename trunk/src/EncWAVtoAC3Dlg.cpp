@@ -152,6 +152,7 @@ void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
     DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
     DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
+    DDX_Control(pDX, IDC_CHECK_ADVANCED_VIEW, m_ChkAdvancedView);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
@@ -232,6 +233,7 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_EN_KILLFOCUS(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads)
     ON_MESSAGE(WM_MY_EN_CHANGE, EditChangeComboPresets)
     ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CEncWAVtoAC3Dlg::OnBnClickedButtonEngines)
+    ON_BN_CLICKED(IDC_CHECK_ADVANCED_VIEW, &CEncWAVtoAC3Dlg::OnBnClickedCheckAdvancedView)
 END_MESSAGE_MAP()
 
 void CEncWAVtoAC3Dlg::InitDialogAnchors()
@@ -253,6 +255,7 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_OPTION_VALUE, AnchorTopLeft);
     AddAnchor(IDC_COMBO_SETTING, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_COMBO_PRESETS, AnchorTopRight);
+    AddAnchor(IDC_CHECK_ADVANCED_VIEW, AnchorTopRight);
     AddAnchor(IDC_BUTTON_PRESETS_DEFAULTS, AnchorTopRight);
     AddAnchor(IDC_BUTTON_PRESET_DEL, AnchorTopRight);
     AddAnchor(IDC_BUTTON_PRESET_ADD, AnchorTopRight);
@@ -613,6 +616,14 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 
     this->m_ChkMultipleMonoInput.SetTooltipText(szTmpText);
 
+    // engines editor
+    szTmpText = _T("Edit currently available Aften engines.");
+    this->m_BtnEngines.SetTooltipText(szTmpText);
+
+    // advanced view
+    szTmpText = _T("Show or hide advanced configuration options.");
+    this->m_ChkAdvancedView.SetTooltipText(szTmpText);
+
     // enable files/dirs drag & drop for dialog
     this->DragAcceptFiles(TRUE);
 
@@ -690,6 +701,9 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     // set default view mode (if defferent then Advanced)
     if(this->nViewMode != VIEW_MODE_ADVANCED)
         this->UpdateView(this->nViewMode);
+    else
+        this->m_ChkAdvancedView.SetCheck(BST_CHECKED);
+    
 
     // encode input files and close program
     if(this->cmdLineOpt.bEncodeAndExit == true)
@@ -933,6 +947,11 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                     // update view mode if different then currently used
                     if(nMode != this->nViewMode)
                         this->UpdateView(nMode); 
+
+                    if(nMode == VIEW_MODE_ADVANCED)
+                        this->m_ChkAdvancedView.SetCheck(BST_CHECKED);
+                    else
+                        this->m_ChkAdvancedView.SetCheck(BST_UNCHECKED);
                 }
             }
         }
@@ -2535,12 +2554,14 @@ void CEncWAVtoAC3Dlg::OnViewStandard()
 {
     // set view mode to Standard
     this->UpdateView(VIEW_MODE_STANDARD);
+    m_ChkAdvancedView.SetCheck(BST_UNCHECKED);
 }
 
 void CEncWAVtoAC3Dlg::OnViewAdvanced()
 {
     // set view mode to Advanced
     this->UpdateView(VIEW_MODE_ADVANCED);
+    m_ChkAdvancedView.SetCheck(BST_CHECKED);
 }
 
 void CEncWAVtoAC3Dlg::OnHelpCommandLine()
@@ -3678,4 +3699,12 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 
         // ...
     }
+}
+
+void CEncWAVtoAC3Dlg::OnBnClickedCheckAdvancedView()
+{
+    if(m_ChkAdvancedView.GetCheck() == BST_UNCHECKED)
+        this->UpdateView(VIEW_MODE_STANDARD);
+    else
+        this->UpdateView(VIEW_MODE_ADVANCED);
 }
