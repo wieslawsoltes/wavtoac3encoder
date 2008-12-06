@@ -48,11 +48,13 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
     ConfigList_t m_EngineList;
+    CString szCurrentFileName;
 public:
     CListCtrl m_LstEngines;
     CEdit m_EdtEngineName;
     CEdit m_EdtEnginePath;
 public:
+    bool InsertProgramEngines();
     bool LoadProgramEngines(CString szFileName);
     bool SaveProgramEngines(CString szFileName);
 public:
@@ -65,7 +67,9 @@ public:
     afx_msg void OnBnClickedButtonEnginesExport();
     afx_msg void OnBnClickedButtonEnginesAdd();
     afx_msg void OnBnClickedButtonEnginesRemove();
+public:
     afx_msg void OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult);
+public:
     afx_msg void OnEnChangeEditEngineName();
     afx_msg void OnEnChangeEditEnginePath();
 };
