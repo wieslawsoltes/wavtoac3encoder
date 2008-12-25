@@ -30,6 +30,7 @@ CEncWAVtoAC3EngDlg::CEncWAVtoAC3EngDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CEncWAVtoAC3EngDlg::IDD, pParent)
 {
     bUpdateList = true;
+    nCurrSel = 0;
 }
 
 CEncWAVtoAC3EngDlg::~CEncWAVtoAC3EngDlg()
@@ -63,11 +64,19 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
 {
     CDialog::OnInitDialog();
 
+    // set style of the engines list
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+
+    // add columns to engines list
     this->m_LstEngines.InsertColumn(0, _T("Name"), 0, 150);
     this->m_LstEngines.InsertColumn(1, _T("Path"), 0, 440);
 
+    // populate engines list
     this->InsertProgramEngines();
+
+    // select currently used engine
+    this->m_LstEngines.SetItemState(-1,  0, LVIS_SELECTED);
+    this->m_LstEngines.SetItemState(this->nCurrSel, LVIS_SELECTED, LVIS_SELECTED);
 
     return TRUE;
 }

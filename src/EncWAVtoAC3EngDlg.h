@@ -55,6 +55,7 @@ public:
     CListCtrl m_LstEngines;
     CEdit m_EdtEngineName;
     CEdit m_EdtEnginePath;
+    int nCurrSel;
 public:
     bool InsertProgramEngines();
     bool LoadProgramEngines(CString szFileName);
