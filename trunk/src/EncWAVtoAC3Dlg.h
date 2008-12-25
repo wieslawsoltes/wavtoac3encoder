@@ -152,6 +152,7 @@ public:
     bool SaveFilesList(CString &szFileName, int nFormat);
     bool LoadProgramConfig(CString szFileName);
     bool SaveProgramConfig(CString szFileName);
+    bool UpdateProgramEngines();
     bool LoadProgramEngines(CString szFileName);
     bool SaveProgramEngines(CString szFileName);
 public:

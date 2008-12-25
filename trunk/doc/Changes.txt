@@ -4,6 +4,7 @@ Version 2.3:
 
 - Added fully featured Aften engines editor.
 - Added Advanced view check box to main window.
+- Fixed invalid position change for bitrate/quality slider when switching between CBR/VBR mode.
 
 Version 2.2:
 

@@ -1066,6 +1066,81 @@ bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
     return ::SaveConfig(szFileName, this->m_ConfigList);
 }
 
+bool CEncWAVtoAC3Dlg::UpdateProgramEngines()
+{
+    int nSize = this->m_EngineList.GetSize();
+
+    // if there is no engine then return error
+    if(nSize == 0)
+    {
+        // add default engine to the list
+        ConfigEntry ce;
+
+        ce.szKey = _T("Aften");
+        ce.szData = _T("libaften.dll");
+
+        this->m_EngineList.RemoveAll();
+        this->m_EngineList.AddTail(ce);       
+
+        EncoderPreset tmpPreset = GetCurrentPreset();
+        tmpPreset.nCurrentEngine = 0;
+        UpdateCurrentPreset(tmpPreset);
+
+        this->m_CmbEngines.InsertString(0, ce.szKey);
+        this->m_CmbEngines.SetCurSel(0);
+
+        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+        OpenAftenAPI(&this->api);
+
+        return false;
+    }
+
+    POSITION pos = this->m_EngineList.GetHeadPosition();
+    for(INT_PTR i = 0; i < nSize; i++)
+    {
+        ConfigEntry ce;
+
+        // get next entry in configuration list
+        ce = this->m_EngineList.GetNext(pos);
+
+        // insert all items to engines combobox
+        // ce.szKey  - name of engine   
+        // ce.szData - path to libaften.dll
+        this->m_CmbEngines.InsertString(i, ce.szKey);
+    }
+
+    // reset current engine if it's to big
+    if(GetCurrentPreset().nCurrentEngine > nSize)
+    {
+        EncoderPreset tmpPreset = GetCurrentPreset();
+        tmpPreset.nCurrentEngine = 0;
+        UpdateCurrentPreset(tmpPreset);
+    }
+
+    // load and select current engine
+    if((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
+    {
+        // load new aften library
+        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+        if(OpenAftenAPI(&this->api) == false)
+        {
+            // select 'None' aften engine
+            this->m_CmbEngines.SetCurSel(0);
+
+            EncoderPreset tmpPreset = GetCurrentPreset();
+            tmpPreset.nCurrentEngine = 0;
+            UpdateCurrentPreset(tmpPreset);
+        }
+        else
+        {
+            // select current aften engine
+            this->m_CmbEngines.SetCurSel(GetCurrentPreset().nCurrentEngine);
+        }
+    }
+
+    return true;
+}
+
 bool CEncWAVtoAC3Dlg::LoadProgramEngines(CString szFileName)
 {
     // init engines configuration
@@ -1074,77 +1149,7 @@ bool CEncWAVtoAC3Dlg::LoadProgramEngines(CString szFileName)
 
     if(::LoadConfig(szFileName, this->m_EngineList) == true)
     {
-        int nSize = this->m_EngineList.GetSize();
-
-        // if there is no engine then return error
-        if(nSize == 0)
-        {
-            // add default engine to the list
-            ConfigEntry ce;
-
-            ce.szKey = _T("Aften");
-            ce.szData = _T("libaften.dll");
-
-            this->m_EngineList.RemoveAll();
-            this->m_EngineList.AddTail(ce);       
-
-            EncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nCurrentEngine = 0;
-            UpdateCurrentPreset(tmpPreset);
-
-            this->m_CmbEngines.InsertString(0, ce.szKey);
-            this->m_CmbEngines.SetCurSel(0);
-
-            this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
-            OpenAftenAPI(&this->api);
-
-            return false;
-        }
-
-        POSITION pos = this->m_EngineList.GetHeadPosition();
-        for(INT_PTR i = 0; i < nSize; i++)
-        {
-            ConfigEntry ce;
-
-            // get next entry in configuration list
-            ce = this->m_EngineList.GetNext(pos);
-
-            // insert all items to engines combobox
-            // ce.szKey  - name of engine   
-            // ce.szData - path to libaften.dll
-            this->m_CmbEngines.InsertString(i, ce.szKey);
-        }
-
-        // reset current engine if it's to big
-        if(GetCurrentPreset().nCurrentEngine > nSize)
-        {
-            EncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nCurrentEngine = 0;
-            UpdateCurrentPreset(tmpPreset);
-        }
-
-        // load and select current engine
-        if((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
-        {
-            // load new aften library
-            this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
-            if(OpenAftenAPI(&this->api) == false)
-            {
-                // select 'None' aften engine
-                this->m_CmbEngines.SetCurSel(0);
-
-                EncoderPreset tmpPreset = GetCurrentPreset();
-                tmpPreset.nCurrentEngine = 0;
-                UpdateCurrentPreset(tmpPreset);
-            }
-            else
-            {
-                // select current aften engine
-                this->m_CmbEngines.SetCurSel(GetCurrentPreset().nCurrentEngine);
-            }
-        }
-
-        return true;
+        return this->UpdateProgramEngines();
     }
     else
     {
@@ -2941,8 +2946,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedCheckVbr()
         EncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nMode = AFTEN_ENC_MODE_VBR;
         UpdateCurrentPreset(tmpPreset);
-        this->m_SldBitrate.SetRange(0, 1023);
-        this->m_SldBitrate.SetPos(GetCurrentPreset().nQuality);
+        this->m_SldBitrate.SetRange(0, 1023, TRUE);
+        int nNewPos = GetCurrentPreset().nQuality;
+        this->m_SldBitrate.SetPos(nNewPos);
     }
     else
     {
@@ -2950,8 +2956,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedCheckVbr()
         EncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nMode = AFTEN_ENC_MODE_CBR;
         UpdateCurrentPreset(tmpPreset);
-        this->m_SldBitrate.SetRange(0, 19);
-        this->m_SldBitrate.SetPos(FindValidBitratePos(GetCurrentPreset().nBitrate));
+        this->m_SldBitrate.SetRange(0, 19, TRUE);
+        int nNewPos = FindValidBitratePos(GetCurrentPreset().nBitrate);
+        this->m_SldBitrate.SetPos(nNewPos);
     }
 
     this->UpdateBitrateText();
@@ -3678,6 +3685,8 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 {
     CEncWAVtoAC3EngDlg dlg;
 
+    dlg.nCurrSel = this->m_CmbEngines.GetCurSel();
+
     // copy engines list to engines editor dialog
     int nSize = this->m_EngineList.GetSize();
     POSITION pos = this->m_EngineList.GetHeadPosition();
@@ -3695,9 +3704,29 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
     // show pengines editor dialog box
     if(dlg.DoModal() == IDOK)
     {
-        // TODO: update currently loaded program engines
+        // init engines configuration
+        this->m_EngineList.RemoveAll();
+        this->m_CmbEngines.ResetContent();
 
-        // ...
+        // copy new engines from editor dialog to list
+        int nSize = dlg.m_EngineList.GetSize();
+        POSITION pos = dlg.m_EngineList.GetHeadPosition();
+        for(INT_PTR i = 0; i < nSize; i++)
+        {
+            ConfigEntry ce;
+
+            // get next entry in configuration list
+            ce = dlg.m_EngineList.GetNext(pos);
+
+            // insert all items to new engines list
+            this->m_EngineList.AddTail(ce);
+        }
+
+        // update currently loaded program engines
+        this->UpdateProgramEngines();
+
+        // update engines combobox and preset
+        this->OnCbnSelchangeComboEngines();
     }
 }
 
