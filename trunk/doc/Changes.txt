@@ -1,5 +1,11 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 3.0:
+
+- Added Avisynth (*.avs files) scripting support (not supported in 'Multiple mono input' and in 'One per file' mode).
+- Added *.avs filter to open dialog.
+- Double-click on *.avs script in files list to show AVS File Properties window.
+
 Version 2.3:
 
 - Added fully featured Aften engines editor.

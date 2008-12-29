@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ const CString szHelpMessage =
 	_T("Do not save configuration on exit.\n")
     _T("\n")
     _T("-i, --input-file <file.ext>\n")
-	_T("Set input files path (*.wav, *.bin, *.pcm, *.raw).\n")
+	_T("Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).\n")
 	_T("\n")
     _T("-o, --output-file <file.ext>\n")
 	_T("Set output file path (*.ac3).\n")
