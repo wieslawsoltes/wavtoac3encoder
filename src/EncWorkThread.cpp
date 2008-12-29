@@ -1058,8 +1058,15 @@ int RunAftenEncoder(AftenAPI &api,
     if(frame)
         free(frame);
 
-	// close PCM file context
-    pcm_close(&pf);
+    if(bAvisynthInput == false)
+    {
+	    // close PCM file context
+        pcm_close(&pf);
+    }
+    else
+    {
+        decoderAVS.CloseAvisynth();
+    }
 
     if(pWork->bParallelFileEncoding == false)
     {   
