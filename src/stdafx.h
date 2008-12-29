@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -139,4 +139,4 @@ extern "C" {
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
 
 // define program version
-#define ENCWAVTOAC3_VERSION _T("2.3")
+#define ENCWAVTOAC3_VERSION _T("3.0 BETA")

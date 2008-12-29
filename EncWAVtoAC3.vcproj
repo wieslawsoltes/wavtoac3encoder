@@ -381,6 +381,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Avs2Raw.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CommandLine.cpp"
 				>
 			</File>
@@ -885,6 +889,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Avs2Raw.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\CommandLine.h"
 				>
 			</File>
@@ -1002,6 +1010,18 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Avisynth Header Files"
+				>
+				<File
+					RelativePath=".\src\avisynth\src\core\avisynth.h"
+					>
+				</File>
+				<File
+					RelativePath=".\src\avisynth\src\internal.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -1077,19 +1097,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\installer\SetupScript.Win32A.iss"
+				RelativePath=".\installer\SetupScript.Win32.iss"
 				>
 			</File>
 			<File
-				RelativePath=".\installer\SetupScript.Win32U.iss"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.Win64A.iss"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.Win64U.iss"
+				RelativePath=".\installer\SetupScript.x64.iss"
 				>
 			</File>
 		</Filter>

@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -153,7 +153,7 @@ bool LoadEncoderPresets(CString szFileName);
 bool SaveEncoderPresets(CString szFileName);
 
 // define supported input file extension
-#define NUM_SUPPORTED_INPUT_EXT 7
+#define NUM_SUPPORTED_INPUT_EXT 8
 
 // define supported output file extension
 #define NUM_SUPPORTED_OUTPUT_EXT 1

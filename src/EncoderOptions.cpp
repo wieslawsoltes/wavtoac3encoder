@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -141,7 +141,8 @@ const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8] =
     _T("bin"),
     _T("aiff"),
     _T("aif"),
-    _T("aifc")
+    _T("aifc"),
+    _T("avs")
 };
 
 // supported input file formats
@@ -153,7 +154,8 @@ const int nSupportedInputFormats[NUM_SUPPORTED_INPUT_EXT] =
     PCM_FORMAT_RAW,
     PCM_FORMAT_AIFF,
     PCM_FORMAT_AIFF,
-    PCM_FORMAT_CAFF
+    PCM_FORMAT_CAFF,
+
 };
 
 // supported output file extensions

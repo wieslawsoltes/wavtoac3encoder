@@ -1,7 +1,7 @@
 @echo off
 rem
 rem WAV to AC3 Encoder
-rem Copyright (C) 2007-2008 Wieslaw Soltes <wieslaw.soltes@gmail.com>
+rem Copyright (C) 2007, 2008, 2009 Wieslaw Soltes <wieslaw.soltes@gmail.com>
 rem
 rem This program is free software; you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=c:\Program Files (x86)\WinRAR\WinRAR.exe
 
-set varVersion=2.3
+set varVersion=3.0
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 

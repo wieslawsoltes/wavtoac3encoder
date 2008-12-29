@@ -1,9 +1,9 @@
-﻿WAV to AC3 Encoder 2.3 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 3.0 (Using Aften A/52 Audio Encoder)
 
 1) LICENSE
 
 WAV to AC3 Encoder
-Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ Main features:
 * Small size.
 * Sources available under GNU GPLv2 license.
 * Very simple to use. 
+* Avisynth scripting support.
 
 Program actively developed. Currently still in beta version.
 
@@ -82,7 +83,7 @@ you need to put libaften.dll's to 'bin' sub-directories.
 
 7) COPYRIGHTS
 
-WAV to AC3 Encoder, Copyright (C) 2007-2008 Wiesław Šoltés
+WAV to AC3 Encoder, Copyright (C) 2007, 2008, 2009 Wiesław Šoltés
 http://code.google.com/p/wavtoac3encoder/
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>

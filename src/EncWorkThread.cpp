@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "EncoderOptions.h"
 #include "Utilities.h"
 #include "MyFile.h"
+#include "Avs2Raw.h"
 
 CList<SingleWorkerData,SingleWorkerData> workList;
 
@@ -215,13 +216,19 @@ void SetAftenOptions(AftenAPI &api,
     }
 }
 
-void ShowCurrentJobInfo(int nInputFiles,  PcmContext &pf, WorkerParam *pWork, AftenContext &s)
+void ShowCurrentJobInfo(int nInputFiles,  
+                        PcmContext &pf, 
+                        WorkerParam *pWork, 
+                        AftenContext &s,
+                        bool bAvisynthInput,
+                        AvsAudioInfo &infoAVS)
 {
     CString szInputInfo = _T("");
     CString szOutputInfo = _T("");
     CString szSimdInfo = _T("");
 
     // input info (using code from pcm/pcm.c)
+    if(bAvisynthInput == false)
     {
         for(int i = 0; i < nInputFiles; i++)
         {
@@ -306,6 +313,28 @@ void ShowCurrentJobInfo(int nInputFiles,  PcmContext &pf, WorkerParam *pWork, Af
 
             pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[i])->SetWindowText(szInputInfo);
         }
+    }
+    else
+    {
+        // NOTE: type is always Raw PCM but floating-point may change in future and endianes
+        TCHAR *chan;
+        chan = _T("?-channel");
+
+        switch(infoAVS.nAudioChannels) 
+        {
+        case 1: chan = _T("mono"); break;
+        case 2: chan = _T("stereo"); break;
+        case 3: chan = _T("3-channel"); break;
+        case 4: chan = _T("4-channel"); break;
+        case 5: chan = _T("5-channel"); break;
+        case 6: chan = _T("6-channel"); break;
+        default: chan = _T("multi-channel"); break;
+        }
+
+        szInputInfo.Format(_T("\tAvisynth: Raw PCM Floating-point 32-bit little-endian %d Hz %s"), 
+            infoAVS.nSamplesPerSecond, chan);
+
+        pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[0])->SetWindowText(szInputInfo);
     }
 
     // output info (using code from aften/aften.c)
@@ -411,6 +440,13 @@ int RunAftenEncoder(AftenAPI &api,
     int input_file_format;
     enum PcmSampleFormat read_format;
 
+    // indicate avisynth script as input file
+    bool bAvisynthInput = false;
+
+    // check if we have avisynth script as input
+    if(GetFileExt(szInPath[0]).MakeLower() == _T("avs"))
+        bAvisynthInput = true;
+
 	// total size of input file(s)
     pWork->nInTotalSize = 0;
 
@@ -430,39 +466,79 @@ int RunAftenEncoder(AftenAPI &api,
         pszInPath[i] = szInPath[i].GetBuffer();
 
     pszOutPath = szOutPath.GetBuffer();
-
     memset(ifp, 0, NUM_MAX_INPUT_FILES * sizeof(FILE *));
 
-    // open input files
-    for(int i = 0; i < nInputFiles; i++)
+    // avisynth data
+    AvsAudioInfo infoAVS;
+    Avs2RawStatus statusAVS;
+    CAvs2Raw decoderAVS;
+    char szInputFileAVS[MAX_PATH] = "";
+
+    if(bAvisynthInput == true)
     {
-        ifp[i] = _tfopen(pszInPath[i], _T("rb"));
-        if(!ifp[i]) 
+        // initialize Avisynth - only one input file supported
+        // NOTE: only Ansi file names supported
+#ifdef _UNICODE
+        ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0])); 
+        if(decoderAVS.OpenAvisynth(szInputFileAVS) == false)
+#else
+        if(decoderAVS.OpenAvisynth(pszInPath[0]) == false)
+#endif
         {
-            // stop file timer
-            if(pWork->bParallelFileEncoding == false)
+            if(logCtx.bInit)
             {
-                pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-                pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
-                pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+                ::LogMessage(&logCtx, szLogMessage + _T("Failed to initialize Avisynth."));
             }
-
-			if(logCtx.bInit)
-			{ 
-				::LogMessage(&logCtx, szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
-			}
-
-            pWork->pWorkDlg->bTerminate = true;
-            if(pWork->bParallelFileEncoding == false)
-			{
-                ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
-			}
 
             return(WORKDLG_RETURN_FAILURE);
         }
         else
         {
-            pWork->nInTotalSize += GetFileSizeInt64(ifp[i]);
+            // get input Audio stream information from Avisynth
+            infoAVS = decoderAVS.GetInputInfo();
+
+            // calculate total size of input raw data
+            pWork->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+
+            if(logCtx.bInit)
+            {
+                ::LogMessage(&logCtx, szLogMessage + _T("Avisynth initialized successfully."));
+            }
+        }
+    }
+    else
+    {
+        // open input files
+        for(int i = 0; i < nInputFiles; i++)
+        {
+            ifp[i] = _tfopen(pszInPath[i], _T("rb"));
+            if(!ifp[i]) 
+            {
+                // stop file timer
+                if(pWork->bParallelFileEncoding == false)
+                {
+                    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+                    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+                    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+                }
+
+                if(logCtx.bInit)
+                { 
+                    ::LogMessage(&logCtx, szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
+                }
+
+                pWork->pWorkDlg->bTerminate = true;
+                if(pWork->bParallelFileEncoding == false)
+                {
+                    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+                }
+
+                return(WORKDLG_RETURN_FAILURE);
+            }
+            else
+            {
+                pWork->nInTotalSize += GetFileSizeInt64(ifp[i]);
+            }
         }
     }
 
@@ -499,7 +575,7 @@ int RunAftenEncoder(AftenAPI &api,
     }
 
     // begin clean-up code used after error
-
+    //
 #define HandleEncoderError(message) \
     if(pWork->bParallelFileEncoding == false) \
     { \
@@ -514,13 +590,21 @@ int RunAftenEncoder(AftenAPI &api,
     if(frame) \
         free(frame); \
     \
-    pcm_close(&pf); \
-    \
-    for(int i = 0; i < nInputFiles; i++) \
+    if(bAvisynthInput == true) \
     { \
-        if(ifp[i]) \
-            fclose(ifp[i]); \
+        decoderAVS.CloseAvisynth(); \
     } \
+    else \
+    { \
+        pcm_close(&pf); \
+    \
+        for(int i = 0; i < nInputFiles; i++) \
+        { \
+            if(ifp[i]) \
+                fclose(ifp[i]); \
+        } \
+    } \
+    \
     if(ofp) \
         fclose(ofp); \
     \
@@ -540,7 +624,7 @@ int RunAftenEncoder(AftenAPI &api,
         ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     \
     return(WORKDLG_RETURN_FAILURE);
-
+    //
     // end clean-up code used after error
 
 #ifdef CONFIG_DOUBLE
@@ -550,7 +634,8 @@ int RunAftenEncoder(AftenAPI &api,
 #endif
 
     input_file_format = PCM_FORMAT_UNKNOWN;
-    if(opt.raw_input)
+
+    if((opt.raw_input) || (bAvisynthInput == true))
     {
         // user selectd raw input format
         input_file_format = PCM_FORMAT_RAW;
@@ -561,19 +646,50 @@ int RunAftenEncoder(AftenAPI &api,
         input_file_format = GetSupportedInputFormat(GetFileExt(szInPath[0]));
     }
 
-    if(pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format)) 
+    if(bAvisynthInput == false)
     {
-		HandleEncoderError(_T("Failed to initialize PCM library."));
+        if(pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format)) 
+        {
+            HandleEncoderError(_T("Failed to initialize PCM library."));
+        }
+
+        if(opt.read_to_eof)
+            pcm_set_read_to_eof(&pf, 1);
+
+        if(opt.raw_input)
+        {
+            pcm_set_source_params(&pf, opt.raw_ch, opt.raw_fmt, opt.raw_order, opt.raw_sr);
+        }
+    }
+    else
+    {
+        if(opt.raw_input)
+        {
+            // NOTE: raw audio settings are ignored at this time, using avisynth settings
+        }
     }
 
-    if(opt.read_to_eof)
-        pcm_set_read_to_eof(&pf, 1);
-
-    if(opt.raw_input)
+    if(bAvisynthInput == true)
     {
-        pcm_set_source_params(&pf, opt.raw_ch, opt.raw_fmt, opt.raw_order, opt.raw_sr);
+        // init avisynth read status structure
+        statusAVS.nStart = 0;
+        statusAVS.nSamples = infoAVS.nAudioSamples;
+        statusAVS.nSamplesLeft = infoAVS.nAudioSamples;
+        statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
+
+        // 'pf' is not used by avisynth, only needed for stats (to share same code with pcm lib)
+        pf.samples = infoAVS.nAudioSamples;
+        pf.sample_rate = infoAVS.nSamplesPerSecond;
+        pf.channels = infoAVS.nAudioChannels;
+        pf.ch_mask = 0xFFFFFFFF; // NOTE: plain WAVE channel selection is assumed
+
+        // TODO: need to set this for proper encoding and check if user has selected other settings
+        // NOTE: currently using ch_mask to set this
+        //s.acmod = ;
+        //s.lfe = ;
     }
 
+    // TODO: need to test this with Avisynth input
     if(s.acmod >= 0) 
     {
         static const int acmod_to_ch[8] = { 2, 1, 2, 3, 3, 4, 4, 5 };
@@ -637,14 +753,38 @@ int RunAftenEncoder(AftenAPI &api,
         }
     }
 
-    s.channels = pf.channels;
-    s.samplerate = pf.sample_rate;
+    if(bAvisynthInput == false)
+    {
 #ifdef CONFIG_DOUBLE
-    s.sample_format = A52_SAMPLE_FMT_DBL;
+        s.sample_format = A52_SAMPLE_FMT_DBL;
 #else
-    s.sample_format = A52_SAMPLE_FMT_FLT;
+        s.sample_format = A52_SAMPLE_FMT_FLT;
 #endif
 
+        s.channels = pf.channels;
+        s.samplerate = pf.sample_rate;
+    }
+    else
+    {
+        // Avs2Raw converts all formats to FLOAT by default
+        /*
+        switch(infoAVS.nSampleType)
+        {
+        case SAMPLE_INT8: s.sample_format = A52_SAMPLE_FMT_S8; break;
+        case SAMPLE_INT16: s.sample_format = A52_SAMPLE_FMT_S16; break;
+        case SAMPLE_INT24: s.sample_format = A52_SAMPLE_FMT_S24; break;
+        case SAMPLE_INT32: s.sample_format = A52_SAMPLE_FMT_S32; break;
+        case SAMPLE_FLOAT: s.sample_format = A52_SAMPLE_FMT_FLT; break;
+        default: s.sample_format = A52_SAMPLE_FMT_FLT; break;
+        }
+        */
+        s.sample_format = A52_SAMPLE_FMT_FLT;
+
+        s.channels = infoAVS.nAudioChannels;
+        s.samplerate = infoAVS.nSamplesPerSecond;      
+    }
+
+    // allocate memory for audio data
     frame = (uint8_t *) calloc(A52_MAX_CODED_FRAME_SIZE, 1);
     fwav = (FLOAT *) calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
     if(frame == NULL || fwav == NULL) 
@@ -669,11 +809,20 @@ int RunAftenEncoder(AftenAPI &api,
     {
         int diff;
 
+        if(bAvisynthInput == false)
+        {
+            cIORead.Start();
+            nr = pcm_read_samples(&pf, fwav, 256);
+            cIORead.Stop();
+        }
+        else
+        {
+            statusAVS.nSamplesToRead = 256;
 
-        cIORead.Start();
-        nr = pcm_read_samples(&pf, fwav, 256);
-        cIORead.Stop();
-
+            cIORead.Start();
+            nr = decoderAVS.GetAudio(fwav, &statusAVS);
+            cIORead.Stop();
+        }
 
         diff = 256 - nr;
         if(diff > 0) 
@@ -696,7 +845,9 @@ int RunAftenEncoder(AftenAPI &api,
 
     // show current job information in work dialog
     if(pWork->bParallelFileEncoding == false)
-        ShowCurrentJobInfo(nInputFiles, pf, pWork, s);
+    {
+        ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
+    }
 
     // main encoding loop
     do
@@ -720,9 +871,20 @@ int RunAftenEncoder(AftenAPI &api,
         }
 
         // read input data
-        cIORead.Start();
-        nr = pcm_read_samples(&pf, fwav, A52_SAMPLES_PER_FRAME);
-        cIORead.Stop();
+        if(bAvisynthInput == false)
+        {
+            cIORead.Start();
+            nr = pcm_read_samples(&pf, fwav, A52_SAMPLES_PER_FRAME);
+            cIORead.Stop();
+        }
+        else
+        {
+            statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
+
+            cIORead.Start();
+            nr = decoderAVS.GetAudio(fwav, &statusAVS);
+            cIORead.Stop();
+        }
 
         if(aften_remap)
             aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
@@ -762,16 +924,24 @@ int RunAftenEncoder(AftenAPI &api,
                 int nCurTotalPos = 0; // 0% - 100%
                 __int64 nCurPos = 0;
 
-                if(pWork->bMultiMonoInput == false)
+                if(bAvisynthInput == false)
                 {
-                    nCurPos = _ftelli64(ifp[0]);
+                    if(pWork->bMultiMonoInput == false)
+                    {
+                        nCurPos = _ftelli64(ifp[0]);
+                    }
+                    else
+                    {
+                        for(int i = 0; i < nInputFiles; i++)
+                        {
+                            nCurPos += _ftelli64(ifp[i]);
+                        }
+                    }
                 }
                 else
                 {
-                    for(int i = 0; i < nInputFiles; i++)
-                    {
-                        nCurPos += _ftelli64(ifp[i]);
-                    }
+                    // TODO: use 'nr' to count read samples instead of 'samplecount'
+                    nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
                 }
 
                 // use ftell to get encoding progress
@@ -894,16 +1064,23 @@ int RunAftenEncoder(AftenAPI &api,
     if(pWork->bParallelFileEncoding == false)
     {   
         // update total counter
-        if(pWork->bMultiMonoInput == false)
+        if(bAvisynthInput == false)
         {
-            *nTotalSizeCounter += _ftelli64(ifp[0]);
+            if(pWork->bMultiMonoInput == false)
+            {
+                *nTotalSizeCounter += _ftelli64(ifp[0]);
+            }
+            else
+            {
+                for(int i = 0; i < nInputFiles; i++)
+                {
+                    *nTotalSizeCounter += _ftelli64(ifp[i]);
+                }
+            }
         }
         else
         {
-            for(int i = 0; i < nInputFiles; i++)
-            {
-                *nTotalSizeCounter += _ftelli64(ifp[i]);
-            }
+            *nTotalSizeCounter += pWork->nInTotalSize;
         }
     }
 

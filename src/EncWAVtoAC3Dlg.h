@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -35,6 +35,8 @@
 #include "MySliderCtrl.h"
 
 #include "aften.h"
+
+#include "Avs2Raw.h"
 
 #include "EncoderOptions.h"
 
@@ -168,6 +170,8 @@ public:
     void ShowOptionPopup(bool bUseRect);
     void UpdateView(int nMode);
 public:
+    AvsAudioInfo GetAvisynthFileInfo(CString szFileName);
+public:
     afx_msg void OnDropFiles(HDROP hDropInfo);
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
@@ -238,6 +242,7 @@ public:
     afx_msg void OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult);
 public:
     afx_msg void OnEnChangeEditRawSampleRate();
     afx_msg void OnEnChangeEditRawChannels();

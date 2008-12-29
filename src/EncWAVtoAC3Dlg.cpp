@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2008 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -219,6 +219,7 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_NOTIFY(NM_RCLICK, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnNMRclickListFiles)
     ON_NOTIFY(NM_RCLICK, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnNMRclickListSettings)
     ON_NOTIFY(NM_DBLCLK, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnNMDblclkListSettings)
+    ON_NOTIFY(NM_DBLCLK, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnNMDblclkListFiles)
     ON_EN_CHANGE(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnChangeEditThreads)
     ON_EN_CHANGE(IDC_EDIT_RAW_SAMPLE_RATE, &CEncWAVtoAC3Dlg::OnEnChangeEditRawSampleRate)
     ON_EN_CHANGE(IDC_EDIT_RAW_CHANNELS, &CEncWAVtoAC3Dlg::OnEnChangeEditRawChannels)
@@ -1544,6 +1545,14 @@ void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
     // update item file name
     this->m_LstFiles.SetItemText(nItem, 0, szPath);
 
+    // get AVS file size
+    if(GetFileExt(szPath).MakeLower() == _T("avs"))
+    {
+        // get input Audio stream information from Avisynth
+        AvsAudioInfo infoAVS = GetAvisynthFileInfo(szPath);
+        nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+    }
+
     // szSize.Format(_T("%I64d"), GetFileSize64(szPath));
     szSize.Format(_T("%I64d"), nFileSize);
 
@@ -2776,11 +2785,18 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     CList<bool,bool> listStatus;
     dlg.nTotalSize = 0;
     CString szSizeBuff;
+    CString szFileBuffer;
+    bool bAvisynthInput = false;
 
     for(int i = 0; i < nItemsCount; i++)
     {
+        // check for avisynth scipts
+        szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
+        if(GetFileExt(szFileBuffer).MakeLower() == _T("avs"))
+            bAvisynthInput = true;
+
         // get item file path
-        list.AddTail(this->m_LstFiles.GetItemText(i, 0));
+        list.AddTail(szFileBuffer);
 
         // set encoded status
         listStatus.AddTail(false);
@@ -2788,6 +2804,18 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         // get item file size
         szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
         dlg.nTotalSize += _ttoi64(szSizeBuff);
+    }
+
+    // check if we can process avisynth *.avs script (check all files in the list)
+    // 1. 'Multiple mono input' mode - off
+    // 2. 'One per file' mode - off
+    if(((GetCurrentPreset().bParallelFileEncoding == true) || (this->bMultipleMonoInput == true))
+        && (bAvisynthInput == true))
+    {
+        MessageBox(_T("Disable 'Multiple mono input' mode and 'One per file' mode in order to use Avisynth scripts!"), 
+            _T("Error"), MB_ICONERROR | MB_OK);
+        bWorking = false;
+        return;
     }
 
     // set pointer to files list
@@ -3447,6 +3475,101 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 
         // show option help text
         this->MessageBox(encOpt[nItem].szHelpText, encOpt[nItem].szName, MB_ICONINFORMATION | MB_OK);
+    }
+
+    *pResult = 0;
+}
+
+AvsAudioInfo CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName)
+{
+    TCHAR *pszInPath = szFileName.GetBuffer();
+    AvsAudioInfo infoAVS;
+    memset(&infoAVS, 0, sizeof(AvsAudioInfo));
+
+    // show AVS file information text
+    CAvs2Raw decoderAVS;
+    char szInputFileAVS[MAX_PATH] = "";
+
+    // initialize Avisynth - only one input file supported
+    // NOTE: only Ansi file names supported
+#ifdef _UNICODE
+    ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath)); 
+    if(decoderAVS.OpenAvisynth(szInputFileAVS) == false)
+#else
+    if(decoderAVS.OpenAvisynth(pszInPath) == false)
+#endif
+    {
+        this->MessageBox(_T("Failed to initialize Avisynth"), _T("Error"), MB_ICONERROR | MB_OK);
+    }
+    else
+    {
+        // get input Audio stream information from Avisynth
+        infoAVS = decoderAVS.GetInputInfo();
+
+        // close Avisynth
+        decoderAVS.CloseAvisynth();
+    }
+
+    return infoAVS;
+}
+
+void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    POSITION pos = m_LstFiles.GetFirstSelectedItemPosition();
+    if(pos != NULL)
+    {
+        int nItem = m_LstFiles.GetNextSelectedItem(pos);
+        CString szFileName = m_LstFiles.GetItemText(nItem, 0);
+
+        // show AVS file information text
+        if(GetFileExt(szFileName).MakeLower() == _T("avs"))
+        {
+            // get input Audio stream information from Avisynth
+            AvsAudioInfo infoAVS = GetAvisynthFileInfo(szFileName);
+            CString szInfo;
+
+            TCHAR *pszInPath = szFileName.GetBuffer();
+
+            // get inforamtion about input file
+            szInfo += _T("Sample format\t: ");
+            switch(infoAVS.nSampleType)
+            {
+            case SAMPLE_INT8:
+                szInfo += _T("SAMPLE_INT8\n");
+                break;
+            case SAMPLE_INT16:
+                szInfo += _T("SAMPLE_INT16\n");
+                break;
+            case SAMPLE_INT24:
+                szInfo += _T("SAMPLE_INT24\n");
+                break;
+            case SAMPLE_INT32:
+                szInfo += _T("SAMPLE_INT32\n");
+                break;
+            case SAMPLE_FLOAT:
+                szInfo += _T("SAMPLE_FLOAT\n");
+                break;
+            default:
+                szInfo += _T("unknown\n");
+                break;
+            }
+
+            CString szBuff;
+            szBuff.Format(_T("Sample rate\t: %d\n"), infoAVS.nSamplesPerSecond);
+            szInfo += szBuff;
+            szBuff.Format(_T("Channels\t\t: %d\n"), infoAVS.nAudioChannels);
+            szInfo += szBuff;
+            szBuff.Format(_T("Audio samples\t: %I64d\n"), infoAVS.nAudioSamples);
+            szInfo += szBuff;
+            szBuff.Format(_T("Decoded size\t: %I64d"), 
+                infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
+            szInfo += szBuff;
+
+            szFileName.ReleaseBuffer();
+
+            // show infor to user
+            this->MessageBox(szInfo, _T("AVS File Properties"), MB_ICONINFORMATION | MB_OK); 
+        } 
     }
 
     *pResult = 0;

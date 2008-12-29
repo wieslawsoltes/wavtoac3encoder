@@ -9,7 +9,7 @@ Options:
  -x, --encode-and-exit			Encode input files and exit.
  -r, --read-only			Do not save configuration on exit.
 
- -i, --input-file <file.ext>		Set input files path (*.wav, *.bin, *.pcm, *.raw).
+ -i, --input-file <file.ext>		Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).
  -o, --output-file <file.ext>		Set output file path (*.ac3).
  -d, --output-path <path>		Set default output path (default: input file path is used).
 
