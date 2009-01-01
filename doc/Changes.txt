@@ -2,9 +2,10 @@
 
 Version 3.0:
 
-- Added Avisynth (*.avs files) scripting support (not supported in 'Multiple mono input' and in 'One per file' mode).
+- Added preliminary Avisynth (*.avs files) scripting support (not supported in 'Multiple mono input' and in 'One per file' mode).
 - Added *.avs filter to open dialog.
 - Double-click on *.avs script in files list to show AVS File Properties window.
+- The Win64 build is not available and does not compile properly (Avisynth not available for 64-bit Windows).
 
 Version 2.3:
 

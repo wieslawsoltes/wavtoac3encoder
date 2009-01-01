@@ -20,6 +20,7 @@
 
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
+
 #include "Avs2Raw.h"
 
 CAvs2Raw::CAvs2Raw()
