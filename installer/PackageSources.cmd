@@ -69,6 +69,21 @@ copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.rc" "%varOutput%\%varPath%"
 
+set varPath=src\avisynth
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
+set varPath=src\avisynth\src
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
+set varPath=src\avisynth\src\core
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
 set varPath=src\aften
 mkdir "%varOutput%\%varPath%"
 
