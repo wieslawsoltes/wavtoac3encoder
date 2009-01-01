@@ -139,4 +139,4 @@ extern "C" {
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
 
 // define program version
-#define ENCWAVTOAC3_VERSION _T("3.0 BETA 1")
+#define ENCWAVTOAC3_VERSION _T("3.0")

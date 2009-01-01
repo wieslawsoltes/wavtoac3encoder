@@ -170,7 +170,7 @@ public:
     void ShowOptionPopup(bool bUseRect);
     void UpdateView(int nMode);
 public:
-    AvsAudioInfo GetAvisynthFileInfo(CString szFileName);
+    bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
 public:
     afx_msg void OnDropFiles(HDROP hDropInfo);
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
