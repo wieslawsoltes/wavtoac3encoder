@@ -98,7 +98,7 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
     this->bMultipleMonoInput = false;
 
     // text file log
-    this->bEnableLog = false;
+    this->bEnableLog = true;
     this->szLogFile = _T("");
 
     // visibility of main window
@@ -659,10 +659,11 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     {
         if(this->cmdLineOpt.bHaveLogFile == true)
             this->szLogFile = this->cmdLineOpt.szLogFile;
-
-        this->bEnableLog = true;
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_CHECKED);
     }
+
+    // set log menu item check state
+    this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, 
+        (this->bEnableLog == true) ? MF_CHECKED : MF_UNCHECKED);
 
     // process read-only setting
     if(this->cmdLineOpt.bHaveSaveConfig == true)
