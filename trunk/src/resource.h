@@ -14,8 +14,9 @@
 #define IDB_ABOUT_BITMAP                132
 #define IDR_MENU_LIST                   133
 #define IDD_MUX_DIALOG                  134
-#define IDD_ENGINES                     135
 #define IDD_ENGINES_DIALOG              135
+#define IDD_LOG_DIALOG                  136
+#define IDD_AVISYNTH_DIALOG             137
 #define IDC_PROGRESS_CURRENT            1001
 #define IDC_PROGRESS_TOTAL              1002
 #define IDC_LIST_FILES                  1003
@@ -117,6 +118,9 @@
 #define IDC_EDIT_ENGINE_PATH            1099
 #define IDC_BUTTON_ENGINES_REMOVE       1100
 #define IDC_CHECK_ADVANCED_VIEW         1101
+#define IDC_LIST_LOG                    1102
+#define IDC_STATIC_GROUP_LOG            1103
+#define IDC_BUTTON_SAVE_LOG             1104
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -153,9 +157,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32804
-#define _APS_NEXT_CONTROL_VALUE         1102
+#define _APS_NEXT_CONTROL_VALUE         1105
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

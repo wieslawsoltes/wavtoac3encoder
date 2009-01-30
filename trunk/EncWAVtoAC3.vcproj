@@ -397,11 +397,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\EncWAVtoAC3AvsDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3EngDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\EncWAVtoAC3LogDlg.cpp"
 				>
 			</File>
 			<File
@@ -905,11 +913,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\EncWAVtoAC3AvsDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.h"
 				>
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3EngDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\EncWAVtoAC3LogDlg.h"
 				>
 			</File>
 			<File
