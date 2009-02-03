@@ -40,7 +40,7 @@ Main features:
 * Loading and saving of all program settings.
 * Encoder presets.
 * Vary fast.
-* Optimized for modern CPU's.
+* Optimized for modern CPUs.
 * High-quality of output audio files.
 * Full UNICODE and ANSI support.
 * Natively supports x86 and AMD64 architectures.
@@ -61,7 +61,7 @@ automaticaly loaded/saved by program every time the program is started/closed.
 
 Program configuration is stored in EncWAVtoAC3.config file.
 
-Presets for enoder are stored in EncWAVtoAC3.presets file.
+Presets for encoder are stored in EncWAVtoAC3.presets file.
 
 Paths and names of different libaften.dll engines are stored in 
 EncWAVtoAC3.win32 (Win32) and EncWAVtoAC3.win64 (Win64) files.
