@@ -19,7 +19,7 @@ rem
 rem $Id$
 setlocal
 
-set varWinRAR=c:\Program Files (x86)\WinRAR\WinRAR.exe
+set varWinRAR=c:\Program Files\WinRAR\WinRAR.exe
 
 set varVersion=3.0
 set varOutputVer=EncWAVtoAC3-%varVersion%
