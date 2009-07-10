@@ -50,7 +50,7 @@ public:
     void SetControlsState();
     bool LoadFilesList(CString &szFileName);
     bool SaveFilesList(CString &szFileName, int nFormat);
-    void ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyStatic *m_StcCurrent);
+    void ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent);
 public:
     int nChannelConfig;
     bool bLFE;
@@ -63,6 +63,7 @@ public:
     CMyButton m_BtnChannelLFE;
     CMyButton m_BtnChannelSL;
     CMyButton m_BtnChannelSR;
+    CMyButton m_BtnChannelS;
     CMyButton m_ChkChannelConfigLFE;
 public:
     CMyStatic m_StcLabelFL;
@@ -71,14 +72,6 @@ public:
     CMyStatic m_StcLabelLFE;
     CMyStatic m_StcLabelSL;
     CMyStatic m_StcLabelSR;
-public:
-    CMyStatic m_StcChannelFL;
-    CMyStatic m_StcChannelFR;
-    CMyStatic m_StcChannelFC;
-    CMyStatic m_StcChannelLFE;
-    CMyStatic m_StcChannelSL;
-    CMyStatic m_StcChannelSR;
-    CMyButton m_BtnChannelS;
 public:
     CMyComboBox m_CmbChannelConfig;
 public:
@@ -106,4 +99,10 @@ public:
     afx_msg void OnBnClickedCheckChannelConfigLfe();
 public:
     afx_msg void OnCbnSelchangeComboChannelConfig();
+	CMyEdit m_EdtChannelFL;
+	CMyEdit m_EdtChannelFR;
+	CMyEdit m_EdtChannelFC;
+	CMyEdit m_EdtChannelLFE;
+	CMyEdit m_EdtChannelSL;
+	CMyEdit m_EdtChannelSR;
 };

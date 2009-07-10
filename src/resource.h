@@ -121,6 +121,13 @@
 #define IDC_LIST_LOG                    1102
 #define IDC_STATIC_GROUP_LOG            1103
 #define IDC_BUTTON_SAVE_LOG             1104
+#define IDC_EDIT_FL                     1105
+#define IDC_EDIT_FR                     1106
+#define IDC_EDIT_FC                     1107
+#define IDC_EDIT_LFE                    1108
+#define IDC_EDIT_SL                     1109
+#define IDC_EDIT_SL2                    1110
+#define IDC_EDIT_SR                     1110
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -159,7 +166,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32804
-#define _APS_NEXT_CONTROL_VALUE         1105
+#define _APS_NEXT_CONTROL_VALUE         1106
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

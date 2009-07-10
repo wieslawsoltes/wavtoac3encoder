@@ -99,28 +99,28 @@ CEncWAVtoAC3MuxDlg::~CEncWAVtoAC3MuxDlg()
 
 void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
-    DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
-    DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
-    DDX_Control(pDX, IDC_BUTTON_LFE, m_BtnChannelLFE);
-    DDX_Control(pDX, IDC_BUTTON_SL, m_BtnChannelSL);
-    DDX_Control(pDX, IDC_BUTTON_SR, m_BtnChannelSR);
-    DDX_Control(pDX, IDC_BUTTON_S, m_BtnChannelS);
-    DDX_Control(pDX, IDC_STATIC_LABEL_FL, m_StcLabelFL);
-    DDX_Control(pDX, IDC_STATIC_LABEL_FR, m_StcLabelFR);
-    DDX_Control(pDX, IDC_STATIC_LABEL_FC, m_StcLabelFC);
-    DDX_Control(pDX, IDC_STATIC_LABEL_LFE, m_StcLabelLFE);
-    DDX_Control(pDX, IDC_STATIC_LABEL_SL, m_StcLabelSL);
-    DDX_Control(pDX, IDC_STATIC_LABEL_SR, m_StcLabelSR);
-    DDX_Control(pDX, IDC_STATIC_FL, m_StcChannelFL);
-    DDX_Control(pDX, IDC_STATIC_FR, m_StcChannelFR);
-    DDX_Control(pDX, IDC_STATIC_FC, m_StcChannelFC);
-    DDX_Control(pDX, IDC_STATIC_LFE, m_StcChannelLFE);
-    DDX_Control(pDX, IDC_STATIC_SL, m_StcChannelSL);
-    DDX_Control(pDX, IDC_STATIC_SR, m_StcChannelSR);
-    DDX_Control(pDX, IDC_COMBO_CHANNEL_CONFIG, m_CmbChannelConfig);
-    DDX_Control(pDX, IDC_CHECK_CHANNEL_CONFIG_LFE, m_ChkChannelConfigLFE);
+	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
+	DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
+	DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
+	DDX_Control(pDX, IDC_BUTTON_LFE, m_BtnChannelLFE);
+	DDX_Control(pDX, IDC_BUTTON_SL, m_BtnChannelSL);
+	DDX_Control(pDX, IDC_BUTTON_SR, m_BtnChannelSR);
+	DDX_Control(pDX, IDC_BUTTON_S, m_BtnChannelS);
+	DDX_Control(pDX, IDC_STATIC_LABEL_FL, m_StcLabelFL);
+	DDX_Control(pDX, IDC_STATIC_LABEL_FR, m_StcLabelFR);
+	DDX_Control(pDX, IDC_STATIC_LABEL_FC, m_StcLabelFC);
+	DDX_Control(pDX, IDC_STATIC_LABEL_LFE, m_StcLabelLFE);
+	DDX_Control(pDX, IDC_STATIC_LABEL_SL, m_StcLabelSL);
+	DDX_Control(pDX, IDC_STATIC_LABEL_SR, m_StcLabelSR);
+	DDX_Control(pDX, IDC_COMBO_CHANNEL_CONFIG, m_CmbChannelConfig);
+	DDX_Control(pDX, IDC_CHECK_CHANNEL_CONFIG_LFE, m_ChkChannelConfigLFE);
+	DDX_Control(pDX, IDC_EDIT_FL, m_EdtChannelFL);
+	DDX_Control(pDX, IDC_EDIT_FR, m_EdtChannelFR);
+	DDX_Control(pDX, IDC_EDIT_FC, m_EdtChannelFC);
+	DDX_Control(pDX, IDC_EDIT_LFE, m_EdtChannelLFE);
+	DDX_Control(pDX, IDC_EDIT_SL, m_EdtChannelSL);
+	DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3MuxDlg, CDialog)
@@ -293,12 +293,12 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
 
 void CEncWAVtoAC3MuxDlg::SetFilePaths()
 {
-    this->m_StcChannelFL.SetWindowText(szInputFiles[0]);
-    this->m_StcChannelFR.SetWindowText(szInputFiles[1]);
-    this->m_StcChannelFC.SetWindowText(szInputFiles[2]);
-    this->m_StcChannelLFE.SetWindowText(szInputFiles[3]);
-    this->m_StcChannelSL.SetWindowText(szInputFiles[4]);
-    this->m_StcChannelSR.SetWindowText(szInputFiles[5]);
+    this->m_EdtChannelFL.SetWindowText(szInputFiles[0]);
+    this->m_EdtChannelFR.SetWindowText(szInputFiles[1]);
+    this->m_EdtChannelFC.SetWindowText(szInputFiles[2]);
+    this->m_EdtChannelLFE.SetWindowText(szInputFiles[3]);
+    this->m_EdtChannelSL.SetWindowText(szInputFiles[4]);
+    this->m_EdtChannelSR.SetWindowText(szInputFiles[5]);
 }
 
 void CEncWAVtoAC3MuxDlg::SetControlsState()
@@ -562,14 +562,14 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
     return true;
 }
 
-void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyStatic *m_StcCurrent)
+void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
 {
-    if(m_BtnCurrent == NULL || m_StcCurrent == NULL)
+    if(m_BtnCurrent == NULL || m_EdtCurrent == NULL)
         return;
 
     CString szCurrentFileName;
     
-    m_StcCurrent->GetWindowText(szCurrentFileName);
+    m_EdtCurrent->GetWindowText(szCurrentFileName);
     szCurrentFileName = GetFileName(szCurrentFileName);
 
     // get input file filter
@@ -586,7 +586,7 @@ void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMySt
     {
         CString szFileName = fd.GetPathName();
 
-        m_StcCurrent->SetWindowText(szFileName);
+        m_EdtCurrent->SetWindowText(szFileName);
         this->szInputFiles[nID] = szFileName;
         m_BtnCurrent->SetBold(true);
     }
@@ -594,43 +594,43 @@ void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMySt
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFl()
 {
-    this->ShowOpenFileDlg(0, &this->m_BtnChannelFL, &this->m_StcChannelFL);
+    this->ShowOpenFileDlg(0, &this->m_BtnChannelFL, &this->m_EdtChannelFL);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFr()
 {
-    this->ShowOpenFileDlg(1, &this->m_BtnChannelFR, &this->m_StcChannelFR);
+    this->ShowOpenFileDlg(1, &this->m_BtnChannelFR, &this->m_EdtChannelFR);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFc()
 {
-    this->ShowOpenFileDlg(2, &this->m_BtnChannelFC, &this->m_StcChannelFC);
+    this->ShowOpenFileDlg(2, &this->m_BtnChannelFC, &this->m_EdtChannelFC);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonLfe()
 {
-    this->ShowOpenFileDlg(3, &this->m_BtnChannelLFE, &this->m_StcChannelLFE);
+    this->ShowOpenFileDlg(3, &this->m_BtnChannelLFE, &this->m_EdtChannelLFE);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonSl()
 {
-    this->ShowOpenFileDlg(4, &this->m_BtnChannelSL, &this->m_StcChannelSL);
+    this->ShowOpenFileDlg(4, &this->m_BtnChannelSL, &this->m_EdtChannelSL);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonSr()
 {
-    this->ShowOpenFileDlg(5, &this->m_BtnChannelSR, &this->m_StcChannelSR);
+    this->ShowOpenFileDlg(5, &this->m_BtnChannelSR, &this->m_EdtChannelSR);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonS()
 {
-    this->ShowOpenFileDlg(4, &this->m_BtnChannelS, &this->m_StcChannelSL);
+    this->ShowOpenFileDlg(4, &this->m_BtnChannelS, &this->m_EdtChannelSL);
 }
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFl()
 {
     this->m_BtnChannelFL.SetBold(false);
-    this->m_StcChannelFL.SetWindowText(_T(""));
+    this->m_EdtChannelFL.SetWindowText(_T(""));
     this->szInputFiles[0] = _T("");
 
     this->SetControlsState();
@@ -639,7 +639,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFl()
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFc()
 {
     this->m_BtnChannelFC.SetBold(false);
-    this->m_StcChannelFC.SetWindowText(_T(""));
+    this->m_EdtChannelFC.SetWindowText(_T(""));
     this->szInputFiles[2] = _T("");
 
     this->SetControlsState();
@@ -648,7 +648,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFc()
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFr()
 {
     this->m_BtnChannelFR.SetBold(false);
-    this->m_StcChannelFR.SetWindowText(_T(""));
+    this->m_EdtChannelFR.SetWindowText(_T(""));
     this->szInputFiles[1] = _T("");
 
     this->SetControlsState();
@@ -657,7 +657,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFr()
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe()
 {
     this->m_BtnChannelLFE.SetBold(false);
-    this->m_StcChannelLFE.SetWindowText(_T(""));
+    this->m_EdtChannelLFE.SetWindowText(_T(""));
     this->szInputFiles[3] = _T("");
 
     this->SetControlsState();
@@ -675,7 +675,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
         this->m_BtnChannelSL.SetBold(false);
     }
 
-    this->m_StcChannelSL.SetWindowText(_T(""));
+    this->m_EdtChannelSL.SetWindowText(_T(""));
     this->szInputFiles[4] = _T("");
 
     this->SetControlsState();
@@ -684,7 +684,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSr()
 {
     this->m_BtnChannelSR.SetBold(false);
-    this->m_StcChannelSR.SetWindowText(_T(""));
+    this->m_EdtChannelSR.SetWindowText(_T(""));
     this->szInputFiles[5] = _T("");
 
     this->SetControlsState();
