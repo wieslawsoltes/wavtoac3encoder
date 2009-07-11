@@ -19,17 +19,11 @@ rem
 rem $Id$
 setlocal
 
-set BasePath=Release\Win32
+set BasePath=Release
 upx --best "%BasePath%\EncWAVtoAC3.exe"
 upx --best "%BasePath%\libaftendll_x86\libaften.dll"
 upx --best "%BasePath%\libaftendll_x86_SSE\libaften.dll"
 upx --best "%BasePath%\libaftendll_x86_SSE2\libaften.dll"
 upx --best "%BasePath%\libaftendll_x86_SSE3\libaften.dll"
-
-rem set BasePath=Release\x64
-rem upx --best "%BasePath%\EncWAVtoAC3.exe"
-rem upx --best "%BasePath%\libaftendll_AMD64\libaften.dll"
-rem upx --best "%BasePath%\libaftendll_AMD64_SSE2\libaften.dll"
-rem upx --best "%BasePath%\libaftendll_AMD64_SSE3\libaften.dll"
 
 endlocal
