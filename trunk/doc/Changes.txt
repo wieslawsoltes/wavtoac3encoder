@@ -1,5 +1,13 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 4.0:
+
+- Updated Aften sources and libraries to svn revision 843.
+- Removed parallel file encoding mode.
+- Removed x64 build configuration.
+- Changed engines configuration file extention from .win32 and .win64 to .engines.
+- Updated project to Visual Studio 2010 Beta 1.
+
 Version 3.0:
 
 - Added preliminary Avisynth (*.avs files) scripting support (not supported in 'Multiple mono input' and in 'One per file' mode).
