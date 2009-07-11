@@ -18,7 +18,6 @@ rem Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 rem
 rem $Id$
 setlocal
-set IssCompiler32=c:\Program Files (x86)\Inno Setup 5\Compil32.exe
-"%IssCompiler32%" /cc "SetupScript.Win32.iss"
-"%IssCompiler32%" /cc "SetupScript.x64.iss"
+set IssCompiler32=C:\Program Files\Inno Setup 5\Compil32.exe
+"%IssCompiler32%" /cc "SetupScript.iss"
 endlocal
