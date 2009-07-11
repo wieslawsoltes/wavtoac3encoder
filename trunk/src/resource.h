@@ -60,7 +60,6 @@
 #define IDC_STATIC_PRESETS              1040
 #define IDC_EDIT_THREADS                1041
 #define IDC_SPIN_THREADS                1042
-#define IDC_LIST_MT_PROGRESS            1043
 #define IDC_BUTTON_ENGINES              1043
 #define IDC_STATIC_SIMD                 1044
 #define IDC_CHECK_SIMD_MMX              1045
@@ -79,7 +78,6 @@
 #define IDC_STATIC_RAW                  1058
 #define IDC_STATIC_BUILD_INFO           1059
 #define IDC_STATIC_PARALLEL             1060
-#define IDC_CHECK_FILE_PARALLEL         1061
 #define IDC_STATIC_ENGINE               1062
 #define IDC_COMBO_ENGINES               1063
 #define IDC_CHECK_MULTIPLE_MONO_INPUT   1064
@@ -90,13 +88,7 @@
 #define IDC_BUTTON_LFE                  1069
 #define IDC_BUTTON_SL                   1070
 #define IDC_BUTTON_SR                   1071
-#define IDC_STATIC_FL                   1072
 #define IDC_BUTTON_CLEAR_FL             1073
-#define IDC_STATIC_FR                   1074
-#define IDC_STATIC_FC                   1075
-#define IDC_STATIC_LFE                  1076
-#define IDC_STATIC_SL                   1077
-#define IDC_STATIC_SR                   1078
 #define IDC_BUTTON_CLEAR_FC             1079
 #define IDC_BUTTON_CLEAR_FR             1080
 #define IDC_BUTTON_CLEAR_LFE            1081
@@ -126,7 +118,6 @@
 #define IDC_EDIT_FC                     1107
 #define IDC_EDIT_LFE                    1108
 #define IDC_EDIT_SL                     1109
-#define IDC_EDIT_SL2                    1110
 #define IDC_EDIT_SR                     1110
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
@@ -148,8 +139,6 @@
 #define ID_FILE_ADDDIRECTORY            32789
 #define ID_FILE_MUXWIZARD               32790
 #define ID_LIST_MUXWIZARD               32791
-#define ID_OPTIONS_ENABLELOGING         32792
-#define ID_OPTIONS_DIABLEALLWARNINGS    32793
 #define ID_OPTIONS_ENABLELOGGING        32794
 #define ID_OPTIONS_DISABLEALLWARNINGS   32795
 #define ID_OPTIONS_OPENLOGFILE          32796
@@ -166,7 +155,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32804
-#define _APS_NEXT_CONTROL_VALUE         1106
+#define _APS_NEXT_CONTROL_VALUE         1111
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

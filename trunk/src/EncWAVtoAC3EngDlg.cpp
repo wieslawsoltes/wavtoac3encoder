@@ -113,18 +113,10 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
 {
     CFileDialog fd(TRUE, 
-#if defined(_WIN32) & !defined(_WIN64)
-        _T("win32"),
-#else
-        _T("win64"),
-#endif // _WIN32
+        _T("engines"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-#if defined(_WIN32) & !defined(_WIN64)
-        _T("Win32 Engines (*.win32)|*.win32|Win64 Engines (*.win64)|*.win64|All Files (*.*)|*.*||"), 
-#else
-        _T("Win64 Engines (*.win64)|*.win64|Win32 Engines (*.win32)|*.win32|All Files (*.*)|*.*||"),
-#endif // _WIN32
+        _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"), 
         this);
 
     if(fd.DoModal() == IDOK)
@@ -140,18 +132,10 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
 {
     CFileDialog fd(FALSE, 
-#if defined(_WIN32) & !defined(_WIN64)
-        _T("win32"),
-#else
-        _T("win64"),
-#endif // _WIN32
+        _T("engines"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-#if defined(_WIN32) & !defined(_WIN64)
-        _T("Win32 Engines (*.win32)|*.win32|Win64 Engines (*.win64)|*.win64|All Files (*.*)|*.*||"), 
-#else
-        _T("Win64 Engines (*.win64)|*.win64|Win32 Engines (*.win32)|*.win32|All Files (*.*)|*.*||"),
-#endif // _WIN32 
+        _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"), 
         this);
 
     if(fd.DoModal() == IDOK)

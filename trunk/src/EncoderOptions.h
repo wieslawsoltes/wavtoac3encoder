@@ -115,8 +115,6 @@ typedef struct
     int nUsedSIMD[nNumSIMDIntructions];
     // number of threads
     int nThreads;
-    // parallel file encoding flag
-    bool bParallelFileEncoding;
     // currently used encoder engine
     // if set to -1 then no engine is used
     // if set to 0 or above then user engine is used
