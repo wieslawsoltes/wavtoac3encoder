@@ -89,6 +89,7 @@ mkdir "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\*.cmd" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
 
 set varPath=src\aften\windows\help
 mkdir "%varOutput%\%varPath%"
