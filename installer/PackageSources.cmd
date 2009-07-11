@@ -29,6 +29,8 @@ mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
 copy "%varBase%\*.vcxproj" "%varOutput%"
+copy "%varBase%\*.vcxproj.filters" "%varOutput%"
+copy "%varBase%\*.vcxproj.user" "%varOutput%"
 copy "%varBase%\*.cmd" "%varOutput%"
 copy "%varBase%\*.inc" "%varOutput%"
 
