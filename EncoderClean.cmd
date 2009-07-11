@@ -23,45 +23,32 @@ set BasePath=.
 set BuildNames=EncoderBuilds.inc
 
 @del /Q "%BasePath%\*.aps"
+@del /Q "%BasePath%\*.sdf"
 @del /Q "%BasePath%\*.ncb"
 @del /Q "%BasePath%\src\*.aps"
 @del /Q /AH "%BasePath%\*.suo"
+@del /Q "%BasePath%\*.filters"
 @del /Q "%BasePath%\*.user"
 
 FOR /F "tokens=*" %%i IN (%BuildNames%) DO (
-    @del "%BasePath%\%%i\Win32\EncWAVtoAC3.exe"
-    @del "%BasePath%\%%i\Win32\*.htm"
-    @del "%BasePath%\%%i\Win32\*.idb"
-    @del "%BasePath%\%%i\Win32\*.ilk"
-    @del "%BasePath%\%%i\Win32\*.obj"
-    @del "%BasePath%\%%i\Win32\*.pch"
-    @del "%BasePath%\%%i\Win32\*.pdb"
-    @del "%BasePath%\%%i\Win32\*.res"
-    @del "%BasePath%\%%i\Win32\*.manifest"
-    @del "%BasePath%\%%i\Win32\*.dep"
-    @del "%BasePath%\%%i\Win32\*.config
-    @del "%BasePath%\%%i\Win32\*.dll
-    @del "%BasePath%\%%i\Win32\*.files
-    @del "%BasePath%\%%i\Win32\*.presets
-    @del "%BasePath%\%%i\Win32\*.log
-)
-
-FOR /F "tokens=*" %%i IN (%BuildNames%) DO (
-    @del "%BasePath%\%%i\x64\EncWAVtoAC3.exe"
-    @del "%BasePath%\%%i\x64\*.htm"
-    @del "%BasePath%\%%i\x64\*.idb"
-    @del "%BasePath%\%%i\x64\*.ilk"
-    @del "%BasePath%\%%i\x64\*.obj"
-    @del "%BasePath%\%%i\x64\*.pch"
-    @del "%BasePath%\%%i\x64\*.pdb"
-    @del "%BasePath%\%%i\x64\*.res"
-    @del "%BasePath%\%%i\x64\*.manifest"
-    @del "%BasePath%\%%i\x64\*.dep"
-    @del "%BasePath%\%%i\x64\*.config
-    @del "%BasePath%\%%i\x64\*.dll
-    @del "%BasePath%\%%i\x64\*.files
-    @del "%BasePath%\%%i\x64\*.presets
-    @del "%BasePath%\%%i\x64\*.log
+    @del "%BasePath%\%%i\EncWAVtoAC3.exe"
+    @del "%BasePath%\%%i\*.htm"
+    @del "%BasePath%\%%i\*.idb"
+    @del "%BasePath%\%%i\*.ilk"
+    @del "%BasePath%\%%i\*.obj"
+    @del "%BasePath%\%%i\*.pch"
+    @del "%BasePath%\%%i\*.pdb"
+    @del "%BasePath%\%%i\*.res"
+    @del "%BasePath%\%%i\*.manifest"
+    @del "%BasePath%\%%i\*.dep"
+    @del "%BasePath%\%%i\*.config
+    @del "%BasePath%\%%i\*.dll
+    @del "%BasePath%\%%i\*.files
+    @del "%BasePath%\%%i\*.presets
+    @del "%BasePath%\%%i\*.log
+    @del "%BasePath%\%%i\*.tlog
+    @del "%BasePath%\%%i\*.rc
+    @del "%BasePath%\%%i\*.timestamp
 )
 
 endlocal

@@ -19,37 +19,20 @@ rem
 rem $Id$
 setlocal
 
-set Win32FileName=EncWAVtoAC3.win32
-set Win64FileName=EncWAVtoAC3.win64
+set EnginesFileName=EncWAVtoAC3.engines
 
-rem Win32
-
-set BasePath=Debug\Win32
+set BasePath=Debug
 rmdir /S /Q "%BasePath%\libaftendll_x86"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE2"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE3"
-del "%BasePath%\%Win32FileName%"
+del "%BasePath%\%EnginesFileName%"
 
-set BasePath=Release\Win32
+set BasePath=Release
 rmdir /S /Q "%BasePath%\libaftendll_x86"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE2"
 rmdir /S /Q "%BasePath%\libaftendll_x86_SSE3"
-del "%BasePath%\%Win32FileName%"
-
-rem x64
-
-set BasePath=Debug\x64
-rmdir /S /Q "%BasePath%\libaftendll_AMD64"
-rmdir /S /Q "%BasePath%\libaftendll_AMD64_SSE2"
-rmdir /S /Q "%BasePath%\libaftendll_AMD64_SSE3"
-del "%BasePath%\%Win64FileName%"
-
-set BasePath=Release\x64
-rmdir /S /Q "%BasePath%\libaftendll_AMD64"
-rmdir /S /Q "%BasePath%\libaftendll_AMD64_SSE2"
-rmdir /S /Q "%BasePath%\libaftendll_AMD64_SSE3"
-del "%BasePath%\%Win64FileName%"
+del "%BasePath%\%EnginesFileName%"
 
 endlocal
