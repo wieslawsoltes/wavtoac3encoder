@@ -1,6 +1,6 @@
-﻿WAV to AC3 Encoder 3.0 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 4.0 (Using Aften A/52 Audio Encoder)
 
-1) LICENSE
+==LICENSE==
 
 WAV to AC3 Encoder
 Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
@@ -18,7 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-2) ABOUT
+==ABOUT==
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
 audio streams based on ATSC A/52 specification. This type of audio 
@@ -27,32 +27,31 @@ codecs used in DVD-Video content.
 
 WAV to AC3 Encoder is a GUI for Aften A/52 audio encoder 
 created by Justin Ruggles. WAV to AC3 Encoder project was 
-started at 27 January 2007 by Wiesław Šoltés. There are 
-Win32 (x86) and Win64 (x86_64, AMD64) binaries available. 
+started at 27 January 2007 by Wiesław Šoltés. 
 
 WAV to AC3 Encoder has full UNICODE and ANSI support. 
 The latest sources can be obtained through Subversion. 
 The main developer of WAV to AC3 Encoder is Wiesław Šoltés. 
 
-Main features:
+===Main Program Features===
 
-* Multi-Threaded encoding.
-* Loading and saving of all program settings.
-* Encoder presets.
-* Vary fast.
-* Optimized for modern CPUs.
-* High-quality of output audio files.
-* Full UNICODE and ANSI support.
-* Natively supports x86 and AMD64 architectures.
-* Options for advanced users.
-* Small size.
-* Sources available under GNU GPLv2 license.
-* Very simple to use. 
-* Avisynth scripting support.
+  * High-quality output audio files.
+  * Vary fast encoder.
+  * Multi-threaded encoding.
+  * Milti-channel file input.
+  * Multiple-mono file input.
+  * Advanved mux wizard.
+  * Optimized for modern CPUs.
+  * Small program size.
+  * Load and save all program settings.
+  * Load and save encoder presets.
+  * Avisynth scripting support.
+  * Full UNICODE and ANSI support.
+  * Very simple to use.
+  * Options for advanced users.
+  * Sources available under GNU GPLv2 license.
 
-Program actively developed. Currently still in beta version.
-
-3) CONFIGURATION
+==CONFIGURATION==
 
 All confguration files are in plain text format. Each configuration file 
 has different structure. Edit the files and check the sources to find 
@@ -63,36 +62,43 @@ Program configuration is stored in EncWAVtoAC3.config file.
 
 Presets for encoder are stored in EncWAVtoAC3.presets file.
 
-Paths and names of different libaften.dll engines are stored in 
-EncWAVtoAC3.win32 (Win32) and EncWAVtoAC3.win64 (Win64) files.
+Paths to libaften.dll engines are stored in EncWAVtoAC3.engines file.
 
-4) SUBVERSION
+==SOURCES==
+
+Source code is managed by the Subversion repository.
 
 svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-read-only
 
-5) BUILDING
+==BUILD==
 
-Download latest Aften sources from http://code.google.com/p/wavtoac3encoder/
-and extract them in aften sub-directory in project source tree.
+  * Download latest Aften sources from http://code.google.com/p/wavtoac3encoder/
 
-Use Miscroft Visual Studio 2008 (C++ with MFC) to build Release binaries.
+  * Extract them in aften sub-directory in project source tree.
 
-Distribute Release binaries with libaften.dll downloaded from the same 
-site as aften sources. You can also build installer using Inno Setup
-you need to put libaften.dll's to 'bin' sub-directories.
+  * Use Miscroft Visual Studio 2010 Beta 1 to build Release binaries.
 
-7) COPYRIGHTS
+  * Distribute Release binaries with libaften.dll.
+
+  * You can also build installer using Inno Setup.
+
+==COPYRIGHTS==
 
 WAV to AC3 Encoder, Copyright (C) 2007, 2008, 2009 Wiesław Šoltés
-http://code.google.com/p/wavtoac3encoder/
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
-http://aften.sourceforge.net/
-http://sourceforge.net/projects/aften/
 
-8) WEBSITE
+==WEBSITES==
 
-http://code.google.com/p/wavtoac3encoder/
+===WAV to AC3 Encoder===
+
+  * http://code.google.com/p/wavtoac3encoder/
+
+===Aften===
+
+  * http://aften.sourceforge.net/
+  * http://sourceforge.net/projects/aften/
+
 
 $Id$
