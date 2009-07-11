@@ -39,7 +39,7 @@ copy "%varBase%\%varPath%\Copying.txt" "%varOutput%"
 copy "%varBase%\%varPath%\ReadMe.txt" "%varOutput%"
 copy "%varBase%\%varPath%\Command-Line.txt" "%varOutput%"
 
-copy "%varBase%\Release\Win32\EncWAVtoAC3.exe" "%varOutput%"
+copy "%varBase%\Release\EncWAVtoAC3.exe" "%varOutput%"
 copy "%varBase%\UnicoWS\unicows.dll" "%varOutput%"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86\libaften.dll" "%varOutput%\libaftendll_x86\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE\libaften.dll" "%varOutput%\libaftendll_x86_SSE\libaften.dll"
