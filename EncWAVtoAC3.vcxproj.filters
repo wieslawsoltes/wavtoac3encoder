@@ -214,16 +214,10 @@
     <None Include="EnginesCopy.cmd">
       <Filter>Batch Scripts</Filter>
     </None>
-    <None Include="engines\ansi\EncWAVtoAC3.win32">
+    <None Include="engines\ansi\EncWAVtoAC3.engines">
       <Filter>Engine Files\Ansi</Filter>
     </None>
-    <None Include="engines\ansi\EncWAVtoAC3.win64">
-      <Filter>Engine Files\Ansi</Filter>
-    </None>
-    <None Include="engines\unicode\EncWAVtoAC3.win32">
-      <Filter>Engine Files\Unicode</Filter>
-    </None>
-    <None Include="engines\unicode\EncWAVtoAC3.win64">
+    <None Include="engines\unicode\EncWAVtoAC3.engines">
       <Filter>Engine Files\Unicode</Filter>
     </None>
     <None Include="installer\PackageBinaries.cmd">
@@ -235,16 +229,7 @@
     <None Include="installer\PackageSources.cmd">
       <Filter>Installer Files</Filter>
     </None>
-    <None Include="installer\SetupScript.base">
-      <Filter>Installer Files</Filter>
-    </None>
-    <None Include="installer\SetupScript.version">
-      <Filter>Installer Files</Filter>
-    </None>
-    <None Include="installer\SetupScript.Win32.iss">
-      <Filter>Installer Files</Filter>
-    </None>
-    <None Include="installer\SetupScript.x64.iss">
+    <None Include="installer\SetupScript.iss">
       <Filter>Installer Files</Filter>
     </None>
     <None Include="src\res\EncWAVtoAC3.bmp">
