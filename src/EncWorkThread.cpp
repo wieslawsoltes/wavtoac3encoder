@@ -207,13 +207,6 @@ void SetAftenOptions(AftenAPI &api,
 
     // adconvtyp
     nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
-
-    // parallel encoding uses only one thread for each aften instance
-    if(pWork->bParallelFileEncoding == true)
-    {
-        // in this mode we only use one thread per Aften instance
-        s.system.n_threads = 1;
-    }
 }
 
 void ShowCurrentJobInfo(int nInputFiles,  
@@ -515,12 +508,9 @@ int RunAftenEncoder(AftenAPI &api,
             if(!ifp[i]) 
             {
                 // stop file timer
-                if(pWork->bParallelFileEncoding == false)
-                {
-                    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-                    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
-                    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-                }
+				pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+				pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+				pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
                 if(logCtx.bInit)
                 { 
@@ -528,10 +518,7 @@ int RunAftenEncoder(AftenAPI &api,
                 }
 
                 pWork->pWorkDlg->bTerminate = true;
-                if(pWork->bParallelFileEncoding == false)
-                {
-                    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
-                }
+                ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
                 return(WORKDLG_RETURN_FAILURE);
             }
@@ -547,12 +534,9 @@ int RunAftenEncoder(AftenAPI &api,
     if(!ofp) 
     {
         // stop file timer
-        if(pWork->bParallelFileEncoding == false)
-        {  
-            pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-            pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
-            pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-        }
+		pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+		pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+		pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
         for(int i = 0; i < nInputFiles; i++)
         {
@@ -566,10 +550,7 @@ int RunAftenEncoder(AftenAPI &api,
 		}
 
         pWork->pWorkDlg->bTerminate = true;
-        if(pWork->bParallelFileEncoding == false)
-		{
-            ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
-		}
+        ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
         return(WORKDLG_RETURN_FAILURE);
     }
@@ -577,12 +558,9 @@ int RunAftenEncoder(AftenAPI &api,
     // begin clean-up code used after error
     //
 #define HandleEncoderError(message) \
-    if(pWork->bParallelFileEncoding == false) \
-    { \
-        pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
-        pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00")); \
-        pWork->pWorkDlg->m_ElapsedTimeFile = 0L; \
-    } \
+    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
+    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00")); \
+    pWork->pWorkDlg->m_ElapsedTimeFile = 0L; \
     \
     if(fwav) \
         free(fwav); \
@@ -620,8 +598,7 @@ int RunAftenEncoder(AftenAPI &api,
         ::LogMessage(&logCtx, szLogMessage + message); \
     } \
     pWork->pWorkDlg->bTerminate = true; \
-    if(pWork->bParallelFileEncoding == false) \
-        ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
+    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     \
     return(WORKDLG_RETURN_FAILURE);
     //
@@ -844,10 +821,7 @@ int RunAftenEncoder(AftenAPI &api,
     }
 
     // show current job information in work dialog
-    if(pWork->bParallelFileEncoding == false)
-    {
-        ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
-    }
+    ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
 
     // main encoding loop
     do
@@ -947,39 +921,26 @@ int RunAftenEncoder(AftenAPI &api,
                 // use ftell to get encoding progress
                 percent = (100 * nCurPos) / pWork->nInTotalSize;
 
-                // update progress bars
-                if(pWork->bParallelFileEncoding == false)
-                {               
+                // update progress bars              
+                if(pWork->pWorkDlg->bCanUpdateWindow == true)
+                {
+                    pWork->pWorkDlg->bCanUpdateWindow = false;
+                    pWork->pWorkDlg->m_PrgCurrent.SetPos(percent);
+                    // TRACE(_T("PRG_CUR=%3d%%\n"), percent);
+                    pWork->pWorkDlg->bCanUpdateWindow = true;
+                }
+
+                if(nTotalSizeCounter != NULL)
+                {
+                    nCurTotalPos = (100 * (*nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
+
                     if(pWork->pWorkDlg->bCanUpdateWindow == true)
                     {
                         pWork->pWorkDlg->bCanUpdateWindow = false;
-                        pWork->pWorkDlg->m_PrgCurrent.SetPos(percent);
-						// TRACE(_T("PRG_CUR=%3d%%\n"), percent);
+                        pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
+                        // TRACE(_T("PRG_TOT=%3d%%\n"), nCurTotalPos);
                         pWork->pWorkDlg->bCanUpdateWindow = true;
                     }
-
-                    if(nTotalSizeCounter != NULL)
-                    {
-                        nCurTotalPos = (100 * (*nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
-
-                        if(pWork->pWorkDlg->bCanUpdateWindow == true)
-                        {
-                            pWork->pWorkDlg->bCanUpdateWindow = false;
-                            pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
-							// TRACE(_T("PRG_TOT=%3d%%\n"), nCurTotalPos);
-                            pWork->pWorkDlg->bCanUpdateWindow = true;
-                        }
-                    }
-                }
-                else
-                {  
-                    // update progress counter
-                    pworkData->nProgress = percent;
-
-                    // send message to work dialog with updated progress
-                    ::EnterCriticalSection(&csQue);
-                    pWork->pWorkDlg->SendMessage(WM_WORKER_PROGRESS, (WPARAM) pworkData, 2);
-                    ::LeaveCriticalSection(&csQue);
                 }
             }
             t0 = t1;
@@ -1068,27 +1029,24 @@ int RunAftenEncoder(AftenAPI &api,
         decoderAVS.CloseAvisynth();
     }
 
-    if(pWork->bParallelFileEncoding == false)
-    {   
-        // update total counter
-        if(bAvisynthInput == false)
+    // update total counter
+    if(bAvisynthInput == false)
+    {
+        if(pWork->bMultiMonoInput == false)
         {
-            if(pWork->bMultiMonoInput == false)
-            {
-                *nTotalSizeCounter += _ftelli64(ifp[0]);
-            }
-            else
-            {
-                for(int i = 0; i < nInputFiles; i++)
-                {
-                    *nTotalSizeCounter += _ftelli64(ifp[i]);
-                }
-            }
+            *nTotalSizeCounter += _ftelli64(ifp[0]);
         }
         else
         {
-            *nTotalSizeCounter += pWork->nInTotalSize;
+            for(int i = 0; i < nInputFiles; i++)
+            {
+                *nTotalSizeCounter += _ftelli64(ifp[i]);
+            }
         }
+    }
+    else
+    {
+        *nTotalSizeCounter += pWork->nInTotalSize;
     }
 
     // close input files
@@ -1106,12 +1064,9 @@ int RunAftenEncoder(AftenAPI &api,
     api.LibAften_aften_encode_close(&s);
 
     // reset file timer
-    if(pWork->bParallelFileEncoding == false)
-    {  
-        pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-        pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
-        pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-    }
+    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
     // release string buffers
     for(int i = 0; i < nInputFiles; i++)
@@ -1345,292 +1300,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->KillTimer(WM_TOTAL_TIMER);
 
     // tell work dialog it is the end of work
-    pWork->pWorkDlg->bTerminate = true;
-    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
-
-    // return succes from worker thread
-    return(WORKDLG_RETURN_SUCCESS);
-}
-
-void InitWorkThreads()
-{
-    for(int i = 0; i < (int) dwWorkThreads; i++)
-        pbTerminate[i] = false;
-}
-
-void TerminateWorkThreads()
-{
-    for(int i = 0; i < (int) dwWorkThreads; i++)
-    {
-        pbTerminate[i] = true;
-        // Sleep(50);
-        // TerminateThread(phThreads[i]);
-    }
-}
-
-DWORD WINAPI EncSingleWorkThread(LPVOID pParam)
-{
-    // get worker configuration data
-    WorkerParam *pWork = (WorkerParam *) pParam;
-    AftenAPI api = pWork->api;
-
-    do
-    {
-        int nCurrent = -1;
-
-        ::EnterCriticalSection(&csQue);
-
-        nCurrent = nNextInQue;
-        if(nNextInQue >= nTotalFiles)
-        {
-            ::LeaveCriticalSection(&csQue);
-
-            // done all files in que
-            return(WORKDLG_RETURN_SUCCESS);
-        }
-
-        // get single file data
-        SingleWorkerData workData = workList.GetAt(workList.FindIndex(nNextInQue));
-
-        workData.nID = nCurrent;
-        pWork->pWorkDlg->SendMessage(WM_WORKER_PROGRESS, (WPARAM) &workData, 1);
-
-        // update que counter
-        nNextInQue++;
-
-        ::LeaveCriticalSection(&csQue);
-
-        // get string buffers
-        TCHAR *pszInPath = workData.szInPath.GetBuffer();
-        TCHAR *pszOutPath = workData.szOutPath.GetBuffer();  
-
-        // start time counter
-        CMyCounter countTime;
-        countTime.Init();
-        countTime.Start();
-
-        CString szInPath[6] = { _T(""), _T(""), _T(""), _T(""), _T(""), _T("") };
-        szInPath[0] = workData.szInPath;
-
-        // encode input .wav file to output .ac3 file
-        if(RunAftenEncoder(api, 
-            workData.s, 
-            workData.opt, 
-            pWork, 
-            szInPath, 
-            workData.szOutPath,
-            1,
-            NULL,
-            &workData) == WORKDLG_RETURN_FAILURE)
-        {
-            workData.bSuccess = false;
-
-            ::EnterCriticalSection(&csQue);
-            workList.SetAt(workList.FindIndex(nCurrent), workData);
-            ::LeaveCriticalSection(&csQue);
-
-            return(WORKDLG_RETURN_FAILURE);
-        }
-        else
-        { 
-            workData.bSuccess = true;
-        }
-
-        // stop file time counter
-        countTime.Stop();
-        workData.fEncTime = countTime.Time();
-
-        // send message to work dialog with final encoding time
-        ::EnterCriticalSection(&csQue);
-        workList.SetAt(workList.FindIndex(nCurrent), workData);
-        pWork->pWorkDlg->SendMessage(WM_WORKER_PROGRESS, (WPARAM) &workData, 3);
-        ::LeaveCriticalSection(&csQue);
-    }
-    while(TRUE);
-
-    return(WORKDLG_RETURN_SUCCESS);
-}
-
-DWORD WINAPI EncWorkThreadMT(LPVOID pParam)
-{
-    // get worker configuration data
-    WorkerParam *pWork = (WorkerParam *) pParam;
-    __int64 nTotalSizeCounter = 0;
-    AftenAPI api = pWork->api;
-
-    EncoderPreset preset;
-
-    // get currently selected preset
-    preset = GetCurrentPreset();
-    pWork->nThreads = preset.nThreads;
-
-    // check if we have auto mode on
-    if(pWork->nThreads == 0)
-    {
-        // get number of CPUs
-        int nCpus = 0, nThreads = 0;
-
-        SYSTEM_INFO cpuinfo;
-        GetSystemInfo(&cpuinfo);
-
-        nCpus = cpuinfo.dwNumberOfProcessors;
-        nThreads = (nCpus > 1) ? nCpus : 1;
-
-        // set numder of work threads
-        pWork->nThreads = nThreads;
-    }
-
-    // check if we have valid worker dialog object
-    if(pWork->pWorkDlg == NULL)
-    {
-        // fatal error, invalid object
-        return(WORKDLG_RETURN_FAILURE);
-    }
-
-    phThreads = (HANDLE *) malloc(sizeof(HANDLE) * pWork->nThreads);
-    if(phThreads == NULL)
-    {
-        // fatal error, not enough memory
-        return(WORKDLG_RETURN_FAILURE);
-    }
-
-    pdwThreadsID = (DWORD *) malloc(sizeof(DWORD) * pWork->nThreads);
-    if(pdwThreadsID == NULL)
-    {
-        // fatal error, not enough memory
-        return(WORKDLG_RETURN_FAILURE);
-    }
-
-    pbTerminate = (bool *) malloc(sizeof(bool) * pWork->nThreads);
-    if(pbTerminate == NULL)
-    {
-        // fatal error, not enough memory
-        return(WORKDLG_RETURN_FAILURE);
-    }
-
-    CList<CString,CString> *list = pWork->list;
-    CList<bool,bool> *listStatus = pWork->listStatus;
-    SingleWorkerData workData;
-
-    // process all file in list
-    int nCurrentFile = 0;
-    nTotalFiles = list->GetSize();
-
-    // set encoding dialog title using some stats
-    CString szTitle;
-    szTitle.Format(_T("Encoding %d file%s (%d thread%s)"), 
-        nTotalFiles, 
-        (nTotalFiles == 1) ? _T("") : _T("s"), 
-        pWork->nThreads,
-        (pWork->nThreads == 1) ? _T("") : _T("s"));
-    pWork->pWorkDlg->SetWindowText(szTitle);
-
-    POSITION pos = list->GetHeadPosition();
-    while(pos != NULL)
-    {
-        // set defaults for worker status variables
-        workData.nProgress = 0;
-        workData.fEncTime = 0.0;
-        workData.bTerminate = false;
-        workData.bSuccess = false;
-
-        // get next file path
-        workData.szInPath = list->GetNext(pos);
-
-        // prepare output file path
-        workData.szOutPath = workData.szInPath;
-
-        // remove wav extension
-        workData.szOutPath.Truncate(workData.szOutPath.GetLength() - GetFileExt(workData.szOutPath).GetLength());
-
-        // add ac3 extension
-        workData.szOutPath.Append(szSupportedOutputExt[0]);
-
-        // use different output path
-        if(pWork->bUseOutPath == true)
-        {
-            CString szFile = GetFileName(workData.szOutPath);
-
-            if((pWork->szOutPath[pWork->szOutPath.GetLength() - 1] == '\\') || 
-                (pWork->szOutPath[pWork->szOutPath.GetLength() - 1] == '/'))
-                workData.szOutPath = pWork->szOutPath + szFile;
-            else
-                workData.szOutPath = pWork->szOutPath + '\\' + szFile;
-        }
-
-        // zero options
-        ZeroMemory(&workData.opt, sizeof(AftenOpt));
-
-        // prepare aften context for encoding process
-        SetAftenOptions(api, workData.s, preset, workData.opt, pWork);
-
-        // add to que list
-        workList.AddTail(workData);
-
-        // update file counter
-        nCurrentFile++;
-    }
-
-    // encode all files in multiple threads
-    nNextInQue = 0;
-
-    ::InitializeCriticalSection(&csQue);
-
-    // start total timer
-    pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
-    pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(_T("Total elapsed time: 00:00:00"));
-    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 1000, NULL);
-
-    for(int i = 0; i < pWork->nThreads; i++)
-    {
-        phThreads[i] = CreateThread(NULL, 0,
-            EncSingleWorkThread,
-            pParam,
-            0,
-            &pdwThreadsID[i]);
-        if(phThreads[i] == NULL)
-        {
-            // error while creating thread
-            break;
-        }
-
-        Sleep(0);
-    }
-
-    // wait for thread to finish their work
-    WaitForMultipleObjects(pWork->nThreads, phThreads, TRUE, INFINITE);
-
-    ::DeleteCriticalSection(&csQue);
-
-    // update encoded status list
-    for(INT_PTR i = 0; i < listStatus->GetSize(); i++)
-    {
-        bool bSuccess = workList.GetAt(workList.FindIndex(i)).bSuccess;
-        if(bSuccess == true)
-        {
-            listStatus->SetAt(listStatus->FindIndex(i), true);
-        }
-    }
-
-    // free dynamic memory
-    if(phThreads != NULL)
-        free(phThreads);
-
-    if(pdwThreadsID != NULL)
-        free(pdwThreadsID);
-
-    if(pbTerminate != NULL)
-        free(pbTerminate);
-
-    workList.RemoveAll();
-
-    // calculate number of succesful encodings
-    pWork->pWorkDlg->nCount = nTotalFiles;
-
-    // stop total timer
-    pWork->pWorkDlg->KillTimer(WM_TOTAL_TIMER);
-
-    // tell work dialog it is end of work
     pWork->pWorkDlg->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 

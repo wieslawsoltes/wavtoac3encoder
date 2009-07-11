@@ -68,7 +68,7 @@ const CString szHelpMessage =
 	_T("Load list of preconfigured presets (*.presets).\n")
 	_T("\n")
     _T("-e, --load-engines <file.ext>\n")
-	_T("Load list of Aften engines (*.win32, *.win64).\n")
+	_T("Load list of Aften engines (*.engines).\n")
     _T("\n")
     _T("-l, --enable-log [<file.log>]\n")
 	_T("Enable loging to text file.\n")

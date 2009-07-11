@@ -142,7 +142,6 @@ void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_CHECK_SIMD_SSE, m_ChkSimdSSE);
     DDX_Control(pDX, IDC_CHECK_SIMD_SSE2, m_ChkSimdSSE2);
     DDX_Control(pDX, IDC_CHECK_SIMD_SSE3, m_ChkSimdSSE3);
-    DDX_Control(pDX, IDC_CHECK_FILE_PARALLEL, m_ChkParallelFileEncoding);
     DDX_Control(pDX, IDC_CHECK_MULTIPLE_MONO_INPUT, m_ChkMultipleMonoInput);
     DDX_Control(pDX, IDC_BUTTON_ENCODE, m_BtnEncode);
     DDX_Control(pDX, IDC_BUTTON_PRESETS_DEFAULTS, m_BtnResetCurrent);
@@ -205,7 +204,6 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_BN_CLICKED(IDC_CHECK_SIMD_SSE, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse)
     ON_BN_CLICKED(IDC_CHECK_SIMD_SSE2, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse2)
     ON_BN_CLICKED(IDC_CHECK_SIMD_SSE3, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse3)
-    ON_BN_CLICKED(IDC_CHECK_FILE_PARALLEL, &CEncWAVtoAC3Dlg::OnBnClickedCheckFileParallel)
     ON_BN_CLICKED(IDC_CHECK_MULTIPLE_MONO_INPUT, &CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput)
     ON_BN_CLICKED(IDC_BUTTON_MUX_WIZARD, &CEncWAVtoAC3Dlg::OnBnClickedButtonMuxWizard)
     ON_CBN_SELCHANGE(IDC_COMBO_SETTING, &CEncWAVtoAC3Dlg::OnCbnSelchangeComboSetting)
@@ -251,7 +249,6 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_THREADS, AnchorTopRight);
     AddAnchor(IDC_EDIT_THREADS, AnchorTopRight);
     AddAnchor(IDC_SPIN_THREADS, AnchorTopRight);
-    AddAnchor(IDC_CHECK_FILE_PARALLEL, AnchorTopRight);
     AddAnchor(IDC_LIST_SETTINGS, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_STATIC_OPTION_VALUE, AnchorTopLeft);
     AddAnchor(IDC_COMBO_SETTING, AnchorTopLeft, AnchorTopRight);
@@ -418,7 +415,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     defaultPreset.nRawSampleRate = 0;
     defaultPreset.nCurrentEngine = 0;
     defaultPreset.nThreads = 0;
-    defaultPreset.bParallelFileEncoding = false;
     defaultPreset.nUsedSIMD[0] = 1;
     defaultPreset.nUsedSIMD[1] = 1;
     defaultPreset.nUsedSIMD[2] = 1;
@@ -584,15 +580,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         _T("should try to detect the number of CPUs.");
 
     this->m_EdtThreads.SetTooltipText(szTmpText);
-
-    // One per file CheckBox
-    szTmpText = 
-        _T("Enable alternative parallel encoding mode. One input file\n")
-        _T("is encoded using one separate thread. For example if you set\n")
-        _T("number of threads to 2 than there will be encoded 2 files\n")
-        _T("at the same time. Not supported in multiple mono input mode.");
-
-    this->m_ChkParallelFileEncoding.SetTooltipText(szTmpText);
 
     // Engine ComboBox
     szTmpText = 
@@ -1613,9 +1600,6 @@ void CEncWAVtoAC3Dlg::ApplyPresetToDlg(EncoderPreset &Preset)
     // update Aften engine
     this->m_CmbEngines.SetCurSel(Preset.nCurrentEngine);
 
-    // update parallel encoding mode
-    this->m_ChkParallelFileEncoding.SetCheck(Preset.bParallelFileEncoding ? BST_CHECKED : BST_UNCHECKED);
-
     // update raw audio input sample format
     this->m_CmbRawSampleFormat.SetCurSel(Preset.nRawSampleFormat);
 
@@ -1885,7 +1869,6 @@ void CEncWAVtoAC3Dlg::UpdateView(int nMode)
     this->m_ChkSimdSSE.ShowWindow(nCmdShow);
     this->m_ChkSimdSSE2.ShowWindow(nCmdShow);
     this->m_ChkSimdSSE3.ShowWindow(nCmdShow);
-    this->m_ChkParallelFileEncoding.ShowWindow(nCmdShow);
     this->m_BtnResetCurrent.ShowWindow(nCmdShow);
     this->m_BtnRemove.ShowWindow(nCmdShow);
     this->m_BtnAddNew.ShowWindow(nCmdShow);
@@ -2767,13 +2750,6 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         return;
     }
 
-    // can't use "One per file" mode with "Multiple mono input"
-    if((GetCurrentPreset().bParallelFileEncoding == true) && (this->bMultipleMonoInput == true))
-    {
-        MessageBox(_T("Can not combine \"One per file\" mode with \"Multiple mono input\"!"), _T("Error"), MB_ICONERROR | MB_OK);
-        return;
-    }
-
     bWorking = true;
 
     if(OpenAftenAPI(&this->api) == false)
@@ -2813,11 +2789,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
 
     // check if we can process avisynth *.avs script (check all files in the list)
     // 1. 'Multiple mono input' mode - off
-    // 2. 'One per file' mode - off
-    if(((GetCurrentPreset().bParallelFileEncoding == true) || (this->bMultipleMonoInput == true))
-        && (bAvisynthInput == true))
+    if((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
-        MessageBox(_T("Disable 'Multiple mono input' mode and 'One per file' mode in order to use Avisynth scripts!"), 
+        MessageBox(_T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"), 
             _T("Error"), MB_ICONERROR | MB_OK);
         bWorking = false;
         return;
@@ -3146,13 +3120,6 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetsDefaults()
         // apply current preset to main dialog
         this->ApplyPresetToDlg(tmpPreset);
     }
-}
-
-void CEncWAVtoAC3Dlg::OnBnClickedCheckFileParallel()
-{
-    EncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.bParallelFileEncoding = this->m_ChkParallelFileEncoding.GetCheck() == BST_CHECKED ? true : false;
-    UpdateCurrentPreset(tmpPreset);
 }
 
 void CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput()

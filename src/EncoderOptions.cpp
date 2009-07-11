@@ -1105,17 +1105,6 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // parallel mode
-        if(ce.szKey.Compare(_T("parallel")) == 0)
-        {
-            int nTmp = _tstoi(ce.szData); // 1 = true, 0 = false
-            if(nTmp == 1)
-                preset.bParallelFileEncoding =  true;
-            else
-                preset.bParallelFileEncoding =  false;
-            continue;
-        }
-
         // number of threads
         szBuffer = szThreadsOption;
         if(ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
@@ -1398,13 +1387,6 @@ bool SaveEncoderPresets(CString szFileName)
             if(preset.nCurrentEngine != defaultPreset.nCurrentEngine)
             {
                 szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
-                WriteBufferToFile();
-            }
-
-            // save parallel mode
-            if(preset.bParallelFileEncoding != defaultPreset.bParallelFileEncoding)
-            {
-                szBuffer.Format(_T("parallel=%d\r\n"), preset.bParallelFileEncoding == true ? 1 : 0);
                 WriteBufferToFile();
             }
 

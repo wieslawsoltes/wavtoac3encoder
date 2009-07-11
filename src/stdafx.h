@@ -129,14 +129,10 @@ extern "C" {
 #define DEFAULT_LOG_FILE_NAME _T("EncWAVtoAC3.log")
 
 // define default file name for engines
-#if defined(_WIN32) & !defined(_WIN64)
-    #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.win32")
-#else
-    #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.win64")
-#endif // _WIN32
+#define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.engines")
 
 // define program home url
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
 
 // define program version
-#define ENCWAVTOAC3_VERSION _T("3.0")
+#define ENCWAVTOAC3_VERSION _T("4.0")

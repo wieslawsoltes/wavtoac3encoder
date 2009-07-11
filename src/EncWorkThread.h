@@ -54,5 +54,3 @@ typedef struct
 #define WM_WORKER_PROGRESS WM_USER + 0x10
 
 DWORD WINAPI EncWorkThread(LPVOID pParam);
-
-DWORD WINAPI EncWorkThreadMT(LPVOID pParam);

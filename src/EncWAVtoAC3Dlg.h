@@ -141,7 +141,6 @@ public:
     CMyButton m_BtnAddNew;
     CMyButton m_BtnAddFiles;
     CMyButton m_BtnBrowse;
-    CMyButton m_ChkParallelFileEncoding;
     CMyButton m_ChkMultipleMonoInput;
     CMyButton m_BtnMuxWizard;
     CMyButton m_BtnEngines;
@@ -223,7 +222,6 @@ public:
     afx_msg void OnBnClickedCheckSimdSse2();
     afx_msg void OnBnClickedCheckSimdSse3();
     afx_msg void OnBnClickedButtonBrowse();
-    afx_msg void OnBnClickedCheckFileParallel();
     afx_msg void OnBnClickedCheckMultipleMonoInput();
     afx_msg void OnBnClickedButtonPresetsDefaults();
     afx_msg void OnBnClickedButtonMuxWizard();
