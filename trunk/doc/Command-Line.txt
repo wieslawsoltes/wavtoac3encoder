@@ -16,7 +16,7 @@ Options:
  -c, --load-config <file.ext>		Load program configation (*.config).
  -f, --load-files <file.ext>		Load list of files to encode (*.files, *.mux).
  -p, --load-presets <file.ext>		Load list of preconfigured presets (*.presets).
- -e, --load-engines <file.ext>		Load list of Aften engines (*.win32, *.win64).
+ -e, --load-engines <file.ext>		Load list of Aften engines (*.engines).
 
  -l, --enable-log [<file.log>]		Enable loging to text file.
 
