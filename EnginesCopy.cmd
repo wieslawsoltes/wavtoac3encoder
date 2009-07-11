@@ -19,16 +19,13 @@ rem
 rem $Id$
 setlocal
 
-set Win32FileName=EncWAVtoAC3.win32
-set Win64FileName=EncWAVtoAC3.win64
+set EnginesFileName=EncWAVtoAC3.engines
 set BasePathAftenBin=src\aften\windows\output
 set BasePathAnsi=engines\ansi
 set BasePathUnicode=engines\unicode
 set LibAftenDll=libaften.dll
 
-rem Win32
-
-set BasePath=Debug\Win32
+set BasePath=Debug
 mkdir "%BasePath%\libaftendll_x86"
 mkdir "%BasePath%\libaftendll_x86_SSE"
 mkdir "%BasePath%\libaftendll_x86_SSE2"
@@ -37,9 +34,9 @@ copy /Y "%BasePathAftenBin%\libaftendll_x86\%LibAftenDll%" "%BasePath%\libaftend
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE\%LibAftenDll%"
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE2\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE2\%LibAftenDll%"
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE3\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE3\%LibAftenDll%"
-copy /Y "%BasePathUnicode%\%Win32FileName%" "%BasePath%\%Win32FileName%"
+copy /Y "%BasePathUnicode%\%EnginesFileName%" "%BasePath%\%EnginesFileName%"
 
-set BasePath=Release\Win32
+set BasePath=Release
 mkdir "%BasePath%\libaftendll_x86"
 mkdir "%BasePath%\libaftendll_x86_SSE"
 mkdir "%BasePath%\libaftendll_x86_SSE2"
@@ -48,26 +45,6 @@ copy /Y "%BasePathAftenBin%\libaftendll_x86\%LibAftenDll%" "%BasePath%\libaftend
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE\%LibAftenDll%"
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE2\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE2\%LibAftenDll%"
 copy /Y "%BasePathAftenBin%\libaftendll_x86_SSE3\%LibAftenDll%" "%BasePath%\libaftendll_x86_SSE3\%LibAftenDll%"
-copy /Y "%BasePathUnicode%\%Win32FileName%" "%BasePath%\%Win32FileName%"
-
-rem x64
-
-set BasePath=Debug\x64
-mkdir "%BasePath%\libaftendll_AMD64"
-mkdir "%BasePath%\libaftendll_AMD64_SSE2"
-mkdir "%BasePath%\libaftendll_AMD64_SSE3"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64\%LibAftenDll%" "%BasePath%\libaftendll_AMD64\%LibAftenDll%"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64_SSE2\%LibAftenDll%" "%BasePath%\libaftendll_AMD64_SSE2\%LibAftenDll%"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64_SSE3\%LibAftenDll%" "%BasePath%\libaftendll_AMD64_SSE3\%LibAftenDll%"
-copy /Y "%BasePathUnicode%\%Win64FileName%" "%BasePath%\%Win64FileName%"
-
-set BasePath=Release\x64
-mkdir "%BasePath%\libaftendll_AMD64"
-mkdir "%BasePath%\libaftendll_AMD64_SSE2"
-mkdir "%BasePath%\libaftendll_AMD64_SSE3"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64\%LibAftenDll%" "%BasePath%\libaftendll_AMD64\%LibAftenDll%"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64_SSE2\%LibAftenDll%" "%BasePath%\libaftendll_AMD64_SSE2\%LibAftenDll%"
-copy /Y "%BasePathAftenBin%\libaftendll_AMD64_SSE3\%LibAftenDll%" "%BasePath%\libaftendll_AMD64_SSE3\%LibAftenDll%"
-copy /Y "%BasePathUnicode%\%Win64FileName%" "%BasePath%\%Win64FileName%"
+copy /Y "%BasePathUnicode%\%EnginesFileName%" "%BasePath%\%EnginesFileName%"
 
 endlocal
