@@ -27,6 +27,7 @@ set BuildNames=EncoderBuilds.inc
 @del /Q "%BasePath%\*.ncb"
 @del /Q "%BasePath%\src\*.aps"
 @del /Q /AH "%BasePath%\*.suo"
+@del /Q "%BasePath%\*.log"
 
 FOR /F "tokens=*" %%i IN (%BuildNames%) DO (
     @del "%BasePath%\%%i\EncWAVtoAC3.exe"
