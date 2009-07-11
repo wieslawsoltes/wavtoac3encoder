@@ -19,16 +19,16 @@ rem
 rem $Id$
 setlocal
 
-set varWinRAR=c:\Program Files (x86)\WinRAR\WinRAR.exe
+set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=3.0
+set varVersion=4.0
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
 mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
-copy "%varBase%\*.vcproj" "%varOutput%"
+copy "%varBase%\*.vcxproj" "%varOutput%"
 copy "%varBase%\*.cmd" "%varOutput%"
 copy "%varBase%\*.inc" "%varOutput%"
 
@@ -44,23 +44,18 @@ mkdir "%varOutput%\%varPath%"
 set varPath=engines\ansi
 mkdir "%varOutput%\%varPath%"
 
-copy "%varBase%\%varPath%\EncWAVtoAC3.win32" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\EncWAVtoAC3.win64" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
 
 set varPath=engines\unicode
 mkdir "%varOutput%\%varPath%"
 
-copy "%varBase%\%varPath%\EncWAVtoAC3.win32" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\EncWAVtoAC3.win64" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
 
 set varPath=installer
 mkdir "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\*.cmd" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.base" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.version" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.Win32.iss" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.x64.iss" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.iss" "%varOutput%\%varPath%"
 
 set varPath=src
 mkdir "%varOutput%\%varPath%"
@@ -120,14 +115,10 @@ copy "%varBase%\%varPath%\redist.txt" "%varOutput%\%varPath%"
 set varPath=Debug
 
 mkdir "%varOutput%\%varPath%"
-mkdir "%varOutput%\%varPath%\Win32"
-mkdir "%varOutput%\%varPath%\x64"
 
 set varPath=Release
 
 mkdir "%varOutput%\%varPath%"
-mkdir "%varOutput%\%varPath%\Win32"
-mkdir "%varOutput%\%varPath%\x64"
 
 rem "%varWinRAR%" a -ep1 -m5 -r -s -t "%varOutput%.rar" "%varOutput%\*"
 "%varWinRAR%" a -ep1 -m5 -r -t "%varOutput%.zip" "%varOutput%\*"
