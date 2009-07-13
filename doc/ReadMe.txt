@@ -1,4 +1,4 @@
-﻿WAV to AC3 Encoder 4.0 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 4.1 (Using Aften A/52 Audio Encoder)
 
 ==LICENSE==
 
