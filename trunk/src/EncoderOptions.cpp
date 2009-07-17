@@ -142,7 +142,9 @@ const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8] =
     _T("aiff"),
     _T("aif"),
     _T("aifc"),
+#ifndef DISABLE_AVISYNTH
     _T("avs")
+#endif
 };
 
 // supported input file formats

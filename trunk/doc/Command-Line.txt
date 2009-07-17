@@ -22,4 +22,6 @@ Options:
 
  -m, --mux-wizard			Show standalone MUX Wizard window.
 
+Notes: AviSynth is not supported under x64 platforms.
+
 $Id $

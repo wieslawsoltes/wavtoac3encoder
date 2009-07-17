@@ -36,7 +36,9 @@
 
 #include "aften.h"
 
+#ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
+#endif
 
 #include "EncoderOptions.h"
 
@@ -169,7 +171,9 @@ public:
     void ShowOptionPopup(bool bUseRect);
     void UpdateView(int nMode);
 public:
+#ifndef DISABLE_AVISYNTH
     bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
+#endif
 public:
     afx_msg void OnDropFiles(HDROP hDropInfo);
     afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);

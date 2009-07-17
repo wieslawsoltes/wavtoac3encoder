@@ -25,7 +25,10 @@
 #include "EncoderOptions.h"
 #include "Utilities.h"
 #include "MyFile.h"
+
+#ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
+#endif
 
 CList<SingleWorkerData,SingleWorkerData> workList;
 
@@ -209,12 +212,20 @@ void SetAftenOptions(AftenAPI &api,
     nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
+#ifndef DISABLE_AVISYNTH
 void ShowCurrentJobInfo(int nInputFiles,  
                         PcmContext &pf, 
                         WorkerParam *pWork, 
                         AftenContext &s,
                         bool bAvisynthInput,
                         AvsAudioInfo &infoAVS)
+#else
+void ShowCurrentJobInfo(int nInputFiles,  
+                        PcmContext &pf, 
+                        WorkerParam *pWork, 
+                        AftenContext &s,
+                        bool bAvisynthInput)
+#endif
 {
     CString szInputInfo = _T("");
     CString szOutputInfo = _T("");
@@ -309,6 +320,7 @@ void ShowCurrentJobInfo(int nInputFiles,
     }
     else
     {
+#ifndef DISABLE_AVISYNTH
         // NOTE: type is always Raw PCM but floating-point may change in future and endianes
         TCHAR *chan;
         chan = _T("?-channel");
@@ -328,6 +340,7 @@ void ShowCurrentJobInfo(int nInputFiles,
             infoAVS.nSamplesPerSecond, chan);
 
         pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[0])->SetWindowText(szInputInfo);
+#endif
     }
 
     // output info (using code from aften/aften.c)
@@ -436,9 +449,11 @@ int RunAftenEncoder(AftenAPI &api,
     // indicate avisynth script as input file
     bool bAvisynthInput = false;
 
+#ifndef DISABLE_AVISYNTH
     // check if we have avisynth script as input
     if(GetFileExt(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
+#endif
 
 	// total size of input file(s)
     pWork->nInTotalSize = 0;
@@ -461,14 +476,18 @@ int RunAftenEncoder(AftenAPI &api,
     pszOutPath = szOutPath.GetBuffer();
     memset(ifp, 0, NUM_MAX_INPUT_FILES * sizeof(FILE *));
 
+#ifndef DISABLE_AVISYNTH
     // avisynth data
     AvsAudioInfo infoAVS;
     Avs2RawStatus statusAVS;
     CAvs2Raw decoderAVS;
     char szInputFileAVS[MAX_PATH] = "";
+#endif
 
     if(bAvisynthInput == true)
-    {
+	{
+#ifndef DISABLE_AVISYNTH
+
         // initialize Avisynth - only one input file supported
         // NOTE: only Ansi file names supported
 #ifdef _UNICODE
@@ -498,6 +517,7 @@ int RunAftenEncoder(AftenAPI &api,
                 ::LogMessage(&logCtx, szLogMessage + _T("Avisynth initialized successfully."));
             }
         }
+#endif
     }
     else
     {
@@ -568,11 +588,7 @@ int RunAftenEncoder(AftenAPI &api,
     if(frame) \
         free(frame); \
     \
-    if(bAvisynthInput == true) \
-    { \
-        decoderAVS.CloseAvisynth(); \
-    } \
-    else \
+    if(bAvisynthInput == false) \
     { \
         pcm_close(&pf); \
     \
@@ -581,6 +597,10 @@ int RunAftenEncoder(AftenAPI &api,
             if(ifp[i]) \
                 fclose(ifp[i]); \
         } \
+    } \
+    else \
+    { \
+        /* decoderAVS.CloseAvisynth(); */ \
     } \
     \
     if(ofp) \
@@ -640,14 +660,17 @@ int RunAftenEncoder(AftenAPI &api,
     }
     else
     {
+#ifndef DISABLE_AVISYNTH
         if(opt.raw_input)
         {
             // NOTE: raw audio settings are ignored at this time, using avisynth settings
         }
+#endif
     }
 
     if(bAvisynthInput == true)
     {
+#ifndef DISABLE_AVISYNTH
         // init avisynth read status structure
         statusAVS.nStart = 0;
         statusAVS.nSamples = infoAVS.nAudioSamples;
@@ -664,6 +687,7 @@ int RunAftenEncoder(AftenAPI &api,
         // NOTE: currently using ch_mask to set this
         //s.acmod = ;
         //s.lfe = ;
+#endif
     }
 
     // TODO: need to test this with Avisynth input
@@ -743,6 +767,7 @@ int RunAftenEncoder(AftenAPI &api,
     }
     else
     {
+#ifndef DISABLE_AVISYNTH
         // Avs2Raw converts all formats to FLOAT by default
         /*
         switch(infoAVS.nSampleType)
@@ -758,7 +783,8 @@ int RunAftenEncoder(AftenAPI &api,
         s.sample_format = A52_SAMPLE_FMT_FLT;
 
         s.channels = infoAVS.nAudioChannels;
-        s.samplerate = infoAVS.nSamplesPerSecond;      
+        s.samplerate = infoAVS.nSamplesPerSecond; 
+#endif
     }
 
     // allocate memory for audio data
@@ -794,11 +820,13 @@ int RunAftenEncoder(AftenAPI &api,
         }
         else
         {
+#ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = 256;
 
             cIORead.Start();
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
             cIORead.Stop();
+#endif
         }
 
         diff = 256 - nr;
@@ -821,7 +849,11 @@ int RunAftenEncoder(AftenAPI &api,
     }
 
     // show current job information in work dialog
+#ifndef DISABLE_AVISYNTH
     ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
+#else
+    ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput);
+#endif
 
     // main encoding loop
     do
@@ -853,11 +885,13 @@ int RunAftenEncoder(AftenAPI &api,
         }
         else
         {
+#ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
 
             cIORead.Start();
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
             cIORead.Stop();
+#endif
         }
 
         if(aften_remap)
@@ -914,8 +948,10 @@ int RunAftenEncoder(AftenAPI &api,
                 }
                 else
                 {
+#ifndef DISABLE_AVISYNTH
                     // TODO: use 'nr' to count read samples instead of 'samplecount'
                     nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+#endif
                 }
 
                 // use ftell to get encoding progress
@@ -1026,7 +1062,9 @@ int RunAftenEncoder(AftenAPI &api,
     }
     else
     {
+#ifndef DISABLE_AVISYNTH
         decoderAVS.CloseAvisynth();
+#endif
     }
 
     // update total counter
@@ -1046,7 +1084,9 @@ int RunAftenEncoder(AftenAPI &api,
     }
     else
     {
+#ifndef DISABLE_AVISYNTH
         *nTotalSizeCounter += pWork->nInTotalSize;
+#endif
     }
 
     // close input files

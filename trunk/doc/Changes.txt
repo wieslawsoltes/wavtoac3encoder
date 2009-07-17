@@ -1,5 +1,9 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 4.2:
+
+- 
+
 Version 4.1:
 
 - Fixed compatibility issue with Windows 2000.

@@ -50,7 +50,11 @@ const CString szHelpMessage =
 	_T("Do not save configuration on exit.\n")
     _T("\n")
     _T("-i, --input-file <file.ext>\n")
+#ifndef DISABLE_AVISYNTH
 	_T("Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).\n")
+#else
+	_T("Set input files path (*.wav, *.bin, *.pcm, *.raw).\n")
+#endif
 	_T("\n")
     _T("-o, --output-file <file.ext>\n")
 	_T("Set output file path (*.ac3).\n")
