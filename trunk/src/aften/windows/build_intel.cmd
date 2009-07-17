@@ -17,13 +17,13 @@ goto use_intel_compiler_%1
 :use_intel_compiler_11_1_035
 
 rem Set environment variables for Intel C++ Compiler v11.1.035 (x86 PGO, MMX, SSE, SSE2 and SSE3 Builds)
-@call "C:\Program Files\Intel\Compiler\11.1\035\bin\ia32\iclvars_ia32.bat"
+@call "c:\Program Files (x86)\Intel\Compiler\11.1\035\bin\ia32\iclvars_ia32.bat"
 goto common_settings
 
 :use_intel_compiler_11_1_035_x64
 
 rem Set environment variables for Intel C++ Compiler v11.1.035 (x86-64, EM64T PGO, MMX, SSE, SSE2 and SSE3 Builds)
-@call "C:\Program Files\Intel\Compiler\11.1\035\bin\ia32_intel64\iclvars_ia32_intel64.bat"
+@call "c:\Program Files (x86)\Intel\Compiler\11.1\035\bin\intel64\iclvars_intel64.bat"
 goto common_settings
 
 rem
@@ -101,7 +101,7 @@ if /i "11_1_035_x64"=="%1" set opt_icl_cmn=%opt_icl_cmn% /D "WIN32" /D "WIN64"
 
 rem Set Compiler optimization command-line options
 if /i "DEBUG"=="%4" (
-  set opt_icl_opt=%opt_icl_cmn% /Od /ZI /RTC1
+  set opt_icl_opt=%opt_icl_cmn% /Od /Zi /RTC1
 ) else (
   set opt_icl_opt=%opt_icl_cmn% /GA /Ox /Og /Ob1 /Ot     
 )
