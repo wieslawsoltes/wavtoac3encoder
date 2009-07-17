@@ -1533,6 +1533,7 @@ void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
     // update item file name
     this->m_LstFiles.SetItemText(nItem, 0, szPath);
 
+#ifndef DISABLE_AVISYNTH
     // get AVS file size
     if(GetFileExt(szPath).MakeLower() == _T("avs"))
     {
@@ -1544,6 +1545,7 @@ void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
 
         nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
     }
+#endif
 
     // szSize.Format(_T("%I64d"), GetFileSize64(szPath));
     szSize.Format(_T("%I64d"), nFileSize);
@@ -2773,8 +2775,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     {
         // check for avisynth scipts
         szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
+
+#ifndef DISABLE_AVISYNTH
         if(GetFileExt(szFileBuffer).MakeLower() == _T("avs"))
             bAvisynthInput = true;
+#endif
 
         // get item file path
         list.AddTail(szFileBuffer);
@@ -2787,6 +2792,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         dlg.nTotalSize += _ttoi64(szSizeBuff);
     }
 
+#ifndef DISABLE_AVISYNTH
     // check if we can process avisynth *.avs script (check all files in the list)
     // 1. 'Multiple mono input' mode - off
     if((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
@@ -2796,6 +2802,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         bWorking = false;
         return;
     }
+#endif
 
     // set pointer to files list
     dlg.workParam.list = &list;
@@ -3452,6 +3459,8 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 }
 
+#ifndef DISABLE_AVISYNTH
+
 bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
 {
     TCHAR *pszInPath = szFileName.GetBuffer();
@@ -3489,6 +3498,8 @@ bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInf
     }   
 }
 
+#endif
+
 void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
     POSITION pos = m_LstFiles.GetFirstSelectedItemPosition();
@@ -3497,9 +3508,10 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
         int nItem = m_LstFiles.GetNextSelectedItem(pos);
         CString szFileName = m_LstFiles.GetItemText(nItem, 0);
 
+#ifndef DISABLE_AVISYNTH
         // show AVS file information text
         if(GetFileExt(szFileName).MakeLower() == _T("avs"))
-        {
+		{
             // get input Audio stream information from Avisynth
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -3550,6 +3562,7 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
                 this->MessageBox(szInfo, _T("AVS File Properties"), MB_ICONINFORMATION | MB_OK);
             }
         } 
+#endif
     }
 
     *pResult = 0;
