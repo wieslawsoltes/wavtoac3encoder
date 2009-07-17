@@ -2,7 +2,7 @@
 
 Version 4.2:
 
-- 
+- Added AMD64 builds but without Avisynth *.avs support.
 
 Version 4.1:
 

@@ -12,11 +12,9 @@ set OutPath=output
 @call build_intel.cmd %icl_version% wavrms DEFAULT
 
 @call build_intel.cmd %icl_version% libaftendll DEFAULT
-@call build_intel.cmd %icl_version% libaftendll SSE2
 @call build_intel.cmd %icl_version% libaftendll SSE3
 
 @call build_intel.cmd %icl_version% aften DEFAULT
-@call build_intel.cmd %icl_version% aften SSE2
 @call build_intel.cmd %icl_version% aften SSE3
 
 rem Copy additional files for binary package
