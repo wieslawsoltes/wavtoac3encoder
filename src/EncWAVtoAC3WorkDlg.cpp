@@ -52,6 +52,10 @@ CEncWAVtoAC3WorkDlg::CEncWAVtoAC3WorkDlg(CWnd* pParent /*=NULL*/)
     this->nCount = 0;
     this->m_ElapsedTimeFile = 0;
     this->m_ElapsedTimeTotal = 0;
+
+	this->szSpeedEncoder = _T("0.0");
+	this->szSpeedReads = _T("0.0");
+	this->szSpeedWrites = _T("0.0");
 }
 
 CEncWAVtoAC3WorkDlg::~CEncWAVtoAC3WorkDlg()
@@ -97,11 +101,12 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 
 		// move other controls
 		CRect rcIn[NUM_MAX_INPUT_FILES], rcInInfo[NUM_MAX_INPUT_FILES];
+		CRect rcSpeedInfo[3][5];
 		CRect rcOut, rcOutInfo;
 		CRect rcSIMD;
 		CRect rcElapsed[2];
 		CRect rcProgress[2];
-		CRect rcGroup, rcBtnCancel;
+		CRect rcGroup, rcGroupStats, rcBtnCancel;
 		CRect rcDlg;
 
 		for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
@@ -119,6 +124,23 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 		this->m_PrgTotal.GetWindowRect(rcProgress[1]);
 		this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->GetWindowRect(rcGroup);
 		this->m_BtnCancel.GetWindowRect(rcBtnCancel);
+		this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->GetWindowRect(rcSpeedInfo[0][0]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_SPEED)->GetWindowRect(rcSpeedInfo[0][1]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_UNIT)->GetWindowRect(rcSpeedInfo[0][2]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_BREAK)->GetWindowRect(rcSpeedInfo[0][3]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->GetWindowRect(rcSpeedInfo[0][4]);
+		this->GetDlgItem(IDC_STATIC_READS_LABEL)->GetWindowRect(rcSpeedInfo[1][0]);
+		this->GetDlgItem(IDC_STATIC_READS_SPEED)->GetWindowRect(rcSpeedInfo[1][1]);
+		this->GetDlgItem(IDC_STATIC_READS_UNIT)->GetWindowRect(rcSpeedInfo[1][2]);
+		this->GetDlgItem(IDC_STATIC_READS_BREAK)->GetWindowRect(rcSpeedInfo[1][3]);
+		this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->GetWindowRect(rcSpeedInfo[1][4]);
+		this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->GetWindowRect(rcSpeedInfo[2][0]);
+		this->GetDlgItem(IDC_STATIC_WRITES_SPEED)->GetWindowRect(rcSpeedInfo[2][1]);
+		this->GetDlgItem(IDC_STATIC_WRITES_UNIT)->GetWindowRect(rcSpeedInfo[2][2]);
+		this->GetDlgItem(IDC_STATIC_WRITES_BREAK)->GetWindowRect(rcSpeedInfo[2][3]);
+		this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->GetWindowRect(rcSpeedInfo[2][4]);
+
+		this->GetDlgItem(IDC_STATIC_GROUP_STATS)->GetWindowRect(rcGroupStats);
 		this->GetWindowRect(rcDlg);
 
 		int nHeight = 0;
@@ -155,6 +177,70 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 		rcBtnCancel.MoveToY(rcBtnCancel.top - nHeight);
 		this->ScreenToClient(rcBtnCancel);
 		this->m_BtnCancel.MoveWindow(rcBtnCancel);
+
+        rcSpeedInfo[0][0].MoveToY(rcSpeedInfo[0][0].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[0][0]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->MoveWindow(rcSpeedInfo[0][0]);
+
+        rcSpeedInfo[0][1].MoveToY(rcSpeedInfo[0][1].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[0][1]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_SPEED)->MoveWindow(rcSpeedInfo[0][1]);
+
+        rcSpeedInfo[0][2].MoveToY(rcSpeedInfo[0][2].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[0][2]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_UNIT)->MoveWindow(rcSpeedInfo[0][2]);
+
+        rcSpeedInfo[0][3].MoveToY(rcSpeedInfo[0][3].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[0][3]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_BREAK)->MoveWindow(rcSpeedInfo[0][3]);
+
+        rcSpeedInfo[0][4].MoveToY(rcSpeedInfo[0][4].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[0][4]);
+		this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->MoveWindow(rcSpeedInfo[0][4]);
+
+        rcSpeedInfo[1][0].MoveToY(rcSpeedInfo[1][0].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[1][0]);
+		this->GetDlgItem(IDC_STATIC_READS_LABEL)->MoveWindow(rcSpeedInfo[1][0]);
+
+        rcSpeedInfo[1][1].MoveToY(rcSpeedInfo[1][1].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[1][1]);
+		this->GetDlgItem(IDC_STATIC_READS_SPEED)->MoveWindow(rcSpeedInfo[1][1]);
+
+        rcSpeedInfo[1][2].MoveToY(rcSpeedInfo[1][2].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[1][2]);
+		this->GetDlgItem(IDC_STATIC_READS_UNIT)->MoveWindow(rcSpeedInfo[1][2]);
+
+        rcSpeedInfo[1][3].MoveToY(rcSpeedInfo[1][3].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[1][3]);
+		this->GetDlgItem(IDC_STATIC_READS_BREAK)->MoveWindow(rcSpeedInfo[1][3]);
+
+        rcSpeedInfo[1][4].MoveToY(rcSpeedInfo[1][4].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[1][4]);
+		this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->MoveWindow(rcSpeedInfo[1][4]);
+
+        rcSpeedInfo[2][0].MoveToY(rcSpeedInfo[2][0].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[2][0]);
+		this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->MoveWindow(rcSpeedInfo[2][0]);
+
+        rcSpeedInfo[2][1].MoveToY(rcSpeedInfo[2][1].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[2][1]);
+		this->GetDlgItem(IDC_STATIC_WRITES_SPEED)->MoveWindow(rcSpeedInfo[2][1]);
+
+        rcSpeedInfo[2][2].MoveToY(rcSpeedInfo[2][2].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[2][2]);
+		this->GetDlgItem(IDC_STATIC_WRITES_UNIT)->MoveWindow(rcSpeedInfo[2][2]);
+
+        rcSpeedInfo[2][3].MoveToY(rcSpeedInfo[2][3].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[2][3]);
+		this->GetDlgItem(IDC_STATIC_WRITES_BREAK)->MoveWindow(rcSpeedInfo[2][3]);
+
+        rcSpeedInfo[2][4].MoveToY(rcSpeedInfo[2][4].top - nHeight);
+        this->ScreenToClient(rcSpeedInfo[2][4]);
+		this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->MoveWindow(rcSpeedInfo[2][4]);
+
+        rcGroupStats.MoveToY(rcGroupStats.top - nHeight);
+        this->ScreenToClient(rcGroupStats);
+		this->GetDlgItem(IDC_STATIC_GROUP_STATS)->MoveWindow(rcGroupStats);
 
 		rcGroup.bottom -= nHeight;
 		this->ScreenToClient(rcGroup);
@@ -222,26 +308,26 @@ void CEncWAVtoAC3WorkDlg::OnTimer(UINT_PTR nIDEvent)
     case WM_TOTAL_TIMER:
         {
             TCHAR strTime[32] = _T("");
-            m_ElapsedTimeTotal += 1L;
+            m_ElapsedTimeTotal += 0.25;
 
             // get time in format hh:mm:ss
             if(m_ElapsedTimeTotal <= 59)
             {
                 _stprintf(strTime, _T("Total elapsed time: 00:00:%02u\0"), 
-                    m_ElapsedTimeTotal); // ss
+                    (unsigned long) m_ElapsedTimeTotal); // ss
             }
             else if(m_ElapsedTimeTotal <= 3599)
             {
                 _stprintf(strTime, _T("Total elapsed time: 00:%02u:%02u\0"),
-                    (m_ElapsedTimeTotal / 60), // mm
-                    (m_ElapsedTimeTotal % 60)); // ss
+                    ((unsigned long) m_ElapsedTimeTotal / 60), // mm
+                    ((unsigned long) m_ElapsedTimeTotal % 60)); // ss
             }
             else
             {
                 _stprintf(strTime, _T("Total elapsed time: %02u:%02u:%02u\0"), 
-                    (m_ElapsedTimeTotal / 60) / 60, // hh
-                    (m_ElapsedTimeTotal / 60) % 60, // mm
-                    (((m_ElapsedTimeTotal / 60) % 60) * 60) % 60); // ss
+                    ((unsigned long) m_ElapsedTimeTotal / 60) / 60, // hh
+                    ((unsigned long) m_ElapsedTimeTotal / 60) % 60, // mm
+                    ((((unsigned long) m_ElapsedTimeTotal / 60) % 60) * 60) % 60); // ss
             }
 
             // write to dialog
@@ -259,33 +345,45 @@ void CEncWAVtoAC3WorkDlg::OnTimer(UINT_PTR nIDEvent)
     case WM_FILE_TIMER:
         {
             TCHAR strTime[32] = _T("");
-            m_ElapsedTimeFile += 1L;
+            m_ElapsedTimeFile += 0.25;
 
             // get time in format hh:mm:ss
             if(m_ElapsedTimeFile <= 59)
             {
                 _stprintf(strTime, _T("Elapsed time: 00:00:%02u\0"), 
-                    m_ElapsedTimeFile); // ss
+                    (unsigned long) m_ElapsedTimeFile); // ss
             }
             else if(m_ElapsedTimeFile <= 3599)
             {
                 _stprintf(strTime, _T("Elapsed time: 00:%02u:%02u\0"),
-                    (m_ElapsedTimeFile / 60), // mm
-                    (m_ElapsedTimeFile % 60)); // ss
+                    ((unsigned long) m_ElapsedTimeFile / 60), // mm
+                    ((unsigned long) m_ElapsedTimeFile % 60)); // ss
             }
             else
             {
                 _stprintf(strTime, _T("Elapsed time: %02u:%02u:%02u\0"), 
-                    (m_ElapsedTimeFile / 60) / 60, // hh
-                    (m_ElapsedTimeFile / 60) % 60, // mm
-                    (((m_ElapsedTimeFile / 60) % 60) * 60) % 60); // ss
+                    ((unsigned long) m_ElapsedTimeFile / 60) / 60, // hh
+                    ((unsigned long) m_ElapsedTimeFile / 60) % 60, // mm
+                    ((((unsigned long) m_ElapsedTimeFile / 60) % 60) * 60) % 60); // ss
             }
 
             // write to dialog
             if(this->bCanUpdateWindow == true)
             {
                 this->bCanUpdateWindow = false;
+
+				// show current time
                 m_StcTimeCurrent.SetWindowText(strTime);
+
+				// show current speed
+				this->GetDlgItem(IDC_STATIC_ENCODER_SPEED)->SetWindowText(szSpeedEncoder);
+				this->GetDlgItem(IDC_STATIC_READS_SPEED)->SetWindowText(szSpeedReads);
+				this->GetDlgItem(IDC_STATIC_WRITES_SPEED)->SetWindowText(szSpeedWrites);
+
+				this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->SetWindowText(szSpeedEncoderAvg);
+				this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->SetWindowText(szSpeedReadsAvg);
+				this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->SetWindowText(szSpeedWritesAvg);
+
                 this->bCanUpdateWindow = true;
             }
 
