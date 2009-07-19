@@ -855,6 +855,17 @@ int RunAftenEncoder(AftenAPI &api,
     ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput);
 #endif
 
+	int nCurTotalPos = 0; // 0% - 100%
+	__int64 nCurPos = 0;
+	bool bUpdateSpeed = false;
+
+	__int64 nInPrevCurPos = 0;
+	__int64 nOutPrevCurPos = 0;
+    double fPrevTimeEncoding = 0.0;
+    double fPrevTimeIORead = 0.0;
+    double fPrevTimeIOWrite = 0.0;
+
+
     // main encoding loop
     do
     {
@@ -920,7 +931,7 @@ int RunAftenEncoder(AftenAPI &api,
 
             t1 = samplecount / pf.sample_rate;
             if(frame_cnt > 0 && (t1 > t0 || samplecount >= pf.samples))
-            {
+			{
                 kbps = (bytecount * FCONST(8.0) * pf.sample_rate) / (FCONST(1000.0) * samplecount);
                 percent = 0;
                 if(pf.samples > 0) 
@@ -929,8 +940,8 @@ int RunAftenEncoder(AftenAPI &api,
                     percent = CLIP(percent, 0, 100);
                 }
 
-                int nCurTotalPos = 0; // 0% - 100%
-                __int64 nCurPos = 0;
+                // int nCurTotalPos = 0; // 0% - 100%
+                // __int64 nCurPos = 0;
 
                 if(bAvisynthInput == false)
                 {
@@ -953,6 +964,32 @@ int RunAftenEncoder(AftenAPI &api,
                     nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
 #endif
                 }
+
+                if(pWork->pWorkDlg->bCanUpdateWindow == true)
+                {
+					pWork->pWorkDlg->bCanUpdateWindow = false;
+					CString szTmpBuff;
+
+					// update current encoder speed
+					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos - nInPrevCurPos) / 1048576.0f) / (cEncoding.Time() - fPrevTimeEncoding + 1.0e-16));
+					pWork->pWorkDlg->szSpeedEncoder = szTmpBuff;
+
+					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos) / 1048576.0f) / (cEncoding.Time() + 1.0e-16));
+					pWork->pWorkDlg->szSpeedEncoderAvg = szTmpBuff;
+
+					// update current read speed
+					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos - nInPrevCurPos) / 1048576.0f) / (cIORead.Time() - fPrevTimeIORead + 1.0e-16));
+					pWork->pWorkDlg->szSpeedReads = szTmpBuff;
+
+					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos) / 1048576.0f) / (cIORead.Time() + 1.0e-16));
+					pWork->pWorkDlg->szSpeedReadsAvg = szTmpBuff;
+
+					nInPrevCurPos = nCurPos;
+					fPrevTimeEncoding = cEncoding.Time();
+					fPrevTimeIORead = cIORead.Time();
+
+					pWork->pWorkDlg->bCanUpdateWindow = true;
+				}
 
                 // use ftell to get encoding progress
                 percent = (100 * nCurPos) / pWork->nInTotalSize;
@@ -985,6 +1022,24 @@ int RunAftenEncoder(AftenAPI &api,
             cIOWrite.Start();
             fwrite(frame, 1, fs, ofp);
             cIOWrite.Stop();
+
+			if(pWork->pWorkDlg->bCanUpdateWindow == true)
+			{
+				// update current write speed
+				pWork->pWorkDlg->bCanUpdateWindow = false;
+
+				CString szTmpBuff;
+				szTmpBuff.Format(_T("%0.1lf"), ((double) (_ftelli64(ofp) - nOutPrevCurPos) / 1048576.0f) / (cIOWrite.Time() - fPrevTimeIOWrite + 1.0e-16));
+				pWork->pWorkDlg->szSpeedWrites = szTmpBuff;
+
+				szTmpBuff.Format(_T("%0.1lf"), ((double) (_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.Time() + 1.0e-16));
+				pWork->pWorkDlg->szSpeedWritesAvg = szTmpBuff;
+
+				nOutPrevCurPos = _ftelli64(ofp);
+    			fPrevTimeIOWrite = cIOWrite.Time();
+
+				pWork->pWorkDlg->bCanUpdateWindow = true;
+			}
 
             // update frame counter
             frame_cnt++;
@@ -1157,7 +1212,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
     pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(_T("Total elapsed time: 00:00:00"));
-    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 1000, NULL);
+    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, NULL);
 
     int nFileCounter = 0;
     int nTotalFiles = list->GetSize();
@@ -1206,7 +1261,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             // start file timer
             pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
             pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-            pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 1000, NULL);
+            pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
 
             // update progress bars
             pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
@@ -1289,7 +1344,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         // start file timer
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-        pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 1000, NULL);
+        pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
 
         // update progress bars
         pWork->pWorkDlg->m_PrgCurrent.SetPos(0);

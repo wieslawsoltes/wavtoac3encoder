@@ -29,33 +29,49 @@
 #define IDC_STATIC_IN_INFO_01           1009
 #define IDC_STATIC_ELAPSED_CURRENT      1010
 #define IDC_SLIDER_BITRATE              1011
+#define IDC_STATIC_ENCODER_LABEL        1011
 #define IDC_STATIC_IN_00                1012
 #define IDC_STATIC_OUT_INFO             1013
 #define IDC_BUTTON_PRESETS_DEFAULTS     1014
+#define IDC_STATIC_READS_LABEL          1014
 #define IDC_STATIC_IN_INFO_00           1015
 #define IDC_STATIC_ELAPSED_TOTAL        1016
 #define IDC_CHECK_VBR                   1017
+#define IDC_STATIC_WRITES_LABEL         1017
 #define IDC_STATIC_IN_02                1018
 #define IDC_STATIC_SIMD_INFO            1019
 #define IDC_STATIC_LICENSE              1020
+#define IDC_STATIC_ENCODER_SPEED        1020
 #define IDC_STATIC_IN_INFO_02           1021
 #define IDC_STATIC_BITRATE              1022
+#define IDC_STATIC_READS_SPEED          1022
 #define IDC_STATIC_IN_03                1023
 #define IDC_COMBO_SETTING               1024
+#define IDC_STATIC_WRITES_SPEED         1024
 #define IDC_STATIC_IN_INFO_03           1025
 #define IDC_COMBO_PRESETS               1026
+#define IDC_STATIC_ENCODER_UNIT         1026
 #define IDC_STATIC_IN_04                1027
 #define IDC_BUTTON_PRESET_ADD           1028
+#define IDC_STATIC_READS_UNIT           1028
 #define IDC_STATIC_IN_INFO_04           1029
 #define IDC_BUTTON_PRESET_DEL           1030
+#define IDC_STATIC_WRITES_UNIT          1030
 #define IDC_STATIC_IN_05                1031
 #define IDC_EDIT_OUTPUT_PATH            1032
+#define IDC_STATIC_ENCODER_BREAK        1032
 #define IDC_STATIC_IN_INFO_05           1033
 #define IDC_BUTTON_BROWSE               1034
+#define IDC_STATIC_READS_BREAK          1034
 #define IDC_STATIC_SETTINGS             1035
+#define IDC_STATIC_WRITES_BREAK         1035
 #define IDC_STATIC_QUALITY              1036
+#define IDC_STATIC_ENCODER_SPEED_AVG    1036
 #define IDC_STATIC_OPTION_VALUE         1037
+#define IDC_STATIC_READS_SPEED_AVG      1037
 #define IDC_STATIC_THREADS              1038
+#define IDC_STATIC_WRITES_SPEED2        1038
+#define IDC_STATIC_WRITES_SPEED_AVG     1038
 #define IDC_STATIC_OUTPUT               1039
 #define IDC_STATIC_PRESETS              1040
 #define IDC_EDIT_THREADS                1041
@@ -119,6 +135,7 @@
 #define IDC_EDIT_LFE                    1108
 #define IDC_EDIT_SL                     1109
 #define IDC_EDIT_SR                     1110
+#define IDC_STATIC_GROUP_STATS          1111
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -155,7 +172,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32804
-#define _APS_NEXT_CONTROL_VALUE         1111
+#define _APS_NEXT_CONTROL_VALUE         1112
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

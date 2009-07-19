@@ -83,10 +83,16 @@ public:
     HANDLE hThread;
     DWORD dwThreadId;
     __int64 nTotalSize;
-    unsigned long m_ElapsedTimeFile;
-    unsigned long m_ElapsedTimeTotal;
+    double m_ElapsedTimeFile;
+    double m_ElapsedTimeTotal;
     int nCount;
     WorkerParam workParam;
+	CString szSpeedEncoder;
+	CString szSpeedReads;
+	CString szSpeedWrites;
+	CString szSpeedEncoderAvg;
+	CString szSpeedReadsAvg;
+	CString szSpeedWritesAvg;
 public:
     CMyStatic m_StcOut;
     CMyStatic m_StcOutInfo;
