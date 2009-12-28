@@ -1,0 +1,124 @@
+Aften TODO list
+---------------
+- Channel coupling (this will be a large undertaking)
+- E-AC-3 bitstream format and encoding
+- ABR encoding mode
+- 2-pass encoding
+- Frame parser / analyzer
+- Option to downmix/upmix/resample prior to encoding
+    - 2-channel surround-matrix downmix
+    - 2-channel headphone downmix
+    - Stereo to 5.1 upmix
+- Improve DRC implementation
+- Psychoacoustic model & delta bit allocation
+- Gapless info using auxdata field
+- Streaming interface to libaften / internal sample buffer
+- Better error logging for libaften
+- pkg-config support or alike
+- Channel layout support in PCM decoder
+
+Aften Changelog
+---------------
+version SVN : current
+- added Windows x64 support (tested with Visual Studio 2008)
+- added C# bindings with simple high level API
+- changed API to simplify its usage
+- added API.txt
+- fixed aften error handling
+- fixed libaften closing in threaded mode, simplifying its usage
+- AftenContext has a new member called initial_samples.
+  If 256 samples are provided here, the first frame is not padded
+  with zero samples. Nevertheless, you shouldn't use this option unless
+  you need perfect sync, as these first 256 samples can't properly be
+  reconstructed.
+- fixed bug in wav to ac3 channel remapping
+- Multiple-file commandline input with channel designation
+- AIFF file support
+- CAFF file support
+- changed API to create a new exponent strategy decision with better quality
+  and more flexibility
+- rearranged code structure of SIMD optimizations
+
+version 0.08 :
+- fixed piped input from FFmpeg
+- added support for MPEG channel order remapping
+- restructured audio input. enables raw pcm file support.
+- bugfixes in MMX/SSE2 code
+- stack align hack for x86 MinGW with threads
+- API changes
+- SIMD and threads usage is shown and is configurable
+- screen output gets updated every 200ms to reduce load
+- SIMD detection changed to compiler-independent inline assembly,
+  thus nasm/yasm not needed anymore
+
+version 0.07 : 25 April 2007
+- added C++ bindings (pass -DBINDINGS_CXX=1 to cmake to build them)
+- API change of helper functions
+- new and more precise bitalloc algorithm
+- parallelization
+- optional faster exponent strategy decision
+- added SSE version of window function
+- added MMX and SSE2 versions of some exponent related functions
+- removed old build system
+- frame-independent variable bandwidth
+- minimum and maximum bandwidth settings for variable bandwidth mode
+- altivec support framework (by David Conrad)
+- altivec MDCT (by David Conrad)
+
+version 0.06 : 31 January 2007
+- added SSE/SSE3 mdct code (based on vorbis lancer by blacksword8192@hotmail.com)
+- added runtime SIMD detection code (Prakash Punnoor)
+- added CMake build system with shared lib/dll support
+- optional faster bit allocation by reducing accuracy/quality
+- replaced MDCT code with implementation from libvorbis
+- added Dynamic Range Compression encoding w/ profile selection
+- improved exponent strategy decision
+- accuracy increase in bit allocation
+- new longhelp option for detailed commandline info
+
+version 0.05 : 21 August 2006
+- bit allocation speedup by Prakash Punnoor <prakash@punnoor.de>
+- compile-time choice of using floats or doubles internally
+- internal restructuring of MDCT functions
+- more bit allocation speed-ups and bug fixes
+- quality=0 is now a valid setting
+
+version 0.04 : 05 August 2006
+- fixed VBR to lower quality if needed to fit in largest available frame size
+- small adjustment to exponent strategy decision
+- WAVE_FORMAT_EXTENSIBLE fix by Tebasuna
+- Alternate bit stream syntax with new commandline options
+- Better encoding structure
+- filter library
+- changed sample type from float to double
+- moved CRC code to a separate file
+- LFE low-pass filter
+- DC high-pass filter
+- bandwidth low-pass filter
+- Improved variable bandwidth selection
+- Channel bandwidth low-pass filter
+- Created separate library and frontend
+- changed default mode to CBR
+- allow for specification of max bitrate in VBR mode
+
+version 0.03 : 20 July 2006
+- support for WAV with sample types 8-bit, 24-bit, 32-bit, float, or double.
+- better multi-channel support, better mapping with WAV_FORMAT_EXTENSIBLE.
+- adjustments to VBR, changed default quality from 200 to 220.
+- adjustments to variable bandwidth, increased average bandwidth settings.
+
+version 0.02 : 09 July 2006
+- commandline options and customizable settings for:
+    - mix levels
+    - dialog normalization
+    - dolby surround flag
+
+version 0.01 : 09 July 2006 (first versioned release)
+- simple configure script
+- piped input and output
+- 6-channel mapping
+- corrected defaults for mix levels
+- commandline options
+- quiet mode (no console output)
+- per-frame or average statistics
+- big-endian support

@@ -1,0 +1,6 @@
+WavRMS: utility program to calculate AC-3 dialnorm.
+(c) 2006-2007 Justin Ruggles, et al.
+
+usage: wavrms <test.wav> [<start> [<end>]]
+    use '-' to input from stdin.
+    unit for start and end is seconds.
