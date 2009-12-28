@@ -5,7 +5,7 @@ rem
 rem USAGE: @call build_intel.cmd <compiler_version> <build_name> <optimizations> [<debug_flag>]
 rem
 
-title Building Aften Win32 and Win64 Binaries (C) 2006-2008 Wieslaw Soltes
+title Building Aften Win32 and Win64 Binaries (C) 2006-2009 Wieslaw Soltes
 
 rem
 rem SELECT COMPILER
@@ -14,16 +14,16 @@ rem
 rem Select proper compiler environment variables
 goto use_intel_compiler_%1
 
-:use_intel_compiler_11_1_035
+:use_intel_compiler_11_1_054
 
-rem Set environment variables for Intel C++ Compiler v11.1.035 (x86 PGO, MMX, SSE, SSE2 and SSE3 Builds)
-@call "c:\Program Files (x86)\Intel\Compiler\11.1\035\bin\ia32\iclvars_ia32.bat"
+rem Set environment variables for Intel C++ Compiler v11.1.054 (x86 PGO, MMX, SSE, SSE2 and SSE3 Builds)
+@call "c:\Program Files (x86)\Intel\Compiler\11.1\054\bin\ia32\iclvars_ia32.bat"
 goto common_settings
 
-:use_intel_compiler_11_1_035_x64
+:use_intel_compiler_11_1_054_x64
 
-rem Set environment variables for Intel C++ Compiler v11.1.035 (x86-64, EM64T PGO, MMX, SSE, SSE2 and SSE3 Builds)
-@call "c:\Program Files (x86)\Intel\Compiler\11.1\035\bin\intel64\iclvars_intel64.bat"
+rem Set environment variables for Intel C++ Compiler v11.1.054 (x86-64, EM64T PGO, MMX, SSE, SSE2 and SSE3 Builds)
+@call "c:\Program Files (x86)\Intel\Compiler\11.1\054\bin\intel64\iclvars_intel64.bat"
 goto common_settings
 
 rem
@@ -37,8 +37,8 @@ set out_path=output
 
 rem Set output directory names for release binaries
 
-if /i "11_1_035_x64"=="%1" set build_type=AMD64
-if /i "11_1_035"=="%1" set build_type=x86
+if /i "11_1_054_x64"=="%1" set build_type=AMD64
+if /i "11_1_054"=="%1" set build_type=x86
 
 if /i "DEFAULT"=="%3" (
   set build_opt=
@@ -96,23 +96,23 @@ if /i "DEBUG"=="%4" (
 set opt_icl_cmn=%opt_icl_cmn% /D "_CONSOLE" /D "_MBCS" /D "EMULATE_INTTYPES" /D "AFTEN_BUILD_LIBRARY" /D "MAX_NUM_THREADS=32" /D "HAVE_MM_MALLOC" /D "HAVE_CPU_CAPS_DETECTION" /D "HAVE_WINDOWS_THREADS" /D "_CRT_SECURE_NO_DEPRECATE"
 set opt_icl_cmn=%opt_icl_cmn% /Qwd177 /Qwd186 /Qwd188 /Qwd1478
 
-if /i "11_1_035"=="%1" set opt_icl_cmn=%opt_icl_cmn% /Gd /D "WIN32"
-if /i "11_1_035_x64"=="%1" set opt_icl_cmn=%opt_icl_cmn% /D "WIN32" /D "WIN64"
+if /i "11_1_054"=="%1" set opt_icl_cmn=%opt_icl_cmn% /Gd /D "WIN32"
+if /i "11_1_054_x64"=="%1" set opt_icl_cmn=%opt_icl_cmn% /D "WIN32" /D "WIN64"
 
 rem Set Compiler optimization command-line options
 if /i "DEBUG"=="%4" (
-  set opt_icl_opt=%opt_icl_cmn% /Od /Zi /RTC1
+  set opt_icl_opt=%opt_icl_cmn% /Od /ZI /RTC1
 ) else (
   set opt_icl_opt=%opt_icl_cmn% /GA /Ox /Og /Ob1 /Ot     
 )
 
-if /i "11_1_035"=="%1" set opt_icl_opt=%opt_icl_opt% /Gd /Qipo4 /fp:fast /Qprec-div- /Qcomplex-limited-range /Qipo-jobs:8 /Qunroll-aggressive
-if /i "11_1_035_x64"=="%1" set opt_icl_opt=%opt_icl_opt% /Qipo4 /fp:fast /Qprec-div- /Qcomplex-limited-range /Qipo-jobs:8 /Qunroll-aggressive
+if /i "11_1_054"=="%1" set opt_icl_opt=%opt_icl_opt% /Gd /Qipo4 /fp:fast /Qprec-div- /Qcomplex-limited-range /Qipo-jobs:8 /Qunroll-aggressive
+if /i "11_1_054_x64"=="%1" set opt_icl_opt=%opt_icl_opt% /Qipo4 /fp:fast /Qprec-div- /Qcomplex-limited-range /Qipo-jobs:8 /Qunroll-aggressive
 
 set opt_icl_opt=%opt_icl_opt% /D "HAVE_MMX" /D "HAVE_SSE" /D "HAVE_SSE2" /D "HAVE_SSE3"
 
 if /i "DEFAULT"=="%3" set opt_icl_opt=%opt_icl_opt% /G7
-if /i "SSE"=="%3" set opt_icl_opt=%opt_icl_opt% /G7 arch:SSE
+if /i "SSE"=="%3" set opt_icl_opt=%opt_icl_opt% /G7 /arch:SSE
 if /i "SSE2"=="%3" set opt_icl_opt=%opt_icl_opt% /G7 /arch:SSE2
 if /i "SSE3"=="%3" set opt_icl_opt=%opt_icl_opt% /G7 /arch:SSE3
 
@@ -137,8 +137,8 @@ set opt_xilink=/NOLOGO /INCREMENTAL:NO /OPT:REF /OPT:ICF /TLBID:1
 rem DEBUG!!!
 if /i "DEBUG"=="%4" set opt_xilink=%opt_xilink% /DEBUG
 
-if /i "11_1_035"=="%1" set opt_xilink=%opt_xilink% /MACHINE:IX86
-if /i "11_1_035_x64"=="%1" set opt_xilink=%opt_xilink% /MACHINE:X64
+if /i "11_1_054"=="%1" set opt_xilink=%opt_xilink% /MACHINE:IX86
+if /i "11_1_054_x64"=="%1" set opt_xilink=%opt_xilink% /MACHINE:X64
 
 set opt_xilink_exe=%opt_xilink% /OUT:"%out_path%/%name_exe%.exe" /SUBSYSTEM:CONSOLE "%out_path%\%name_lib%.lib"
 
