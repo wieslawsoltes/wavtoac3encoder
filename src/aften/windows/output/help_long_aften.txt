@@ -1,0 +1,386 @@
+
+Aften: A/52 audio encoder
+Version git
+(c) 2006-2009 Justin Ruggles, Prakash Punnoor, et al.
+
+usage: aften [options] <input.wav> <output.ac3>
+options:
+
+CONSOLE OUTPUT OPTIONS
+
+    [-h]           Print out list of commandline options.
+
+    [-longhelp]    Print out commandline option details.
+
+    [-version]     Print out the build version.
+
+    [-v #]         Verbosity
+                       This controls the level of console output to stderr.
+                       0 - Quiet Mode. No output to stderr.
+                       1 - Shows a running average of encoding statistics.
+                           This is the default setting.
+                       2 - Shows the statistics for each frame.
+
+ENCODING OPTIONS
+
+    [-threads #]   Number of threads
+                       Aften can use multiple threads to speed up encoding.
+                       By default, Aften uses one thread for each logical CPU
+                       your system has, but you can override this value.  A
+                       value of 0 is the default and indicates that Aften
+                       should try to detect the number of CPUs.
+
+    [-nosimd X]    Comma-separated list of SIMD instruction sets not to use
+                       Aften will auto-detect available SIMD instruction sets
+                       for your CPU, so you shouldn't need to disable sets
+                       explicitly - unless for speed or debugging reasons.
+                       Available sets are mmx, sse, sse2, sse3 and altivec.
+                       No spaces are allowed between the sets and the commas.
+                       Example: -nosimd sse2,sse3
+
+    [-b #]         CBR bitrate in kbps
+                       CBR mode is selected by default. This option allows for
+                       setting the fixed bitrate. The default bitrate depends
+                       on the number of channels (not including LFE).
+                       mono      =  96 kbps
+                       stereo    = 192 kbps
+                       3-channel = 256 kbps
+                       4-channel = 384 kbps
+                       5-channel = 448 kbps
+
+    [-q #]         VBR quality
+                       A value 0 to 1023 which corresponds to SNR offset, where
+                       q=240 equates to an SNR offset of 0.  240 is the default
+                       value.  This scale will most likely be replaced in the
+                       future with a better quality measurement.
+
+    [-fba #]      Fast bit allocation
+                       Fast bit allocation is a less-accurate search method
+                       for CBR bit allocation.  It only narrows down the SNR
+                       value to within 16 of the optimal value.  The result
+                       is lower overall quality, but faster encoding.  This
+                       may not give the same results each time when using
+                       parallel encoding.
+
+    [-exps #]     Exponent strategy search size
+                       The encoder determines the best combination of
+                       exponent strategies for a frame by searching through
+                       a list of pre-defined exponent strategies.  This option
+                       controls the size of the list to be searched.  The
+                       value can range from 1 (lower quality but faster) to
+                       32 (higher quality but slower).  The default value is 8.
+
+    [-pad #]      Start-of-stream padding
+                       The AC-3 format uses an overlap/add cycle for encoding
+                       each block.  By default, Aften pads the delay buffer
+                       with a block of silence to avoid inaccurate encoding
+                       of the first frame of audio.  If this behavior is not
+                       wanted, it can be disabled.  The pad value can be a
+                       1 (default) to use padding or 0 to not use padding.
+
+    [-w #]         Bandwidth
+                       The bandwidth setting corresponds to the high-frequency
+                       cutoff.  Specifically, it sets the highest frequency bin
+                       which is encoded.  The AC-3 format uses a 512-point MDCT
+                       which gives 256 frequency levels from 0 to 1/2 of the
+                       samplerate.  The formula to give the number of coded
+                       frequency bins from bandwidth setting is:
+                       (w * 3) + 73, which gives a range of 73 to 253
+                       I hope to replace this setting with one where the user
+                       specifies the actual cutoff frequency rather than the
+                       bandwidth code.
+                       There are 2 special values, -1 and -2.
+                       When -1 is used, Aften automatically selects what
+                       it thinks is an appropriate bandwidth.  This is the
+                       default setting.
+                       When -2 is used, a bandwidth is chosen for each frame
+                       based on CBR frame size and a target quality of 240.
+                       Variable bandwidth cannot be used with VBR mode.
+
+    [-wmin #]      Minimum bandwidth
+                       For variable bandwidth mode (-2), this option sets the
+                       minimum value for the bandwidth code.  This allows the
+                       user to avoid a harsh cutoff frequency by sacrificing
+                       general audio quality.  The default value is 0.
+
+    [-wmax #]      Maximum bandwidth
+                       For variable bandwidth mode (-2), this option sets the
+                       maximum value for the bandwidth code.  This can be used
+                       to speed up encoding by using a lower value than 60,
+                       which is the default.
+
+    [-m #]         Stereo rematrixing
+                       Using stereo rematrixing can increase quality by
+                       removing redundant information between the left and
+                       right channels.  This technique is common in audio
+                       encoding, and is sometimes called mid/side encoding.
+                       When this setting is turned on, Aften adaptively turns
+                       rematrixing on or off for each of 4 frequency bands for
+                       each block.  When this setting is turned off,
+                       rematrixing is not used for any blocks. The default
+                       value is 1.
+
+    [-s #]         Block switching
+                       The AC-3 format allows for 2 different types of MDCT
+                       transformations to translate from time-domain to
+                       frequency-domain.  The default is a 512-point transform,
+                       which gives better frequency resolution.  There is also
+                       a 256-point transform, which gives better time
+                       resolution.  The specification gives a suggested method
+                       for determining when to use the 256-point transform.
+                       When block switching is turned on, Aften uses the spec
+                       method for selecting the 256-point MDCT.  When it is
+                       turned off, only the 512-point MDCT is used, which is
+                       faster.  Block switching is turned off by default.
+
+BITSTREAM INFO METADATA
+
+    [-cmix #]      Center mix level
+                       When three front channels are in use, this code
+                       indicates the nominal down mix level of the center
+                       channel with respect to the left and right channels.
+                       0 = -3.0 dB (default)
+                       1 = -4.5 dB
+                       2 = -6.0 dB
+
+    [-smix #]      Surround mix level
+                       If surround channels are in use, this code indicates
+                       the nominal down mix level of the surround channels.
+                       0 = -3 dB (default)
+                       1 = -6 dB
+                       2 = 0
+
+    [-dsur #]      Dolby Surround mode
+                       When operating in the two channel mode, this code
+                       indicates whether or not the program has been encoded in
+                       Dolby Surround.  This information is not used by the
+                       AC-3 decoder, but may be used by other portions of the
+                       audio reproduction equipment.
+                       0 = not indicated (default)
+                       1 = not Dolby surround encoded
+                       2 = Dolby surround encoded
+
+DYNAMIC RANGE COMPRESSION AND DIALOG NORMALIZATION
+
+    [-dynrng #]    Dynamic Range Compression profile
+                       Dynamic Range Compression allows for the final output
+                       dynamic range to be limited without sacrificing quality.
+                       The full dynamic range audio is still encoded, but a
+                       code is given for each block which tells the decoder to
+                       adjust the output volume for that block.  The encoder
+                       must analyze the input audio to determine the best way
+                       to compress the dynamic range based on the loudness and
+                       type of input (film, music, speech).
+                       0 = Film Light
+                       1 = Film Standard
+                       2 = Music Light
+                       3 = Music Standard
+                       4 = Speech
+                       5 = None (default)
+
+    [-dnorm #]     Dialog normalization [0 - 31] (default: 31)
+                       The dialog normalization value sets the average dialog
+                       level.  The value is typically constant for a particular
+                       audio program.  The decoder has a target output dialog
+                       level of -31dB, so if the dialog level is specified as
+                       being -31dB already (default), the output volume is not
+                       altered.  Otherwise, the overall output volume is
+                       decreased so that the dialog level is adjusted down to
+                       -31dB.
+
+INPUT OPTIONS
+
+    By default, information about the input file, such as the channel
+    configuration and data size, is determined by the input file wav header.
+    However, the basic WAVE format is limited in that it can only support
+    up to 4 GB of data and cannot specify all channel layouts possible in the
+    AC-3 format.  The acmod, lfe, and chconfig options allow the user to
+    explicitly select the desired channel layout.  This only controls the
+    interpretation of the input, so no downmixing or upmixing is done.  The
+    readtoeof option overrides the header and lets the user specify that Aften
+    should keep reading data until the end-of-file.
+
+    [-acmod #]     Audio coding mode (overrides wav header)
+                       0 = 1+1 (Ch1,Ch2)
+                       1 = 1/0 (C)
+                       2 = 2/0 (L,R)
+                       3 = 3/0 (L,R,C)
+                       4 = 2/1 (L,R,S)
+                       5 = 3/1 (L,R,C,S)
+                       6 = 2/2 (L,R,SL,SR)
+                       7 = 3/2 (L,R,C,SL,SR)
+
+    [-lfe #]       Specify use of LFE channel (overrides wav header)
+                       0 = LFE channel is not present
+                       1 = LFE channel is present
+
+    [-chconfig X]  Specify channel configuration (overrides wav header)
+                       1+1 = (Ch1,Ch2)
+                       1/0 = (C)
+                       2/0 = (L,R)
+                       3/0 = (L,R,C)
+                       2/1 = (L,R,S)
+                       3/1 = (L,R,C,S)
+                       2/2 = (L,R,SL,SR)
+                       3/2 = (L,R,C,SL,SR)
+                       adding "+LFE" indicates use of the LFE channel
+
+    [-ch_X file]   Add a mono file to the input list as the channel specified
+                       These parameters are used to specify multiple mono
+                       source files instead of a single multi-channel source
+                       file.  Only valid AC-3 combinations are allowed.  The
+                       acmod, lfe, chconfig, and chmap parameters are all
+                       ignored if multi-mono inputs are used.
+                       ch_fl  = Front Left
+                       ch_fc  = Front Center
+                       ch_fr  = Front Right
+                       ch_sl  = Surround Left
+                       ch_s   = Surround
+                       ch_sr  = Surround Right
+                       ch_m1  = Dual Mono Channel 1
+                       ch_m2  = Dual Mono Channel 2
+                       ch_lfe = LFE
+
+    [-raw_fmt X]   Raw audio input sample format (default: s16_le)
+                       This options specifies the sample format when using
+                       raw audio input.  Using this option forces Aften to
+                       treat the input as raw audio.  The choices for the
+                       pre-defined sample formats are:
+                       u8, s8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,
+                       s32_le, s32_be, float_le, float_be, double_le, double_be
+
+    [-raw_sr #]    Raw audio input sample rate (default: 48000)
+                       Using this option forces Aften to treat the input as
+                       raw audio.
+
+    [-raw_ch #]    Raw audio input channels (default: 1)
+                       Using this option forces Aften to treat the input as
+                       raw audio.
+
+    [-chmap #]     Channel mapping order of input audio
+                       Some programs create WAVE files which use a channel
+                       mapping other than the standard WAVE mapping.  This
+                       option allows the user to specify if the input file
+                       uses WAVE, AC-3, or MPEG channel mapping.  The MPEG
+                       channel mapping is used by DTS and by MPEG-2/4 formats
+                       such as MP2 and AAC.
+                       0 = WAVE mapping (default)
+                       1 = AC-3 mapping
+                       2 = MPEG mapping
+
+    [-readtoeof #] Read input WAVE audio data until the end-of-file.
+                       This overrides the data size in the WAVE header, and
+                       can be useful for streaming input or files larger than
+                       4 GB.
+                       0 = use data size in header (default)
+                       1 = read data until end-of-file
+
+INPUT FILTERS
+
+    [-bwfilter #]  Specify use of the bandwidth low-pass filter
+                       The bandwidth low-pass filter pre-filters the input
+                       audio before converting to frequency-domain.  This
+                       smooths the cutoff frequency transition for slightly
+                       better quality.  When used with variable bandwidth
+                       mode, the maximum bandwidth setting used as the cutoff
+                       frequency.
+                       0 = do not apply filter (default)
+                       1 = apply filter
+
+    [-dcfilter #]  Specify use of the DC high-pass filter
+                       The DC high-pass filter is listed as optional by the
+                       AC-3 specification.  The implementation, as suggested,
+                       is a single pole filter at 3 Hz.
+                       0 = do not apply filter (default)
+                       1 = apply filter
+
+    [-lfefilter #] Specify use of the LFE low-pass filter
+                       The LFE low-pass filter is recommended by the AC-3
+                       specification.  The cutoff is 120 Hz.  The specification
+                       recommends an 8th order elliptic filter, but instead,
+                       Aften uses a Butterworth 2nd order cascaded direct
+                       form II filter.
+                       0 = do not apply filter (default)
+                       1 = apply filter
+
+ALTERNATE BIT STREAM SYNTAX
+
+    The alternate bit stream syntax allows for encoding additional metadata by
+    adding 1 or 2 extended bitstream info sections to each frame.
+
+    [-xbsi1 #]     Specify use of extended bitstream info 1
+                       Extended bitstream info 1 contains the dmixmod,
+                       ltrtcmix, ltrtsmix, lorocmix, and lorosmix fields.  If
+                       this option is turned on, all these values are written
+                       to the output stream.
+                       0 = do not write xbsi1
+                       1 = write xbsi1
+
+    [-dmixmod #]   Preferred stereo downmix mode
+                       This code indicates the type of stereo downmix preferred
+                       by the mastering engineer, and can be optionally used,
+                       overridden, or ignored by the decoder.
+                       0 = not indicated (default)
+                       1 = Lt/Rt downmix preferred
+                       2 = Lo/Ro downmix preferred
+
+    The 4 mix level options below all use the same code table:
+                       0 = +3.0 dB
+                       1 = +1.5 dB
+                       2 =  0.0 dB
+                       3 = -1.5 dB
+                       4 = -3.0 dB (default)
+                       5 = -4.5 dB
+                       6 = -6.0 dB
+                       7 = -inf dB
+
+    [-ltrtcmix #]  Lt/Rt center mix level
+                       This code indicates the nominal down mix level of the
+                       center channel with respect to the left and right
+                       channels in an Lt/Rt downmix.
+
+    [-ltrtsmix #]  Lt/Rt surround mix level
+                       This code indicates the nominal down mix level of the
+                       surround channels with respect to the left and right
+                       channels in an Lt/Rt downmix.
+
+    [-lorocmix #]  Lo/Ro center mix level
+                       This code indicates the nominal down mix level of the
+                       center channel with respect to the left and right
+                       channels in an Lo/Ro downmix.
+
+    [-lorosmix #]  Lo/Ro surround mix level
+                       This code indicates the nominal down mix level of the
+                       surround channels with respect to the left and right
+                       channels in an Lo/Ro downmix.
+
+    [-xbsi2 #]     Specify use of extended bitstream info 2
+                       Extended bitstream info 2 contains the dsurexmod,
+                       dheadphon, and adconvtyp fields.  If this option is
+                       turned on, all these values are written to the output
+                       stream.  These options are not used by the AC-3 decoder,
+                       but may be used by other portions of the audio
+                       reproduction equipment.
+                       0 = do not write xbsi2
+                       1 = write xbsi2
+
+    [-dsurexmod #] Dolby Surround EX mode
+                       This code indicates whether or not the program has been
+                       encoded in Dolby Surround EX.
+                       0 = not indicated (default)
+                       1 = Not Dolby Surround EX encoded
+                       2 = Dolby Surround EX encoded
+
+    [-dheadphon #] Dolby Headphone mode
+                       This code indicates whether or not the program has been
+                       Dolby Headphone-encoded.
+                       0 = not indicated (default)
+                       1 = Not Dolby Headphone encoded
+                       2 = Dolby Headphone encoded
+
+    [-adconvtyp #] A/D converter type
+                       This code indicates the type of A/D converter technology
+                       used to capture the PCM audio.
+                       0 = Standard (default)
+                       1 = HDCD
+
