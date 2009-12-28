@@ -692,7 +692,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         this->UpdateView(this->nViewMode);
     else
         this->m_ChkAdvancedView.SetCheck(BST_CHECKED);
-    
 
     // encode input files and close program
     if(this->cmdLineOpt.bEncodeAndExit == true)
