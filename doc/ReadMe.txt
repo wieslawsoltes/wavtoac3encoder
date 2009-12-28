@@ -45,7 +45,7 @@ The main developer of WAV to AC3 Encoder is Wiesław Šoltés.
   * Small program size.
   * Load and save all program settings.
   * Load and save encoder presets.
-  * Avisynth scripting support.
+  * Avisynth scripting support (Win32 only).
   * Full UNICODE and ANSI support.
   * Very simple to use.
   * Options for advanced users.
