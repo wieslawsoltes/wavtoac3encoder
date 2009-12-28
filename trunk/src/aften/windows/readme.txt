@@ -1,6 +1,6 @@
 ﻿Windows (Win32 and Win64) build environment for aften and libaften.
 
-Building aften and libaften using Intel C++ Compiler v11.1.035:
+Building aften and libaften using Intel C++ Compiler v11.1.054:
 
   Configure paths in 'feedback.cmd' and 'build_intel.cmd' batch scripts to
   match your system configuration and available compilers.

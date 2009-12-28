@@ -35,8 +35,10 @@ Win64 Builds (AMD64):
  .\wavinfo_AMD64\wavinfo.exe             - AMD64 ICL Build
  .\wavrms_AMD64\wavrms.exe               - AMD64 ICL Build
  .\libaftendll_AMD64\libaften.dll        - AMD64 ICL PGO Build with Parallelization Enabled
+ .\libaftendll_AMD64_SSE2\libaften.dll   - AMD64 ICL PGO SSE2 Build with Parallelization Enabled
  .\libaftendll_AMD64_SSE3\libaften.dll   - AMD64 ICL PGO SSE3 Build with Parallelization Enabled
  .\aften_AMD64\aften.exe                 - AMD64 ICL PGO Build with Parallelization Enabled
+ .\aften_AMD64_SSE2\aften.exe            - AMD64 ICL PGO SSE2 Build with Parallelization Enabled
  .\aften_AMD64_SSE3\aften.exe            - AMD64 ICL PGO SSE3 Build with Parallelization Enabled
 
 Glossary:

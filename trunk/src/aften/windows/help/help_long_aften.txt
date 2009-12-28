@@ -1,7 +1,7 @@
 
 Aften: A/52 audio encoder
-Version SVN
-(c) 2006-2007 Justin Ruggles, Prakash Punnoor, et al.
+Version git
+(c) 2006-2009 Justin Ruggles, Prakash Punnoor, et al.
 
 usage: aften [options] <input.wav> <output.ac3>
 options:
@@ -281,7 +281,9 @@ INPUT FILTERS
                        The bandwidth low-pass filter pre-filters the input
                        audio before converting to frequency-domain.  This
                        smooths the cutoff frequency transition for slightly
-                       better quality.
+                       better quality.  When used with variable bandwidth
+                       mode, the maximum bandwidth setting used as the cutoff
+                       frequency.
                        0 = do not apply filter (default)
                        1 = apply filter
 

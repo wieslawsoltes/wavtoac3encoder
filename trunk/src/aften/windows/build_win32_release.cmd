@@ -2,9 +2,9 @@
 setlocal
 
 rem Win32 builds
-rem Available Intel C++ Compiler versions: 11_1_035
+rem Available Intel C++ Compiler versions: 11_1_054
 
-set icl_version=11_1_035
+set icl_version=11_1_054
 set OutPath=output
 
 @call build_intel.cmd %icl_version% wavfilter DEFAULT

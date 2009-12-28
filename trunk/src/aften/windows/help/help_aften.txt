@@ -1,7 +1,7 @@
 
 Aften: A/52 audio encoder
-Version SVN
-(c) 2006-2007 Justin Ruggles, Prakash Punnoor, et al.
+Version git
+(c) 2006-2009 Justin Ruggles, Prakash Punnoor, et al.
 
 usage: aften [options] <input.wav> <output.ac3>
 options:

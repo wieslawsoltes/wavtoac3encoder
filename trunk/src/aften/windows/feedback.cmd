@@ -5,8 +5,8 @@ rem Currently using this wave file:
 rem http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/Samples/Microsoft/6_Channel_ID.wav
 rem Mono WAV files are extracted from 6_Channel_ID.wav WAV file
 
-set WavFiles=c:\DOWNLOADS\DEV\WAV
-set WavFiles_Mono=c:\DOWNLOADS\DEV\WAV\MONO
+set WavFiles=c:\DOWNLOADS\DOCS\DEV\WAV
+set WavFiles_Mono=c:\DOWNLOADS\DOCS\DEV\WAV\MONO
 
 set EncoderExe=%1
 set EncoderOptions=feedback.txt
