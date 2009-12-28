@@ -1,15 +1,16 @@
 ﻿Files where program version is stored:
 
-|---------------------------------|-----------------|
-| File path                       | How many times  |
-|---------------------------------|-----------------|
-| src\EncWAVtoAC3.rc              | 4               |
-| src\stdafx.h                    | 1               |
-| installer\SetupScript.iss       | 1               |
-| installer\PackageBinaries.cmd   | 1               |
-| installer\PackageSources.cmd    | 1               |
-| doc\ReadMe.txt                  | 1               |
-| doc\Changes.txt                 | 1               |
-|---------------------------------|-----------------|
+|-------------------------------------|-----------------|
+| File path                           | How many times  |
+|-------------------------------------|-----------------|
+| src\EncWAVtoAC3.rc                  | 4               |
+| src\stdafx.h                        | 1               |
+| installer\SetupScript.iss           | 1               |
+| installer\PackageBinaries.cmd       | 1               |
+| installer\PackageBinariesAMD64.cmd  | 1               |
+| installer\PackageSources.cmd        | 1               |
+| doc\ReadMe.txt                      | 1               |
+| doc\Changes.txt                     | 1               |
+|-------------------------------------|-----------------|
 
 $Id$

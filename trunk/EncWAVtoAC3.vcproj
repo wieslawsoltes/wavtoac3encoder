@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="EncWAVtoAC3"
 	ProjectGUID="{952D8A09-0CBF-4EE8-9536-389632BC5E7F}"
 	RootNamespace="EncWAVtoAC3"
@@ -133,7 +133,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;EMULATE_INTTYPES"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;EMULATE_INTTYPES;DISABLE_AVISYNTH"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -308,7 +308,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories="./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;EMULATE_INTTYPES"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;EMULATE_INTTYPES;DISABLE_AVISYNTH"
 				MinimalRebuild="false"
 				RuntimeLibrary="0"
 				FloatingPointModel="2"
@@ -383,6 +383,22 @@
 			<File
 				RelativePath=".\src\Avs2Raw.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\CommandLine.cpp"

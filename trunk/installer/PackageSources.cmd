@@ -46,9 +46,25 @@ mkdir "%varOutput%\%varPath%"
 set varPath=engines\ansi
 mkdir "%varOutput%\%varPath%"
 
+set varPath=engines\ansi\Win32
+mkdir "%varOutput%\%varPath%"
+
+copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
+
+set varPath=engines\ansi\x64
+mkdir "%varOutput%\%varPath%"
+
 copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
 
 set varPath=engines\unicode
+mkdir "%varOutput%\%varPath%"
+
+set varPath=engines\unicode\Win32
+mkdir "%varOutput%\%varPath%"
+
+copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
+
+set varPath=engines\unicode\x64
 mkdir "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"

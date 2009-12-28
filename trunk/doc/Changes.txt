@@ -2,7 +2,9 @@
 
 Version 4.3:
 
+- Updated Aften sources and libraries to Git master head snapshot from 20091226.
 - Added encoding process statistics to worker window.
+- Reverted project to Visual Studio 2008.
 
 Version 4.2:
 

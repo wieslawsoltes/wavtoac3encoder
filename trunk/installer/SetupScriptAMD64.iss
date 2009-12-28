@@ -21,7 +21,7 @@
 ;
 ; Setup release version
 ;
-#define ReleaseVersion "4.3"
+#define ReleaseVersion "4.3-AMD64"
 
 ;
 ; Include setup base srcript
@@ -61,17 +61,16 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 
 [Files]
 
-Source: ..\Release\Win32\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
+Source: ..\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\ReadMe.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\UnicoWS\unicows.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\engines\unicode\Win32\EncWAVtoAC3.engines; DestDir: {app}; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_x86_SSE2\libaften.dll; DestDir: {app}\libaftendll_x86_SSE2; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_x86_SSE3\libaften.dll; DestDir: {app}\libaftendll_x86_SSE3; Flags: ignoreversion
+Source: ..\engines\unicode\x64\EncWAVtoAC3.engines; DestDir: {app}; Flags: ignoreversion
+Source: ..\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion
+Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion
+Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion
 
 [Icons]
 
