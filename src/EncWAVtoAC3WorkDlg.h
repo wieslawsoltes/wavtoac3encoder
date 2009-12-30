@@ -87,9 +87,6 @@ public:
     double m_ElapsedTimeTotal;
     int nCount;
     WorkerParam workParam;
-	CString szSpeedEncoder;
-	CString szSpeedReads;
-	CString szSpeedWrites;
 	CString szSpeedEncoderAvg;
 	CString szSpeedReadsAvg;
 	CString szSpeedWritesAvg;

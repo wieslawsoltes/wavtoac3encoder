@@ -971,16 +971,10 @@ int RunAftenEncoder(AftenAPI &api,
 					CString szTmpBuff;
 
 					// update current encoder speed
-					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos - nInPrevCurPos) / 1048576.0f) / (cEncoding.Time() - fPrevTimeEncoding + 1.0e-16));
-					pWork->pWorkDlg->szSpeedEncoder = szTmpBuff;
-
 					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos) / 1048576.0f) / (cEncoding.Time() + 1.0e-16));
 					pWork->pWorkDlg->szSpeedEncoderAvg = szTmpBuff;
 
 					// update current read speed
-					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos - nInPrevCurPos) / 1048576.0f) / (cIORead.Time() - fPrevTimeIORead + 1.0e-16));
-					pWork->pWorkDlg->szSpeedReads = szTmpBuff;
-
 					szTmpBuff.Format(_T("%0.1lf"), ((double) (nCurPos) / 1048576.0f) / (cIORead.Time() + 1.0e-16));
 					pWork->pWorkDlg->szSpeedReadsAvg = szTmpBuff;
 
@@ -1029,8 +1023,6 @@ int RunAftenEncoder(AftenAPI &api,
 				pWork->pWorkDlg->bCanUpdateWindow = false;
 
 				CString szTmpBuff;
-				szTmpBuff.Format(_T("%0.1lf"), ((double) (_ftelli64(ofp) - nOutPrevCurPos) / 1048576.0f) / (cIOWrite.Time() - fPrevTimeIOWrite + 1.0e-16));
-				pWork->pWorkDlg->szSpeedWrites = szTmpBuff;
 
 				szTmpBuff.Format(_T("%0.1lf"), ((double) (_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.Time() + 1.0e-16));
 				pWork->pWorkDlg->szSpeedWritesAvg = szTmpBuff;
