@@ -28,12 +28,9 @@ set varBase=..
 mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
-copy "%varBase%\*.vcxproj" "%varOutput%"
-copy "%varBase%\*.vcxproj.filters" "%varOutput%"
-copy "%varBase%\*.vcxproj.user" "%varOutput%"
+copy "%varBase%\*.vcproj" "%varOutput%"
 copy "%varBase%\*.cmd" "%varOutput%"
 copy "%varBase%\*.inc" "%varOutput%"
-
 
 set varPath=doc
 mkdir "%varOutput%\%varPath%"
@@ -135,7 +132,23 @@ set varPath=Debug
 
 mkdir "%varOutput%\%varPath%"
 
+set varPath=Debug\Win32
+
+mkdir "%varOutput%\%varPath%"
+
+set varPath=Debug\x64
+
+mkdir "%varOutput%\%varPath%"
+
 set varPath=Release
+
+mkdir "%varOutput%\%varPath%"
+
+set varPath=Release\Win32
+
+mkdir "%varOutput%\%varPath%"
+
+set varPath=Release\x64
 
 mkdir "%varOutput%\%varPath%"
 
