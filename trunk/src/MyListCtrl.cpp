@@ -193,7 +193,7 @@ BOOL CMyListCtrl::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
     static CString szTipText;
     UINT nID = pNMHDR->idFrom;
 
-    if(nID == 0)
+    if(nID == 0 || bUseTooltipsList == false)
         return FALSE;
 
     int nRow = ((nID - 1) >> 10) & 0x3fffff;
