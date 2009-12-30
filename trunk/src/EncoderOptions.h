@@ -76,6 +76,9 @@ const int nNumSIMDIntructions = 4;
 // advanced options global variable
 extern EncoderOptions encOpt[nNumEncoderOptions];
 
+// encoder options groups
+extern const LPWSTR pszGroups[nNumEncoderOptionsGroups];
+
 // option for CBR encoding mode for aften
 extern const CString szCbrOption;
 
