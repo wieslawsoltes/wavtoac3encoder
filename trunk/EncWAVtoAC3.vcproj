@@ -413,19 +413,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\EncWAVtoAC3AvsDlg.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3EngDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\EncWAVtoAC3LogDlg.cpp"
 				>
 			</File>
 			<File
@@ -929,19 +921,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\EncWAVtoAC3AvsDlg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\EncWAVtoAC3Dlg.h"
 				>
 			</File>
 			<File
 				RelativePath=".\src\EncWAVtoAC3EngDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\EncWAVtoAC3LogDlg.h"
 				>
 			</File>
 			<File
@@ -1074,154 +1058,6 @@
 			</File>
 			<File
 				RelativePath=".\src\res\EncWAVtoAC3.rc2"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Text Files"
-			Filter="txt;doc;rtf"
-			UniqueIdentifier="{3FDAAD30-3150-4ae9-A9E2-4FFC8BD70984}"
-			>
-			<File
-				RelativePath=".\doc\Changes.txt"
-				>
-			</File>
-			<File
-				RelativePath=".\doc\Command-Line.txt"
-				>
-			</File>
-			<File
-				RelativePath=".\doc\Copying.txt"
-				>
-			</File>
-			<File
-				RelativePath=".\doc\ReadMe.txt"
-				>
-			</File>
-			<File
-				RelativePath=".\doc\Version.txt"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Installer Files"
-			Filter="bat;cmd;base;iss;version"
-			UniqueIdentifier="{1D1BD3F6-CA92-40af-A8FA-725B0E8F79EC}"
-			>
-			<File
-				RelativePath=".\installer\PackageBinaries.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\PackageInstallers.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\PackageSources.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.base"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.version"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.Win32.iss"
-				>
-			</File>
-			<File
-				RelativePath=".\installer\SetupScript.x64.iss"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Engine Files"
-			Filter="win32;win64"
-			UniqueIdentifier="{42438A05-CAAF-4bcc-8650-0D818413EE5D}"
-			>
-			<Filter
-				Name="Ansi"
-				Filter="win32;win64"
-				UniqueIdentifier="{37F768C2-25AC-44c4-8E9C-8A7ADDC69425}"
-				>
-				<File
-					RelativePath=".\engines\ansi\EncWAVtoAC3.win32"
-					>
-				</File>
-				<File
-					RelativePath=".\engines\ansi\EncWAVtoAC3.win64"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Unicode"
-				Filter="win32;win64"
-				UniqueIdentifier="{CA85DB63-F7C3-4d3a-84D7-D44E94103CD0}"
-				>
-				<File
-					RelativePath=".\engines\unicode\EncWAVtoAC3.win32"
-					>
-				</File>
-				<File
-					RelativePath=".\engines\unicode\EncWAVtoAC3.win64"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Batch Scripts"
-			Filter="bat;cmd;inc"
-			UniqueIdentifier="{0CF42F41-A9C3-4ef1-AEFC-ECAA03FAADCB}"
-			>
-			<File
-				RelativePath=".\AftenBuild.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\AftenBuilds.inc"
-				>
-			</File>
-			<File
-				RelativePath=".\AftenClean.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\AftenPackages.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\AftenRelease.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EncoderBuild.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EncoderBuilds.inc"
-				>
-			</File>
-			<File
-				RelativePath=".\EncoderClean.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EncoderPackages.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EncoderRelease.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EnginesClean.cmd"
-				>
-			</File>
-			<File
-				RelativePath=".\EnginesCopy.cmd"
 				>
 			</File>
 		</Filter>

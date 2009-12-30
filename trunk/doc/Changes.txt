@@ -1,5 +1,9 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 4.4:
+
+- Minor GUI tweaks.
+
 Version 4.3:
 
 - Updated Aften sources and libraries to Git master head snapshot from 20091226.
