@@ -353,10 +353,36 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilLargeTmp, LVSIL_NORMAL);
     ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilSmallTmp, LVSIL_SMALL);
 
-    // setup settings listctrl
-    this->m_LstSettings.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-    this->m_LstSettings.InsertColumn(0, _T("Option"), LVCFMT_LEFT, 255, 0);
-    this->m_LstSettings.InsertColumn(1, _T("Value"), LVCFMT_LEFT, 183, 1);
+	// setup settings listctrl
+	HWND listView = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
+	ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT);
+	ListView_EnableGroupView(listView, TRUE);
+
+	// add Columns to settings listctrl
+	LVCOLUMN lc;
+	lc.mask = LVCF_TEXT|LVCF_WIDTH|LVCF_SUBITEM;
+
+	lc.iSubItem = 0;
+	lc.cx = 255;
+	lc.pszText = _T("Option");
+	ListView_InsertColumn(listView, 0, &lc);
+
+	lc.iSubItem = 1;
+	lc.cx = 183;
+	lc.pszText = _T("Value");
+	ListView_InsertColumn(listView, 1, &lc);
+
+	// add Groups to settings listctrl
+	LVGROUP lg;
+	lg.cbSize = sizeof(LVGROUP);
+	lg.mask = LVGF_HEADER | LVGF_GROUPID;
+
+	for(int i = 0; i < nNumEncoderOptionsGroups; i++)
+	{
+		lg.pszHeader = pszGroups[i];
+		lg.iGroupId = 101 + i;
+		ListView_InsertGroup(listView, -1, &lg);
+	}
 
     // setup default values for raw audio input
     for(int i = 0; i < nNumRawSampleFormats; i++)
@@ -392,21 +418,34 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
     defaultPreset.nQuality = 240; // aftenCtx.params.quality;
 
-    // fill advanced encoder options list
-    for(int i = 0; i < nNumEncoderOptions; i++)
-    {
-        this->m_LstSettings.InsertItem(i, encOpt[i].szName);
+	// add items  to settings listctrl
+	int nGroupCounter = -1;
+	LVITEM li = {0};
+	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
 
-        // set all values to defaults
-        this->m_LstSettings.SetItemText(i, 
-            1, 
-            encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)));
+	// fill advanced encoder options list
+	for(int i = 0; i < nNumEncoderOptions; i++)
+	{
+		if(encOpt[i].bBeginGroup == true)
+			nGroupCounter++;
 
-        this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
+		if(nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
+		{
+			li.pszText = encOpt[i].szName.GetBuffer();
+			li.iItem = i;
+			li.iSubItem = 0;
+			li.iGroupId = 101 + nGroupCounter;
+			ListView_InsertItem(listView, &li);
+			ListView_SetItemText(listView, 0, 1, 
+				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
 
-        // set current settings to defaults
-        defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
-    }
+			encOpt[i].szName.ReleaseBuffer();
+			encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
+		}
+
+		// set current settings to defaults
+		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
+	}
 
     this->m_LstSettings.bUseTooltipsList = true;
 

@@ -74,6 +74,17 @@ const LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
 // advanced options global variable
 EncoderOptions encOpt[nNumEncoderOptions];
 
+// encoder options groups
+const LPWSTR pszGroups[nNumEncoderOptionsGroups] = 
+{
+	L"Encoding options",
+	L"Bitstream info metadata",
+	L"Dynamic range compression and dialog normalization",
+	L"Input options",
+	L"Input filters",
+	L"Alternate bit stream syntax"
+};
+
 // option for CBR encoding mode for aften
 /*
 [-b #]         CBR bitrate in kbps (default: about 96kbps per channel)
