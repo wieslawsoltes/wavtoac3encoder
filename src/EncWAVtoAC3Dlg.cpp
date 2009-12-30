@@ -436,8 +436,11 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 			li.iSubItem = 0;
 			li.iGroupId = 101 + nGroupCounter;
 			ListView_InsertItem(listView, &li);
-			ListView_SetItemText(listView, 0, 1, 
+
+			ListView_SetItemText(listView, i, 1, 
 				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
+
+			this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
 
 			encOpt[i].szName.ReleaseBuffer();
 			encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
@@ -447,7 +450,8 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 	}
 
-    this->m_LstSettings.bUseTooltipsList = true;
+	// TODO: tooltips are not working on all list itrems
+    this->m_LstSettings.bUseTooltipsList = false;
 
     defaultPreset.nRawChannels = 0;
     defaultPreset.nRawSampleFormat = 0;
