@@ -41,9 +41,9 @@ typedef struct TDRAGANDDROP
 } DRAGANDDROP, *PDRAGANDDROP;
 
 static volatile bool bHandleDrop = true;
-static HANDLE hDDThread;
+static volatile HANDLE hDDThread;
 static DWORD dwDDThreadID;
-static DRAGANDDROP m_DDParam;
+static volatile DRAGANDDROP m_DDParam;
 
 DWORD WINAPI DragAndDropThread(LPVOID lpParam)
 {
@@ -690,6 +690,15 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         if(this->cmdLineOpt.bHaveLogFile == true)
             this->szLogFile = this->cmdLineOpt.szLogFile;
     }
+	else
+	{
+		if(this->bEnableLog == true)
+		{
+        // open/create log file
+        ::LogFile(&logCtx, this->szLogFile);
+        ::LogOpen(&logCtx);
+		}
+	}
 
     // set log menu item check state
     this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, 
@@ -1706,6 +1715,9 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
                 i, 
                 szFile.GetBuffer(nReqChars * 2 + 8), 
                 nReqChars * 2 + 8);
+
+szFile.ReleaseBuffer();
+
             if(::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
             {
                 // insert droped files in directory and subdirs
@@ -1726,7 +1738,7 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
                 }
             }
 
-            szFile.ReleaseBuffer();
+            
         }
     }
 
