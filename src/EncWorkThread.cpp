@@ -514,7 +514,7 @@ int RunAftenEncoder(AftenAPI &api,
 
             if(logCtx.bInit)
             {
-                ::LogMessage(&logCtx, szLogMessage + _T("Avisynth initialized successfully."));
+                ::LogMessage(&logCtx, _T("Avisynth initialized successfully."));
             }
         }
 #endif
