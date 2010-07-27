@@ -2,7 +2,7 @@
 
 Version 4.6:
 
-- Bug fixes.
+- Fixed .mux files ANSI loading error.
 
 Version 4.5:
 
