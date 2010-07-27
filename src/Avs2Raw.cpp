@@ -55,7 +55,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
         //fprintf(stderr, "ERROR: couldn't load avisynth.dll\n");
         return false;
     }
-
+	
     // retrieve address of createscriptenvironment function
     CreateEnv = (IScriptEnvironment *(__stdcall *)(int)) GetProcAddress(hAvisynthDLL, 
         "CreateScriptEnvironment"); 

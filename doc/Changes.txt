@@ -1,5 +1,9 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 4.7:
+
+- Added support for avisynth in AMD64 (64-bit) builds using http://code.google.com/p/avisynth64/.
+
 Version 4.6:
 
 - Fixed .mux files ANSI loading error.
