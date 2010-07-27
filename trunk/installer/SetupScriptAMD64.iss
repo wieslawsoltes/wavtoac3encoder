@@ -49,6 +49,7 @@ OutputDir=.
 OutputBaseFilename=EncWAVtoAC3-{#ReleaseVersion}
 Compression=lzma
 SolidCompression=yes
+ArchitecturesInstallIn64BitMode=x64
 
 [Languages]
 
