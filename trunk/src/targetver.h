@@ -1,6 +1,6 @@
-Ôªø//
+//
 // WAV to AC3 Encoder
-// Copyright (C) 2007,2008,2009,2010 Wies≈Çaw ≈†olt√©s <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007, 2008, 2009, 2010 Wies≥aw äoltÈs <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,30 +20,9 @@
 
 #pragma once
 
-class CMySliderCtrl : public CSliderCtrl
-{
-public:
-    CMySliderCtrl();
-public:
-    virtual ~CMySliderCtrl();
-protected:
-    virtual void PreSubclassWindow();
-protected:
-    DECLARE_MESSAGE_MAP()
-protected:
-    afx_msg BOOL OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult);
-public:
-    virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
-private:
-    CString szToolTipText;
-private:
-    bool bHaveToolTipText;
-public:
-    void SetTooltipText(CString szText);
-public:
-    CString GetTooltipText();
-public:
-    void DelTooltipText();
-public:
-    bool HaveTooltipText();
-};
+// Including SDKDDKVer.h defines the highest available Windows platform.
+
+// If you wish to build your application for a previous Windows platform, include WinSDKVer.h and
+// set the _WIN32_WINNT macro to the platform you wish to support before including SDKDDKVer.h.
+
+#include <SDKDDKVer.h>

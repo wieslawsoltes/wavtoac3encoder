@@ -111,7 +111,7 @@ typedef unsigned __int64 uint64_t;
 #endif
 
 #ifdef _WIN32
-#define CDECL __cdecl
+//#define CDECL __cdecl
 #ifdef _MSC_VER
 #define inline __inline
 #endif /* _MSC_VER */
@@ -122,7 +122,7 @@ typedef unsigned __int64 uint64_t;
 #if __GNUC__
 #define UNUSED(x) x __attribute__((unused))
 #else
-#define UNUSED(x) x
+//#define UNUSED(x) x
 #endif
 
 #ifdef CONFIG_DOUBLE

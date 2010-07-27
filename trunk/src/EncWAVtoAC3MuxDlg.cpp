@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007,2008,2009,2010 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -391,7 +391,7 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
             if((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
 
-            if(Buffer == '\n' || nRead == nLength - sizeof(TCHAR))
+            if(Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1: sizeof(TCHAR)))
             {
                 szBuffer += _T("\0");
 
