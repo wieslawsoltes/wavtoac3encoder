@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=4.5
+set varVersion=4.6
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
@@ -29,6 +29,10 @@ mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
 copy "%varBase%\*.vcproj" "%varOutput%"
+copy "%varBase%\*.vcxproj.filters" "%varOutput%"
+copy "%varBase%\*.vcxproj.user" "%varOutput%"
+copy "%varBase%\*.vcxproj" "%varOutput%"
+
 copy "%varBase%\*.cmd" "%varOutput%"
 copy "%varBase%\*.inc" "%varOutput%"
 

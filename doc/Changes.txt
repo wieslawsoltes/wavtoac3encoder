@@ -1,5 +1,9 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 4.6:
+
+- Bug fixes.
+
 Version 4.5:
 
 - Fixed AviSynth drag&drop bug.
