@@ -99,7 +99,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;EMULATE_INTTYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -137,7 +137,7 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;EMULATE_INTTYPES;DISABLE_AVISYNTH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -172,7 +172,7 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EMULATE_INTTYPES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -215,7 +215,7 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/libaften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./src/aften;./src/aften/aften;./src/aften/pcm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;EMULATE_INTTYPES;DISABLE_AVISYNTH;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -408,6 +408,7 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
     <ClInclude Include="src\ResizeDialog.h" />
     <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\targetver.h" />
     <ClInclude Include="src\Utilities.h" />
     <ClInclude Include="src\aften\libaften\aften.h" />
     <ClInclude Include="src\aften\pcm\byteio.h" />
