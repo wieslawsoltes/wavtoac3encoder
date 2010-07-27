@@ -12,6 +12,7 @@
 | installer\SetupScriptAMD64.iss      | 1               |
 | doc\ReadMe.txt                      | 1               |
 | doc\Changes.txt                     | 1               |
+| doc\Packages.txt                    | 5               |
 |-------------------------------------|-----------------|
 
 $Id$

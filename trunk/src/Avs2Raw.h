@@ -25,7 +25,11 @@
 #include <io.h>
 
 // include Avisynth headers
-#include "avisynth\src\internal.h"
+#if defined(_WIN32) & !defined(_WIN64)
+    #include "avisynth\src\internal.h"
+#else
+    #include "avisynth64\src\internal.h"
+#endif // _WIN32
 
 typedef struct TAvsAudioInfo
 {

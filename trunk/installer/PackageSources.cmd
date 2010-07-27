@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=4.6
+set varVersion=4.7
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
@@ -94,6 +94,21 @@ copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 
 set varPath=src\avisynth\src\core
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
+set varPath=src\avisynth64
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
+set varPath=src\avisynth64\src
+mkdir "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
+
+set varPath=src\avisynth64\src\core
 mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"

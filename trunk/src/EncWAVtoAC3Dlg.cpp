@@ -694,9 +694,9 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 	{
 		if(this->bEnableLog == true)
 		{
-        // open/create log file
-        ::LogFile(&logCtx, this->szLogFile);
-        ::LogOpen(&logCtx);
+			// open/create log file
+			::LogFile(&logCtx, this->szLogFile);
+			::LogOpen(&logCtx);
 		}
 	}
 
