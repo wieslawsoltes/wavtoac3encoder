@@ -18,8 +18,6 @@ Options:
  -p, --load-presets <file.ext>		Load list of preconfigured presets (*.presets).
  -e, --load-engines <file.ext>		Load list of Aften engines (*.engines).
 
- -l, --enable-log [<file.log>]		Enable loging to text file.
-
  -m, --mux-wizard			Show standalone MUX Wizard window.
 
 Notes: AviSynth is not supported under x64 platforms.

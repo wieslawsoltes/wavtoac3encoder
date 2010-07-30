@@ -21,7 +21,7 @@
 ;
 ; Setup release version
 ;
-#define ReleaseVersion "4.7"
+#define ReleaseVersion "5.0"
 
 ;
 ; Include setup base srcript

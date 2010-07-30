@@ -97,10 +97,6 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
     // multiple mono input
     this->bMultipleMonoInput = false;
 
-    // text file log
-    this->bEnableLog = true;
-    this->szLogFile = _T("");
-
     // visibility of main window
     this->bVisible = false;
 
@@ -112,9 +108,6 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
 
     // default options view mode
     this->nViewMode = VIEW_MODE_STANDARD;
-
-    // set logging defaults
-    ::LogDefaults(&logCtx);
 }
 
 void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
@@ -172,9 +165,6 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_COMMAND(ID_FILE_LOADFILESLIST, &CEncWAVtoAC3Dlg::OnFileLoadFilesList)
     ON_COMMAND(ID_FILE_SAVEFILESLIST, &CEncWAVtoAC3Dlg::OnFileSaveFilesList)
     ON_COMMAND(ID_FILE_EXIT, &CEncWAVtoAC3Dlg::OnFileExit)
-    ON_COMMAND(ID_OPTIONS_ENABLELOGGING, &CEncWAVtoAC3Dlg::OnOptionsEnableLogging)
-    ON_COMMAND(ID_OPTIONS_OPENLOGFILE, &CEncWAVtoAC3Dlg::OnOptionsOpenLogFile)
-    ON_COMMAND(ID_OPTIONS_SETLOGFILEPATH, &CEncWAVtoAC3Dlg::OnOptionsSetLogFilePath)
     ON_COMMAND(ID_OPTIONS_DISABLEALLWARNINGS, &CEncWAVtoAC3Dlg::OnOptionsDisableAllWarnings)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration)
@@ -285,258 +275,9 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_PRESETS, AnchorTopRight);
 }
 
-BOOL CEncWAVtoAC3Dlg::OnInitDialog()
+void CEncWAVtoAC3Dlg::InitTooltips()
 {
-    CResizeDialog::OnInitDialog();
-
-    // set dialog icons
-    SetIcon(m_hIcon, TRUE);
-    SetIcon(m_hIcon, FALSE);
-
-    // set text style to normal or bold for static controls and buttons
-    m_StcQualityBitrate.SetBold(false);
-    m_StcBitrate.SetBold(true);
-    m_StcSelected.SetBold(false);
-    m_StcPreconfigured.SetBold(false);
-    m_BtnEncode.SetBold(true);
-
-    // create statusbar control
-    VERIFY(m_StatusBar.Create(WS_CHILD | WS_VISIBLE | CCS_BOTTOM | SBARS_SIZEGRIP,
-        CRect(0, 0, 0, 0), 
-        this, 
-        IDC_STATUSBAR));
-
-    // status bar has only one pane
-    // int nStatusBarParts[3] = { 150, 150, -1 };
-    // m_StatusBar.SetParts(3, nStatusBarParts);
-
-    // show program name and version in main dialog title
-    CString szDialogTitle = _T("");
-    szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
-    this->SetWindowText(szDialogTitle);
-
-    // set range for work threads spiner
-    m_SpnThreads.SetRange32(0, INT_MAX);
-    m_SpnThreads.SetPos(0);
-
-    // setup file listctrl
-    // use LVS_SHAREIMAGELISTS to prevent 
-    // deletion of image list under win9x
-    // set this style under resource editor
-    this->m_LstFiles.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 614, 0);
-    this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 100, 0);
-
-    // initialize the image list for file listctrl
-    SHFILEINFO sfi;
-
-    HIMAGELIST m_ilLargeTmp;
-    HIMAGELIST m_ilSmallTmp;
-
-    TCHAR szSystemRoot[MAX_PATH + 1];
-    GetWindowsDirectory(szSystemRoot, MAX_PATH);
-    PathStripToRoot(szSystemRoot);
-
-    m_ilLargeTmp = (HIMAGELIST) SHGetFileInfo(szSystemRoot,
-        0,
-        &sfi,
-        sizeof(SHFILEINFO),
-        SHGFI_SYSICONINDEX | SHGFI_LARGEICON | SHGFI_ICON);
-
-    m_ilSmallTmp = (HIMAGELIST) SHGetFileInfo(szSystemRoot,
-        0,
-        &sfi,
-        sizeof(SHFILEINFO),
-        SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON);
-
-    // set listctrl image lists
-    ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilLargeTmp, LVSIL_NORMAL);
-    ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilSmallTmp, LVSIL_SMALL);
-
-	// setup settings listctrl
-	HWND listView = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
-	ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT);
-	ListView_EnableGroupView(listView, TRUE);
-
-	// add Columns to settings listctrl
-	LVCOLUMN lc;
-	lc.mask = LVCF_TEXT|LVCF_WIDTH|LVCF_SUBITEM;
-
-	lc.iSubItem = 0;
-	lc.cx = 255;
-	lc.pszText = _T("Option");
-	ListView_InsertColumn(listView, 0, &lc);
-
-	lc.iSubItem = 1;
-	lc.cx = 183;
-	lc.pszText = _T("Value");
-	ListView_InsertColumn(listView, 1, &lc);
-
-	// add Groups to settings listctrl
-	LVGROUP lg;
-	lg.cbSize = sizeof(LVGROUP);
-	lg.mask = LVGF_HEADER | LVGF_GROUPID;
-
-	for(int i = 0; i < nNumEncoderOptionsGroups; i++)
-	{
-		lg.pszHeader = pszGroups[i];
-		lg.iGroupId = 101 + i;
-		ListView_InsertGroup(listView, -1, &lg);
-	}
-
-    // setup default values for raw audio input
-    for(int i = 0; i < nNumRawSampleFormats; i++)
-        this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
-
-    // set default sample rate number
-    this->m_SpnRawSampleRate.SetRange32(0, INT_MAX);
-    this->m_SpnRawSampleRate.SetPos(0);
-
-    // set default channels number
-    this->m_SpnRawChannels.SetRange32(0, INT_MAX);
-    this->m_SpnRawChannels.SetPos(0);
-
-    // set default state for save configuration on exit option
-    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 
-        this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
-
-    // set output file/path default value
-    if(this->bMultipleMonoInput == true)
-        this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
-    else
-        this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
-
-    // init encoder options
-    InitEncoderOptions();
-
-    // configure Default preset
-    defaultPreset.szName = _T("Default");
-
-    // set Aften engine defaults values for first start (when there is no config file present)
-    // there is Aften api function to get this values: AftenContext aftenCtx; aften_set_defaults(&aftenCtx);
-    defaultPreset.nMode = AFTEN_ENC_MODE_CBR; // aftenCtx.params.encoding_mode;
-    defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
-    defaultPreset.nQuality = 240; // aftenCtx.params.quality;
-
-	// add items  to settings listctrl
-	int nGroupCounter = -1;
-	LVITEM li = {0};
-	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
-
-	// fill advanced encoder options list
-	for(int i = 0; i < nNumEncoderOptions; i++)
-	{
-		if(encOpt[i].bBeginGroup == true)
-			nGroupCounter++;
-
-		if(nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
-		{
-			li.pszText = encOpt[i].szName.GetBuffer();
-			li.iItem = i;
-			li.iSubItem = 0;
-			li.iGroupId = 101 + nGroupCounter;
-			ListView_InsertItem(listView, &li);
-
-			ListView_SetItemText(listView, i, 1, 
-				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
-
-			this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
-
-			encOpt[i].szName.ReleaseBuffer();
-			encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
-		}
-
-		// set current settings to defaults
-		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
-	}
-
-	// TODO: tooltips are not working on all list itrems
-    this->m_LstSettings.bUseTooltipsList = false;
-
-    defaultPreset.nRawChannels = 0;
-    defaultPreset.nRawSampleFormat = 0;
-    defaultPreset.nRawSampleRate = 0;
-    defaultPreset.nCurrentEngine = 0;
-    defaultPreset.nThreads = 0;
-    defaultPreset.nUsedSIMD[0] = 1;
-    defaultPreset.nUsedSIMD[1] = 1;
-    defaultPreset.nUsedSIMD[2] = 1;
-    defaultPreset.nUsedSIMD[3] = 1;
-
-    // add default preset to presets list
-    encPresets.AddTail(defaultPreset);
-    ::nCurrentPreset = 0;
-    this->m_CmbPresets.InsertString(0, defaultPreset.szName);
-    this->m_CmbPresets.SetCurSel(::nCurrentPreset);
-
-    // select first item in options list
-    this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
-
-    // set raw audio input defaults
-    this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
-
-    if(defaultPreset.nRawSampleRate == 0)
-    {
-        this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
-    }
-    else
-    {
-        CString szBuff;
-        szBuff.Format(_T("%d"), defaultPreset.nRawSampleRate);
-        this->m_EdtRawSamplerate.SetWindowText(szBuff);
-    }
-
-    if(defaultPreset.nRawChannels == 0)
-    {
-        this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
-    }
-    else
-    {
-        CString szBuff;
-        szBuff.Format(_T("%d"), defaultPreset.nRawChannels);
-        this->m_EdtRawChannels.SetWindowText(szBuff);
-    }
-
-    // setup check state for SIMD instructions
-    this->m_ChkSimdMMX.SetCheck(defaultPreset.nUsedSIMD[0] == 1 ? BST_CHECKED : BST_UNCHECKED);
-    this->m_ChkSimdSSE.SetCheck(defaultPreset.nUsedSIMD[1] == 1 ? BST_CHECKED : BST_UNCHECKED);
-    this->m_ChkSimdSSE2.SetCheck(defaultPreset.nUsedSIMD[2] == 1 ? BST_CHECKED : BST_UNCHECKED);
-    this->m_ChkSimdSSE3.SetCheck(defaultPreset.nUsedSIMD[3] == 1 ? BST_CHECKED : BST_UNCHECKED);
-
-    // set number of default threads
-    if(defaultPreset.nThreads == 0)
-    {
-        this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
-    }
-    else
-    {
-        CString szBuff;
-        szBuff.Format(_T("%d"), defaultPreset.nThreads);
-        this->m_EdtThreads.SetWindowText(szBuff);
-    }
-
-    // set bitrate or quality value and CBR/VBR mode switch
-    if(defaultPreset.nMode == AFTEN_ENC_MODE_CBR)
-    {
-        this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 19);
-        this->m_SldBitrate.SetPos(FindValidBitratePos(defaultPreset.nBitrate));
-
-        this->m_ChkVbr.SetCheck(BST_UNCHECKED);
-    }
-    else if(defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
-    {
-        this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 1023);
-        this->m_SldBitrate.SetPos(defaultPreset.nQuality);
-
-        this->m_ChkVbr.SetCheck(BST_CHECKED);
-    }
-
-    // update bitrate text field
-    this->UpdateBitrateText();
-
-    // set tooltips
+   // set tooltips
     CString szTmpText;
 
     // Bitrate/Quality Slider
@@ -654,6 +395,273 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     // advanced view
     szTmpText = _T("Show or hide advanced configuration options.");
     this->m_ChkAdvancedView.SetTooltipText(szTmpText);
+}
+
+void CEncWAVtoAC3Dlg::InitDefaultPreset()
+{
+    // configure Default preset
+    defaultPreset.szName = _T("Default");
+
+    // set Aften engine defaults values for first start (when there is no config file present)
+    // there is Aften api function to get this values: AftenContext aftenCtx; aften_set_defaults(&aftenCtx);
+    defaultPreset.nMode = AFTEN_ENC_MODE_CBR; // aftenCtx.params.encoding_mode;
+    defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
+    defaultPreset.nQuality = 240; // aftenCtx.params.quality;
+
+	// add items  to settings listctrl
+	int nGroupCounter = -1;
+	LVITEM li = {0};
+	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
+
+	// fill advanced encoder options list
+	for(int i = 0; i < nNumEncoderOptions; i++)
+	{
+		if(encOpt[i].bBeginGroup == true)
+			nGroupCounter++;
+
+		if(nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
+		{
+			li.pszText = encOpt[i].szName.GetBuffer();
+			li.iItem = i;
+			li.iSubItem = 0;
+			li.iGroupId = 101 + nGroupCounter;
+			ListView_InsertItem(this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd(), &li);
+
+			ListView_SetItemText(this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd(), i, 1, 
+				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
+
+			this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
+
+			encOpt[i].szName.ReleaseBuffer();
+			encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
+		}
+
+		// set current settings to defaults
+		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
+	}
+
+	// TODO: tooltips are not working on all list itrems
+    this->m_LstSettings.bUseTooltipsList = false;
+
+    defaultPreset.nRawChannels = 0;
+    defaultPreset.nRawSampleFormat = 0;
+    defaultPreset.nRawSampleRate = 0;
+    defaultPreset.nCurrentEngine = 0;
+    defaultPreset.nThreads = 0;
+    defaultPreset.nUsedSIMD[0] = 1;
+    defaultPreset.nUsedSIMD[1] = 1;
+    defaultPreset.nUsedSIMD[2] = 1;
+    defaultPreset.nUsedSIMD[3] = 1;
+
+    // add default preset to presets list
+    encPresets.AddTail(defaultPreset);
+    ::nCurrentPreset = 0;
+    this->m_CmbPresets.InsertString(0, defaultPreset.szName);
+    this->m_CmbPresets.SetCurSel(::nCurrentPreset);
+
+    // select first item in options list
+    this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
+
+    // set raw audio input defaults
+    this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
+
+    if(defaultPreset.nRawSampleRate == 0)
+    {
+        this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
+    }
+    else
+    {
+        CString szBuff;
+        szBuff.Format(_T("%d"), defaultPreset.nRawSampleRate);
+        this->m_EdtRawSamplerate.SetWindowText(szBuff);
+    }
+
+    if(defaultPreset.nRawChannels == 0)
+    {
+        this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
+    }
+    else
+    {
+        CString szBuff;
+        szBuff.Format(_T("%d"), defaultPreset.nRawChannels);
+        this->m_EdtRawChannels.SetWindowText(szBuff);
+    }
+
+    // setup check state for SIMD instructions
+    this->m_ChkSimdMMX.SetCheck(defaultPreset.nUsedSIMD[0] == 1 ? BST_CHECKED : BST_UNCHECKED);
+    this->m_ChkSimdSSE.SetCheck(defaultPreset.nUsedSIMD[1] == 1 ? BST_CHECKED : BST_UNCHECKED);
+    this->m_ChkSimdSSE2.SetCheck(defaultPreset.nUsedSIMD[2] == 1 ? BST_CHECKED : BST_UNCHECKED);
+    this->m_ChkSimdSSE3.SetCheck(defaultPreset.nUsedSIMD[3] == 1 ? BST_CHECKED : BST_UNCHECKED);
+
+    // set number of default threads
+    if(defaultPreset.nThreads == 0)
+    {
+        this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
+    }
+    else
+    {
+        CString szBuff;
+        szBuff.Format(_T("%d"), defaultPreset.nThreads);
+        this->m_EdtThreads.SetWindowText(szBuff);
+    }
+
+    // set bitrate or quality value and CBR/VBR mode switch
+    if(defaultPreset.nMode == AFTEN_ENC_MODE_CBR)
+    {
+        this->m_SldBitrate.SetTic(1);
+        this->m_SldBitrate.SetRange(0, 19);
+        this->m_SldBitrate.SetPos(FindValidBitratePos(defaultPreset.nBitrate));
+
+        this->m_ChkVbr.SetCheck(BST_UNCHECKED);
+    }
+    else if(defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
+    {
+        this->m_SldBitrate.SetTic(1);
+        this->m_SldBitrate.SetRange(0, 1023);
+        this->m_SldBitrate.SetPos(defaultPreset.nQuality);
+
+        this->m_ChkVbr.SetCheck(BST_CHECKED);
+    }
+}
+
+void CEncWAVtoAC3Dlg::InitDialogControls()
+{
+    // set text style to normal or bold for static controls and buttons
+    m_StcQualityBitrate.SetBold(false);
+    m_StcBitrate.SetBold(true);
+    m_StcSelected.SetBold(false);
+    m_StcPreconfigured.SetBold(false);
+    m_BtnEncode.SetBold(true);
+
+    // create statusbar control
+    VERIFY(m_StatusBar.Create(WS_CHILD | WS_VISIBLE | CCS_BOTTOM | SBARS_SIZEGRIP,
+        CRect(0, 0, 0, 0), 
+        this, 
+        IDC_STATUSBAR));
+
+    // status bar has only one pane
+    // int nStatusBarParts[3] = { 150, 150, -1 };
+    // m_StatusBar.SetParts(3, nStatusBarParts);
+
+    // set range for work threads spiner
+    m_SpnThreads.SetRange32(0, INT_MAX);
+    m_SpnThreads.SetPos(0);
+
+    // setup file listctrl
+    // use LVS_SHAREIMAGELISTS to prevent 
+    // deletion of image list under win9x
+    // set this style under resource editor
+    this->m_LstFiles.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 614, 0);
+    this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 100, 0);
+
+    // initialize the image list for file listctrl
+    SHFILEINFO sfi;
+
+    HIMAGELIST m_ilLargeTmp;
+    HIMAGELIST m_ilSmallTmp;
+
+    TCHAR szSystemRoot[MAX_PATH + 1];
+    GetWindowsDirectory(szSystemRoot, MAX_PATH);
+    PathStripToRoot(szSystemRoot);
+
+    m_ilLargeTmp = (HIMAGELIST) SHGetFileInfo(szSystemRoot,
+        0,
+        &sfi,
+        sizeof(SHFILEINFO),
+        SHGFI_SYSICONINDEX | SHGFI_LARGEICON | SHGFI_ICON);
+
+    m_ilSmallTmp = (HIMAGELIST) SHGetFileInfo(szSystemRoot,
+        0,
+        &sfi,
+        sizeof(SHFILEINFO),
+        SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON);
+
+    // set listctrl image lists
+    ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilLargeTmp, LVSIL_NORMAL);
+    ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilSmallTmp, LVSIL_SMALL);
+
+	// setup settings listctrl
+	HWND listView = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
+	ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT);
+	ListView_EnableGroupView(listView, TRUE);
+
+	// add Columns to settings listctrl
+	LVCOLUMN lc;
+	lc.mask = LVCF_TEXT|LVCF_WIDTH|LVCF_SUBITEM;
+
+	lc.iSubItem = 0;
+	lc.cx = 255;
+	lc.pszText = _T("Option");
+	ListView_InsertColumn(listView, 0, &lc);
+
+	lc.iSubItem = 1;
+	lc.cx = 183;
+	lc.pszText = _T("Value");
+	ListView_InsertColumn(listView, 1, &lc);
+
+	// add Groups to settings listctrl
+	LVGROUP lg;
+	lg.cbSize = sizeof(LVGROUP);
+	lg.mask = LVGF_HEADER | LVGF_GROUPID;
+
+	for(int i = 0; i < nNumEncoderOptionsGroups; i++)
+	{
+		lg.pszHeader = pszGroups[i];
+		lg.iGroupId = 101 + i;
+		ListView_InsertGroup(listView, -1, &lg);
+	}
+
+    // setup default values for raw audio input
+    for(int i = 0; i < nNumRawSampleFormats; i++)
+        this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
+
+    // set default sample rate number
+    this->m_SpnRawSampleRate.SetRange32(0, INT_MAX);
+    this->m_SpnRawSampleRate.SetPos(0);
+
+    // set default channels number
+    this->m_SpnRawChannels.SetRange32(0, INT_MAX);
+    this->m_SpnRawChannels.SetPos(0);
+
+    // set default state for save configuration on exit option
+    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 
+        this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
+
+    // set output file/path default value
+    if(this->bMultipleMonoInput == true)
+        this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
+    else
+        this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
+}
+
+BOOL CEncWAVtoAC3Dlg::OnInitDialog()
+{
+    CResizeDialog::OnInitDialog();
+
+    // show program name and version in main dialog title
+    CString szDialogTitle = _T("");
+    szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
+    this->SetWindowText(szDialogTitle);
+
+    // set dialog icons
+    SetIcon(m_hIcon, TRUE);
+    SetIcon(m_hIcon, FALSE);
+
+	// init dialog controls
+	this->InitDialogControls();
+
+    // init encoder options
+    InitEncoderOptions();
+
+	// init encoder default preset
+	this->InitDefaultPreset();
+
+    // update bitrate text field
+    this->UpdateBitrateText();
+
+	// init dialog tooltips
+	this->InitTooltips();
 
     // enable files/dirs drag & drop for dialog
     this->DragAcceptFiles(TRUE);
@@ -670,39 +678,8 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     phPresets->GetWindowRect(rcInit_Presets);
     this->m_LstFiles.GetWindowRect(rcInit_LstFiles);
 
-    // set default log file path
-    this->szLogFile = GetExeFilePath() + DEFAULT_LOG_FILE_NAME;
-
-    // init log file
-    if(this->cmdLineOpt.bEnableLog == true)
-    {
-        // open/create log file
-        ::LogFile(&logCtx, this->cmdLineOpt.szLogFile);
-        ::LogOpen(&logCtx);
-    }
-
     // load all program configuration and settings
     this->LoadAllConfiguration();
-
-    // overwrites logging setting from config file
-    if(this->cmdLineOpt.bEnableLog == true)
-    {
-        if(this->cmdLineOpt.bHaveLogFile == true)
-            this->szLogFile = this->cmdLineOpt.szLogFile;
-    }
-	else
-	{
-		if(this->bEnableLog == true)
-		{
-			// open/create log file
-			::LogFile(&logCtx, this->szLogFile);
-			::LogOpen(&logCtx);
-		}
-	}
-
-    // set log menu item check state
-    this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, 
-        (this->bEnableLog == true) ? MF_CHECKED : MF_UNCHECKED);
 
     // process read-only setting
     if(this->cmdLineOpt.bHaveSaveConfig == true)
@@ -904,35 +881,6 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                 }
             }
 
-            // key: LogFile
-            else if(ce.szKey.Compare(_T("LogFile")) == 0)
-            {
-                if(ce.szData.Compare(_T("")) != 0)
-                {
-                    this->szLogFile = ce.szData;
-                }
-            }
-
-            // key: EnableLogging
-            else if(ce.szKey.Compare(_T("EnableLogging")) == 0)
-            {
-                if(ce.szData.Compare(_T("true")) == 0)
-                {
-                    this->bEnableLog = true;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_CHECKED);
-                }
-                else if(ce.szData.Compare(_T("false")) == 0)
-                {
-                    this->bEnableLog = false;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_UNCHECKED);
-                }
-                else
-                {
-                    this->bEnableLog = false;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_UNCHECKED);
-                }
-            }
-
             // key: DisableAllWarnings
             else if(ce.szKey.Compare(_T("DisableAllWarnings")) == 0)
             {
@@ -994,13 +942,6 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                         this->m_ChkAdvancedView.SetCheck(BST_UNCHECKED);
                 }
             }
-        }
-
-        // open/create log file
-        if((this->bEnableLog == true) && (logCtx.bInit == false))
-        {
-            ::LogFile(&logCtx, this->szLogFile);
-            ::LogOpen(&logCtx);
         }
 
         // set output file/path
@@ -1074,16 +1015,6 @@ bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
     // key: MultipleMonoInput
     ce.szKey = _T("MultipleMonoInput");
     ce.szData = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
-    this->m_ConfigList.AddTail(ce);
-
-    // key: LogFile
-    ce.szKey = _T("LogFile");
-    ce.szData = this->szLogFile;
-    this->m_ConfigList.AddTail(ce);
-
-    // key: EnableLogging
-    ce.szKey = _T("EnableLogging");
-    ce.szData = (this->bEnableLog == true) ? _T("true") : _T("false");
     this->m_ConfigList.AddTail(ce);
 
     // key: DisableAllWarnings
@@ -1329,24 +1260,12 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     if(this->cmdLineOpt.bHaveLoadPresets == true)
     {
         bRet = ::LoadEncoderPresets(this->cmdLineOpt.szLoadPresets);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded encoder presets: ") + this->cmdLineOpt.szLoadPresets);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load encoder presets: ") + this->cmdLineOpt.szLoadPresets);
-        }
+        ::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + this->cmdLineOpt.szLoadPresets);
     }
     else
     {
         bRet = ::LoadEncoderPresets(GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded encoder presets: ") + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load encoder presets: ") + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-        }
+		::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
     }
 
     // process presets list
@@ -1381,48 +1300,24 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     if(this->cmdLineOpt.bHaveLoadConfig == true)
     {
         bRet = this->LoadProgramConfig(this->cmdLineOpt.szLoadConfig);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded program config: ") + this->cmdLineOpt.szLoadConfig);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load program config: ") + this->cmdLineOpt.szLoadConfig);
-        }
+		::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + this->cmdLineOpt.szLoadConfig);
     }
     else
     {
         bRet = this->LoadProgramConfig(GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded program config: ") + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load program config: ") + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-        }
+		::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
     }
 
     // load engines settings from file
     if(this->cmdLineOpt.bHaveLoadEngines == true)
     {
         bRet = this->LoadProgramEngines(this->cmdLineOpt.szLoadEngines);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded encoder engines: ") + this->cmdLineOpt.szLoadEngines);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load encoder engines: ") + this->cmdLineOpt.szLoadEngines);
-        }
+		::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + this->cmdLineOpt.szLoadEngines);
     }
     else
     {
         bRet = this->LoadProgramEngines(GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-        if(this->bEnableLog)
-        {
-            if(bRet == true)
-                ::LogMessage(&logCtx, _T("Loaded encoder engines: ") + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-            else
-                ::LogMessage(&logCtx, _T("Failed to load encoder engines: ") + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-        }
+		::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
     }
 
     // add input file to the files list
@@ -1437,24 +1332,12 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
         if(this->cmdLineOpt.bHaveLoadFiles == true)
         {
             bRet = this->LoadFilesList(this->cmdLineOpt.szLoadFiles);
-            if(this->bEnableLog)
-            {
-                if(bRet == true)
-                    ::LogMessage(&logCtx, _T("Loaded files list: ") + this->cmdLineOpt.szLoadFiles);
-                else
-                    ::LogMessage(&logCtx, _T("Failed to load files list: ") + this->cmdLineOpt.szLoadFiles);
-            }
+			::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + this->cmdLineOpt.szLoadFiles);
         }
         else
         {
             bRet = this->LoadFilesList(GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-            if(this->bEnableLog)
-            {
-                if(bRet == true)
-                    ::LogMessage(&logCtx, _T("Loaded files list: ") + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-                else
-                    ::LogMessage(&logCtx, _T("Failed to load files list: ") + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-            }
+			::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
         }
     }
 }
@@ -1465,43 +1348,19 @@ void CEncWAVtoAC3Dlg::SaveAllConfiguration()
 
     // save encoder presets to a file
     bRet = ::SaveEncoderPresets(GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-    if(this->bEnableLog)
-    {
-        if(bRet == true)
-            ::LogMessage(&logCtx, _T("Saved encoder presets: ") + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-        else
-            ::LogMessage(&logCtx, _T("Failed to save encoder presets: ") + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-    }
+	::LogMessage((bRet ? _T("Saved encoder presets: ") : _T("Failed to save encoder presets: ")) + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
 
     // save program configuration to a file
     bRet = this->SaveProgramConfig(GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-    if(this->bEnableLog)
-    {
-        if(bRet == true)
-            ::LogMessage(&logCtx, _T("Saved program config: ") + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-        else
-            ::LogMessage(&logCtx, _T("Failed to save program config: ") + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-    }
+	::LogMessage((bRet ? _T("Saved program config: ") : _T("Failed to save program config: ")) + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
 
     // save engines settings to a file
     bRet = this->SaveProgramEngines(GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-    if(this->bEnableLog)
-    {
-        if(bRet == true)
-            ::LogMessage(&logCtx, _T("Saved encoder engines: ") + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-        else
-            ::LogMessage(&logCtx, _T("Failed to save encoder engines: ") + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-    }
+	::LogMessage((bRet ? _T("Saved encoder engines: ") : _T("Failed to save encoder engines: ")) + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
 
     // save files list to file
     bRet = this->SaveFilesList(GetExeFilePath() + DEFAULT_FILES_FILE_NAME, DEFAULT_FILES_FORMAT);
-    if(this->bEnableLog)
-    {
-        if(bRet == true)
-            ::LogMessage(&logCtx, _T("Saved files list: ") + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-        else
-            ::LogMessage(&logCtx, _T("Failed to save files list: ") + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-    }
+	::LogMessage((bRet ? _T("Saved files list: ") : _T("Failed to save files list: ")) + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
 }
 
 void CEncWAVtoAC3Dlg::UpdateBitrateText()
@@ -1716,7 +1575,7 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
                 szFile.GetBuffer(nReqChars * 2 + 8), 
                 nReqChars * 2 + 8);
 
-szFile.ReleaseBuffer();
+			szFile.ReleaseBuffer();
 
             if(::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
             {
@@ -1936,18 +1795,6 @@ void CEncWAVtoAC3Dlg::UpdateView(int nMode)
     this->GetDlgItem(IDC_STATIC_PARALLEL)->ShowWindow(nCmdShow);
     this->GetDlgItem(IDC_STATIC_ENGINE)->ShowWindow(nCmdShow);
     this->GetDlgItem(IDC_STATIC_THREADS)->ShowWindow(nCmdShow);
-    // this->m_LstFiles.ShowWindow(nCmdShow);
-    // this->m_SldBitrate.ShowWindow(nCmdShow);
-    // this->m_StcBitrate.ShowWindow(nCmdShow);
-    // this->m_StcQualityBitrate.ShowWindow(nCmdShow);
-    // this->m_CmbPresets.ShowWindow(nCmdShow);
-    // this->m_EdtOutPath.ShowWindow(nCmdShow);
-    // this->m_ChkVbr.ShowWindow(nCmdShow);
-    // this->m_ChkMultipleMonoInput.ShowWindow(nCmdShow);
-    // this->m_BtnEncode.ShowWindow(nCmdShow);
-    // this->m_BtnAddFiles.ShowWindow(nCmdShow);
-    // this->m_BtnBrowse.ShowWindow(nCmdShow);
-    // this->m_BtnMuxWizard.ShowWindow(nCmdShow);
 
     // move/resize controls
     CWnd *phSettings = this->GetDlgItem(IDC_STATIC_SETTINGS);
@@ -2076,12 +1923,6 @@ void CEncWAVtoAC3Dlg::OnClose()
     if(this->bSaveConfig == true)
     {
         this->SaveAllConfiguration();
-    }
-
-    // close log file
-    if(this->bEnableLog == true)
-    {
-        ::LogClose(&logCtx);
     }
 
     CResizeDialog::OnClose();
@@ -2521,68 +2362,6 @@ void CEncWAVtoAC3Dlg::OnFileExit()
     this->EndDialog(IDOK);
 }
 
-void CEncWAVtoAC3Dlg::OnOptionsEnableLogging()
-{
-    if(this->bEnableLog == false)
-    {
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_CHECKED);
-        this->bEnableLog = true;
-
-        // open/create log file
-        if(logCtx.bInit == false)
-        {
-            ::LogFile(&logCtx, this->szLogFile);
-            ::LogOpen(&logCtx);
-        }
-    }
-    else
-    {
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_ENABLELOGGING, MF_UNCHECKED);
-        this->bEnableLog = false;
-
-        // close log file
-        if(logCtx.bInit == true)
-        {
-            ::LogClose(&logCtx);
-        }
-    }
-}
-
-void CEncWAVtoAC3Dlg::OnOptionsOpenLogFile()
-{
-    // open log file in external editor (notepad, etc.)
-    LaunchAndWait(this->szLogFile, _T(""), FALSE);
-}
-
-void CEncWAVtoAC3Dlg::OnOptionsSetLogFilePath()
-{
-    CFileDialog fd(FALSE, 
-        _T("log"), 
-        this->szLogFile, // GetFileName(this->szLogFile), 
-        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Supported Files (*.log;*.txt)|*.log;*.txt|LOG Files (*.log)|*.log|TXT Files (*.txt)|*.txt|All Files (*.*)|*.*||"), 
-        this);
-
-    if(fd.DoModal() == IDOK)
-    {
-        // get full path from filedialog
-        CString szFileName = fd.GetPathName();
-
-        // save log file path
-        this->szLogFile = szFileName;
-
-        // close old log file
-        if(logCtx.bInit == true)
-        {
-            ::LogClose(&logCtx);
-        }
-
-        // create new log file
-        ::LogFile(&logCtx, this->szLogFile);
-        ::LogOpen(&logCtx);
-    }
-}
-
 void CEncWAVtoAC3Dlg::OnOptionsDisableAllWarnings()
 {
     this->bDisableAllWarnings = this->bDisableAllWarnings ? false : true;
@@ -2795,6 +2574,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     // do nothing if there are no files in list
     if(nItemsCount <= 0)
     {
+		::LogMessage(_T("Error: Add at least one file to the file list!"));
         MessageBox(_T("Add at least one file to the file list!"), _T("Error"), MB_ICONERROR | MB_OK);
         return;
     }
@@ -2802,6 +2582,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     // check if correct number of mono input files is present
     if((this->bMultipleMonoInput == true) && (nItemsCount <= 1 || nItemsCount > 6))
     {
+		::LogMessage(_T("Error: Supported are minimum 2 and maximum 6 mono input files!"));
         MessageBox(_T("Supported are minimum 2 and maximum 6 mono input files!"), _T("Error"), MB_ICONERROR | MB_OK);
         return;
     }
@@ -2810,6 +2591,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
 
     if(OpenAftenAPI(&this->api) == false)
     {
+		::LogMessage(_T("Error: Failed to load libaften.dll dynamic library!"));
         MessageBox(_T("Failed to load libaften.dll dynamic library!"), _T("Error"), MB_ICONERROR | MB_OK);
         bWorking = false;
         return;
@@ -2851,6 +2633,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     // 1. 'Multiple mono input' mode - off
     if((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
+		::LogMessage(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
         MessageBox(_T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"), 
             _T("Error"), MB_ICONERROR | MB_OK);
         bWorking = false;
@@ -2871,6 +2654,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     int nLen = dlg.workParam.szOutPath.GetLength();
     if(nLen < 3)
     {
+		::LogMessage(_T("Error: Invalid output path!"));
         this->MessageBox(_T("Invalid output path!"), _T("Error"), MB_OK | MB_ICONERROR);
         bWorking = false;
         return;
@@ -2883,6 +2667,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         {
             if((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
             {
+				::LogMessage(_T("Error: Invalid output file!"));
                 this->MessageBox(_T("Invalid output file!"), _T("Error"), MB_OK | MB_ICONERROR);
                 bWorking = false;
                 return;
@@ -2899,6 +2684,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
             if(MakeFullPath(dlg.workParam.szOutPath) == false)
             {
                 // show error message
+				::LogMessage(_T("Error: Failed to create output path!"));
                 this->MessageBox(_T("Failed to create output path!"), _T("Error"), MB_OK | MB_ICONERROR);
                 bWorking = false;
                 return;
@@ -2910,10 +2696,10 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
             CString szFile = GetFileName(dlg.workParam.szOutPath);
 
             szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
-
             if(MakeFullPath(szTmpOutPath) == false)
             {
                 // show error message
+				::LogMessage(_T("Error: Failed to create output path!"));
                 this->MessageBox(_T("Failed to create output path!"), _T("Error"), MB_OK | MB_ICONERROR);
                 bWorking = false;
                 return;
@@ -2944,37 +2730,37 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     for(INT_PTR i = listStatus.GetSize() - 1; i >= 0; i--)
     {
         if(listStatus.GetAt(listStatus.FindIndex(i)) == true)
-        {
             this->m_LstFiles.DeleteItem(i);
-        }
     }
 
     // show total work time
     if(dlg.nCount <= 0)
     {
         szText.Format(_T(""));
+		::LogMessage(_T("Error: Failed to encode all files."));
     }
     else
     {
         if(this->bMultipleMonoInput == true)
         {
-        szText.Format(_T("Encoded %d mono files in %s (%0.3lf sec)"), 
-            dlg.nCount, 
-            FormatTime(countTime.Time(), 3), 
-            countTime.Time());
+			szText.Format(_T("Encoded %d mono files in %s (%0.3lf sec)"), 
+				dlg.nCount, 
+				FormatTime(countTime.Time(), 3), 
+				countTime.Time());
+			::LogMessage(szText);
         }
         else
         {
-        szText.Format(_T("Encoded %d file%s in %s (%0.3lf sec)"), 
-            dlg.nCount, 
-            dlg.nCount == 1 ? _T("") : _T("s"),
-            FormatTime(countTime.Time(), 3), 
-            countTime.Time());
+			szText.Format(_T("Encoded %d file%s in %s (%0.3lf sec)"), 
+				dlg.nCount, 
+				dlg.nCount == 1 ? _T("") : _T("s"),
+				FormatTime(countTime.Time(), 3), 
+				countTime.Time());
+			::LogMessage(szText);
         }
     }
 
     this->m_StatusBar.SetText(szText, 0, 0);
-
     bWorking = false;
 }
 
@@ -3537,6 +3323,7 @@ bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInf
     if(decoderAVS.OpenAvisynth(pszInPath) == false)
 #endif
     {
+		::LogMessage(_T("Error: Failed to initialize Avisynth!"));
         this->MessageBox(_T("Failed to initialize Avisynth"), _T("Error"), MB_ICONERROR | MB_OK);
         return false;
     }

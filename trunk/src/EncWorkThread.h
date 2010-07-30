@@ -20,7 +20,7 @@
 
 #pragma once
 
-typedef struct
+typedef struct TAftenOpt
 {
     int pad_start;
     int chmap;
@@ -32,7 +32,7 @@ typedef struct
     int raw_order;
 } AftenOpt;
 
-typedef struct
+typedef struct TSingleWorkerData
 {
     // input and output files
     CString szInPath;

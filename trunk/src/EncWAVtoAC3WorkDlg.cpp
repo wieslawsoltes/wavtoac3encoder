@@ -229,6 +229,8 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 
     if(this->hThread == NULL)
     {
+		::LogMessage(_T("Error: Failed to create worker thread!"));
+
         // show critical error message
         this->MessageBox(_T("Failed to create worker thread!"), 
             _T("Fatal Error"), 

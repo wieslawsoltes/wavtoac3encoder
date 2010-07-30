@@ -259,8 +259,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 4,7,0,0
- PRODUCTVERSION 4,7,0,0
+ FILEVERSION 5,0,0,0
+ PRODUCTVERSION 5,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -277,12 +277,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wieslaw Soltes"
             VALUE "FileDescription", "WAV to AC3 Encoder"
-            VALUE "FileVersion", "4.7.0.0"
+            VALUE "FileVersion", "5.0.0.0"
             VALUE "InternalName", "EncWAVtoAC3.exe"
             VALUE "LegalCopyright", "WAV to AC3 Encoder (C) Wieslaw Soltes. All rights reserved."
             VALUE "OriginalFilename", "EncWAVtoAC3.exe"
             VALUE "ProductName", "WAV to AC3 Encoder"
-            VALUE "ProductVersion", "4.7.0.0"
+            VALUE "ProductVersion", "5.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -316,10 +316,6 @@ BEGIN
     END
     POPUP "&Options"
     BEGIN
-        MENUITEM "Enable &Logging",             ID_OPTIONS_ENABLELOGGING
-        MENUITEM "&Open Log File...",           ID_OPTIONS_OPENLOGFILE
-        MENUITEM "&Set Log File Path...",       ID_OPTIONS_SETLOGFILEPATH
-        MENUITEM SEPARATOR
         MENUITEM "Disable All &Warnings",       ID_OPTIONS_DISABLEALLWARNINGS
         MENUITEM SEPARATOR
         MENUITEM "Save Configuration On E&xit", ID_OPTIONS_SAVECONFIGURATIONONEXIT

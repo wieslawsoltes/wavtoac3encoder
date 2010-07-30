@@ -87,7 +87,7 @@ const LPCSTR pszLibAften_aften_get_float_type = "aften_get_float_type";
 //
 // structure with currently loaded aften api from dll
 //
-typedef struct
+typedef struct TAftenAPI
 {
     // path to currently loaded libaften.dll
     CString szLibPath;

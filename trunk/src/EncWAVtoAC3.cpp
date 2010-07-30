@@ -25,12 +25,11 @@
 
 #include "CommandLine.h"
 #include "OptionsParser.h"
+#include "Utilities.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
-LogCtx logCtx;
 
 // command-line help message
 const CString szHelpMessage = 
@@ -74,9 +73,6 @@ const CString szHelpMessage =
     _T("-e, --load-engines <file.ext>\n")
 	_T("Load list of Aften engines (*.engines).\n")
     _T("\n")
-    _T("-l, --enable-log [<file.log>]\n")
-	_T("Enable loging to text file.\n")
-    _T("\n")
     _T("-m, --mux-wizard\n")
 	_T("Show standalone MUX Wizard window.\n");
 
@@ -93,7 +89,6 @@ enum CL_OPTIONS_CONST
     CLOP_LOAD_FILES,
     CLOP_LOAD_PRESETS,
     CLOP_LOAD_ENGINES,
-    CLOP_ENABLE_LOG,
     CLOP_MUX_WIZARD
 };
 
@@ -110,7 +105,6 @@ const COptionsParser::CL_OPTIONS clOptions[] =
     { _T("f;load-files"),         CLOP_LOAD_FILES,                           1, true  },
     { _T("p;load-presets"),       CLOP_LOAD_PRESETS,                         1, true  },
     { _T("e;load-engines"),       CLOP_LOAD_ENGINES,                         1, true  },
-    { _T("l;enable-log"),         CLOP_ENABLE_LOG,                           0, false },
     { _T("m;mux-wizard"),         CLOP_MUX_WIZARD,                           0, false },
     { NULL,                       0,                                         0, false }
 };
@@ -124,6 +118,11 @@ void ShowCommandLineError(CString szMessage)
         _T("Error: %s\n\n")
         _T("Use --help option to obtain more informations."),
         szMessage);
+
+	::LogMessage(_T("Command line error: ") + szMessage);
+
+	// stop log
+	LogClose();
 
     // show error message
     MessageBox(NULL, 
@@ -150,12 +149,21 @@ CEncWAVtoAC3App::CEncWAVtoAC3App()
 
 }
 
+CEncWAVtoAC3App::~CEncWAVtoAC3App()
+{
+
+}
+
 CEncWAVtoAC3App theApp;
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
-    AfxEnableControlContainer();
+	// enable log
+	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
+	LogOpen();
 
+	// init
+    AfxEnableControlContainer();
 	InitCommonControls();
 
 	//InitContextMenuManager();
@@ -279,17 +287,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
                     dlg.cmdLineOpt.bHaveLoadEngines = true;
                 }
                 break;
-            case CLOP_ENABLE_LOG:
-                {
-                    dlg.cmdLineOpt.bEnableLog = true;
-
-                    if(op.GetParam(szParam, 0) == true)
-                    {
-                        dlg.cmdLineOpt.szLogFile = szParam;
-                        dlg.cmdLineOpt.bHaveLogFile = true;
-                    }
-                }
-                break;
             case CLOP_MUX_WIZARD:
                 {
                     // show standalone MUX Wizard window
@@ -314,6 +311,9 @@ BOOL CEncWAVtoAC3App::InitInstance()
             {
                 // free used memory
                 ::GlobalFree(pArgv);
+
+				// stop log
+				LogClose();
 
                 return FALSE;
             }
@@ -350,15 +350,14 @@ BOOL CEncWAVtoAC3App::InitInstance()
         return FALSE;
     }
 
-#ifdef _DEBUG
-    // dlg.cmdLineOpt.bEnableLog = true;
-#endif
-
     // show main dialog
     m_pMainWnd = &dlg;
 
     // show main window
     dlg.DoModal();
+
+	// stop log
+	LogClose();
 
     // terminate the program
     return FALSE;

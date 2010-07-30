@@ -20,6 +20,13 @@
 
 #pragma once
 
+
+// DEFAULTS
+
+
+// define program version
+#define ENCWAVTOAC3_VERSION _T("5.0")
+
 // default text for auto value
 #define DEFAULT_TEXT_AUTO _T("<Auto>")
 
@@ -45,16 +52,13 @@
 #define DEFAULT_FILES_FORMAT 0
 
 // define default file name for log
-#define DEFAULT_LOG_FILE_NAME _T("EncWAVtoAC3.log")
+#define DEFAULT_LOG_FILE_NAME _T("EncWAVtoAC3.txt")
 
 // define default file name for engines
 #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.engines")
 
 // define program home url
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
-
-// define program version
-#define ENCWAVTOAC3_VERSION _T("4.7")
 
 
 // MFC
@@ -126,3 +130,20 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
+
+
+// LOG
+
+
+typedef struct TLogCtx
+{
+    bool bInit;
+    CString szLogFileName;
+    CFile fp;
+} LogCtx;
+
+void LogDefaults();
+void LogFile(CString szLogFileName);
+bool LogOpen();
+bool LogClose();
+bool LogMessage(CString szMessage);

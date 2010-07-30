@@ -1,5 +1,11 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 5.0:
+
+- Log to a file is now always enabled.
+- Removed command-line options -l and --enable-log.
+- Added more error messages saved in the default log file EncWAVtoAC3.txt.
+
 Version 4.7:
 
 - Added support for avisynth in AMD64 (64-bit) builds using http://code.google.com/p/avisynth64/.

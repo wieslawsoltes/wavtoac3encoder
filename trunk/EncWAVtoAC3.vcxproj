@@ -261,7 +261,6 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
     <ClCompile Include="src\MyEdit.cpp" />
     <ClCompile Include="src\MyFile.cpp" />
     <ClCompile Include="src\MyListCtrl.cpp" />
-    <ClCompile Include="src\MyLog.cpp" />
     <ClCompile Include="src\MySliderCtrl.cpp" />
     <ClCompile Include="src\MyStatic.cpp" />
     <ClCompile Include="src\OptionsParser.cpp" />
@@ -397,7 +396,6 @@ kernel32.lib advapi32.lib user32.lib gdi32.lib shell32.lib comdlg32.lib version.
     <ClInclude Include="src\MyEdit.h" />
     <ClInclude Include="src\MyFile.h" />
     <ClInclude Include="src\MyListCtrl.h" />
-    <ClInclude Include="src\MyLog.h" />
     <ClInclude Include="src\MySliderCtrl.h" />
     <ClInclude Include="src\MyStatic.h" />
     <ClInclude Include="src\OptionsParser.h" />
