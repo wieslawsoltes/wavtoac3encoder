@@ -72,6 +72,9 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
     void InitDialogAnchors();
+	void InitTooltips();
+	void InitDefaultPreset();
+	void InitDialogControls();
 protected:
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
@@ -94,9 +97,6 @@ public:
     CString szOutputFile;
 public:
     bool bMultipleMonoInput;
-public:
-    bool bEnableLog;
-    CString szLogFile;
 public:
     bool bDisableAllWarnings;
 public:
@@ -191,9 +191,6 @@ public:
     afx_msg void OnFileSavePresets();
     afx_msg void OnFileExit();
 public:
-    afx_msg void OnOptionsEnableLogging();
-    afx_msg void OnOptionsOpenLogFile();
-    afx_msg void OnOptionsSetLogFilePath();
     afx_msg void OnOptionsDisableAllWarnings();
     afx_msg void OnOptionsSaveConfigurationOnExit();
     afx_msg void OnOptionsLoadConfiguration();

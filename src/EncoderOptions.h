@@ -51,7 +51,7 @@ extern const LPTSTR szRawSampleFormats[nNumRawSampleFormats];
 // find valid bitrate index
 int FindValidBitratePos(const int nBitrate);
 
-typedef struct
+typedef struct TEncoderOptions
 {
     CString szName;
     CString szOption;
@@ -101,7 +101,7 @@ extern const CString szRawSampleRateOption;
 extern const CString szRawChannelsOption;
 
 // encoder preset settings
-typedef struct
+typedef struct TEncoderPreset
 {
     // preset name
     CString szName;

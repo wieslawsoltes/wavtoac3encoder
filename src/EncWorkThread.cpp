@@ -497,11 +497,7 @@ int RunAftenEncoder(AftenAPI &api,
         if(decoderAVS.OpenAvisynth(pszInPath[0]) == false)
 #endif
         {
-            if(logCtx.bInit)
-            {
-                ::LogMessage(&logCtx, szLogMessage + _T("Failed to initialize Avisynth."));
-            }
-
+            ::LogMessage(szLogMessage + _T("Failed to initialize Avisynth."));
             return(WORKDLG_RETURN_FAILURE);
         }
         else
@@ -511,11 +507,7 @@ int RunAftenEncoder(AftenAPI &api,
 
             // calculate total size of input raw data
             pWork->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-
-            if(logCtx.bInit)
-            {
-                ::LogMessage(&logCtx, _T("Avisynth initialized successfully."));
-            }
+            ::LogMessage(_T("Avisynth initialized successfully."));
         }
 #endif
     }
@@ -532,10 +524,7 @@ int RunAftenEncoder(AftenAPI &api,
 				pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
 				pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
-                if(logCtx.bInit)
-                { 
-                    ::LogMessage(&logCtx, szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
-                }
+                ::LogMessage(szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
 
                 pWork->pWorkDlg->bTerminate = true;
                 ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
@@ -564,10 +553,7 @@ int RunAftenEncoder(AftenAPI &api,
                 fclose(ifp[i]);
         }
 
-		if(logCtx.bInit)
-		{ 
-			::LogMessage(&logCtx, szLogMessage + _T("Failed to create output file: ") + pszOutPath);
-		}
+		::LogMessage(szLogMessage + _T("Failed to create output file: ") + pszOutPath);
 
         pWork->pWorkDlg->bTerminate = true;
         ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
@@ -613,10 +599,8 @@ int RunAftenEncoder(AftenAPI &api,
     \
     szOutPath.ReleaseBuffer(); \
     \
-    if(logCtx.bInit) \
-    { \
-        ::LogMessage(&logCtx, szLogMessage + message); \
-    } \
+    ::LogMessage(szLogMessage + message); \
+	\
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     \
@@ -781,7 +765,6 @@ int RunAftenEncoder(AftenAPI &api,
         }
         */
         s.sample_format = A52_SAMPLE_FMT_FLT;
-
         s.channels = infoAVS.nAudioChannels;
         s.samplerate = infoAVS.nSamplesPerSecond; 
 #endif
@@ -864,7 +847,6 @@ int RunAftenEncoder(AftenAPI &api,
     double fPrevTimeEncoding = 0.0;
     double fPrevTimeIORead = 0.0;
     double fPrevTimeIOWrite = 0.0;
-
 
     // main encoding loop
     do
@@ -1049,51 +1031,49 @@ int RunAftenEncoder(AftenAPI &api,
 	pWork->nOutTotalSize = GetFileSizeInt64(ofp);
 
     // log preformance stats
-    if(logCtx.bInit)
+
+	// log input file(s) path(s)
+    CString szTmpBuff;
+    for(int i = 0; i < nInputFiles; i++)
     {
-		// log input file(s) path(s)
-        CString szTmpBuff;
-        for(int i = 0; i < nInputFiles; i++)
-        {
-            szTmpBuff.Format(_T("Input[%d]=%s"), i, szInPath[i]);
-            ::LogMessage(&logCtx, szTmpBuff);
-        }
-
-		// log output file path
-        szTmpBuff.Format(_T("Output=%s"), szOutPath);
-        ::LogMessage(&logCtx, szTmpBuff);
-
-		// calculate total time
-        pWork->fTimeTotal = pWork->fTimeEncoding + pWork->fTimeIORead + pWork->fTimeIOWrite;
-
-		// log encoder speed
-        szTmpBuff.Format(_T("Tenc=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
-			pWork->fTimeEncoding, 
-			((pWork->fTimeEncoding + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
-			pWork->nInTotalSize,
-			((double) (pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeEncoding + 1.0e-16));
-        ::LogMessage(&logCtx, szTmpBuff);
-
-		// log read speed
-        szTmpBuff.Format(_T("Tread=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
-			pWork->fTimeIORead, 
-			((pWork->fTimeIORead + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
-			pWork->nInTotalSize,
-			((double) (pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeIORead + 1.0e-16));
-        ::LogMessage(&logCtx, szTmpBuff);
-
-		// log write speed
-        szTmpBuff.Format(_T("Twrite=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
-			pWork->fTimeIOWrite, 
-			((pWork->fTimeIOWrite + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
-			pWork->nOutTotalSize,
-			((double) (pWork->nOutTotalSize) / 1048576.0f) / (pWork->fTimeIOWrite + 1.0e-16));
-        ::LogMessage(&logCtx, szTmpBuff);
-
-		// log total time
-        szTmpBuff.Format(_T("Ttotal=%0.3lfs"), pWork->fTimeTotal);
-        ::LogMessage(&logCtx, szTmpBuff);
+        szTmpBuff.Format(_T("Input[%d]=%s"), i, szInPath[i]);
+        ::LogMessage(szTmpBuff);
     }
+
+	// log output file path
+    szTmpBuff.Format(_T("Output=%s"), szOutPath);
+    ::LogMessage(szTmpBuff);
+
+	// calculate total time
+    pWork->fTimeTotal = pWork->fTimeEncoding + pWork->fTimeIORead + pWork->fTimeIOWrite;
+
+	// log encoder speed
+    szTmpBuff.Format(_T("Tenc=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
+		pWork->fTimeEncoding, 
+		((pWork->fTimeEncoding + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
+		pWork->nInTotalSize,
+		((double) (pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeEncoding + 1.0e-16));
+    ::LogMessage(szTmpBuff);
+
+	// log read speed
+    szTmpBuff.Format(_T("Tread=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
+		pWork->fTimeIORead, 
+		((pWork->fTimeIORead + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
+		pWork->nInTotalSize,
+		((double) (pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeIORead + 1.0e-16));
+    ::LogMessage( szTmpBuff);
+
+	// log write speed
+    szTmpBuff.Format(_T("Twrite=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"), 
+		pWork->fTimeIOWrite, 
+		((pWork->fTimeIOWrite + 1.0e-16) * 100.0f) /  (pWork->fTimeTotal + 1.0e-16),
+		pWork->nOutTotalSize,
+		((double) (pWork->nOutTotalSize) / 1048576.0f) / (pWork->fTimeIOWrite + 1.0e-16));
+    ::LogMessage(szTmpBuff);
+
+	// log total time
+    szTmpBuff.Format(_T("Ttotal=%0.3lfs"), pWork->fTimeTotal);
+    ::LogMessage(szTmpBuff);
 
     // clean-up used memory
     if(fwav)

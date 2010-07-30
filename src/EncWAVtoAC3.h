@@ -26,10 +26,6 @@
 
 #include "resource.h"
 
-#include "MyLog.h"
-
-extern LogCtx logCtx;
-
 void ShowCommandLineHelp(HWND hWnd);
 
 typedef class TCommandLineOpt
@@ -64,10 +60,6 @@ public:
 
         this->szLoadEngines = _T("");
         this->bHaveLoadEngines = false;
-
-        this->bEnableLog = false;
-        this->szLogFile = _T("");
-        this->bHaveLogFile = false;
     }
 public:
     bool bHelp;
@@ -97,16 +89,13 @@ public:
 public:
     CString szLoadEngines;
     bool bHaveLoadEngines;
-public:
-    bool bEnableLog;
-    CString szLogFile;
-    bool bHaveLogFile;
 } CommandLineOpt;
 
 class CEncWAVtoAC3App : public CWinApp
 {
 public:
     CEncWAVtoAC3App();
+	virtual ~CEncWAVtoAC3App();
 public:
     virtual BOOL InitInstance();
     DECLARE_MESSAGE_MAP()

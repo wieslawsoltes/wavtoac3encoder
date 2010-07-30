@@ -44,7 +44,7 @@
 class CEncWAVtoAC3WorkDlg;
 
 // params used in worker thread
-typedef struct
+typedef struct TWorkerParam
 {
     CEncWAVtoAC3WorkDlg *pWorkDlg;
     CList<CString,CString> *list;
