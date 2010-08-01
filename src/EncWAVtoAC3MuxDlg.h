@@ -32,7 +32,7 @@
 
 #include "EncoderOptions.h"
 
-class CEncWAVtoAC3MuxDlg : public CDialog
+class CEncWAVtoAC3MuxDlg : public CDialogEx
 {
     DECLARE_DYNAMIC(CEncWAVtoAC3MuxDlg)
 public:

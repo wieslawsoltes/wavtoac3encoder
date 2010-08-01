@@ -32,13 +32,13 @@ CResizeDialog::CResizeDialog()
 }
 
 CResizeDialog::CResizeDialog(UINT nIDTemplate, CWnd *pParentWnd)
-: CDialog(nIDTemplate, pParentWnd)
+: CDialogEx(nIDTemplate, pParentWnd)
 {
     InitVars();
 }
 
 CResizeDialog::CResizeDialog(LPCTSTR lpszTemplateName, CWnd *pParentWnd)
-: CDialog(lpszTemplateName, pParentWnd)
+: CDialogEx(lpszTemplateName, pParentWnd)
 {
     InitVars();
 }
@@ -48,7 +48,7 @@ CResizeDialog::~CResizeDialog()
     m_LayoutList.RemoveAll();
 }
 
-BEGIN_MESSAGE_MAP(CResizeDialog, CDialog)
+BEGIN_MESSAGE_MAP(CResizeDialog, CDialogEx)
     ON_WM_GETMINMAXINFO()
     ON_WM_SIZE()
 END_MESSAGE_MAP()
@@ -72,7 +72,7 @@ void CResizeDialog::CleanUp()
 
 BOOL CResizeDialog::OnInitDialog() 
 {
-    CDialog::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
     CRect rc;
     GetWindowRect(&rc);

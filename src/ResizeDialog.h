@@ -31,7 +31,7 @@ const CSize AnchorBottomLeft   (  0, 100);
 const CSize AnchorBottomCenter ( 50, 100);
 const CSize AnchorBottomRight  (100, 100);
 
-class CResizeDialog : public CDialog
+class CResizeDialog : public CDialogEx
 {
 private:
     typedef struct 

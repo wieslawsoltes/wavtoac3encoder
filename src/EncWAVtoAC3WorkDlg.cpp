@@ -26,10 +26,10 @@
 #include "MyFile.h"
 #include "EncWorkThread.h"
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3WorkDlg, CDialog)
+IMPLEMENT_DYNAMIC(CEncWAVtoAC3WorkDlg, CDialogEx)
 
 CEncWAVtoAC3WorkDlg::CEncWAVtoAC3WorkDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CEncWAVtoAC3WorkDlg::IDD, pParent)
+: CDialogEx(CEncWAVtoAC3WorkDlg::IDD, pParent)
 {
     nIDIn[0] = IDC_STATIC_IN_00;
     nIDIn[1] = IDC_STATIC_IN_01;
@@ -61,7 +61,7 @@ CEncWAVtoAC3WorkDlg::~CEncWAVtoAC3WorkDlg()
 
 void CEncWAVtoAC3WorkDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDCANCEL, m_BtnCancel);
     DDX_Control(pDX, IDC_STATIC_ELAPSED_CURRENT, m_StcTimeCurrent);
     DDX_Control(pDX, IDC_STATIC_ELAPSED_TOTAL, m_StcTimeTotal);
@@ -72,7 +72,7 @@ void CEncWAVtoAC3WorkDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_PROGRESS_TOTAL, m_PrgTotal);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3WorkDlg, CDialog)
+BEGIN_MESSAGE_MAP(CEncWAVtoAC3WorkDlg, CDialogEx)
     ON_WM_CLOSE()
     ON_WM_DESTROY()
     ON_WM_TIMER()
@@ -81,7 +81,7 @@ END_MESSAGE_MAP()
 
 BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
     // setup worker thread settings
     workParam.pWorkDlg = this;
@@ -257,12 +257,12 @@ void CEncWAVtoAC3WorkDlg::OnClose()
     else
         this->EndDialog(IDOK);
 
-    CDialog::OnClose();
+    CDialogEx::OnClose();
 }
 
 void CEncWAVtoAC3WorkDlg::OnDestroy()
 {
-    CDialog::OnDestroy();
+    CDialogEx::OnDestroy();
 
     if(this->hThread != NULL)
     {
@@ -359,7 +359,7 @@ void CEncWAVtoAC3WorkDlg::OnTimer(UINT_PTR nIDEvent)
         break;
     };
 
-    CDialog::OnTimer(nIDEvent);
+    CDialogEx::OnTimer(nIDEvent);
 }
 
 void CEncWAVtoAC3WorkDlg::OnBnClickedCancel()

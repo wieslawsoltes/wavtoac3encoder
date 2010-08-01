@@ -22,10 +22,10 @@
 #include "EncWAVtoAC3.h"
 #include "AboutDlg.h"
 
-IMPLEMENT_DYNAMIC(CAboutDlg, CDialog)
+IMPLEMENT_DYNAMIC(CAboutDlg, CDialogEx)
 
 CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CAboutDlg::IDD, pParent)
+: CDialogEx(CAboutDlg::IDD, pParent)
 {
 
 }
@@ -37,18 +37,18 @@ CAboutDlg::~CAboutDlg()
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDOK, m_BtnOK);
     DDX_Control(pDX, IDC_STATIC_BUILD_INFO, m_StcBuildInfo);
     DDX_Control(pDX, IDC_STATIC_LICENSE, m_StcLicense);
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 BOOL CAboutDlg::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
     // set build information
     CString szBuildInfo = _T("");

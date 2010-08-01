@@ -140,8 +140,8 @@ void ShowCommandLineHelp(HWND hWnd)
         MB_OK | MB_ICONINFORMATION | MB_APPLMODAL);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinApp)
-    ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
+    ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
 END_MESSAGE_MAP()
 
 CEncWAVtoAC3App::CEncWAVtoAC3App()
@@ -162,20 +162,16 @@ BOOL CEncWAVtoAC3App::InitInstance()
 	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
 	LogOpen();
 
-	// init
-    AfxEnableControlContainer();
-	InitCommonControls();
+	// init app
+	INITCOMMONCONTROLSEX InitCtrls;
+	InitCtrls.dwSize = sizeof(InitCtrls);
 
-	//InitContextMenuManager();
-	//InitShellManager();
+	InitCtrls.dwICC = ICC_WIN95_CLASSES;
+	InitCommonControlsEx(&InitCtrls);
 
-    // init common controls
-    //INITCOMMONCONTROLSEX InitCtrls;
-    //InitCtrls.dwSize = sizeof(InitCtrls);
-    //InitCtrls.dwICC = ICC_WIN95_CLASSES;
-    //InitCommonControlsEx(&InitCtrls);
-
-    CWinApp::InitInstance();
+	CWinAppEx::InitInstance();
+	AfxEnableControlContainer();
+	InitShellManager();
 
     // main dialog object
     CEncWAVtoAC3Dlg dlg;
