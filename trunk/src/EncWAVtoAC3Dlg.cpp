@@ -112,39 +112,39 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
 
 void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
 {
-    CResizeDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
-    DDX_Control(pDX, IDC_LIST_SETTINGS, m_LstSettings);
-    DDX_Control(pDX, IDC_SLIDER_BITRATE, m_SldBitrate);
-    DDX_Control(pDX, IDC_STATIC_BITRATE, m_StcBitrate);
-    DDX_Control(pDX, IDC_STATIC_QUALITY, m_StcQualityBitrate);
-    DDX_Control(pDX, IDC_STATIC_OPTION_VALUE, m_StcSelected);
-    DDX_Control(pDX, IDC_COMBO_SETTING, m_CmbValue);
-    DDX_Control(pDX, IDC_COMBO_PRESETS, m_CmbPresets);
-    DDX_Control(pDX, IDC_COMBO_RAW_SAMPLE_FORMAT, m_CmbRawSampleFormat);
-    DDX_Control(pDX, IDC_COMBO_ENGINES, m_CmbEngines);
-    DDX_Control(pDX, IDC_EDIT_OUTPUT_PATH, m_EdtOutPath);
-    DDX_Control(pDX, IDC_EDIT_THREADS, m_EdtThreads);
-    DDX_Control(pDX, IDC_EDIT_RAW_SAMPLE_RATE, m_EdtRawSamplerate);
-    DDX_Control(pDX, IDC_EDIT_RAW_CHANNELS, m_EdtRawChannels);
-    DDX_Control(pDX, IDC_SPIN_THREADS, m_SpnThreads);
-    DDX_Control(pDX, IDC_SPIN_RAW_SAMPLE_RATE, m_SpnRawSampleRate);
-    DDX_Control(pDX, IDC_SPIN_RAW_CHANNELS, m_SpnRawChannels);
-    DDX_Control(pDX, IDC_CHECK_VBR, m_ChkVbr);
-    DDX_Control(pDX, IDC_CHECK_SIMD_MMX, m_ChkSimdMMX);
-    DDX_Control(pDX, IDC_CHECK_SIMD_SSE, m_ChkSimdSSE);
-    DDX_Control(pDX, IDC_CHECK_SIMD_SSE2, m_ChkSimdSSE2);
-    DDX_Control(pDX, IDC_CHECK_SIMD_SSE3, m_ChkSimdSSE3);
-    DDX_Control(pDX, IDC_CHECK_MULTIPLE_MONO_INPUT, m_ChkMultipleMonoInput);
-    DDX_Control(pDX, IDC_BUTTON_ENCODE, m_BtnEncode);
-    DDX_Control(pDX, IDC_BUTTON_PRESETS_DEFAULTS, m_BtnResetCurrent);
-    DDX_Control(pDX, IDC_BUTTON_PRESET_DEL, m_BtnRemove);
-    DDX_Control(pDX, IDC_BUTTON_PRESET_ADD, m_BtnAddNew);
-    DDX_Control(pDX, IDC_BUTTON_ADD, m_BtnAddFiles);
-    DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
-    DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
-    DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
-    DDX_Control(pDX, IDC_CHECK_ADVANCED_VIEW, m_ChkAdvancedView);
+	CResizeDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
+	DDX_Control(pDX, IDC_LIST_SETTINGS, m_LstSettings);
+	DDX_Control(pDX, IDC_SLIDER_BITRATE, m_SldBitrate);
+	DDX_Control(pDX, IDC_STATIC_BITRATE, m_StcBitrate);
+	DDX_Control(pDX, IDC_STATIC_QUALITY, m_StcQualityBitrate);
+	DDX_Control(pDX, IDC_STATIC_OPTION_VALUE, m_StcSelected);
+	DDX_Control(pDX, IDC_COMBO_SETTING, m_CmbValue);
+	DDX_Control(pDX, IDC_COMBO_PRESETS, m_CmbPresets);
+	DDX_Control(pDX, IDC_COMBO_RAW_SAMPLE_FORMAT, m_CmbRawSampleFormat);
+	DDX_Control(pDX, IDC_COMBO_ENGINES, m_CmbEngines);
+	DDX_Control(pDX, IDC_EDIT_OUTPUT_PATH, m_EdtOutPath);
+	DDX_Control(pDX, IDC_EDIT_THREADS, m_EdtThreads);
+	DDX_Control(pDX, IDC_EDIT_RAW_SAMPLE_RATE, m_EdtRawSamplerate);
+	DDX_Control(pDX, IDC_EDIT_RAW_CHANNELS, m_EdtRawChannels);
+	DDX_Control(pDX, IDC_SPIN_THREADS, m_SpnThreads);
+	DDX_Control(pDX, IDC_SPIN_RAW_SAMPLE_RATE, m_SpnRawSampleRate);
+	DDX_Control(pDX, IDC_SPIN_RAW_CHANNELS, m_SpnRawChannels);
+	DDX_Control(pDX, IDC_CHECK_VBR, m_ChkVbr);
+	DDX_Control(pDX, IDC_CHECK_SIMD_MMX, m_ChkSimdMMX);
+	DDX_Control(pDX, IDC_CHECK_SIMD_SSE, m_ChkSimdSSE);
+	DDX_Control(pDX, IDC_CHECK_SIMD_SSE2, m_ChkSimdSSE2);
+	DDX_Control(pDX, IDC_CHECK_SIMD_SSE3, m_ChkSimdSSE3);
+	DDX_Control(pDX, IDC_CHECK_MULTIPLE_MONO_INPUT, m_ChkMultipleMonoInput);
+	DDX_Control(pDX, IDC_BUTTON_ENCODE, m_BtnEncode);
+	DDX_Control(pDX, IDC_BUTTON_PRESETS_DEFAULTS, m_BtnResetCurrent);
+	DDX_Control(pDX, IDC_BUTTON_PRESET_DEL, m_BtnRemove);
+	DDX_Control(pDX, IDC_BUTTON_PRESET_ADD, m_BtnAddNew);
+	DDX_Control(pDX, IDC_BUTTON_ADD, m_BtnAddFiles);
+	DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
+	DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
+	DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
+	DDX_Control(pDX, IDC_CHECK_ADVANCED_VIEW, m_ChkAdvancedView);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
@@ -1911,7 +1911,7 @@ void CEncWAVtoAC3Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     }
     else
     {
-        CDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+        CDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
     }
 
     CResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);

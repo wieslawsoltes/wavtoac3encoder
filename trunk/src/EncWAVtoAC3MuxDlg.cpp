@@ -77,10 +77,10 @@ const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
     {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("SL"),  _T("SR") }  // 3/2
 };
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3MuxDlg, CDialog)
+IMPLEMENT_DYNAMIC(CEncWAVtoAC3MuxDlg, CDialogEx)
 
 CEncWAVtoAC3MuxDlg::CEncWAVtoAC3MuxDlg(CWnd* pParent /*=NULL*/)
-    : CDialog(CEncWAVtoAC3MuxDlg::IDD, pParent)
+    : CDialogEx(CEncWAVtoAC3MuxDlg::IDD, pParent)
 {
     for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
@@ -99,7 +99,7 @@ CEncWAVtoAC3MuxDlg::~CEncWAVtoAC3MuxDlg()
 
 void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
 	DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
 	DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
@@ -123,7 +123,7 @@ void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3MuxDlg, CDialog)
+BEGIN_MESSAGE_MAP(CEncWAVtoAC3MuxDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_FL, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFl)
     ON_BN_CLICKED(IDC_BUTTON_FR, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFr)
     ON_BN_CLICKED(IDC_BUTTON_FC, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFc)
@@ -147,7 +147,7 @@ END_MESSAGE_MAP()
 
 BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
     // init channel configuration ComboBox
     for(int i = 0; i < nNumChannelConfig; i++)

@@ -24,10 +24,10 @@
 #include "Utilities.h"
 #include "MyFile.h"
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialog)
+IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialogEx)
 
 CEncWAVtoAC3EngDlg::CEncWAVtoAC3EngDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CEncWAVtoAC3EngDlg::IDD, pParent)
+	: CDialogEx(CEncWAVtoAC3EngDlg::IDD, pParent)
 {
     bUpdateList = true;
     nCurrSel = 0;
@@ -40,13 +40,13 @@ CEncWAVtoAC3EngDlg::~CEncWAVtoAC3EngDlg()
 
 void CEncWAVtoAC3EngDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialog::DoDataExchange(pDX);
+    CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST_ENGINES, m_LstEngines);
     DDX_Control(pDX, IDC_EDIT_ENGINE_NAME, m_EdtEngineName);
     DDX_Control(pDX, IDC_EDIT_ENGINE_PATH, m_EdtEnginePath);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3EngDlg, CDialog)
+BEGIN_MESSAGE_MAP(CEncWAVtoAC3EngDlg, CDialogEx)
     ON_BN_CLICKED(IDOK, &CEncWAVtoAC3EngDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &CEncWAVtoAC3EngDlg::OnBnClickedCancel)
     ON_BN_CLICKED(IDC_BUTTON_ENGINES_BROWSE, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse)
@@ -62,7 +62,7 @@ END_MESSAGE_MAP()
 
 BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+    CDialogEx::OnInitDialog();
 
     // set style of the engines list
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);

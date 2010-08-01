@@ -91,7 +91,7 @@ public:
     bool bHaveLoadEngines;
 } CommandLineOpt;
 
-class CEncWAVtoAC3App : public CWinApp
+class CEncWAVtoAC3App : public CWinAppEx
 {
 public:
     CEncWAVtoAC3App();

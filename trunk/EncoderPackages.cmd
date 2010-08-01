@@ -23,8 +23,9 @@ set BasePath=.
 
 cd "%BasePath%\installer"
 
-@call "PackageSources.cmd"
 @call "PackageBinaries.cmd"
+@call "PackageBinariesAMD64.cmd"
+@call "PackageSources.cmd"
 @call "PackageInstallers.cmd"
 
 endlocal

@@ -62,7 +62,7 @@ typedef struct TWorkerParam
 	__int64 nOutTotalSize;
 } WorkerParam;
 
-class CEncWAVtoAC3WorkDlg : public CDialog
+class CEncWAVtoAC3WorkDlg : public CDialogEx
 {
     DECLARE_DYNAMIC(CEncWAVtoAC3WorkDlg)
 public:

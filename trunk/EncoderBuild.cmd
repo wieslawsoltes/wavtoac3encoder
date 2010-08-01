@@ -27,7 +27,7 @@ set SolutionName=EncWAVtoAC3
 setlocal
 
 rem VS2008
-@call "c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86
+@call "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
 
 FOR /F "tokens=*" %%i IN (%BuildNames%) DO (
     devenv /rebuild "%%i|Win32" "%BasePath%\%SolutionName%.sln"
@@ -38,7 +38,7 @@ endlocal
 setlocal
 
 rem VS2008
-@call "c:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86_amd64
+@call "c:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64
 
 FOR /F "tokens=*" %%i IN (%BuildNames%) DO (
     devenv /rebuild "%%i|x64" "%BasePath%\%SolutionName%.sln"

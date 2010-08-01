@@ -41,6 +41,7 @@
 #endif
 
 #include "EncoderOptions.h"
+#include "afxpropertygridctrl.h"
 
 // define main window statusbar id
 #define IDC_STATUSBAR 1500
