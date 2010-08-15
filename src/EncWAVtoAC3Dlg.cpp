@@ -105,9 +105,6 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
 
     // save configuration on exit
     this->bSaveConfig = true;
-
-    // default options view mode
-    this->nViewMode = VIEW_MODE_STANDARD;
 }
 
 void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
@@ -144,7 +141,6 @@ void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
 	DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
 	DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
-	DDX_Control(pDX, IDC_CHECK_ADVANCED_VIEW, m_ChkAdvancedView);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
@@ -169,8 +165,6 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration)
     ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsLoadConfiguration)
-    ON_COMMAND(ID_VIEW_STANDARD, &CEncWAVtoAC3Dlg::OnViewStandard)
-    ON_COMMAND(ID_VIEW_ADVANCED, &CEncWAVtoAC3Dlg::OnViewAdvanced)
     ON_COMMAND(ID_HELP_COMMAND_LINE, &CEncWAVtoAC3Dlg::OnHelpCommandLine)
     ON_COMMAND(ID_HELP_WEBSITE, &CEncWAVtoAC3Dlg::OnHelpWebsite)
     ON_COMMAND(ID_HELP_ABOUT, &CEncWAVtoAC3Dlg::OnHelpAbout)
@@ -222,7 +216,6 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_EN_KILLFOCUS(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads)
     ON_MESSAGE(WM_MY_EN_CHANGE, EditChangeComboPresets)
     ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CEncWAVtoAC3Dlg::OnBnClickedButtonEngines)
-    ON_BN_CLICKED(IDC_CHECK_ADVANCED_VIEW, &CEncWAVtoAC3Dlg::OnBnClickedCheckAdvancedView)
 END_MESSAGE_MAP()
 
 void CEncWAVtoAC3Dlg::InitDialogAnchors()
@@ -233,32 +226,33 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_BITRATE, AnchorTopRight);
     AddAnchor(IDC_SLIDER_BITRATE, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_CHECK_VBR, AnchorTopRight);
-    AddAnchor(IDC_STATIC_ENGINE, AnchorTopRight);
-    AddAnchor(IDC_COMBO_ENGINES, AnchorTopRight);
-    AddAnchor(IDC_BUTTON_ENGINES, AnchorTopRight);
-    AddAnchor(IDC_STATIC_THREADS, AnchorTopRight);
-    AddAnchor(IDC_EDIT_THREADS, AnchorTopRight);
-    AddAnchor(IDC_SPIN_THREADS, AnchorTopRight);
+    AddAnchor(IDC_STATIC_ENGINE, AnchorTopLeft);
+    AddAnchor(IDC_COMBO_ENGINES, AnchorTopLeft);
+    AddAnchor(IDC_BUTTON_ENGINES, AnchorTopLeft);
+    AddAnchor(IDC_STATIC_THREADS, AnchorTopLeft);
+    AddAnchor(IDC_EDIT_THREADS, AnchorTopLeft);
+    AddAnchor(IDC_SPIN_THREADS, AnchorTopLeft);
     AddAnchor(IDC_LIST_SETTINGS, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_STATIC_OPTION_VALUE, AnchorTopLeft);
     AddAnchor(IDC_COMBO_SETTING, AnchorTopLeft, AnchorTopRight);
-    AddAnchor(IDC_COMBO_PRESETS, AnchorTopRight);
-    AddAnchor(IDC_CHECK_ADVANCED_VIEW, AnchorTopRight);
-    AddAnchor(IDC_BUTTON_PRESETS_DEFAULTS, AnchorTopRight);
-    AddAnchor(IDC_BUTTON_PRESET_DEL, AnchorTopRight);
-    AddAnchor(IDC_BUTTON_PRESET_ADD, AnchorTopRight);
-    AddAnchor(IDC_CHECK_SIMD_MMX, AnchorTopRight);
-    AddAnchor(IDC_CHECK_SIMD_SSE, AnchorTopRight);
-    AddAnchor(IDC_CHECK_SIMD_SSE2, AnchorTopRight);
-    AddAnchor(IDC_CHECK_SIMD_SSE3, AnchorTopRight);
-    AddAnchor(IDC_STATIC_SAMPLE_FORMAT, AnchorTopRight);
-    AddAnchor(IDC_COMBO_RAW_SAMPLE_FORMAT, AnchorTopRight);
-    AddAnchor(IDC_STATIC_SAMPLE_RATE, AnchorTopRight);
-    AddAnchor(IDC_EDIT_RAW_SAMPLE_RATE, AnchorTopRight);
-    AddAnchor(IDC_SPIN_RAW_SAMPLE_RATE, AnchorTopRight);
-    AddAnchor(IDC_STATIC_CHANNELS, AnchorTopRight);
-    AddAnchor(IDC_EDIT_RAW_CHANNELS, AnchorTopRight);
-    AddAnchor(IDC_SPIN_RAW_CHANNELS, AnchorTopRight);
+	AddAnchor(IDC_STATIC_PRESET, AnchorTopLeft);
+    AddAnchor(IDC_COMBO_PRESETS, AnchorTopLeft);
+    AddAnchor(IDC_BUTTON_PRESETS_DEFAULTS, AnchorTopLeft);
+    AddAnchor(IDC_BUTTON_PRESET_DEL, AnchorTopLeft);
+    AddAnchor(IDC_BUTTON_PRESET_ADD, AnchorTopLeft);
+	AddAnchor(IDC_STATIC_SIMD, AnchorTopLeft);
+    AddAnchor(IDC_CHECK_SIMD_MMX, AnchorTopLeft);
+    AddAnchor(IDC_CHECK_SIMD_SSE, AnchorTopLeft);
+    AddAnchor(IDC_CHECK_SIMD_SSE2, AnchorTopLeft);
+    AddAnchor(IDC_CHECK_SIMD_SSE3, AnchorTopLeft);
+    AddAnchor(IDC_STATIC_SAMPLE_FORMAT, AnchorTopLeft);
+    AddAnchor(IDC_COMBO_RAW_SAMPLE_FORMAT, AnchorTopLeft);
+    AddAnchor(IDC_STATIC_SAMPLE_RATE, AnchorTopLeft);
+    AddAnchor(IDC_EDIT_RAW_SAMPLE_RATE, AnchorTopLeft);
+    AddAnchor(IDC_SPIN_RAW_SAMPLE_RATE, AnchorTopLeft);
+    AddAnchor(IDC_STATIC_CHANNELS, AnchorTopLeft);
+    AddAnchor(IDC_EDIT_RAW_CHANNELS, AnchorTopLeft);
+    AddAnchor(IDC_SPIN_RAW_CHANNELS, AnchorTopLeft);
     AddAnchor(IDC_LIST_FILES, AnchorTopLeft, AnchorBottomRight);
     AddAnchor(IDC_BUTTON_ADD, AnchorBottomLeft);
     AddAnchor(IDC_STATIC_OUTPUT, AnchorBottomLeft);
@@ -268,11 +262,6 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_BUTTON_MUX_WIZARD, AnchorBottomLeft);
     AddAnchor(IDC_BUTTON_ENCODE, AnchorBottomRight);
     AddAnchor(IDC_STATUSBAR, AnchorBottomLeft, AnchorBottomRight);
-    AddAnchor(IDC_STATIC_SETTINGS, AnchorTopLeft, AnchorTopRight);
-    AddAnchor(IDC_STATIC_PARALLEL, AnchorTopRight);
-    AddAnchor(IDC_STATIC_RAW, AnchorTopRight);
-    AddAnchor(IDC_STATIC_SIMD, AnchorTopRight);
-    AddAnchor(IDC_STATIC_PRESETS, AnchorTopRight);
 }
 
 void CEncWAVtoAC3Dlg::InitTooltips()
@@ -391,10 +380,6 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     // engines editor
     szTmpText = _T("Edit currently available Aften engines.");
     this->m_BtnEngines.SetTooltipText(szTmpText);
-
-    // advanced view
-    szTmpText = _T("Show or hide advanced configuration options.");
-    this->m_ChkAdvancedView.SetTooltipText(szTmpText);
 }
 
 void CEncWAVtoAC3Dlg::InitDefaultPreset()
@@ -591,12 +576,12 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 	lc.mask = LVCF_TEXT|LVCF_WIDTH|LVCF_SUBITEM;
 
 	lc.iSubItem = 0;
-	lc.cx = 255;
+	lc.cx = 265;
 	lc.pszText = _T("Option");
 	ListView_InsertColumn(listView, 0, &lc);
 
 	lc.iSubItem = 1;
-	lc.cx = 183;
+	lc.cx = 210;
 	lc.pszText = _T("Value");
 	ListView_InsertColumn(listView, 1, &lc);
 
@@ -669,15 +654,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     // add resize anchors for main dialog
     this->InitDialogAnchors();
 
-    // get controls CRect for later use in UpdateView function
-    CWnd *phSettings = this->GetDlgItem(IDC_STATIC_SETTINGS);
-    CWnd *phPresets = this->GetDlgItem(IDC_STATIC_PRESETS);
-
-    this->m_BtnResetCurrent.GetWindowRect(rcInit_ResetCurrent);
-    phSettings->GetWindowRect(rcInit_Settings);
-    phPresets->GetWindowRect(rcInit_Presets);
-    this->m_LstFiles.GetWindowRect(rcInit_LstFiles);
-
     // load all program configuration and settings
     this->LoadAllConfiguration();
 
@@ -715,12 +691,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         this->szOutputPath = this->cmdLineOpt.szOutputPath;
         this->m_EdtOutPath.SetWindowText(this->szOutputPath);
     }
-
-    // set default view mode (if defferent then Advanced)
-    if(this->nViewMode != VIEW_MODE_ADVANCED)
-        this->UpdateView(this->nViewMode);
-    else
-        this->m_ChkAdvancedView.SetCheck(BST_CHECKED);
 
     // encode input files and close program
     if(this->cmdLineOpt.bEncodeAndExit == true)
@@ -920,28 +890,6 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                     this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
                 }
             }
-
-            // key: ViewMode
-            else if(ce.szKey.Compare(_T("ViewMode")) == 0)
-            {
-                int nMode = VIEW_MODE_STANDARD;
-                if(_stscanf(ce.szData, _T("%d"), 
-                    &nMode) == 1)
-                {
-                    // reset mode if the value is invalid
-                    if((nMode > VIEW_MODE_ADVANCED) || (nMode < VIEW_MODE_STANDARD))
-                        nMode = VIEW_MODE_STANDARD;
-
-                    // update view mode if different then currently used
-                    if(nMode != this->nViewMode)
-                        this->UpdateView(nMode); 
-
-                    if(nMode == VIEW_MODE_ADVANCED)
-                        this->m_ChkAdvancedView.SetCheck(BST_CHECKED);
-                    else
-                        this->m_ChkAdvancedView.SetCheck(BST_UNCHECKED);
-                }
-            }
         }
 
         // set output file/path
@@ -1025,12 +973,6 @@ bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
     // key: SaveConfig
     ce.szKey = _T("SaveConfig");
     ce.szData = (this->bSaveConfig == true) ? _T("true") : _T("false");
-    this->m_ConfigList.AddTail(ce);
-
-    // key: ViewMode
-    ce.szKey = _T("ViewMode");
-    ce.szData.Format(_T("%d"), 
-        this->nViewMode);
     this->m_ConfigList.AddTail(ce);
 
     // save program configuration
@@ -1761,85 +1703,6 @@ void CEncWAVtoAC3Dlg::ShowOptionPopup(bool bUseRect)
 
 void CEncWAVtoAC3Dlg::UpdateView(int nMode)
 {
-    // 0 - Standard, 1 - Advanced
-    int nCmdShow = nMode == VIEW_MODE_STANDARD ? SW_HIDE : SW_SHOW;
-
-    // update view mode global setting
-    this->nViewMode = nMode;
-
-    // show or hide window controls
-    this->m_LstSettings.ShowWindow(nCmdShow);
-    this->m_StcSelected.ShowWindow(nCmdShow);
-    this->m_CmbValue.ShowWindow(nCmdShow);
-    this->m_CmbRawSampleFormat.ShowWindow(nCmdShow);
-    this->m_CmbEngines.ShowWindow(nCmdShow);
-    this->m_BtnEngines.ShowWindow(nCmdShow);
-    this->m_EdtThreads.ShowWindow(nCmdShow);
-    this->m_EdtRawSamplerate.ShowWindow(nCmdShow);
-    this->m_EdtRawChannels.ShowWindow(nCmdShow);
-    this->m_SpnThreads.ShowWindow(nCmdShow);
-    this->m_SpnRawSampleRate.ShowWindow(nCmdShow);
-    this->m_SpnRawChannels.ShowWindow(nCmdShow);
-    this->m_ChkSimdMMX.ShowWindow(nCmdShow);
-    this->m_ChkSimdSSE.ShowWindow(nCmdShow);
-    this->m_ChkSimdSSE2.ShowWindow(nCmdShow);
-    this->m_ChkSimdSSE3.ShowWindow(nCmdShow);
-    this->m_BtnResetCurrent.ShowWindow(nCmdShow);
-    this->m_BtnRemove.ShowWindow(nCmdShow);
-    this->m_BtnAddNew.ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_RAW)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_CHANNELS)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_SIMD)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_PARALLEL)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_ENGINE)->ShowWindow(nCmdShow);
-    this->GetDlgItem(IDC_STATIC_THREADS)->ShowWindow(nCmdShow);
-
-    // move/resize controls
-    CWnd *phSettings = this->GetDlgItem(IDC_STATIC_SETTINGS);
-    CWnd *phPresets = this->GetDlgItem(IDC_STATIC_PRESETS);
-
-    CRect rcResetCurrent;
-    CRect rcSettings;
-    CRect rcPresets;
-    CRect rcLstFiles;
-
-    this->m_BtnResetCurrent.GetWindowRect(rcResetCurrent);
-    phSettings->GetWindowRect(rcSettings);
-    phPresets->GetWindowRect(rcPresets);
-    this->m_LstFiles.GetWindowRect(rcLstFiles);
-
-    int nMargin = (this->rcInit_ResetCurrent.Height() / 3);
-
-    if(nMode == VIEW_MODE_STANDARD)
-        rcSettings.bottom = rcResetCurrent.top + nMargin;
-    else if(nMode == VIEW_MODE_ADVANCED)
-        rcSettings.bottom = rcSettings.top + this->rcInit_Settings.Height();
-
-    int nLstFilesTop = rcSettings.bottom + (this->rcInit_LstFiles.top - this->rcInit_Settings.bottom);
-
-    this->ScreenToClient(rcSettings);
-    phSettings->MoveWindow(rcSettings, TRUE);
-
-    if(nMode == VIEW_MODE_STANDARD)
-        rcPresets.bottom = rcResetCurrent.top + nMargin;
-    else if(nMode == VIEW_MODE_ADVANCED)
-        rcPresets.bottom = rcPresets.top + this->rcInit_Presets.Height();
-    this->ScreenToClient(rcPresets);
-        phPresets->MoveWindow(rcPresets, TRUE);
-
-    if((nMode == VIEW_MODE_STANDARD) || (nMode == VIEW_MODE_ADVANCED))
-        rcLstFiles.top = nLstFilesTop;
-    this->ScreenToClient(rcLstFiles);
-    this->m_LstFiles.MoveWindow(rcLstFiles, TRUE);
-
-    // check/uncheck proper View menu items
-    this->GetMenu()->CheckMenuRadioItem(ID_VIEW_STANDARD, 
-        ID_VIEW_ADVANCED,
-        nMode == VIEW_MODE_STANDARD ? ID_VIEW_STANDARD : ID_VIEW_ADVANCED,
-        0);
-
     // reset dialog anchors
     this->InitDialogAnchors();
 }
@@ -2385,20 +2248,6 @@ void CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration()
 {
     // save configuration to disk (works also in read-only mode)
     this->SaveAllConfiguration();
-}
-
-void CEncWAVtoAC3Dlg::OnViewStandard()
-{
-    // set view mode to Standard
-    this->UpdateView(VIEW_MODE_STANDARD);
-    m_ChkAdvancedView.SetCheck(BST_UNCHECKED);
-}
-
-void CEncWAVtoAC3Dlg::OnViewAdvanced()
-{
-    // set view mode to Advanced
-    this->UpdateView(VIEW_MODE_ADVANCED);
-    m_ChkAdvancedView.SetCheck(BST_CHECKED);
 }
 
 void CEncWAVtoAC3Dlg::OnHelpCommandLine()
@@ -3685,12 +3534,4 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
         // update engines combobox and preset
         this->OnCbnSelchangeComboEngines();
     }
-}
-
-void CEncWAVtoAC3Dlg::OnBnClickedCheckAdvancedView()
-{
-    if(m_ChkAdvancedView.GetCheck() == BST_UNCHECKED)
-        this->UpdateView(VIEW_MODE_STANDARD);
-    else
-        this->UpdateView(VIEW_MODE_ADVANCED);
 }

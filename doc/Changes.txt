@@ -2,6 +2,7 @@
 
 Version 5.0:
 
+- Redesigned the GUI.
 - Log to a file is now always enabled.
 - Removed command-line options -l and --enable-log.
 - Added more error messages saved in the default log file EncWAVtoAC3.txt.
