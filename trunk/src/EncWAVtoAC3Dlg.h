@@ -52,10 +52,6 @@
 // start id for context-menu used in settings list
 #define ID_OPTIONS_MENU_START 4000
 
-// view modes
-#define VIEW_MODE_STANDARD 0
-#define VIEW_MODE_ADVANCED 1
-
 typedef struct TItemToMove
 {
     int nItem0;
@@ -102,12 +98,6 @@ public:
     bool bDisableAllWarnings;
 public:
     bool bSaveConfig;
-public:
-    int nViewMode;
-    CRect rcInit_ResetCurrent;
-    CRect rcInit_Settings;
-    CRect rcInit_Presets;
-    CRect rcInit_LstFiles;
 public:
     CStatusBarCtrl m_StatusBar;
 public:
@@ -197,9 +187,6 @@ public:
     afx_msg void OnOptionsLoadConfiguration();
     afx_msg void OnOptionsSaveConfiguration();
 public:
-    afx_msg void OnViewStandard();
-    afx_msg void OnViewAdvanced();
-public:
     afx_msg void OnHelpCommandLine();
     afx_msg void OnHelpWebsite();
     afx_msg void OnHelpAbout();
@@ -260,6 +247,4 @@ public:
     afx_msg void OnEnKillfocusEditThreads();
 public:
     afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
-    afx_msg void OnBnClickedCheckAdvancedView();
-    CMyButton m_ChkAdvancedView;
 };
