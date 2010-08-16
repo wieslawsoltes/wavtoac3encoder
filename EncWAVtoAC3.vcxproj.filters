@@ -45,6 +45,9 @@
     <Filter Include="Header Files\Aften\Pcm">
       <UniqueIdentifier>{08dd14d6-02c3-4669-804b-71a63c9a6996}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Avisynth64">
+      <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommandLine.cpp">
@@ -211,9 +214,6 @@
     <ClInclude Include="src\AftenAPI.h">
       <Filter>Header Files\Aften</Filter>
     </ClInclude>
-    <ClInclude Include="src\Avs2Raw.h">
-      <Filter>Header Files\Avisynth</Filter>
-    </ClInclude>
     <ClInclude Include="src\EncWAVtoAC3Dlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
@@ -249,6 +249,15 @@
     </ClInclude>
     <ClInclude Include="src\aften\libaften\aften.h">
       <Filter>Header Files\Aften</Filter>
+    </ClInclude>
+    <ClInclude Include="src\avisynth64\src\internal.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="src\avisynth64\src\core\avisynth.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Avs2Raw.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

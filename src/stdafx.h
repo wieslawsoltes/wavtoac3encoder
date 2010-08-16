@@ -25,7 +25,7 @@
 
 
 // define program version
-#define ENCWAVTOAC3_VERSION _T("5.0")
+#define ENCWAVTOAC3_VERSION _T("5.1")
 
 // default text for auto value
 #define DEFAULT_TEXT_AUTO _T("<Auto>")

@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=c:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=5.0
+set varVersion=5.1
 set varOutputVer=EncWAVtoAC3-%varVersion%
 set varBase=..
 set varPathAftenBin=src\aften\windows\output
@@ -40,7 +40,6 @@ copy "%varBase%\%varPath%\ReadMe.txt" "%varOutput%"
 copy "%varBase%\%varPath%\Command-Line.txt" "%varOutput%"
 
 copy "%varBase%\Release\Win32\EncWAVtoAC3.exe" "%varOutput%"
-copy "%varBase%\UnicoWS\unicows.dll" "%varOutput%"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86\libaften.dll" "%varOutput%\libaftendll_x86\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE\libaften.dll" "%varOutput%\libaftendll_x86_SSE\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE2\libaften.dll" "%varOutput%\libaftendll_x86_SSE2\libaften.dll"

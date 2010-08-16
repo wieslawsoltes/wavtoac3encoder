@@ -21,14 +21,13 @@ setlocal
 
 set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=5.0
+set varVersion=5.1
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
 mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
-copy "%varBase%\*.vcproj" "%varOutput%"
 copy "%varBase%\*.vcxproj.filters" "%varOutput%"
 copy "%varBase%\*.vcxproj.user" "%varOutput%"
 copy "%varBase%\*.vcxproj" "%varOutput%"
@@ -83,35 +82,21 @@ copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.rc" "%varOutput%\%varPath%"
 
-set varPath=src\avisynth
-mkdir "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
-
 set varPath=src\avisynth\src
 mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 
 set varPath=src\avisynth\src\core
 mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
-
-set varPath=src\avisynth64
-mkdir "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 
 set varPath=src\avisynth64\src
 mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 
 set varPath=src\avisynth64\src\core
 mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 
 set varPath=src\aften
 mkdir "%varOutput%\%varPath%"
@@ -137,15 +122,6 @@ mkdir "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.bmp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.ico" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.rc2" "%varOutput%\%varPath%"
-
-set varPath=UnicoWS
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\unicows.dll" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\unicows.lib" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\unicows.pdb" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\license.txt" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\redist.txt" "%varOutput%\%varPath%"
 
 set varPath=Debug
 

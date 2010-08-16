@@ -1,5 +1,7 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 5.1:
+
 Version 5.0:
 
 - Redesigned the GUI.
