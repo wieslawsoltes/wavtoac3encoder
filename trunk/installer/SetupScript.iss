@@ -21,7 +21,7 @@
 ;
 ; Setup release version
 ;
-#define ReleaseVersion "5.0"
+#define ReleaseVersion "5.1"
 
 ;
 ; Include setup base srcript
@@ -66,7 +66,6 @@ Source: ..\doc\ReadMe.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\UnicoWS\unicows.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\engines\unicode\Win32\EncWAVtoAC3.engines; DestDir: {app}; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion

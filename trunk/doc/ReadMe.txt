@@ -1,4 +1,4 @@
-﻿WAV to AC3 Encoder 5.0 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 5.1 (Using Aften A/52 Audio Encoder)
 
 ==ABOUT==
 
@@ -25,7 +25,7 @@ maintained and actively developed.
   * Load and save all program settings.
   * Load and save encoder presets.
   * Avisynth scripting support (32 bit & 64 bit).
-  * Full UNICODE and ANSI support.
+  * Full UNICODE support.
   * Very simple to use.
   * Options for advanced users.
   * Sources available under GNU GPLv2 license.
@@ -77,7 +77,7 @@ svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-re
 
   * Extract them in aften sub-directory in project source tree.
 
-  * Use Miscroft Visual Studio 2008 to build Release binaries.
+  * Use Miscroft Visual Studio 2010 to build Release binaries.
 
   * Distribute Release binaries with libaften.dll.
 
@@ -86,7 +86,7 @@ svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-re
 ==LICENSE==
 
 WAV to AC3 Encoder
-Copyright (C) 2007, 2008, 2009 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007,2008,2009,2010 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -103,7 +103,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ==COPYRIGHTS==
 
-WAV to AC3 Encoder, Copyright (C) 2007, 2008, 2009 Wiesław Šoltés
+WAV to AC3 Encoder, Copyright (C) 2007,2008,2009,2010 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
