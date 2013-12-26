@@ -2,6 +2,8 @@
 
 Version 5.1:
 
+- Fixed bitmap resource issue in VS2013.
+
 Version 5.0:
 
 - Redesigned the GUI.
