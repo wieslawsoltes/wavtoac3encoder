@@ -221,9 +221,9 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_BITRATE, AnchorTopRight);
     AddAnchor(IDC_SLIDER_BITRATE, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_CHECK_VBR, AnchorTopRight);
-    AddAnchor(IDC_STATIC_ENGINE, AnchorTopLeft);
-    AddAnchor(IDC_COMBO_ENGINES, AnchorTopLeft);
-    AddAnchor(IDC_BUTTON_ENGINES, AnchorTopLeft);
+	AddAnchor(IDC_STATIC_ENGINE, AnchorBottomRight);
+	AddAnchor(IDC_COMBO_ENGINES, AnchorBottomRight);
+	AddAnchor(IDC_BUTTON_ENGINES, AnchorBottomRight);
     AddAnchor(IDC_STATIC_THREADS, AnchorTopLeft);
     AddAnchor(IDC_EDIT_THREADS, AnchorTopLeft);
     AddAnchor(IDC_SPIN_THREADS, AnchorTopLeft);
@@ -543,7 +543,7 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     // deletion of image list under win9x
     // set this style under resource editor
     this->m_LstFiles.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 614, 0);
+    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 664, 0);
     this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 100, 0);
 
     // initialize the image list for file listctrl
