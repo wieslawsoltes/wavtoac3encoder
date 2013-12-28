@@ -647,6 +647,10 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 	// init dialog controls
 	this->InitDialogControls();
 
+	// initialize language strings
+	if (HaveLangStrings())
+		this->InitLang();
+
     // init encoder options
     InitEncoderOptions();
 
@@ -717,10 +721,6 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         this->bVisible = true;
         this->ShowWindow(SW_SHOW);
     }
-
-	// initialize language strings
-	if (HaveLangStrings())
-		this->InitLang();
 
     return TRUE;
 }
@@ -3613,13 +3613,8 @@ void CEncWAVtoAC3Dlg::InitLang()
 	// Main Dialog: Settings List
 	InitLangSettingsList();
 
-	// TODO: Main Dialog: Settings List - Encoder Options
-
 	// Main Dialog: Main Menu
 	InitLangMainMenu();
-
-	// Main Dialog: Tooltips
-	//InitTooltips()
 }
 
 void CEncWAVtoAC3Dlg::InitLangButtons()
@@ -3714,9 +3709,12 @@ void CEncWAVtoAC3Dlg::InitLangMainMenu()
 	m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, GetLangString(0x00102005));
 
 	m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, GetLangString(0x00103001));
-	m_hMenu->ModifyMenuW(ID_HELP_COMMAND_LINE, 0, ID_HELP_COMMAND_LINE, GetLangString(0x00103002));
-	m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00103003));
-	m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00103004));
+	m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, GetLangString(0x00103002));
+
+	m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, GetLangString(0x00104001));
+	m_hMenu->ModifyMenuW(ID_HELP_COMMAND_LINE, 0, ID_HELP_COMMAND_LINE, GetLangString(0x00104002));
+	m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00104003));
+	m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00104004));
 
 	this->DrawMenuBar();
 }
