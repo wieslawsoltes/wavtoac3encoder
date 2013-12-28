@@ -15,20 +15,21 @@ maintained and actively developed.
 ===Main Program Features===
 
   * High-quality output audio files.
-  * Vary fast encoder.
+  * Vary fast encoding.
   * Multi-threaded encoding.
   * Milti-channel file input.
   * Multiple-mono file input.
-  * Advanved mux wizard.
+  * Advanved MUX wizard.
   * Optimized for modern CPUs.
   * Small program size.
-  * Load and save all program settings.
+  * Load and save program settings.
   * Load and save encoder presets.
   * Avisynth scripting support (32 bit & 64 bit).
   * Full UNICODE support.
   * Very simple to use.
   * Options for advanced users.
   * Sources available under GNU GPLv2 license.
+  * Support for multi-language user interface.
 
 ==CONFIGURATION==
 
@@ -43,6 +44,10 @@ Presets for encoder are stored in EncWAVtoAC3.presets file.
 
 Paths to libaften.dll engines are stored in EncWAVtoAC3.engines file.
 
+User interface trasnlation files are located in Lang sub-directory.
+
+Translation files must be saved with Unicode charset and BOM header.
+
 ==AviSynth==
 
 To run 64-bit version you need to install avisynth64:
@@ -51,9 +56,9 @@ To run 64-bit version you need to install avisynth64:
 Additional help and informations is available here: 
   * http://forum.doom9.org/showthread.php?t=152800
 
-Running avisynth requires to setup properly Input Options (at least overrides wave header settings).
+Running avisynth requires properly setup  Input Options (e.g. override wave header settings).
 
-You can double-click on avisynth script in the file list to get e.g. number of audio channels.
+You can double-click in the file list on avisynth script to get e.g. number of audio channels.
 
 ==Troubleshooting==
 
@@ -67,13 +72,13 @@ For more informations and help please visit:
 
 ==SOURCES==
 
-Source code is managed by the Subversion repository.
+Source code is available in Subversion repository.
 
 svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-read-only
 
 ==BUILD==
 
-  * Download latest Aften sources from http://code.google.com/p/wavtoac3encoder/
+  * Download latest Aften sources and binaries from http://code.google.com/p/wavtoac3encoder/
 
   * Extract them in aften sub-directory in project source tree.
 
@@ -103,7 +108,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ==COPYRIGHTS==
 
-WAV to AC3 Encoder, Copyright (C) 2007,2008,2009,2010 Wiesław Šoltés
+WAV to AC3 Encoder, Copyright (C) 2007-2013 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
