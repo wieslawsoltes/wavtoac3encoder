@@ -322,6 +322,10 @@ BEGIN
         MENUITEM "Loa&d Configuration",         ID_OPTIONS_LOADCONFIGURATION
         MENUITEM "Sav&e Configuration",         ID_OPTIONS_SAVECONFIGURATION
     END
+    POPUP "&Language"
+    BEGIN
+        MENUITEM "&Default (English)",          ID_LANGUAGE_DEFAULT, CHECKED
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "Command-&Line Help",          ID_HELP_COMMAND_LINE
