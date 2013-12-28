@@ -48,10 +48,8 @@ static volatile DRAGANDDROP m_DDParam;
 DWORD WINAPI DragAndDropThread(LPVOID lpParam)
 {
     PDRAGANDDROP m_ThreadParam = (PDRAGANDDROP) lpParam;
-
     m_ThreadParam->pDlg->HandleDropFiles(m_ThreadParam->hDropInfo);
     bHandleDrop = true;
-
     return ::CloseHandle(hDDThread);
 }
 
@@ -60,7 +58,6 @@ int CALLBACK CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamData)
     CEncWAVtoAC3Dlg *pDlg = (CEncWAVtoAC3Dlg *) lParamData;
 
     LVFINDINFO pInfo1, pInfo2;
-
     pInfo1.flags = LVFI_PARAM;
     pInfo2.flags = LVFI_PARAM;
     pInfo1.lParam = lParam1;
@@ -68,7 +65,6 @@ int CALLBACK CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamData)
 
     int nIndex1 = pDlg->m_LstFiles.FindItem(&pInfo1);
     int nIndex2 = pDlg->m_LstFiles.FindItem(&pInfo2);
-
     CString szItem1 = pDlg->m_LstFiles.GetItemText(nIndex1, pDlg->nSortColumn);
     CString szItem2 = pDlg->m_LstFiles.GetItemText(nIndex2, pDlg->nSortColumn);
 
@@ -221,7 +217,6 @@ END_MESSAGE_MAP()
 void CEncWAVtoAC3Dlg::InitDialogAnchors()
 {
     CleanUp();
-
     AddAnchor(IDC_STATIC_QUALITY, AnchorTopLeft);
     AddAnchor(IDC_STATIC_BITRATE, AnchorTopRight);
     AddAnchor(IDC_SLIDER_BITRATE, AnchorTopLeft, AnchorTopRight);
@@ -266,13 +261,13 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
 
 void CEncWAVtoAC3Dlg::InitTooltips()
 {
-   // set tooltips
+    // set tooltips
     CString szTmpText;
 
     // Bitrate/Quality Slider
     /* [-b #]         CBR bitrate in kbps */
     /* [-q #]         VBR quality */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206001) :
         _T("CBR bitrate in kbps:\n\n")
         _T("CBR mode is selected by default. This option allows for\n")
         _T("setting the fixed bitrate. The default bitrate depends\n")
@@ -291,13 +286,13 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     this->m_SldBitrate.SetTooltipText(szTmpText);
 
     // CBR/VBR CheckBox
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206002) :
         _T("Enable VBR mode. If unchecked the CBR mode is used instead.");
 
     this->m_ChkVbr.SetTooltipText(szTmpText);
 
     // Presets ComboBox
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206003) :
         _T("Set currently used encoder preset. You can load/save presets from/to file\n")
         _T("from File menu. All presets are automatically loaded/saved from/to text file.");
 
@@ -305,19 +300,26 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 
     // SIMD instructions CheckBoxes
     /* [-nosimd X]    Comma-separated list of SIMD instruction sets not to use */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206004) :
         _T("Aften will auto-detect available SIMD instruction sets\n")
         _T("for your CPU, so you shouldn't need to disable sets\n")
         _T("explicitly - unless for speed or debugging reasons.");
 
-    this->m_ChkSimdMMX.SetTooltipText(_T("This option enables MMX optimizations (if supported by CPU).\n\n") + szTmpText);
-    this->m_ChkSimdSSE.SetTooltipText(_T("This option enables SSE optimizations (if supported by CPU).\n\n") + szTmpText);
-    this->m_ChkSimdSSE2.SetTooltipText(_T("This option enables SSE2 optimizations (if supported by CPU).\n\n") + szTmpText);
-    this->m_ChkSimdSSE3.SetTooltipText(_T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
+	this->m_ChkSimdMMX.SetTooltipText(HaveLangStrings() ? GetLangString(0x00206005) + szTmpText :
+		_T("This option enables MMX optimizations (if supported by CPU).\n\n") + szTmpText);
+    
+	this->m_ChkSimdSSE.SetTooltipText(HaveLangStrings() ? GetLangString(0x00206006) + szTmpText :
+		_T("This option enables SSE optimizations (if supported by CPU).\n\n") + szTmpText);
+    
+	this->m_ChkSimdSSE2.SetTooltipText(HaveLangStrings() ? GetLangString(0x00206007) + szTmpText :
+		_T("This option enables SSE2 optimizations (if supported by CPU).\n\n") + szTmpText);
+    
+	this->m_ChkSimdSSE3.SetTooltipText(HaveLangStrings() ? GetLangString(0x00206008) + szTmpText :
+		_T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
 
     // Sample format ComboBox
     /* [-raw_fmt X]   Raw audio input sample format (default: s16_le) */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206009) :
         _T("Raw audio input sample format specifies the sample format\n")
         _T("when using raw audio input. Using this option forces Aften to\n")
         _T("treat the input as raw audio. The choices for the\n")
@@ -329,7 +331,7 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 
     // Sample rate EditBox
     /* [-raw_sr #]    Raw audio input sample rate (default: 48000) */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600A) :
         _T("Raw audio input sample rate option forces Aften to\n")
         _T("treat the input as raw audio (default: 48000).");
 
@@ -337,7 +339,7 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 
     // Channels EditBox
     /* [-raw_ch #]    Raw audio input channels (default: 2) */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600B) :
         _T("Raw audio input channels forces Aften to treat the input as\n")
         _T("raw audio (default: 2).");
 
@@ -345,7 +347,7 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 
     // Threads EditBox
     /* [-threads #]   Number of threads */
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600C) :
         _T("Aften can use multiple threads to speed up encoding.\n")
         _T("By default, Aften uses one thread for each logical CPU\n")
         _T("your system has, but you can override this value. A\n")
@@ -355,14 +357,14 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     this->m_EdtThreads.SetTooltipText(szTmpText);
 
     // Engine ComboBox
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600D) :
         _T("Set currently used Aften library. By selecting optimized Aften\n")
         _T("library you can speedup the encoding process.");
 
     this->m_CmbEngines.SetTooltipText(szTmpText);
 
     // Output path EditBox
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600E) :
         _T("Set default output path for encoded files. By default files\n")
         _T("are encoded to the same directory as input files. When using\n")
         _T("multiple mono input than here is set the output file path.");
@@ -370,7 +372,7 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     this->m_EdtOutPath.SetTooltipText(szTmpText);
 
     // Multiple mono input CheckBox
-    szTmpText = 
+	szTmpText = HaveLangStrings() ? GetLangString(0x0020600F) :
         _T("Enable multiple mono input mode. By adding multiple mono input\n")
         _T("files to the files list (minimum 2, maximum 6) in correct channel\n")
         _T("order the mono input files will be encoded into single ac3 file.");
@@ -378,14 +380,17 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     this->m_ChkMultipleMonoInput.SetTooltipText(szTmpText);
 
     // engines editor
-    szTmpText = _T("Edit currently available Aften engines.");
+	szTmpText = HaveLangStrings() ? GetLangString(0x00206010) :
+		_T("Edit currently available Aften engines.");
+
     this->m_BtnEngines.SetTooltipText(szTmpText);
 }
 
 void CEncWAVtoAC3Dlg::InitDefaultPreset()
 {
-    // configure Default preset
-    defaultPreset.szName = _T("Default");
+	// TODO: Reload text when language has changed.
+    // configure default preset
+	defaultPreset.szName = DEFAULT_PRESET_NAME;
 
     // set Aften engine defaults values for first start (when there is no config file present)
     // there is Aften api function to get this values: AftenContext aftenCtx; aften_set_defaults(&aftenCtx);
@@ -393,11 +398,12 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
     defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
     defaultPreset.nQuality = 240; // aftenCtx.params.quality;
 
-	// add items  to settings listctrl
+	// add items to settings listctrl
 	int nGroupCounter = -1;
 	LVITEM li = {0};
 	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
 
+	// TODO: Reload text when language has changed.
 	// fill advanced encoder options list
 	for(int i = 0; i < nNumEncoderOptions; i++)
 	{
@@ -425,7 +431,7 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 	}
 
-	// TODO: tooltips are not working on all list itrems
+	// TODO: tooltips are not working on all list items
     this->m_LstSettings.bUseTooltipsList = false;
 
     defaultPreset.nRawChannels = 0;
@@ -518,7 +524,7 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     m_StcPreconfigured.SetBold(false);
     m_BtnEncode.SetBold(true);
 
-    // create statusbar control
+    // create status bar control
     VERIFY(m_StatusBar.Create(WS_CHILD | WS_VISIBLE | CCS_BOTTOM | SBARS_SIZEGRIP,
         CRect(0, 0, 0, 0), 
         this, 
@@ -528,7 +534,7 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     // int nStatusBarParts[3] = { 150, 150, -1 };
     // m_StatusBar.SetParts(3, nStatusBarParts);
 
-    // set range for work threads spiner
+    // set range for work threads spinner
     m_SpnThreads.SetRange32(0, INT_MAX);
     m_SpnThreads.SetPos(0);
 
@@ -592,10 +598,15 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 
 	for(int i = 0; i < nNumEncoderOptionsGroups; i++)
 	{
-		lg.pszHeader = pszGroups[i];
+		// TODO: Reload text when language has changed.
+		lg.pszHeader = (LPTSTR)(LPCTSTR)(HaveLangStrings() ? GetLangString(0x00208000 + i + 1) : pszGroups[i]);
+
 		lg.iGroupId = 101 + i;
 		ListView_InsertGroup(listView, -1, &lg);
 	}
+
+	// TODO: Reload text when language has changed.
+	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR) (DEFAULT_TEXT_IGNORED);
 
     // setup default values for raw audio input
     for(int i = 0; i < nNumRawSampleFormats; i++)
@@ -707,6 +718,10 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
         this->ShowWindow(SW_SHOW);
     }
 
+	// initialize language strings
+	if (HaveLangStrings())
+		this->InitLang();
+
     return TRUE;
 }
 
@@ -739,9 +754,7 @@ void CEncWAVtoAC3Dlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
     // by default hide main window
     if(this->bVisible == false)
-    {
         lpwndpos->flags &= ~SWP_SHOWWINDOW;
-    }
 
     CResizeDialog::OnWindowPosChanging(lpwndpos);
 }
@@ -1308,13 +1321,15 @@ void CEncWAVtoAC3Dlg::SaveAllConfiguration()
 void CEncWAVtoAC3Dlg::UpdateBitrateText()
 {
     int nCurPos = this->m_SldBitrate.GetPos();
-
     CString szBuff;
 
     if(this->m_ChkVbr.GetCheck() == BST_CHECKED)
     {
         // indicate that we have selected Quality based mode (VBR)
-        m_StcQualityBitrate.SetWindowText(_T("Quality:"));
+		if (HaveLangStrings())
+			m_StcQualityBitrate.SetWindowText(GetLangString(0x00202002));
+		else
+			m_StcQualityBitrate.SetWindowText(_T("Quality:"));
 
         szBuff.Format(_T("%d"), nCurPos);
 
@@ -1327,7 +1342,10 @@ void CEncWAVtoAC3Dlg::UpdateBitrateText()
         if((nCurPos >= 0) && (nCurPos < nNumValidCbrBitrates))
         {
             // indicate that we have selected Bitrate based mode (CBR)
-            m_StcQualityBitrate.SetWindowText(_T("Bitrate:"));
+			if (HaveLangStrings())
+				m_StcQualityBitrate.SetWindowText(GetLangString(0x00202003));
+			else
+				m_StcQualityBitrate.SetWindowText(_T("Bitrate:"));
 
             if(nCurPos == 0)
                 szBuff.Format(DEFAULT_TEXT_AUTO);
@@ -1393,7 +1411,7 @@ void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
         AvsAudioInfo infoAVS;
         memset(&infoAVS, 0, sizeof(AvsAudioInfo));
         if(GetAvisynthFileInfo(szPath, &infoAVS) == false)
-            return; // failed to load avisynth script
+            return; // failed to load Avisynth script
 
         nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
     }
@@ -1439,7 +1457,7 @@ void CEncWAVtoAC3Dlg::ApplyPresetToDlg(EncoderPreset &Preset)
     this->m_ChkSimdSSE2.SetCheck(Preset.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
     this->m_ChkSimdSSE3.SetCheck(Preset.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
 
-    // update numer of threads
+    // update number of threads
     if(Preset.nThreads == 0)
     {
         this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
@@ -1521,7 +1539,7 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
 
             if(::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // insert droped files in directory and subdirs
+                // insert dropped files in directory and subdirs
                 this->SearchFolderForFiles(szFile, true);
             }
             else
@@ -1534,12 +1552,10 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
                 // add only files with proper file extensions
                 if(IsSupportedInputExt(szExt) == true)
                 {
-                    // insert droped file
+                    // insert dropped file
                     this->AddItemToFileList(szFile);
                 }
             }
-
-            
         }
     }
 
@@ -1554,9 +1570,7 @@ void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
     // add new items to combobox
     POSITION posNames = encOpt[nItem].listOptNames.GetHeadPosition();
     while(posNames != NULL)
-    {
         this->m_CmbValue.AddString(encOpt[nItem].listOptNames.GetNext(posNames));
-    }
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING);
 
@@ -1616,9 +1630,7 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
 
                 // recurse subdirs
                 if(bRecurse == true)
-                {
                     this->SearchFolderForFiles(cTempBuf, true);
-                }
             }
 
             if(FindNextFile(hSearch, &w32FileData) == FALSE) 
@@ -1650,18 +1662,13 @@ void CEncWAVtoAC3Dlg::ShowOptionPopup(bool bUseRect)
     // show right click context menu for selected item
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
     if(pos != NULL)
-    {
         nItem = m_LstSettings.GetNextSelectedItem(pos);
-    }
     else
-    {
         return;
-    }
 
     if(bUseRect == true)
     {
         CRect rc;
-
         m_LstSettings.GetItemRect(nItem, rc, LVIR_BOUNDS);
         m_LstSettings.ClientToScreen(rc);
 
@@ -1712,7 +1719,6 @@ void CEncWAVtoAC3Dlg::OnDropFiles(HDROP hDropInfo)
     if(bHandleDrop == true)
     {
         bHandleDrop = false;
-
         m_DDParam.pDlg = this;
         m_DDParam.hDropInfo = hDropInfo;
 
@@ -1721,9 +1727,8 @@ void CEncWAVtoAC3Dlg::OnDropFiles(HDROP hDropInfo)
             bHandleDrop = true;
     }
 
-    // under Win9x this does not work, we use seperate thread to handle drop
+    // under Win9x this does not work, we use separate thread to handle drop
     // this->HandleDropFiles(hDropInfo);
-
     CResizeDialog::OnDropFiles(hDropInfo);
 }
 
@@ -1784,9 +1789,7 @@ void CEncWAVtoAC3Dlg::OnClose()
 {
     // save configuration to disk (does not work in read-only mode)
     if(this->bSaveConfig == true)
-    {
         this->SaveAllConfiguration();
-    }
 
     CResizeDialog::OnClose();
 }
@@ -1809,8 +1812,9 @@ void CEncWAVtoAC3Dlg::OnFileAddFiles()
         pFiles = (TCHAR *) malloc(dwMaxSize);
         if(pFiles == NULL)
         {
-            MessageBox(_T("Failed to allocate memory for filenames buffer!"), 
-                _T("Fatal Error"), 
+            MessageBox(
+				HaveLangStrings() ? GetLangString(0x00207009) : _T("Failed to allocate memory for filenames buffer!"),
+				HaveLangStrings() ? GetLangString(0x0020700A) : _T("Fatal Error"),
                 MB_OK | MB_ICONERROR);
             return;
         }
@@ -1833,10 +1837,8 @@ void CEncWAVtoAC3Dlg::OnFileAddFiles()
         // show file dialog
         if(fd.DoModal() == IDOK)
         {
-            POSITION pos;
-
             // get first file position
-            pos = fd.GetStartPosition();
+			POSITION pos = fd.GetStartPosition();
             while(pos != NULL)
             {
                 // do not check file extension when using add file dialog because user can use *.* filter
@@ -1891,7 +1893,7 @@ void CEncWAVtoAC3Dlg::OnFileAddDirectory()
     bi.hwndOwner = this->GetSafeHwnd(); 
     bi.pidlRoot = pidlDesktop; 
     bi.pszDisplayName = lpBuffer; 
-    bi.lpszTitle = _T("Add directory with supported input files:");
+	bi.lpszTitle = HaveLangStrings() ? GetLangString(0x0020700B) : _T("Add directory with supported input files:");
     bi.lpfn = NULL; 
     bi.lParam = 0; 
     bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_NONEWFOLDERBUTTON;
@@ -1972,9 +1974,10 @@ void CEncWAVtoAC3Dlg::OnFileMuxWizard()
         if(this->bDisableAllWarnings == false)
         {
             nRet = this->MessageBox(
+				HaveLangStrings() ? GetLangString(0x0020700C) :
                 _T("Remove all files from list and add files selected in MUX Wizard?\n\n")
                 _T("Note: The channel configuration for current preset will be adjusted."),
-                _T("MUX Wizard"),
+				HaveLangStrings() ? GetLangString(0x0020700D) : _T("MUX Wizard"),
                 MB_YESNO | MB_ICONQUESTION);
         }
 
@@ -2125,15 +2128,15 @@ void CEncWAVtoAC3Dlg::OnFileMuxWizard()
 void CEncWAVtoAC3Dlg::OnFileLoadFilesList()
 {
     CFileDialog fd(TRUE, 
-        _T("files"), 
+		_T("files"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x0020700E) : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
         // load files list from file
@@ -2144,10 +2147,10 @@ void CEncWAVtoAC3Dlg::OnFileLoadFilesList()
 void CEncWAVtoAC3Dlg::OnFileSaveFilesList()
 {
     CFileDialog fd(FALSE, 
-        _T("files"), 
+		_T("files"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x0020700E) : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
@@ -2170,12 +2173,12 @@ void CEncWAVtoAC3Dlg::OnFileLoadPresets()
         _T("presets"), 
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x0020700F) : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
         // load presets list from file
@@ -2207,12 +2210,12 @@ void CEncWAVtoAC3Dlg::OnFileSavePresets()
         _T("presets"), 
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x0020700F) : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
         // save presets list to file
@@ -2257,7 +2260,7 @@ void CEncWAVtoAC3Dlg::OnHelpCommandLine()
 
 void CEncWAVtoAC3Dlg::OnHelpWebsite()
 {
-    // go to program website using default internet browser
+    // go to program website using default Internet browser
     LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
 }
 
@@ -2389,16 +2392,12 @@ void CEncWAVtoAC3Dlg::OnListDelFiles()
     // get all selected items
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
     while(pos != NULL)
-    {
         list.AddTail(this->m_LstFiles.GetNextSelectedItem(pos));
-    }
 
     // remove all selected items
     pos = list.GetTailPosition();
     while(pos != NULL)
-    {
         this->m_LstFiles.DeleteItem(list.GetPrev(pos));
-    }
 }
 
 void CEncWAVtoAC3Dlg::OnListClearList()
@@ -2424,7 +2423,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     if(nItemsCount <= 0)
     {
 		::LogMessage(_T("Error: Add at least one file to the file list!"));
-        MessageBox(_T("Add at least one file to the file list!"), _T("Error"), MB_ICONERROR | MB_OK);
+
+		MessageBox(HaveLangStrings() ? GetLangString(0x00207011) : _T("Add at least one file to the file list!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_ICONERROR | MB_OK);
+
         return;
     }
 
@@ -2432,8 +2435,12 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     if((this->bMultipleMonoInput == true) && (nItemsCount <= 1 || nItemsCount > 6))
     {
 		::LogMessage(_T("Error: Supported are minimum 2 and maximum 6 mono input files!"));
-        MessageBox(_T("Supported are minimum 2 and maximum 6 mono input files!"), _T("Error"), MB_ICONERROR | MB_OK);
-        return;
+
+		MessageBox(HaveLangStrings() ? GetLangString(0x00207012) : _T("Supported are minimum 2 and maximum 6 mono input files!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_ICONERROR | MB_OK);
+       
+		return;
     }
 
     bWorking = true;
@@ -2441,7 +2448,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     if(OpenAftenAPI(&this->api) == false)
     {
 		::LogMessage(_T("Error: Failed to load libaften.dll dynamic library!"));
-        MessageBox(_T("Failed to load libaften.dll dynamic library!"), _T("Error"), MB_ICONERROR | MB_OK);
+
+		MessageBox(HaveLangStrings() ? GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_ICONERROR | MB_OK);
+
         bWorking = false;
         return;
     }
@@ -2458,7 +2469,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
 
     for(int i = 0; i < nItemsCount; i++)
     {
-        // check for avisynth scipts
+        // check for Avisynth scripts
         szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
 
 #ifndef DISABLE_AVISYNTH
@@ -2483,8 +2494,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     if((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
 		::LogMessage(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
-        MessageBox(_T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"), 
-            _T("Error"), MB_ICONERROR | MB_OK);
+
+		MessageBox(HaveLangStrings() ? GetLangString(0x00207014) : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_ICONERROR | MB_OK);
+
         bWorking = false;
         return;
     }
@@ -2504,7 +2518,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     if(nLen < 3)
     {
 		::LogMessage(_T("Error: Invalid output path!"));
-        this->MessageBox(_T("Invalid output path!"), _T("Error"), MB_OK | MB_ICONERROR);
+
+		this->MessageBox(HaveLangStrings() ? GetLangString(0x00207015) : _T("Invalid output path!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_OK | MB_ICONERROR);
+
         bWorking = false;
         return;
     }
@@ -2517,7 +2535,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
             if((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
             {
 				::LogMessage(_T("Error: Invalid output file!"));
-                this->MessageBox(_T("Invalid output file!"), _T("Error"), MB_OK | MB_ICONERROR);
+
+				this->MessageBox(HaveLangStrings() ? GetLangString(0x00207016) : _T("Invalid output file!"),
+					HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+					MB_OK | MB_ICONERROR);
+
                 bWorking = false;
                 return;
             }
@@ -2534,7 +2556,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
             {
                 // show error message
 				::LogMessage(_T("Error: Failed to create output path!"));
-                this->MessageBox(_T("Failed to create output path!"), _T("Error"), MB_OK | MB_ICONERROR);
+
+				this->MessageBox(HaveLangStrings() ? GetLangString(0x00207017) : _T("Failed to create output path!"),
+					HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+					MB_OK | MB_ICONERROR);
+
                 bWorking = false;
                 return;
             }
@@ -2549,7 +2575,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
             {
                 // show error message
 				::LogMessage(_T("Error: Failed to create output path!"));
-                this->MessageBox(_T("Failed to create output path!"), _T("Error"), MB_OK | MB_ICONERROR);
+
+				this->MessageBox(HaveLangStrings() ? GetLangString(0x00207017) : _T("Failed to create output path!"),
+					HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+					MB_OK | MB_ICONERROR);
+
                 bWorking = false;
                 return;
             }
@@ -2592,19 +2622,22 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     {
         if(this->bMultipleMonoInput == true)
         {
-			szText.Format(_T("Encoded %d mono files in %s (%0.3lf sec)"), 
+			szText.Format(HaveLangStrings() ? GetLangString(0x00207018) : _T("Encoded %d mono files in %s (%0.3lf sec)"),
 				dlg.nCount, 
 				FormatTime(countTime.Time(), 3), 
 				countTime.Time());
+
 			::LogMessage(szText);
         }
         else
         {
-			szText.Format(_T("Encoded %d file%s in %s (%0.3lf sec)"), 
+			szText.Format(HaveLangStrings() ? GetLangString(0x00207019) : _T("Encoded %d file%s in %s (%0.3lf sec)"),
 				dlg.nCount, 
-				dlg.nCount == 1 ? _T("") : _T("s"),
+				dlg.nCount == 1 ? _T("") : 
+				(HaveLangStrings() ? GetLangString(0x0020701A) : _T("s")),
 				FormatTime(countTime.Time(), 3), 
 				countTime.Time());
+
 			::LogMessage(szText);
         }
     }
@@ -2673,7 +2706,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
 
     static int nCount = 0;
 
-    newPreset.szName.Format(_T("New preset (%d)"), nCount++);
+    newPreset.szName.Format(_T("%s (%d)"), 
+		HaveLangStrings() ? GetLangString(0x0020701B) : _T("New preset"),
+		nCount++);
     ::encPresets.AddTail(newPreset);
 
     ::nCurrentPreset = ::encPresets.GetCount() - 1;
@@ -2730,8 +2765,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonBrowse()
             szSupportedOutputExt[0], 
             _T(""), 
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER, 
-            _T("AC3 Files (*.ac3)|*.ac3|")
-            _T("All Files (*.*)|*.*||"));
+			HaveLangStrings() ? GetLangString(0x0020701C) : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"));
 
         // show file dialog
         if(fd.DoModal() == IDOK)
@@ -2773,7 +2807,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonBrowse()
         bi.hwndOwner = this->GetSafeHwnd(); 
         bi.pidlRoot = pidlDesktop; 
         bi.pszDisplayName = lpBuffer; 
-        bi.lpszTitle = _T("Select default output path:");
+		bi.lpszTitle = HaveLangStrings() ? GetLangString(0x0020701D) : _T("Select default output path:");
         bi.lpfn = NULL; 
         bi.lParam = 0; 
         bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
@@ -2823,13 +2857,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput()
     this->bMultipleMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
 
     if(this->bMultipleMonoInput == true)
-    {
-        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(_T("Output file:"));
-    }
+		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(HaveLangStrings() ? GetLangString(0x0020200B) : _T("Output file:"));
     else
-    {
-        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(_T("Output path:"));
-    }
+		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(HaveLangStrings() ? GetLangString(0x0020200C) : _T("Output path:"));
 
     CString szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
 
@@ -2912,10 +2942,14 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines()
     this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
     if(OpenAftenAPI(&this->api) == false)
     {
-        // show error message in statusbar
-        CString szLogMessage = _T("Failed to load '") +
+        // show error message in status bar
+		CString szLogMessage = 
+			(HaveLangStrings() ? GetLangString(0x0020701E) : _T("Failed to load")) +
+			_T(" '") +
             m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szKey +
-            _T("' library!");
+			_T("' ") + 
+			(HaveLangStrings() ? GetLangString(0x0020701F) : _T("library")) +
+			_T("!");
         this->m_StatusBar.SetText(szLogMessage, 0, 0);
 
         // this->nCurrentEngine = -1;
@@ -2924,7 +2958,7 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines()
     }
     else
     {
-        // get Aften library version (Ansi string)
+        // get Aften library version (ANSI string)
         const char *szAftenVersionAnsi = this->api.LibAften_aften_get_version();
         int nVersionLen = strlen(szAftenVersionAnsi);
 
@@ -2941,10 +2975,16 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines()
         const char *szAftenVersion = szAftenVersionAnsi;
 #endif // _UNICODE
 
-        // show Aften build and version info in statusbar
-        CString szLogMessage = _T("Loaded '") +
+        // show Aften build and version info in status bar
+		CString szLogMessage = 
+			(HaveLangStrings() ? GetLangString(0x00207020) : _T("Loaded")) +
+			_T(" '") +
             m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szKey +
-            _T("' library, version ") + 
+			_T("' ") +
+			(HaveLangStrings() ? GetLangString(0x0020701F) : _T("library")) +
+			_T(", ") +
+			(HaveLangStrings() ? GetLangString(0x00207021) : _T("version")) +
+			_T(" ") +
             szAftenVersion;
         this->m_StatusBar.SetText(szLogMessage, 0, 0);
     }
@@ -2960,10 +3000,9 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboRawSampleFormat()
 void CEncWAVtoAC3Dlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-
     static int nLastItem = -1;
-
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
+
     if(pos != NULL)
     {
         int nItem = m_LstSettings.GetNextSelectedItem(pos);
@@ -2972,7 +3011,6 @@ void CEncWAVtoAC3Dlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResu
         if(nLastItem != nItem)
         {
             this->UpdateSettingsComboBox(nItem);
-
             nLastItem = nItem;
         }
     }
@@ -3102,7 +3140,6 @@ void CEncWAVtoAC3Dlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
         break;
     default: 
         {
-
         }
         break;
     };
@@ -3117,11 +3154,17 @@ void CEncWAVtoAC3Dlg::OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
     GetCursorPos(&point);
 
     // show right click context menu
-    CMenu menu;
-    menu.LoadMenu(IDR_MENU_LIST);
-    CMenu *subMenu = menu.GetSubMenu(0);
+	CMenu m_hMenu;
+	m_hMenu.LoadMenu(IDR_MENU_LIST);
+	CMenu *m_hSubMenu = m_hMenu.GetSubMenu(0);
     ::SetForegroundWindow(this->GetSafeHwnd());
-    subMenu->TrackPopupMenu(0, point.x, point.y, this, NULL);
+
+	// init context menu language
+	if (HaveLangStrings())
+		InitLangFilesListContextMenu(m_hMenu);
+
+	// display menu
+	m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, NULL);
 
     *pResult = 0;
 }
@@ -3164,7 +3207,7 @@ bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInf
     char szInputFileAVS[MAX_PATH] = "";
 
     // initialize Avisynth - only one input file supported
-    // NOTE: only Ansi file names supported
+    // NOTE: only ANSI file names supported
 #ifdef _UNICODE
     ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath)); 
     if(decoderAVS.OpenAvisynth(szInputFileAVS) == false)
@@ -3173,7 +3216,11 @@ bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInf
 #endif
     {
 		::LogMessage(_T("Error: Failed to initialize Avisynth!"));
-        this->MessageBox(_T("Failed to initialize Avisynth"), _T("Error"), MB_ICONERROR | MB_OK);
+
+		this->MessageBox(HaveLangStrings() ? GetLangString(0x00207022) : _T("Failed to initialize Avisynth"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_ICONERROR | MB_OK);
+
         return false;
     }
     else
@@ -3208,11 +3255,13 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
             if(GetAvisynthFileInfo(szFileName, &infoAVS))
             {
                 CString szInfo;
-
                 TCHAR *pszInPath = szFileName.GetBuffer();
 
-                // get inforamtion about input file
-                szInfo += _T("Sample format\t: ");
+                // get information about input file
+				szInfo += 
+					(HaveLangStrings() ? GetLangString(0x00207023) : _T("Sample format")) +
+					_T("\t: ");
+
                 switch(infoAVS.nSampleType)
                 {
                 case SAMPLE_INT8:
@@ -3231,25 +3280,40 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
                     szInfo += _T("SAMPLE_FLOAT\n");
                     break;
                 default:
-                    szInfo += _T("unknown\n");
+					szInfo += 
+						(HaveLangStrings() ? GetLangString(0x00207024) : _T("unknown")) +
+						_T("\n");
                     break;
                 }
 
                 CString szBuff;
-                szBuff.Format(_T("Sample rate\t: %d\n"), infoAVS.nSamplesPerSecond);
+
+                szBuff.Format(_T("%s\t: %d\n"), 
+					HaveLangStrings() ? GetLangString(0x00207025) : _T("Sample rate"),
+					infoAVS.nSamplesPerSecond);
                 szInfo += szBuff;
-                szBuff.Format(_T("Channels\t\t: %d\n"), infoAVS.nAudioChannels);
+
+                szBuff.Format(_T("%s\t\t: %d\n"), 
+					HaveLangStrings() ? GetLangString(0x00207026) : _T("Channels"),
+					infoAVS.nAudioChannels);
                 szInfo += szBuff;
-                szBuff.Format(_T("Audio samples\t: %I64d\n"), infoAVS.nAudioSamples);
+
+                szBuff.Format(_T("%s\t: %I64d\n"), 
+					HaveLangStrings() ? GetLangString(0x00207027) : _T("Audio samples"),
+					infoAVS.nAudioSamples);
                 szInfo += szBuff;
-                szBuff.Format(_T("Decoded size\t: %I64d"), 
+
+                szBuff.Format(_T("%s\t: %I64d"), 
+					HaveLangStrings() ? GetLangString(0x00207028) : _T("Decoded size"),
                     infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
                 szInfo += szBuff;
 
                 szFileName.ReleaseBuffer();
 
-                // show infor to user
-                this->MessageBox(szInfo, _T("AVS File Properties"), MB_ICONINFORMATION | MB_OK);
+                // show info to user
+                this->MessageBox(szInfo, 
+					HaveLangStrings() ? GetLangString(0x00207029) : _T("AVS File Properties"),
+					MB_ICONINFORMATION | MB_OK);
             }
         } 
 #endif
@@ -3480,7 +3544,6 @@ LRESULT CEncWAVtoAC3Dlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
             this->m_CmbPresets.InsertString(nPreset, *szName);
             this->m_CmbPresets.SetCurSel(nPreset);
             this->m_CmbPresets.SetEditSel(HIWORD(dwEditSel), LOWORD(dwEditSel));
-            // TRACE(_T("Preset=%s\n"), *szName);
         }
     }
 
@@ -3507,7 +3570,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
         dlg.m_EngineList.AddTail(ce);
     }
 
-    // show pengines editor dialog box
+    // show engines editor dialog box
     if(dlg.DoModal() == IDOK)
     {
         // init engines configuration
@@ -3534,4 +3597,126 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
         // update engines combobox and preset
         this->OnCbnSelchangeComboEngines();
     }
+}
+
+void CEncWAVtoAC3Dlg::InitLang()
+{
+	// Main Dialog: Buttons
+	InitLangButtons();
+
+	// Main Dialog: Static Text
+	InitLangStaticText();
+
+	// Main Dialog: Files List
+	InitLangFilesList();
+
+	// Main Dialog: Settings List
+	InitLangSettingsList();
+
+	// TODO: Main Dialog: Settings List - Encoder Options
+
+	// Main Dialog: Main Menu
+	InitLangMainMenu();
+
+	// Main Dialog: Tooltips
+	//InitTooltips()
+}
+
+void CEncWAVtoAC3Dlg::InitLangButtons()
+{
+	m_BtnEncode.SetWindowTextW(GetLangString(0x00201001));
+	m_BtnResetCurrent.SetWindowTextW(GetLangString(0x00201002));
+	m_BtnRemove.SetWindowTextW(GetLangString(0x00201003));
+	m_BtnAddNew.SetWindowTextW(GetLangString(0x00201004));
+	m_BtnAddFiles.SetWindowTextW(GetLangString(0x00201005));
+	m_BtnBrowse.SetWindowTextW(GetLangString(0x00201006));
+	m_BtnMuxWizard.SetWindowTextW(GetLangString(0x00201007));
+	m_BtnEngines.SetWindowTextW(GetLangString(0x00201008));
+}
+
+void CEncWAVtoAC3Dlg::InitLangStaticText()
+{
+	this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(GetLangString(0x00202001));
+
+	if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
+		this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(GetLangString(0x00202002));
+	else
+		this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(GetLangString(0x00202003));
+
+	this->GetDlgItem(IDC_STATIC_OPTION_VALUE)->SetWindowTextW(GetLangString(0x00202004));
+	this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->SetWindowTextW(GetLangString(0x00202005));
+	this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->SetWindowTextW(GetLangString(0x00202006));
+	this->GetDlgItem(IDC_STATIC_CHANNELS)->SetWindowTextW(GetLangString(0x00202007));
+	this->GetDlgItem(IDC_STATIC_ENGINE)->SetWindowTextW(GetLangString(0x00202008));
+	this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(GetLangString(0x00202009));
+	this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(GetLangString(0x0020200A));
+
+    if (this->bMultipleMonoInput == true)
+		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(GetLangString(0x0020200B));
+	else
+		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(GetLangString(0x0020200C));
+}
+
+void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, CString& text)
+{
+	LVCOLUMN lvCol;
+	::ZeroMemory((void *)&lvCol, sizeof(LVCOLUMN));
+	lvCol.mask = LVCF_TEXT;
+	listCtrl.GetColumn(nCol, &lvCol);
+	lvCol.pszText = (LPTSTR)(LPCTSTR)text;
+	listCtrl.SetColumn(nCol, &lvCol);
+}
+
+void CEncWAVtoAC3Dlg::InitLangFilesList()
+{
+	SetListCtrlColumnText(this->m_LstFiles, 0, GetLangString(0x00203001));
+	SetListCtrlColumnText(this->m_LstFiles, 1, GetLangString(0x00203002));
+}
+
+void CEncWAVtoAC3Dlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
+{
+	m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, GetLangString(0x00204001));
+	m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, GetLangString(0x00204002));
+	m_hMenu.ModifyMenuW(ID_LIST_ADDDIRECTORY, 0, ID_LIST_ADDDIRECTORY, GetLangString(0x00204003));
+	m_hMenu.ModifyMenuW(ID_LIST_MUXWIZARD, 0, ID_LIST_MUXWIZARD, GetLangString(0x00204004));
+	m_hMenu.ModifyMenuW(ID_LIST_LOADLIST, 0, ID_LIST_LOADLIST, GetLangString(0x00204005));
+	m_hMenu.ModifyMenuW(ID_LIST_SAVELIST, 0, ID_LIST_SAVELIST, GetLangString(0x00204006));
+	m_hMenu.ModifyMenuW(ID_LIST_MOVEUP, 0, ID_LIST_MOVEUP, GetLangString(0x00204007));
+	m_hMenu.ModifyMenuW(ID_LIST_MOVEDOWN, 0, ID_LIST_MOVEDOWN, GetLangString(0x00204008));
+	m_hMenu.ModifyMenuW(ID_LIST_DELFILES, 0, ID_LIST_DELFILES, GetLangString(0x00204009));
+	m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, GetLangString(0x0020400A));
+}
+
+void CEncWAVtoAC3Dlg::InitLangSettingsList()
+{
+	SetListCtrlColumnText(this->m_LstSettings, 0, GetLangString(0x00205001));
+	SetListCtrlColumnText(this->m_LstSettings, 1, GetLangString(0x00205002));
+}
+
+void CEncWAVtoAC3Dlg::InitLangMainMenu()
+{
+	CMenu *m_hMenu = this->GetMenu();
+
+	m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, GetLangString(0x00101001));
+	m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, GetLangString(0x00101002));
+	m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, GetLangString(0x00101003));
+	m_hMenu->ModifyMenuW(ID_FILE_MUXWIZARD, 0, ID_FILE_MUXWIZARD, GetLangString(0x00101004));
+	m_hMenu->ModifyMenuW(ID_FILE_LOADFILESLIST, 0, ID_FILE_LOADFILESLIST, GetLangString(0x00101005));
+	m_hMenu->ModifyMenuW(ID_FILE_SAVEFILESLIST, 0, ID_FILE_SAVEFILESLIST, GetLangString(0x00101006));
+	m_hMenu->ModifyMenuW(ID_FILE_LOADPRESETS, 0, ID_FILE_LOADPRESETS, GetLangString(0x00101007));
+	m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, GetLangString(0x00101008));
+	m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, GetLangString(0x00101009));
+
+	m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, GetLangString(0x00102001));
+	m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, GetLangString(0x00102002));
+	m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, GetLangString(0x00102003));
+	m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, GetLangString(0x00102004));
+	m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, GetLangString(0x00102005));
+
+	m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, GetLangString(0x00103001));
+	m_hMenu->ModifyMenuW(ID_HELP_COMMAND_LINE, 0, ID_HELP_COMMAND_LINE, GetLangString(0x00103002));
+	m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00103003));
+	m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00103004));
+
+	this->DrawMenuBar();
 }

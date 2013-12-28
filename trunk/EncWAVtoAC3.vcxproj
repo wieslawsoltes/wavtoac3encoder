@@ -235,6 +235,7 @@
     <ClCompile Include="src\EncWAVtoAC3MuxDlg.cpp" />
     <ClCompile Include="src\EncWAVtoAC3WorkDlg.cpp" />
     <ClCompile Include="src\EncWorkThread.cpp" />
+    <ClCompile Include="src\Language.cpp" />
     <ClCompile Include="src\MyButton.cpp" />
     <ClCompile Include="src\MyComboBox.cpp" />
     <ClCompile Include="src\MyComboBoxEdit.cpp" />
@@ -372,6 +373,7 @@
     <ClInclude Include="src\EncWAVtoAC3MuxDlg.h" />
     <ClInclude Include="src\EncWAVtoAC3WorkDlg.h" />
     <ClInclude Include="src\EncWorkThread.h" />
+    <ClInclude Include="src\Language.h" />
     <ClInclude Include="src\MyButton.h" />
     <ClInclude Include="src\MyComboBox.h" />
     <ClInclude Include="src\MyComboBoxEdit.h" />
@@ -402,6 +404,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\EncWAVtoAC3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lang\en.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

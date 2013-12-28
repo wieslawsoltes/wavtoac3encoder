@@ -48,6 +48,9 @@
     <Filter Include="Header Files\Avisynth64">
       <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Language Files">
+      <UniqueIdentifier>{586b82f5-cd4e-48e8-ad10-ea13b4d95b81}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\CommandLine.cpp">
@@ -151,6 +154,9 @@
     </ClCompile>
     <ClCompile Include="src\aften\pcm\raw.c">
       <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Language.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +265,9 @@
     <ClInclude Include="src\Avs2Raw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Language.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\EncWAVtoAC3.bmp">
@@ -275,5 +284,10 @@
     <ResourceCompile Include="src\EncWAVtoAC3.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lang\en.txt">
+      <Filter>Language Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -20,24 +20,27 @@
 
 #pragma once
 
-
+//
 // DEFAULTS
-
+//
 
 // define program version
 #define ENCWAVTOAC3_VERSION _T("5.1")
 
+// default preset name
+#define DEFAULT_PRESET_NAME (HaveLangStrings() ? GetLangString(0x00207001) : _T("Default"))
+
 // default text for auto value
-#define DEFAULT_TEXT_AUTO _T("<Auto>")
+#define DEFAULT_TEXT_AUTO (HaveLangStrings() ? GetLangString(0x00207002) : _T("<Auto>"))
 
 // default text for ignored value
-#define DEFAULT_TEXT_IGNORED _T("<Ignored>")
+#define DEFAULT_TEXT_IGNORED (HaveLangStrings() ? GetLangString(0x00207003) : _T("<Ignored>"))
 
 // default text for same as source file output path value
-#define DEFAULT_TEXT_OUTPUT_PATH _T("<Same as input file path>")
+#define DEFAULT_TEXT_OUTPUT_PATH (HaveLangStrings() ? GetLangString(0x00207004) : _T("<Same as input file path>"))
 
 // default text for same as source file output path value (multi mono input)
-#define DEFAULT_TEXT_OUTPUT_FILE _T("<Same as first input file path + output.ac3>")
+#define DEFAULT_TEXT_OUTPUT_FILE (HaveLangStrings() ? GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
 // define default file name for program configuration
 #define DEFAULT_CONFIG_FILE_NAME _T("EncWAVtoAC3.config")
@@ -57,12 +60,12 @@
 // define default file name for engines
 #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.engines")
 
-// define program home url
+// define program home URL
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
 
-
+//
 // MFC
-
+//
 
 #ifndef _SECURE_ATL
 #define _SECURE_ATL 1
@@ -104,9 +107,9 @@
 #endif
 #endif
 
-
+//
 // AFTEN
-
+//
 
 #ifndef _UNICODE
 #include <direct.h>
@@ -131,9 +134,9 @@ extern "C" {
 }
 #endif
 
-
+//
 // LOG
-
+//
 
 typedef struct TLogCtx
 {

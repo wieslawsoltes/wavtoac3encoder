@@ -24,6 +24,7 @@
 #include "afxwin.h"
 
 #include "ProgramConfig.h"
+#include "Language.h"
 #include "ResizeDialog.h"
 
 #include "MyButton.h"
@@ -43,7 +44,7 @@
 #include "EncoderOptions.h"
 #include "afxpropertygridctrl.h"
 
-// define main window statusbar id
+// define main window status bar id
 #define IDC_STATUSBAR 1500
 
 // define settings combo box id
@@ -72,6 +73,14 @@ protected:
 	void InitTooltips();
 	void InitDefaultPreset();
 	void InitDialogControls();
+protected:
+	void InitLang();
+	void InitLangButtons();
+	void InitLangStaticText();
+	void InitLangFilesList();
+	void InitLangFilesListContextMenu(CMenu &m_hMenu);
+	void InitLangSettingsList();
+	void InitLangMainMenu();
 protected:
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
@@ -227,7 +236,7 @@ public:
     afx_msg void OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult);
 public:
     afx_msg void OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
-    afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult);
 public:
