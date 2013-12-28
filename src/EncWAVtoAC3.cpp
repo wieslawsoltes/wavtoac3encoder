@@ -346,6 +346,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
         return FALSE;
     }
 
+	LoadLangStrings();
+
     // show main dialog
     m_pMainWnd = &dlg;
 
@@ -357,4 +359,28 @@ BOOL CEncWAVtoAC3App::InitInstance()
 
     // terminate the program
     return FALSE;
+}
+
+void LoadLangStrings()
+{
+#ifdef _DEBUG
+	CString szLangFile = GetExeFilePath() + _T("..\\..\\lang\\en.txt");
+#else
+	CString szLangFile = GetExeFilePath() + _T("lang\\en.txt");
+#endif
+
+	if (::LoadLang(szLangFile, theApp.m_Lang) == true)
+		theApp.m_bHaveLang = TRUE;
+	else
+		theApp.m_bHaveLang = FALSE;
+}
+
+inline BOOL HaveLangStrings()
+{
+	return theApp.m_bHaveLang;
+}
+
+inline CString& GetLangString(int id)
+{
+	return theApp.m_Lang[id];
 }

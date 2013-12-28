@@ -26,6 +26,8 @@
 
 #include "resource.h"
 
+#include "Language.h"
+
 void ShowCommandLineHelp(HWND hWnd);
 
 typedef class TCommandLineOpt
@@ -99,6 +101,13 @@ public:
 public:
     virtual BOOL InitInstance();
     DECLARE_MESSAGE_MAP()
+public:
+	LangMap_t m_Lang;
+	BOOL m_bHaveLang = FALSE;
 };
 
 extern CEncWAVtoAC3App theApp;
+
+extern void LoadLangStrings();
+extern BOOL HaveLangStrings();
+extern CString& GetLangString(int id);

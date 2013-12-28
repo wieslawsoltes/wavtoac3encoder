@@ -46,7 +46,7 @@ extern const ChannelConfig ccAften[nNumChannelConfigAften];
 const int nNumRawSampleFormats = 15;
 
 // default values for raw audio input
-extern const LPTSTR szRawSampleFormats[nNumRawSampleFormats];
+extern LPTSTR szRawSampleFormats[nNumRawSampleFormats];
 
 // find valid bitrate index
 int FindValidBitratePos(const int nBitrate);
@@ -77,7 +77,7 @@ const int nNumSIMDIntructions = 4;
 extern EncoderOptions encOpt[nNumEncoderOptions];
 
 // encoder options groups
-extern const LPWSTR pszGroups[nNumEncoderOptionsGroups];
+extern CString pszGroups[nNumEncoderOptionsGroups];
 
 // option for CBR encoding mode for aften
 extern const CString szCbrOption;
