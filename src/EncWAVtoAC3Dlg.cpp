@@ -1647,7 +1647,9 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
     }
     catch(...)
     {
-        MessageBox(_T("Error while searching for files!"), _T("Error"), MB_OK | MB_ICONERROR);
+		MessageBox(HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_OK | MB_ICONERROR);
     }
 }
 
