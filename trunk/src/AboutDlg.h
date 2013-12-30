@@ -42,6 +42,9 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
 protected:
+	void SetBuildInfo();
+	void InitLang();
+protected:
     DECLARE_MESSAGE_MAP()
 public:
     CMyStatic m_StcLicense;
