@@ -221,9 +221,9 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
     AddAnchor(IDC_STATIC_BITRATE, AnchorTopRight);
     AddAnchor(IDC_SLIDER_BITRATE, AnchorTopLeft, AnchorTopRight);
     AddAnchor(IDC_CHECK_VBR, AnchorTopRight);
-	AddAnchor(IDC_STATIC_ENGINE, AnchorBottomRight);
-	AddAnchor(IDC_COMBO_ENGINES, AnchorBottomRight);
-	AddAnchor(IDC_BUTTON_ENGINES, AnchorBottomRight);
+	AddAnchor(IDC_STATIC_ENGINE, AnchorTopLeft);
+	AddAnchor(IDC_COMBO_ENGINES, AnchorTopLeft);
+	AddAnchor(IDC_BUTTON_ENGINES, AnchorTopLeft);
     AddAnchor(IDC_STATIC_THREADS, AnchorTopLeft);
     AddAnchor(IDC_EDIT_THREADS, AnchorTopLeft);
     AddAnchor(IDC_SPIN_THREADS, AnchorTopLeft);
