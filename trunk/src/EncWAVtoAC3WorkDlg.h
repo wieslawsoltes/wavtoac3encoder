@@ -73,6 +73,12 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
 protected:
+	void InitSettings();
+	void InitCtrls();
+	void CreateWorker();
+	void UpdateFileTimer();
+	void UpdateTotalTimer();
+protected:
     DECLARE_MESSAGE_MAP()
 public:
     int nIDIn[NUM_MAX_INPUT_FILES];
