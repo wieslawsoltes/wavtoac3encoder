@@ -32,23 +32,13 @@ public:
 };
 
 CString FormatTime(double fTime, int nFormat);
-
 void SetComboBoxHeight(HWND hDlg, int nComboBoxID);
-
 ULONGLONG GetFileSize64(CString szFileName);
-
 __int64 GetFileSizeInt64(FILE *fp);
-
 CString GetFileExt(CString szFilePath);
-
 CString GetFileName(CString szFilePath);
-
 CString GetExeFilePath();
-
 bool MakeFullPath(CString szPath);
-
 void LaunchAndWait(LPCTSTR file, LPCTSTR params, BOOL bWait);
-
 void ConvertAnsiToUnicode(const char *szAnsi, wchar_t *szUnicode, ULONG nLength);
-
 void ConvertUnicodeToAnsi(const wchar_t *szUnicode, char *szAnsi, ULONG nLength);
