@@ -24,19 +24,15 @@ class CMyStatic : public CStatic
 {
 public:
     CMyStatic();
-public:
     virtual ~CMyStatic();
 protected:
     virtual void PreSubclassWindow();
 protected:
     CFont m_BoldFont;
-protected:
     CFont m_StdFont; 
-protected:
     bool bIsBold;
 public:
     void SetBold(bool bBold = true);
-public:
     bool GetBold();
 protected:
     DECLARE_MESSAGE_MAP()
@@ -46,14 +42,10 @@ public:
     virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
 private:
     CString szToolTipText;
-private:
     bool bHaveToolTipText;
 public:
     void SetTooltipText(CString szText);
-public:
     CString GetTooltipText();
-public:
     void DelTooltipText();
-public:
     bool HaveTooltipText();
 };

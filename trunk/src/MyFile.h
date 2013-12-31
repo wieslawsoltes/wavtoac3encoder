@@ -56,16 +56,12 @@ public:
     bool FSetMode(int nMode = 3);
 #endif
     int FMode();
-public:
     ULONGLONG FSize();
     ULONGLONG FPos();
-public:
     bool FOpen(CString szFileName = _T(""), bool bWrite = false);
     bool FClose();
-public:
     bool FRead(TCHAR &Buffer);
     bool FWrite(TCHAR &Buffer);
-public:
     UINT FReadString(TCHAR *Buffer, UINT nLength);
     bool FWriteString(TCHAR *Buffer, UINT nLength);
 };

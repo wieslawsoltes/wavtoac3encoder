@@ -27,7 +27,6 @@ class CMyComboBoxEdit : public CEdit
     DECLARE_DYNAMIC(CMyComboBoxEdit)
 public:
     CMyComboBoxEdit();
-public:
     virtual ~CMyComboBoxEdit();
 protected:
     virtual void PreSubclassWindow();
@@ -41,14 +40,10 @@ public:
     afx_msg void OnEnChange();
 private:
     CString szToolTipText;
-private:
     bool bHaveToolTipText;
 public:
     void SetTooltipText(CString szText);
-public:
     CString GetTooltipText();
-public:
     void DelTooltipText();
-public:
     bool HaveTooltipText();
 };

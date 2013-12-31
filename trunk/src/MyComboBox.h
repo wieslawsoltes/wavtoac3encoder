@@ -24,7 +24,6 @@ class CMyComboBox : public CComboBox
 {
 public:
     CMyComboBox();
-public:
     virtual ~CMyComboBox();
 protected:
     virtual void PreSubclassWindow();
@@ -36,14 +35,10 @@ public:
     virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO* pTI) const;
 private:
     CString szToolTipText;
-private:
     bool bHaveToolTipText;
 public:
     void SetTooltipText(CString szText);
-public:
     CString GetTooltipText();
-public:
     void DelTooltipText();
-public:
     bool HaveTooltipText();
 };
