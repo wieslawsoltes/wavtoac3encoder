@@ -400,6 +400,7 @@ void LoadLangStrings()
 		theApp.m_nLangId = 0;
 		theApp.m_bHaveLang = TRUE;
 		theApp.m_Lang = theApp.m_LangLst.GetHead().lm;
+		//theApp.m_Lang = theApp.m_LangLst.GetTail().lm;
 	}
 	else
 	{

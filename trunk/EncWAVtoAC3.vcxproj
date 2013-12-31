@@ -407,6 +407,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="lang\en.txt" />
+    <Text Include="lang\pl.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

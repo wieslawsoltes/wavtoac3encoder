@@ -848,19 +848,19 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                     this->bMultipleMonoInput = true;
-                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(_T("Output file:"));
+					this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(HaveLangStrings() ? GetLangString(0x0020200B) : _T("Output file:"));
                 }
                 else if(ce.szData.Compare(_T("false")) == 0)
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                     this->bMultipleMonoInput = false;
-                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(_T("Output path:"));
+					this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(HaveLangStrings() ? GetLangString(0x0020200C) : _T("Output path:"));
                 }
                 else
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                     this->bMultipleMonoInput = false;
-                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(_T("Output path:"));
+					this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(HaveLangStrings() ? GetLangString(0x0020200C) : _T("Output path:"));
                 }
             }
 
@@ -3650,7 +3650,7 @@ void CEncWAVtoAC3Dlg::InitLangStaticText()
 	this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(GetLangString(0x00202009));
 	this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(GetLangString(0x0020200A));
 
-    if (this->bMultipleMonoInput == true)
+	if (this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED)
 		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(GetLangString(0x0020200B));
 	else
 		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(GetLangString(0x0020200C));
@@ -3725,12 +3725,13 @@ void CEncWAVtoAC3Dlg::InitLangMainMenu()
 
 void CEncWAVtoAC3Dlg::InitLangMenu()
 {
-	// insert languages to Language menu
+	// insert languages to Language sub-menu
 	if (theApp.m_LangLst.GetCount() > 0)
 	{
 		CMenu *m_hMenu = this->GetMenu();
 		CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
+		m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 		m_hLangMenu->AppendMenu(MF_SEPARATOR);
 
 		POSITION pos = theApp.m_LangLst.GetHeadPosition();
@@ -3741,7 +3742,18 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 			CString szBuff;
 			szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
 			m_hLangMenu->AppendMenu(MF_STRING, 2000 + i, szBuff);
+			m_hLangMenu->CheckMenuItem(2000 + i, MF_UNCHECKED);
+
 			i++;
 		}
+
+		m_hLangMenu->CheckMenuItem(2000, MF_CHECKED);
+	}
+	else
+	{
+		CMenu *m_hMenu = this->GetMenu();
+		CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
+
+		m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 	}
 }
