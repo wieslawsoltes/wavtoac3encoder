@@ -289,5 +289,8 @@
     <Text Include="lang\en.txt">
       <Filter>Language Files</Filter>
     </Text>
+    <Text Include="lang\pl.txt">
+      <Filter>Language Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
