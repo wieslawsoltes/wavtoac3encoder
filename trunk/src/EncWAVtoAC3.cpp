@@ -115,8 +115,9 @@ void ShowCommandLineError(CString szMessage)
 
     // format message
     szDisplayMessage.Format(
-        _T("Error: %s\n\n")
-        _T("Use --help option to obtain more informations."),
+        _T("%s: %s\n\n%s"),
+		HaveLangStrings() ? GetLangString(0x00D01004) : _T("Error"),
+		HaveLangStrings() ? GetLangString(0x00D01005) : _T("Use --help option to obtain more informations."),
         szMessage);
 
 	::LogMessage(_T("Command line error: ") + szMessage);
@@ -127,16 +128,26 @@ void ShowCommandLineError(CString szMessage)
     // show error message
     MessageBox(NULL, 
         szDisplayMessage, 
-        _T("Error"), 
+		HaveLangStrings() ? GetLangString(0x00D01004) : _T("Error"),
         MB_OK | MB_ICONERROR);
 }
 
 void ShowCommandLineHelp(HWND hWnd)
 {
-    // show help message
+	CString szMessage = _T("");
+
+	if (HaveLangStrings())
+	{
+#ifndef DISABLE_AVISYNTH
+		szMessage = GetLangString(0x00D01001);
+#else
+		szMessage = GetLangString(0x00D01002);
+#endif
+	}
+
     MessageBox(hWnd, 
-       szHelpMessage, 
-        _T("Command-Line Help"), 
+		HaveLangStrings() ? szMessage : szHelpMessage,
+		HaveLangStrings() ? GetLangString(0x00D01003) : _T("Command-Line Help"),
         MB_OK | MB_ICONINFORMATION | MB_APPLMODAL);
 }
 
@@ -158,9 +169,9 @@ CEncWAVtoAC3App theApp;
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
-	// enable log
-	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
-	LogOpen();
+	InitLog();
+
+	LoadLangStrings();
 
 	// init app
 	INITCOMMONCONTROLSEX InitCtrls;
@@ -176,7 +187,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
     // main dialog object
     CEncWAVtoAC3Dlg dlg;
 
-    // command-line help variables
+    // command-line helper variables
     int nNumArgs = 1;
     LPTSTR *pArgv = NULL;
     LPTSTR lpCommandLine = NULL;
@@ -184,14 +195,14 @@ BOOL CEncWAVtoAC3App::InitInstance()
     int nCountOptions = 0;
     COptionsParser op;
 
-    // get command line form system
+    // get command line from system
     lpCommandLine = ::GetCommandLine();
 
     // get command line in *argv[] format
     if(lpCommandLine != NULL)
         pArgv = MyCommandLineToArgv(lpCommandLine, &nNumArgs);
 
-    // if there is only one arg then free memory
+    // free memory if there is only one argument
     if((nNumArgs == 1) && (pArgv != NULL))
         ::GlobalFree(pArgv);
 
@@ -212,7 +223,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
             {
             case COptionsParser::NEXT_INVALID_ARG:
                 {
-                    ShowCommandLineError(_T("Invalid command-line argument!"));
+					ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D01006) : 
+						_T("Invalid command-line argument!"));
                     bExit = true;
                 }
                 break;
@@ -287,7 +299,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
                 {
                     // show standalone MUX Wizard window
                     CEncWAVtoAC3MuxDlg dlg;
-
                     m_pMainWnd = &dlg;
                     dlg.DoModal();
 
@@ -297,7 +308,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
             default:
                 {
                     // unknown option Id
-                    ShowCommandLineError(_T("Unknown option Id!"));
+					ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D01007) : 
+						_T("Unknown option Id!"));
                     bExit = true;
                 }
                 break;
@@ -324,29 +336,31 @@ BOOL CEncWAVtoAC3App::InitInstance()
     // check for command-line errors
     if((dlg.cmdLineOpt.bHaveOutputFile == true) && (dlg.cmdLineOpt.bHaveInputFile == false))
     {
-        ShowCommandLineError(_T("Input file is missing! Please use also --input-file option!."));
+		ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D01008) :
+			_T("Input file is missing! Please use also --input-file option!."));
         return FALSE;
     }
 
     if((dlg.cmdLineOpt.bHaveInputFile == true) && (dlg.cmdLineOpt.bHaveLoadFiles == true))
     {
-        ShowCommandLineError(_T("Can not combine --input-file with --load-files option!"));
+		ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D01009) :
+			_T("Can not combine --input-file with --load-files option!"));
         return FALSE;
     }
 
     if((dlg.cmdLineOpt.bHaveOutputFile == true) && (dlg.cmdLineOpt.bHaveLoadFiles == true))
     {
-        ShowCommandLineError(_T("Can not combine --output-file with --load-files option!"));
+		ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D0100A) :
+			_T("Can not combine --output-file with --load-files option!"));
         return FALSE;
     }
 
     if((dlg.cmdLineOpt.bHaveOutputFile == true) && (dlg.cmdLineOpt.bHaveOutputPath == true))
     {
-        ShowCommandLineError(_T("Can not combine --output-file with --output-path option!"));
+		ShowCommandLineError(HaveLangStrings() ? GetLangString(0x00D0100B) :
+			_T("Can not combine --output-file with --output-path option!"));
         return FALSE;
     }
-
-	LoadLangStrings();
 
     // show main dialog
     m_pMainWnd = &dlg;
@@ -359,6 +373,13 @@ BOOL CEncWAVtoAC3App::InitInstance()
 
     // terminate the program
     return FALSE;
+}
+
+void CEncWAVtoAC3App::InitLog()
+{
+	// enable log
+	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
+	LogOpen();
 }
 
 void LoadLangStrings()
