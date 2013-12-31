@@ -95,9 +95,6 @@
     <ClCompile Include="src\MyEdit.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="src\MyFile.cpp">
-      <Filter>Source Files\Controls</Filter>
-    </ClCompile>
     <ClCompile Include="src\MyListCtrl.cpp">
       <Filter>Source Files\Controls</Filter>
     </ClCompile>
@@ -158,6 +155,9 @@
     <ClCompile Include="src\Language.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MyFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CommandLine.h">
@@ -203,9 +203,6 @@
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
     <ClInclude Include="src\MyEdit.h">
-      <Filter>Header Files\Controls</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MyFile.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>
     <ClInclude Include="src\MyListCtrl.h">
@@ -266,6 +263,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Language.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MyFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
