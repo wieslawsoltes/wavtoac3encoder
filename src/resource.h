@@ -121,6 +121,9 @@
 #define IDC_BUTTON_ENGINES_ADD          1108
 #define IDC_BUTTON_ENGINES_BROWSE       1109
 #define IDC_MFCBUTTON_ABOUT_BITMAP      1111
+#define IDC_STATIC_GROUP_ENGINE         1112
+#define IDC_STATIC_TEXT_ENGINE_NAME     1113
+#define IDC_STATIC_TEXT_ENGINE_PATH     1114
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -153,7 +156,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32799
-#define _APS_NEXT_CONTROL_VALUE         1112
+#define _APS_NEXT_CONTROL_VALUE         1115
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

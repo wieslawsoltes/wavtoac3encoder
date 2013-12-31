@@ -68,8 +68,12 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
     // add columns to engines list
-    this->m_LstEngines.InsertColumn(0, _T("Name"), 0, 150);
-    this->m_LstEngines.InsertColumn(1, _T("Path"), 0, 440);
+    this->m_LstEngines.InsertColumn(0, 
+		HaveLangStrings() ? GetLangString(0x00B0100C) : _T("Name"),
+		0, 150);
+    this->m_LstEngines.InsertColumn(1, 
+		HaveLangStrings() ? GetLangString(0x00B0100D) : _T("Path"),
+		0, 440);
 
     // populate engines list
     this->InsertProgramEngines();
@@ -77,6 +81,8 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
     // select currently used engine
     this->m_LstEngines.SetItemState(-1,  0, LVIS_SELECTED);
     this->m_LstEngines.SetItemState(this->nCurrSel, LVIS_SELECTED, LVIS_SELECTED);
+
+	InitLang();
 
     return TRUE;
 }
@@ -97,12 +103,12 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
         _T("dll"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
         // set engine path
@@ -116,12 +122,12 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
         _T("engines"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
         // load engines from file
@@ -135,12 +141,12 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
         _T("engines"),
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if(fd.DoModal() == IDOK)
     {
-        // get full path from filedialog
+        // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
          // save engines from file
@@ -207,7 +213,7 @@ bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
         this->m_LstEngines.SetItemText(i, 1, ce.szData);
     }
 
-    // always selectd first item in the list
+    // always selected first item in the list
     this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
     return true;
@@ -321,4 +327,24 @@ void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult
     };
 
     *pResult = 0;
+}
+
+void CEncWAVtoAC3EngDlg::InitLang()
+{
+	if (HaveLangStrings())
+	{
+		this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00B01001));
+
+		this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(GetLangString(0x00B01002));
+		this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(GetLangString(0x00B01003));
+		this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(GetLangString(0x00B01004));
+
+		this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(GetLangString(0x00B01005));
+		this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(GetLangString(0x00B01006));
+		this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(GetLangString(0x00B01007));
+		this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(GetLangString(0x00B01008));
+		this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(GetLangString(0x00B01009));
+		this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00B0100A));
+		this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00B0100B));
+	}
 }
