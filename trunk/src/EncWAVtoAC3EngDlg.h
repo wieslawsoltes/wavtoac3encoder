@@ -60,6 +60,8 @@ public:
     bool InsertProgramEngines();
     bool LoadProgramEngines(CString szFileName);
     bool SaveProgramEngines(CString szFileName);
+protected:
+	void InitLang();
 public:
     virtual BOOL OnInitDialog();
 public:
