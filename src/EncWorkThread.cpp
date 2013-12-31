@@ -49,7 +49,7 @@ void SetAftenOptions(AftenAPI &api,
     // get default settings from aften library
     api.LibAften_aften_set_defaults(&s);
 
-    // set Aften qaulity options
+    // set Aften quality options
     s.params.encoding_mode = preset.nMode;
     s.params.bitrate = preset.nBitrate;
     s.params.quality = preset.nQuality;
@@ -91,7 +91,6 @@ void SetAftenOptions(AftenAPI &api,
     if(preset.nRawSampleRate != 0)
     {
         opt.raw_sr = preset.nRawSampleRate;
-
         opt.raw_input = 1;
     }
 
@@ -99,7 +98,6 @@ void SetAftenOptions(AftenAPI &api,
     if(preset.nRawChannels != 0)
     {
         opt.raw_ch = preset.nRawChannels;
-
         opt.raw_input = 1;
     }
 
@@ -108,8 +106,8 @@ void SetAftenOptions(AftenAPI &api,
 
     // use this macro to prepare aften settings
     #define SET_AFTEN_SETTING(set, type) \
-    if(encOpt[nSetting].nIgnoreValue != preset.nSetting[nSetting]) \
-    (set) = (type) encOpt[nSetting].listOptValues.GetAt(encOpt[nSetting].listOptValues.FindIndex(preset.nSetting[nSetting]));
+		if(encOpt[nSetting].nIgnoreValue != preset.nSetting[nSetting]) \
+		(set) = (type) encOpt[nSetting].listOptValues.GetAt(encOpt[nSetting].listOptValues.FindIndex(preset.nSetting[nSetting]));
 
     // process all aften options for encoder context
 
@@ -231,7 +229,7 @@ void ShowCurrentJobInfo(int nInputFiles,
     CString szOutputInfo = _T("");
     CString szSimdInfo = _T("");
 
-    // input info (using code from pcm/pcm.c)
+    // input info (using Aften code from pcm/pcm.c)
     if(bAvisynthInput == false)
     {
         for(int i = 0; i < nInputFiles; i++)
@@ -240,71 +238,74 @@ void ShowCurrentJobInfo(int nInputFiles,
             TCHAR *type, *chan, *order;
             TCHAR fmt[64] = _T(""); 
 
-            type = _T("?");
-            chan = _T("?-channel");
+			type = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02001) : _T("?");
+			chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02002) : _T("?-channel");
             order = _T("");
 
             if(pf_info->sample_type == PCM_SAMPLE_TYPE_INT) 
             {
                 if(pf_info->source_format == PCM_SAMPLE_FMT_U8) 
-                    type = _T("Unsigned");
+					type = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02003) : _T("Unsigned");
                 else 
-                    type = _T("Signed");
+					type = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02004) : _T("Signed");
             } 
             else if(pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT) 
             {
-                type = _T("Floating-point");
+				type = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02005) : _T("Floating-point");
             } 
             else 
             {
-                type = _T("[unsupported type]");
+				type = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02006) : _T("[unsupported type]");
             }
 
             if(pf_info->ch_mask & 0x08) 
             {
                 switch(pf_info->channels-1) 
                 {
-                case 1: chan = _T("1.1-channel"); break;
-                case 2: chan = _T("2.1-channel"); break;
-                case 3: chan = _T("3.1-channel"); break;
-                case 4: chan = _T("4.1-channel"); break;
-                case 5: chan = _T("5.1-channel"); break;
-                default: chan = _T("multi-channel with LFE"); break;
+				case 1: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02007) : _T("1.1-channel"); break;
+				case 2: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02008) : _T("2.1-channel"); break;
+				case 3: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02009) : _T("3.1-channel"); break;
+				case 4: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200A) : _T("4.1-channel"); break;
+				case 5: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200B) : _T("5.1-channel"); break;
+				default: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
                 }
             } 
             else 
             {
                 switch(pf_info->channels) 
                 {
-                case 1: chan = _T("mono"); break;
-                case 2: chan = _T("stereo"); break;
-                case 3: chan = _T("3-channel"); break;
-                case 4: chan = _T("4-channel"); break;
-                case 5: chan = _T("5-channel"); break;
-                case 6: chan = _T("6-channel"); break;
-                default: chan = _T("multi-channel"); break;
+				case 1: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200D) : _T("mono"); break;
+				case 2: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200E) : _T("stereo"); break;
+				case 3: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200F) : _T("3-channel"); break;
+				case 4: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02010) : _T("4-channel"); break;
+				case 5: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02011) : _T("5-channel"); break;
+				case 6: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02012) : _T("6-channel"); break;
+				default: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02013) : _T("multi-channel"); break;
                 }
             }
 
             if(pf_info->pcm_format)
             {
 #ifdef _UNICODE
-                ConvertAnsiToUnicode(pf_info->pcm_format->long_name, fmt, strlen(pf_info->pcm_format->long_name));
+                ConvertAnsiToUnicode(pf_info->pcm_format->long_name, 
+					fmt, 
+					strlen(pf_info->pcm_format->long_name));
 #else
                 sprintf(fmt, _T("%s"), pf_info->pcm_format->long_name);
 #endif
             }
             else
             {
-                _stprintf(fmt, _T("%s"), _T("unknown"));
+                _stprintf(fmt, _T("%s"), 
+					HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02014) : _T("unknown"));
             }
 
             if(pf_info->source_format > PCM_SAMPLE_FMT_S8) 
             {
                 switch(pf_info->order) 
                 {
-                case PCM_BYTE_ORDER_LE: order = _T("little-endian"); break;
-                case PCM_BYTE_ORDER_BE: order = _T("big-endian"); break;
+				case PCM_BYTE_ORDER_LE: order = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02015) : _T("little-endian"); break;
+				case PCM_BYTE_ORDER_BE: order = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02016) : _T("big-endian"); break;
                 }
             } 
             else 
@@ -327,16 +328,17 @@ void ShowCurrentJobInfo(int nInputFiles,
 
         switch(infoAVS.nAudioChannels) 
         {
-        case 1: chan = _T("mono"); break;
-        case 2: chan = _T("stereo"); break;
-        case 3: chan = _T("3-channel"); break;
-        case 4: chan = _T("4-channel"); break;
-        case 5: chan = _T("5-channel"); break;
-        case 6: chan = _T("6-channel"); break;
-        default: chan = _T("multi-channel"); break;
+		case 1: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200D) : _T("mono"); break;
+		case 2: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200E) : _T("stereo"); break;
+		case 3: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0200F) : _T("3-channel"); break;
+		case 4: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02010) : _T("4-channel"); break;
+		case 5: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02011) : _T("5-channel"); break;
+		case 6: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02012) : _T("6-channel"); break;
+		default: chan = HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02013) : _T("multi-channel"); break;
         }
 
-        szInputInfo.Format(_T("\tAvisynth: Raw PCM Floating-point 32-bit little-endian %d Hz %s"), 
+        szInputInfo.Format(_T("\t%s %d Hz %s"), 
+			HaveLangStrings() ? GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
             infoAVS.nSamplesPerSecond, chan);
 
         pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[0])->SetWindowText(szInputInfo);
@@ -345,18 +347,18 @@ void ShowCurrentJobInfo(int nInputFiles,
 
     // output info (using code from aften/aften.c)
     {
-        static const TCHAR *acmod_str[8] = 
+        TCHAR *acmod_str[32] = 
         { 
-            _T("dual mono (1+1)"), 
-            _T("mono (1/0)"), 
-            _T("stereo (2/0)"), 
+			HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02018) : _T("dual mono (1+1)"),
+			HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A02019) : _T("mono (1/0)"),
+			HaveLangStrings() ? (LPTSTR)(LPCTSTR)GetLangString(0x00A0201A) : _T("stereo (2/0)"),
             _T("3/0"), 
             _T("2/1"), 
             _T("3/1"), 
             _T("2/2"), 
             _T("3/2")
         };
-
+		
         szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod]);
         if(s.lfe) 
             szOutputInfo += _T(" + LFE");
@@ -401,13 +403,19 @@ void ShowCurrentJobInfo(int nInputFiles,
         }
 
         if(nCountSimd == 0) 
-            szSimdInfo += _T(" NONE");
+			szSimdInfo += _T(" ") + (HaveLangStrings() ? GetLangString(0x00A0201B) : _T("NONE"));
 
         CString szBuff;
-        if(s.system.n_threads == 0)
-            szBuff = _T(" | Threads: Auto");
-        else
-            szBuff.Format(_T(" | Threads: %i"), s.system.n_threads);
+		if (s.system.n_threads == 0)
+		{
+			szBuff = _T(" | ") + (HaveLangStrings() ? GetLangString(0x00A0201C) : _T("Threads: Auto"));
+		}
+		else
+		{
+			szBuff.Format(_T(" | %s %i"),
+				HaveLangStrings() ? GetLangString(0x00A0201D) : _T("Threads:"),
+				s.system.n_threads);
+		}
 
         szSimdInfo += szBuff;
     }
@@ -446,11 +454,11 @@ int RunAftenEncoder(AftenAPI &api,
     int input_file_format;
     enum PcmSampleFormat read_format;
 
-    // indicate avisynth script as input file
+    // indicate Avisynth script as input file
     bool bAvisynthInput = false;
 
 #ifndef DISABLE_AVISYNTH
-    // check if we have avisynth script as input
+    // check if we have Avisynth script as input
     if(GetFileExt(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
 #endif
@@ -477,7 +485,7 @@ int RunAftenEncoder(AftenAPI &api,
     memset(ifp, 0, NUM_MAX_INPUT_FILES * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
-    // avisynth data
+    // Avisynth data
     AvsAudioInfo infoAVS;
     Avs2RawStatus statusAVS;
     CAvs2Raw decoderAVS;
@@ -521,7 +529,13 @@ int RunAftenEncoder(AftenAPI &api,
             {
                 // stop file timer
 				pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-				pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+
+				CString szBuff;
+				szBuff.Format(_T("%s %s"), 
+					HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
+					_T("00:00:00"));
+
+				pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
 				pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
                 ::LogMessage(szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
@@ -542,9 +556,14 @@ int RunAftenEncoder(AftenAPI &api,
     ofp = _tfopen(pszOutPath, _T("wb"));
     if(!ofp) 
     {
+		CString szBuff;
+		szBuff.Format(_T("%s %s"),
+			HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
+			_T("00:00:00"));
+
         // stop file timer
 		pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-		pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+		pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
 		pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
         for(int i = 0; i < nInputFiles; i++)
@@ -565,19 +584,19 @@ int RunAftenEncoder(AftenAPI &api,
     //
 #define HandleEncoderError(message) \
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
-    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00")); \
+	CString szBuff; \
+	szBuff.Format(_T("%s %s"), \
+		HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"), \
+		_T("00:00:00")); \
+	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff); \
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L; \
-    \
     if(fwav) \
         free(fwav); \
-    \
     if(frame) \
         free(frame); \
-    \
     if(bAvisynthInput == false) \
     { \
         pcm_close(&pf); \
-    \
         for(int i = 0; i < nInputFiles; i++) \
         { \
             if(ifp[i]) \
@@ -588,22 +607,15 @@ int RunAftenEncoder(AftenAPI &api,
     { \
         /* decoderAVS.CloseAvisynth(); */ \
     } \
-    \
     if(ofp) \
         fclose(ofp); \
-    \
     api.LibAften_aften_encode_close(&s); \
-    \
     for(int i = 0; i < nInputFiles; i++) \
         szInPath[i].ReleaseBuffer(); \
-    \
     szOutPath.ReleaseBuffer(); \
-    \
     ::LogMessage(szLogMessage + message); \
-	\
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
-    \
     return(WORKDLG_RETURN_FAILURE);
     //
     // end clean-up code used after error
@@ -618,7 +630,7 @@ int RunAftenEncoder(AftenAPI &api,
 
     if((opt.raw_input) || (bAvisynthInput == true))
     {
-        // user selectd raw input format
+        // user selected raw input format
         input_file_format = PCM_FORMAT_RAW;
     }
     else
@@ -647,7 +659,7 @@ int RunAftenEncoder(AftenAPI &api,
 #ifndef DISABLE_AVISYNTH
         if(opt.raw_input)
         {
-            // NOTE: raw audio settings are ignored at this time, using avisynth settings
+            // NOTE: raw audio settings are ignored at this time, using Avisynth settings
         }
 #endif
     }
@@ -655,13 +667,13 @@ int RunAftenEncoder(AftenAPI &api,
     if(bAvisynthInput == true)
     {
 #ifndef DISABLE_AVISYNTH
-        // init avisynth read status structure
+        // init Avisynth read status structure
         statusAVS.nStart = 0;
         statusAVS.nSamples = infoAVS.nAudioSamples;
         statusAVS.nSamplesLeft = infoAVS.nAudioSamples;
         statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
 
-        // 'pf' is not used by avisynth, only needed for stats (to share same code with pcm lib)
+        // 'pf' is not used by Avisynth, only needed for stats (to share same code with pcm lib)
         pf.samples = infoAVS.nAudioSamples;
         pf.sample_rate = infoAVS.nSamplesPerSecond;
         pf.channels = infoAVS.nAudioChannels;
@@ -1030,7 +1042,7 @@ int RunAftenEncoder(AftenAPI &api,
 	// get output file size
 	pWork->nOutTotalSize = GetFileSizeInt64(ofp);
 
-    // log preformance stats
+    // log performance stats
 
 	// log input file(s) path(s)
     CString szTmpBuff;
@@ -1132,7 +1144,11 @@ int RunAftenEncoder(AftenAPI &api,
 
     // reset file timer
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+	CString szBuff;
+	szBuff.Format(_T("%s %s"),
+		HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
+		_T("00:00:00"));
+	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
     // release string buffers
@@ -1141,7 +1157,7 @@ int RunAftenEncoder(AftenAPI &api,
 
     szOutPath.ReleaseBuffer();
 
-    // return succes from worker thread
+    // return success from worker thread
     return(WORKDLG_RETURN_SUCCESS);
 }
 
@@ -1183,7 +1199,10 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     // start total timer
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
-    pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(_T("Total elapsed time: 00:00:00"));
+	szBuff.Format(_T("%s %s"),
+		HaveLangStrings() ? GetLangString(0x00A01006) : _T("Total elapsed time:"),
+		_T("00:00:00"));
+	pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(szBuff);
     pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, NULL);
 
     int nFileCounter = 0;
@@ -1194,7 +1213,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
     if(pWork->bMultiMonoInput == false)
     {
-        // process all filse in list
+        // process all files in list
         pos = list->GetHeadPosition();
         while(pos != NULL)
         {
@@ -1223,15 +1242,27 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
             // update encoding windows title
             CString szTitle;
-            szTitle.Format(_T("Encoding file %d of %d"), nFileCounter + 1, nTotalFiles);
+			szTitle.Format(HaveLangStrings() ? GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
+				nFileCounter + 1, 
+				nTotalFiles);
             pWork->pWorkDlg->SetWindowText(szTitle);
 
             // update input and output file labels
-            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(_T("From:\t") + szInPath[0]);
-            pWork->pWorkDlg->m_StcOut.SetWindowText(_T("To:\t") + szOutPath);
+			szBuff.Format(_T("%s\t%s"),
+				HaveLangStrings() ? GetLangString(0x00A01003) : _T("From:"),
+				szInPath[0]);
+			pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
+
+			szBuff.Format(_T("%s\t%s"),
+				HaveLangStrings() ? GetLangString(0x00A01004) : _T("To:"),
+				szOutPath);
+			pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
             // start file timer
-            pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+			szBuff.Format(_T("%s %s"),
+				HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
+				_T("00:00:00"));
+			pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
             pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
             pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
 
@@ -1284,7 +1315,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         {
             // get next file path
             szInPath[nFileCounter] = list->GetNext(pos);
-
             nFileCounter++;
         }
 
@@ -1295,26 +1325,33 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
         // use user selected output file path
         if(pWork->bUseOutPath == true)
-        {
             szOutPath = pWork->szOutPath;
-        }
 
         // update encoding windows title
         CString szTitle;
-        szTitle.Format(_T("Encoding %d mono files"), nTotalFiles);
+		szTitle.Format(HaveLangStrings() ? GetLangString(0x00A0100D) : _T("Encoding %d mono files"), 
+			nTotalFiles);
         pWork->pWorkDlg->SetWindowText(szTitle);
 
         // update input and output file labels
-        pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(_T("From:\t") + szInPath[0]);
-        for(int i = 1; i < nFileCounter; i++)
-        {
-            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[i])->SetWindowText(_T("\t") + szInPath[i]);
-        }
+		szBuff.Format(_T("%s\t%s"),
+			HaveLangStrings() ? GetLangString(0x00A01003) : _T("From:"),
+			szInPath[0]);
+		pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
 
-        pWork->pWorkDlg->m_StcOut.SetWindowText(_T("To:\t") + szOutPath);
+        for(int i = 1; i < nFileCounter; i++)
+            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[i])->SetWindowText(_T("\t") + szInPath[i]);
+
+		szBuff.Format(_T("%s\t%s"),
+			HaveLangStrings() ? GetLangString(0x00A01004) : _T("To:"),
+			szOutPath);
+		pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
         // start file timer
-        pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(_T("Elapsed time: 00:00:00"));
+		szBuff.Format(_T("%s %s"),
+			HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
+			_T("00:00:00"));
+		pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
         pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
 
@@ -1370,6 +1407,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
-    // return succes from worker thread
+    // return success from worker thread
     return(WORKDLG_RETURN_SUCCESS);
 }

@@ -85,6 +85,7 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
 
 	InitSettings();
 	InitCtrls();
+	InitLang();
 	CreateWorker();
 
     return TRUE;
@@ -298,20 +299,20 @@ void CEncWAVtoAC3WorkDlg::UpdateTotalTimer()
 	if (m_ElapsedTimeTotal <= 59)
 	{
 		_stprintf(strTime, _T("%s 00:00:%02u\0"),
-			_T("Total elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01006) : _T("Total elapsed time:"),
 			(unsigned long)m_ElapsedTimeTotal); // ss
 	}
 	else if (m_ElapsedTimeTotal <= 3599)
 	{
 		_stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-			_T("Total elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01006) : _T("Total elapsed time:"),
 			((unsigned long)m_ElapsedTimeTotal / 60), // mm
 			((unsigned long)m_ElapsedTimeTotal % 60)); // ss
 	}
 	else
 	{
 		_stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-			_T("Total elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01006) : _T("Total elapsed time:"),
 			((unsigned long)m_ElapsedTimeTotal / 60) / 60, // hh
 			((unsigned long)m_ElapsedTimeTotal / 60) % 60, // mm
 			((((unsigned long)m_ElapsedTimeTotal / 60) % 60) * 60) % 60); // ss
@@ -335,20 +336,20 @@ void CEncWAVtoAC3WorkDlg::UpdateFileTimer()
 	if (m_ElapsedTimeFile <= 59)
 	{
 		_stprintf(strTime, _T("%s 00:00:%02u\0"),
-			_T("Elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
 			(unsigned long)m_ElapsedTimeFile); // ss
 	}
 	else if (m_ElapsedTimeFile <= 3599)
 	{
 		_stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-			_T("Elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
 			((unsigned long)m_ElapsedTimeFile / 60), // mm
 			((unsigned long)m_ElapsedTimeFile % 60)); // ss
 	}
 	else
 	{
 		_stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-			_T("Elapsed time:"),
+			HaveLangStrings() ? GetLangString(0x00A01005) : _T("Elapsed time:"),
 			((unsigned long)m_ElapsedTimeFile / 60) / 60, // hh
 			((unsigned long)m_ElapsedTimeFile / 60) % 60, // mm
 			((((unsigned long)m_ElapsedTimeFile / 60) % 60) * 60) % 60); // ss
@@ -385,8 +386,20 @@ void CEncWAVtoAC3WorkDlg::CreateWorker()
 		::LogMessage(_T("Error: Failed to create worker thread!"));
 
 		// show critical error message
-		this->MessageBox(_T("Failed to create worker thread!"),
-			_T("Fatal Error"),
+		this->MessageBox(HaveLangStrings() ? GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
+			HaveLangStrings() ? GetLangString(0x00A0100A) : _T("Fatal Error"),
 			MB_OK | MB_ICONERROR);
+	}
+}
+
+void CEncWAVtoAC3WorkDlg::InitLang()
+{
+	if (HaveLangStrings())
+	{
+		this->SetWindowText(GetLangString(0x00A01001));
+		this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00A01002));
+		this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->SetWindowText(GetLangString(0x00A01007));
+		this->GetDlgItem(IDC_STATIC_READS_LABEL)->SetWindowText(GetLangString(0x00A01008));
+		this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->SetWindowText(GetLangString(0x00A01009));
 	}
 }
