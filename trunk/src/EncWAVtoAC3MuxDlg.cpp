@@ -45,7 +45,7 @@ const CString szChannelConfig[nNumChannelConfig] =
     _T("3/2 = (L,R,C,SL,SR)")
 };
 
-// currect number of input file for each channel config + LFE channel
+// correct number of input file for each channel config + LFE channel
 const int nNumInputFiles[nNumChannelConfig] =
 {
     2, 1, 2, 3, 3, 4, 4, 5
@@ -149,45 +149,8 @@ BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
-    // init channel configuration ComboBox
-    for(int i = 0; i < nNumChannelConfig; i++)
-        this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
-
-    this->m_CmbChannelConfig.SetCurSel(0);
-
-    // set tooltips
-    CString szTmpText;
-
-    // channel config ComboBox
-    szTmpText = 
-        _T("Specify channel configuration:\n")
-        _T("1+1 = (Ch1,Ch2)\n")
-        _T("1/0 = (C)\n")
-        _T("2/0 = (L,R)\n")
-        _T("3/0 = (L,R,C)\n")
-        _T("2/1 = (L,R,S)\n")
-        _T("3/1 = (L,R,C,S)\n")
-        _T("2/2 = (L,R,SL,SR)\n")
-        _T("3/2 = (L,R,C,SL,SR)");
-
-    this->m_CmbChannelConfig.SetTooltipText(szTmpText);
-
-    // +LFE CheckBox
-    this->m_ChkChannelConfigLFE.SetTooltipText(_T("Indicates use of the LFE channel."));
-
-    // set fixed height of combobox controls
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG);
-
-    // channel buttons
-    this->m_BtnChannelFL.SetTooltipText(_T("Front Left Channel"));
-    this->m_BtnChannelFR.SetTooltipText(_T("Front Right Channel"));
-    this->m_BtnChannelFC.SetTooltipText(_T("Front Center Channel"));
-    this->m_BtnChannelLFE.SetTooltipText(_T("Low Frequency Effect Channel"));
-    this->m_BtnChannelSL.SetTooltipText(_T("Surround Left Channel"));
-    this->m_BtnChannelSR.SetTooltipText(_T("Surround Right Channel"));
-    this->m_BtnChannelS.SetTooltipText(_T("Surround Channel"));
-
-    this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
+	InitCtrls();
+	InitLang();
 
     // set file paths
     this->RemapFilesToChannels();
@@ -197,6 +160,69 @@ BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
     this->SetControlsState();
 
     return TRUE;
+}
+
+void CEncWAVtoAC3MuxDlg::InitCtrls()
+{
+	// init channel configuration ComboBox
+	for (int i = 0; i < nNumChannelConfig; i++)
+		this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
+
+	this->m_CmbChannelConfig.SetCurSel(0);
+
+	// set tooltips
+	CString szTmpText;
+
+	// channel config ComboBox
+	szTmpText = HaveLangStrings() ? GetLangString(0x00C01008) :
+		_T("Specify channel configuration:\n")
+		_T("1+1 = (Ch1,Ch2)\n")
+		_T("1/0 = (C)\n")
+		_T("2/0 = (L,R)\n")
+		_T("3/0 = (L,R,C)\n")
+		_T("2/1 = (L,R,S)\n")
+		_T("3/1 = (L,R,C,S)\n")
+		_T("2/2 = (L,R,SL,SR)\n")
+		_T("3/2 = (L,R,C,SL,SR)");
+
+	this->m_CmbChannelConfig.SetTooltipText(szTmpText);
+
+	// +LFE CheckBox
+	this->m_ChkChannelConfigLFE.SetTooltipText(
+		HaveLangStrings() ? GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
+
+	// set fixed height of combobox controls
+	SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG);
+
+	// channel buttons
+	this->m_BtnChannelFL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100A) : _T("Front Left Channel"));
+	this->m_BtnChannelFR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100B) : _T("Front Right Channel"));
+	this->m_BtnChannelFC.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100C) : _T("Front Center Channel"));
+	this->m_BtnChannelLFE.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
+	this->m_BtnChannelSL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100E) : _T("Surround Left Channel"));
+	this->m_BtnChannelSR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100F) : _T("Surround Right Channel"));
+	this->m_BtnChannelS.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C01010) : _T("Surround Channel"));
+
+	this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
+}
+
+void CEncWAVtoAC3MuxDlg::InitLang()
+{
+	if (HaveLangStrings())
+	{
+		this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00C01001));
+		this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(GetLangString(0x00C01002));
+		this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(GetLangString(0x00C01003));
+		this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(GetLangString(0x00C01004));
+		this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00C01005));
+		this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00C01006));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(GetLangString(0x00C01007));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(GetLangString(0x00C01007));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(GetLangString(0x00C01007));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(GetLangString(0x00C01007));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(GetLangString(0x00C01007));
+		this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(GetLangString(0x00C01007));
+	}
 }
 
 void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
@@ -572,14 +598,11 @@ void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEd
     m_EdtCurrent->GetWindowText(szCurrentFileName);
     szCurrentFileName = GetFileName(szCurrentFileName);
 
-    // get input file filter
-    CString szFilter = GetSupportedInputFilesFilter();
-
     CFileDialog fd(TRUE, 
         szSupportedInputExt[0], 
         szCurrentFileName, 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        szFilter, 
+		GetSupportedInputFilesFilter(),
         this);
 
     if(fd.DoModal() == IDOK)
@@ -665,7 +688,6 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe()
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
 {
-
     if(nChannelConfigStates[nChannelConfig][3] == 1)
     {
         this->m_BtnChannelS.SetBold(false);
@@ -696,7 +718,8 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport()
         _T("files"), 
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
+		HaveLangStrings() ? GetLangString(0x00C01011) :
+		_T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
         this);
 
     if(fd.DoModal() == IDOK)
@@ -719,6 +742,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonImport()
         _T("files"), 
         _T(""), 
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
+		HaveLangStrings() ? GetLangString(0x00C01011) :
         _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
         this);
 
