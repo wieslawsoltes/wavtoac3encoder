@@ -100,13 +100,14 @@ public:
 	virtual ~CEncWAVtoAC3App();
 public:
     virtual BOOL InitInstance();
-
-	void InitLog();
-
 	DECLARE_MESSAGE_MAP()
 public:
-	LangMap_t m_Lang;
+	void InitLog();
+public:
+	LangMap_t *m_Lang;
+	LangList_t m_LangLst;
 	BOOL m_bHaveLang = FALSE;
+	int m_nLangId = -1;
 };
 
 extern CEncWAVtoAC3App theApp;

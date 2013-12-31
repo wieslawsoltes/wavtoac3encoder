@@ -371,6 +371,9 @@ BOOL CEncWAVtoAC3App::InitInstance()
 	// stop log
 	LogClose();
 
+	// clean language list
+	CleanLangList(theApp.m_LangLst);
+
     // terminate the program
     return FALSE;
 }
@@ -385,15 +388,24 @@ void CEncWAVtoAC3App::InitLog()
 void LoadLangStrings()
 {
 #ifdef _DEBUG
-	CString szLangFile = GetExeFilePath() + _T("..\\..\\lang\\en.txt");
+	CString szLangPath = GetExeFilePath() + _T("..\\..\\Lang");
 #else
-	CString szLangFile = GetExeFilePath() + _T("lang\\en.txt");
+	CString szLangPath = GetExeFilePath() + _T("Lang");
 #endif
 
-	if (::LoadLang(szLangFile, theApp.m_Lang) == true)
+	SearchFolderForLang(szLangPath, false, theApp.m_LangLst);
+
+	if (theApp.m_LangLst.GetCount() > 0)
+	{
+		theApp.m_nLangId = 0;
 		theApp.m_bHaveLang = TRUE;
+		theApp.m_Lang = theApp.m_LangLst.GetHead().lm;
+	}
 	else
+	{
+		theApp.m_nLangId = -1;
 		theApp.m_bHaveLang = FALSE;
+	}
 }
 
 inline BOOL HaveLangStrings()
@@ -403,5 +415,6 @@ inline BOOL HaveLangStrings()
 
 inline CString& GetLangString(int id)
 {
-	return theApp.m_Lang[id];
+	// return (*theApp.m_Lang)[id];
+	return theApp.m_Lang->PLookup(id)->value;
 }

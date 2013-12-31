@@ -23,7 +23,102 @@
 #include "Language.h"
 #include "MyFile.h"
 
-bool LoadLang(CString &szFileName, LangMap_t &lm)
+void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
+{
+	try
+	{
+		WIN32_FIND_DATA w32FileData;
+		HANDLE hSearch = NULL;
+		BOOL fFinished = FALSE;
+		TCHAR cTempBuf[(MAX_PATH * 2) + 1];
+
+		ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
+		ZeroMemory(cTempBuf, MAX_PATH * 2);
+
+		// remove '\' or '/' from end of search path
+		szPath.TrimRight(_T("\\"));
+		szPath.TrimRight(_T("/"));
+
+		wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
+
+		hSearch = FindFirstFile(cTempBuf, &w32FileData);
+		if (hSearch == INVALID_HANDLE_VALUE)
+			return;
+
+		while (fFinished == FALSE)
+		{
+			if (w32FileData.cFileName[0] != '.' &&
+				!(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+			{
+				CString szTempBuf;
+				szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
+
+				// apply filter and add only .txt files
+				CString szExt = ::PathFindExtension(szTempBuf);
+				szExt.MakeLower();
+				szExt.Remove('.');
+
+				// add only files with proper file extensions
+				if (szExt.CompareNoCase(_T("txt")) == 0)
+				{
+					Lang lang;
+					LangMap_t *lm = new LangMap_t();
+
+					//this->AddItemToFileList(szTempBuf);
+					if (::LoadLang(szTempBuf, lm) == true)
+					{
+						lang.lm = lm;
+						lang.szFileName = szTempBuf;
+						lang.szEnglishName = (*lang.lm)[0x00000001];
+						lang.szTargetName = (*lang.lm)[0x00000002];
+
+						m_LangLst.AddTail(lang);
+					}
+				}
+			}
+
+			if (w32FileData.cFileName[0] != '.' &&
+				w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
+
+				// recurse subdirs
+				if (bRecurse == true)
+					SearchFolderForLang(cTempBuf, true, m_LangLst);
+			}
+
+			if (FindNextFile(hSearch, &w32FileData) == FALSE)
+			{
+				if (GetLastError() == ERROR_NO_MORE_FILES)
+					fFinished = TRUE;
+				else
+					return;
+			}
+		}
+
+		if (FindClose(hSearch) == FALSE)
+			return;
+	}
+	catch (...)
+	{
+		//MessageBox(NULL,
+		//	HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
+		//	HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+		//	MB_OK | MB_ICONERROR);
+	}
+}
+
+void CleanLangList(LangList_t& m_LangLst)
+{
+	POSITION pos = m_LangLst.GetHeadPosition();
+	while (pos)
+	{
+		Lang lang = m_LangLst.GetNext(pos);
+		delete lang.lm;
+	}
+}
+
+bool LoadLang(CString &szFileName, LangMap_t *lm)
 {
 	try
 	{
@@ -32,7 +127,7 @@ bool LoadLang(CString &szFileName, LangMap_t &lm)
 			return false;
 
 		// clear list
-		lm.RemoveAll();
+		lm->RemoveAll();
 
 		TCHAR Buffer;
 		const ULONGLONG nLength = fp.FSize();
@@ -63,7 +158,7 @@ bool LoadLang(CString &szFileName, LangMap_t &lm)
 
 					_stscanf(szKey, _T("%x"), &key);
 
-					lm[key] = szValue;
+					(*lm)[key] = szValue;
 				}
 
 				szBuffer = _T("");

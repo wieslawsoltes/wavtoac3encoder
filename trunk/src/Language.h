@@ -22,4 +22,16 @@
 
 typedef CMap<int, int, CString, CString&> LangMap_t;
 
-bool LoadLang(CString &szFileName, LangMap_t &lm);
+typedef struct TLang
+{
+	CString szFileName;
+	CString szEnglishName;
+	CString szTargetName;
+	LangMap_t *lm;
+} Lang;
+
+typedef CList<Lang, Lang&> LangList_t;
+
+void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
+void CleanLangList(LangList_t& m_LangLst);
+bool LoadLang(CString &szFileName, LangMap_t *lm);

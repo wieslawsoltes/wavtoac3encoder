@@ -1581,7 +1581,7 @@ void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
         this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
 }
 
-void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
+void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
 {
     try
     {
@@ -1594,10 +1594,10 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
         ZeroMemory(cTempBuf, MAX_PATH * 2);
 
         // remove '\' or '/' from end of search path
-        szFile.TrimRight(_T("\\"));
-        szFile.TrimRight(_T("/"));
+		szPath.TrimRight(_T("\\"));
+		szPath.TrimRight(_T("/"));
 
-        wsprintf(cTempBuf, _T("%s\\*.*\0"), szFile);
+		wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
 
         hSearch = FindFirstFile(cTempBuf, &w32FileData); 
         if(hSearch == INVALID_HANDLE_VALUE) 
@@ -1609,7 +1609,7 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
                 !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
             {  
                 CString szTempBuf;
-                szTempBuf.Format(_T("%s\\%s\0"), szFile, w32FileData.cFileName);
+				szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
 
                 // apply filter and add only .wav files
                 CString szExt = ::PathFindExtension(szTempBuf);
@@ -1626,7 +1626,7 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szFile, const bool bRecurse)
             if(w32FileData.cFileName[0] != '.' &&
                 w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                wsprintf(cTempBuf, _T("%s\\%s\0"), szFile, w32FileData.cFileName);
+				wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
 
                 // recurse subdirs
                 if(bRecurse == true)
