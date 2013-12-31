@@ -25,13 +25,10 @@ class CMyListCtrl : public CListCtrl
     DECLARE_DYNAMIC(CMyListCtrl)
 public:
     CMyListCtrl();
-public:
     virtual ~CMyListCtrl();
 protected:
     afx_msg void PreSubclassWindow();
-protected:
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-protected:
     afx_msg BOOL OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult);
 protected:
     DECLARE_MESSAGE_MAP()
@@ -41,22 +38,16 @@ protected:
     int CellRectFromPoint(CPoint &point, RECT *rcCell, int *nCol) const;
 private:
     CMyListCtrl& operator=(const CMyListCtrl &x);
-private:
     CMyListCtrl(const CMyListCtrl &x);
 public:
     bool bUseTooltipsList; // use only for LVS_REPORT style
-public:
     CList<CString,CString&> listTooltips; 
 private:
     CString szToolTipText;
-private:
     bool bHaveToolTipText;
 public:
     void SetTooltipText(CString szText);
-public:
     CString GetTooltipText();
-public:
     void DelTooltipText();
-public:
     bool HaveTooltipText();
 };

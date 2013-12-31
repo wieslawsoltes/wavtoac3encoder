@@ -53,13 +53,9 @@ private:
     };
 private:
     BOOL m_bUseMaxTrack, m_bUseMinTrack, m_bUseMaxRect;
-private:
     BOOL m_bInitDone;
-private:
     POINT m_ptMinTrackSize, m_ptMaxTrackSize;
-private:
     POINT m_ptMaxPos, m_ptMaxSize;
-private:
     CList<Layout,Layout> m_LayoutList;
 private:
     void InitVars();
@@ -69,42 +65,26 @@ protected:
     virtual BOOL OnInitDialog();
 protected:
     afx_msg void OnGetMinMaxInfo(MINMAXINFO FAR *lpMMI);
-protected:
     afx_msg void OnSize(UINT nType, int cx, int cy);
 protected:
     DECLARE_MESSAGE_MAP()
 public:
     CResizeDialog();
-public:
     CResizeDialog(UINT nIDTemplate, CWnd *pParentWnd = NULL);
-public:
     CResizeDialog(LPCTSTR lpszTemplateName, CWnd *pParentWnd = NULL);
-public:
     virtual ~CResizeDialog();
 public:
     void UpdateLayout();
-public:
     void ArrangeLayout();
-public:
     void AddAnchor(HWND newWnd, CSize typeTL, CSize typeBR = AnchorNone);
-public:
     void AddAnchor(UINT nCtrlID, CSize typeTL, CSize typeBR = AnchorNone);
-public:
     void SetMaximizedRect(const CRect &rc); 
-public:
     void ResetMaximizedRect();
-public:
     void SetMinTrackSize(const CSize &size);
-public:
     void ResetMinTrackSize();
-public:
     void SetMaxTrackSize(const CSize &size);
-public:
     void ResetMaxTrackSize();
-public:
     void UpdateWindowPos(HWND hWnd, CRect newRC);
-public:
     CString GetWindowRectStr();
-public:
     void SetWindowRectStr(CString szData);
 };
