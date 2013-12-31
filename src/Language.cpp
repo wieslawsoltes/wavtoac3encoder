@@ -64,7 +64,6 @@ void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_Lang
 					Lang lang;
 					LangMap_t *lm = new LangMap_t();
 
-					//this->AddItemToFileList(szTempBuf);
 					if (::LoadLang(szTempBuf, lm) == true)
 					{
 						lang.lm = lm;
@@ -101,10 +100,10 @@ void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_Lang
 	}
 	catch (...)
 	{
-		//MessageBox(NULL,
-		//	HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
-		//	HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
-		//	MB_OK | MB_ICONERROR);
+		MessageBox(NULL,
+			HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
+			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+			MB_OK | MB_ICONERROR);
 	}
 }
 

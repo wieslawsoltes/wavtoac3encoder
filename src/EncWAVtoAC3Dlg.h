@@ -81,6 +81,7 @@ protected:
 	void InitLangFilesListContextMenu(CMenu &m_hMenu);
 	void InitLangSettingsList();
 	void InitLangMainMenu();
+	void InitLangMenu();
 protected:
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();

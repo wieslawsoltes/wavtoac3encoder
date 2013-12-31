@@ -3603,6 +3603,8 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 
 void CEncWAVtoAC3Dlg::InitLang()
 {
+	InitLangMenu();
+
 	// Main Dialog: Buttons
 	InitLangButtons();
 
@@ -3719,4 +3721,27 @@ void CEncWAVtoAC3Dlg::InitLangMainMenu()
 	m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00104004));
 
 	this->DrawMenuBar();
+}
+
+void CEncWAVtoAC3Dlg::InitLangMenu()
+{
+	// insert languages to Language menu
+	if (theApp.m_LangLst.GetCount() > 0)
+	{
+		CMenu *m_hMenu = this->GetMenu();
+		CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
+
+		m_hLangMenu->AppendMenu(MF_SEPARATOR);
+
+		POSITION pos = theApp.m_LangLst.GetHeadPosition();
+		int i = 0;
+		while (pos)
+		{
+			Lang lang = theApp.m_LangLst.GetNext(pos);
+			CString szBuff;
+			szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
+			m_hLangMenu->AppendMenu(MF_STRING, 2000 + i, szBuff);
+			i++;
+		}
+	}
 }
