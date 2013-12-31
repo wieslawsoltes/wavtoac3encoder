@@ -44,6 +44,9 @@ protected:
     DECLARE_MESSAGE_MAP()
 public:
     virtual BOOL OnInitDialog();
+protected:
+	void InitCtrls();
+	void InitLang();
 public:
     void RemapFilesToChannels();
     void SetFilePaths();
@@ -75,6 +78,13 @@ public:
 public:
     CMyComboBox m_CmbChannelConfig;
 public:
+	CMyEdit m_EdtChannelFL;
+	CMyEdit m_EdtChannelFR;
+	CMyEdit m_EdtChannelFC;
+	CMyEdit m_EdtChannelLFE;
+	CMyEdit m_EdtChannelSL;
+	CMyEdit m_EdtChannelSR;
+public:
     afx_msg void OnBnClickedButtonFl();
     afx_msg void OnBnClickedButtonFr();
     afx_msg void OnBnClickedButtonFc();
@@ -99,10 +109,4 @@ public:
     afx_msg void OnBnClickedCheckChannelConfigLfe();
 public:
     afx_msg void OnCbnSelchangeComboChannelConfig();
-	CMyEdit m_EdtChannelFL;
-	CMyEdit m_EdtChannelFR;
-	CMyEdit m_EdtChannelFC;
-	CMyEdit m_EdtChannelLFE;
-	CMyEdit m_EdtChannelSL;
-	CMyEdit m_EdtChannelSR;
 };
