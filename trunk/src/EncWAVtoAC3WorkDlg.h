@@ -75,6 +75,7 @@ protected:
 protected:
 	void InitSettings();
 	void InitCtrls();
+	void InitLang();
 	void CreateWorker();
 	void UpdateFileTimer();
 	void UpdateTotalTimer();
