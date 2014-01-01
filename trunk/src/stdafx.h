@@ -42,25 +42,28 @@
 // default text for same as source file output path value (multi mono input)
 #define DEFAULT_TEXT_OUTPUT_FILE (HaveLangStrings() ? GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
-// define default file name for program configuration
+// default file name for program configuration
 #define DEFAULT_CONFIG_FILE_NAME _T("EncWAVtoAC3.config")
 
-// define default file name for encoder presets
+// default file name for language configuration
+#define DEFAULT_LANG_FILE_NAME _T("EncWAVtoAC3.lang")
+
+// default file name for encoder presets
 #define DEFAULT_PRESETS_FILE_NAME _T("EncWAVtoAC3.presets")
 
-// define default file name for files list
+// default file name for files list
 #define DEFAULT_FILES_FILE_NAME _T("EncWAVtoAC3.files")
 
-// define default files list format (0 = *.files, 1 = *.mux)
+// default files list format (0 = *.files, 1 = *.mux)
 #define DEFAULT_FILES_FORMAT 0
 
-// define default file name for log
+// default file name for log
 #define DEFAULT_LOG_FILE_NAME _T("EncWAVtoAC3.txt")
 
-// define default file name for engines
+// default file name for engines
 #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.engines")
 
-// define program home URL
+// program home URL
 #define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
 
 //
