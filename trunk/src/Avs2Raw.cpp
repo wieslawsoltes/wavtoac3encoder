@@ -86,26 +86,31 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
             {
                 delete Video;
                 delete env;
+				Video = NULL;
+				env = NULL;
                 return false;
             }
         }
         else
         {
             delete env;
+			env = NULL;
             return false;
         }
     }  
     //catch(AvisynthError e) 
     //{
-    //    fprintf(stderr, "ERROR: (Avisynth Error) loading avisynth script\n");
+    //    fprintf(stderr, "ERROR: (Avisynth Error) loading Avisynth script\n");
     //    fprintf(stderr, "%s.\n", e.msg);
     //    delete env;
+	//    env = NULL;
     //    return false;
     //}
     catch(...) 
     {
-        //fprintf(stderr, "ERROR: (Unknown) loading avisynth script\n");
+        //fprintf(stderr, "ERROR: (Unknown) loading Avisynth script\n");
         delete env;
+		env = NULL;
         return false;
     }
 
@@ -134,7 +139,8 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
         // fprintf(stderr, "ERROR: no audio stream\n");
         delete Video;
         delete env;
-
+		Video = NULL;
+		env = NULL;
         this->bHaveDLL = true;
         return false;
     }
@@ -142,23 +148,33 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
 
 bool CAvs2Raw::CloseAvisynth()
 {
-    // cleanup used memory
-    if(Video)
-        delete Video;
+	try
+	{
+		// cleanup used memory
+		if (Video)
+		{
+			delete Video;
+			Video = NULL;
+		}
 
-    if(env)
-        delete env;
+		if (env)
+		{
+			delete env;
+			env = NULL;
+		}
 
-    if(hAvisynthDLL)
-        FreeLibrary(hAvisynthDLL);
+		if (hAvisynthDLL)
+			FreeLibrary(hAvisynthDLL);
 
-    this->bHaveDLL = false;
-    hAvisynthDLL = NULL;
-    _szAvsFileName = NULL;
-    memset(&this->info, 0, sizeof(AvsAudioInfo));
-    CreateEnv = NULL;
-    env = NULL;
-    Video = NULL;
+		this->bHaveDLL = false;
+		hAvisynthDLL = NULL;
+		_szAvsFileName = NULL;
+		memset(&this->info, 0, sizeof(AvsAudioInfo));
+		CreateEnv = NULL;
+		env = NULL;
+		Video = NULL;
+	}
+	catch (...) { }
 
     return true;
 }
