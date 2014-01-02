@@ -212,7 +212,18 @@ int FindOptionIndex(CString szOption)
     return 0;
 }
 
-// TODO: Reload text when language has changed.
+void ResetEncoderOptionsLists()
+{
+	for (int i = 0; i < nNumEncoderOptions; i++)
+	{
+		if (encOpt[i].listOptNames.GetCount() > 0)
+			encOpt[i].listOptNames.RemoveAll();
+
+		if (encOpt[i].listOptValues.GetCount() > 0)
+			encOpt[i].listOptValues.RemoveAll();
+	}
+}
+
 void InitEncoderOptions()
 {
     // tooltip text is based on Aften command-line help text (aften -longhelp)
@@ -235,6 +246,9 @@ void InitEncoderOptions()
         encOpt[nCurOpt].listOptNames.AddTail(szName); \
         nValue = value; \
         encOpt[nCurOpt].listOptValues.AddTail(nValue);
+
+	// reset encoder options lists
+	ResetEncoderOptionsLists();
 
     // (1) Encoding options
 
