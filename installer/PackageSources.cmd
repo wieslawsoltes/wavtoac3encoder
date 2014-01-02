@@ -40,6 +40,11 @@ mkdir "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
 
+set varPath=lang
+mkdir "%varOutput%\%varPath%"
+
+copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
+
 set varPath=engines
 mkdir "%varOutput%\%varPath%"
 
