@@ -52,16 +52,16 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     hAvisynthDLL = LoadLibrary(_T("avisynth")); 
     if(!hAvisynthDLL)
     {
-        //fprintf(stderr, "ERROR: couldn't load avisynth.dll\n");
+		::LogMessage(_T("Avisynth Error: Could not load avisynth.dll!"));
         return false;
     }
 	
-    // retrieve address of createscriptenvironment function
+    // retrieve address of CreateScriptEnvironment function
     CreateEnv = (IScriptEnvironment *(__stdcall *)(int)) GetProcAddress(hAvisynthDLL, 
         "CreateScriptEnvironment"); 
     if(!CreateEnv)
     {
-        //fprintf(stderr, "ERROR: couldn't access CreateScriptEnvironment\n");
+		::LogMessage(_T("Avisynth Error: Could not access CreateScriptEnvironment!"));
         return false;
     }
 
@@ -69,11 +69,11 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     env = CreateEnv(AVISYNTH_INTERFACE_VERSION);
     if(!env)
     {
-        //fprintf(stderr, "ERROR: couldn't create scriptenvironment\n");
+		::LogMessage(_T("Avisynth Error: Could not create scriptenvironment!"));
         return false;
     }
 
-    // load the avisynth script
+    // load the Avisynth script
     AVSValue args[1] = { szAvsFileName };
     try 
     {
@@ -98,17 +98,36 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
             return false;
         }
     }  
-    //catch(AvisynthError e) 
-    //{
-    //    fprintf(stderr, "ERROR: (Avisynth Error) loading Avisynth script\n");
-    //    fprintf(stderr, "%s.\n", e.msg);
-    //    delete env;
-	//    env = NULL;
-    //    return false;
-    //}
+    catch(AvisynthError e) 
+    {
+#ifdef _UNICODE
+		const char *ansistr = e.msg;
+		int lenA = lstrlenA(ansistr);
+		int lenW;
+		BSTR unicodestr;
+		lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
+		if (lenW > 0)
+		{
+			unicodestr = ::SysAllocStringLen(0, lenW);
+			::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
+			CString szBuff;
+			szBuff.Format(_T("Avisynth Error: Loading Avisynth script message: %s"), unicodestr);
+			::LogMessage(szBuff);
+		}
+		::SysFreeString(unicodestr);
+#else
+		CString szBuff;
+		szBuff.Format(_T("Avisynth Error: Loading Avisynth script message: %s"), e.msg);
+		::LogMessage(szBuff);
+#endif
+        delete env;
+	    env = NULL;
+        return false;
+    }
     catch(...) 
     {
-        //fprintf(stderr, "ERROR: (Unknown) loading Avisynth script\n");
+		::LogMessage(_T("Avisynth Error: Unknown error while loading Avisynth script!"));
+
         delete env;
 		env = NULL;
         return false;
@@ -135,8 +154,9 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
         return true;
     }
     else
-    {           
-        // fprintf(stderr, "ERROR: no audio stream\n");
+    {
+		::LogMessage(_T("Avisynth Error: No audio stream!"));
+
         delete Video;
         delete env;
 		Video = NULL;
@@ -198,17 +218,36 @@ int CAvs2Raw::GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     {
         (*Video)->GetAudio(pBuffer, pStatus->nStart, pStatus->nSamplesToRead, env);
     }
-    //catch(AvisynthError e) 
-    //{
-    //    fprintf(stderr, "\nERROR: (Avisynth Error) GetAudio()\n");
-    //    fprintf(stderr, "%s.\n", e.msg);
-    //    delete Video;
-    //    delete env;
-    //    return -1;
-    //}
+    catch(AvisynthError e) 
+    {
+#ifdef _UNICODE
+		const char *ansistr = e.msg;
+		int lenA = lstrlenA(ansistr);
+		int lenW;
+		BSTR unicodestr;
+		lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
+		if (lenW > 0)
+		{
+			unicodestr = ::SysAllocStringLen(0, lenW);
+			::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
+			CString szBuff;
+			szBuff.Format(_T("Avisynth Error: GetAudio() error message: %s"), unicodestr);
+			::LogMessage(szBuff);
+		}
+		::SysFreeString(unicodestr);
+#else
+		CString szBuff;
+		szBuff.Format(_T("Avisynth Error: GetAudio() error message: %s"), e.msg);
+		::LogMessage(szBuff);
+#endif
+        delete Video;
+        delete env;
+        return -1;
+    }
     catch(...) 
     {
-        //fprintf(stderr, "\nERROR: (Unknown) GetAudio()\n");
+		::LogMessage(_T("Avisynth Error: Unknown error in GetAudio()!"));
+
         delete Video;
         delete env;
         return -1;
