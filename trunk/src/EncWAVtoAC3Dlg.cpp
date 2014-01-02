@@ -3834,8 +3834,9 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 		CMenu *m_hMenu = this->GetMenu();
 		CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
-		m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
-		m_hLangMenu->AppendMenu(MF_SEPARATOR);
+		m_hLangMenu->DeleteMenu(ID_LANGUAGE_DEFAULT, 0);
+		//m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
+		//m_hLangMenu->AppendMenu(MF_SEPARATOR);
 
 		POSITION pos = theApp.m_LangLst.GetHeadPosition();
 		int i = 0;
@@ -3858,7 +3859,6 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 	{
 		CMenu *m_hMenu = this->GetMenu();
 		CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
-
 		m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 	}
 }
