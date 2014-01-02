@@ -4,6 +4,9 @@ Version 5.1:
 
 - Added multi-language support.
 - Redesigned the GUI to enable multi-language support.
+- Added tool-tips for settings list.
+- Added log messages for Avisynth errors.
+- Updated project to Visual Studio 2013.
 - Fixed bitmap resource issue in VS2013.
 
 Version 5.0:
