@@ -66,6 +66,7 @@ Source: ..\doc\ReadMe.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
+Source: ..\lang\*.txt; DestDir: {app}\Lang; Flags: ignoreversion
 Source: ..\engines\unicode\Win32\EncWAVtoAC3.engines; DestDir: {app}; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion
