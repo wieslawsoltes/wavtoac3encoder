@@ -388,40 +388,31 @@ void CEncWAVtoAC3Dlg::InitTooltips()
     this->m_BtnEngines.SetTooltipText(szTmpText);
 }
 
-void CEncWAVtoAC3Dlg::InitDefaultPreset()
+void CEncWAVtoAC3Dlg::InitSettingsList()
 {
-	// TODO: Reload text when language has changed.
-    // configure default preset
-	defaultPreset.szName = DEFAULT_PRESET_NAME;
-
-    // set Aften engine defaults values for first start (when there is no config file present)
-    // there is Aften api function to get this values: AftenContext aftenCtx; aften_set_defaults(&aftenCtx);
-    defaultPreset.nMode = AFTEN_ENC_MODE_CBR; // aftenCtx.params.encoding_mode;
-    defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
-    defaultPreset.nQuality = 240; // aftenCtx.params.quality;
-
 	// add items to settings listctrl
 	int nGroupCounter = -1;
-	LVITEM li = {0};
+
+	LVITEM li = { 0 };
 	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
 
-	// TODO: Reload text when language has changed.
+	HWND listSettings = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
+
 	// fill advanced encoder options list
-	for(int i = 0; i < nNumEncoderOptions; i++)
+	for (int i = 0; i < nNumEncoderOptions; i++)
 	{
-		if(encOpt[i].bBeginGroup == true)
+		if (encOpt[i].bBeginGroup == true)
 			nGroupCounter++;
 
-		if(nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
+		if (nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
 		{
 			li.pszText = encOpt[i].szName.GetBuffer();
 			li.iItem = i;
 			li.iSubItem = 0;
 			li.iGroupId = 101 + nGroupCounter;
-			ListView_InsertItem(this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd(), &li);
 
-			ListView_SetItemText(this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd(), i, 1, 
-				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
+			ListView_InsertItem(listSettings, &li);
+			ListView_SetItemText(listSettings, i, 1, encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
 
 			this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
 
@@ -433,9 +424,24 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 	}
 
-	// TODO: tooltips are not working on all list items
-    this->m_LstSettings.bUseTooltipsList = false;
+	// enable tooltips for settings list
+	this->m_LstSettings.bUseTooltipsList = true;
+}
 
+void CEncWAVtoAC3Dlg::InitDefaultPreset()
+{
+	// TODO: Reload text when language has changed.
+	this->InitSettingsList();
+
+	// TODO: Reload text when language has changed.
+    // configure default preset
+	defaultPreset.szName = DEFAULT_PRESET_NAME;
+
+    // set Aften engine defaults values for first start (when there is no config file present)
+    // there is Aften api function to get this values: AftenContext aftenCtx; aften_set_defaults(&aftenCtx);
+    defaultPreset.nMode = AFTEN_ENC_MODE_CBR; // aftenCtx.params.encoding_mode;
+    defaultPreset.nBitrate = 0; // aftenCtx.params.bitrate;
+    defaultPreset.nQuality = 240; // aftenCtx.params.quality;
     defaultPreset.nRawChannels = 0;
     defaultPreset.nRawSampleFormat = 0;
     defaultPreset.nRawSampleRate = 0;
@@ -452,7 +458,7 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
     this->m_CmbPresets.InsertString(0, defaultPreset.szName);
     this->m_CmbPresets.SetCurSel(::nCurrentPreset);
 
-    // select first item in options list
+    // select first item in settings list
     this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
     // set raw audio input defaults

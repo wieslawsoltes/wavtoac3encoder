@@ -34,8 +34,6 @@ protected:
     DECLARE_MESSAGE_MAP()
 protected:
     virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
-protected:
-    int CellRectFromPoint(CPoint &point, RECT *rcCell, int *nCol) const;
 private:
     CMyListCtrl& operator=(const CMyListCtrl &x);
     CMyListCtrl(const CMyListCtrl &x);

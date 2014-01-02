@@ -76,6 +76,7 @@ protected:
     virtual BOOL OnInitDialog();
     void InitDialogAnchors();
 	void InitTooltips();
+	void InitSettingsList();
 	void InitDefaultPreset();
 	void InitRawSamleFormatComboBox();
 	void InitSettingsListGroups();
