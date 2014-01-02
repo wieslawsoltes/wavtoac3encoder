@@ -651,7 +651,7 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 
 	// initialize language strings
 	if (HaveLangStrings())
-		this->InitLang();
+		this->InitLang(true);
 
     // init encoder options
     InitEncoderOptions();
@@ -2259,15 +2259,64 @@ void CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration()
 
 void CEncWAVtoAC3Dlg::OnLanguageChangeDefault()
 {
-	// TODO: Set language to default.
+	// set language to default
+	theApp.m_nLangId = -1;
+	theApp.m_bHaveLang = FALSE;
+	theApp.m_Lang = NULL;
+	langFileName = _T("");
+
+	// update Language menu checked status
+	CMenu *m_hMenu = this->GetMenu();
+	CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
+
+	m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
+
+	POSITION pos = theApp.m_LangLst.GetHeadPosition();
+	int i = 0;
+	while (pos)
+	{
+		m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
+		i++;
+	}
+
+	// init language
+	InitLang(false);
 }
 
 void CEncWAVtoAC3Dlg::OnLanguageChange(UINT nID)
 {
-	// TODO: Load language by ID.
-	CString szText;
-	szText.Format(_T("%d"), nID);
-	MessageBox(szText, _T("Language ID"), MB_ICONINFORMATION);
+	// set language by ID
+	POSITION pos = theApp.m_LangLst.FindIndex(nID - ID_LANGUAGE_MENU_START);
+	if (pos != NULL)
+	{
+		Lang lang = theApp.m_LangLst.GetAt(pos);
+		theApp.m_nLangId = nID - ID_LANGUAGE_MENU_START;
+		theApp.m_bHaveLang = TRUE;
+		theApp.m_Lang = lang.lm;
+		langFileName = lang.szFileName;
+	}
+
+	// update Language menu checked status
+	CMenu *m_hMenu = this->GetMenu();
+	CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
+
+	m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
+
+	pos = theApp.m_LangLst.GetHeadPosition();
+	int i = 0;
+	while (pos)
+	{
+		Lang lang = theApp.m_LangLst.GetNext(pos);
+		if (theApp.m_nLangId == i)
+			m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
+		else
+			m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
+
+		i++;
+	}
+
+	// init language
+	this->InitLang(false);
 }
 
 void CEncWAVtoAC3Dlg::OnHelpCommandLine()
@@ -3616,9 +3665,10 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
     }
 }
 
-void CEncWAVtoAC3Dlg::InitLang()
+void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 {
-	InitLangMenu();
+	if (initLangMenu == true)
+		InitLangMenu();
 
 	// Main Dialog: Buttons
 	InitLangButtons();

@@ -79,7 +79,7 @@ protected:
 	void InitDefaultPreset();
 	void InitDialogControls();
 protected:
-	void InitLang();
+	void InitLang(bool initLangMenu);
 	void InitLangButtons();
 	void InitLangStaticText();
 	void InitLangFilesList();

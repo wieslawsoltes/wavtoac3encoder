@@ -154,6 +154,7 @@ CEncWAVtoAC3App::~CEncWAVtoAC3App()
 }
 
 CEncWAVtoAC3App theApp;
+CString langFileName = _T("");
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
@@ -376,8 +377,6 @@ void CEncWAVtoAC3App::InitLog()
 	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
 	LogOpen();
 }
-
-CString langFileName = _T("");
 
 bool LoadLangConfig(CString &szFileName)
 {
