@@ -545,8 +545,8 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     // deletion of image list under win9x
     // set this style under resource editor
     this->m_LstFiles.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 664, 0);
-    this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 100, 0);
+    this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 624, 0);
+    this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 140, 0);
 
     // initialize the image list for file listctrl
     SHFILEINFO sfi;
