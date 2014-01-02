@@ -3686,22 +3686,22 @@ void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 	if (HaveLangStrings())
 	{
 		if (initLangMenu == true)
-			InitLangMenu();
+			this->InitLangMenu();
 
 		// Main Dialog: Buttons
-		InitLangButtons();
+		this->InitLangButtons();
 
 		// Main Dialog: Static Text
-		InitLangStaticText();
+		this->InitLangStaticText();
 
 		// Main Dialog: Files List
-		InitLangFilesList();
+		this->InitLangFilesList();
 
 		// Main Dialog: Settings List
-		InitLangSettingsList();
+		this->InitLangSettingsList();
 
 		// Main Dialog: Main Menu
-		InitLangMainMenu();
+		this->InitLangMainMenu();
 	}
 
 	// init encoder options
