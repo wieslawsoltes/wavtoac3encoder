@@ -153,3 +153,4 @@ void LogFile(CString szLogFileName);
 bool LogOpen();
 bool LogClose();
 bool LogMessage(CString szMessage);
+void LogAnsiMessage(const PTCHAR pszMessage, const char* msg);

@@ -89,3 +89,21 @@ bool LogMessage(CString szMessage)
 
     return true;
 }
+
+void LogAnsiMessage(const PTCHAR pszMessage, const char* msg)
+{
+	const char *ansistr = msg;
+	int lenA = lstrlenA(ansistr);
+	int lenW;
+	BSTR unicodestr;
+	lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
+	if (lenW > 0)
+	{
+		unicodestr = ::SysAllocStringLen(0, lenW);
+		::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
+		CString szBuff;
+		szBuff.Format(_T("%s: %s"), pszMessage, unicodestr);
+		::LogMessage(szBuff);
+	}
+	::SysFreeString(unicodestr);
+}

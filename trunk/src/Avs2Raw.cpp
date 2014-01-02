@@ -101,20 +101,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     catch(AvisynthError e) 
     {
 #ifdef _UNICODE
-		const char *ansistr = e.msg;
-		int lenA = lstrlenA(ansistr);
-		int lenW;
-		BSTR unicodestr;
-		lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
-		if (lenW > 0)
-		{
-			unicodestr = ::SysAllocStringLen(0, lenW);
-			::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
-			CString szBuff;
-			szBuff.Format(_T("Avisynth Error: Loading Avisynth script message: %s"), unicodestr);
-			::LogMessage(szBuff);
-		}
-		::SysFreeString(unicodestr);
+		::LogAnsiMessage(_T("Avisynth Error: Loading Avisynth script message"), e.msg);
 #else
 		CString szBuff;
 		szBuff.Format(_T("Avisynth Error: Loading Avisynth script message: %s"), e.msg);
@@ -194,7 +181,10 @@ bool CAvs2Raw::CloseAvisynth()
 		env = NULL;
 		Video = NULL;
 	}
-	catch (...) { }
+	catch (...) 
+	{ 
+		::LogMessage(_T("Avisynth Error: Failed to close Avs2Raw!"));
+	}
 
     return true;
 }
@@ -221,20 +211,7 @@ int CAvs2Raw::GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     catch(AvisynthError e) 
     {
 #ifdef _UNICODE
-		const char *ansistr = e.msg;
-		int lenA = lstrlenA(ansistr);
-		int lenW;
-		BSTR unicodestr;
-		lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
-		if (lenW > 0)
-		{
-			unicodestr = ::SysAllocStringLen(0, lenW);
-			::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
-			CString szBuff;
-			szBuff.Format(_T("Avisynth Error: GetAudio() error message: %s"), unicodestr);
-			::LogMessage(szBuff);
-		}
-		::SysFreeString(unicodestr);
+		::LogAnsiMessage(_T("Avisynth Error: GetAudio() error message"), e.msg);
 #else
 		CString szBuff;
 		szBuff.Format(_T("Avisynth Error: GetAudio() error message: %s"), e.msg);
