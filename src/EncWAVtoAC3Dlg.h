@@ -77,6 +77,8 @@ protected:
     void InitDialogAnchors();
 	void InitTooltips();
 	void InitDefaultPreset();
+	void InitRawSamleFormatComboBox();
+	void InitSettingsListGroups();
 	void InitDialogControls();
 protected:
 	void InitLang(bool initLangMenu);

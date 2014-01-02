@@ -517,6 +517,39 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
     }
 }
 
+void CEncWAVtoAC3Dlg::InitRawSamleFormatComboBox()
+{
+	// update language string
+	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED);
+
+	// remove all items from sample format combobox
+	this->m_CmbRawSampleFormat.ResetContent();
+
+	// setup default values for raw audio input
+	for (int i = 0; i < nNumRawSampleFormats; i++)
+		this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
+}
+
+void CEncWAVtoAC3Dlg::InitSettingsListGroups()
+{
+	LVGROUP lg;
+	lg.cbSize = sizeof(LVGROUP);
+	lg.mask = LVGF_HEADER | LVGF_GROUPID;
+
+	HWND listView = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
+
+	// remove all settings groups
+	ListView_RemoveAllGroups(listView);
+
+	// add Groups to settings listctrl
+	for (int i = 0; i < nNumEncoderOptionsGroups; i++)
+	{
+		lg.pszHeader = (LPTSTR)(LPCTSTR)(HaveLangStrings() ? GetLangString(0x00208000 + i + 1) : pszGroups[i]);
+		lg.iGroupId = 101 + i;
+		ListView_InsertGroup(listView, -1, &lg);
+	}
+}
+
 void CEncWAVtoAC3Dlg::InitDialogControls()
 {
     // set text style to normal or bold for static controls and buttons
@@ -550,11 +583,10 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 
     // initialize the image list for file listctrl
     SHFILEINFO sfi;
-
     HIMAGELIST m_ilLargeTmp;
     HIMAGELIST m_ilSmallTmp;
-
     TCHAR szSystemRoot[MAX_PATH + 1];
+
     GetWindowsDirectory(szSystemRoot, MAX_PATH);
     PathStripToRoot(szSystemRoot);
 
@@ -593,20 +625,6 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 	lc.pszText = _T("Value");
 	ListView_InsertColumn(listView, 1, &lc);
 
-	// add Groups to settings listctrl
-	LVGROUP lg;
-	lg.cbSize = sizeof(LVGROUP);
-	lg.mask = LVGF_HEADER | LVGF_GROUPID;
-
-	for(int i = 0; i < nNumEncoderOptionsGroups; i++)
-	{
-		// TODO: Reload text when language has changed.
-		lg.pszHeader = (LPTSTR)(LPCTSTR)(HaveLangStrings() ? GetLangString(0x00208000 + i + 1) : pszGroups[i]);
-
-		lg.iGroupId = 101 + i;
-		ListView_InsertGroup(listView, -1, &lg);
-	}
-
     // set default sample rate number
     this->m_SpnRawSampleRate.SetRange32(0, INT_MAX);
     this->m_SpnRawSampleRate.SetPos(0);
@@ -619,25 +637,24 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 
         this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
-	// TODO: Reload text when language has changed.
-	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED);
-
-	// setup default values for raw audio input
-	for (int i = 0; i < nNumRawSampleFormats; i++)
-		this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
-
     // set output file/path default value
     if(this->bMultipleMonoInput == true)
         this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
     else
         this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
+
+	// TODO: Reload text when language has changed.
+	this->InitRawSamleFormatComboBox();
+
+	// TODO: Reload text when language has changed.
+	this->InitSettingsListGroups();
 }
 
 BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 {
     CResizeDialog::OnInitDialog();
 
-    // show program name and version in main dialog title
+    // set program name and version in main dialog title
     CString szDialogTitle = _T("");
     szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
     this->SetWindowText(szDialogTitle);
