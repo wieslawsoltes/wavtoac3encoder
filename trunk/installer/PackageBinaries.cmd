@@ -28,6 +28,7 @@ set varPathAftenBin=src\aften\windows\output
 
 set varOutput=%varOutputVer%
 mkdir "%varOutput%"
+mkdir "%varOutput%\Lang"
 mkdir "%varOutput%\libaftendll_x86"
 mkdir "%varOutput%\libaftendll_x86_SSE"
 mkdir "%varOutput%\libaftendll_x86_SSE2"
@@ -38,6 +39,9 @@ copy "%varBase%\%varPath%\Changes.txt" "%varOutput%"
 copy "%varBase%\%varPath%\Copying.txt" "%varOutput%"
 copy "%varBase%\%varPath%\ReadMe.txt" "%varOutput%"
 copy "%varBase%\%varPath%\Command-Line.txt" "%varOutput%"
+
+set varPath=Lang
+copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
 
 copy "%varBase%\Release\Win32\EncWAVtoAC3.exe" "%varOutput%"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86\libaften.dll" "%varOutput%\libaftendll_x86\libaften.dll"
