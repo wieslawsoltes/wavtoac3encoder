@@ -144,6 +144,8 @@ void UpdateCurrentPreset(EncoderPreset updatePreset);
 // find option index
 int FindOptionIndex(CString szOption);
 
+void ResetEncoderOptionsLists();
+
 // initialize advanced encoder options
 void InitEncoderOptions();
 
