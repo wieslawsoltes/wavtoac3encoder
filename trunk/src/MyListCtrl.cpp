@@ -21,6 +21,7 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "MyListCtrl.h"
+
 #include <afxpriv.h>
 
 #ifdef _DEBUG
@@ -87,103 +88,24 @@ int CMyListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 INT_PTR CMyListCtrl::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
 {
-    int nRow, nCol;
-    RECT rcCell;
-    nRow = CellRectFromPoint(point, &rcCell, &nCol);
+	int nItem = this->HitTest(point);
 
-    if(nRow == -1) 
-        return -1;
+	if (nItem == -1)
+		return -1;
 
-    pTI->hwnd = m_hWnd;
-    pTI->uId = (UINT) ((nRow << 10) + (nCol & 0x3ff) + 1);
-    pTI->lpszText = LPSTR_TEXTCALLBACK;
-    pTI->rect = rcCell;
+	if (nItem)
+		nItem = nItem;
 
-    return pTI->uId;
-}
+	CRect rc;
+	this->GetItemRect(nItem, rc, LVIR_BOUNDS);
 
-int CMyListCtrl::CellRectFromPoint(CPoint &point, RECT *rcCell, int *nCol) const
-{
-    int nColNum;
-    CHeaderCtrl *pHeader;
-    int nColumnCount;
+	pTI->hwnd = m_hWnd;
+	pTI->uId = nItem + 1;
+	pTI->lpszText = LPSTR_TEXTCALLBACK;
+	pTI->uFlags |= TTF_ALWAYSTIP | TTF_NOTBUTTON;
+	pTI->rect = rc;
 
-    if((GetWindowLong(m_hWnd, GWL_STYLE) & LVS_TYPEMASK) != LVS_REPORT)
-    {
-        nColumnCount = 1;
-    }
-    else
-    {
-        pHeader = (CHeaderCtrl*) GetDlgItem(0);
-        nColumnCount = pHeader->GetItemCount();
-    }
-
-    int nRow = GetTopIndex();
-    int nBottom = nRow + GetCountPerPage();
-    if(nBottom > GetItemCount())
-        nBottom = GetItemCount();
-
-    for(; nRow <= nBottom; nRow++)
-    {
-        CRect rcTemp, rcLabel;
-        if((GetWindowLong(m_hWnd, GWL_STYLE) & LVS_TYPEMASK) != LVS_REPORT)
-        {
-            GetItemRect(nRow, &rcTemp, LVIR_ICON);
-            GetItemRect(nRow, &rcLabel, LVIR_LABEL);
-        }
-        else
-        {
-            GetItemRect(nRow, &rcTemp, LVIR_BOUNDS);
-        }
-
-        if(rcTemp.PtInRect(point) || rcLabel.PtInRect(point))
-        {
-            bool bIsInLabel = false;
-            if(rcTemp.PtInRect(point))
-                bIsInLabel = false;
-            else if(rcLabel.PtInRect(point))
-                bIsInLabel = true;
-
-            for(nColNum = 0; nColNum < nColumnCount; nColNum++)
-            {
-                // get column width for report style
-                int nColWidth = 100000;
-                if((GetWindowLong(m_hWnd, GWL_STYLE) & LVS_TYPEMASK) == LVS_REPORT)
-                    nColWidth = GetColumnWidth(nColNum);
-
-                if((point.x >= rcTemp.left && point.x <= (rcTemp.left + nColWidth)) 
-                    || (point.x >= rcLabel.left && point.x <= (rcLabel.left + nColWidth)))
-                {
-                    RECT rcClient;
-                    GetClientRect(&rcClient);
-
-                    if(nCol) 
-                        *nCol = nColNum;
-
-                    rcTemp.right = rcTemp.left + nColWidth;
-                    rcLabel.right = rcLabel.left + nColWidth;
-
-                    if(rcTemp.right > rcClient.right) 
-                        rcTemp.right = rcClient.right;
-
-                    if(rcLabel.right > rcClient.right)
-                        rcLabel.right = rcClient.right;
-
-                    if(!bIsInLabel)
-                        *rcCell = rcTemp;
-                    else
-                        *rcCell = rcLabel;
-
-                    return nRow;
-                }
-
-                rcTemp.left += nColWidth;
-                rcLabel.left += nColWidth;
-            }
-        }
-    }
-
-    return -1;
+	return pTI->uId;
 }
 
 BOOL CMyListCtrl::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
@@ -193,11 +115,11 @@ BOOL CMyListCtrl::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
     static CString szTipText;
     UINT nID = pNMHDR->idFrom;
 
-    if(nID == 0 || bUseTooltipsList == false)
+    if(nID == 0  || bUseTooltipsList == false)
         return FALSE;
 
-    int nRow = ((nID - 1) >> 10) & 0x3fffff;
-    int nCol = (nID - 1) & 0x3ff;
+	int nRow = nID - 1;
+	int nCol = 0;
 
     if((GetWindowLong(m_hWnd, GWL_STYLE) & LVS_TYPEMASK) == LVS_REPORT && bUseTooltipsList == true)
     {
