@@ -607,13 +607,6 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 		ListView_InsertGroup(listView, -1, &lg);
 	}
 
-	// TODO: Reload text when language has changed.
-	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR) (DEFAULT_TEXT_IGNORED);
-
-    // setup default values for raw audio input
-    for(int i = 0; i < nNumRawSampleFormats; i++)
-        this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
-
     // set default sample rate number
     this->m_SpnRawSampleRate.SetRange32(0, INT_MAX);
     this->m_SpnRawSampleRate.SetPos(0);
@@ -625,6 +618,13 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
     // set default state for save configuration on exit option
     this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 
         this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
+
+	// TODO: Reload text when language has changed.
+	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED);
+
+	// setup default values for raw audio input
+	for (int i = 0; i < nNumRawSampleFormats; i++)
+		this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
 
     // set output file/path default value
     if(this->bMultipleMonoInput == true)
