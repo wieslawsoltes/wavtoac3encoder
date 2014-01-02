@@ -433,8 +433,7 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 	// TODO: Reload text when language has changed.
 	this->InitSettingsList();
 
-	// TODO: Reload text when language has changed.
-    // configure default preset
+    // set default preset name
 	defaultPreset.szName = DEFAULT_PRESET_NAME;
 
     // set Aften engine defaults values for first start (when there is no config file present)
