@@ -3759,8 +3759,10 @@ void CEncWAVtoAC3Dlg::InitLangSettingsList()
 
 void CEncWAVtoAC3Dlg::InitLangMainMenu()
 {
+	// get main menu handle
 	CMenu *m_hMenu = this->GetMenu();
 
+	// File menu
 	m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, GetLangString(0x00101001));
 	m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, GetLangString(0x00101002));
 	m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, GetLangString(0x00101003));
@@ -3771,20 +3773,31 @@ void CEncWAVtoAC3Dlg::InitLangMainMenu()
 	m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, GetLangString(0x00101008));
 	m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, GetLangString(0x00101009));
 
+	// Options menu
 	m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, GetLangString(0x00102001));
 	m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, GetLangString(0x00102002));
 	m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, GetLangString(0x00102003));
 	m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, GetLangString(0x00102004));
 	m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, GetLangString(0x00102005));
 
+	// Language menu
 	m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, GetLangString(0x00103001));
 	m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, GetLangString(0x00103002));
 
+	// Help menu
 	m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, GetLangString(0x00104001));
 	m_hMenu->ModifyMenuW(ID_HELP_COMMAND_LINE, 0, ID_HELP_COMMAND_LINE, GetLangString(0x00104002));
 	m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00104003));
 	m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00104004));
 
+	// restore options checked state
+	m_hMenu->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
+		this->bDisableAllWarnings ? MF_CHECKED : MF_UNCHECKED);
+
+	m_hMenu->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
+		this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
+
+	// redraw main menu
 	this->DrawMenuBar();
 }
 
