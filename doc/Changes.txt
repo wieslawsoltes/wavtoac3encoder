@@ -2,6 +2,8 @@
 
 Version 5.1:
 
+- Added multi-language support.
+- Redesigned the GUI to enable multi-language support.
 - Fixed bitmap resource issue in VS2013.
 
 Version 5.0:
