@@ -1140,7 +1140,7 @@ bool CEncWAVtoAC3Dlg::LoadFilesList(CString &szFileName)
 
                 if(szBuffer.GetLength() > 0)
                 {
-                    // remove leading nad trailing quotes (used for *.mux file format)
+                    // remove leading and trailing quotes (used for *.mux file format)
                     szBuffer.TrimLeft('"');
                     szBuffer.TrimRight('"');
 
@@ -3742,12 +3742,14 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 			CString szBuff;
 			szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
 			m_hLangMenu->AppendMenu(MF_STRING, 2000 + i, szBuff);
-			m_hLangMenu->CheckMenuItem(2000 + i, MF_UNCHECKED);
+
+			if (theApp.m_nLangId == i)
+				m_hLangMenu->CheckMenuItem(2000 + i, MF_CHECKED);
+			else
+				m_hLangMenu->CheckMenuItem(2000 + i, MF_UNCHECKED);
 
 			i++;
 		}
-
-		m_hLangMenu->CheckMenuItem(2000, MF_CHECKED);
 	}
 	else
 	{

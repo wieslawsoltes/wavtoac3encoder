@@ -26,6 +26,7 @@
 #include "CommandLine.h"
 #include "OptionsParser.h"
 #include "Utilities.h"
+#include "MyFile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -157,6 +158,8 @@ CEncWAVtoAC3App theApp;
 BOOL CEncWAVtoAC3App::InitInstance()
 {
 	InitLog();
+
+	LoadLangConfig(GetExeFilePath() + DEFAULT_LANG_FILE_NAME);
 
 	LoadLangStrings();
 
@@ -355,6 +358,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
     // show main window
     dlg.DoModal();
 
+	SaveLangConfig(GetExeFilePath() + DEFAULT_LANG_FILE_NAME);
+
 	// stop log
 	LogClose();
 
@@ -372,6 +377,93 @@ void CEncWAVtoAC3App::InitLog()
 	LogOpen();
 }
 
+CString langFileName = _T("");
+
+bool LoadLangConfig(CString &szFileName)
+{
+	try
+	{
+		CMyFile fp;
+		if (fp.FOpen(szFileName, false) == false)
+			return false;
+
+		ULONGLONG  nRead = 0, nLength = fp.FSize();
+		if (nLength == 0)
+		{
+			fp.FClose();
+			return true;
+		}
+
+		TCHAR Buffer;
+		CString szBuffer = _T("");
+		int nFileCounter = 0;
+
+		while (fp.FRead(Buffer) == true)
+		{
+			if ((Buffer != '\r') && (Buffer != '\n'))
+				szBuffer += Buffer;
+
+			if (Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1 : sizeof(TCHAR)))
+			{
+				szBuffer += _T("\0");
+
+				// terminate reading if max of input files is reached
+				if (nFileCounter >= 1)
+				{
+					fp.FClose();
+					return true;
+				}
+
+				// remove leading and trailing quotes (used for *.mux file format)
+				szBuffer.TrimLeft('"');
+				szBuffer.TrimRight('"');
+
+				langFileName = szBuffer;
+
+				// update file counter
+				nFileCounter++;
+
+				// reset buffer
+				szBuffer = _T("");
+			}
+
+			nRead++;
+		}
+
+		fp.FClose();
+		return true;
+	}
+	catch (...)
+	{
+		return false;
+	}
+}
+
+bool SaveLangConfig(CString &szFileName)
+{
+	try
+	{
+		CMyFile fp;
+
+		if (fp.FOpen(szFileName, true) == false)
+			return false;
+
+		CString szBuffer;
+
+		szBuffer.Format(_T("%s\r\n"), langFileName);
+		fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
+		szBuffer.ReleaseBuffer();
+
+		fp.FClose();
+	}
+	catch (...)
+	{
+		return false;
+	}
+
+	return true;
+}
+
 void LoadLangStrings()
 {
 #ifdef _DEBUG
@@ -384,10 +476,35 @@ void LoadLangStrings()
 
 	if (theApp.m_LangLst.GetCount() > 0)
 	{
-		theApp.m_nLangId = 0;
-		theApp.m_bHaveLang = TRUE;
-		theApp.m_Lang = theApp.m_LangLst.GetHead().lm;
-		//theApp.m_Lang = theApp.m_LangLst.GetTail().lm;
+		bool haveLang = false;
+
+		POSITION pos = theApp.m_LangLst.GetHeadPosition();
+		int i = 0;
+		while (pos)
+		{
+			Lang lang = theApp.m_LangLst.GetNext(pos);
+
+			if (lang.szFileName.Compare(langFileName) == 0)
+			{
+				theApp.m_nLangId = i;
+				theApp.m_bHaveLang = TRUE;
+				theApp.m_Lang = lang.lm;
+				haveLang = true;
+				break;
+			}
+
+			i++;
+		}
+
+		if (haveLang == false)
+		{
+			Lang lang = theApp.m_LangLst.GetHead();
+
+			theApp.m_nLangId = 0;
+			theApp.m_bHaveLang = TRUE;
+			theApp.m_Lang = lang.lm;
+			langFileName = lang.szFileName;
+		}
 	}
 	else
 	{

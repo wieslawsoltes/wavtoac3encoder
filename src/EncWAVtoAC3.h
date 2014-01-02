@@ -112,6 +112,9 @@ public:
 
 extern CEncWAVtoAC3App theApp;
 
+bool LoadLangConfig(CString &szFileName);
+bool SaveLangConfig(CString &szFileName);
+
 extern void LoadLangStrings();
 extern BOOL HaveLangStrings();
 extern CString& GetLangString(int id);

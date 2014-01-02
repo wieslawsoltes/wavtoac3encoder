@@ -428,7 +428,7 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
                     return true;
                 }
 
-                // remove leading nad trailing quotes (used for *.mux file format)
+                // remove leading and trailing quotes (used for *.mux file format)
                 szBuffer.TrimLeft('"');
                 szBuffer.TrimRight('"');
 
