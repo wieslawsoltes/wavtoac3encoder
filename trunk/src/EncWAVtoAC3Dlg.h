@@ -51,7 +51,12 @@
 #define IDC_COMBOBOX 1501
 
 // start id for context-menu used in settings list
+
 #define ID_OPTIONS_MENU_START 4000
+
+// start id for language menu
+#define ID_LANGUAGE_MENU_START 2000
+#define ID_LANGUAGE_MENU_MAX 2999
 
 typedef struct TItemToMove
 {
@@ -196,6 +201,9 @@ public:
     afx_msg void OnOptionsSaveConfigurationOnExit();
     afx_msg void OnOptionsLoadConfiguration();
     afx_msg void OnOptionsSaveConfiguration();
+public:
+	afx_msg void OnLanguageChangeDefault();
+	afx_msg void OnLanguageChange(UINT nID);
 public:
     afx_msg void OnHelpCommandLine();
     afx_msg void OnHelpWebsite();

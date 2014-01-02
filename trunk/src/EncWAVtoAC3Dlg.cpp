@@ -161,6 +161,8 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration)
     ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsLoadConfiguration)
+	ON_COMMAND(ID_LANGUAGE_DEFAULT, &CEncWAVtoAC3Dlg::OnLanguageChangeDefault)
+	ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CEncWAVtoAC3Dlg::OnLanguageChange)
     ON_COMMAND(ID_HELP_COMMAND_LINE, &CEncWAVtoAC3Dlg::OnHelpCommandLine)
     ON_COMMAND(ID_HELP_WEBSITE, &CEncWAVtoAC3Dlg::OnHelpWebsite)
     ON_COMMAND(ID_HELP_ABOUT, &CEncWAVtoAC3Dlg::OnHelpAbout)
@@ -2255,6 +2257,19 @@ void CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration()
     this->SaveAllConfiguration();
 }
 
+void CEncWAVtoAC3Dlg::OnLanguageChangeDefault()
+{
+	// TODO: Set language to default.
+}
+
+void CEncWAVtoAC3Dlg::OnLanguageChange(UINT nID)
+{
+	// TODO: Load language by ID.
+	CString szText;
+	szText.Format(_T("%d"), nID);
+	MessageBox(szText, _T("Language ID"), MB_ICONINFORMATION);
+}
+
 void CEncWAVtoAC3Dlg::OnHelpCommandLine()
 {
     ShowCommandLineHelp(this->GetSafeHwnd());
@@ -3741,12 +3756,12 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 			Lang lang = theApp.m_LangLst.GetNext(pos);
 			CString szBuff;
 			szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
-			m_hLangMenu->AppendMenu(MF_STRING, 2000 + i, szBuff);
+			m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
 
 			if (theApp.m_nLangId == i)
-				m_hLangMenu->CheckMenuItem(2000 + i, MF_CHECKED);
+				m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
 			else
-				m_hLangMenu->CheckMenuItem(2000 + i, MF_UNCHECKED);
+				m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
 
 			i++;
 		}
