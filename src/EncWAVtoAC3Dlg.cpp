@@ -650,20 +650,13 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 	this->InitDialogControls();
 
 	// initialize language strings
-	if (HaveLangStrings())
-		this->InitLang(true);
-
-    // init encoder options
-    InitEncoderOptions();
+	this->InitLang(true);
 
 	// init encoder default preset
 	this->InitDefaultPreset();
 
     // update bitrate text field
     this->UpdateBitrateText();
-
-	// init dialog tooltips
-	this->InitTooltips();
 
     // enable files/dirs drag & drop for dialog
     this->DragAcceptFiles(TRUE);
@@ -3667,23 +3660,32 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 
 void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 {
-	if (initLangMenu == true)
-		InitLangMenu();
+	if (HaveLangStrings())
+	{
+		if (initLangMenu == true)
+			InitLangMenu();
 
-	// Main Dialog: Buttons
-	InitLangButtons();
+		// Main Dialog: Buttons
+		InitLangButtons();
 
-	// Main Dialog: Static Text
-	InitLangStaticText();
+		// Main Dialog: Static Text
+		InitLangStaticText();
 
-	// Main Dialog: Files List
-	InitLangFilesList();
+		// Main Dialog: Files List
+		InitLangFilesList();
 
-	// Main Dialog: Settings List
-	InitLangSettingsList();
+		// Main Dialog: Settings List
+		InitLangSettingsList();
 
-	// Main Dialog: Main Menu
-	InitLangMainMenu();
+		// Main Dialog: Main Menu
+		InitLangMainMenu();
+	}
+
+	// init encoder options
+	::InitEncoderOptions();
+
+	// init dialog tooltips
+	this->InitTooltips();
 }
 
 void CEncWAVtoAC3Dlg::InitLangButtons()
