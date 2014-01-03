@@ -216,6 +216,14 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CEncWAVtoAC3Dlg::OnBnClickedButtonEngines)
 END_MESSAGE_MAP()
 
+void CEncWAVtoAC3Dlg::InitTitle()
+{
+	// set program name and version in main dialog title
+	CString szDialogTitle = _T("");
+	szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
+	this->SetWindowText(szDialogTitle);
+}
+
 void CEncWAVtoAC3Dlg::InitDialogAnchors()
 {
     CleanUp();
@@ -645,35 +653,23 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
         this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
     else
         this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
-
-	// TODO: Reload text when language has changed.
-	this->InitRawSamleFormatComboBox();
-
-	// TODO: Reload text when language has changed.
-	this->InitSettingsListGroups();
 }
 
 BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 {
     CResizeDialog::OnInitDialog();
 
-    // set program name and version in main dialog title
-    CString szDialogTitle = _T("");
-    szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
-    this->SetWindowText(szDialogTitle);
-
     // set dialog icons
     SetIcon(m_hIcon, TRUE);
     SetIcon(m_hIcon, FALSE);
+
+	this->InitTitle();
 
 	// init dialog controls
 	this->InitDialogControls();
 
 	// initialize language strings
 	this->InitLang(true);
-
-	// TODO: Reload text when language has changed.
-	this->InitSettingsList();
 
 	// init encoder default preset
 	this->InitDefaultPreset();
@@ -3683,6 +3679,10 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
 
 void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 {
+	this->InitRawSamleFormatComboBox();
+
+	this->InitSettingsListGroups();
+
 	if (HaveLangStrings())
 	{
 		if (initLangMenu == true)
@@ -3699,13 +3699,24 @@ void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 
 		// Main Dialog: Settings List
 		this->InitLangSettingsList();
+	}
 
+	::InitEncoderOptions();
+
+	this->InitSettingsList();
+
+	// restore settings list
+	if (initLangMenu == false)
+	{
+		EncoderPreset tmpPreset = GetCurrentPreset();
+		this->ApplyPresetToDlg(tmpPreset);
+	}
+
+	if (HaveLangStrings())
+	{
 		// Main Dialog: Main Menu
 		this->InitLangMainMenu();
 	}
-
-	// init encoder options
-	::InitEncoderOptions();
 
 	// init dialog tooltips
 	this->InitTooltips();
