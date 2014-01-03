@@ -3720,6 +3720,13 @@ void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 
 	// init dialog tooltips
 	this->InitTooltips();
+
+	// set output path string
+	CString szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
+	if (szBuff.Compare(_T("")) == 0 || szBuff.Left(1).Compare(_T("<")) == 0 )
+		this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
+	else
+		this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath);
 }
 
 void CEncWAVtoAC3Dlg::InitLangButtons()
