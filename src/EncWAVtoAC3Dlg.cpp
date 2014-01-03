@@ -390,13 +390,14 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 
 void CEncWAVtoAC3Dlg::InitSettingsList()
 {
-	// add items to settings listctrl
 	int nGroupCounter = -1;
 
 	LVITEM li = { 0 };
 	li.mask = LVIF_TEXT | LVIF_GROUPID | LVIF_COLUMNS;
 
 	HWND listSettings = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
+	
+	ListView_DeleteAllItems(listSettings);
 
 	// fill advanced encoder options list
 	for (int i = 0; i < nNumEncoderOptions; i++)
@@ -412,26 +413,28 @@ void CEncWAVtoAC3Dlg::InitSettingsList()
 			li.iGroupId = 101 + nGroupCounter;
 
 			ListView_InsertItem(listSettings, &li);
-			ListView_SetItemText(listSettings, i, 1, encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
+			ListView_SetItemText(listSettings, i, 1, 
+				encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
 
 			this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
 
 			encOpt[i].szName.ReleaseBuffer();
 			encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
 		}
-
-		// set current settings to defaults
-		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 	}
 
 	// enable tooltips for settings list
 	this->m_LstSettings.bUseTooltipsList = true;
+
+	// select first item in settings list
+	this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 void CEncWAVtoAC3Dlg::InitDefaultPreset()
 {
-	// TODO: Reload text when language has changed.
-	this->InitSettingsList();
+	// set current settings to defaults
+	for (int i = 0; i < nNumEncoderOptions; i++)
+		defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 
     // set default preset name
 	defaultPreset.szName = DEFAULT_PRESET_NAME;
@@ -456,9 +459,6 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
     ::nCurrentPreset = 0;
     this->m_CmbPresets.InsertString(0, defaultPreset.szName);
     this->m_CmbPresets.SetCurSel(::nCurrentPreset);
-
-    // select first item in settings list
-    this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
     // set raw audio input defaults
     this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
@@ -509,7 +509,6 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
         this->m_SldBitrate.SetTic(1);
         this->m_SldBitrate.SetRange(0, 19);
         this->m_SldBitrate.SetPos(FindValidBitratePos(defaultPreset.nBitrate));
-
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
     else if(defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
@@ -517,7 +516,6 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
         this->m_SldBitrate.SetTic(1);
         this->m_SldBitrate.SetRange(0, 1023);
         this->m_SldBitrate.SetPos(defaultPreset.nQuality);
-
         this->m_ChkVbr.SetCheck(BST_CHECKED);
     }
 }
@@ -673,6 +671,9 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 
 	// initialize language strings
 	this->InitLang(true);
+
+	// TODO: Reload text when language has changed.
+	this->InitSettingsList();
 
 	// init encoder default preset
 	this->InitDefaultPreset();
