@@ -464,9 +464,9 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 
     // add default preset to presets list
     encPresets.AddTail(defaultPreset);
-    ::nCurrentPreset = 0;
+    this->nCurrentPreset = 0;
     this->m_CmbPresets.InsertString(0, defaultPreset.szName);
-    this->m_CmbPresets.SetCurSel(::nCurrentPreset);
+    this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
     // set raw audio input defaults
     this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
@@ -775,17 +775,19 @@ void CEncWAVtoAC3Dlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
 {
+	ConfigList_t m_ConfigList;
+
     // init program configuration
-    if(::LoadConfig(szFileName, this->m_ConfigList) == true)
+    if(::LoadConfig(szFileName, m_ConfigList) == true)
     {
-        int nSize = this->m_ConfigList.GetSize();
-        POSITION pos = this->m_ConfigList.GetHeadPosition();
+        int nSize = m_ConfigList.GetSize();
+        POSITION pos = m_ConfigList.GetHeadPosition();
         for(INT_PTR i = 0; i < nSize; i++)
         {
             ConfigEntry ce;
 
             // get next entry in configuration list
-            ce = this->m_ConfigList.GetNext(pos);
+            ce = m_ConfigList.GetNext(pos);
 
             // key: MainWindow
             if(ce.szKey.Compare(_T("MainWindow")) == 0)
@@ -846,9 +848,9 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
                     if((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
                         nPreset = 0;
 
-                    if(::nCurrentPreset != nPreset)
+                    if(this->nCurrentPreset != nPreset)
                     {
-                        ::nCurrentPreset = nPreset;
+                        this->nCurrentPreset = nPreset;
                         this->m_CmbPresets.SetCurSel(nPreset);
                         this->OnCbnSelchangeComboPresets();
                     }
@@ -943,67 +945,69 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
 
 bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
 {
+	ConfigList_t m_ConfigList;
+
     // prepare program configuration
-    this->m_ConfigList.RemoveAll();
+    m_ConfigList.RemoveAll();
 
     ConfigEntry ce;
 
     // key: MainWindow
     ce.szKey = _T("MainWindow");
     ce.szData = this->GetWindowRectStr();
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: ColumnSizeSettings
     ce.szKey = _T("ColumnSizeSettings");
     ce.szData.Format(_T("%d %d"), 
         this->m_LstSettings.GetColumnWidth(0),
         this->m_LstSettings.GetColumnWidth(1));
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: ColumnSizeFiles
     ce.szKey = _T("ColumnSizeFiles");
     ce.szData.Format(_T("%d %d"), 
         this->m_LstFiles.GetColumnWidth(0),
         this->m_LstFiles.GetColumnWidth(1));
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: OutputPath
     ce.szKey = _T("OutputPath");
     ce.szData = this->szOutputPath;
     if(ce.szData.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
         ce.szData = _T("");
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: OutputFile
     ce.szKey = _T("OutputFile");
     ce.szData = this->szOutputFile;
     if(ce.szData.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
         ce.szData = _T("");
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: SelectedPreset
     ce.szKey = _T("SelectedPreset");
     ce.szData.Format(_T("%d"), 
         this->m_CmbPresets.GetCurSel());
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: MultipleMonoInput
     ce.szKey = _T("MultipleMonoInput");
     ce.szData = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: DisableAllWarnings
     ce.szKey = _T("DisableAllWarnings");
     ce.szData = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // key: SaveConfig
     ce.szKey = _T("SaveConfig");
     ce.szData = (this->bSaveConfig == true) ? _T("true") : _T("false");
-    this->m_ConfigList.AddTail(ce);
+    m_ConfigList.AddTail(ce);
 
     // save program configuration
-    return ::SaveConfig(szFileName, this->m_ConfigList);
+    return ::SaveConfig(szFileName, m_ConfigList);
 }
 
 bool CEncWAVtoAC3Dlg::UpdateProgramEngines()
@@ -1228,12 +1232,12 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     // load presets from file
     if(this->cmdLineOpt.bHaveLoadPresets == true)
     {
-        bRet = ::LoadEncoderPresets(this->cmdLineOpt.szLoadPresets);
+        bRet = ::LoadEncoderPresets(this->encPresets, this->cmdLineOpt.szLoadPresets, this->defaultPreset);
         ::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + this->cmdLineOpt.szLoadPresets);
     }
     else
     {
-        bRet = ::LoadEncoderPresets(theApp.m_szPresetsFilePath);
+        bRet = ::LoadEncoderPresets(this->encPresets, theApp.m_szPresetsFilePath, this->defaultPreset);
 		::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_szPresetsFilePath);
     }
 
@@ -1255,10 +1259,10 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
             }
 
             // select current preset
-            if((::nCurrentPreset >= encPresets.GetCount()) || (::nCurrentPreset < 0))
-                ::nCurrentPreset = 0;
+            if((this->nCurrentPreset >= encPresets.GetCount()) || (this->nCurrentPreset < 0))
+                this->nCurrentPreset = 0;
 
-            this->m_CmbPresets.SetCurSel(::nCurrentPreset);
+            this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
             // update all controls
             this->OnCbnSelchangeComboPresets();
@@ -1316,7 +1320,7 @@ void CEncWAVtoAC3Dlg::SaveAllConfiguration()
     bool bRet = false;
 
     // save encoder presets to a file
-	bRet = ::SaveEncoderPresets(theApp.m_szPresetsFilePath);
+	bRet = ::SaveEncoderPresets(this->encPresets, theApp.m_szPresetsFilePath, this->defaultPreset);
 	::LogMessage((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_szPresetsFilePath);
 
     // save program configuration to a file
@@ -1373,6 +1377,16 @@ void CEncWAVtoAC3Dlg::UpdateBitrateText()
     }
 
     this->m_StcBitrate.SetWindowText(szBuff);
+}
+
+EncoderPreset CEncWAVtoAC3Dlg::GetCurrentPreset()
+{
+	return this->encPresets.GetAt(this->encPresets.FindIndex(this->nCurrentPreset));
+}
+
+void CEncWAVtoAC3Dlg::UpdateCurrentPreset(EncoderPreset updatePreset)
+{
+	this->encPresets.SetAt(this->encPresets.FindIndex(this->nCurrentPreset), updatePreset);
 }
 
 void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
@@ -1589,7 +1603,7 @@ void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING);
 
     // select default value or last selected
-    if(::encPresets.GetSize() <= 0)
+    if(this->encPresets.GetSize() <= 0)
         this->m_CmbValue.SetCurSel(encOpt[nItem].nDefaultValue);
     else
         this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
@@ -2198,7 +2212,7 @@ void CEncWAVtoAC3Dlg::OnFileLoadPresets()
         CString szFileName = fd.GetPathName();
 
         // load presets list from file
-        if(::LoadEncoderPresets(szFileName) == true)
+        if(::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
         {
             // populate presets list
             this->m_CmbPresets.ResetContent();
@@ -2211,7 +2225,7 @@ void CEncWAVtoAC3Dlg::OnFileLoadPresets()
             SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
 
             // select first preset
-            ::nCurrentPreset = 0;
+			this->nCurrentPreset = 0;
             this->m_CmbPresets.SetCurSel(0);
 
             // update all controls
@@ -2235,7 +2249,7 @@ void CEncWAVtoAC3Dlg::OnFileSavePresets()
         CString szFileName = fd.GetPathName();
 
         // save presets list to file
-        ::SaveEncoderPresets(szFileName);
+		::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
     }
 }
 
@@ -2582,6 +2596,9 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     }
 #endif
 
+	// set preset
+	dlg.workParam.preset = this->GetCurrentPreset();
+
     // set pointer to files list
     dlg.workParam.list = &list;
 
@@ -2787,11 +2804,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
     newPreset.szName.Format(_T("%s (%d)"), 
 		HaveLangStrings() ? GetLangString(0x0020701B) : _T("New preset"),
 		nCount++);
-    ::encPresets.AddTail(newPreset);
+    this->encPresets.AddTail(newPreset);
 
-    ::nCurrentPreset = ::encPresets.GetCount() - 1;
-    this->m_CmbPresets.InsertString(::nCurrentPreset, newPreset.szName);
-    this->m_CmbPresets.SetCurSel(::nCurrentPreset);
+    this->nCurrentPreset = this->encPresets.GetCount() - 1;
+    this->m_CmbPresets.InsertString(this->nCurrentPreset, newPreset.szName);
+    this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
 }
@@ -2799,30 +2816,30 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
 void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel()
 {
     // we need at least one preset present
-    if(::encPresets.GetCount() >= 2)
+    if(this->encPresets.GetCount() >= 2)
     {
         int nCount = this->m_CmbPresets.GetCount();
         int nPreset = this->m_CmbPresets.GetCurSel();
 
-        ::encPresets.RemoveAt(::encPresets.FindIndex(nPreset));
+		this->encPresets.RemoveAt(this->encPresets.FindIndex(nPreset));
         this->m_CmbPresets.DeleteString(nPreset);
 
-        this->m_CmbPresets.SetCurSel(::nCurrentPreset);
+		this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
         if(nPreset == (nCount - 1)) // last preset
         {
             this->m_CmbPresets.SetCurSel(nCount - 2);
-            ::nCurrentPreset = nCount - 2;
+			this->nCurrentPreset = nCount - 2;
         }
         else if(nPreset == 0) // first preset
         {
             this->m_CmbPresets.SetCurSel(0);
-            ::nCurrentPreset = 0;
+			this->nCurrentPreset = 0;
         }
         else // in the middle
         {
             this->m_CmbPresets.SetCurSel(nPreset);
-            ::nCurrentPreset = nPreset;
+			this->nCurrentPreset = nPreset;
         }
 
         SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
@@ -2918,7 +2935,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetsDefaults()
     int nPreset = this->m_CmbPresets.GetCurSel();
     if(nPreset != CB_ERR)
     {
-        ::nCurrentPreset = nPreset;
+		this->nCurrentPreset = nPreset;
 
         // load default preset and set all settings
         EncoderPreset tmpPreset = defaultPreset;
@@ -2985,7 +3002,7 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboPresets()
     int nPreset = this->m_CmbPresets.GetCurSel();
     if(nPreset != CB_ERR)
     {
-        ::nCurrentPreset = nPreset;
+        this->nCurrentPreset = nPreset;
 
         // load selected preset and set all settings
         EncoderPreset tmpPreset = GetCurrentPreset();
