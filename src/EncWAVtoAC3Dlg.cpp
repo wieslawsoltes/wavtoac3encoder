@@ -2275,7 +2275,7 @@ void CEncWAVtoAC3Dlg::OnLanguageChangeDefault()
 	theApp.m_nLangId = -1;
 	theApp.m_bHaveLang = FALSE;
 	theApp.m_Lang = NULL;
-	langFileName = _T("");
+	theApp.m_szLangFileName = _T("");
 
 	// update Language menu checked status
 	CMenu *m_hMenu = this->GetMenu();
@@ -2305,7 +2305,7 @@ void CEncWAVtoAC3Dlg::OnLanguageChange(UINT nID)
 		theApp.m_nLangId = nID - ID_LANGUAGE_MENU_START;
 		theApp.m_bHaveLang = TRUE;
 		theApp.m_Lang = lang.lm;
-		langFileName = lang.szFileName;
+		theApp.m_szLangFileName = lang.szFileName;
 	}
 
 	// update Language menu checked status
