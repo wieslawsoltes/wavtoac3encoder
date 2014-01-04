@@ -43,7 +43,11 @@
 #define DEFAULT_TEXT_OUTPUT_FILE (HaveLangStrings() ? GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
 // default directory for roaming data
+#ifdef _M_X64
+#define DEFAULT_CONFIG_DIRECTORY _T("EncWAVtoAC3-AMD64")
+#else
 #define DEFAULT_CONFIG_DIRECTORY _T("EncWAVtoAC3")
+#endif
 
 // default directory for language files
 #ifdef _DEBUG
