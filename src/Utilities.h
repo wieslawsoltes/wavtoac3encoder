@@ -38,6 +38,7 @@ __int64 GetFileSizeInt64(FILE *fp);
 CString GetFileExt(CString szFilePath);
 CString GetFileName(CString szFilePath);
 CString GetExeFilePath();
+CString GetSettingsFilePath(CString szFileName);
 bool MakeFullPath(CString szPath);
 void LaunchAndWait(LPCTSTR file, LPCTSTR params, BOOL bWait);
 void ConvertAnsiToUnicode(const char *szAnsi, wchar_t *szUnicode, ULONG nLength);

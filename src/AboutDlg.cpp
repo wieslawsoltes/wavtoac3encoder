@@ -85,6 +85,8 @@ void CAboutDlg::SetBuildInfo()
 	szBuildInfo += _T(" ");
 	szBuildInfo += __TIME__;
 
+	szBuildInfo += theApp.m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
+
 	this->m_StcBuildInfo.SetWindowText(szBuildInfo);
 }
 

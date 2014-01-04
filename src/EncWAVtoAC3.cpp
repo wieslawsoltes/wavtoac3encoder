@@ -158,13 +158,41 @@ CString langFileName = _T("");
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
+	// set portable flag
+	m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
+
+	// set configuration file paths
+	if (m_bIsPortable == true)
+	{
+		m_szPresetsFilePath = GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME;
+		m_szConfigFilePath = GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME;
+		m_szEnginesFilePath = GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME;
+		m_szFilesListFilePath = GetExeFilePath() + DEFAULT_FILES_FILE_NAME;
+		m_szLangFilePath = GetExeFilePath() + DEFAULT_LANG_FILE_NAME;
+		m_szLogFilePath = GetExeFilePath() + DEFAULT_LOG_FILE_NAME;
+	}
+	else
+	{
+		CreateDirectory(GetSettingsFilePath(_T("")), NULL);
+
+		m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME);
+		m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME);
+		m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME);
+		m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME);
+		m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME);
+		m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME);
+	}
+
+	// initialize log file
 	InitLog();
 
-	LoadLangConfig(GetExeFilePath() + DEFAULT_LANG_FILE_NAME);
+	// load language configuration file
+	LoadLangConfig(m_szLangFilePath);
 
+	// load all language strings
 	LoadLangStrings();
 
-	// init app
+	// initialize application
 	INITCOMMONCONTROLSEX InitCtrls;
 	InitCtrls.dwSize = sizeof(InitCtrls);
 
@@ -359,7 +387,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
     // show main window
     dlg.DoModal();
 
-	SaveLangConfig(GetExeFilePath() + DEFAULT_LANG_FILE_NAME);
+	SaveLangConfig(m_szLangFilePath);
 
 	// stop log
 	LogClose();
@@ -374,7 +402,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
 void CEncWAVtoAC3App::InitLog()
 {
 	// enable log
-	LogFile(GetExeFilePath() + DEFAULT_LOG_FILE_NAME);
+	LogFile(m_szLogFilePath);
 	LogOpen();
 }
 
@@ -465,11 +493,7 @@ bool SaveLangConfig(CString &szFileName)
 
 void LoadLangStrings()
 {
-#ifdef _DEBUG
-	CString szLangPath = GetExeFilePath() + _T("..\\..\\Lang");
-#else
-	CString szLangPath = GetExeFilePath() + _T("Lang");
-#endif
+	CString szLangPath = GetExeFilePath() + DEFAULT_LANG_DIRECTORY;
 
 	SearchFolderForLang(szLangPath, false, theApp.m_LangLst);
 

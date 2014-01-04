@@ -1233,8 +1233,8 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     }
     else
     {
-        bRet = ::LoadEncoderPresets(GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-		::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
+        bRet = ::LoadEncoderPresets(theApp.m_szPresetsFilePath);
+		::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_szPresetsFilePath);
     }
 
     // process presets list
@@ -1273,8 +1273,8 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     }
     else
     {
-        bRet = this->LoadProgramConfig(GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-		::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
+		bRet = this->LoadProgramConfig(theApp.m_szConfigFilePath);
+		::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_szConfigFilePath);
     }
 
     // load engines settings from file
@@ -1285,8 +1285,8 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
     }
     else
     {
-        bRet = this->LoadProgramEngines(GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-		::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
+		bRet = this->LoadProgramEngines(theApp.m_szEnginesFilePath);
+		::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_szEnginesFilePath);
     }
 
     // add input file to the files list
@@ -1305,8 +1305,8 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
         }
         else
         {
-            bRet = this->LoadFilesList(GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
-			::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
+			bRet = this->LoadFilesList(theApp.m_szFilesListFilePath);
+			::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_szFilesListFilePath);
         }
     }
 }
@@ -1316,20 +1316,20 @@ void CEncWAVtoAC3Dlg::SaveAllConfiguration()
     bool bRet = false;
 
     // save encoder presets to a file
-    bRet = ::SaveEncoderPresets(GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
-	::LogMessage((bRet ? _T("Saved encoder presets: ") : _T("Failed to save encoder presets: ")) + GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME);
+	bRet = ::SaveEncoderPresets(theApp.m_szPresetsFilePath);
+	::LogMessage((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_szPresetsFilePath);
 
     // save program configuration to a file
-    bRet = this->SaveProgramConfig(GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
-	::LogMessage((bRet ? _T("Saved program config: ") : _T("Failed to save program config: ")) + GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME);
+	bRet = this->SaveProgramConfig(theApp.m_szConfigFilePath);
+	::LogMessage((bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + theApp.m_szConfigFilePath);
 
     // save engines settings to a file
-    bRet = this->SaveProgramEngines(GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
-	::LogMessage((bRet ? _T("Saved encoder engines: ") : _T("Failed to save encoder engines: ")) + GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME);
+	bRet = this->SaveProgramEngines(theApp.m_szEnginesFilePath);
+	::LogMessage((bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_szEnginesFilePath);
 
     // save files list to file
-    bRet = this->SaveFilesList(GetExeFilePath() + DEFAULT_FILES_FILE_NAME, DEFAULT_FILES_FORMAT);
-	::LogMessage((bRet ? _T("Saved files list: ") : _T("Failed to save files list: ")) + GetExeFilePath() + DEFAULT_FILES_FILE_NAME);
+	bRet = this->SaveFilesList(theApp.m_szFilesListFilePath, DEFAULT_FILES_FORMAT);
+	::LogMessage((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_szFilesListFilePath);
 }
 
 void CEncWAVtoAC3Dlg::UpdateBitrateText()

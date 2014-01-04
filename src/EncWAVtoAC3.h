@@ -108,6 +108,14 @@ public:
 	LangList_t m_LangLst;
 	BOOL m_bHaveLang = FALSE;
 	int m_nLangId = -1;
+public:
+	bool m_bIsPortable = true;
+	CString m_szPresetsFilePath;
+	CString m_szConfigFilePath;
+	CString m_szEnginesFilePath;
+	CString m_szFilesListFilePath;
+	CString m_szLangFilePath;
+	CString m_szLogFilePath;
 };
 
 extern CEncWAVtoAC3App theApp;

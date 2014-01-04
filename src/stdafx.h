@@ -42,6 +42,19 @@
 // default text for same as source file output path value (multi mono input)
 #define DEFAULT_TEXT_OUTPUT_FILE (HaveLangStrings() ? GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
+// default directory for roaming data
+#define DEFAULT_CONFIG_DIRECTORY _T("EncWAVtoAC3")
+
+// default directory for language files
+#ifdef _DEBUG
+#define DEFAULT_LANG_DIRECTORY _T("..\\..\\Lang");
+#else
+#define DEFAULT_LANG_DIRECTORY  _T("Lang");
+#endif
+
+// default file name used to enable portable application
+#define DEFAULT_PORTABLE_FILE_NAME _T("EncWAVtoAC3.portable")
+
 // default file name for program configuration
 #define DEFAULT_CONFIG_FILE_NAME _T("EncWAVtoAC3.config")
 
