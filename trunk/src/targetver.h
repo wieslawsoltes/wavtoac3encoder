@@ -1,6 +1,6 @@
 //
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2013 Wies³aw Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007-2014 Wies³aw Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
