@@ -27,7 +27,7 @@
 ; Include setup base srcript
 ;
 #define MyAppBaseName "WAV to AC3 Encoder"
-#define MyAppName MyAppBaseName
+#define MyAppName MyAppBaseName + " (AMD64)"
 #define MyAppVerName MyAppBaseName + " " + ReleaseVersion
 #define MyAppPublisher "Wieslaw Soltes"
 #define MyAppURL "http://code.google.com/p/wavtoac3encoder/"
