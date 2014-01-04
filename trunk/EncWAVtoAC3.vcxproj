@@ -230,7 +230,16 @@
     <ClCompile Include="src\CommandLine.cpp" />
     <ClCompile Include="src\EncoderOptions.cpp" />
     <ClCompile Include="src\EncWAVtoAC3.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Button.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-ComboBox.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Config.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Drop.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Edit.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Init.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-List.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Menu.cpp" />
     <ClCompile Include="src\EncWAVtoAC3Dlg.cpp" />
+    <ClCompile Include="src\EncWAVtoAC3Dlg-Lang.cpp" />
     <ClCompile Include="src\EncWAVtoAC3EngDlg.cpp" />
     <ClCompile Include="src\EncWAVtoAC3MuxDlg.cpp" />
     <ClCompile Include="src\EncWAVtoAC3WorkDlg.cpp" />
