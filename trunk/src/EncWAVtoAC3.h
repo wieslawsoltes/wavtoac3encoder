@@ -106,6 +106,7 @@ public:
 public:
 	LangMap_t *m_Lang;
 	LangList_t m_LangLst;
+	CString m_szLangFileName = _T("");
 	BOOL m_bHaveLang = FALSE;
 	int m_nLangId = -1;
 public:
@@ -119,7 +120,6 @@ public:
 };
 
 extern CEncWAVtoAC3App theApp;
-extern CString langFileName;
 
 bool LoadLangConfig(CString &szFileName);
 bool SaveLangConfig(CString &szFileName);

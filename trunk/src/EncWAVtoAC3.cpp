@@ -154,7 +154,6 @@ CEncWAVtoAC3App::~CEncWAVtoAC3App()
 }
 
 CEncWAVtoAC3App theApp;
-CString langFileName = _T("");
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
@@ -445,7 +444,7 @@ bool LoadLangConfig(CString &szFileName)
 				szBuffer.TrimLeft('"');
 				szBuffer.TrimRight('"');
 
-				langFileName = szBuffer;
+				theApp.m_szLangFileName = szBuffer;
 
 				// update file counter
 				nFileCounter++;
@@ -477,7 +476,7 @@ bool SaveLangConfig(CString &szFileName)
 
 		CString szBuffer;
 
-		szBuffer.Format(_T("%s\r\n"), langFileName);
+		szBuffer.Format(_T("%s\r\n"), theApp.m_szLangFileName);
 		fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
 		szBuffer.ReleaseBuffer();
 
@@ -507,7 +506,7 @@ void LoadLangStrings()
 		{
 			Lang lang = theApp.m_LangLst.GetNext(pos);
 
-			if (lang.szFileName.Compare(langFileName) == 0)
+			if (lang.szFileName.Compare(theApp.m_szLangFileName) == 0)
 			{
 				theApp.m_nLangId = i;
 				theApp.m_bHaveLang = TRUE;
@@ -526,7 +525,7 @@ void LoadLangStrings()
 			theApp.m_nLangId = 0;
 			theApp.m_bHaveLang = TRUE;
 			theApp.m_Lang = lang.lm;
-			langFileName = lang.szFileName;
+			theApp.m_szLangFileName = lang.szFileName;
 		}
 	}
 	else
