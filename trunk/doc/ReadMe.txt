@@ -1,4 +1,4 @@
-﻿WAV to AC3 Encoder 5.1 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 5.2 (Using Aften A/52 Audio Encoder)
 
 ==ABOUT==
 
@@ -10,7 +10,7 @@ audio encoder  created by Justin Ruggles. WAV to AC3 Encoder
 project was started on 27th January 2007 by Wiesław Šoltés and is still
 maintained and actively developed.
 
-[http://i47.tinypic.com/20qdkcx.png]
+[http://i44.tinypic.com/2wewcx4.png]
 
 ===Main Program Features===
 
@@ -30,6 +30,7 @@ maintained and actively developed.
   * Options for advanced users.
   * Sources available under GNU GPLv2 license.
   * Support for multi-language user interface.
+  * Portable and installer packages available.
 
 ==CONFIGURATION==
 
