@@ -68,7 +68,7 @@ Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\lang\*.txt; DestDir: {app}\Lang; Flags: ignoreversion
-Source: ..\engines\unicode\x64\EncWAVtoAC3.engines; DestDir: {app}; Flags: ignoreversion
+Source: ..\engines\unicode\x64\EncWAVtoAC3.engines; DestDir: {userappdata}\EncWAVtoAC3; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion
 Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion
