@@ -92,7 +92,7 @@ svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-re
 ==LICENSE==
 
 WAV to AC3 Encoder
-Copyright (C) 2007-2013 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007-2014 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ==COPYRIGHTS==
 
-WAV to AC3 Encoder, Copyright (C) 2007-2013 Wiesław Šoltés
+WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
