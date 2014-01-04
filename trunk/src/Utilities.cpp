@@ -221,6 +221,23 @@ CString GetExeFilePath()
     return NULL;
 }
 
+CString GetSettingsFilePath(CString szFileName)
+{
+	TCHAR szPath[MAX_PATH];
+
+	if (SUCCEEDED(SHGetFolderPath(NULL,
+		CSIDL_APPDATA | CSIDL_FLAG_CREATE,
+		NULL,
+		0,
+		szPath)))
+	{
+		PathAppend(szPath, DEFAULT_CONFIG_DIRECTORY);
+		PathAppend(szPath, szFileName);
+		return szPath;
+	}
+	return NULL;
+}
+
 bool MakeFullPath(CString szPath)
 {
     if(szPath[szPath.GetLength() - 1] != '\\')
@@ -259,7 +276,7 @@ void LaunchAndWait(LPCTSTR file, LPCTSTR params, BOOL bWait)
 
    sei.cbSize = sizeof(SHELLEXECUTEINFO);
    sei.fMask = SEE_MASK_NOCLOSEPROCESS;
-   // sei.lpVerb is uninitialised, so that default action will be taken
+   // sei.lpVerb is uninitialized, so that default action will be taken
    sei.nShow = SW_SHOWNORMAL;
    sei.lpFile = file;
    sei.lpParameters = params;
