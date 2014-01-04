@@ -126,22 +126,8 @@ typedef struct TEncoderPreset
     int nSetting[nNumEncoderOptions];
 } EncoderPreset;
 
-// list of encoder presets
-extern CList<EncoderPreset,EncoderPreset&> encPresets;
+typedef CList<EncoderPreset, EncoderPreset&> EncoderPresetList_t;
 
-// default preset
-extern EncoderPreset defaultPreset;
-
-// current preset index
-extern int nCurrentPreset;
-
-// get currently selected preset
-extern EncoderPreset GetCurrentPreset();
-
-// update currently selected preset
-void UpdateCurrentPreset(EncoderPreset updatePreset);
-
-// find option index
 int FindOptionIndex(CString szOption);
 
 void ResetEncoderOptionsLists();
@@ -150,10 +136,10 @@ void ResetEncoderOptionsLists();
 void InitEncoderOptions();
 
 // load encoder presets
-bool LoadEncoderPresets(CString szFileName);
+bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset);
 
 // save encoder presets
-bool SaveEncoderPresets(CString szFileName);
+bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset);
 
 // define supported input file extension
 #define NUM_SUPPORTED_INPUT_EXT 8

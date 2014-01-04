@@ -1277,7 +1277,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             ZeroMemory(&opt, sizeof(AftenOpt));
 
             // get currently selected preset
-            EncoderPreset preset = GetCurrentPreset();
+			EncoderPreset preset = pWork->preset;
 
             // prepare aften context for encoding process
             SetAftenOptions(api, s, preset, opt, pWork);
@@ -1366,7 +1366,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         ZeroMemory(&opt, sizeof(AftenOpt));
 
         // get currently selected preset
-        EncoderPreset preset = GetCurrentPreset();
+		EncoderPreset preset = pWork->preset;
 
         // prepare aften context for encoding process
         SetAftenOptions(api, s, preset, opt, pWork);

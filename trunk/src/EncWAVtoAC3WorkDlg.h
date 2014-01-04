@@ -49,6 +49,7 @@ typedef struct TWorkerParam
     CEncWAVtoAC3WorkDlg *pWorkDlg;
     CList<CString,CString> *list;
     CList<bool,bool> *listStatus;
+	EncoderPreset preset;
     bool bUseOutPath;
     CString szOutPath;
     bool bMultiMonoInput;

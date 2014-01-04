@@ -135,15 +135,6 @@ const CString szRawSampleRateOption = _T("-raw_sr");
 */
 const CString szRawChannelsOption = _T("-raw_ch");
 
-// list of encoder presets
-CList<EncoderPreset,EncoderPreset&> encPresets;
-
-// default preset
-EncoderPreset defaultPreset;
-
-// current preset index
-int nCurrentPreset = 0;
-
 // supported input file extensions
 const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8] = 
 {
@@ -176,16 +167,6 @@ const TCHAR szSupportedOutputExt[NUM_SUPPORTED_OUTPUT_EXT][8] =
 {
     _T("ac3")
 };
-
-EncoderPreset GetCurrentPreset()
-{
-    return ::encPresets.GetAt(::encPresets.FindIndex(::nCurrentPreset));
-}
-
-void UpdateCurrentPreset(EncoderPreset updatePreset)
-{
-    ::encPresets.SetAt(::encPresets.FindIndex(::nCurrentPreset), updatePreset);
-}
 
 int FindValidBitratePos(const int nBitrate)
 {
@@ -1260,7 +1241,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
     }
 }
 
-bool LoadEncoderPresets(CString szFileName)
+bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset)
 {
     try
     {
@@ -1408,7 +1389,7 @@ bool LoadEncoderPresets(CString szFileName)
     return true;
 }
 
-bool SaveEncoderPresets(CString szFileName)
+bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset)
 {
     const int nSize = (const int) encPresets.GetSize();
     try

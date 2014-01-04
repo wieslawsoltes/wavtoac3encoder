@@ -80,8 +80,11 @@ public:
 	int nSortColumn;
 	bool nSortOrder[2];
 	bool bSettingsValueVisible;
-	ConfigList_t m_ConfigList;
 	ConfigList_t m_EngineList;
+public:
+	EncoderPresetList_t encPresets;
+	EncoderPreset defaultPreset;
+	int nCurrentPreset = 0;
 public:
 	CString szOutputPath;
 	CString szOutputFile;
@@ -164,6 +167,9 @@ public:
 	bool SaveProgramEngines(CString szFileName);
 	void LoadAllConfiguration();
 	void SaveAllConfiguration();
+public:
+	EncoderPreset GetCurrentPreset();
+	void UpdateCurrentPreset(EncoderPreset updatePreset);
 public:
 	void HandleDropFiles(HDROP hDropInfo);
 	void SearchFolderForFiles(CString szFile, const bool bRecurse);
