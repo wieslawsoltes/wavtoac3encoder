@@ -79,6 +79,7 @@ mkdir "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\*.cmd" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.iss" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\EncWAVtoAC3.portable" "%varOutput%\%varPath%"
 
 set varPath=src
 mkdir "%varOutput%\%varPath%"

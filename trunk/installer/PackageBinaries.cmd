@@ -49,6 +49,7 @@ copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE\libaften.dll" "%varOutput%
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE2\libaften.dll" "%varOutput%\libaftendll_x86_SSE2\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_x86_SSE3\libaften.dll" "%varOutput%\libaftendll_x86_SSE3\libaften.dll"
 copy "%varBase%\engines\unicode\Win32\EncWAVtoAC3.engines" "%varOutput%"
+copy "%varBase%\installer\EncWAVtoAC3.portable" "%varOutput%"
 
 rem "%varWinRAR%" a -ep1 -m5 -r -s -t "%varOutput%.rar" "%varOutput%\*"
 "%varWinRAR%" a -ep1 -m5 -r -t "%varOutput%.zip" "%varOutput%\*"
