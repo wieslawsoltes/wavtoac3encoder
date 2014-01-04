@@ -1,5 +1,10 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 5.2:
+
+- Installer packages save configuration files by default to user roaming directory
+- Enable portable version by creating empty EncWAVtoAC3.portable file
+
 Version 5.1:
 
 - Added multi-language support.
