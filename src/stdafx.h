@@ -25,7 +25,7 @@
 //
 
 // define program version
-#define ENCWAVTOAC3_VERSION _T("5.2")
+#define ENCWAVTOAC3_VERSION _T("5.3")
 
 // default preset name
 #define DEFAULT_PRESET_NAME (HaveLangStrings() ? GetLangString(0x00207001) : _T("Default"))
