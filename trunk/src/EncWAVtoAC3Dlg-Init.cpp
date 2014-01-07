@@ -480,6 +480,10 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);
 	SetIcon(m_hIcon, FALSE);
 
+	// load accelerators for main dialog
+	m_hAccelTable = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR_MAIN_MENU));
+
+	// set window title
 	this->InitTitle();
 
 	// init dialog controls

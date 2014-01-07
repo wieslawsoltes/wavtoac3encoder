@@ -282,3 +282,14 @@ void CEncWAVtoAC3Dlg::OnDestroy()
     this->m_LstFiles.DeleteAllItems();
     this->m_LstSettings.DeleteAllItems();
 }
+
+BOOL CEncWAVtoAC3Dlg::PreTranslateMessage(MSG* pMsg)
+{
+	if (m_hAccelTable)
+	{
+		if (::TranslateAccelerator(m_hWnd, m_hAccelTable, pMsg))
+			return(TRUE);
+	}
+
+	return CResizeDialog::PreTranslateMessage(pMsg);
+}
