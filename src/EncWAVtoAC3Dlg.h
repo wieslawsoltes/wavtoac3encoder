@@ -71,6 +71,7 @@ public:
     enum { IDD = IDD_ENCWAVTOAC3_DIALOG };
 protected:
     HICON m_hIcon;
+	HACCEL m_hAccelTable;
 public:
 	bool bVisible;
 public:
@@ -140,6 +141,7 @@ public:
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
 	void InitTitle();
     void InitDialogAnchors();
