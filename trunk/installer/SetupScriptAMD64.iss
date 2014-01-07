@@ -64,6 +64,7 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 
 Source: ..\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\ReadMe.txt; DestDir: {app}; Flags: ignoreversion
+Source: ..\doc\Keyboard.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
@@ -77,6 +78,7 @@ Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir
 
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
 Name: {group}\{#MyAppName} ReadMe; Filename: {app}\ReadMe.txt
+Name: {group}\{#MyAppName} Keyboard; Filename: {app}\Keyboard.txt
 Name: {group}\{#MyAppName} License; Filename: {app}\Copying.txt
 Name: {group}\{#MyAppName} Changes; Filename: {app}\Changes.txt
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
