@@ -22,4 +22,4 @@ Options:
 
 Notes: AviSynth is not supported under x64 platforms.
 
-$Id $
+$Id$
