@@ -2,6 +2,7 @@
 
 Version 5.3:
 
+- Added keyboard shortcuts.
 - Fixed compatibility issue with Windows XP.
 
 Version 5.2:
