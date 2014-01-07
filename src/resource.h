@@ -11,6 +11,7 @@
 #define IDR_MENU_LIST                   133
 #define IDD_MUX_DIALOG                  134
 #define IDD_ENGINES_DIALOG              135
+#define IDR_ACCELERATOR_MAIN_MENU       136
 #define IDC_PROGRESS_CURRENT            1001
 #define IDC_PROGRESS_TOTAL              1002
 #define IDC_LIST_FILES                  1003
@@ -155,8 +156,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
-#define _APS_NEXT_COMMAND_VALUE         32799
+#define _APS_NEXT_RESOURCE_VALUE        137
+#define _APS_NEXT_COMMAND_VALUE         32822
 #define _APS_NEXT_CONTROL_VALUE         1116
 #define _APS_NEXT_SYMED_VALUE           103
 #endif

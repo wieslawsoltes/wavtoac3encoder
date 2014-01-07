@@ -61,6 +61,38 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR_MAIN_MENU ACCELERATORS
+BEGIN
+    "F",            ID_FILE_ADDFILES,       VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_FILE_ADDDIRECTORY,   VIRTKEY, CONTROL, NOINVERT
+    "M",            ID_FILE_MUXWIZARD,      VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F5,          IDC_BUTTON_ENCODE,      VIRTKEY, NOINVERT
+    "E",            IDC_BUTTON_ENGINES,     VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_OPTIONS_DISABLEALLWARNINGS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "C",            ID_OPTIONS_SAVECONFIGURATIONONEXIT, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F7,          ID_OPTIONS_LOADCONFIGURATION, VIRTKEY, NOINVERT
+    VK_F8,          ID_OPTIONS_SAVECONFIGURATION, VIRTKEY, NOINVERT
+    VK_F1,          ID_HELP_COMMAND_LINE,   VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_HELP_WEBSITE,        VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "A",            ID_HELP_ABOUT,          VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_UP,          ID_LIST_MOVEUP,         VIRTKEY, CONTROL, NOINVERT
+    VK_DOWN,        ID_LIST_MOVEDOWN,       VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_LIST_CLEARLIST,      VIRTKEY, CONTROL, NOINVERT
+    "R",            IDC_BUTTON_PRESETS_DEFAULTS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "D",            IDC_BUTTON_PRESET_DEL,  VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F9,          IDC_BUTTON_PRESET_ADD,  VIRTKEY, NOINVERT
+END
+
 #endif    // Polish (Poland) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -300,27 +332,27 @@ IDR_MENU_MAIN MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "Add &Files...",               ID_FILE_ADDFILES
-        MENUITEM "Add &Directory...",           ID_FILE_ADDDIRECTORY
+        MENUITEM "Add &Files...\tCtrl+F",       ID_FILE_ADDFILES
+        MENUITEM "Add &Directory...\tCtrl+D",   ID_FILE_ADDDIRECTORY
         MENUITEM SEPARATOR
-        MENUITEM "&MUX Wizard...",              ID_FILE_MUXWIZARD
+        MENUITEM "&MUX Wizard...\tCtrl+M",      ID_FILE_MUXWIZARD
         MENUITEM SEPARATOR
-        MENUITEM "L&oad Files List...",         ID_FILE_LOADFILESLIST
-        MENUITEM "Sa&ve Files List...",         ID_FILE_SAVEFILESLIST
+        MENUITEM "L&oad Files List...\tCtrl+O", ID_FILE_LOADFILESLIST
+        MENUITEM "Sa&ve Files List...\tCtrl+S", ID_FILE_SAVEFILESLIST
         MENUITEM SEPARATOR
-        MENUITEM "&Load Presets...",            ID_FILE_LOADPRESETS
-        MENUITEM "&Save Presets...",            ID_FILE_SAVEPRESETS
+        MENUITEM "&Load Presets...\tCtrl+Shitf+O", ID_FILE_LOADPRESETS
+        MENUITEM "&Save Presets...\tCtrl+Shitf+S", ID_FILE_SAVEPRESETS
         MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_FILE_EXIT
+        MENUITEM "E&xit\tAlt+F4",               ID_FILE_EXIT
     END
     POPUP "&Options"
     BEGIN
-        MENUITEM "Disable All &Warnings",       ID_OPTIONS_DISABLEALLWARNINGS
+        MENUITEM "Disable All &Warnings\tCtrl+Shift+W", ID_OPTIONS_DISABLEALLWARNINGS
         MENUITEM SEPARATOR
-        MENUITEM "Save Configuration On E&xit", ID_OPTIONS_SAVECONFIGURATIONONEXIT
+        MENUITEM "Save Configuration On E&xit\tCtrl+Shift+C", ID_OPTIONS_SAVECONFIGURATIONONEXIT
         MENUITEM SEPARATOR
-        MENUITEM "Loa&d Configuration",         ID_OPTIONS_LOADCONFIGURATION
-        MENUITEM "Sav&e Configuration",         ID_OPTIONS_SAVECONFIGURATION
+        MENUITEM "Loa&d Configuration\tF7",     ID_OPTIONS_LOADCONFIGURATION
+        MENUITEM "Sav&e Configuration\tF8",     ID_OPTIONS_SAVECONFIGURATION
     END
     POPUP "&Language"
     BEGIN
@@ -328,10 +360,10 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "Command-&Line Help",          ID_HELP_COMMAND_LINE
-        MENUITEM "&Website",                    ID_HELP_WEBSITE
+        MENUITEM "Command-&Line Help\tCtrl+F1", ID_HELP_COMMAND_LINE
+        MENUITEM "&Website\tCtrl+Shift+W",      ID_HELP_WEBSITE
         MENUITEM SEPARATOR
-        MENUITEM "&About...",                   ID_HELP_ABOUT
+        MENUITEM "&About...\tCtrl+Shift+A",     ID_HELP_ABOUT
     END
 END
 
@@ -339,19 +371,19 @@ IDR_MENU_LIST MENU
 BEGIN
     POPUP "&List"
     BEGIN
-        MENUITEM "Add &Files...",               ID_LIST_ADDFILES
-        MENUITEM "Add &Directory...",           ID_LIST_ADDDIRECTORY
+        MENUITEM "Add &Files...\tCtrl+F",       ID_LIST_ADDFILES
+        MENUITEM "Add &Directory...\tCtrl+D",   ID_LIST_ADDDIRECTORY
         MENUITEM SEPARATOR
-        MENUITEM "&MUX Wizard...",              ID_LIST_MUXWIZARD
+        MENUITEM "&MUX Wizard...\tCtrl+M",      ID_LIST_MUXWIZARD
         MENUITEM SEPARATOR
-        MENUITEM "L&oad Files List...",         ID_LIST_LOADLIST
-        MENUITEM "Sa&ve Files List...",         ID_LIST_SAVELIST
+        MENUITEM "L&oad Files List...\tCtrl+O", ID_LIST_LOADLIST
+        MENUITEM "Sa&ve Files List...\tCtrl+S", ID_LIST_SAVELIST
         MENUITEM SEPARATOR
-        MENUITEM "Move &Up",                    ID_LIST_MOVEUP
-        MENUITEM "Move Dow&n",                  ID_LIST_MOVEDOWN
+        MENUITEM "Move &Up\tCtrl+Up",           ID_LIST_MOVEUP
+        MENUITEM "Move Dow&n\tCtrl+Down",       ID_LIST_MOVEDOWN
         MENUITEM SEPARATOR
-        MENUITEM "Remove &Selected Files",      ID_LIST_DELFILES
-        MENUITEM "Remove &All Files",           ID_LIST_CLEARLIST
+        MENUITEM "Remove &Selected Files\tDel", ID_LIST_DELFILES
+        MENUITEM "Remove &All Files\tCtrl+Del", ID_LIST_CLEARLIST
     END
 END
 
