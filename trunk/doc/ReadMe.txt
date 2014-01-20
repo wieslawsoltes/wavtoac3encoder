@@ -77,6 +77,16 @@ Source code is available in Subversion repository.
 
 svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-read-only
 
+==TRANSLATIONS==
+
+  * English (Wiesław Šoltés)
+
+  * German (A. Haack)
+
+  * Japanese (http://donkichirou.blog27.fc2.com/blog-entry-277.html)
+
+  * Polish (Wiesław Šoltés)
+
 ==BUILD==
 
   * Download latest Aften sources and binaries from http://code.google.com/p/wavtoac3encoder/
