@@ -1,4 +1,4 @@
-﻿WAV to AC3 Encoder 5.3 (Using Aften A/52 Audio Encoder)
+﻿WAV to AC3 Encoder 5.4 (Using Aften A/52 Audio Encoder)
 
 ==ABOUT==
 
