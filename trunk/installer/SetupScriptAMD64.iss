@@ -21,7 +21,7 @@
 ;
 ; Setup release version
 ;
-#define ReleaseVersion "5.3-AMD64"
+#define ReleaseVersion "5.4-AMD64"
 
 ;
 ; Include setup base srcript
