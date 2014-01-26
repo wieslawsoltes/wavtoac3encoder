@@ -21,7 +21,7 @@ setlocal
 
 set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
-set varVersion=5.3
+set varVersion=5.4
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 
