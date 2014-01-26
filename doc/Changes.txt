@@ -1,5 +1,10 @@
 ﻿Changes in WAV to AC3 Encoder:
 
+Version 5.4:
+
+- Added support for single channel multi-mono input.
+- Added German and Japanese language.
+
 Version 5.3:
 
 - Added keyboard shortcuts.
