@@ -1,0 +1,18 @@
+﻿Source files in which program version is set:
+
+|-------------------------------------|-----------------|
+| File path                           | How many times  |
+|-------------------------------------|-----------------|
+| doc\Changes.txt                     | 1               |
+| doc\Packages.txt                    | 5               |
+| doc\ReadMe.txt                      | 1               |
+| installer\PackageBinaries.cmd       | 1               |
+| installer\PackageBinariesAMD64.cmd  | 1               |
+| installer\PackageSources.cmd        | 1               |
+| installer\SetupScript.iss           | 1               |
+| installer\SetupScriptAMD64.iss      | 1               |
+| src\EncWAVtoAC3.rc                  | 4               |
+| src\stdafx.h                        | 1               |
+|-------------------------------------|-----------------|
+
+$Id$

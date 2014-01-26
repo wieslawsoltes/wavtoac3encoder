@@ -1,0 +1,494 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+#include "verrsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Polish (Poland) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+LANGUAGE LANG_POLISH, SUBLANG_DEFAULT
+#pragma code_page(1250)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "#include ""verrsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)\r\n"
+    "LANGUAGE 21, 1\r\n"
+    "#include ""res\\EncWAVtoAC3.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""      // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR_MAIN_MENU ACCELERATORS
+BEGIN
+    "F",            ID_FILE_ADDFILES,       VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_FILE_ADDDIRECTORY,   VIRTKEY, CONTROL, NOINVERT
+    "M",            ID_FILE_MUXWIZARD,      VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F5,          IDC_BUTTON_ENCODE,      VIRTKEY, NOINVERT
+    "E",            IDC_BUTTON_ENGINES,     VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_OPTIONS_DISABLEALLWARNINGS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "C",            ID_OPTIONS_SAVECONFIGURATIONONEXIT, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F7,          ID_OPTIONS_LOADCONFIGURATION, VIRTKEY, NOINVERT
+    VK_F8,          ID_OPTIONS_SAVECONFIGURATION, VIRTKEY, NOINVERT
+    VK_F1,          ID_HELP_COMMAND_LINE,   VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_HELP_WEBSITE,        VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "A",            ID_HELP_ABOUT,          VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_UP,          ID_LIST_MOVEUP,         VIRTKEY, CONTROL, NOINVERT
+    VK_DOWN,        ID_LIST_MOVEDOWN,       VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_LIST_CLEARLIST,      VIRTKEY, CONTROL, NOINVERT
+    "R",            IDC_BUTTON_PRESETS_DEFAULTS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "D",            IDC_BUTTON_PRESET_DEL,  VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F9,          IDC_BUTTON_PRESET_ADD,  VIRTKEY, NOINVERT
+END
+
+#endif    // Polish (Poland) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\EncWAVtoAC3.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ENCWAVTOAC3_DIALOG DIALOGEX 0, 0, 545, 321
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "WAV to AC3 Encoder"
+MENU IDR_MENU_MAIN
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "Quality:",IDC_STATIC_QUALITY,201,15,38,16,SS_CENTERIMAGE
+    CTEXT           "192 kbps",IDC_STATIC_BITRATE,449,15,45,16,SS_CENTERIMAGE
+    CONTROL         "V&BR",IDC_CHECK_VBR,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,500,15,39,16
+    CONTROL         "",IDC_SLIDER_BITRATE,"msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,246,15,201,16
+    CONTROL         "",IDC_LIST_SETTINGS,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | LVS_NOSORTHEADER | WS_TABSTOP,200,34,339,104,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Rese&t",IDC_BUTTON_PRESETS_DEFAULTS,6,33,48,12
+    COMBOBOX        IDC_COMBO_PRESETS,6,17,188,64,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "A&dd",IDC_BUTTON_PRESET_ADD,146,33,48,12
+    PUSHBUTTON      "&Remove",IDC_BUTTON_PRESET_DEL,57,33,48,12
+    CONTROL         "&MMX",IDC_CHECK_SIMD_MMX,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,99,96,28,11
+    CONTROL         "&SSE",IDC_CHECK_SIMD_SSE,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,99,107,28,11
+    CONTROL         "SSE&2",IDC_CHECK_SIMD_SSE2,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,99,118,28,11
+    CONTROL         "SSE&3",IDC_CHECK_SIMD_SSE3,"Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,99,129,28,11
+    LTEXT           "Sample format:",IDC_STATIC_SAMPLE_FORMAT,7,56,86,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_RAW_SAMPLE_FORMAT,6,70,87,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Sample rate:",IDC_STATIC_SAMPLE_RATE,7,112,86,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_RAW_SAMPLE_RATE,6,126,87,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_RAW_SAMPLE_RATE,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,82,126,11,12
+    LTEXT           "Channels:",IDC_STATIC_CHANNELS,7,84,86,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_RAW_CHANNELS,6,98,87,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_SPIN_RAW_CHANNELS,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,82,98,11,12
+    LTEXT           "Engine:",IDC_STATIC_ENGINE,100,56,66,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_ENGINES,99,70,94,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Threads:",IDC_STATIC_THREADS,136,112,57,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_THREADS,135,126,57,12,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN_THREADS,"msctls_updown32",UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,182,126,11,12
+    CONTROL         "",IDC_LIST_FILES,"SysListView32",LVS_REPORT | LVS_SHAREIMAGELISTS | LVS_ALIGNLEFT | WS_TABSTOP,6,159,533,91,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "&Add files...",IDC_BUTTON_ADD,6,255,70,16
+    LTEXT           "Output path:",IDC_STATIC_OUTPUT,7,273,70,12,SS_CENTERIMAGE
+    EDITTEXT        IDC_EDIT_OUTPUT_PATH,6,288,289,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_BUTTON_BROWSE,298,288,50,12
+    PUSHBUTTON      "&Encode",IDC_BUTTON_ENCODE,464,268,76,33
+    CONTROL         "M&ultiple mono input",IDC_CHECK_MULTIPLE_MONO_INPUT,
+                    "Button",BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,171,257,173,12
+    PUSHBUTTON      "MU&X Wizard...",IDC_BUTTON_MUX_WIZARD,82,255,82,16
+    PUSHBUTTON      "Ed&it",IDC_BUTTON_ENGINES,146,86,48,12
+    LTEXT           "Value:",IDC_STATIC_OPTION_VALUE,201,141,38,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_SETTING,244,141,295,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Preset:",IDC_STATIC_PRESET,7,3,90,12,SS_CENTERIMAGE
+    LTEXT           "SIMD:",IDC_STATIC_SIMD,100,84,25,12,SS_CENTERIMAGE
+END
+
+IDD_ENCODING_DIALOG DIALOGEX 0, 0, 400, 281
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Encoding..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Cancel",IDCANCEL,169,242,60,31
+    LTEXT           "From:\t-",IDC_STATIC_IN_00,14,13,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_00,14,24,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_01,14,35,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_01,14,46,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_02,14,57,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_02,14,68,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_03,14,78,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_03,14,89,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_04,14,100,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_04,14,111,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_05,14,122,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_IN_INFO_05,14,133,372,8,SS_PATHELLIPSIS
+    LTEXT           "To:\t-",IDC_STATIC_OUT,14,148,372,8,SS_PATHELLIPSIS
+    LTEXT           "\t-",IDC_STATIC_OUT_INFO,14,159,372,8,SS_PATHELLIPSIS
+    CONTROL         "",IDC_PROGRESS_CURRENT,"msctls_progress32",0x0,14,177,372,11,WS_EX_STATICEDGE
+    LTEXT           "Elapsed time: 00:00:00",IDC_STATIC_ELAPSED_CURRENT,14,191,300,8,SS_PATHELLIPSIS
+    CONTROL         "",IDC_PROGRESS_TOTAL,"msctls_progress32",0x0,14,204,372,11,WS_EX_STATICEDGE
+    LTEXT           "Total elapsed time: 00:00:00",IDC_STATIC_ELAPSED_TOTAL,14,218,155,8,SS_PATHELLIPSIS
+    RTEXT           "",IDC_STATIC_SIMD_INFO,186,218,200,8,SS_PATHELLIPSIS
+    GROUPBOX        "",IDC_STATIC_GROUP_ENCODING,5,1,390,234
+    RTEXT           "Encoding:",IDC_STATIC_ENCODER_LABEL,270,245,58,8,SS_PATHELLIPSIS
+    RTEXT           "I/O Reads:",IDC_STATIC_READS_LABEL,270,253,58,8,SS_PATHELLIPSIS
+    RTEXT           "I/O Writes:",IDC_STATIC_WRITES_LABEL,270,261,58,8,SS_PATHELLIPSIS
+    RTEXT           "MB/s",IDC_STATIC_ENCODER_UNIT,362,245,20,8,SS_PATHELLIPSIS
+    RTEXT           "MB/s",IDC_STATIC_READS_UNIT,362,253,20,8,SS_PATHELLIPSIS
+    RTEXT           "MB/s",IDC_STATIC_WRITES_UNIT,362,261,20,8,SS_PATHELLIPSIS
+    GROUPBOX        "",IDC_STATIC_GROUP_STATS,263,238,132,35
+    RTEXT           "0.0",IDC_STATIC_ENCODER_SPEED_AVG,333,245,28,8,SS_PATHELLIPSIS
+    RTEXT           "0.0",IDC_STATIC_READS_SPEED_AVG,333,253,28,8,SS_PATHELLIPSIS
+    RTEXT           "0.0",IDC_STATIC_WRITES_SPEED_AVG,333,261,28,8,SS_PATHELLIPSIS
+END
+
+IDD_ABOUT_DIALOG DIALOGEX 0, 0, 349, 212
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About WAV to AC3 Encoder"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&OK",IDOK,292,191,50,14
+    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,53,145,243,23
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,180,335,2,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    LTEXT           "",IDC_STATIC_BUILD_INFO,7,191,278,14,SS_CENTERIMAGE | WS_DISABLED
+    CONTROL         "",IDC_MFCBUTTON_ABOUT_BITMAP,"MfcButton",0x0,7,7,335,124
+END
+
+IDD_MUX_DIALOG DIALOGEX 0, 0, 525, 218
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "WAV to AC3 Encoder - MUX Wizard"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Cancel",IDCANCEL,469,198,50,14
+    PUSHBUTTON      "FL",IDC_BUTTON_FL,14,14,30,30
+    PUSHBUTTON      "FR",IDC_BUTTON_FR,174,14,30,30
+    PUSHBUTTON      "FC",IDC_BUTTON_FC,94,14,30,30
+    PUSHBUTTON      "LFE",IDC_BUTTON_LFE,94,84,30,30
+    PUSHBUTTON      "SL",IDC_BUTTON_SL,14,154,30,30
+    PUSHBUTTON      "SR",IDC_BUTTON_SR,174,154,30,30
+    PUSHBUTTON      "&OK",IDOK,413,198,50,14
+    PUSHBUTTON      "&Import MUX...",IDC_BUTTON_IMPORT,219,198,80,14
+    PUSHBUTTON      "&Export MUX...",IDC_BUTTON_EXPORT,305,198,80,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FL,459,14,52,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FR,459,45,52,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_FC,459,76,52,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_LFE,459,107,52,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_SL,459,138,52,14
+    PUSHBUTTON      "CLEAR",IDC_BUTTON_CLEAR_SR,459,169,52,14
+    CTEXT           "FL",IDC_STATIC_LABEL_FL,227,14,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "FR",IDC_STATIC_LABEL_FR,227,45,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "FC",IDC_STATIC_LABEL_FC,227,76,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "LFE",IDC_STATIC_LABEL_LFE,227,107,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "SL",IDC_STATIC_LABEL_SL,227,138,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    CTEXT           "SR",IDC_STATIC_LABEL_SR,227,169,20,14,SS_CENTERIMAGE,WS_EX_STATICEDGE
+    GROUPBOX        "",IDC_STATIC_CHANNELS,6,2,206,190
+    GROUPBOX        "",IDC_STATIC_FILES,219,2,300,190
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,48,29,42,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,128,29,42,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,48,169,121,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT,29,48,1,102
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT,188,48,1,102
+    COMBOBOX        IDC_COMBO_CHANNEL_CONFIG,81,200,93,86,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "+&LFE",IDC_CHECK_CHANNEL_CONFIG_LFE,"Button",BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,180,200,32,12
+    LTEXT           "Channel config:",IDC_STATIC_TEXT_CHANNEL_CONFIG,6,200,72,12,SS_CENTERIMAGE
+    PUSHBUTTON      "S",IDC_BUTTON_S,94,127,30,30
+    EDITTEXT        IDC_EDIT_FL,253,14,200,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_FR,253,44,200,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_FC,253,76,200,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_LFE,253,107,200,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_SL,253,138,200,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT_SR,253,169,200,14,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_ENGINES_DIALOG DIALOGEX 0, 0, 424, 180
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "WAV to AC3 Encoder - Engines Editor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "&Cancel",IDCANCEL,368,160,50,14
+    CONTROL         "",IDC_LIST_ENGINES,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_TABSTOP,6,6,412,98,WS_EX_CLIENTEDGE
+    EDITTEXT        IDC_EDIT_ENGINE_NAME,60,120,240,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ENGINE_PATH,60,136,296,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "&...",IDC_BUTTON_ENGINES_BROWSE,362,136,50,12
+    PUSHBUTTON      "&Add",IDC_BUTTON_ENGINES_ADD,306,120,50,12
+    PUSHBUTTON      "&Remove",IDC_BUTTON_ENGINES_REMOVE,362,120,50,12
+    PUSHBUTTON      "&Import...",IDC_BUTTON_ENGINES_IMPORT,6,160,60,14
+    PUSHBUTTON      "&Export...",IDC_BUTTON_ENGINES_EXPORT,73,160,60,14
+    LTEXT           "Name:",IDC_STATIC_TEXT_ENGINE_NAME,12,120,44,12,SS_CENTERIMAGE
+    LTEXT           "Path:",IDC_STATIC_TEXT_ENGINE_PATH,12,136,44,12,SS_CENTERIMAGE
+    GROUPBOX        "Engine",IDC_STATIC_GROUP_ENGINE,6,110,412,44
+    PUSHBUTTON      "&OK",IDOK,311,160,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 5,4,0,0
+ PRODUCTVERSION 5,4,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Wieslaw Soltes"
+            VALUE "FileDescription", "WAV to AC3 Encoder"
+            VALUE "FileVersion", "5.4.0.0"
+            VALUE "InternalName", "EncWAVtoAC3.exe"
+            VALUE "LegalCopyright", "WAV to AC3 Encoder (C) Wieslaw Soltes. All rights reserved."
+            VALUE "OriginalFilename", "EncWAVtoAC3.exe"
+            VALUE "ProductName", "WAV to AC3 Encoder"
+            VALUE "ProductVersion", "5.4.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_MAIN MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Add &Files...\tCtrl+F",       ID_FILE_ADDFILES
+        MENUITEM "Add &Directory...\tCtrl+D",   ID_FILE_ADDDIRECTORY
+        MENUITEM SEPARATOR
+        MENUITEM "&MUX Wizard...\tCtrl+M",      ID_FILE_MUXWIZARD
+        MENUITEM SEPARATOR
+        MENUITEM "L&oad Files List...\tCtrl+O", ID_FILE_LOADFILESLIST
+        MENUITEM "Sa&ve Files List...\tCtrl+S", ID_FILE_SAVEFILESLIST
+        MENUITEM SEPARATOR
+        MENUITEM "&Load Presets...\tCtrl+Shitf+O", ID_FILE_LOADPRESETS
+        MENUITEM "&Save Presets...\tCtrl+Shitf+S", ID_FILE_SAVEPRESETS
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit\tAlt+F4",               ID_FILE_EXIT
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "Disable All &Warnings\tCtrl+Shift+W", ID_OPTIONS_DISABLEALLWARNINGS
+        MENUITEM SEPARATOR
+        MENUITEM "Save Configuration On E&xit\tCtrl+Shift+C", ID_OPTIONS_SAVECONFIGURATIONONEXIT
+        MENUITEM SEPARATOR
+        MENUITEM "Loa&d Configuration\tF7",     ID_OPTIONS_LOADCONFIGURATION
+        MENUITEM "Sav&e Configuration\tF8",     ID_OPTIONS_SAVECONFIGURATION
+    END
+    POPUP "&Language"
+    BEGIN
+        MENUITEM "&Default (English)",          ID_LANGUAGE_DEFAULT, CHECKED
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "Command-&Line Help\tCtrl+F1", ID_HELP_COMMAND_LINE
+        MENUITEM "&Website\tCtrl+Shift+W",      ID_HELP_WEBSITE
+        MENUITEM SEPARATOR
+        MENUITEM "&About...\tCtrl+Shift+A",     ID_HELP_ABOUT
+    END
+END
+
+IDR_MENU_LIST MENU
+BEGIN
+    POPUP "&List"
+    BEGIN
+        MENUITEM "Add &Files...\tCtrl+F",       ID_LIST_ADDFILES
+        MENUITEM "Add &Directory...\tCtrl+D",   ID_LIST_ADDDIRECTORY
+        MENUITEM SEPARATOR
+        MENUITEM "&MUX Wizard...\tCtrl+M",      ID_LIST_MUXWIZARD
+        MENUITEM SEPARATOR
+        MENUITEM "L&oad Files List...\tCtrl+O", ID_LIST_LOADLIST
+        MENUITEM "Sa&ve Files List...\tCtrl+S", ID_LIST_SAVELIST
+        MENUITEM SEPARATOR
+        MENUITEM "Move &Up\tCtrl+Up",           ID_LIST_MOVEUP
+        MENUITEM "Move Dow&n\tCtrl+Down",       ID_LIST_MOVEDOWN
+        MENUITEM SEPARATOR
+        MENUITEM "Remove &Selected Files\tDel", ID_LIST_DELFILES
+        MENUITEM "Remove &All Files\tCtrl+Del", ID_LIST_CLEARLIST
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_ABOUT_BITMAP        BITMAP                  "res\\EncWAVtoAC3.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ENCWAVTOAC3_DIALOG, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 320
+    END
+
+    IDD_ENCODING_DIALOG, DIALOG
+    BEGIN
+    END
+
+    IDD_ABOUT_DIALOG, DIALOG
+    BEGIN
+        VERTGUIDE, 7
+        VERTGUIDE, 342
+        HORZGUIDE, 7
+        HORZGUIDE, 131
+    END
+
+    IDD_MUX_DIALOG, DIALOG
+    BEGIN
+    END
+
+    IDD_ENGINES_DIALOG, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_ABOUT_DIALOG DLGINIT
+BEGIN
+    IDC_MFCBUTTON_ABOUT_BITMAP, 0x37c, 462, 0
+0x4d3c, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x535f, 0x7974, 0x656c, 0x363e, 
+0x2f3c, 0x464d, 0x4243, 0x7475, 0x6f74, 0x5f6e, 0x7453, 0x6c79, 0x3e65, 
+0x4d3c, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x415f, 0x7475, 0x736f, 0x7a69, 
+0x3e65, 0x4146, 0x534c, 0x3c45, 0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 
+0x415f, 0x7475, 0x736f, 0x7a69, 0x3e65, 0x4d3c, 0x4346, 0x7542, 0x7474, 
+0x6e6f, 0x545f, 0x6f6f, 0x746c, 0x7069, 0x3c3e, 0x4d2f, 0x4346, 0x7542, 
+0x7474, 0x6e6f, 0x545f, 0x6f6f, 0x746c, 0x7069, 0x3c3e, 0x464d, 0x4243, 
+0x7475, 0x6f74, 0x5f6e, 0x7546, 0x6c6c, 0x6554, 0x7478, 0x6f54, 0x6c6f, 
+0x543e, 0x5552, 0x3c45, 0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x465f, 
+0x6c75, 0x546c, 0x7865, 0x5474, 0x6f6f, 0x3e6c, 0x4d3c, 0x4346, 0x7542, 
+0x7474, 0x6e6f, 0x435f, 0x7275, 0x6f73, 0x5472, 0x7079, 0x3e65, 0x3131, 
+0x2f3c, 0x464d, 0x4243, 0x7475, 0x6f74, 0x5f6e, 0x7543, 0x7372, 0x726f, 
+0x7954, 0x6570, 0x3c3e, 0x464d, 0x4243, 0x7475, 0x6f74, 0x5f6e, 0x6d49, 
+0x6761, 0x5465, 0x7079, 0x3e65, 0x3031, 0x2f3c, 0x464d, 0x4243, 0x7475, 
+0x6f74, 0x5f6e, 0x6d49, 0x6761, 0x5465, 0x7079, 0x3e65, 0x4d3c, 0x4346, 
+0x7542, 0x7474, 0x6e6f, 0x495f, 0x616d, 0x6567, 0x4449, 0x313e, 0x3233, 
+0x2f3c, 0x464d, 0x4243, 0x7475, 0x6f74, 0x5f6e, 0x6d49, 0x6761, 0x4965, 
+0x3e44, 0x4d3c, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x495f, 0x616d, 0x6567, 
+0x493e, 0x4244, 0x415f, 0x4f42, 0x5455, 0x425f, 0x5449, 0x414d, 0x3c50, 
+0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x495f, 0x616d, 0x6567, 0x3c3e, 
+0x464d, 0x4243, 0x7475, 0x6f74, 0x5f6e, 0x6d49, 0x6761, 0x4f65, 0x546e, 
+0x706f, 0x543e, 0x5552, 0x3c45, 0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 
+0x495f, 0x616d, 0x6567, 0x6e4f, 0x6f54, 0x3e70, 0x4d3c, 0x4346, 0x7542, 
+0x7474, 0x6e6f, 0x495f, 0x616d, 0x6567, 0x6e4f, 0x6952, 0x6867, 0x3e74, 
+0x4146, 0x534c, 0x3c45, 0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x495f, 
+0x616d, 0x6567, 0x6e4f, 0x6952, 0x6867, 0x3e74, 
+    0
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
+LANGUAGE 21, 1
+#include "res\EncWAVtoAC3.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"      // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

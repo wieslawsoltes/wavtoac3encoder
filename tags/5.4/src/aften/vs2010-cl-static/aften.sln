@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aften", "aften.vcxproj", "{101DE5FF-34F5-485D-9C3C-48444D8CB05A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libaften", "libaften.vcxproj", "{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Debug|Win32.Build.0 = Debug|Win32
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Debug|x64.ActiveCfg = Debug|x64
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Debug|x64.Build.0 = Debug|x64
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Release|Win32.ActiveCfg = Release|Win32
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Release|Win32.Build.0 = Release|Win32
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Release|x64.ActiveCfg = Release|x64
+		{101DE5FF-34F5-485D-9C3C-48444D8CB05A}.Release|x64.Build.0 = Release|x64
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Debug|Win32.Build.0 = Debug|Win32
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Debug|x64.ActiveCfg = Debug|x64
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Debug|x64.Build.0 = Debug|x64
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Release|Win32.ActiveCfg = Release|Win32
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Release|Win32.Build.0 = Release|Win32
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Release|x64.ActiveCfg = Release|x64
+		{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

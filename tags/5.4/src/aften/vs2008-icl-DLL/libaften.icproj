@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="libaften"
+	ProjectGUID="{5637F515-418B-45B6-93FE-F6BF700CEC3B}"
+	VCNestedProjectGUID="{FCF10A43-3390-4E89-B416-F2BE52D0DCC8}"
+	VCNestedProjectFileName="libaften.vcproj">
+	<Configurations>
+		<Configuration
+			Name="Release|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
+				FloatingPointSpeculation="0"/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64">
+			<Tool
+				Name="CppCmplrTool"
+				GlobalOptimizations="true"
+				OptimizeForWindowsApplication="true"
+				FloatingPointSpeculation="0"/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

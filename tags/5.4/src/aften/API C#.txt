@@ -1,0 +1,83 @@
+Some notes about using the Aften C# API    by Prakash Punnoor <prakash@punnoor.de>
+==================================================================================
+
+In contrast to the native C API, the C# bindings allow a high-level use of Aften.
+At the end of the document you can find a running example to hackishly convert a
+standard 44,1kHz 16bit PCM Stereo file, as you can find on CD-DA.
+
+The context object from the C API is just lightly wrapped, so bear with me. So, before
+initializing the encoder you should set up your context object. The best is, to get one
+filled with default values by calling the static GetDefaultsContext() method. Then set
+it up and pass it to the constructor of the FrameEncoderTSample, where TSample denotes
+the type of samples you want to convert. If you have samples made of short integeres,
+you would use FrameEncoderInt16. If you don't cast the object, you will have strongly-
+typed Encode functions which take Arrays of TSamples. You can also cast down to the
+FrameEncoder base class, which takes generic Arrays. Nevertheless the allowed type is
+determined by the class you instantiate.
+
+Keep in mind that the context object is a value type! I stumbled a few times upon it...
+
+There will be several overloads of Encode functions available, which allow passing of
+arrays or streams. You can also decide whether you want to pass a stream where the
+output stream is written or you'll get a MemoryStream back (with position set at the
+end). (You are free to mix the functions if you like.) Remember to call the Flush
+function, when you are done with encoding, as Aften will still return frames. As a
+convenience a EncodeAndFlush function exists, which can be used to encode a complete
+stream in one shot, as it is done in the example. At the end dispose the encoder, as
+otherwise the finalizer would be called sometime in the future which you don't really want.
+
+To get some status back while encoding you can subscribe to the FrameEncoded event.
+
+You can abort an encode with the Abort function (from another thread), though you'll have
+to dispose the instance afterwards.
+
+Remember that the C# bindings are still incomplete and will evolve with time, but I'll
+be happy to receive some feedback.
+
+
+The example program:
+
+using System;
+using System.IO;
+using Aften;
+
+namespace AftenTest
+{
+	public class Test
+	{
+		public static int Main( string[] args )
+		{
+			Console.WriteLine( "Aften AC3 Encoding Demo" );
+			if ( args.Length != 2 ) {
+				Console.WriteLine(
+					"Usage: " + Path.GetFileNameWithoutExtension( Environment.CommandLine )
+					 + " <input.wav> <output.ac3>" );
+
+				return -1;
+			}
+			EncodingContext context = FrameEncoder.GetDefaultsContext();
+			context.Channels = 2;
+			context.SampleRate = 44100;
+			context.AudioCodingMode = AudioCodingMode.Stereo;
+			context.HasLfe = false;
+			
+			using ( FileStream inputStream = new FileStream( args[0], FileMode.Open ) )
+			using ( FileStream outputStream = new FileStream( args[1], FileMode.Create ) )
+			using ( FrameEncoder encoder = new FrameEncoderInt16( ref context ) ) {
+				inputStream.Seek( 44, SeekOrigin.Begin ); // Skip WAVE header...
+				encoder.FrameEncoded += new EventHandler<FrameEventArgs>( encoder_FrameEncoded );
+				encoder.EncodeAndFlush( inputStream, outputStream );
+			}
+			Console.WriteLine( "Done" );
+			Console.ReadLine();
+			return 0;
+		}
+
+		private static void encoder_FrameEncoded( object sender, FrameEventArgs e )
+		{
+			if ( e.FrameNumber % 100 == 1 )
+				Console.WriteLine(
+					"Frame: " + e.FrameNumber + "  Size: " + e.Size + "  Quality: " + e.Status.Quality );
+		}
+	}
+}

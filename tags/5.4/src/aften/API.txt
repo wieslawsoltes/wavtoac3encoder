@@ -1,0 +1,70 @@
+Some notes about using the API
+==============================
+
+Aften in threaded mode gives back frames with a latency depending of the amount of threads used.
+You can think of Aften using some sort of internal queue, which needs to be filled, prior you get encoded frames back.
+That means, if Aften runs with n threads, the first n calls to aften_encode_frame will immediately return with a value of 0.
+Similarly, once you have no more input samples, the queue must be flushed, before the encoder can be closed.
+Otherwise you'll have dead-locks or segfaults. So you have to call aften_encode_frame will a NULL samples buffer,
+so that the encoder flushes the remaining frames. (These contain valid data, of course, so don't forget to handle them properly.)
+Even if you are *not* in threaded mode, you need to flush the encoder, as it might give back an additional frame due to padding.
+
+In case you want to abort the encoder, you can simply call aften_encode_close now. Aften will shut down running threads if needed,
+and inform you about this via error code.
+
+
+This is a stripped down version of aften.c. You should model your routine similarly if you want to run aften in threaded mode.
+A side note: Don't think of optimizing away the got_fs_once variable. This will lead to dead-locks if you encode <=n frames.
+
+#include "aften.h"
+
+int
+main(int argc, char **argv)
+{
+    uint8_t *frame_buffer;
+    FLOAT *samples_buffer;
+    AftenContext s;
+    int last_frame = 0;
+    int got_fs_once = 0;
+    int fs = 0;
+    int nr = 0;
+
+    // init context with default values
+    aften_set_defaults(&s);
+
+    // set-up AftenContext now, init buffers, etc.
+
+    // initialize encoder
+    if(aften_encode_init(&s)) {
+        fprintf(stderr, "error initializing encoder\n");
+        aften_encode_close(&s);
+
+        return 1;
+    }
+
+    // main decoding loop
+    do {
+        nr = read_samples(...);
+
+        // call remapping function here...
+
+        // encode
+        fs = aften_encode_frame(&s, frame_buffer, samples_buffer, nr);// flush encoder by giving zero count
+        // if got_fs_once is true and than on flushing we get back 0, it means we have to close encoder
+
+        if(fs < 0) {
+            fprintf(stderr, "Error encoding frame\n");
+            break;
+        } else {
+            if (fs > 0) {
+                write_frame(...);// write frame with size of fs
+                got_fs_once;// means encoder started outputting samples.
+            }
+            last_frame = nr;
+        }
+    } while(nr > 0 || fs > 0 || !got_fs_once);// we must flush encoder before closing it
+
+    aften_encode_close(&s);
+
+    return 0;
+}

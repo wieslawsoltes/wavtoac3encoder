@@ -1,0 +1,149 @@
+
+Aften: A/52 audio encoder
+Version git
+(c) 2006-2009 Justin Ruggles, Prakash Punnoor, et al.
+
+usage: aften [options] <input.wav> <output.ac3>
+options:
+    [-h]           Print out list of commandline options
+    [-longhelp]    Print out commandline option details
+    [-version]     Print out the build version
+    [-v #]         Verbosity (controls output to console)
+                       0 = quiet mode
+                       1 = show average stats (default)
+                       2 = show each frame's stats
+    [-threads #]   Number of parallel threads to use
+                       0 = detect number of CPUs (default)
+    [-nosimd X]    Comma-separated list of SIMD instruction sets not to use
+                       Available sets are mmx, sse, sse2, sse3 and altivec.
+                       No spaces are allowed between the sets and the commas.
+    [-b #]         CBR bitrate in kbps (default: about 96kbps per channel)
+    [-q #]         VBR quality [0 - 1023] (default: 240)
+    [-fba #]       Fast bit allocation (default: 0)
+                       0 = more accurate encoding
+                       1 = faster encoding
+    [-exps #]      Exponent strategy search size (default: 8)
+                       1 to 32 (lower is faster, higher is better quality)
+    [-pad #]       Start-of-stream padding
+                       0 = no padding
+                       1 = 256 samples of padding (default)
+    [-w #]         Bandwidth
+                       0 to 60 = fixed bandwidth (28%-99% of full bandwidth)
+                      -1 = fixed adaptive bandwidth (default)
+                      -2 = variable adaptive bandwidth
+    [-wmin #]      Minimum bandwidth [0 - 60] (default: 0)
+    [-wmax #]      Maximum bandwidth [0 - 60] (default: 60)
+    [-m #]         Stereo rematrixing
+                       0 = independent L+R channels
+                       1 = mid/side rematrixing (default)
+    [-s #]         Block switching
+                       0 = use only 512-point MDCT (default)
+                       1 = selectively use 256-point MDCT
+    [-cmix #]      Center mix level
+                       0 = -3.0 dB (default)
+                       1 = -4.5 dB
+                       2 = -6.0 dB
+    [-smix #]      Surround mix level
+                       0 = -3 dB (default)
+                       1 = -6 dB
+                       2 = 0
+    [-dsur #]      Dolby Surround mode
+                       0 = not indicated (default)
+                       1 = not Dolby surround encoded
+                       2 = Dolby surround encoded
+    [-dnorm #]     Dialog normalization [0 - 31] (default: 31)
+    [-dynrng #]    Dynamic Range Compression profile
+                       0 = Film Light
+                       1 = Film Standard
+                       2 = Music Light
+                       3 = Music Standard
+                       4 = Speech
+                       5 = None (default)
+    [-acmod #]     Audio coding mode (overrides wav header)
+                       0 = 1+1 (Ch1,Ch2)
+                       1 = 1/0 (C)
+                       2 = 2/0 (L,R)
+                       3 = 3/0 (L,R,C)
+                       4 = 2/1 (L,R,S)
+                       5 = 3/1 (L,R,C,S)
+                       6 = 2/2 (L,R,SL,SR)
+                       7 = 3/2 (L,R,C,SL,SR)
+    [-lfe #]       Specify use of LFE channel (overrides wav header)
+                       0 = LFE channel is not present
+                       1 = LFE channel is present
+    [-chconfig X]  Specify channel configuration (overrides wav header)
+                       1+1 = (Ch1,Ch2)
+                       1/0 = (C)
+                       2/0 = (L,R)
+                       3/0 = (L,R,C)
+                       2/1 = (L,R,S)
+                       3/1 = (L,R,C,S)
+                       2/2 = (L,R,SL,SR)
+                       3/2 = (L,R,C,SL,SR)
+                       adding "+LFE" indicates use of the LFE channel
+    [-ch_X file]   Add a mono file to the input list as the channel specified
+                       ch_fl  = Front Left
+                       ch_fc  = Front Center
+                       ch_fr  = Front Right
+                       ch_sl  = Surround Left
+                       ch_s   = Surround
+                       ch_sr  = Surround Right
+                       ch_m1  = Dual Mono Channel 1
+                       ch_m2  = Dual Mono Channel 2
+                       ch_lfe = LFE
+    [-raw_fmt X]   Raw audio input sample format (default: s16_le)
+                       One of the pre-defined sample formats:
+                       u8, s8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,
+                       s32_le, s32_be, float_le, float_be, double_le, double_be
+    [-raw_sr #]    Raw audio input sample rate (default: 48000)
+    [-raw_ch #]    Raw audio input channels (default: 1)
+    [-chmap #]     Channel mapping order of input audio
+                       0 = WAVE mapping (default)
+                       1 = AC-3 mapping
+                       2 = MPEG mapping
+    [-readtoeof #] Read input WAVE audio data until the end-of-file
+                       0 = use data size in header (default)
+                       1 = read data until end-of-file
+    [-bwfilter #]  Specify use of the bandwidth low-pass filter
+                       0 = do not apply filter (default)
+                       1 = apply filter
+    [-dcfilter #]  Specify use of the DC high-pass filter
+                       0 = do not apply filter (default)
+                       1 = apply filter
+    [-lfefilter #] Specify use of the LFE low-pass filter
+                       0 = do not apply filter (default)
+                       1 = apply filter
+    [-xbsi1 #]     Specify use of extended bitstream info 1
+                       0 = do not write xbsi1
+                       1 = write xbsi1
+    [-dmixmod #]   Preferred stereo downmix mode
+                       0 = not indicated (default)
+                       1 = Lt/Rt downmix preferred
+                       2 = Lo/Ro downmix preferred
+    [-ltrtcmix #]  Lt/Rt center mix level
+    [-ltrtsmix #]  Lt/Rt surround mix level
+    [-lorocmix #]  Lo/Ro center mix level
+    [-lorosmix #]  Lo/Ro surround mix level
+                       0 = +3.0 dB
+                       1 = +1.5 dB
+                       2 =  0.0 dB
+                       3 = -1.5 dB
+                       4 = -3.0 dB (default)
+                       5 = -4.5 dB
+                       6 = -6.0 dB
+                       7 = -inf dB
+    [-xbsi2 #]     Specify use of extended bitstream info 2
+                       0 = do not write xbsi2
+                       1 = write xbsi2
+    [-dsurexmod #] Dolby Surround EX mode
+                       0 = not indicated (default)
+                       1 = Not Dolby Surround EX encoded
+                       2 = Dolby Surround EX encoded
+    [-dheadphon #] Dolby Headphone mode
+                       0 = not indicated (default)
+                       1 = Not Dolby Headphone encoded
+                       2 = Dolby Headphone encoded
+    [-adconvtyp #] A/D converter type
+                       0 = Standard (default)
+                       1 = HDCD
+
