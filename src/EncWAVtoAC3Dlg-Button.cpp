@@ -60,11 +60,11 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
 	}
 
 	// check if correct number of mono input files is present
-	if ((this->bMultipleMonoInput == true) && (nItemsCount <= 1 || nItemsCount > 6))
+	if ((this->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
 	{
-		::LogMessage(_T("Error: Supported are minimum 2 and maximum 6 mono input files!"));
+		::LogMessage(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
 
-		MessageBox(HaveLangStrings() ? GetLangString(0x00207012) : _T("Supported are minimum 2 and maximum 6 mono input files!"),
+		MessageBox(HaveLangStrings() ? GetLangString(0x00207012) : _T("Supported are minimum 1 and maximum 6 mono input files!"),
 			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
 			MB_ICONERROR | MB_OK);
 
