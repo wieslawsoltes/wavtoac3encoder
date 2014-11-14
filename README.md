@@ -1,13 +1,5 @@
 WAV to AC3 Encoder 5.4 (Using Aften A/52 Audio Encoder)
 
-## DOWNLOAD
-
-  * x86 Binaries: [http://dl.bintray.com/wisodev/wavtoac3encoder/EncWAVtoAC3-5.4.zip EncWAVtoAC3-5.4.zip]
-  * AMD64 Binaries: [http://dl.bintray.com/wisodev/wavtoac3encoder/EncWAVtoAC3-5.4-AMD64.zip EncWAVtoAC3-5.4-AMD64.zip]
-  * x86 Installer: [http://dl.bintray.com/wisodev/wavtoac3encoder/EncWAVtoAC3-5.4.exe EncWAVtoAC3-5.4.exe]
-  * AMD64 Installer: [http://dl.bintray.com/wisodev/wavtoac3encoder/EncWAVtoAC3-5.4-AMD64.exe EncWAVtoAC3-5.4-AMD64.exe]
-  * Sources: [http://dl.bintray.com/wisodev/wavtoac3encoder/EncWAVtoAC3-5.4-src.zip EncWAVtoAC3-5.4-src.zip]
-
 ## ABOUT
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
@@ -40,13 +32,13 @@ maintained and actively developed.
 
 ### Screenshots
 
-[http://i62.tinypic.com/2rw9bt1.png]
+![](http://i62.tinypic.com/2rw9bt1.png)
 
-[http://i58.tinypic.com/n3w9kp.png]
+![](http://i58.tinypic.com/n3w9kp.png)
 
-[http://i60.tinypic.com/iyog7d.png]
+![](http://i60.tinypic.com/iyog7d.png)
 
-[http://i58.tinypic.com/zn06yr.png]
+![](http://i58.tinypic.com/zn06yr.png)
 
 ## CONFIGURATION
 
@@ -82,16 +74,16 @@ You can double-click in the file list on avisynth script to get e.g. number of a
 Please first check the *.log file in program directory for more information.
 
 To report issues please use: 
-  * https://code.google.com/p/wavtoac3encoder/issues/list
+  * https://github.com/wieslawsoltes/wavtoac3encoder/issues
 
 For more informations and help please visit:
   * http://forum.doom9.org/showthread.php?t=113074
 
 ## SOURCES
 
-Source code is available in Subversion repository.
+Source code is available in Git repository.
 
-svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-read-only
+https://github.com/wieslawsoltes/wavtoac3encoder
 
 ## TRANSLATIONS
 
@@ -105,7 +97,7 @@ svn checkout http://wavtoac3encoder.googlecode.com/svn/trunk/ wavtoac3encoder-re
 
 ## BUILD
 
-  * Download latest Aften sources and binaries from http://code.google.com/p/wavtoac3encoder/
+  * Download latest Aften sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder
 
   * Extract them in aften sub-directory in project source tree.
 
@@ -144,6 +136,7 @@ Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
 
 ### WAV to AC3 Encoder
 
+  * https://github.com/wieslawsoltes/wavtoac3encoder
   * http://code.google.com/p/wavtoac3encoder/
 
 ### Aften
@@ -153,4 +146,4 @@ Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
 
 ## DOWNLOAD MIRRORS
 
-<a href="http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml"><img border="0" src="http://www.softpedia.com/images/softpedia_download_small.gif"/></a>
+[![Softpedia Download Mirror](http://www.softpedia.com/images/softpedia_download_small.gif)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
