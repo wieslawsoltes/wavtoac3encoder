@@ -47,15 +47,11 @@ has different structure. Edit the files and check the sources to find
 out more about how this files are created. Each configuration file is 
 automaticaly loaded/saved by program every time the program is started/closed.
 
-Program configuration is stored in EncWAVtoAC3.config file.
-
-Presets for encoder are stored in EncWAVtoAC3.presets file.
-
-Paths to libaften.dll engines are stored in EncWAVtoAC3.engines file.
-
-User interface trasnlation files are located in Lang sub-directory.
-
-Translation files must be saved with Unicode charset and BOM header.
+  * Program configuration is stored in EncWAVtoAC3.config file.
+  * Presets for encoder are stored in EncWAVtoAC3.presets file.
+  * Paths to libaften.dll engines are stored in EncWAVtoAC3.engines file.
+  * User interface trasnlation files are located in Lang sub-directory.
+  * Translation files must be saved with Unicode charset and BOM header.
 
 ### AviSynth
 
