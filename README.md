@@ -1,6 +1,6 @@
 WAV to AC3 Encoder 5.4 (Using Aften A/52 Audio Encoder)
 
-## ABOUT
+### ABOUT
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
 audio streams based on ATSC A/52 specification. This type of audio 
@@ -10,7 +10,7 @@ audio encoder  created by Justin Ruggles. WAV to AC3 Encoder
 project was started on 27th January 2007 by Wiesław Šoltés and is still
 maintained and actively developed.
 
-### Main Program Features
+#### Main Program Features
 
   * High-quality output audio files.
   * Vary fast encoding.
@@ -30,7 +30,7 @@ maintained and actively developed.
   * Support for multi-language user interface.
   * Portable and installer packages available.
 
-### Screenshots
+#### Screenshots
 
 ![](http://i62.tinypic.com/2rw9bt1.png)
 
@@ -40,7 +40,7 @@ maintained and actively developed.
 
 ![](http://i58.tinypic.com/zn06yr.png)
 
-## CONFIGURATION
+### CONFIGURATION
 
 All confguration files are in plain text format. Each configuration file 
 has different structure. Edit the files and check the sources to find 
@@ -57,7 +57,7 @@ User interface trasnlation files are located in Lang sub-directory.
 
 Translation files must be saved with Unicode charset and BOM header.
 
-## AviSynth
+### AviSynth
 
 To run 64-bit version you need to install avisynth64:
   * http://code.google.com/p/avisynth64/
@@ -69,7 +69,7 @@ Running avisynth requires properly setup  Input Options (e.g. override wave head
 
 You can double-click in the file list on avisynth script to get e.g. number of audio channels.
 
-## Troubleshooting
+### Troubleshooting
 
 Please first check the *.log file in program directory for more information.
 
@@ -79,35 +79,28 @@ To report issues please use:
 For more informations and help please visit:
   * http://forum.doom9.org/showthread.php?t=113074
 
-## SOURCES
+### SOURCES
 
 Source code is available in Git repository.
 
 https://github.com/wieslawsoltes/wavtoac3encoder
 
-## TRANSLATIONS
+### TRANSLATIONS
 
   * English (Wiesław Šoltés)
-
   * German (A. Haack)
-
   * Japanese (http://donkichirou.blog27.fc2.com/blog-entry-277.html)
-
   * Polish (Wiesław Šoltés)
 
-## BUILD
+### BUILD
 
   * Download latest Aften sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder
-
   * Extract them in aften sub-directory in project source tree.
-
   * Use Miscroft Visual Studio 2010 to build Release binaries.
-
   * Distribute Release binaries with libaften.dll.
-
   * You can also build installer using Inno Setup.
 
-## LICENSE
+### LICENSE
 
 WAV to AC3 Encoder
 Copyright (C) 2007-2014 Wiesław Šoltés <wieslaw.soltes@gmail.com>
@@ -125,25 +118,25 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-## COPYRIGHTS
+### COPYRIGHTS
 
 WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
 
-## WEBSITES
+### WEBSITES
 
-### WAV to AC3 Encoder
+#### WAV to AC3 Encoder
 
   * https://github.com/wieslawsoltes/wavtoac3encoder
-  * http://code.google.com/p/wavtoac3encoder/
+  * http://code.google.com/p/wavtoac3encoder/ (old website)
 
-### Aften
+#### Aften
 
   * http://aften.sourceforge.net/
   * http://sourceforge.net/projects/aften/
 
-## DOWNLOAD MIRRORS
+### DOWNLOAD MIRRORS
 
-[![Softpedia Download Mirror](http://www.softpedia.com/images/softpedia_download_small.gif)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
+[![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
