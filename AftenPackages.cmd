@@ -16,7 +16,6 @@ rem You should have received a copy of the GNU General Public License
 rem along with this program; if not, write to the Free Software
 rem Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 rem
-rem $Id$
 setlocal
 
 set PackageVersion=git-20091226-icl11_1_054

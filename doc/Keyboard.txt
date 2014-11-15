@@ -39,5 +39,3 @@ Ctrl+E		Edit Engines
 F9		Add Preset
 Ctrl+Shift+D	Delete Preset
 Ctrl+Shift+R	Reset Preset
-
-$Id$

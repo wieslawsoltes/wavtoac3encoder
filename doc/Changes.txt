@@ -243,5 +243,3 @@ Version 0.1:
 
 - First public release.
 - Full Unicode support.
-
-$Id$
