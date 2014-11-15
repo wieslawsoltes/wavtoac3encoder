@@ -92,7 +92,7 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 
   * Download latest Aften sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder
   * Extract them in aften sub-directory in project source tree.
-  * Use Miscroft Visual Studio 2010 to build Release binaries.
+  * Use Microsoft Visual Studio Community 2013 with Update 4 to build Release binaries.
   * Distribute Release binaries with libaften.dll.
   * You can also build installer using Inno Setup.
 
