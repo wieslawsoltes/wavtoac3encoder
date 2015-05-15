@@ -60,7 +60,7 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 [Files]
 
 Source: ..\Release\Win32\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
-Source: ..\doc\ReadMe.txt; DestDir: {app}; Flags: ignoreversion
+Source: ..\ReadMe.md; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Keyboard.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
