@@ -75,7 +75,7 @@ Source: ..\src\aften\windows\output\libaftendll_x86_SSE3\libaften.dll; DestDir: 
 [Icons]
 
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
-Name: {group}\{#MyAppName} ReadMe; Filename: {app}\ReadMe.txt
+Name: {group}\{#MyAppName} ReadMe; Filename: {app}\ReadMe.md
 Name: {group}\{#MyAppName} Keyboard; Filename: {app}\Keyboard.txt
 Name: {group}\{#MyAppName} License; Filename: {app}\Copying.txt
 Name: {group}\{#MyAppName} Changes; Filename: {app}\Changes.txt
