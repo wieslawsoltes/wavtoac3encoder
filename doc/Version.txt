@@ -3,9 +3,10 @@
 |-------------------------------------|-----------------|
 | File path                           | How many times  |
 |-------------------------------------|-----------------|
+| ReadMe.md                           | 1               |
 | doc\Changes.txt                     | 1               |
 | doc\Packages.txt                    | 5               |
-| doc\ReadMe.txt                      | 1               |
+| installer\ReadMe.md                 | 1               |
 | installer\PackageBinaries.cmd       | 1               |
 | installer\PackageBinariesAMD64.cmd  | 1               |
 | installer\PackageSources.cmd        | 1               |
