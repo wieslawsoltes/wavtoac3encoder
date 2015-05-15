@@ -34,6 +34,8 @@ copy "%varBase%\*.vcxproj" "%varOutput%"
 copy "%varBase%\*.cmd" "%varOutput%"
 copy "%varBase%\*.inc" "%varOutput%"
 
+copy "%varBase%\*.md" "%varOutput%"
+
 set varPath=doc
 mkdir "%varOutput%\%varPath%"
 
@@ -76,6 +78,7 @@ copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
 set varPath=installer
 mkdir "%varOutput%\%varPath%"
 
+copy "%varBase%\%varPath%\*.md" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.cmd" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.iss" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.portable" "%varOutput%\%varPath%"
