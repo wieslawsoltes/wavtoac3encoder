@@ -1,16 +1,17 @@
 # WAV to AC3 Encoder
 
-### DOWNLOAD Installer
+WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on ATSC A/52 specification.
 
-* 32-bit: [EncWAVtoAC3-5.4.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.exe)
-* 64-bit: [EncWAVtoAC3-5.4-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.exe)
+## Downloads
 
-### DOWNLOAD Portable
+| Platforn              | Type        | Version    | Download                                                                                                                               |
+|-----------------------|-------------|------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| Windows 32-bit        | Installer   | 5.4        | [EncWAVtoAC3-5.4.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.exe)                      |
+| Windows 64-bit        | Installer   | 5.4        | [EncWAVtoAC3-5.4-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.exe)          |
+| Windows 32-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.zip)                      |
+| Windows 64-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.zip)          |
 
-* 32-bit: [EncWAVtoAC3-5.4.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.zip)
-* 64-bit: [EncWAVtoAC3-5.4-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.zip)
-
-## ABOUT
+## About
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
 audio streams based on ATSC A/52 specification. This type of audio 
@@ -20,7 +21,7 @@ audio encoder  created by Justin Ruggles. WAV to AC3 Encoder
 project was started on 27th January 2007 by Wiesław Šoltés and is still
 maintained and actively developed.
 
-## Program Features
+## Features
 
 * High-quality output audio files.
 * Vary fast encoding.
@@ -50,7 +51,7 @@ maintained and actively developed.
 
 ![](http://i58.tinypic.com/zn06yr.png)
 
-## CONFIGURATION
+## Configuration
 
 All confguration files are in plain text format. Each configuration file 
 has different structure. Edit the files and check the sources to find 
@@ -85,20 +86,20 @@ To report issues please use:
 For more informations and help please visit:
 * http://forum.doom9.org/showthread.php?t=113074
 
-## SOURCES
+## Sources
 
 Source code is available in Git repository.
 
 https://github.com/wieslawsoltes/wavtoac3encoder
 
-## TRANSLATIONS
+## Translations
 
 * English (Wiesław Šoltés)
 * German (A. Haack)
 * Japanese (http://donkichirou.blog27.fc2.com/blog-entry-277.html)
 * Polish (Wiesław Šoltés)
 
-## BUILD
+## Build
 
 * Download latest Aften sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder
 * Extract them in aften sub-directory in project source tree.
@@ -106,7 +107,7 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 * Distribute Release binaries with libaften.dll.
 * You can also build installer using Inno Setup.
 
-## LICENSE
+## License
 
 WAV to AC3 Encoder
 Copyright (C) 2007-2014 Wiesław Šoltés <wieslaw.soltes@gmail.com>
@@ -124,14 +125,14 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-## COPYRIGHTS
+## Copyrights
 
 WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
 
-## WEBSITES
+## Resources
 
 ### WAV to AC3 Encoder
 
@@ -143,6 +144,6 @@ Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
 * http://aften.sourceforge.net/
 * http://sourceforge.net/projects/aften/
 
-## DOWNLOAD MIRRORS
+## Mirrors
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
