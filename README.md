@@ -2,7 +2,7 @@
 
 WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on ATSC A/52 specification.
 
-## Downloads
+### Downloads
 
 | Platforn              | Type        | Version    | Download                                                                                                                               |
 |-----------------------|-------------|------------|----------------------------------------------------------------------------------------------------------------------------------------|
@@ -10,6 +10,10 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 | Windows 64-bit        | Installer   | 5.4        | [EncWAVtoAC3-5.4-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.exe)          |
 | Windows 32-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.zip)                      |
 | Windows 64-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.zip)          |
+
+### Mirrors
+
+[![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
 
 ## About
 
@@ -107,6 +111,20 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 * Distribute Release binaries with libaften.dll.
 * You can also build installer using Inno Setup.
 
+## Resources
+
+* https://github.com/wieslawsoltes/wavtoac3encoder
+* http://code.google.com/p/wavtoac3encoder/ (old website)
+* http://aften.sourceforge.net/
+* http://sourceforge.net/projects/aften/
+
+## Copyrights
+
+WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
+
+Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
+                     2006-2007 Prakash Punnoor <prakash@punnoor.de>
+
 ## License
 
 WAV to AC3 Encoder
@@ -124,26 +142,3 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-## Copyrights
-
-WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
-
-Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
-                     2006-2007 Prakash Punnoor <prakash@punnoor.de>
-
-## Resources
-
-### WAV to AC3 Encoder
-
-* https://github.com/wieslawsoltes/wavtoac3encoder
-* http://code.google.com/p/wavtoac3encoder/ (old website)
-
-### Aften
-
-* http://aften.sourceforge.net/
-* http://sourceforge.net/projects/aften/
-
-## Mirrors
-
-[![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
