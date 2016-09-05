@@ -1,4 +1,4 @@
-# WAV to AC3 Encoder
+﻿# WAV to AC3 Encoder
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/wavtoac3encoder.svg)](https://gitter.im/wieslawsoltes/wavtoac3encoder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -51,13 +51,13 @@ maintained and actively developed.
 
 ## Screenshots
 
-![](MainWindow.png)
+![](screenshots/MainWindow.png)
 
-![](EngineEditor.png)
+![](screenshots/MuxWizard.png)
 
-![](MuxWizard.png)
+![](screenshots/EngineEditor.png)
 
-![](EncodingProgress.png)
+![](screenshots/EncodingProgress.png)
 
 ## Command-Line
 
