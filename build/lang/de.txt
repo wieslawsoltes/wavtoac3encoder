@@ -1,0 +1,481 @@
+﻿//
+// Description: WAV to AC3 Encoder Translation File
+// Version: 5.4
+// Charset: Unicode
+// Translator: A. Haack
+//
+
+//
+// Translation Language Name: in Deutsch
+//
+
+0x00000001=German
+
+//
+// Translation Language Name: in target language
+//
+
+0x00000002=Deutsch
+
+//
+// Main Dialog: Main Menu
+//
+
+0x00101001=&Datei
+0x00101002=Dateien &hinzufügen...\tStrg+F
+0x00101003=&Verzeichnis hinzufügen...\tStrg+D
+0x00101004=&MUX-Assistent...\tStrg+M
+0x00101005=Dateilist &laden...\tStrg+O
+0x00101006=Dateilist &speichern...\tStrg+S
+0x00101007=V&oreinstellung laden...\tStrg+Umschalttaste+O
+0x00101008=Vo&reinstellung speichern...\tStrg+Umschalttaste+S
+0x00101009=&Beenden\tAlt+F4
+
+0x00102001=&Optionen
+0x00102002=Alle &Warnungen deaktivieren\tStrg+Umschalttaste+W
+0x00102003=Konfiguration beim Beenden speichern\tStrg+Umschalttaste+C
+0x00102004=Konfiguration &laden\tF7
+0x00102005=Konfiguration &speichern\tF8
+
+0x00103001=&Language (Sprache)
+0x00103002=&Default (English)
+
+0x00104001=&Hilfe
+0x00104002=&Befehlszeilenhilfe\tStrg+F1
+0x00104003=&Webseite\tStrg+Umschalttaste+W
+0x00104004=Ü&ber...\tStrg+Umschalttaste+A
+
+//
+// Main Dialog: Buttons
+//
+
+0x00201001=&Kodieren
+0x00201002=&Zurücksetzen
+0x00201003=Ente&rnen
+0x00201004=&Hinzufügen
+0x00201005=D&ateien hinzufügen
+0x00201006=&...
+0x00201007=MU&X-Assistent...
+0x00201008=Bearbe&iten
+
+//
+// Main Dialog: Static Text
+//
+
+0x00202001=Voreinstellung:
+0x00202002=Qualität:
+0x00202003=Bitrate:
+0x00202004=Wert:
+0x00202005=Abtastformat:
+0x00202006=Abtastrate:
+0x00202007=Kanäle:
+0x00202008=Maschine:
+0x00202009=Threads:
+0x0020200A=M&ehrere Mono-Dateien
+0x0020200B=Ausgabedatei:
+0x0020200C=Ausgabeordner:
+
+//
+// Main Dialog: Files List
+//
+
+0x00203001=Dateipfad
+0x00203002=Dateigröße (Byte)
+
+//
+// Main Dialog: Files List Context-Menu
+//
+
+0x00204001=&Liste
+0x00204002=Dateien &hinzufügen...
+0x00204003=&Verzeichnis hinzufügen...
+0x00204004=&MUX-Assistent...
+0x00204005=Dateilist &laden...
+0x00204006=Dateilist spei&chern...
+0x00204007=Nach &unten verschieben
+0x00204008=Nach oben verschiebe&n
+0x00204009=Ausgewählte Dateien &entfernen
+0x0020400A=&Alle Dateien entfernen
+
+//
+// Main Dialog: Settings List
+//
+
+0x00205001=Option
+0x00205002=Wert
+
+//
+// Main Dialog: Tooltips
+//
+
+0x00206001=CBR Bitrate in kB/s:\n\nCBR-Modus ist standardmäßig ausgewählt. Diese Option ermöglicht\ndie Einstellung der festen Bitrate. Die Standard-Bitrate hängt\nvon der Anzahl der Kanälen (LFE nicht eingeschlossen) ab.\n1 = 96 kB/s\n2 = 192 kB/s\n3 = 256 kB/s\n4 = 384 kB/s\n5 = 448 kB/s\n\nVBR-Qualität:\n\nEin Wert von 0 bis 1023 was den SNR-Versatz entspricht, wobei\nq=240 einen SNR-Versatz von 0 entspricht. 240 ist der\nStandard-Wert. Diese Skala wird wahrscheinlich in der\nZukunft mit einer besseren Qualitätsmessung ersetzt.
+0x00206002=VBR-Modus aktivieren.\nWenn kein Häckchen gesetzt worden ist,\nwird der CBR-Modus verwendet.
+0x00206003=Voreinstellung für aktuellen Kodierer verwenden. Sie können diese Einstellung im Dateimenü\nladen und sichern. Alle Voreinstellungen werden aus der Textdatei geladen bzw. gesichert.
+0x00206004=Aften erkennt automatisch verfügbare SIMD-Befehlssätze\nfür Ihre CPU, sollten Sie diese nicht benötigen, um Sätze\nexplizit zu deaktivieren  - es sei denn, aus Geschwindigkeit- und Debugging-Gründen.
+0x00206005=Diese Option ermöglicht MMX Optimierungen (CPU-Unterstützung vorausgesetzt).\n\n
+0x00206006=Diese Option ermöglicht SSE-Optimierungen (CPU-Unterstützung vorausgesetzt).\n\n
+0x00206007=Diese Option ermöglicht SSE2-Optimierungen (CPU-Unterstützung vorausgesetzt).\n\n
+0x00206008=Diese Option ermöglicht SSE3-Optimierungen (CPU-Unterstützung vorausgesetzt).\n\n
+0x00206009=Raw audio input sample format specifies the sample format\nwhen using raw audio input. Using this option forces Aften to\ntreat the input as raw audio. The choices for the\npre-defined sample formats are (default: s16_le):\nu8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,\ns32_le, s32_be, float_le, float_be, double_le, double_be
+0x0020600A=Raw audio input sample rate option forces Aften to\ntreat the input as raw audio (default: 48000).
+0x0020600B=Raw audio input channels forces Aften to treat the input as\nraw audio (default: 2).
+0x0020600C=Aften can use multiple threads to speed up encoding.\nBy default, Aften uses one thread for each logical CPU\nyour system has, but you can override this value. A\nvalue of 0 is the default and indicates that Aften\nshould try to detect the number of CPUs.
+0x0020600D=Set currently used Aften library. By selecting optimized Aften\nlibrary you can speedup the encoding process.
+0x0020600E=Set default output path for encoded files. By default files\nare encoded to the same directory as input files. When using\nmultiple mono input than here is set the output file path.
+0x0020600F=Enable multiple mono input mode. By adding multiple mono input\nfiles to the files list (minimum 2, maximum 6) in correct channel\norder the mono input files will be encoded into single ac3 file.
+0x00206010=Bearbeitet die aktuelle vorhandene Aften-Maschine.
+
+//
+// Main Dialog: Misc.
+//
+
+0x00207001=Standard
+0x00207002=<Auto>
+0x00207003=<Ignoriert>
+0x00207004=<Gleicher Pfad wie Eingabedatei>
+0x00207005=<Gleicher Pfad wie Eingabedatei + Ausgabe.ac3>
+0x00207006=Unterstützte Dateien
+0x00207007=Dateien
+0x00207008=Alle Dateien
+0x00207009=Puffer für Dateinamen Speicherreservierung fehlgeschlagen!
+0x0020700A=Schwerwiegender Fehler
+0x0020700B=Verzeichnis mit unterstützten Eingabedateien hinzufügen:
+0x0020700C=Alle Dateien von der Liste sowie ausgewählte hinzugefügte im MUX-Assistenten entfernen?\n\nAnmerkung: Die Kanalkonfiguration für die aktuelle Voreinstellung wird angepasst.
+0x0020700D=MUX-Assistent
+0x0020700E=Unterstützte Dateien (*.files;*.mux)|*.files;*.mux|Dateiliste (*.files)|*.files|MUX Dateien (*.mux)|*.mux|Alle Dateien (*.*)|*.*||
+0x0020700F=Vorkonfigurierte Voreinstellung (*.presets)|*.presets|Alle Dateien (*.*)|*.*||
+0x00207010=Fehler
+0x00207011=Fügen Sie mindestens eine Datei in die Dateiliste ein!
+0x00207012=Es werden nur 1 bis 6 Kanäle unterstützt!
+0x00207013=Dynamische DLL-Bibliothek libaften.dll konnte nicht geladen werden!
+0x00207014=Modus für 'Mehrfache Eingaben für Mono' deaktivieren, um Avisynth Skripte verwenden!
+0x00207015=Ungültiger Ausgabepfad!
+0x00207016=Ungültige Ausgabedatei!
+0x00207017=Ausgabepfad konnte nicht erstellt werden!
+0x00207018=%d kodierte Mono-Dateien in %s (%0.3lf Sek.)
+0x00207019=%d Dateien%s in %s (%0.3lf Sek.)
+0x0020701A=s
+0x0020701B=Neue Voreinstellung
+0x0020701C=AC3 Dateien (*.ac3)|*.ac3|Alle Dateien (*.*)|*.*||
+0x0020701D=Standard-Ausgabepfad wählen:
+0x0020701E=Fehler beim Laden
+0x0020701F=Bibliothek
+0x00207020=Geladen
+0x00207021=Version
+0x00207022=Avisynth Konnte nicht initialisiert werden
+0x00207023=Sampleformat
+0x00207024=Unbekannt
+0x00207025=Abtastrate
+0x00207026=Kanäle
+0x00207027=Audiosamples
+0x00207028=Dekodiergröße
+0x00207029=AVS Dateieigenschaften
+0x0020702A=Fehler beim Suchen von Dateien!
+
+//
+// Main Dialog: Advanced Encoder Options Groups
+//
+
+0x00208001=Kodiereinstellungen
+0x00208002=Bitstream info metadata
+0x00208003=Dynamikbereich-Komprimierung und Dialog-Normalisierung
+0x00208004=Eingabeoptionen
+0x00208005=Eingabefilter
+0x00208006=Alternative Bitstromsyntax
+
+//
+// Main Dialog: (1) Encoding options
+//
+
+0x00301001=Schnelle Bit-Zuordnung
+0x00301002=Schnelle Bit-Zuordnung ist eine weniger genaue Suchmethode\nfür die CBR Bit-Zuordnung. Es verkürzt und verlangsamt nur den SNR-Wert\ninnerhalb von 16 des optimalen Wert. Das Ergebnis\nist eine geringere Gesamtqualität, aber schnellere Kodierung. Es kann\nbei Verwendung der parallele Kodierung nicht jedesmal das gleiche\nErgebnis liefern.
+0x00301003=Genauere Codierung (Standard)
+0x00301004=Schnellere Kodierung
+
+0x00302001=Exponent Strategie Suchgröße
+0x00302002=The encoder determines the best combination of\nexponent strategies for a frame by searching through\na list of pre-defined exponent strategies. This option\ncontrols the size of the list to be searched. The\nvalue can range from 1 (lower quality but faster) to\n32 (higher quality but slower). The default value is 8.
+0x00302003=1 (niedrigere Qualität, dafür schneller)
+0x00302004=8 (Standard)
+0x00302005=32 (höhere Qualität, dafür langsamer)
+
+0x00303001=Start der Strom-Auffüllung
+0x00303002=Das AC-3 Format verwendet eine Überlappung,\neinen Zyklus für jeden kodierten\nBlock hinzu. Standardmäßig füllt Aften einen Verzögerungspuffer\nmit einem Block von Stille hinzu um ungenaue Kodierung\ndes ersten Audio-Rahmens zu vermeiden.Wenn dieses Verhalten\nnicht gewünscht ist, kann dieser deaktiviert werden. Dieser Auffüllwert kann eine zum Auffüllen 1 (Standard) oder zum nicht Auffüllen eine 0 sein.
+0x00303003=Kein Auffüllen
+0x00303004=256 Samples der Auffüllung (Standard)
+
+0x00304001=Bandweite
+0x00304002=The bandwidth setting corresponds to the high-frequency\ncutoff. Specifically, it sets the highest frequency bin\nwhich is encoded. The AC-3 format uses a 512-point MDCT\nwhich gives 256 frequency levels from 0 to 1/2 of the\nsamplerate. The formula to give the number of coded\nfrequency bins from bandwidth setting is:\n(w * 3) + 73, which gives a range of 73 to 253\nThere are 2 special values, -1 and -2.\nWhen -1 is used, Aften automatically selects what\nit thinks is an appropriate bandwidth. This is the\ndefault setting.\nWhen -2 is used, a bandwidth is chosen for each frame\nbased on CBR frame size and a target quality of 240.\nVariable bandwidth cannot be used with VBR mode.
+0x00304003=Fixed adaptive bandwidth (Standard)
+0x00304004=Variable adaptive Bandbreite
+0x00304005=0 (28% der vollen Bandbreite)
+0x00304006=60 (99% der vollen Bandbreite)
+
+0x00305001=Mindestbandbreite
+0x00305002=For variable bandwidth mode (-2), this option sets the\nminimum value for the bandwidth code. This allows the\nuser to avoid a harsh cutoff frequency by sacrificing\ngeneral audio quality. The default value is 0.
+0x00305003=0 (Standard)
+
+0x00306001=Maximalbandbreite
+0x00306002=For variable bandwidth mode (-2), this option sets the\nmaximum value for the bandwidth code. This can be used\nto speed up encoding by using a lower value than 60,\nwhich is the default.
+0x00306003=60 (Standard)
+
+0x00307001=Stereo rematrixing
+0x00307002=Using stereo rematrixing can increase quality by\nremoving redundant information between the left and\nright channels. This technique is common in audio\nencoding, and is sometimes called mid/side encoding.\nWhen this setting is turned on, Aften adaptively turns\nrematrixing on or off for each of 4 frequency bands for\neach block. When this setting is turned off,\nrematrixing is not used for any blocks. The default\nvalue is 1.
+0x00307003=Unabhängige L+R Kanäle
+0x00307004=Mitte/Seite rematrixing (Standard)
+
+0x00308001=Block-Schaltung
+0x00308002=The AC-3 format allows for 2 different types of MDCT\ntransformations to translate from time-domain to\nfrequency-domain. The default is a 512-point transform,\nwhich gives better frequency resolution. There is also\na 256-point transform, which gives better time\nresolution. The specification gives a suggested method\nfor determining when to use the 256-point transform.\nWhen block switching is turned on, Aften uses the spec\nmethod for selecting the 256-point MDCT. When it is\nturned off, only the 512-point MDCT is used, which is\nfaster. Block switching is turned off by default.
+0x00308003=Nur 512-Punkt-MDCT verwenden (Standard)
+0x00308004=Selektives 512-Punkt-MDCT verwenden
+
+//
+// Main Dialog: (2) Bitstream info metadata
+//
+
+0x00401001=Mischpegel Mitte
+0x00401002=When three front channels are in use, this code\nindicates the nominal down mix level of the center\nchannel with respect to the left and right channels.\n0 = -3.0 dB (Standard)\n1 = -4.5 dB\n2 = -6.0 dB
+0x00401003=-3.0 dB (Standard)
+
+0x00402001=Mischpegel Surround
+0x00402002=If surround channels are in use, this code indicates\nthe nominal down mix level of the surround channels.\n0 = -3 dB (Standard)\n1 = -6 dB\n2 = 0
+0x00402003=-3 dB (Standard)
+
+0x00403001=Dolby Surroundmodus
+0x00403002=When operating in the two channel mode, this code\nindicates whether or not the program has been encoded in\nDolby Surround. This information is not used by the\nAC-3 decoder, but may be used by other portions of the\naudio reproduction equipment.\n0 = not indicated (Standard)\n1 = not Dolby surround encoded\n2 = Dolby surround encoded
+0x00403003=Nicht angezeigt (Standard)
+0x00403004=Nicht Dolby Surround kodiert
+0x00403005=Dolby Surround kodiert
+
+//
+// Main Dialog: (3) Dynamic range compression and dialog normalization
+//
+
+0x00501001=Dialog-Normalisierung
+0x00501002=The dialog normalization value sets the average dialog\nlevel. The value is typically constant for a particular\naudio program. The decoder has a target output dialog\nlevel of -31dB, so if the dialog level is specified as\nbeing -31dB already (Standard), the output volume is not\naltered. Otherwise, the overall output volume is\ndecreased so that the dialog level is adjusted down to\n-31dB.
+0x00501003=31 (Standard)
+
+0x00502001=Profil für Dynamikkompression
+0x00502002=Dynamic Range Compression allows for the final output\ndynamic range to be limited without sacrificing quality.\nThe full dynamic range audio is still encoded, but a\ncode is given for each block which tells the decoder to\nadjust the output volume for that block. The encoder\nmust analyze the input audio to determine the best way\nto compress the dynamic range based on the loudness and\ntype of input (film, music, speech).\n0 = Film Light\n1 = Film Standard\n2 = Music Light\n3 = Music Standard\n4 = Speech\n5 = None (Standard)
+0x00502003=Film leicht
+0x00502004=Film Standard
+0x00502005=Musik leicht
+0x00502006=Musik Standard
+0x00502007=Sprache
+0x00502008=Keine Auswahl (Standard)
+
+//
+// Main Dialog: (4) Input options
+//
+
+0x00601001=Audiokodierungsmodus (überschreibt wav-Kopfzeile)
+0x00601002=The acmod and lfe options allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 0 = 1+1 (Ch1,Ch2)\n1 = 1/0 (C)\n2 = 2/0 (L,R)\n3 = 3/0 (L,R,C)\n4 = 2/1 (L,R,S)\n5 = 3/1 (L,R,C,S)\n6 = 2/2 (L,R,SL,SR)\n7 = 3/2 (L,R,C,SL,SR)
+
+0x00602001=Verwendung des LFE-Kanal angeben (überschreibt wav-Kopfzeile)
+0x00602002=The acmod and lfe options allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 0 = LFE channel is not present\n1 = LFE channel is present
+0x00602003=LFE-Kanal nicht vorhanden
+0x00602004=LFE-Kanal vorhanden
+
+0x00603001=Kanalkonfiguration angeben (überschreibt wav-Kopfzeile)
+0x00603002=The chconfig option allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 1+1 = (Ch1,Ch2)\n1/0 = (C)\n2/0 = (L,R)\n3/0 = (L,R,C)\n2/1 = (L,R,S)\n3/1 = (L,R,C,S)\n2/2 = (L,R,SL,SR)\n3/2 = (L,R,C,SL,SR)\nAdding +LFE indicates use of the LFE channel
+
+0x00604001=Kanalzuordnung Reigenfolge der Eingabedatei
+0x00604002=Some programs create WAVE files which use a channel\nmapping other than the standard WAVE mapping. This\noption allows the user to specify if the input file\nuses WAVE, AC-3, or MPEG channel mapping. The MPEG\nchannel mapping is used by DTS and by MPEG-2/4 formats\nsuch as MP2 and AAC.\n0 = WAVE mapping (Standard)\n1 = AC-3 mapping\n2 = MPEG mapping
+0x00604003=WAV Zuordnung (Standard)
+0x00604004=AC-3 Zuordnung
+0x00604005=MPEG Zuordnung
+
+0x00605001=Read input WAVE audio data until the end-of-file
+0x00605002=This overrides the data size in the WAVE header, and\ncan be useful for streaming input or files larger than\n4 GB.\n0 = use data size in header (Standard)\n1 = read data until end-of-file
+0x00605003=Use data size in header (Standard)
+0x00605004=Read data until end-of-file
+
+//
+// Main Dialog: (5) Input filters
+//
+
+0x00701001=Verwendung des Tiefpassfilter angeben
+0x00701002=The bandwidth low-pass filter pre-filters the input\naudio before converting to frequency-domain. This\nsmooths the cutoff frequency transition for slightly\nbetter quality.\n0 = do not apply filter (Standard)\n1 = apply filter
+0x00701003=Filter nicht anwenden (Standard)
+0x00701004=Filter anwenden
+
+0x00702001=Verwendung des DC-Hochpassfilter angeben
+0x00702002=The DC high-pass filter is listed as optional by the\nAC-3 specification. The implementation, as suggested,\nis a single pole filter at 3 Hz.\n0 = do not apply filter (Standard)\n1 = apply filter
+0x00702003=Filter nicht anwenden (Standard)
+0x00702004=Filter anwenden
+
+0x00703001=Verwendung des LFE-Tiefpassfilter angeben
+0x00703002=The LFE low-pass filter is recommended by the AC-3\nspecification. The cutoff is 120 Hz. The specification\nrecommends an 8th order elliptic filter, but instead,\nAften uses a Butterworth 2nd order cascaded direct\nform II filter.\n0 = do not apply filter (Standard)\n1 = apply filter
+0x00703003=Filter nicht anwenden (Standard)
+0x00703004=Filter anwenden
+
+//
+// Main Dialog: (6) Alternate bit stream syntax
+//
+
+0x00801001=Specify use of extended bitstream info 1
+0x00801002=Extended bitstream info 1 contains the dmixmod,\nltrtcmix, ltrtsmix, lorocmix, and lorosmix fields. If\nthis option is turned on, all these values are written\nto the output stream.\n0 = do not write xbsi1\n1 = write xbsi1
+0x00801003=Do not write xbsi1
+0x00801004=Write xbsi1
+
+0x00802001=Bevorzugter Stereo-Downmix-Modus
+0x00802002=This code indicates the type of stereo downmix preferred\nby the mastering engineer, and can be optionally used,\noverridden, or ignored by the decoder.\n0 = not indicated (Standard)\n1 = Lt/Rt downmix preferred\n2 = Lo/Ro downmix preferred
+0x00802003=Not indicated (Standard)
+0x00802004=Lt/Rt Downmix bevorzugt
+0x00802005=Lo/Ro Downmix bevorzugt
+
+0x00803001=Lt/Rt center mix level
+0x00803002=This code indicates the nominal down mix level of the\ncenter channel with respect to the left and right\nchannels in an Lt/Rt downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (Standard)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB
+0x00803003=-3.0 dB (Standard)
+
+0x00804001=Lt/Rt surround mix level
+0x00804002=This code indicates the nominal down mix level of the\nsurround channels with respect to the left and right\nchannels in an Lt/Rt downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (Standard)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB
+0x00804003=-3.0 dB (Standard)
+
+0x00805001=Lo/Ro center mix level
+0x00805002=This code indicates the nominal down mix level of the\ncenter channel with respect to the left and right\nchannels in an Lo/Ro downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (Standard)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB
+0x00805003=-3.0 dB (Standard)
+
+0x00806001=Lo/Ro surround mix level
+0x00806002=This code indicates the nominal down mix level of the\nsurround channels with respect to the left and right\nchannels in an Lo/Ro downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (Standard)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB
+0x00806003=-3.0 dB (Standard)
+
+0x00807001=Specify use of extended bitstream info 2
+0x00807002=Extended bitstream info 2 contains the dsurexmod,\ndheadphon, and adconvtyp fields. If this option is\nturned on, all these values are written to the output\nstream. These options are not used by the AC-3 decoder,\nbut may be used by other portions of the audio\nreproduction equipment.\n0 = do not write xbsi2\n1 = write xbsi2
+0x00807003=Do not write xbsi2
+0x00807004=Write xbsi2
+
+0x00808001=Dolby Surround EX mode
+0x00808002=This code indicates whether or not the program has been\nencoded in Dolby Surround EX.\n0 = not indicated (Standard)\n1 = Not Dolby Surround EX encoded\n2 = Dolby Surround EX encoded
+0x00808003=Not indicated (Standard)
+0x00808004=Not Dolby Surround EX encoded
+0x00808005=Dolby Surround EX encoded
+
+0x00809001=Dolby Headphone mode
+0x00809002=This code indicates whether or not the program has been\nDolby Headphone-encoded.\n0 = not indicated (Standard)\n1 = Not Dolby Headphone encoded\n2 = Dolby Headphone encoded
+0x00809003=Not indicated (Standard)
+0x00809004=Not Dolby Headphone encoded
+0x00809005=Dolby Headphone encoded
+
+0x0080A001=A/D Wandler-Typ
+0x0080A002=This code indicates the type of A/D converter technology\nused to capture the PCM audio.\n0 = Standard (Standard)\n1 = HDCD
+0x0080A003=Standard (Standard)
+0x0080A004=HDCD
+
+//
+// About Dialog
+//
+
+0x00901001=&OK
+0x00901002=Über WAV to AC3 Encoder
+0x00901003=This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.
+0x00901004=Version
+
+//
+// Work Dialog
+//
+
+0x00A01001=Kodierung...
+0x00A01002=Abbre&chen
+0x00A01003=Von:
+0x00A01004=Nach:
+0x00A01005=Verstrichene Zeit:
+0x00A01006=Gesamtlaufzeit:
+0x00A01007=Kodierung:
+0x00A01008=I/O gelesen:
+0x00A01009=I/O geschrieben:
+0x00A0100A=Schwerwiegender Fehler
+0x00A0100B=Fehler beim erstellen des Arbeitsthread!
+0x00A0100C=Dateikodierung %d von %d
+0x00A0100D=Kodieren der %d Mono-Datei
+
+//
+// Work Dialog: Current Job Info
+//
+
+0x00A02001=?
+0x00A02002=?-Kanal
+0x00A02003=Unsigniert
+0x00A02004=Signiert
+0x00A02005=Floating-point
+0x00A02006=[Nichtunterstüzter Typ]
+0x00A02007=1.1-Kanal
+0x00A02008=2.1-Kanal
+0x00A02009=3.1-Kanal
+0x00A0200A=4.1-Kanal
+0x00A0200B=5.1-Kanal
+0x00A0200C=Mehrkanal mit LFE
+0x00A0200D=Mono
+0x00A0200E=Stereo
+0x00A0200F=3-Kanal
+0x00A02010=4-Kanal
+0x00A02011=5-Kanal
+0x00A02012=6-Kanal
+0x00A02013=Mehrkanal
+0x00A02014=unbekannt
+0x00A02015=Little-Endian
+0x00A02016=Big-Endian
+0x00A02017=Avisynth: Raw PCM Floating-point 32-bit little-endian
+0x00A02018=Dual-Mono (1+1)
+0x00A02019=Mono (1/0)
+0x00A0201A=Stereo (2/0)
+0x00A0201B=NICHTS
+0x00A0201C=Threads: Auto
+0x00A0201D=Threads:
+
+//
+// Engines Dialog
+//
+
+0x00B01001=Maschinen-Editor
+0x00B01002=Maschine
+0x00B01003=Name:
+0x00B01004=Pfad:
+0x00B01005=&...
+0x00B01006=&Importieren...
+0x00B01007=&Exportieren...
+0x00B01008=&Hinzufügen
+0x00B01009=Entf&ernen
+0x00B0100A=&OK
+0x00B0100B=Abbre&chen
+0x00B0100C=Name
+0x00B0100D=Pfad
+0x00B0100E=DLL Dateien (*.dll)|*.dll|Alle Dateien (*.*)|*.*||
+0x00B0100F=Aften Maschinen (*.engines)|*.engines|Alle Dateien (*.*)|*.*||
+
+//
+// MUX Dialog
+//
+
+0x00C01001=MUX-Assistent
+0x00C01002=Kanaleinstellung:
+0x00C01003=MUX &importieren...
+0x00C01004=MUX &exportieren...
+0x00C01005=&OK
+0x00C01006=Abbre&chen
+0x00C01007=LEEREN
+0x00C01008=Kanal-Konfiguration auswählen:\n1+1 = (Kanal 1,Kanal 2)\n1/0 = (C)\n2/0 = (L,R)\n3/0 = (L,R,C)\n2/1 = (L,R,S)\n3/1 = (L,R,C,S)\n2/2 = (L,R,SL,SR)\n3/2 = (L,R,C,SL,SR)
+0x00C01009=Verweist auf die Verwendung des LFE-Kanals.
+0x00C0100A=Vorne links
+0x00C0100B=Vorne rechts
+0x00C0100C=Vorne Mitte
+0x00C0100D=Tiefton-Effektkanal
+0x00C0100E=Hinten links
+0x00C0100F=Hinten rechts
+0x00C01010=Hinten Mitte
+0x00C01011=Unterstützte Dateien (*.files;*.mux)|*.files;*.mux|Dateiliste (*.files)|*.files|MUX-Dateien (*.mux)|*.mux|Alle Dateien (*.*)|*.*||
+
+//
+// Command-Line
+//
+
+0x00D01001=WAV to AC3 Encoder Befehlszeilenhilfe\n\nVerwendung: EncWAVtoAC3 [Optionen]\n\nOptionen:\n\n-h, --help\nZeigt dieses Befehlszeilenhilfe an.\n\n-x,--encode-and-exit\nEingangsdatei kodieren und beenden.\n\n-r, --read-only\nKonfigurationsdatei beim Beenden nicht speichern.\n\n-i, --input-file <datei.erw>\nSetzt den Eingabedateipfad (*.wav, *.bin, *.pcm, *.raw, *.avs).\n\n-o, --output-file <datei.erw>\nSetzt den Ausgabedateipfad (*.ac3).\n\n-d, --output-path <pfad>\nSetzt den Standardausgabepfad (Standard: Eingabedateipfad wird verwendet).\n\n-c, --load-config <datei.erw>\nLäd die Programmkonfigation (*.config).\n\n-f, --load-files <datei.erw>\nLäd die Dateiliste zum kodieren (*.files, *.mux).\n\n-p, --load-presets <datei.erw>\nLäd die Liste der vorkonfigurierten Voreinstellungen (*.presets).\n\n-e, --load-engines <datei.erw>\nLäd die Liste von Aften Engines (*.engines).\n\n-m, --mux-wizard\nZeigt das eigenständige MUX-Assistent Fenster an.\n
+0x00D01002=WAV to AC3 Encoder Befehlszeilenhilfe\n\nVerwendung: EncWAVtoAC3 [Optionen]\n\nOptionen:\n\n-h, --help\nZeigt dieses Befehlszeilenhilfe an.\n\n-x,--encode-and-exit\nEingangsdatei kodieren und beenden.\n\n-r, --read-only\nKonfigurationsdatei beim Beenden nicht speichern.\n\n-i, --input-file <datei.erw>\nSetzt den Eingabedateipfad (*.wav, *.bin, *.pcm, *.raw).\n\n-o, --output-file <datei.erw>\nSetzt den Ausgabedateipfad (*.ac3).\n\n-d, --output-path <pfad>\nSetzt den Standardausgabepfad (Standard: Eingabedateipfad wird verwendet).\n\n-c, --load-config <datei.erw>\nLäd die Programmkonfigation (*.config).\n\n-f, --load-files <datei.erw>\nLäd die Dateiliste zum kodieren (*.files, *.mux).\n\n-p, --load-presets <datei.erw>\nLäd die Liste der vorkonfigurierten Voreinstellungen (*.presets).\n\n-e, --load-engines <datei.erw>\nLäd die Liste von Aften Engines (*.engines).\n\n-m, --mux-wizard\nZeigt das eigenständige MUX-Assistent Fenster an.\n
+0x00D01003=Befehlszeilenhilfe
+0x00D01004=Fehler
+0x00D01005=Verwenden Sie für weitere Informationen die Option --help.
+0x00D01006=Ungültiges Befehlszeilenargument!
+0x00D01007=Unbekannte Options-Kennung!
+0x00D01008=Eingabedatei fehlt! Bitte nutzen Sie auch die --input-file Option!.
+0x00D01009=Keine Kombination von --input-file mit --load-files Option!
+0x00D0100A=Keine Kombination von --output-file with --load-files Option!
+0x00D0100B=Keine Kombination von --output-file with --output-path Option!
