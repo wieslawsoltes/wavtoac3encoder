@@ -3,9 +3,16 @@ image: Visual Studio 2015
 install:
   - choco install -y InnoSetup
   - set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
+before_build:
+- git submodule update --init
 build_script:
 - ps: .\build.ps1 -Target "Default"
+after_build:
+- cmd: scripts\Package.cmd
 test: off
+artifacts:
+  - path: scripts\*.zip
+  - path: scripts\*.exe
 notifications:
 - provider: Webhook
   url: https://webhooks.gitter.im/e/a15b32c76b5e78e1b355
@@ -13,8 +20,3 @@ notifications:
   on_build_success: true
   on_build_failure: true
   on_build_status_changed: true
-on_success:
-- cmd: scripts\Package.cmd
-artifacts:
-  - path: scripts\*.zip
-  - path: scripts\*.exe
