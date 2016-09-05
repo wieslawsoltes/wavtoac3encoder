@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Controls">
+      <UniqueIdentifier>{6598491a-29ea-40c0-9113-27221620398d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Aften">
+      <UniqueIdentifier>{5306D685-0357-4421-8171-1B3938A8E39A}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Avisynth">
+      <UniqueIdentifier>{e8d2e766-cc00-4acb-a0bd-8c95b0f482f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Aften">
+      <UniqueIdentifier>{163E7C10-BAFC-49f5-9D0D-B6B408E4843F}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Controls">
+      <UniqueIdentifier>{8ef1124a-7074-4a9c-8ac9-d6767553e9ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dialogs">
+      <UniqueIdentifier>{247886b1-c93b-44f3-b425-a72daed3925a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Dialogs">
+      <UniqueIdentifier>{86d7ea29-032d-4be0-8906-2eb61c061c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Aften\Pcm">
+      <UniqueIdentifier>{add96fa5-f613-4ca4-b3ab-2a8209e32912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Aften\Pcm">
+      <UniqueIdentifier>{08dd14d6-02c3-4669-804b-71a63c9a6996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Avisynth64">
+      <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Language Files">
+      <UniqueIdentifier>{586b82f5-cd4e-48e8-ad10-ea13b4d95b81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CommandLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWorkThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionsParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyButton.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MyStatic.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MyComboBox.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MyComboBoxEdit.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEdit.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MyListCtrl.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="MySliderCtrl.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3EngDlg.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3MuxDlg.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3WorkDlg.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="AboutDlg.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ResizeDialog.cpp">
+      <Filter>Source Files\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\aiff.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\wav.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\byteio.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\caff.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\convert.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\formats.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\pcm.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\pcm_io.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\pcmfile.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="aften\pcm\raw.c">
+      <Filter>Source Files\Aften\Pcm</Filter>
+    </ClCompile>
+    <ClCompile Include="Language.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AftenAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncoderOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Avs2Raw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Lang.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Init.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Config.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Button.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-ComboBox.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Edit.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Menu.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-List.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="EncWAVtoAC3Dlg-Drop.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CommandLine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWAVtoAC3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWorkThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionsParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth\core\avisynth.h">
+      <Filter>Header Files\Avisynth</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth\internal.h">
+      <Filter>Header Files\Avisynth</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyButton.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MyComboBox.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MyComboBoxEdit.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEdit.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MyListCtrl.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MySliderCtrl.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="MyStatic.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWAVtoAC3Dlg.h">
+      <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWAVtoAC3EngDlg.h">
+      <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWAVtoAC3MuxDlg.h">
+      <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="EncWAVtoAC3WorkDlg.h">
+      <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="AboutDlg.h">
+      <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="ResizeDialog.h">
+      <Filter>Header Files\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="aften\pcm\pcmfile.h">
+      <Filter>Header Files\Aften\Pcm</Filter>
+    </ClInclude>
+    <ClInclude Include="aften\pcm\byteio.h">
+      <Filter>Header Files\Aften\Pcm</Filter>
+    </ClInclude>
+    <ClInclude Include="aften\pcm\formats.h">
+      <Filter>Header Files\Aften\Pcm</Filter>
+    </ClInclude>
+    <ClInclude Include="aften\pcm\pcm.h">
+      <Filter>Header Files\Aften\Pcm</Filter>
+    </ClInclude>
+    <ClInclude Include="aften\libaften\aften.h">
+      <Filter>Header Files\Aften</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth64\internal.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth64\core\avisynth.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="Avs2Raw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Language.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AftenAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EncoderOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\EncWAVtoAC3.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\EncWAVtoAC3.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\EncWAVtoAC3.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="EncWAVtoAC3.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lang\de.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+    <Text Include="lang\en.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+    <Text Include="lang\jp.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+    <Text Include="lang\pl.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
