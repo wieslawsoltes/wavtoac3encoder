@@ -23,7 +23,7 @@ copy "%varBase%\src\bin\Release\x64\EncWAVtoAC3.exe" "%varOutput%"
 copy "%varBase%\%varPathAftenBin%\libaftendll_AMD64\libaften.dll" "%varOutput%\libaftendll_AMD64\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_AMD64_SSE2\libaften.dll" "%varOutput%\libaftendll_AMD64_SSE2\libaften.dll"
 copy "%varBase%\%varPathAftenBin%\libaftendll_AMD64_SSE3\libaften.dll" "%varOutput%\libaftendll_AMD64_SSE3\libaften.dll"
-copy "%varBase%\engines\unicode\x64\EncWAVtoAC3.engines" "%varOutput%"
+copy "%varBase%\engines\unicode\Win64\EncWAVtoAC3.engines" "%varOutput%"
 copy "EncWAVtoAC3.portable" "%varOutput%"
 
 "%var7Zip%" a "%varOutput%.zip" "%varOutput%\*"

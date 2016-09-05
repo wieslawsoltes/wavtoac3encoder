@@ -4,7 +4,7 @@ setlocal
 set EnginesFileName=EncWAVtoAC3.engines
 set BasePathAftenBin=..\src\aften\windows\output
 set BasePathUnicodeWin32=..\engines\unicode\Win32
-set BasePathUnicodeWin64=..\engines\unicode\x64
+set BasePathUnicodeWin64=..\engines\unicode\Win64
 set LibAftenDll=libaften.dll
 
 set BasePath=..\src\bin\Debug\Win32
