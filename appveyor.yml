@@ -5,20 +5,10 @@ configuration:
 platform:
 - Win32
 - x64
-install:
-- cmd: >-
-    choco install -y InnoSetup
-
-    set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
 build:
   project: EncWAVtoAC3.sln
   verbosity: minimal
-after_build:
-- cmd: EncoderPackages.cmd
 test: off
-artifacts:
-- path: installer\*.zip
-- path: installer\*.exe
 notifications:
 - provider: Webhook
   url: https://webhooks.gitter.im/e/a15b32c76b5e78e1b355
