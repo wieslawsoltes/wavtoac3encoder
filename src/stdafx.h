@@ -79,7 +79,7 @@
 #define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3.engines")
 
 // program home URL
-#define ENCWAVTOAC3_URL_HOME _T("http://code.google.com/p/wavtoac3encoder/")
+#define ENCWAVTOAC3_URL_HOME _T("https://github.com/wieslawsoltes/SimpleWavSplitter/")
 
 //
 // MFC
