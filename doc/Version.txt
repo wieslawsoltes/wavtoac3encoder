@@ -6,7 +6,6 @@
 | ReadMe.md                                 | 1               |
 |-------------------------------------------|-----------------|
 | doc\Changes.txt                           | 1               |
-| doc\Packages.txt                          | 5               |
 |-------------------------------------------|-----------------|
 | build\installer\PackageBinaries.cmd       | 1               |
 | build\installer\PackageBinariesAMD64.cmd  | 1               |
