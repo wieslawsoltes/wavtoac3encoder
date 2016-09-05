@@ -1,21 +1,21 @@
-﻿Changes in WAV to AC3 Encoder:
+﻿## Changes in WAV to AC3 Encoder
 
-Version 5.4:
+### Version 5.4:
 
 - Added support for single channel multi-mono input.
 - Added German and Japanese language.
 
-Version 5.3:
+### Version 5.3:
 
 - Added keyboard shortcuts.
 - Fixed compatibility issue with Windows XP.
 
-Version 5.2:
+### Version 5.2:
 
 - Installer packages save configuration files by default to user roaming directory.
 - Enable portable version by creating empty EncWAVtoAC3.portable file.
 
-Version 5.1:
+### Version 5.1:
 
 - Added multi-language support.
 - Redesigned the GUI to enable multi-language support.
@@ -24,44 +24,44 @@ Version 5.1:
 - Updated project to Visual Studio 2013.
 - Fixed bitmap resource issue in VS2013.
 
-Version 5.0:
+### Version 5.0:
 
 - Redesigned the GUI.
 - Log to a file is now always enabled.
 - Removed command-line options -l and --enable-log.
 - Added more error messages saved in the default log file EncWAVtoAC3.txt.
 
-Version 4.7:
+### Version 4.7:
 
 - Added support for avisynth in AMD64 (64-bit) builds using http://code.google.com/p/avisynth64/.
 
-Version 4.6:
+### Version 4.6:
 
 - Fixed .mux files ANSI loading error.
 
-Version 4.5:
+### Version 4.5:
 
 - Fixed AviSynth drag&drop bug.
 
-Version 4.4:
+### Version 4.4:
 
 - Minor GUI tweaks.
 
-Version 4.3:
+### Version 4.3:
 
 - Updated Aften sources and libraries to Git master head snapshot from 20091226.
 - Added encoding process statistics to worker window.
 - Reverted project to Visual Studio 2008.
 
-Version 4.2:
+### Version 4.2:
 
 - Added AMD64 builds but without Avisynth *.avs support.
 
-Version 4.1:
+### Version 4.1:
 
 - Fixed compatibility issue with Windows 2000.
 
-Version 4.0:
+### Version 4.0:
 
 - Updated Aften sources and libraries to svn revision 843.
 - Removed parallel file encoding mode.
@@ -69,43 +69,43 @@ Version 4.0:
 - Changed engines configuration file extention from .win32 and .win64 to .engines.
 - Updated project to Visual Studio 2010 Beta 1.
 
-Version 3.0:
+### Version 3.0:
 
 - Added preliminary Avisynth (*.avs files) scripting support (not supported in 'Multiple mono input' and in 'One per file' mode).
 - Added *.avs filter to open dialog.
 - Double-click on *.avs script in files list to show AVS File Properties window.
 - The Win64 build is not available and does not compile properly (Avisynth not available for 64-bit Windows).
 
-Version 2.3:
+### Version 2.3:
 
 - Added fully featured Aften engines editor.
 - Added Advanced view check box to main window.
 - Fixed invalid position change for bitrate/quality slider when switching between CBR/VBR mode.
 
-Version 2.2:
+### Version 2.2:
 
 - Updated Aften sources and libraries to svn revision 832.
 - Fixed bug in UI under Windows Vista.
 
-Version 2.1:
+### Version 2.1:
 
 - Removed help file as it will not be used anymore.
 - Removed donate option as donation are currently not accepted.
 
-Version 2.0:
+### Version 2.0:
 
 - Removed Win32 & x64 Ansi builds and switched to Microsoft Layer for Unicode (not needed for x64 platforms).
 - Added View menu with two GUI modes: Standard (for novice users) and Adcanced (for experienced users).
 - Added MUX Wizard button into main program window.
 
-Version 1.2:
+### Version 1.2:
 
 - Updated Aften sources and libraries to svn revision 762.
 - Added extensive error and performance log messages for encoder.
 - Added Options menu.
 - Added auto detection of input file format based on file extension.
 
-Version 1.1:
+### Version 1.1:
 
 - Updated Aften sources and libraries to svn revision 703.
 - Added support for multi mono input.
@@ -120,7 +120,7 @@ Version 1.1:
 - Removed option to generate batch scripts.
 - Ansi and Unicode configuration files are supported in all builds.
 
-Version 1.0:
+### Version 1.0:
 
 - Updated Aften sources and libraries to svn revision 606.
 - Changed name of solution and project configuration files (from 'encoder' to 'encoder_vs2005').
@@ -129,7 +129,7 @@ Version 1.0:
 - Added Win32 and Win64 builds scripts for Aften in 'src\aften\windows' path.
 - Updated installer and build batch scripts.
 
-Version 0.9:
+### Version 0.9:
 
 - Fixed crush when generating batch script file (again).
 - Renamed File menu item from 'Generate batch file...' to 'Generate batch script...'.
@@ -137,7 +137,7 @@ Version 0.9:
 - Added to File menu two new items 'Load files list...' and 'Save files list...'.
 - Removed two buttons 'Delete files' and 'Clear list' from main window (using instead files list right-click pop-up menu).
 
-Version 0.8:
+### Version 0.8:
 
 - Added version check for presets configuration files when loading.
 - Added check for non existing files when loading files list.
@@ -153,7 +153,7 @@ Version 0.8:
 - Changed minimum supported screen resolution to 800x600 pixels.
 - Added build information to about dialog.
 
-Version 0.7:
+### Version 0.7:
 
 - Added input file and output file detailed format informations to work dialog.
 - Added quality, bandwidth an bitrate informations to work dialog.
@@ -161,7 +161,7 @@ Version 0.7:
 - Changed the way how the <Auto> and <Ignored> label are handled in edit boxes.
 - Added parallel file encoding mode (set ParallelFileEncoding=true in *.config file and use number of parallel threads in main dialog).
 
-Version 0.6:
+### Version 0.6:
 
 - Fixed bug in worker thread when used more then 2 Aften threads closing Aften caused memory leaks.
 - Added automatic save/load for files list content to/from text file.
@@ -172,7 +172,7 @@ Version 0.6:
 - Changed minimum width and height of main dialog (recommended screen resolution is now 1024x768 pixels).
 - Added option to create output path when generating batch file (if output path doesn't exist).
 
-Version 0.5:
+### Version 0.5:
 
 - Updated to Microsoft Visual C++ 2005 SP1 version.
 - Updated Aften sources and libraries to version 0.0.8.
@@ -204,7 +204,7 @@ Version 0.5:
 - Added context menu to the files list.
 - Fixed bug when user clicked encode button and there where no files in the list then when second time user clicked encode button the encoding process didn't start.
 
-Version 0.4:
+### Version 0.4:
 
 - Added to status bar 'Encoded # files in #'.
 - Changed presets configuration file extension from *.cfg  to *.presets.
@@ -219,7 +219,7 @@ Version 0.4:
 - Added drag & drop for files and directories.
 - Added support for Windows 98 SE using Ansi builds (unable to add support for Windows 98/Me Systems using Microsoft Layer for Unicode).
 
-Version 0.3:
+### Version 0.3:
 
 - Added main menu.
 - Added About dialog box.
@@ -228,7 +228,7 @@ Version 0.3:
 - Added output path label.
 - Removed two presets (done already in 0.2 but not updated Changelog).
 
-Version 0.2:
+### Version 0.2:
 
 - Added all Aften settings.
 - Updated GUI.
@@ -239,7 +239,7 @@ Version 0.2:
 - Updated to Aften 0.06 sources.
 - Added new icon.
 
-Version 0.1:
+### Version 0.1:
 
 - First public release.
 - Full Unicode support.
