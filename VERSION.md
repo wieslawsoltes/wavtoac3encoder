@@ -1,5 +1,4 @@
-﻿### Source files in which program version is set
-
+﻿### Version
 
 | File path                                 | How many times  |
 |-------------------------------------------|-----------------|
