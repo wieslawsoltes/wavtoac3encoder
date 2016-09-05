@@ -345,8 +345,10 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 
 void CEncWAVtoAC3Dlg::InitRawSamleFormatComboBox()
 {
+	CString szIgnored = DEFAULT_TEXT_IGNORED;
+
 	// update language string
-	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED);
+	szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(szIgnored);
 
 	// remove all items from sample format combobox
 	this->m_CmbRawSampleFormat.ResetContent();
