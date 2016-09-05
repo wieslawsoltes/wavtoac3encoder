@@ -1,0 +1,11 @@
+version: 5.4.{build}
+configuration:
+- Debug
+- Release
+platform:
+- Win32
+- x64
+build:
+  project: EncWAVtoAC3.sln
+  verbosity: minimal
+test: off
