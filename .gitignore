@@ -71,6 +71,7 @@ ipch/
 *.cachefile
 *.db
 *.opendb
+*.DB-wal
 
 # Visual Studio profiler
 *.psess
