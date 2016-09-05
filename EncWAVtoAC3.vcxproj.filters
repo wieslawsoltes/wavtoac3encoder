@@ -310,10 +310,16 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="lang\en.txt">
+    <Text Include="build\lang\de.txt">
       <Filter>Language Files</Filter>
     </Text>
-    <Text Include="lang\pl.txt">
+    <Text Include="build\lang\en.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+    <Text Include="build\lang\jp.txt">
+      <Filter>Language Files</Filter>
+    </Text>
+    <Text Include="build\lang\pl.txt">
       <Filter>Language Files</Filter>
     </Text>
   </ItemGroup>
