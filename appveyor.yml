@@ -5,6 +5,11 @@ configuration:
 platform:
 - Win32
 - x64
+install:
+- cmd: >-
+    choco install -y curl InnoSetup
+
+    set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
 build:
   project: EncWAVtoAC3.sln
   verbosity: minimal
