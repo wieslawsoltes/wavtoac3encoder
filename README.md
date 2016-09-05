@@ -59,6 +59,69 @@ maintained and actively developed.
 
 ![](http://i58.tinypic.com/zn06yr.png)
 
+## Command-Line
+
+    Usage: EncWAVtoAC3 [Options]
+    Options:
+    -h, --help                      Show command-line help message.
+    -x, --encode-and-exit           Encode input files and exit.
+    -r, --read-only                 Do not save configuration on exit.
+    -i, --input-file <file.ext>     Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).
+    -o, --output-file <file.ext>    Set output file path (*.ac3).
+    -d, --output-path <path>        Set default output path (default: input file path is used).
+    -c, --load-config <file.ext>    Load program configation (*.config).
+    -f, --load-files <file.ext>     Load list of files to encode (*.files, *.mux).
+    -p, --load-presets <file.ext>   Load list of preconfigured presets (*.presets).
+    -e, --load-engines <file.ext>   Load list of Aften engines (*.engines).
+    -m, --mux-wizard                Show standalone MUX Wizard window.
+    Notes: AviSynth is not supported under x64 platforms.
+
+## Keyboard Shortcuts
+
+### Main Menu
+
+| Shortcut          | Description                   |
+|-------------------|-------------------------------|
+| Ctrl+F            | Add Files                     |
+| Ctrl+D            | Add Directory                 |
+| Ctrl+M            | MUX Wizard                    |
+| Ctrl+O            | Load Files List               |
+| Ctrl+S            | Save Files List               |
+| Ctrl+Shitf+O      | Load Presets                  |
+| Ctrl+Shitf+S      | Save Presets                  |
+| Alt+F4            | Exit                          |
+| Ctrl+Shift+W      | Disable All Warnings          |
+| Ctrl+Shift+C      | Save Configuration On Exit    |
+| F7                | Load Configuration            |
+| F8                | Save Configuration            |
+| Ctrl+F1           | Command-Line Help             |
+| Ctrl+Shift+W      | Website                       |
+| Ctrl+Shift+A      | About                         |
+
+### Files List
+
+| Shortcut          | Description                   |
+|-------------------|-------------------------------|
+| Ctrl+F            | Add Files                     |
+| Ctrl+D            | Add Directory                 |
+| Ctrl+M            | MUX Wizard                    |
+| Ctrl+O            | Load Files List               |
+| Ctrl+S            | Save Files List               |
+| Ctrl+Up           | Move Up                       |
+| Ctrl+Down         | Move Down                     |
+| Del               | Remove Selected Files         |
+| Ctrl+Del          | Remove All Files              |
+
+### Main Dialog
+
+| Shortcut          | Description                   |
+|-------------------|-------------------------------|
+| F5                | Encode                        |
+| Ctrl+E            | Edit Engines                  |
+| F9                | Add Preset                    |
+| Ctrl+Shift+D      | Delete Preset                 |
+| Ctrl+Shift+R      | Reset Preset                  |
+
 ## Configuration
 
 All confguration files are in plain text format. Each configuration file 
