@@ -4,7 +4,7 @@ setlocal
 set varVersion=5.4
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
-set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
+set var7Zip=C:\Program Files\7-Zip\7z.exe
 
 mkdir "%varOutput%"
 
@@ -87,7 +87,7 @@ copy "%varBase%\%varPath%\EncWAVtoAC3.bmp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.ico" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.rc2" "%varOutput%\%varPath%"
 
-"%varWinRAR%" a -ep1 -m5 -r -t "%varOutput%.zip" "%varOutput%\*"
+"%var7Zip%" a "%varOutput%.zip" "%varOutput%\*"
 rmdir /S /Q "%varOutput%"
 
 endlocal

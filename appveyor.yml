@@ -2,7 +2,7 @@ version: 5.4.{build}
 image: Visual Studio 2015
 install:
   - choco install -y InnoSetup
-  - set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
+  - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
 before_build:
 - git submodule update --init
 build_script:

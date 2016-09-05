@@ -5,7 +5,7 @@ set varVersion=5.4
 set varOutput=EncWAVtoAC3-%varVersion%-AMD64
 set varBase=..
 set varPathAftenBin=src\aften\windows\output
-set varWinRAR=c:\Program Files\WinRAR\WinRAR.exe
+set var7Zip=C:\Program Files\7-Zip\7z.exe
 
 mkdir "%varOutput%"
 mkdir "%varOutput%\Lang"
@@ -26,7 +26,7 @@ copy "%varBase%\%varPathAftenBin%\libaftendll_AMD64_SSE3\libaften.dll" "%varOutp
 copy "%varBase%\engines\unicode\x64\EncWAVtoAC3.engines" "%varOutput%"
 copy "EncWAVtoAC3.portable" "%varOutput%"
 
-"%varWinRAR%" a -ep1 -m5 -r -t "%varOutput%.zip" "%varOutput%\*"
+"%var7Zip%" a "%varOutput%.zip" "%varOutput%\*"
 rmdir /S /Q "%varOutput%"
 
 endlocal
