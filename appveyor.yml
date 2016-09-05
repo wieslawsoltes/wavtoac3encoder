@@ -11,6 +11,8 @@ after_build:
 - cmd: >-
     cd scripts
 
+    echo $env:appveyor_build_version
+
     Package.cmd $env:appveyor_build_version
 test: off
 artifacts:
