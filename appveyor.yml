@@ -8,7 +8,10 @@ before_build:
 build_script:
 - ps: .\build.ps1 -Target "Default"
 after_build:
-- cmd: scripts\Package.cmd
+- cmd: >-
+    cd scripts
+
+    Package.cmd
 test: off
 artifacts:
   - path: scripts\*.zip
