@@ -11,7 +11,7 @@ after_build:
 - cmd: >-
     cd scripts
 
-    Package.cmd $env:version
+    Package.cmd {version}
 test: off
 artifacts:
   - path: scripts\*.zip
