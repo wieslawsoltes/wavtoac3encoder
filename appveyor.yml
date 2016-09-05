@@ -11,7 +11,7 @@ after_build:
 - cmd: >-
     cd scripts
 
-    Package.cmd {version}
+    Package.cmd $env:appveyor_build_version
 test: off
 artifacts:
   - path: scripts\*.zip
