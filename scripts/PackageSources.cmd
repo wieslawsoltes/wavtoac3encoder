@@ -1,73 +1,46 @@
 @echo off
 setlocal
 
-set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
-
 set varVersion=5.4
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
+set varWinRAR=C:\Program Files\WinRAR\WinRAR.exe
 
 mkdir "%varOutput%"
 
 copy "%varBase%\*.sln" "%varOutput%"
-copy "%varBase%\*.vcxproj.filters" "%varOutput%"
-copy "%varBase%\*.vcxproj.user" "%varOutput%"
-copy "%varBase%\*.vcxproj" "%varOutput%"
-
-copy "%varBase%\*.cmd" "%varOutput%"
-copy "%varBase%\*.inc" "%varOutput%"
-
 copy "%varBase%\*.md" "%varOutput%"
+copy "%varBase%\*.txt" "%varOutput%"
+copy "%varBase%\*.ps1" "%varOutput%"
+copy "%varBase%\*.sh" "%varOutput%"
+copy "%varBase%\*.cake" "%varOutput%"
 
-set varPath=doc
-mkdir "%varOutput%\%varPath%"
+mkdir "%varOutput%\lang"
+copy "%varBase%\lang\*.txt" "%varOutput%\lang"
 
-copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
+mkdir "%varOutput%\engines\ansi\Win32"
+copy "%varBase%\engines\ansi\Win32\EncWAVtoAC3.engines" "%varOutput%\engines\ansi\Win32"
 
-set varPath=lang
-mkdir "%varOutput%\%varPath%"
+mkdir "%varOutput%\engines\ansi\x64"
+copy "%varBase%\engines\ansi\x64\EncWAVtoAC3.engines" "%varOutput%\engines\ansi\x64"
 
-copy "%varBase%\%varPath%\*.txt" "%varOutput%\%varPath%"
+mkdir "%varOutput%\engines\unicode\Win32"
+copy "%varBase%\engines\unicode\Win32\EncWAVtoAC3.engines" "%varOutput%\engines\unicode\Win32"
 
-set varPath=engines
-mkdir "%varOutput%\%varPath%"
+mkdir "%varOutput%\engines\unicode\x64"
+copy "%varBase%\engines\unicode\x64\EncWAVtoAC3.engines" "%varOutput%\engines\unicode\x64"
 
-set varPath=engines\ansi
-mkdir "%varOutput%\%varPath%"
-
-set varPath=engines\ansi\Win32
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
-
-set varPath=engines\ansi\x64
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
-
-set varPath=engines\unicode
-mkdir "%varOutput%\%varPath%"
-
-set varPath=engines\unicode\Win32
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
-
-set varPath=engines\unicode\x64
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\EncWAVtoAC3.engines" "%varOutput%\%varPath%"
-
-set varPath=installer
-mkdir "%varOutput%\%varPath%"
-
-copy "%varBase%\%varPath%\*.md" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.cmd" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\*.iss" "%varOutput%\%varPath%"
-copy "%varBase%\%varPath%\EncWAVtoAC3.portable" "%varOutput%\%varPath%"
+mkdir "%varOutput%\scripts"
+copy "*.cmd" "%varOutput%\scripts"
+copy "*.iss" "%varOutput%\scripts"
+copy "EncWAVtoAC3.portable" "%varOutput%\scripts"
 
 set varPath=src
 mkdir "%varOutput%\%varPath%"
+
+copy "%varBase%\%varPath%\*.vcxproj.filters" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.vcxproj.user" "%varOutput%\%varPath%"
+copy "%varBase%\%varPath%\*.vcxproj" "%varOutput%\%varPath%"
 
 copy "%varBase%\%varPath%\*.cpp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\*.h" "%varOutput%\%varPath%"
@@ -114,31 +87,6 @@ copy "%varBase%\%varPath%\EncWAVtoAC3.bmp" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.ico" "%varOutput%\%varPath%"
 copy "%varBase%\%varPath%\EncWAVtoAC3.rc2" "%varOutput%\%varPath%"
 
-set varPath=Debug
-
-mkdir "%varOutput%\%varPath%"
-
-set varPath=Debug\Win32
-
-mkdir "%varOutput%\%varPath%"
-
-set varPath=Debug\x64
-
-mkdir "%varOutput%\%varPath%"
-
-set varPath=Release
-
-mkdir "%varOutput%\%varPath%"
-
-set varPath=Release\Win32
-
-mkdir "%varOutput%\%varPath%"
-
-set varPath=Release\x64
-
-mkdir "%varOutput%\%varPath%"
-
-rem "%varWinRAR%" a -ep1 -m5 -r -s -t "%varOutput%.rar" "%varOutput%\*"
 "%varWinRAR%" a -ep1 -m5 -r -t "%varOutput%.zip" "%varOutput%\*"
 rmdir /S /Q "%varOutput%"
 

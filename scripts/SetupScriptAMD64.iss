@@ -10,7 +10,7 @@
 #define MyAppName MyAppBaseName + " (AMD64)"
 #define MyAppVerName MyAppBaseName + " " + ReleaseVersion
 #define MyAppPublisher "Wieslaw Soltes"
-#define MyAppURL "http://code.google.com/p/wavtoac3encoder/"
+#define MyAppURL "https://github.com/wieslawsoltes/wavtoac3encoder"
 #define MyAppExeName "EncWAVtoAC3.exe"
 
 [Setup]
@@ -24,7 +24,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=..\doc\Copying.txt
+LicenseFile=..\COPYING.TXT
 OutputDir=.
 OutputBaseFilename=EncWAVtoAC3-{#ReleaseVersion}
 Compression=lzma
@@ -42,12 +42,10 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 
 [Files]
 
-Source: ..\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
-Source: ..\ReadMe.md; DestDir: {app}; Flags: ignoreversion
-Source: ..\doc\Keyboard.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\doc\Copying.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\doc\Changes.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\doc\Command-Line.txt; DestDir: {app}; Flags: ignoreversion
+Source: ..\src\bin\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
+Source: ..\README.md; DestDir: {app}; Flags: ignoreversion
+Source: ..\COPYING.TXT; DestDir: {app}; Flags: ignoreversion
+Source: ..\CHANGELOG.md; DestDir: {app}; Flags: ignoreversion
 Source: ..\lang\*.txt; DestDir: {app}\Lang; Flags: ignoreversion
 Source: ..\engines\unicode\x64\EncWAVtoAC3.engines; DestDir: {userappdata}\EncWAVtoAC3-AMD64; Flags: ignoreversion uninsneveruninstall
 Source: ..\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion
@@ -57,10 +55,9 @@ Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir
 [Icons]
 
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
-Name: {group}\{#MyAppName} ReadMe; Filename: {app}\ReadMe.md
-Name: {group}\{#MyAppName} Keyboard; Filename: {app}\Keyboard.txt
-Name: {group}\{#MyAppName} License; Filename: {app}\Copying.txt
-Name: {group}\{#MyAppName} Changes; Filename: {app}\Changes.txt
+Name: {group}\{#MyAppName} ReadMe; Filename: {app}\README.md
+Name: {group}\{#MyAppName} License; Filename: {app}\COPYING.TXT
+Name: {group}\{#MyAppName} Changes; Filename: {app}\CHANGELOG.md
 Name: {group}\{cm:UninstallProgram,{#MyAppName}}; Filename: {uninstallexe}
 Name: {userdesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: quicklaunchicon
