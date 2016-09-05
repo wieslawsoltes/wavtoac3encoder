@@ -24,7 +24,15 @@ var solution = "./EncWAVtoAC3.sln";
 // TASKS
 ///////////////////////////////////////////////////////////////////////////////
 
+Task("Clean")
+    .Does(() =>
+{
+    CleanDirectory("./src/bin/");
+    CleanDirectory("./src/obj/");
+});
+
 Task("Build")
+    .IsDependentOn("Clean")
     .Does(() =>
 {
     configurations.ForEach(configuration => {
