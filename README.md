@@ -4,7 +4,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/a518qwowh2248j1q/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/branch/master)
 
-WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on ATSC A/52 specification.
+WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital).
 
 ### Downloads
 
@@ -22,11 +22,11 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 ## About
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
-audio streams based on ATSC A/52 specification. This type of audio 
+audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital) specification. This type of audio 
 is also known as AC-3 or Dolby® Digital and is one of the audio codecs 
-used in DVD-Video content. The program is a simple GUI for Aften A/52 
-audio encoder  created by Justin Ruggles. WAV to AC3 Encoder 
-project was started on 27th January 2007 by Wiesław Šoltés and is still
+used in DVD-Video content. The program is a simple GUI for `Aften` `A/52` 
+audio encoder  created by `Justin Ruggle`s. WAV to AC3 Encoder 
+project was started on `27th January 2007` by `Wiesław Šoltés` and is still
 maintained and actively developed.
 
 ## Features
@@ -129,27 +129,27 @@ has different structure. Edit the files and check the sources to find
 out more about how this files are created. Each configuration file is 
 automaticaly loaded/saved by program every time the program is started/closed.
 
-* Program configuration is stored in EncWAVtoAC3.config file.
-* Presets for encoder are stored in EncWAVtoAC3.presets file.
-* Paths to libaften.dll engines are stored in EncWAVtoAC3.engines file.
+* Program configuration is stored in `EncWAVtoAC3.config` file.
+* Presets for encoder are stored in `EncWAVtoAC3.presets` file.
+* Paths to libaften.dll engines are stored in `EncWAVtoAC3.engines` file.
 * User interface trasnlation files are located in Lang sub-directory.
-* Translation files must be saved with Unicode charset and BOM header.
+* Translation files must be saved with `Unicode` charset and `BOM header`.
 
 ## AviSynth Support
 
-To run 64-bit version you need to install avisynth64:
+To run `64-bit` version you need to install `avisynth64`:
 * http://code.google.com/p/avisynth64/
 
 Additional help and informations is available here: 
 * http://forum.doom9.org/showthread.php?t=152800
 
-Running avisynth requires properly setup  Input Options (e.g. override wave header settings).
+Running `avisynth` requires properly setup Input Options (e.g. override wave header settings).
 
 You can double-click in the file list on avisynth script to get e.g. number of audio channels.
 
 ## Troubleshooting
 
-Please first check the *.log file in program directory for more information.
+Please first check the `*.log` file in program directory for more information.
 
 To report issues please use: 
 * https://github.com/wieslawsoltes/wavtoac3encoder/issues
@@ -172,16 +172,15 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 
 ## Build
 
-* Download latest Aften sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder
+* Download latest `Aften` sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder.
 * Extract them in aften sub-directory in project source tree.
-* Use Microsoft Visual Studio Community 2013 with Update 4 to build Release binaries.
-* Distribute Release binaries with libaften.dll.
-* You can also build installer using Inno Setup.
+* Use `Microsoft Visual Studio Community 2013` with `Update 4` to build `Release` binaries.
+* Distribute `Release` binaries with `libaften.dll`.
+* You can also build installer using `Inno Setup`.
 
 ## Resources
 
 * https://github.com/wieslawsoltes/wavtoac3encoder
-* http://code.google.com/p/wavtoac3encoder/ (old website)
 * http://aften.sourceforge.net/
 * http://sourceforge.net/projects/aften/
 
