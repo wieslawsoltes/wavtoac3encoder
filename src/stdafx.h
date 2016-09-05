@@ -49,7 +49,7 @@
 
 // default directory for language files
 #ifdef _DEBUG
-#define DEFAULT_LANG_DIRECTORY _T("..\\..\\Lang");
+#define DEFAULT_LANG_DIRECTORY _T("..\\..\\build\\Lang");
 #else
 #define DEFAULT_LANG_DIRECTORY  _T("Lang");
 #endif
