@@ -1,13 +1,7 @@
+image: Visual Studio 2015
 version: 5.4.{build}
-configuration:
-- Debug
-- Release
-platform:
-- Win32
-- x64
-build:
-  project: EncWAVtoAC3.sln
-  verbosity: minimal
+build_script:
+- ps: .\build.ps1 -Target "Default"
 test: off
 notifications:
 - provider: Webhook
