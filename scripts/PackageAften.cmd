@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 
 set PackageVersion=git-20091226-icl11_1_054

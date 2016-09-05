@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 
 set EnginesFileName=EncWAVtoAC3.engines

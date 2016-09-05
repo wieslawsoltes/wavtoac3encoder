@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 
 set varVersion=5.4

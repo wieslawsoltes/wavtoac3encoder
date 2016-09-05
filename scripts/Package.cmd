@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal
 @call PackageBinaries.cmd
 @call PackageBinariesAMD64.cmd
