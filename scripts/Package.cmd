@@ -1,7 +1,11 @@
-@echo on
+@echo off
 setlocal
-@call PackageBinaries.cmd
-@call PackageBinariesAMD64.cmd
-@call PackageSources.cmd
-@call PackageInstallers.cmd
+
+set varVersion=%1
+
+@call PackageBinaries.cmd varVersion
+@call PackageBinariesAMD64.cmd varVersion
+@call PackageSources.cmd varVersion
+@call PackageInstallers.cmd varVersion
+
 endlocal

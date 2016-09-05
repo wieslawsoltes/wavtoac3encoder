@@ -1,7 +1,7 @@
-@echo on
+@echo off
 setlocal
 
-set varVersion=5.4
+set varVersion=%1
 set varOutput=EncWAVtoAC3-%varVersion%-src
 set varBase=..
 set var7Zip=C:\Program Files\7-Zip\7z.exe
