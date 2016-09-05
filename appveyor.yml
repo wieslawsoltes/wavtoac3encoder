@@ -7,7 +7,7 @@ platform:
 - x64
 install:
 - cmd: >-
-    choco install -y curl InnoSetup
+    choco install -y InnoSetup
 
     set PATH="C:\Program Files (x86)\Inno Setup 5";%PATH%
 build:
