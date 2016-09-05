@@ -2,8 +2,8 @@
 
 | File path                                 | How many times  |
 |-------------------------------------------|-----------------|
-| ReadMe.md                                 | 1               |
-| Changes.txt                               | 1               |
+| README.md                                 | 1               |
+| build\CHANGELOG.md                        | 1               |
 | build\installer\PackageBinaries.cmd       | 1               |
 | build\installer\PackageBinariesAMD64.cmd  | 1               |
 | build\installer\PackageSources.cmd        | 1               |
