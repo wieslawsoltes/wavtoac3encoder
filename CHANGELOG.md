@@ -1,4 +1,4 @@
-﻿## Changes in WAV to AC3 Encoder
+﻿## Changelog
 
 ### Version 5.4:
 
