@@ -51,13 +51,13 @@ maintained and actively developed.
 
 ## Screenshots
 
-![](http://i62.tinypic.com/2rw9bt1.png)
+![](MainWindow.png)
 
-![](http://i58.tinypic.com/n3w9kp.png)
+![](EngineEditor.png)
 
-![](http://i60.tinypic.com/iyog7d.png)
+![](MuxWizard.png)
 
-![](http://i58.tinypic.com/zn06yr.png)
+![](EncodingProgress.png)
 
 ## Command-Line
 
