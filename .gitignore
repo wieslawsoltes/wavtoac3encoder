@@ -69,6 +69,7 @@ ipch/
 *.opensdf
 *.sdf
 *.cachefile
+*.db
 
 # Visual Studio profiler
 *.psess
@@ -181,3 +182,10 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+#################
+## Cake
+#################
+/tools/
+.nuget
+/artifacts/
