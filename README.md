@@ -10,10 +10,10 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 
 | Platforn              | Type        | Version    | Download                                                                                                                               |
 |-----------------------|-------------|------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Installer   | 5.4        | [EncWAVtoAC3-5.4.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.exe)                      |
-| Windows 64-bit        | Installer   | 5.4        | [EncWAVtoAC3-5.4-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.exe)          |
-| Windows 32-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4.zip)                      |
-| Windows 64-bit        | Portable    | 5.4        | [EncWAVtoAC3-5.4-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.4/EncWAVtoAC3-5.4-AMD64.zip)          |
+| Windows 32-bit        | Installer   | 5.5        | [EncWAVtoAC3-5.5.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.exe)                      |
+| Windows 64-bit        | Installer   | 5.5        | [EncWAVtoAC3-5.5-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.exe)          |
+| Windows 32-bit        | Portable    | 5.5        | [EncWAVtoAC3-5.5.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.zip)                      |
+| Windows 64-bit        | Portable    | 5.5        | [EncWAVtoAC3-5.5-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.zip)          |
 
 ### Mirrors
 
