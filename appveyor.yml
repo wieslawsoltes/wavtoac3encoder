@@ -8,8 +8,8 @@ build_script:
 - ps: .\build.ps1 -Target "Default"
 test: off
 artifacts:
-  - path: scripts\*.zip
-  - path: scripts\*.exe
+  - path: artifacts\*.zip
+  - path: artifacts\*.exe
 notifications:
 - provider: Webhook
   url: https://webhooks.gitter.im/e/a15b32c76b5e78e1b355
