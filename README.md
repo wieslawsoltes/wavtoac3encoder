@@ -2,7 +2,7 @@
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/wavtoac3encoder.svg)](https://gitter.im/wieslawsoltes/wavtoac3encoder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/a518qwowh2248j1q/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/xgpr76v102iu86wr/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/branch/master)
 
 WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital).
 
