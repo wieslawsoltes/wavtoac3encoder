@@ -19,11 +19,14 @@ var target = Argument("target", "Default");
 var platforms = new [] { "Win32", "x64" }.ToList();
 var configurations = new [] { "Debug", "Release" }.ToList();
 var solution = "./EncWAVtoAC3.sln";
+var versionHeaderPath = (FilePath)File("./src/version.h");
+var installerScript = MakeAbsolute((FilePath)File("SetupScript.iss"));
+var installerScriptAMD64 = MakeAbsolute((FilePath)File("SetupScriptAMD64.iss"));
+var iscc = @"C:/Program Files (x86)/Inno Setup 5/ISCC.exe";
 var artifactsDir = (DirectoryPath)Directory("./artifacts");
 var binDir = (DirectoryPath)Directory("./src/bin");
 var objDir = (DirectoryPath)Directory("./src/obj");
 var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
-var versionHeaderPath = (FilePath)File("./src/version.h");
 
 ///////////////////////////////////////////////////////////////////////////////
 // VERSION
@@ -155,22 +158,18 @@ Task("Package-Installer-x86")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var installerScript = (FilePath)File("SetupScript.iss");
-    
-    StartProcess("ISCC", new ProcessSettings { 
+    StartProcess(iscc, new ProcessSettings { 
         Arguments = "\"" + installerScript.FullPath + "\"" + " " + "/DVERSION=" + version, 
-        WorkingDirectory = artifactsDir });
+        WorkingDirectory = MakeAbsolute(artifactsDir) });
 });
 
 Task("Package-Installer-AMD64")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var installerScript = (FilePath)File("SetupScriptAMD64.iss");
-
-    StartProcess("ISCC", new ProcessSettings { 
-        Arguments = "\"" + installerScript.FullPath + "\"" + " " + "/DVERSION=" + version, 
-        WorkingDirectory = artifactsDir });
+    StartProcess(iscc, new ProcessSettings { 
+        Arguments = "\"" + installerScriptAMD64.FullPath + "\"" + " " + "/DVERSION=" + version, 
+        WorkingDirectory = MakeAbsolute(artifactsDir) });
 });
 
 ///////////////////////////////////////////////////////////////////////////////

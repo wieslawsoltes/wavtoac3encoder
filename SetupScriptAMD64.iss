@@ -24,8 +24,8 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=..\COPYING.TXT
-OutputDir=.
+LicenseFile=.\COPYING.TXT
+OutputDir=.\artifacts
 OutputBaseFilename=EncWAVtoAC3-{#ReleaseVersion}
 Compression=lzma
 SolidCompression=yes
@@ -42,15 +42,15 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 
 [Files]
 
-Source: ..\src\bin\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
-Source: ..\README.md; DestDir: {app}; Flags: ignoreversion
-Source: ..\COPYING.TXT; DestDir: {app}; Flags: ignoreversion
-Source: ..\CHANGELOG.md; DestDir: {app}; Flags: ignoreversion
-Source: ..\lang\*.txt; DestDir: {app}\Lang; Flags: ignoreversion
-Source: ..\engines\unicode\Win64\EncWAVtoAC3.engines; DestDir: {userappdata}\EncWAVtoAC3-AMD64; Flags: ignoreversion uninsneveruninstall
-Source: ..\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion
-Source: ..\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion
+Source: src\bin\Release\x64\{#MyAppExeName}; DestDir: {app}; Flags: ignoreversion
+Source: README.md; DestDir: {app}; Flags: ignoreversion
+Source: COPYING.TXT; DestDir: {app}; Flags: ignoreversion
+Source: CHANGELOG.md; DestDir: {app}; Flags: ignoreversion
+Source: lang\*.txt; DestDir: {app}\Lang; Flags: ignoreversion
+Source: engines\unicode\Win64\EncWAVtoAC3.engines; DestDir: {userappdata}\EncWAVtoAC3-AMD64; Flags: ignoreversion uninsneveruninstall
+Source: src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion
+Source: src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion
+Source: src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion
 
 [Icons]
 
