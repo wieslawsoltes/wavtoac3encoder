@@ -26,6 +26,7 @@ var VersionPath = File("src/version.h");
 
 Information("Version File: {0}", VersionPath);
 
+/*
 var text = FileReadText(VersionPath);
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 var major = split[0].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
@@ -36,6 +37,7 @@ var version = major + "." + minor;
 
 Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
 Information("Release Version: {0}", version);
+*/
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETTINGS
