@@ -26,8 +26,7 @@ audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/D
 is also known as AC-3 or Dolby® Digital and is one of the audio codecs 
 used in DVD-Video content. The program is a simple GUI for `Aften` `A/52` 
 audio encoder  created by `Justin Ruggle`s. WAV to AC3 Encoder 
-project was started on `27th January 2007` by `Wiesław Šoltés` and is still
-maintained and actively developed.
+project was started on `27th January 2007` by `Wiesław Šoltés`.
 
 ## Features
 
@@ -174,7 +173,7 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 
 * Download latest `Aften` sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder.
 * Extract them in aften sub-directory in project source tree.
-* Use `Microsoft Visual Studio Community 2013` with `Update 4` to build `Release` binaries.
+* Use `Microsoft Visual Studio Community 2015` with `Update 3` to build `Release` binaries.
 * Distribute `Release` binaries with `libaften.dll`.
 * You can also build installer using `Inno Setup`.
 
