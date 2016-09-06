@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+#include "version.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -290,30 +291,26 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 5,4,0,0
- PRODUCTVERSION 5,4,0,0
+ FILEVERSION VER_FILE_VERSION
+ PRODUCTVERSION VER_PRODUCT_VERSION
  FILEFLAGSMASK 0x3fL
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x1L
+ FILEFLAGS VER_FILEFLAGS
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VER_FILETYPE
  FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "Wieslaw Soltes"
-            VALUE "FileDescription", "WAV to AC3 Encoder"
-            VALUE "FileVersion", "5.4.0.0"
-            VALUE "InternalName", "EncWAVtoAC3.exe"
-            VALUE "LegalCopyright", "WAV to AC3 Encoder (C) Wieslaw Soltes. All rights reserved."
-            VALUE "OriginalFilename", "EncWAVtoAC3.exe"
-            VALUE "ProductName", "WAV to AC3 Encoder"
-            VALUE "ProductVersion", "5.4.0.0"
+            VALUE "CompanyName", VER_FILE_COMPANY_NAME_STR "\0"
+            VALUE "FileDescription", VER_FILE_DESCRIPTION_STR "\0"
+            VALUE "FileVersion", VER_FILE_VERSION_LONG_STR "\0"
+            VALUE "InternalName", VER_INTERNAL_NAME_STR "\0"
+            VALUE "LegalCopyright", VER_COPYRIGHT_STR "\0"
+            VALUE "OriginalFilename", VER_ORIGINAL_FILENAME_STR "\0"
+            VALUE "ProductName", VER_PRODUCTNAME_STR "\0"
+            VALUE "ProductVersion", VER_PRODUCT_VERSION_STR "\0"
         END
     END
     BLOCK "VarFileInfo"
