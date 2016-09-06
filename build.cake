@@ -97,7 +97,7 @@ Task("Package-Binaries-x86")
     CopyFileToDirectory(portableFile, outputDir);
 
     CleanDirectory(langDir);
-    CopyFiles("./lang/*.txt", langDir) 
+    CopyFiles("./lang/*.txt", langDir);
     
     foreach (var dir in aftenDllsWin32)
     {
@@ -138,7 +138,7 @@ Task("Package-Binaries-AMD64")
     CopyFileToDirectory(portableFile, outputDir);
 
     CleanDirectory(langDir);
-    CopyFiles("./lang/*.txt", langDir) 
+    CopyFiles("./lang/*.txt", langDir);
     
     foreach (var dir in aftenDllsWin32)
     {
