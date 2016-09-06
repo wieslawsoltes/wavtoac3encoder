@@ -16,7 +16,7 @@ var target = Argument("target", "Default");
 // VERSION
 ///////////////////////////////////////////////////////////////////////////////
 
-var text = System.IO.File.ReadAllText(File("src/version.h").FullPath);
+var text = System.IO.File.ReadAllText(((FilePath)File("src/version.h")).FullPath);
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 var major = split[0].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var minor = split[1].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
