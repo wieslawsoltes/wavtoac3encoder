@@ -22,7 +22,7 @@ var target = Argument("target", "Default");
 // VERSION
 ///////////////////////////////////////////////////////////////////////////////
 
-var VersionPath = File("./src/version.h");
+var VersionPath = File("src/version.h");
 
 var text = FileReadText(VersionPath);
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
