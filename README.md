@@ -48,16 +48,6 @@ project was started on `27th January 2007` by `Wiesław Šoltés`.
 * Support for multi-language user interface.
 * Portable and installer packages available.
 
-## Screenshots
-
-![](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/screenshots/MainWindow.png)
-
-![](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/screenshots/MuxWizard.png)
-
-![](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/screenshots/EngineEditor.png)
-
-![](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/screenshots/EncodingProgress.png)
-
 ## Command-Line
 
     Usage: EncWAVtoAC3 [Options]
