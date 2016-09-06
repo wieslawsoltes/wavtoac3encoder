@@ -13,10 +13,21 @@ using System.Linq;
 var target = Argument("target", "Default");
 
 ///////////////////////////////////////////////////////////////////////////////
+// SETTINGS
+///////////////////////////////////////////////////////////////////////////////
+
+var platforms = new [] { "Win32", "x64" }.ToList();
+var configurations = new [] { "Debug", "Release" }.ToList();
+var solution = "./EncWAVtoAC3.sln";
+var scriptsDir = (DirectoryPath)Directory("./scripts");
+var versionHeaderPath = (FilePath)File("./src/version.h");
+var packageScriptPath = scriptsDir.CombineWithFilePath("Package.cmd");
+
+///////////////////////////////////////////////////////////////////////////////
 // VERSION
 ///////////////////////////////////////////////////////////////////////////////
 
-var text = System.IO.File.ReadAllText(((FilePath)File("src/version.h")).FullPath);
+var text = System.IO.File.ReadAllText(versionHeaderPath.FullPath);
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 var major = split[0].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var minor = split[1].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
@@ -27,13 +38,6 @@ var version = major + "." + minor;
 Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
 Information("Release Version: {0}", version);
 
-///////////////////////////////////////////////////////////////////////////////
-// SETTINGS
-///////////////////////////////////////////////////////////////////////////////
-
-var platforms = new [] { "Win32", "x64" }.ToList();
-var configurations = new [] { "Debug", "Release" }.ToList();
-var solution = "./EncWAVtoAC3.sln";
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS
@@ -62,12 +66,21 @@ Task("Build")
     });
 });
 
+Task("Package")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    StartProcess(packageScriptPath, new ProcessSettings { 
+        Arguments = version, 
+        WorkingDirectory = scriptsDir });
+});
+
 ///////////////////////////////////////////////////////////////////////////////
 // TARGETS
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Default")
-  .IsDependentOn("Build");
+  .IsDependentOn("Package");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTE
