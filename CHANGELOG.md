@@ -1,5 +1,9 @@
 ﻿## Changelog
 
+### Version 5.5:
+
+- Updated project to Visual Studio 2015.
+
 ### Version 5.4:
 
 - Added support for single channel multi-mono input.
