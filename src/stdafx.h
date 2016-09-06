@@ -1,6 +1,6 @@
 ﻿//
 // WAV to AC3 Encoder
-// Copyright (C) 2007-2014 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+// Copyright (C) 2007-2016 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -51,7 +51,7 @@
 
 // default directory for language files
 #ifdef _DEBUG
-#define DEFAULT_LANG_DIRECTORY _T("..\\..\\Lang");
+#define DEFAULT_LANG_DIRECTORY _T("..\\..\\..\\..\\Lang");
 #else
 #define DEFAULT_LANG_DIRECTORY  _T("Lang");
 #endif
@@ -104,8 +104,6 @@
 
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions
-
-
 #include <afxdisp.h>        // MFC Automation classes
 
 #ifndef _AFX_NO_OLE_SUPPORT
@@ -165,7 +163,6 @@ typedef struct TLogCtx
     CFile fp;
 } LogCtx;
 
-void LogDefaults();
 void LogFile(CString szLogFileName);
 bool LogOpen();
 bool LogClose();

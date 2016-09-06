@@ -1,5 +1,5 @@
 #define VERSION_MAJOR               5
-#define VERSION_MINOR               5
+#define VERSION_MINOR               6
 #define VERSION_REVISION            0
 #define VERSION_BUILD               0
 
@@ -27,7 +27,7 @@
 #endif
 #define VER_INTERNAL_NAME_STR       VER_ORIGINAL_FILENAME_STR
 
-#define VER_COPYRIGHT_STR           "Copyright (C) 2007-2014 Wieslaw Soltes. All rights reserved."
+#define VER_COPYRIGHT_STR           "Copyright (C) 2007-2016 Wieslaw Soltes. All rights reserved."
 
 #ifdef _DEBUG
   #define VER_VER_DEBUG             VS_FF_DEBUG

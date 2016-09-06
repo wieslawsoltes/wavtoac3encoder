@@ -6,14 +6,22 @@
 
 WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital).
 
-### Downloads
+### Download EncWAVtoAC3
 
-| Platforn              | Type        | Version    | Download                                                                                                                               |
-|-----------------------|-------------|------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Installer   | 5.5        | [EncWAVtoAC3-5.5.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.exe)                      |
-| Windows 64-bit        | Installer   | 5.5        | [EncWAVtoAC3-5.5-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.exe)          |
-| Windows 32-bit        | Portable    | 5.5        | [EncWAVtoAC3-5.5.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.zip)                      |
-| Windows 64-bit        | Portable    | 5.5        | [EncWAVtoAC3-5.5-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.zip)          |
+| Platforn              | Type        | Version       | Download                                                                                                                               |
+|-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| Windows 32-bit        | Installer   | 5.5           | [EncWAVtoAC3-5.5.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.exe)                      |
+| Windows 64-bit        | Installer   | 5.5           | [EncWAVtoAC3-5.5-AMD64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.exe)          |
+| Windows 32-bit        | Portable    | 5.5           | [EncWAVtoAC3-5.5.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.zip)                      |
+| Windows 64-bit        | Portable    | 5.5           | [EncWAVtoAC3-5.5-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.zip)          |
+
+### Download Aften
+
+| Platforn              | Type        | Version       | Download                                                                                                                                                               |
+|-----------------------|-------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -                     | Sources     | git-20091226  | [aften-git-20091226-icl11_1_054-src.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-src.zip)                |
+| Windows 32-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win32-bin.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-win32-bin.zip)    |
+| Windows 64-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win64-bin.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-win64-bin.zip)    |
 
 ### Mirrors
 
@@ -175,7 +183,7 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 
 ## Copyrights
 
-WAV to AC3 Encoder, Copyright (C) 2007-2014 Wiesław Šoltés
+WAV to AC3 Encoder, Copyright (C) 2007-2016 Wiesław Šoltés
 
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
@@ -183,7 +191,7 @@ Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
 ## License
 
 WAV to AC3 Encoder
-Copyright (C) 2007-2014 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007-2016 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
