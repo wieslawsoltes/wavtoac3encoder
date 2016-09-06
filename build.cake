@@ -21,7 +21,7 @@ var configurations = new [] { "Debug", "Release" }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var scriptsDir = (DirectoryPath)Directory("./scripts");
 var versionHeaderPath = (FilePath)File("./src/version.h");
-var packageScriptPath = scriptsDir.CombineWithFilePath("Package.cmd");
+var packageScriptPath = scriptsDir.CombineWithFilePath("Package");
 
 ///////////////////////////////////////////////////////////////////////////////
 // VERSION
@@ -37,7 +37,6 @@ var version = major + "." + minor;
 
 Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
 Information("Release Version: {0}", version);
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS
