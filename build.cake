@@ -155,7 +155,7 @@ Task("Package-Installer-x86")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var installerScript = File("SetupScript.iss");
+    var installerScript = (FilePath)File("SetupScript.iss");
     
     StartProcess("ISCC", new ProcessSettings { 
         Arguments = "\"" + installerScript.FullPath + "\"" + " " + "/DVERSION=" + version, 
@@ -166,7 +166,7 @@ Task("Package-Installer-AMD64")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var installerScript = File("SetupScriptAMD64.iss");
+    var installerScript = (FilePath)File("SetupScriptAMD64.iss");
 
     StartProcess("ISCC", new ProcessSettings { 
         Arguments = "\"" + installerScript.FullPath + "\"" + " " + "/DVERSION=" + version, 
