@@ -6,11 +6,6 @@ before_build:
 - git submodule update --init
 build_script:
 - ps: .\build.ps1 -Target "Default"
-after_build:
-- cmd: >-
-    cd scripts
-
-    Package.cmd %APPVEYOR_BUILD_VERSION%
 test: off
 artifacts:
   - path: scripts\*.zip
