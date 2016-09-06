@@ -22,7 +22,7 @@ var target = Argument("target", "Default");
 // VERSION
 ///////////////////////////////////////////////////////////////////////////////
 
-var text = FileReadText(File("./src/version.h"));
+var text = FileReadText(MakeAbsolute(File("./src/version.h")));
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 var major = split[0].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var minor = split[1].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
