@@ -22,13 +22,16 @@ var target = Argument("target", "Default");
 // VERSION
 ///////////////////////////////////////////////////////////////////////////////
 
-var text = FileReadText(MakeAbsolute(File("./src/version.h")));
+var VersionPath = File("./src/version.h");
+
+var text = FileReadText(VersionPath);
 var split = text.Split(new char [] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 var major = split[0].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var minor = split[1].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var revision = split[2].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var build = split[3].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var version = major + "." + minor;
+
 Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
 Information("Release Version: {0}", version);
 
