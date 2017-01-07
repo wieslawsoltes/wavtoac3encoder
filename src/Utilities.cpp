@@ -106,23 +106,17 @@ void SetComboBoxHeight(HWND hDlg, int nComboBoxID)
 
     // on WinXP standard method does not work 
     // but we are using CB_SETMINVISIBLE message
-    OSVERSIONINFO VersionInfo;
-    VersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    BOOL bRetVer = ::GetVersionEx(&VersionInfo);
-    if(bRetVer == TRUE)
+	// version >= 5.1 (Windows XP or later windows)
+    if (::IsWindowsXPOrGreater())
     {
-        // version >= 5.1 (Windows XP or later windows)
-        if(VersionInfo.dwMajorVersion >= 5 && VersionInfo.dwMinorVersion >= 1)
-        {
-            // well we using right now 5.0 NT define, but we need this for XP
-            #if !defined(CBM_FIRST) | !defined(CB_SETMINVISIBLE)
-                #define CBM_FIRST 0x1700
-                #define	CB_SETMINVISIBLE (CBM_FIRST + 1)
-            #endif
+        // well we using right now 5.0 NT define, but we need this for XP
+        #if !defined(CBM_FIRST) | !defined(CB_SETMINVISIBLE)
+            #define CBM_FIRST 0x1700
+            #define	CB_SETMINVISIBLE (CBM_FIRST + 1)
+        #endif
 
-            ::SendMessage(hComboxBox, CB_SETMINVISIBLE, (WPARAM) nSizeLimit, 0);
-            return;
-        }
+        ::SendMessage(hComboxBox, CB_SETMINVISIBLE, (WPARAM) nSizeLimit, 0);
+        return;
     }
 
     int nCount = (int) ::SendDlgItemMessage(hDlg, nComboBoxID, CB_GETCOUNT, 0, 0);

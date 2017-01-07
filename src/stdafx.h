@@ -125,14 +125,16 @@
 #endif
 #endif
 
-//
-// AFTEN
-//
-
 #ifndef _UNICODE
 #include <direct.h>
 #endif
 #include <shlwapi.h>
+
+#include <VersionHelpers.h>
+
+//
+// AFTEN
+//
 
 // include libaften common headers
 #pragma warning(disable:4005)
