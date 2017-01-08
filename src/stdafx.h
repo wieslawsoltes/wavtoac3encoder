@@ -102,6 +102,13 @@
 // turns off MFC's hiding of some common and often safely ignored warning messages
 #define _AFX_ALL_WARNINGS
 
+#define _AFX_PORTABLE
+#define _FORCENAMELESSUNION
+#define _AFX_NO_DAO_SUPPORT
+#define _AFX_NO_DHTML_SUPPORT
+#define _AFX_NO_OLEDB_SUPPORT
+#define _AFX_NO_RICHEDIT_SUPPORT
+
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions
 #include <afxdisp.h>        // MFC Automation classes
