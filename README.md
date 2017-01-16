@@ -6,7 +6,12 @@
 
 WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital).
 
-### Download EncWAVtoAC3
+### Support WAV to AC3 Encoder
+
+[![PayPal - The safer, easier way to pay online!](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFQMG36HPYT6W)
+
+### Download WAV to AC3 Encoder
+=
 
 | Platforn              | Type        | Version       | Download                                                                                                                               |
 |-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
