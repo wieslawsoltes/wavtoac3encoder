@@ -32,7 +32,7 @@
 #endif
 
 CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
-: CResizeDialog(CEncWAVtoAC3Dlg::IDD, pParent)
+    : CResizeDialog(CEncWAVtoAC3Dlg::IDD, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -59,38 +59,38 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
 
 void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
 {
-	CResizeDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
-	DDX_Control(pDX, IDC_LIST_SETTINGS, m_LstSettings);
-	DDX_Control(pDX, IDC_SLIDER_BITRATE, m_SldBitrate);
-	DDX_Control(pDX, IDC_STATIC_BITRATE, m_StcBitrate);
-	DDX_Control(pDX, IDC_STATIC_QUALITY, m_StcQualityBitrate);
-	DDX_Control(pDX, IDC_STATIC_OPTION_VALUE, m_StcSelected);
-	DDX_Control(pDX, IDC_COMBO_SETTING, m_CmbValue);
-	DDX_Control(pDX, IDC_COMBO_PRESETS, m_CmbPresets);
-	DDX_Control(pDX, IDC_COMBO_RAW_SAMPLE_FORMAT, m_CmbRawSampleFormat);
-	DDX_Control(pDX, IDC_COMBO_ENGINES, m_CmbEngines);
-	DDX_Control(pDX, IDC_EDIT_OUTPUT_PATH, m_EdtOutPath);
-	DDX_Control(pDX, IDC_EDIT_THREADS, m_EdtThreads);
-	DDX_Control(pDX, IDC_EDIT_RAW_SAMPLE_RATE, m_EdtRawSamplerate);
-	DDX_Control(pDX, IDC_EDIT_RAW_CHANNELS, m_EdtRawChannels);
-	DDX_Control(pDX, IDC_SPIN_THREADS, m_SpnThreads);
-	DDX_Control(pDX, IDC_SPIN_RAW_SAMPLE_RATE, m_SpnRawSampleRate);
-	DDX_Control(pDX, IDC_SPIN_RAW_CHANNELS, m_SpnRawChannels);
-	DDX_Control(pDX, IDC_CHECK_VBR, m_ChkVbr);
-	DDX_Control(pDX, IDC_CHECK_SIMD_MMX, m_ChkSimdMMX);
-	DDX_Control(pDX, IDC_CHECK_SIMD_SSE, m_ChkSimdSSE);
-	DDX_Control(pDX, IDC_CHECK_SIMD_SSE2, m_ChkSimdSSE2);
-	DDX_Control(pDX, IDC_CHECK_SIMD_SSE3, m_ChkSimdSSE3);
-	DDX_Control(pDX, IDC_CHECK_MULTIPLE_MONO_INPUT, m_ChkMultipleMonoInput);
-	DDX_Control(pDX, IDC_BUTTON_ENCODE, m_BtnEncode);
-	DDX_Control(pDX, IDC_BUTTON_PRESETS_DEFAULTS, m_BtnResetCurrent);
-	DDX_Control(pDX, IDC_BUTTON_PRESET_DEL, m_BtnRemove);
-	DDX_Control(pDX, IDC_BUTTON_PRESET_ADD, m_BtnAddNew);
-	DDX_Control(pDX, IDC_BUTTON_ADD, m_BtnAddFiles);
-	DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
-	DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
-	DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
+    CResizeDialog::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
+    DDX_Control(pDX, IDC_LIST_SETTINGS, m_LstSettings);
+    DDX_Control(pDX, IDC_SLIDER_BITRATE, m_SldBitrate);
+    DDX_Control(pDX, IDC_STATIC_BITRATE, m_StcBitrate);
+    DDX_Control(pDX, IDC_STATIC_QUALITY, m_StcQualityBitrate);
+    DDX_Control(pDX, IDC_STATIC_OPTION_VALUE, m_StcSelected);
+    DDX_Control(pDX, IDC_COMBO_SETTING, m_CmbValue);
+    DDX_Control(pDX, IDC_COMBO_PRESETS, m_CmbPresets);
+    DDX_Control(pDX, IDC_COMBO_RAW_SAMPLE_FORMAT, m_CmbRawSampleFormat);
+    DDX_Control(pDX, IDC_COMBO_ENGINES, m_CmbEngines);
+    DDX_Control(pDX, IDC_EDIT_OUTPUT_PATH, m_EdtOutPath);
+    DDX_Control(pDX, IDC_EDIT_THREADS, m_EdtThreads);
+    DDX_Control(pDX, IDC_EDIT_RAW_SAMPLE_RATE, m_EdtRawSamplerate);
+    DDX_Control(pDX, IDC_EDIT_RAW_CHANNELS, m_EdtRawChannels);
+    DDX_Control(pDX, IDC_SPIN_THREADS, m_SpnThreads);
+    DDX_Control(pDX, IDC_SPIN_RAW_SAMPLE_RATE, m_SpnRawSampleRate);
+    DDX_Control(pDX, IDC_SPIN_RAW_CHANNELS, m_SpnRawChannels);
+    DDX_Control(pDX, IDC_CHECK_VBR, m_ChkVbr);
+    DDX_Control(pDX, IDC_CHECK_SIMD_MMX, m_ChkSimdMMX);
+    DDX_Control(pDX, IDC_CHECK_SIMD_SSE, m_ChkSimdSSE);
+    DDX_Control(pDX, IDC_CHECK_SIMD_SSE2, m_ChkSimdSSE2);
+    DDX_Control(pDX, IDC_CHECK_SIMD_SSE3, m_ChkSimdSSE3);
+    DDX_Control(pDX, IDC_CHECK_MULTIPLE_MONO_INPUT, m_ChkMultipleMonoInput);
+    DDX_Control(pDX, IDC_BUTTON_ENCODE, m_BtnEncode);
+    DDX_Control(pDX, IDC_BUTTON_PRESETS_DEFAULTS, m_BtnResetCurrent);
+    DDX_Control(pDX, IDC_BUTTON_PRESET_DEL, m_BtnRemove);
+    DDX_Control(pDX, IDC_BUTTON_PRESET_ADD, m_BtnAddNew);
+    DDX_Control(pDX, IDC_BUTTON_ADD, m_BtnAddFiles);
+    DDX_Control(pDX, IDC_BUTTON_BROWSE, m_BtnBrowse);
+    DDX_Control(pDX, IDC_BUTTON_MUX_WIZARD, m_BtnMuxWizard);
+    DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
@@ -115,8 +115,8 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit)
     ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration)
     ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsLoadConfiguration)
-	ON_COMMAND(ID_LANGUAGE_DEFAULT, &CEncWAVtoAC3Dlg::OnLanguageChangeDefault)
-	ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CEncWAVtoAC3Dlg::OnLanguageChange)
+    ON_COMMAND(ID_LANGUAGE_DEFAULT, &CEncWAVtoAC3Dlg::OnLanguageChangeDefault)
+    ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CEncWAVtoAC3Dlg::OnLanguageChange)
     ON_COMMAND(ID_HELP_COMMAND_LINE, &CEncWAVtoAC3Dlg::OnHelpCommandLine)
     ON_COMMAND(ID_HELP_WEBSITE, &CEncWAVtoAC3Dlg::OnHelpWebsite)
     ON_COMMAND(ID_HELP_ABOUT, &CEncWAVtoAC3Dlg::OnHelpAbout)
@@ -172,7 +172,7 @@ END_MESSAGE_MAP()
 
 void CEncWAVtoAC3Dlg::OnPaint()
 {
-    if(IsIconic())
+    if (IsIconic())
     {
         CPaintDC dc(this);
         SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
@@ -198,7 +198,7 @@ HCURSOR CEncWAVtoAC3Dlg::OnQueryDragIcon()
 void CEncWAVtoAC3Dlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
     // by default hide main window
-    if(this->bVisible == false)
+    if (this->bVisible == false)
         lpwndpos->flags &= ~SWP_SHOWWINDOW;
 
     CResizeDialog::OnWindowPosChanging(lpwndpos);
@@ -219,36 +219,36 @@ void CEncWAVtoAC3Dlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CEncWAVtoAC3Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-    if(pScrollBar->GetDlgCtrlID() == IDC_SPIN_THREADS)
+    if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_THREADS)
     {
         // update threads number
         CString szBuff;
 
-        if(nPos == 0)
+        if (nPos == 0)
             szBuff = DEFAULT_TEXT_AUTO;
         else
             szBuff.Format(_T("%d"), nPos);
 
         this->m_EdtThreads.SetWindowText(szBuff);
     }
-    if(pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_SAMPLE_RATE)
+    if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_SAMPLE_RATE)
     {
         // update sample rate number
         CString szBuff;
 
-        if(nPos == 0)
+        if (nPos == 0)
             szBuff = DEFAULT_TEXT_IGNORED;
         else
             szBuff.Format(_T("%d"), nPos);
 
         this->m_EdtRawSamplerate.SetWindowText(szBuff);
     }
-    if(pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_CHANNELS)
+    if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_CHANNELS)
     {
         // update channels number
         CString szBuff;
 
-        if(nPos == 0)
+        if (nPos == 0)
             szBuff = DEFAULT_TEXT_IGNORED;
         else
             szBuff.Format(_T("%d"), nPos);
@@ -266,7 +266,7 @@ void CEncWAVtoAC3Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 void CEncWAVtoAC3Dlg::OnClose()
 {
     // save configuration to disk (does not work in read-only mode)
-    if(this->bSaveConfig == true)
+    if (this->bSaveConfig == true)
         this->SaveAllConfiguration();
 
     CResizeDialog::OnClose();
@@ -283,11 +283,11 @@ void CEncWAVtoAC3Dlg::OnDestroy()
 
 BOOL CEncWAVtoAC3Dlg::PreTranslateMessage(MSG* pMsg)
 {
-	if (m_hAccelTable)
-	{
-		if (::TranslateAccelerator(m_hWnd, m_hAccelTable, pMsg))
-			return(TRUE);
-	}
+    if (m_hAccelTable)
+    {
+        if (::TranslateAccelerator(m_hWnd, m_hAccelTable, pMsg))
+            return(TRUE);
+    }
 
-	return CResizeDialog::PreTranslateMessage(pMsg);
+    return CResizeDialog::PreTranslateMessage(pMsg);
 }

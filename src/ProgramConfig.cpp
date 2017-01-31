@@ -26,7 +26,7 @@ bool LoadConfig(CString &szFileName, ConfigList_t &cl)
     try
     {
         CMyFile fp;
-        if(fp.FOpen(szFileName, false) == false)
+        if (fp.FOpen(szFileName, false) == false)
             return false;
 
         ConfigEntry ce;
@@ -38,18 +38,18 @@ bool LoadConfig(CString &szFileName, ConfigList_t &cl)
         const ULONGLONG nLength = fp.FSize();
         CString szBuffer = _T("");
 
-        while(fp.FRead(Buffer) == true)
+        while (fp.FRead(Buffer) == true)
         {
-            if((Buffer != '\r') && (Buffer != '\n'))
+            if ((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
-            
+
             // we have full line if there is end of line mark or end of file
-            if((Buffer == '\n') || (fp.FPos() == nLength))
+            if ((Buffer == '\n') || (fp.FPos() == nLength))
             {
                 szBuffer += _T("\0");
 
                 int nPos = szBuffer.Find('=', 0);
-                if(nPos != -1)
+                if (nPos != -1)
                 {
                     ce.szKey = szBuffer.Mid(0, nPos);
                     ce.szData = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
@@ -63,7 +63,7 @@ bool LoadConfig(CString &szFileName, ConfigList_t &cl)
         fp.FClose();
         return true;
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }
@@ -71,14 +71,14 @@ bool LoadConfig(CString &szFileName, ConfigList_t &cl)
 
 bool SaveConfig(CString &szFileName, ConfigList_t &cl)
 {
-    int nSize = (int) cl.GetSize();
+    int nSize = (int)cl.GetSize();
     try
     {
         CMyFile fp;
-        if(fp.FOpen(szFileName, true) == false)
+        if (fp.FOpen(szFileName, true) == false)
             return false;
 
-        for(int i = 0; i < nSize; i++)
+        for (int i = 0; i < nSize; i++)
         {
             CString szBuffer;
             ConfigEntry ce = cl.GetAt(cl.FindIndex(i));
@@ -92,7 +92,7 @@ bool SaveConfig(CString &szFileName, ConfigList_t &cl)
         fp.FClose();
         return true;
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }

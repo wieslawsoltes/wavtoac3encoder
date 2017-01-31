@@ -37,7 +37,7 @@ private:
     CMyListCtrl(const CMyListCtrl &x);
 public:
     bool bUseTooltipsList; // use only for LVS_REPORT style
-    CList<CString,CString&> listTooltips; 
+    CList<CString, CString&> listTooltips;
 private:
     CString szToolTipText;
     bool bHaveToolTipText;

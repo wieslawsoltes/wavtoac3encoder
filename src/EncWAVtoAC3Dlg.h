@@ -69,119 +69,119 @@ public:
     enum { IDD = IDD_ENCWAVTOAC3_DIALOG };
 protected:
     HICON m_hIcon;
-	HACCEL m_hAccelTable;
+    HACCEL m_hAccelTable;
 public:
-	bool bVisible;
+    bool bVisible;
 public:
-	CommandLineOpt cmdLineOpt;
+    CommandLineOpt cmdLineOpt;
 public:
-	AftenAPI api;
-	int nSortColumn;
-	bool nSortOrder[2];
-	bool bSettingsValueVisible;
-	ConfigList_t m_EngineList;
+    AftenAPI api;
+    int nSortColumn;
+    bool nSortOrder[2];
+    bool bSettingsValueVisible;
+    ConfigList_t m_EngineList;
 public:
-	EncoderPresetList_t encPresets;
-	EncoderPreset defaultPreset;
-	int nCurrentPreset = 0;
+    EncoderPresetList_t encPresets;
+    EncoderPreset defaultPreset;
+    int nCurrentPreset = 0;
 public:
-	CString szOutputPath;
-	CString szOutputFile;
+    CString szOutputPath;
+    CString szOutputFile;
 public:
-	bool bMultipleMonoInput;
+    bool bMultipleMonoInput;
 public:
-	bool bDisableAllWarnings;
+    bool bDisableAllWarnings;
 public:
-	bool bSaveConfig;
+    bool bSaveConfig;
 public:
-	CStatusBarCtrl m_StatusBar;
+    CStatusBarCtrl m_StatusBar;
 public:
-	CMySliderCtrl m_SldBitrate;
+    CMySliderCtrl m_SldBitrate;
 public:
-	CMyListCtrl m_LstSettings;
-	CMyListCtrl m_LstFiles;
+    CMyListCtrl m_LstSettings;
+    CMyListCtrl m_LstFiles;
 public:
-	CMyStatic m_StcBitrate;
-	CMyStatic m_StcSelected;
-	CMyStatic m_StcPreconfigured;
-	CMyStatic m_StcQualityBitrate;
+    CMyStatic m_StcBitrate;
+    CMyStatic m_StcSelected;
+    CMyStatic m_StcPreconfigured;
+    CMyStatic m_StcQualityBitrate;
 public:
-	CMyComboBox m_CmbRawSampleFormat;
-	CMyComboBox m_CmbValue;
-	CMyComboBox m_CmbPresets;
-	CMyComboBox m_CmbEngines;
+    CMyComboBox m_CmbRawSampleFormat;
+    CMyComboBox m_CmbValue;
+    CMyComboBox m_CmbPresets;
+    CMyComboBox m_CmbEngines;
 public:
-	CMyComboBoxEdit m_EdtCmbPresetName;
+    CMyComboBoxEdit m_EdtCmbPresetName;
 public:
-	CMyEdit m_EdtRawSamplerate;
-	CMyEdit m_EdtRawChannels;
-	CMyEdit m_EdtOutPath;
-	CMyEdit m_EdtThreads;
+    CMyEdit m_EdtRawSamplerate;
+    CMyEdit m_EdtRawChannels;
+    CMyEdit m_EdtOutPath;
+    CMyEdit m_EdtThreads;
 public:
-	CMyButton m_ChkVbr;
-	CMyButton m_BtnEncode;
-	CMyButton m_ChkSimdMMX;
-	CMyButton m_ChkSimdSSE;
-	CMyButton m_ChkSimdSSE2;
-	CMyButton m_ChkSimdSSE3;
-	CMyButton m_BtnResetCurrent;
-	CMyButton m_BtnRemove;
-	CMyButton m_BtnAddNew;
-	CMyButton m_BtnAddFiles;
-	CMyButton m_BtnBrowse;
-	CMyButton m_ChkMultipleMonoInput;
-	CMyButton m_BtnMuxWizard;
-	CMyButton m_BtnEngines;
+    CMyButton m_ChkVbr;
+    CMyButton m_BtnEncode;
+    CMyButton m_ChkSimdMMX;
+    CMyButton m_ChkSimdSSE;
+    CMyButton m_ChkSimdSSE2;
+    CMyButton m_ChkSimdSSE3;
+    CMyButton m_BtnResetCurrent;
+    CMyButton m_BtnRemove;
+    CMyButton m_BtnAddNew;
+    CMyButton m_BtnAddFiles;
+    CMyButton m_BtnBrowse;
+    CMyButton m_ChkMultipleMonoInput;
+    CMyButton m_BtnMuxWizard;
+    CMyButton m_BtnEngines;
 public:
-	CSpinButtonCtrl m_SpnRawSampleRate;
-	CSpinButtonCtrl m_SpnRawChannels;
-	CSpinButtonCtrl m_SpnThreads;
+    CSpinButtonCtrl m_SpnRawSampleRate;
+    CSpinButtonCtrl m_SpnRawChannels;
+    CSpinButtonCtrl m_SpnThreads;
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+    virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
-	void InitTitle();
+    void InitTitle();
     void InitDialogAnchors();
-	void InitTooltips();
-	void InitSettingsList();
-	void InitDefaultPreset();
-	void InitRawSamleFormatComboBox();
-	void InitSettingsListGroups();
-	void InitDialogControls();
-	void InitLang(bool initLangMenu);
-	void InitLangButtons();
-	void InitLangStaticText();
-	void InitLangFilesList();
-	void InitLangFilesListContextMenu(CMenu &m_hMenu);
-	void InitLangSettingsList();
-	void InitLangMainMenu();
-	void InitLangMenu();
+    void InitTooltips();
+    void InitSettingsList();
+    void InitDefaultPreset();
+    void InitRawSamleFormatComboBox();
+    void InitSettingsListGroups();
+    void InitDialogControls();
+    void InitLang(bool initLangMenu);
+    void InitLangButtons();
+    void InitLangStaticText();
+    void InitLangFilesList();
+    void InitLangFilesListContextMenu(CMenu &m_hMenu);
+    void InitLangSettingsList();
+    void InitLangMainMenu();
+    void InitLangMenu();
 public:
-	bool LoadFilesList(CString &szFileName);
-	bool SaveFilesList(CString &szFileName, int nFormat);
-	bool LoadProgramConfig(CString szFileName);
-	bool SaveProgramConfig(CString szFileName);
-	bool UpdateProgramEngines();
-	bool LoadProgramEngines(CString szFileName);
-	bool SaveProgramEngines(CString szFileName);
-	void LoadAllConfiguration();
-	void SaveAllConfiguration();
+    bool LoadFilesList(CString &szFileName);
+    bool SaveFilesList(CString &szFileName, int nFormat);
+    bool LoadProgramConfig(CString szFileName);
+    bool SaveProgramConfig(CString szFileName);
+    bool UpdateProgramEngines();
+    bool LoadProgramEngines(CString szFileName);
+    bool SaveProgramEngines(CString szFileName);
+    void LoadAllConfiguration();
+    void SaveAllConfiguration();
 public:
-	EncoderPreset GetCurrentPreset();
-	void UpdateCurrentPreset(EncoderPreset updatePreset);
+    EncoderPreset GetCurrentPreset();
+    void UpdateCurrentPreset(EncoderPreset updatePreset);
 public:
-	void HandleDropFiles(HDROP hDropInfo);
-	void SearchFolderForFiles(CString szFile, const bool bRecurse);
-	void AddItemToFileList(CString szPath);
-	void UpdateBitrateText();
-	void UpdateSettingsComboBox(int nItem);
-	void ApplyPresetToDlg(EncoderPreset &Preset);
-	void ShowOptionPopup(bool bUseRect);
-	void UpdateView(int nMode);
+    void HandleDropFiles(HDROP hDropInfo);
+    void SearchFolderForFiles(CString szFile, const bool bRecurse);
+    void AddItemToFileList(CString szPath);
+    void UpdateBitrateText();
+    void UpdateSettingsComboBox(int nItem);
+    void ApplyPresetToDlg(EncoderPreset &Preset);
+    void ShowOptionPopup(bool bUseRect);
+    void UpdateView(int nMode);
 public:
 #ifndef DISABLE_AVISYNTH
-	bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
+    bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
 #endif
 protected:
     afx_msg void OnPaint();
@@ -210,8 +210,8 @@ public:
     afx_msg void OnOptionsLoadConfiguration();
     afx_msg void OnOptionsSaveConfiguration();
 public:
-	afx_msg void OnLanguageChangeDefault();
-	afx_msg void OnLanguageChange(UINT nID);
+    afx_msg void OnLanguageChangeDefault();
+    afx_msg void OnLanguageChange(UINT nID);
 public:
     afx_msg void OnHelpCommandLine();
     afx_msg void OnHelpWebsite();
@@ -253,7 +253,7 @@ public:
     afx_msg void OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult);
 public:
     afx_msg void OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
-	afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult);
 public:

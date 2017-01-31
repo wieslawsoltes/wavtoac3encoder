@@ -28,22 +28,22 @@ void LogFile(CString szLogFileName)
 
 bool LogOpen()
 {
-	if(logCtx.bInit == true)
-		return false;
+    if (logCtx.bInit == true)
+        return false;
 
     BOOL bRet = FALSE;
-    bRet = logCtx.fp.Open(logCtx.szLogFileName, 
+    bRet = logCtx.fp.Open(logCtx.szLogFileName,
         CFile::modeReadWrite | CFile::modeCreate | CFile::modeNoTruncate | CFile::shareDenyWrite);
-    if(bRet == FALSE)
+    if (bRet == FALSE)
     {
         logCtx.bInit = false;
         return false;
     }
     else
     {
-        if(logCtx.fp.GetLength() > 0)
+        if (logCtx.fp.GetLength() > 0)
         {
-            logCtx.fp.Seek(0 ,CFile::end);
+            logCtx.fp.Seek(0, CFile::end);
         }
 #ifdef _UNICODE
         else
@@ -61,8 +61,8 @@ bool LogOpen()
 
 bool LogClose()
 {
-	if(logCtx.bInit == false)
-		return false;
+    if (logCtx.bInit == false)
+        return false;
 
     logCtx.fp.Close();
     logCtx.bInit = false;
@@ -72,14 +72,14 @@ bool LogClose()
 
 bool LogMessage(CString szMessage)
 {
-    if(logCtx.bInit == false)
+    if (logCtx.bInit == false)
         return false;
 
     CString szCurrentDateTtime;
     SYSTEMTIME st;
     ZeroMemory(&st, sizeof(SYSTEMTIME));
     GetLocalTime(&st);
-    szCurrentDateTtime.Format(_T("[%04d-%02d-%02d, %02d:%02d:%02d.%03d] "), 
+    szCurrentDateTtime.Format(_T("[%04d-%02d-%02d, %02d:%02d:%02d.%03d] "),
         st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
     CString tmpBuffer = szCurrentDateTtime + szMessage + _T("\r\n");
     logCtx.fp.Write(tmpBuffer.GetBuffer(), tmpBuffer.GetLength() * sizeof(TCHAR));
@@ -90,18 +90,18 @@ bool LogMessage(CString szMessage)
 
 void LogAnsiMessage(const PTCHAR pszMessage, const char* msg)
 {
-	const char *ansistr = msg;
-	int lenA = lstrlenA(ansistr);
-	int lenW;
-	BSTR unicodestr;
-	lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
-	if (lenW > 0)
-	{
-		unicodestr = ::SysAllocStringLen(0, lenW);
-		::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
-		CString szBuff;
-		szBuff.Format(_T("%s: %s"), pszMessage, unicodestr);
-		::LogMessage(szBuff);
-	}
-	::SysFreeString(unicodestr);
+    const char *ansistr = msg;
+    int lenA = lstrlenA(ansistr);
+    int lenW;
+    BSTR unicodestr;
+    lenW = ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, 0, 0);
+    if (lenW > 0)
+    {
+        unicodestr = ::SysAllocStringLen(0, lenW);
+        ::MultiByteToWideChar(CP_ACP, 0, ansistr, lenA, unicodestr, lenW);
+        CString szBuff;
+        szBuff.Format(_T("%s: %s"), pszMessage, unicodestr);
+        ::LogMessage(szBuff);
+    }
+    ::SysFreeString(unicodestr);
 }

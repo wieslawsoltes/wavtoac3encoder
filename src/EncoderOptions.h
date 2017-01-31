@@ -54,8 +54,8 @@ typedef struct TEncoderOptions
     CString szName;
     CString szOption;
     CString szHelpText;
-    CList<CString,CString&> listOptNames;
-    CList<int,int&> listOptValues;
+    CList<CString, CString&> listOptNames;
+    CList<int, int&> listOptValues;
     int nDefaultValue;
     int nIgnoreValue;
     CString szGroupName;

@@ -25,7 +25,7 @@
 IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialogEx)
 
 CEncWAVtoAC3EngDlg::CEncWAVtoAC3EngDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CEncWAVtoAC3EngDlg::IDD, pParent)
+    : CDialogEx(CEncWAVtoAC3EngDlg::IDD, pParent)
 {
     bUpdateList = true;
     nCurrSel = 0;
@@ -66,21 +66,21 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
     // add columns to engines list
-    this->m_LstEngines.InsertColumn(0, 
-		HaveLangStrings() ? GetLangString(0x00B0100C) : _T("Name"),
-		0, 150);
-    this->m_LstEngines.InsertColumn(1, 
-		HaveLangStrings() ? GetLangString(0x00B0100D) : _T("Path"),
-		0, 440);
+    this->m_LstEngines.InsertColumn(0,
+        HaveLangStrings() ? GetLangString(0x00B0100C) : _T("Name"),
+        0, 150);
+    this->m_LstEngines.InsertColumn(1,
+        HaveLangStrings() ? GetLangString(0x00B0100D) : _T("Path"),
+        0, 440);
 
     // populate engines list
     this->InsertProgramEngines();
 
     // select currently used engine
-    this->m_LstEngines.SetItemState(-1,  0, LVIS_SELECTED);
+    this->m_LstEngines.SetItemState(-1, 0, LVIS_SELECTED);
     this->m_LstEngines.SetItemState(this->nCurrSel, LVIS_SELECTED, LVIS_SELECTED);
 
-	InitLang();
+    InitLang();
 
     return TRUE;
 }
@@ -97,14 +97,14 @@ void CEncWAVtoAC3EngDlg::OnBnClickedCancel()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
 {
-    CFileDialog fd(TRUE, 
+    CFileDialog fd(TRUE,
         _T("dll"),
-        _T(""), 
+        _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		HaveLangStrings() ? GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
+        HaveLangStrings() ? GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         // get full path from file dialog
         CString szFileName = fd.GetPathName();
@@ -116,14 +116,14 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
 {
-    CFileDialog fd(TRUE, 
+    CFileDialog fd(TRUE,
         _T("engines"),
-        _T(""), 
+        _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         // get full path from file dialog
         CString szFileName = fd.GetPathName();
@@ -135,19 +135,19 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
 {
-    CFileDialog fd(FALSE, 
+    CFileDialog fd(FALSE,
         _T("engines"),
-        _T(""), 
+        _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         // get full path from file dialog
         CString szFileName = fd.GetPathName();
 
-         // save engines from file
+        // save engines from file
         this->SaveProgramEngines(szFileName);
     }
 }
@@ -168,19 +168,19 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd()
 
 void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove()
 {
-    CList<int,int> list;
+    CList<int, int> list;
     POSITION pos;
 
     // get all selected items
     pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    while(pos != NULL)
+    while (pos != NULL)
     {
         list.AddTail(this->m_LstEngines.GetNextSelectedItem(pos));
     }
 
     // remove all selected items
     pos = list.GetTailPosition();
-    while(pos != NULL)
+    while (pos != NULL)
     {
         int nIndex = list.GetPrev(pos);
         this->m_LstEngines.DeleteItem(nIndex);
@@ -193,11 +193,11 @@ bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
     int nSize = this->m_EngineList.GetSize();
 
     // no engine return error
-    if(nSize == 0)
+    if (nSize == 0)
         return false;
 
     POSITION pos = this->m_EngineList.GetHeadPosition();
-    for(INT_PTR i = 0; i < nSize; i++)
+    for (INT_PTR i = 0; i < nSize; i++)
     {
         ConfigEntry ce;
 
@@ -223,7 +223,7 @@ bool CEncWAVtoAC3EngDlg::LoadProgramEngines(CString szFileName)
     this->m_EngineList.RemoveAll();
     this->m_LstEngines.DeleteAllItems();
 
-    if(::LoadConfig(szFileName, this->m_EngineList) == true)
+    if (::LoadConfig(szFileName, this->m_EngineList) == true)
     {
         return InsertProgramEngines();
     }
@@ -241,23 +241,23 @@ void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pRe
 {
     LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-    if(bUpdateList == true)
+    if (bUpdateList == true)
     {
-    POSITION pos = m_LstEngines.GetFirstSelectedItemPosition();
-    if(pos != NULL)
-    {
-        int nItem = m_LstEngines.GetNextSelectedItem(pos);
+        POSITION pos = m_LstEngines.GetFirstSelectedItemPosition();
+        if (pos != NULL)
+        {
+            int nItem = m_LstEngines.GetNextSelectedItem(pos);
 
-        ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
+            ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
 
-        this->m_EdtEngineName.SetWindowText(ce.szKey);
-        this->m_EdtEnginePath.SetWindowText(ce.szData);
-    }
-    else
-    {
-        this->m_EdtEngineName.SetWindowText(_T(""));
-        this->m_EdtEnginePath.SetWindowText(_T(""));
-    }
+            this->m_EdtEngineName.SetWindowText(ce.szKey);
+            this->m_EdtEnginePath.SetWindowText(ce.szData);
+        }
+        else
+        {
+            this->m_EdtEngineName.SetWindowText(_T(""));
+            this->m_EdtEnginePath.SetWindowText(_T(""));
+        }
     }
     else
     {
@@ -270,7 +270,7 @@ void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pRe
 void CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    if(pos != NULL)
+    if (pos != NULL)
     {
         CString szText;
 
@@ -290,7 +290,7 @@ void CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName()
 void CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    if(pos != NULL)
+    if (pos != NULL)
     {
         CString szText;
 
@@ -313,13 +313,13 @@ void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult
     LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
 
     // handle keyboard events here
-    switch(pLVKeyDow->wVKey)
+    switch (pLVKeyDow->wVKey)
     {
-    case VK_DELETE: 
-        {
-            this->OnBnClickedButtonEnginesRemove();
-        }
-        break;
+    case VK_DELETE:
+    {
+        this->OnBnClickedButtonEnginesRemove();
+    }
+    break;
 
     default: break;
     };
@@ -329,20 +329,20 @@ void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult
 
 void CEncWAVtoAC3EngDlg::InitLang()
 {
-	if (HaveLangStrings())
-	{
-		this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00B01001));
+    if (HaveLangStrings())
+    {
+        this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00B01001));
 
-		this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(GetLangString(0x00B01002));
-		this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(GetLangString(0x00B01003));
-		this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(GetLangString(0x00B01004));
+        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(GetLangString(0x00B01002));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(GetLangString(0x00B01003));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(GetLangString(0x00B01004));
 
-		this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(GetLangString(0x00B01005));
-		this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(GetLangString(0x00B01006));
-		this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(GetLangString(0x00B01007));
-		this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(GetLangString(0x00B01008));
-		this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(GetLangString(0x00B01009));
-		this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00B0100A));
-		this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00B0100B));
-	}
+        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(GetLangString(0x00B01005));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(GetLangString(0x00B01006));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(GetLangString(0x00B01007));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(GetLangString(0x00B01008));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(GetLangString(0x00B01009));
+        this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00B0100A));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00B0100B));
+    }
 }

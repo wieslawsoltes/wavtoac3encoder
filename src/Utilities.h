@@ -23,10 +23,10 @@ class CMyCounter
     LARGE_INTEGER li[3];
     LARGE_INTEGER total;
 public:
-    void Init()   { total.QuadPart = 0; memset(li, 0, 3 * sizeof(LARGE_INTEGER)); QueryPerformanceFrequency(&li[0]); }
-    void Start()  { QueryPerformanceCounter(&li[1]); }
-    void Stop()   { QueryPerformanceCounter(&li[2]); total.QuadPart += li[2].QuadPart - li[1].QuadPart; }
-    double Time() { return (double) (total.QuadPart) / (double) li[0].QuadPart; }
+    void Init() { total.QuadPart = 0; memset(li, 0, 3 * sizeof(LARGE_INTEGER)); QueryPerformanceFrequency(&li[0]); }
+    void Start() { QueryPerformanceCounter(&li[1]); }
+    void Stop() { QueryPerformanceCounter(&li[2]); total.QuadPart += li[2].QuadPart - li[1].QuadPart; }
+    double Time() { return (double)(total.QuadPart) / (double)li[0].QuadPart; }
 };
 
 CString FormatTime(double fTime, int nFormat);

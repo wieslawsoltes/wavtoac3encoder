@@ -36,14 +36,14 @@
 
 class CEncWAVtoAC3EngDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CEncWAVtoAC3EngDlg)
+    DECLARE_DYNAMIC(CEncWAVtoAC3EngDlg)
 public:
-	CEncWAVtoAC3EngDlg(CWnd* pParent = NULL);
-	virtual ~CEncWAVtoAC3EngDlg();
-	enum { IDD = IDD_ENGINES_DIALOG };
+    CEncWAVtoAC3EngDlg(CWnd* pParent = NULL);
+    virtual ~CEncWAVtoAC3EngDlg();
+    enum { IDD = IDD_ENGINES_DIALOG };
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);
-	DECLARE_MESSAGE_MAP()
+    virtual void DoDataExchange(CDataExchange* pDX);
+    DECLARE_MESSAGE_MAP()
 public:
     ConfigList_t m_EngineList;
     CString szCurrentFileName;
@@ -59,7 +59,7 @@ public:
     bool LoadProgramEngines(CString szFileName);
     bool SaveProgramEngines(CString szFileName);
 protected:
-	void InitLang();
+    void InitLang();
 public:
     virtual BOOL OnInitDialog();
 public:

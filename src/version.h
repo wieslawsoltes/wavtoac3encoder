@@ -21,25 +21,25 @@
 #define VER_PRODUCT_VERSION_STR     VER_FILE_VERSION_LONG_STR
 
 #if LIBRARY_EXPORTS
-  #define VER_ORIGINAL_FILENAME_STR VER_PRODUCTNAME_STR ".dll"
+#define VER_ORIGINAL_FILENAME_STR VER_PRODUCTNAME_STR ".dll"
 #else
-  #define VER_ORIGINAL_FILENAME_STR VER_PRODUCTNAME_STR ".exe"
+#define VER_ORIGINAL_FILENAME_STR VER_PRODUCTNAME_STR ".exe"
 #endif
 #define VER_INTERNAL_NAME_STR       VER_ORIGINAL_FILENAME_STR
 
 #define VER_COPYRIGHT_STR           "Copyright (C) 2007-2016 Wieslaw Soltes. All rights reserved."
 
 #ifdef _DEBUG
-  #define VER_VER_DEBUG             VS_FF_DEBUG
+#define VER_VER_DEBUG             VS_FF_DEBUG
 #else
-  #define VER_VER_DEBUG             0
+#define VER_VER_DEBUG             0
 #endif
 
 #define VER_FILEOS                  VOS_NT_WINDOWS32
 #define VER_FILEFLAGS               VER_VER_DEBUG
 
 #if LIBRARY_EXPORTS
-  #define VER_FILETYPE              VFT_DLL
+#define VER_FILETYPE              VFT_DLL
 #else
-  #define VER_FILETYPE              VFT_APP
+#define VER_FILETYPE              VFT_APP
 #endif

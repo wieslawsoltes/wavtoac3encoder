@@ -76,7 +76,7 @@ INT_PTR CMyEdit::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 {
     CRect rcTemp;
     GetClientRect(rcTemp);
-    if(!rcTemp.PtInRect(point))
+    if (!rcTemp.PtInRect(point))
         return -1;
 
     pTI->hwnd = m_hWnd;
@@ -90,15 +90,15 @@ INT_PTR CMyEdit::OnToolHitTest(CPoint point, TOOLINFO* pTI) const
 
 BOOL CMyEdit::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
 {
-    TOOLTIPTEXTA *pTTTA = (TOOLTIPTEXTA *) pNMHDR;
-    TOOLTIPTEXTW *pTTTW = (TOOLTIPTEXTW *) pNMHDR;
+    TOOLTIPTEXTA *pTTTA = (TOOLTIPTEXTA *)pNMHDR;
+    TOOLTIPTEXTW *pTTTW = (TOOLTIPTEXTW *)pNMHDR;
     static CString szTipText;
     UINT nID = pNMHDR->idFrom;
 
-    if(nID == 0)
+    if (nID == 0)
         return FALSE;
 
-    if(this->HaveTooltipText())
+    if (this->HaveTooltipText())
         szTipText = this->GetTooltipText();
     else
         GetWindowText(szTipText);
@@ -107,16 +107,16 @@ BOOL CMyEdit::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
     static const int nMyTooltipsWidth = 4096;
 
     // check the tooltip text length
-    if(szTipText.GetLength() > nMyTooltipsWidth)
+    if (szTipText.GetLength() > nMyTooltipsWidth)
         return FALSE;
-    
-    ::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, (LPARAM) nMyTooltipsWidth);
+
+    ::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, (LPARAM)nMyTooltipsWidth);
 
     TCHAR szBuff[nMyTooltipsWidth] = _T("");
     _stprintf(szBuff, _T("%s"), (LPCTSTR)szTipText);
 
 #ifndef _UNICODE
-    if(pNMHDR->code == TTN_NEEDTEXTA)
+    if (pNMHDR->code == TTN_NEEDTEXTA)
     {
         pTTTA->lpszText = szBuff;
     }
@@ -127,7 +127,7 @@ BOOL CMyEdit::OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult)
         pTTTW->lpszText = szTmpBuff;
     }
 #else
-    if(pNMHDR->code == TTN_NEEDTEXTA)
+    if (pNMHDR->code == TTN_NEEDTEXTA)
     {
         char szTmpBuff[nMyTooltipsWidth];
         _wcstombsz(szTmpBuff, szBuff, szTipText.GetLength() + 1);

@@ -30,13 +30,13 @@ CResizeDialog::CResizeDialog()
 }
 
 CResizeDialog::CResizeDialog(UINT nIDTemplate, CWnd *pParentWnd)
-: CDialogEx(nIDTemplate, pParentWnd)
+    : CDialogEx(nIDTemplate, pParentWnd)
 {
     InitVars();
 }
 
 CResizeDialog::CResizeDialog(LPCTSTR lpszTemplateName, CWnd *pParentWnd)
-: CDialogEx(lpszTemplateName, pParentWnd)
+    : CDialogEx(lpszTemplateName, pParentWnd)
 {
     InitVars();
 }
@@ -51,7 +51,7 @@ BEGIN_MESSAGE_MAP(CResizeDialog, CDialogEx)
     ON_WM_SIZE()
 END_MESSAGE_MAP()
 
-void CResizeDialog::InitVars() 
+void CResizeDialog::InitVars()
 {
     m_bInitDone = FALSE;
     m_bUseMinTrack = TRUE;
@@ -59,7 +59,7 @@ void CResizeDialog::InitVars()
     m_bUseMaxRect = FALSE;
 }
 
-void CResizeDialog::CleanUp() 
+void CResizeDialog::CleanUp()
 {
     m_bInitDone = FALSE;
 
@@ -68,7 +68,7 @@ void CResizeDialog::CleanUp()
     m_bInitDone = TRUE;
 }
 
-BOOL CResizeDialog::OnInitDialog() 
+BOOL CResizeDialog::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
@@ -83,29 +83,29 @@ BOOL CResizeDialog::OnInitDialog()
     return TRUE;
 }
 
-void CResizeDialog::OnSize(UINT nType, int cx, int cy) 
+void CResizeDialog::OnSize(UINT nType, int cx, int cy)
 {
     CWnd::OnSize(nType, cx, cy);
 
-    if((nType == SIZE_MAXHIDE) || (nType == SIZE_MAXSHOW))
+    if ((nType == SIZE_MAXHIDE) || (nType == SIZE_MAXSHOW))
         return;
 
-    if(m_bInitDone)
+    if (m_bInitDone)
         ArrangeLayout();
 }
 
-void CResizeDialog::OnGetMinMaxInfo(MINMAXINFO FAR *lpMMI) 
+void CResizeDialog::OnGetMinMaxInfo(MINMAXINFO FAR *lpMMI)
 {
-    if(!m_bInitDone)
+    if (!m_bInitDone)
         return;
 
-    if(m_bUseMinTrack)
+    if (m_bUseMinTrack)
         lpMMI->ptMinTrackSize = m_ptMinTrackSize;
 
-    if(m_bUseMaxTrack)
+    if (m_bUseMaxTrack)
         lpMMI->ptMaxTrackSize = m_ptMaxTrackSize;
 
-    if(m_bUseMaxRect)
+    if (m_bUseMaxRect)
     {
         lpMMI->ptMaxPosition = m_ptMaxPos;
         lpMMI->ptMaxSize = m_ptMaxSize;
@@ -123,15 +123,15 @@ void CResizeDialog::AddAnchor(HWND newWnd, CSize typeTL, CSize typeBR)
     szStatic.ReleaseBuffer();
     szStatic.MakeUpper();
 
-    if(szStatic == _T("BUTTON"))
+    if (szStatic == _T("BUTTON"))
     {
         DWORD dwStyle = GetWindowLong(newWnd, GWL_STYLE);
-        if(dwStyle & BS_GROUPBOX)
+        if (dwStyle & BS_GROUPBOX)
             SetWindowLong(newWnd, GWL_STYLE, dwStyle | WS_CLIPSIBLINGS);
     }
 
     BOOL bHScroll = FALSE;
-    if(szStatic == _T("LISTBOX"))
+    if (szStatic == _T("LISTBOX"))
         bHScroll = TRUE;
 
     CRect wndrc, objrc;
@@ -141,12 +141,12 @@ void CResizeDialog::AddAnchor(HWND newWnd, CSize typeTL, CSize typeBR)
 
     CSize marginTL, marginBR;
 
-    if(typeBR == AnchorNone)
+    if (typeBR == AnchorNone)
         typeBR = typeTL;
 
-    marginTL.cx = objrc.left   - wndrc.Width()  * typeTL.cx / 100;
-    marginTL.cy = objrc.top    - wndrc.Height() * typeTL.cy / 100;
-    marginBR.cx = objrc.right  - wndrc.Width()  * typeBR.cx / 100;
+    marginTL.cx = objrc.left - wndrc.Width()  * typeTL.cx / 100;
+    marginTL.cy = objrc.top - wndrc.Height() * typeTL.cy / 100;
+    marginBR.cx = objrc.right - wndrc.Width()  * typeBR.cx / 100;
     marginBR.cy = objrc.bottom - wndrc.Height() * typeBR.cy / 100;
 
     Layout layout;
@@ -162,12 +162,12 @@ void CResizeDialog::AddAnchor(UINT nCtrlID, CSize typeTL, CSize typeBR)
 void CResizeDialog::UpdateLayout()
 {
     POSITION pos = m_LayoutList.GetHeadPosition();
-    while(pos != NULL)
+    while (pos != NULL)
     {
         Layout layout = m_LayoutList.GetNext(pos);
         Layout layoutUpdate;
 
-        if(pos == NULL)
+        if (pos == NULL)
             break;
 
         CRect wndrc, objrc;
@@ -177,15 +177,15 @@ void CResizeDialog::UpdateLayout()
 
         CSize marginTL, marginBR;
 
-        marginTL.cx = objrc.left   - wndrc.Width()  * layout.typeTL.cx / 100;
-        marginTL.cy = objrc.top    - wndrc.Height() * layout.typeTL.cy / 100;
-        marginBR.cx = objrc.right  - wndrc.Width()  * layout.typeBR.cx / 100;
+        marginTL.cx = objrc.left - wndrc.Width()  * layout.typeTL.cx / 100;
+        marginTL.cy = objrc.top - wndrc.Height() * layout.typeTL.cy / 100;
+        marginBR.cx = objrc.right - wndrc.Width()  * layout.typeBR.cx / 100;
         marginBR.cy = objrc.bottom - wndrc.Height() * layout.typeBR.cy / 100;
 
-        this->InitLayout(layoutUpdate, 
-            layout.hWnd, 
-            layout.typeTL, marginTL, 
-            layout.typeBR, marginBR, 
+        this->InitLayout(layoutUpdate,
+            layout.hWnd,
+            layout.typeTL, marginTL,
+            layout.typeBR, marginBR,
             layout.bAdjHscroll);
 
         m_LayoutList.SetAt(pos, layoutUpdate);
@@ -200,7 +200,7 @@ void CResizeDialog::ArrangeLayout()
     HDWP hdwp = BeginDeferWindowPos(m_LayoutList.GetCount());
 
     POSITION pos = m_LayoutList.GetHeadPosition();
-    while(pos != NULL)
+    while (pos != NULL)
     {
         Layout layout = m_LayoutList.GetNext(pos);
 
@@ -210,28 +210,28 @@ void CResizeDialog::ArrangeLayout()
         wnd->GetWindowRect(&objrc);
         ScreenToClient(&objrc);
 
-        newrc.left   = layout.marginTL.cx + wndRC.Width()  * layout.typeTL.cx / 100;
-        newrc.top    = layout.marginTL.cy + wndRC.Height() * layout.typeTL.cy / 100;
-        newrc.right  = layout.marginBR.cx + wndRC.Width()  * layout.typeBR.cx / 100;
+        newrc.left = layout.marginTL.cx + wndRC.Width()  * layout.typeTL.cx / 100;
+        newrc.top = layout.marginTL.cy + wndRC.Height() * layout.typeTL.cy / 100;
+        newrc.right = layout.marginBR.cx + wndRC.Width()  * layout.typeBR.cx / 100;
         newrc.bottom = layout.marginBR.cy + wndRC.Height() * layout.typeBR.cy / 100;
 
-        if(!newrc.EqualRect(&objrc))
+        if (!newrc.EqualRect(&objrc))
         {
-            if(layout.bAdjHscroll)
+            if (layout.bAdjHscroll)
             {
                 int nDiff = newrc.Width() - objrc.Width();
                 int nMax = wnd->GetScrollLimit(SB_HORZ);
-                if((nMax > 0) && (wnd->GetScrollPos(SB_HORZ) > (nMax - nDiff)))
+                if ((nMax > 0) && (wnd->GetScrollPos(SB_HORZ) > (nMax - nDiff)))
                 {
                     wnd->MoveWindow(&newrc);
                     wnd->Invalidate();
                 }
             }
 
-            DeferWindowPos(hdwp, layout.hWnd, 
-                NULL, 
+            DeferWindowPos(hdwp, layout.hWnd,
+                NULL,
                 newrc.left, newrc.top,
-                newrc.Width(), newrc.Height(), 
+                newrc.Width(), newrc.Height(),
                 SWP_NOZORDER | SWP_NOACTIVATE);
 
         }
@@ -281,11 +281,11 @@ void CResizeDialog::UpdateWindowPos(HWND hWnd, CRect newRC)
 {
     HDWP hDwp = BeginDeferWindowPos(1);
 
-    DeferWindowPos(hDwp, hWnd, 
-                NULL, 
-                newRC.left, newRC.top,
-                newRC.Width(), newRC.Height(), 
-                SWP_NOZORDER | SWP_NOACTIVATE);
+    DeferWindowPos(hDwp, hWnd,
+        NULL,
+        newRC.left, newRC.top,
+        newRC.Width(), newRC.Height(),
+        SWP_NOZORDER | SWP_NOACTIVATE);
 
     EndDeferWindowPos(hDwp);
 }
@@ -301,9 +301,9 @@ CString CResizeDialog::GetWindowRectStr()
     GetWindowPlacement(&wp);
     RECT &rc = wp.rcNormalPosition;
 
-    szData.Format(_T("%d %d %d %d %d %d"), 
-        rc.left, rc.top, 
-        rc.right, rc.bottom, 
+    szData.Format(_T("%d %d %d %d %d %d"),
+        rc.left, rc.top,
+        rc.right, rc.bottom,
         wp.showCmd, wp.flags);
 
     return szData;
@@ -313,7 +313,7 @@ void CResizeDialog::SetWindowRectStr(CString szData)
 {
     WINDOWPLACEMENT wp;
 
-    if(szData.IsEmpty())
+    if (szData.IsEmpty())
         return;
 
     ZeroMemory(&wp, sizeof(WINDOWPLACEMENT));
@@ -322,9 +322,9 @@ void CResizeDialog::SetWindowRectStr(CString szData)
     GetWindowPlacement(&wp);
     RECT &rc = wp.rcNormalPosition;
 
-    if(_stscanf(szData, _T("%d %d %d %d %d %d"), 
-        &rc.left, &rc.top, 
-        &rc.right, &rc.bottom, 
+    if (_stscanf(szData, _T("%d %d %d %d %d %d"),
+        &rc.left, &rc.top,
+        &rc.right, &rc.bottom,
         &wp.showCmd, &wp.flags) == 6)
     {
         SetWindowPlacement(&wp);

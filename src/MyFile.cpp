@@ -32,7 +32,7 @@ CMyFile::CMyFile()
 
 CMyFile::CMyFile(CString szFileName, bool bWrite)
 {
-    if(szFileName.GetLength() <= 0)
+    if (szFileName.GetLength() <= 0)
         return;
 
     this->FOpen(szFileName, bWrite);
@@ -42,7 +42,7 @@ CMyFile::~CMyFile()
 {
     try
     {
-        if(this->_bOpen == true)
+        if (this->_bOpen == true)
         {
             Close();
 
@@ -50,7 +50,7 @@ CMyFile::~CMyFile()
             this->_nMode = -1;
         }
     }
-    catch(...)
+    catch (...)
     {
 
     }
@@ -58,7 +58,7 @@ CMyFile::~CMyFile()
 
 bool CMyFile::FSetMode(int nMode)
 {
-    if(nMode >= 0 && nMode <= 3)
+    if (nMode >= 0 && nMode <= 3)
     {
         this->_nMode = nMode;
         return true;
@@ -86,10 +86,10 @@ ULONGLONG CMyFile::FPos()
 
 bool CMyFile::FOpen(CString szFileName, bool bWrite)
 {
-    if(this->_bOpen == true)
+    if (this->_bOpen == true)
         return true;
 
-    if(szFileName.GetLength() <= 0)
+    if (szFileName.GetLength() <= 0)
         return false;
 
     this->_bWrite = bWrite;
@@ -97,7 +97,7 @@ bool CMyFile::FOpen(CString szFileName, bool bWrite)
 
     try
     {
-        if(Open(this->_szFileName,  
+        if (Open(this->_szFileName,
             this->_bWrite ? this->nOpenFlagsWrite : this->nOpenFlagsRead) == FALSE)
         {
             this->_bOpen = false;
@@ -106,40 +106,40 @@ bool CMyFile::FOpen(CString szFileName, bool bWrite)
         else
         {
             // auto-select read & write modes
-            if(this->_nMode == -1)
+            if (this->_nMode == -1)
             {
-                if(this->_bWrite == false)
+                if (this->_bWrite == false)
                 {
                     // set read mode
                     bool bHaveBomHeader = false;
                     unsigned char szUnicodeHeader[nBomHeaderSize];
 
-                    if(Read(szUnicodeHeader, nBomHeaderSize) != nBomHeaderSize)
+                    if (Read(szUnicodeHeader, nBomHeaderSize) != nBomHeaderSize)
                     {
                         Close();
                         this->_bOpen = false;
                         return false;
                     }
 
-                    if((szUnicodeHeader[0] != szUnicode[0]) || (szUnicodeHeader[1] != szUnicode[1]))
+                    if ((szUnicodeHeader[0] != szUnicode[0]) || (szUnicodeHeader[1] != szUnicode[1]))
                         bHaveBomHeader = false;
                     else
                         bHaveBomHeader = true;
 
 #ifdef _UNICODE
-                    if(bHaveBomHeader == true)
+                    if (bHaveBomHeader == true)
                         this->_nMode = 0;
                     else
-                        this->_nMode = 1;   
+                        this->_nMode = 1;
 #else
-                    if(bHaveBomHeader == true)
+                    if (bHaveBomHeader == true)
                         this->_nMode = 2;
                     else
-                        this->_nMode = 3;   
+                        this->_nMode = 3;
 #endif
 
                     // if input is Ansi than seek to the beginning of the file
-                    if((this->_nMode == 1) || (this->_nMode == 3))
+                    if ((this->_nMode == 1) || (this->_nMode == 3))
                         Seek(0, begin);
                 }
                 else
@@ -156,44 +156,44 @@ bool CMyFile::FOpen(CString szFileName, bool bWrite)
             else
             {
                 // mode was selected by user
-                if(this->_bWrite == true)
+                if (this->_bWrite == true)
                 {
-                    switch(this->_nMode)
+                    switch (this->_nMode)
                     {
                         // dst = Unicode
                     case 0:
                     case 1:
-                        {
-                            Write(szUnicode, nBomHeaderSize);
-                        }
-                        break;
-                        // dst = Ansi
+                    {
+                        Write(szUnicode, nBomHeaderSize);
+                    }
+                    break;
+                    // dst = Ansi
                     case 2:
                     case 3:
-                        {
-                            // nothing to do
-                        }
-                        break;
+                    {
+                        // nothing to do
+                    }
+                    break;
                     }
                 }
                 else
                 {
-                    switch(this->_nMode)
+                    switch (this->_nMode)
                     {
                         // src = Unicode
                     case 0:
                     case 2:
-                        {
-                            Seek(nBomHeaderSize, begin);
-                        }
-                        break;
-                        // src = Ansi
+                    {
+                        Seek(nBomHeaderSize, begin);
+                    }
+                    break;
+                    // src = Ansi
                     case 1:
                     case 3:
-                        {
-                             Seek(0, begin);
-                        }
-                        break;
+                    {
+                        Seek(0, begin);
+                    }
+                    break;
                     }
                 }
             }
@@ -202,7 +202,7 @@ bool CMyFile::FOpen(CString szFileName, bool bWrite)
             return true;
         }
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }
@@ -210,14 +210,14 @@ bool CMyFile::FOpen(CString szFileName, bool bWrite)
 
 bool CMyFile::FClose()
 {
-    if(this->_bOpen == false)
+    if (this->_bOpen == false)
         return false;
 
     try
     {
         Close();
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }
@@ -230,172 +230,172 @@ bool CMyFile::FClose()
 
 bool CMyFile::FRead(TCHAR &Buffer)
 {
-    if(this->_bOpen == false)
+    if (this->_bOpen == false)
         return false;
 
-    if(this->_nMode == -1)
+    if (this->_nMode == -1)
         return false;
 
-    switch(this->_nMode)
+    switch (this->_nMode)
     {
         // 0 -> src = Unicode, dst = Unicode
     case 0:
+    {
+        try
         {
-            try
-            {
-                if(Read(&this->BufferU, this->nSizeOf_wchar_t) == 0)
-                    return false;
-            }
-            catch(...)
-            {
+            if (Read(&this->BufferU, this->nSizeOf_wchar_t) == 0)
                 return false;
-            }
-
-            Buffer = this->BufferU;
-            return true;
         }
-        break;
-        // 1 -> src = Ansi, dst = Unicode
-    case 1:
-        {
-            try
-            {
-                if(Read(&this->BufferA, this->nSizeOf_char) == 0)
-                    return false;
-            }
-            catch(...)
-            {
-                return false;
-            }
-
-            _mbstowcsz(&this->BufferU, &this->BufferA, 1);
-            Buffer = this->BufferU;
-            return true;
-        }
-        break;
-        // 2 -> src = Unicode, dst = Ansi
-    case 2:
-        {
-            try
-            {
-                if(Read(&this->BufferU, this->nSizeOf_wchar_t) == 0)
-                    return false;
-            }
-            catch(...)
-            {
-                return false;
-            }
-
-            _wcstombsz(&this->BufferA, &this->BufferU, 1);
-            Buffer = this->BufferU;
-            return true;
-        }
-        break;
-        // 3 -> src = Ansi, dst = Ansi
-    case 3:
-        {
-            try
-            {
-                if(Read(&this->BufferA, this->nSizeOf_char) == 0)
-                    return false;
-            }
-            catch(...)
-            {
-                return false;
-            }
-
-            Buffer = this->BufferA;
-            return true;
-        }
-        break;
-    default:
+        catch (...)
         {
             return false;
         }
-        break;
+
+        Buffer = this->BufferU;
+        return true;
+    }
+    break;
+    // 1 -> src = Ansi, dst = Unicode
+    case 1:
+    {
+        try
+        {
+            if (Read(&this->BufferA, this->nSizeOf_char) == 0)
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
+
+        _mbstowcsz(&this->BufferU, &this->BufferA, 1);
+        Buffer = this->BufferU;
+        return true;
+    }
+    break;
+    // 2 -> src = Unicode, dst = Ansi
+    case 2:
+    {
+        try
+        {
+            if (Read(&this->BufferU, this->nSizeOf_wchar_t) == 0)
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
+
+        _wcstombsz(&this->BufferA, &this->BufferU, 1);
+        Buffer = this->BufferU;
+        return true;
+    }
+    break;
+    // 3 -> src = Ansi, dst = Ansi
+    case 3:
+    {
+        try
+        {
+            if (Read(&this->BufferA, this->nSizeOf_char) == 0)
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
+
+        Buffer = this->BufferA;
+        return true;
+    }
+    break;
+    default:
+    {
+        return false;
+    }
+    break;
     }
 }
 
 bool CMyFile::FWrite(TCHAR &Buffer)
 {
-    if(this->_bOpen == false)
+    if (this->_bOpen == false)
         return false;
 
-    if(this->_bWrite == false)
+    if (this->_bWrite == false)
         return false;
 
-    if(this->_nMode == -1)
+    if (this->_nMode == -1)
         return false;
 
-    switch(this->_nMode)
+    switch (this->_nMode)
     {
         // 0 -> src = Unicode, dst = Unicode
     case 0:
+    {
+        try
         {
-            try
-            {
-                this->BufferU = Buffer;
-                Write(&this->BufferU, this->nSizeOf_wchar_t);
-                return true;
-            }
-            catch(...)
-            {
-                return false;
-            }
+            this->BufferU = Buffer;
+            Write(&this->BufferU, this->nSizeOf_wchar_t);
+            return true;
         }
-        break;
-        // 1 -> src = Ansi, dst = Unicode
-    case 1:
-        {
-            try
-            {
-                this->BufferA = Buffer;
-                _mbstowcsz(&this->BufferU, &this->BufferA, 1);
-                Write(&this->BufferU, this->nSizeOf_wchar_t);
-                return true;
-            }
-            catch(...)
-            {
-                return false;
-            }
-        }
-        break;
-        // 2 -> src = Unicode, dst = Ansi
-    case 2:
-        {
-            try
-            {
-                this->BufferU = Buffer;
-                _wcstombsz(&this->BufferA, &this->BufferU, 1);
-                Write(&this->BufferA, this->nSizeOf_char);
-                return true;
-            }
-            catch(...)
-            {
-                return false;
-            }
-        }
-        break;
-        // 3 -> src = Ansi, dst = Ansi
-    case 3:
-        {
-            try
-            {
-                this->BufferA = Buffer;
-                Write(&this->BufferA, this->nSizeOf_char);
-                return true;
-            }
-            catch(...)
-            {
-                return false;
-            }
-        }
-        break;
-    default:
+        catch (...)
         {
             return false;
         }
-        break;
+    }
+    break;
+    // 1 -> src = Ansi, dst = Unicode
+    case 1:
+    {
+        try
+        {
+            this->BufferA = Buffer;
+            _mbstowcsz(&this->BufferU, &this->BufferA, 1);
+            Write(&this->BufferU, this->nSizeOf_wchar_t);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+    break;
+    // 2 -> src = Unicode, dst = Ansi
+    case 2:
+    {
+        try
+        {
+            this->BufferU = Buffer;
+            _wcstombsz(&this->BufferA, &this->BufferU, 1);
+            Write(&this->BufferA, this->nSizeOf_char);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+    break;
+    // 3 -> src = Ansi, dst = Ansi
+    case 3:
+    {
+        try
+        {
+            this->BufferA = Buffer;
+            Write(&this->BufferA, this->nSizeOf_char);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+    break;
+    default:
+    {
+        return false;
+    }
+    break;
     }
 
     return true;
@@ -405,18 +405,18 @@ UINT CMyFile::FReadString(TCHAR *Buffer, UINT nLength)
 {
     UINT _nRead = 0;
 
-    if((nLength == 0) || (Buffer == NULL))
+    if ((nLength == 0) || (Buffer == NULL))
         return false;
 
-    if(this->_bOpen == false)
+    if (this->_bOpen == false)
         return false;
 
-    if(this->_nMode == -1)
+    if (this->_nMode == -1)
         return false;
 
-    for(UINT i = 0; i < nLength; i++)
+    for (UINT i = 0; i < nLength; i++)
     {
-        if(FRead(Buffer[i]) == false)
+        if (FRead(Buffer[i]) == false)
             return _nRead;
         else
             _nRead++;
@@ -427,21 +427,21 @@ UINT CMyFile::FReadString(TCHAR *Buffer, UINT nLength)
 
 bool CMyFile::FWriteString(TCHAR *Buffer, UINT nLength)
 {
-    if((nLength == 0) || (Buffer == NULL))
+    if ((nLength == 0) || (Buffer == NULL))
         return false;
 
-    if(this->_bOpen == false)
+    if (this->_bOpen == false)
         return false;
 
-    if(this->_bWrite == false)
+    if (this->_bWrite == false)
         return false;
 
-    if(this->_nMode == -1)
+    if (this->_nMode == -1)
         return false;
 
-    for(unsigned int i = 0; i < nLength; i++)
+    for (unsigned int i = 0; i < nLength; i++)
     {
-        if(FWrite(Buffer[i]) == false)
+        if (FWrite(Buffer[i]) == false)
             return false;
     }
 

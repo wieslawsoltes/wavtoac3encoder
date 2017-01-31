@@ -95,26 +95,26 @@ class CEncWAVtoAC3App : public CWinAppEx
 {
 public:
     CEncWAVtoAC3App();
-	virtual ~CEncWAVtoAC3App();
+    virtual ~CEncWAVtoAC3App();
 public:
     virtual BOOL InitInstance();
-	DECLARE_MESSAGE_MAP()
+    DECLARE_MESSAGE_MAP()
 public:
-	void InitLog();
+    void InitLog();
 public:
-	LangMap_t *m_Lang;
-	LangList_t m_LangLst;
-	CString m_szLangFileName = _T("");
-	BOOL m_bHaveLang = FALSE;
-	int m_nLangId = -1;
+    LangMap_t *m_Lang;
+    LangList_t m_LangLst;
+    CString m_szLangFileName = _T("");
+    BOOL m_bHaveLang = FALSE;
+    int m_nLangId = -1;
 public:
-	bool m_bIsPortable = true;
-	CString m_szPresetsFilePath;
-	CString m_szConfigFilePath;
-	CString m_szEnginesFilePath;
-	CString m_szFilesListFilePath;
-	CString m_szLangFilePath;
-	CString m_szLogFilePath;
+    bool m_bIsPortable = true;
+    CString m_szPresetsFilePath;
+    CString m_szConfigFilePath;
+    CString m_szEnginesFilePath;
+    CString m_szFilesListFilePath;
+    CString m_szLangFilePath;
+    CString m_szLogFilePath;
 };
 
 extern CEncWAVtoAC3App theApp;

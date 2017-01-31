@@ -31,7 +31,7 @@
 // SR    -> szInputFiles[5]
 
 const int nNumChannelConfig = 8;
-const CString szChannelConfig[nNumChannelConfig] = 
+const CString szChannelConfig[nNumChannelConfig] =
 {
     _T("1+1 = (Ch1,Ch2)"),
     _T("1/0 = (C)"),
@@ -49,7 +49,7 @@ const int nNumInputFiles[nNumChannelConfig] =
     2, 1, 2, 3, 3, 4, 4, 5
 };
 
-const int nChannelConfigStates[nNumChannelConfig][NUM_MAX_INPUT_FILES] = 
+const int nChannelConfigStates[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
 {
     // FL FR FC S  SL SR
     {  1, 1, 0, 0, 0, 0 }, // 1+1
@@ -62,7 +62,7 @@ const int nChannelConfigStates[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
     {  1, 1, 1, 0, 1, 1 }  // 3/2
 };
 
-const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] = 
+const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
 {
     // FL FR FC S  SL SR
     {  _T("Ch1"), _T("Ch2"), _T("-"), _T("-"), _T("-"),   _T("-")  }, // 1+1
@@ -80,7 +80,7 @@ IMPLEMENT_DYNAMIC(CEncWAVtoAC3MuxDlg, CDialogEx)
 CEncWAVtoAC3MuxDlg::CEncWAVtoAC3MuxDlg(CWnd* pParent /*=NULL*/)
     : CDialogEx(CEncWAVtoAC3MuxDlg::IDD, pParent)
 {
-    for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");
@@ -97,28 +97,28 @@ CEncWAVtoAC3MuxDlg::~CEncWAVtoAC3MuxDlg()
 
 void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
-	DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
-	DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
-	DDX_Control(pDX, IDC_BUTTON_LFE, m_BtnChannelLFE);
-	DDX_Control(pDX, IDC_BUTTON_SL, m_BtnChannelSL);
-	DDX_Control(pDX, IDC_BUTTON_SR, m_BtnChannelSR);
-	DDX_Control(pDX, IDC_BUTTON_S, m_BtnChannelS);
-	DDX_Control(pDX, IDC_STATIC_LABEL_FL, m_StcLabelFL);
-	DDX_Control(pDX, IDC_STATIC_LABEL_FR, m_StcLabelFR);
-	DDX_Control(pDX, IDC_STATIC_LABEL_FC, m_StcLabelFC);
-	DDX_Control(pDX, IDC_STATIC_LABEL_LFE, m_StcLabelLFE);
-	DDX_Control(pDX, IDC_STATIC_LABEL_SL, m_StcLabelSL);
-	DDX_Control(pDX, IDC_STATIC_LABEL_SR, m_StcLabelSR);
-	DDX_Control(pDX, IDC_COMBO_CHANNEL_CONFIG, m_CmbChannelConfig);
-	DDX_Control(pDX, IDC_CHECK_CHANNEL_CONFIG_LFE, m_ChkChannelConfigLFE);
-	DDX_Control(pDX, IDC_EDIT_FL, m_EdtChannelFL);
-	DDX_Control(pDX, IDC_EDIT_FR, m_EdtChannelFR);
-	DDX_Control(pDX, IDC_EDIT_FC, m_EdtChannelFC);
-	DDX_Control(pDX, IDC_EDIT_LFE, m_EdtChannelLFE);
-	DDX_Control(pDX, IDC_EDIT_SL, m_EdtChannelSL);
-	DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
+    CDialogEx::DoDataExchange(pDX);
+    DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
+    DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
+    DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
+    DDX_Control(pDX, IDC_BUTTON_LFE, m_BtnChannelLFE);
+    DDX_Control(pDX, IDC_BUTTON_SL, m_BtnChannelSL);
+    DDX_Control(pDX, IDC_BUTTON_SR, m_BtnChannelSR);
+    DDX_Control(pDX, IDC_BUTTON_S, m_BtnChannelS);
+    DDX_Control(pDX, IDC_STATIC_LABEL_FL, m_StcLabelFL);
+    DDX_Control(pDX, IDC_STATIC_LABEL_FR, m_StcLabelFR);
+    DDX_Control(pDX, IDC_STATIC_LABEL_FC, m_StcLabelFC);
+    DDX_Control(pDX, IDC_STATIC_LABEL_LFE, m_StcLabelLFE);
+    DDX_Control(pDX, IDC_STATIC_LABEL_SL, m_StcLabelSL);
+    DDX_Control(pDX, IDC_STATIC_LABEL_SR, m_StcLabelSR);
+    DDX_Control(pDX, IDC_COMBO_CHANNEL_CONFIG, m_CmbChannelConfig);
+    DDX_Control(pDX, IDC_CHECK_CHANNEL_CONFIG_LFE, m_ChkChannelConfigLFE);
+    DDX_Control(pDX, IDC_EDIT_FL, m_EdtChannelFL);
+    DDX_Control(pDX, IDC_EDIT_FR, m_EdtChannelFR);
+    DDX_Control(pDX, IDC_EDIT_FC, m_EdtChannelFC);
+    DDX_Control(pDX, IDC_EDIT_LFE, m_EdtChannelLFE);
+    DDX_Control(pDX, IDC_EDIT_SL, m_EdtChannelSL);
+    DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
 }
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3MuxDlg, CDialogEx)
@@ -147,8 +147,8 @@ BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
-	InitCtrls();
-	InitLang();
+    InitCtrls();
+    InitLang();
 
     // set file paths
     this->RemapFilesToChannels();
@@ -162,73 +162,73 @@ BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
 
 void CEncWAVtoAC3MuxDlg::InitCtrls()
 {
-	// init channel configuration ComboBox
-	for (int i = 0; i < nNumChannelConfig; i++)
-		this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
+    // init channel configuration ComboBox
+    for (int i = 0; i < nNumChannelConfig; i++)
+        this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
 
-	this->m_CmbChannelConfig.SetCurSel(0);
+    this->m_CmbChannelConfig.SetCurSel(0);
 
-	// set tooltips
-	CString szTmpText;
+    // set tooltips
+    CString szTmpText;
 
-	// channel config ComboBox
-	szTmpText = HaveLangStrings() ? GetLangString(0x00C01008) :
-		_T("Specify channel configuration:\n")
-		_T("1+1 = (Ch1,Ch2)\n")
-		_T("1/0 = (C)\n")
-		_T("2/0 = (L,R)\n")
-		_T("3/0 = (L,R,C)\n")
-		_T("2/1 = (L,R,S)\n")
-		_T("3/1 = (L,R,C,S)\n")
-		_T("2/2 = (L,R,SL,SR)\n")
-		_T("3/2 = (L,R,C,SL,SR)");
+    // channel config ComboBox
+    szTmpText = HaveLangStrings() ? GetLangString(0x00C01008) :
+        _T("Specify channel configuration:\n")
+        _T("1+1 = (Ch1,Ch2)\n")
+        _T("1/0 = (C)\n")
+        _T("2/0 = (L,R)\n")
+        _T("3/0 = (L,R,C)\n")
+        _T("2/1 = (L,R,S)\n")
+        _T("3/1 = (L,R,C,S)\n")
+        _T("2/2 = (L,R,SL,SR)\n")
+        _T("3/2 = (L,R,C,SL,SR)");
 
-	this->m_CmbChannelConfig.SetTooltipText(szTmpText);
+    this->m_CmbChannelConfig.SetTooltipText(szTmpText);
 
-	// +LFE CheckBox
-	this->m_ChkChannelConfigLFE.SetTooltipText(
-		HaveLangStrings() ? GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
+    // +LFE CheckBox
+    this->m_ChkChannelConfigLFE.SetTooltipText(
+        HaveLangStrings() ? GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
-	// set fixed height of combobox controls
-	SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG);
+    // set fixed height of combobox controls
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG);
 
-	// channel buttons
-	this->m_BtnChannelFL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100A) : _T("Front Left Channel"));
-	this->m_BtnChannelFR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100B) : _T("Front Right Channel"));
-	this->m_BtnChannelFC.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100C) : _T("Front Center Channel"));
-	this->m_BtnChannelLFE.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
-	this->m_BtnChannelSL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100E) : _T("Surround Left Channel"));
-	this->m_BtnChannelSR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100F) : _T("Surround Right Channel"));
-	this->m_BtnChannelS.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C01010) : _T("Surround Channel"));
+    // channel buttons
+    this->m_BtnChannelFL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100A) : _T("Front Left Channel"));
+    this->m_BtnChannelFR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100B) : _T("Front Right Channel"));
+    this->m_BtnChannelFC.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100C) : _T("Front Center Channel"));
+    this->m_BtnChannelLFE.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
+    this->m_BtnChannelSL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100E) : _T("Surround Left Channel"));
+    this->m_BtnChannelSR.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100F) : _T("Surround Right Channel"));
+    this->m_BtnChannelS.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C01010) : _T("Surround Channel"));
 
-	this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
+    this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
 }
 
 void CEncWAVtoAC3MuxDlg::InitLang()
 {
-	if (HaveLangStrings())
-	{
-		this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00C01001));
-		this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(GetLangString(0x00C01002));
-		this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(GetLangString(0x00C01003));
-		this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(GetLangString(0x00C01004));
-		this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00C01005));
-		this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00C01006));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(GetLangString(0x00C01007));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(GetLangString(0x00C01007));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(GetLangString(0x00C01007));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(GetLangString(0x00C01007));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(GetLangString(0x00C01007));
-		this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(GetLangString(0x00C01007));
-	}
+    if (HaveLangStrings())
+    {
+        this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00C01001));
+        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(GetLangString(0x00C01002));
+        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(GetLangString(0x00C01003));
+        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(GetLangString(0x00C01004));
+        this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00C01005));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00C01006));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(GetLangString(0x00C01007));
+    }
 }
 
 void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
 {
-    for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
         this->szInputFiles[i] = _T("");
 
-    switch(this->nChannelConfig)
+    switch (this->nChannelConfig)
     {
     case 0:
         this->szInputFiles[0] = szTmpInputFiles[0];
@@ -254,7 +254,7 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
         this->szInputFiles[0] = szTmpInputFiles[0];
         this->szInputFiles[1] = szTmpInputFiles[1];
 
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[3] = szTmpInputFiles[2];
             this->szInputFiles[4] = szTmpInputFiles[3];
@@ -269,7 +269,7 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
         this->szInputFiles[1] = szTmpInputFiles[1];
         this->szInputFiles[2] = szTmpInputFiles[2];
 
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[3] = szTmpInputFiles[3];
             this->szInputFiles[4] = szTmpInputFiles[4];
@@ -283,7 +283,7 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
         this->szInputFiles[0] = szTmpInputFiles[0];
         this->szInputFiles[1] = szTmpInputFiles[1];
 
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[3] = szTmpInputFiles[4];
             this->szInputFiles[4] = szTmpInputFiles[2];
@@ -300,7 +300,7 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
         this->szInputFiles[1] = szTmpInputFiles[1];
         this->szInputFiles[2] = szTmpInputFiles[2];
 
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[3] = szTmpInputFiles[3];
             this->szInputFiles[4] = szTmpInputFiles[4];
@@ -369,7 +369,7 @@ void CEncWAVtoAC3MuxDlg::SetControlsState()
 
     this->m_BtnChannelLFE.SetBold((szInputFiles[3].GetLength() > 0) ? true : false);
 
-    if(nChannelConfigStates[nChannelConfig][3] == 1)
+    if (nChannelConfigStates[nChannelConfig][3] == 1)
     {
         this->m_BtnChannelS.SetBold((szInputFiles[4].GetLength() > 0) ? true : false);
         this->m_BtnChannelSL.SetBold(false);
@@ -390,17 +390,17 @@ void CEncWAVtoAC3MuxDlg::SetControlsState()
 bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
 {
     // reset input files
-    for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
         szTmpInputFiles[i] = _T("");
 
     try
     {
         CMyFile fp;
-        if(fp.FOpen(szFileName, false) == false)
+        if (fp.FOpen(szFileName, false) == false)
             return false;
 
         ULONGLONG  nRead = 0, nLength = fp.FSize();
-        if(nLength == 0)
+        if (nLength == 0)
         {
             fp.FClose();
             return true;
@@ -410,17 +410,17 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
         CString szBuffer = _T("");
         int nFileCounter = 0;
 
-        while(fp.FRead(Buffer) == true)
+        while (fp.FRead(Buffer) == true)
         {
-            if((Buffer != '\r') && (Buffer != '\n'))
+            if ((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
 
-            if(Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1: sizeof(TCHAR)))
+            if (Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1 : sizeof(TCHAR)))
             {
                 szBuffer += _T("\0");
 
                 // terminate reading if max of input files is reached
-                if(nFileCounter >= NUM_MAX_INPUT_FILES)
+                if (nFileCounter >= NUM_MAX_INPUT_FILES)
                 {
                     fp.FClose();
                     return true;
@@ -443,7 +443,7 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
         }
 
         int nReqNumOfFiles = nNumInputFiles[this->nChannelConfig] + (this->bLFE == true ? 1 : 0);
-        if(nFileCounter != nReqNumOfFiles)
+        if (nFileCounter != nReqNumOfFiles)
         {
             fp.FClose();
             return false;
@@ -456,7 +456,7 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
             return true;
         }
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }
@@ -472,7 +472,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
         CMyFile fp;
 
         // write *.mux files always in Ansi format
-        if(nFormat == 1)
+        if (nFormat == 1)
         {
 #ifdef _UNICODE
             fp.FSetMode(2);
@@ -481,20 +481,20 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 #endif
         }
 
-        if(fp.FOpen(szFileName, true) == false)
+        if (fp.FOpen(szFileName, true) == false)
             return false;
 
         CString szBuffer;
         CString szFileName;
 
-        #define WriteToFile(index) \
+#define WriteToFile(index) \
             szBuffer.Format(_T("%s%s%s\r\n"), \
                 nFormat == 0 ? _T("") : _T("\""), \
                 this->szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
             fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); \
             szBuffer.ReleaseBuffer();
 
-        switch(this->nChannelConfig)
+        switch (this->nChannelConfig)
         {
         case 0:
             WriteToFile(0);
@@ -519,7 +519,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
         case 4:
             WriteToFile(0);
             WriteToFile(1);
-            if(this->bLFE == true)
+            if (this->bLFE == true)
             {
                 WriteToFile(3);
                 WriteToFile(4);
@@ -533,7 +533,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
             WriteToFile(0);
             WriteToFile(1);
             WriteToFile(2)
-                if(this->bLFE == true)
+                if (this->bLFE == true)
                 {
                     WriteToFile(3);
                     WriteToFile(4);
@@ -542,11 +542,11 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
                 {
                     WriteToFile(4);
                 }
-                break;
+            break;
         case 6:
             WriteToFile(0);
             WriteToFile(1);
-            if(this->bLFE == true)
+            if (this->bLFE == true)
             {
                 WriteToFile(4);
                 WriteToFile(5);
@@ -562,7 +562,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
             WriteToFile(0);
             WriteToFile(1);
             WriteToFile(2);
-            if(this->bLFE == true)
+            if (this->bLFE == true)
             {
                 WriteToFile(3);
                 WriteToFile(4);
@@ -578,7 +578,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 
         fp.FClose();
     }
-    catch(...)
+    catch (...)
     {
         return false;
     }
@@ -588,22 +588,22 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 
 void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
 {
-    if(m_BtnCurrent == NULL || m_EdtCurrent == NULL)
+    if (m_BtnCurrent == NULL || m_EdtCurrent == NULL)
         return;
 
     CString szCurrentFileName;
-    
+
     m_EdtCurrent->GetWindowText(szCurrentFileName);
     szCurrentFileName = GetFileName(szCurrentFileName);
 
-    CFileDialog fd(TRUE, 
-        szSupportedInputExt[0], 
-        szCurrentFileName, 
+    CFileDialog fd(TRUE,
+        szSupportedInputExt[0],
+        szCurrentFileName,
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		GetSupportedInputFilesFilter(),
+        GetSupportedInputFilesFilter(),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         CString szFileName = fd.GetPathName();
 
@@ -686,7 +686,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe()
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
 {
-    if(nChannelConfigStates[nChannelConfig][3] == 1)
+    if (nChannelConfigStates[nChannelConfig][3] == 1)
     {
         this->m_BtnChannelS.SetBold(false);
     }
@@ -712,22 +712,22 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSr()
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport()
 {
-    CFileDialog fd(FALSE, 
-        _T("files"), 
-        _T(""), 
+    CFileDialog fd(FALSE,
+        _T("files"),
+        _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		HaveLangStrings() ? GetLangString(0x00C01011) :
-		_T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
+        HaveLangStrings() ? GetLangString(0x00C01011) :
+        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         CString szFileName = fd.GetPathName();
 
         int nFormat = 0;
-        if(fd.GetFileExt().CompareNoCase(_T("files")) == 0)
+        if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
             nFormat = 0;
-        else if(fd.GetFileExt().CompareNoCase(_T("mux")) == 0)
+        else if (fd.GetFileExt().CompareNoCase(_T("mux")) == 0)
             nFormat = 1;
 
         this->SaveFilesList(szFileName, nFormat);
@@ -736,15 +736,15 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport()
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedButtonImport()
 {
-    CFileDialog fd(TRUE, 
-        _T("files"), 
-        _T(""), 
+    CFileDialog fd(TRUE,
+        _T("files"),
+        _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-		HaveLangStrings() ? GetLangString(0x00C01011) :
-        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"), 
+        HaveLangStrings() ? GetLangString(0x00C01011) :
+        _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 
-    if(fd.DoModal() == IDOK)
+    if (fd.DoModal() == IDOK)
     {
         CString szFileName = fd.GetPathName();
 
@@ -770,7 +770,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedCheckChannelConfigLfe()
 
 void CEncWAVtoAC3MuxDlg::OnBnClickedCancel()
 {
-    for(int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");
@@ -782,7 +782,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedCancel()
 void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
 {
     // clear unused channels
-    switch(this->nChannelConfig)
+    switch (this->nChannelConfig)
     {
     case 0:
         this->szInputFiles[2] = _T("");
@@ -805,7 +805,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
         this->szInputFiles[5] = _T("");
         break;
     case 4:
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[2] = _T("");
             this->szInputFiles[5] = _T("");
@@ -818,7 +818,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
         }
         break;
     case 5:
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[5] = _T("");
         }
@@ -829,7 +829,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
         }
         break;
     case 6:
-        if(this->bLFE == true)
+        if (this->bLFE == true)
         {
             this->szInputFiles[2] = _T("");
         }
@@ -840,7 +840,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
         }
         break;
     case 7:
-        if(this->bLFE == false)
+        if (this->bLFE == false)
         {
             this->szInputFiles[3] = _T("");
         }
@@ -853,7 +853,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
 void CEncWAVtoAC3MuxDlg::OnCbnSelchangeComboChannelConfig()
 {
     int nSel = this->m_CmbChannelConfig.GetCurSel();
-    if(nSel != CB_ERR)
+    if (nSel != CB_ERR)
     {
         this->nChannelConfig = nSel;
 

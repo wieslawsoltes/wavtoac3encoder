@@ -18,21 +18,21 @@
 
 #pragma once
 
-const CSize AnchorNone         ( -1,  -1);
-const CSize AnchorTopLeft      (  0,   0);
-const CSize AnchorTopCenter    ( 50,   0); 
-const CSize AnchorTopRight     (100,   0);
-const CSize AnchorMiddleLeft   (  0,  50);
-const CSize AnchorMiddleCenter ( 50,  50); 
-const CSize AnchorMiddleRight  (100,  50);
-const CSize AnchorBottomLeft   (  0, 100);
-const CSize AnchorBottomCenter ( 50, 100);
-const CSize AnchorBottomRight  (100, 100);
+const CSize AnchorNone(-1, -1);
+const CSize AnchorTopLeft(0, 0);
+const CSize AnchorTopCenter(50, 0);
+const CSize AnchorTopRight(100, 0);
+const CSize AnchorMiddleLeft(0, 50);
+const CSize AnchorMiddleCenter(50, 50);
+const CSize AnchorMiddleRight(100, 50);
+const CSize AnchorBottomLeft(0, 100);
+const CSize AnchorBottomCenter(50, 100);
+const CSize AnchorBottomRight(100, 100);
 
 class CResizeDialog : public CDialogEx
 {
 private:
-    typedef struct 
+    typedef struct
     {
         HWND hWnd;
         BOOL bAdjHscroll;
@@ -43,9 +43,9 @@ private:
     void InitLayout(Layout &layout, HWND hw, SIZE tTL, SIZE mTL, SIZE tBR, SIZE mBR, BOOL hscroll)
     {
         layout.hWnd = hw;
-        layout.typeTL = tTL; 
+        layout.typeTL = tTL;
         layout.marginTL = mTL;
-        layout.typeBR = tBR; 
+        layout.typeBR = tBR;
         layout.marginBR = mBR;
         layout.bAdjHscroll = hscroll;
     };
@@ -54,7 +54,7 @@ private:
     BOOL m_bInitDone;
     POINT m_ptMinTrackSize, m_ptMaxTrackSize;
     POINT m_ptMaxPos, m_ptMaxSize;
-    CList<Layout,Layout> m_LayoutList;
+    CList<Layout, Layout> m_LayoutList;
 private:
     void InitVars();
 public:
@@ -76,7 +76,7 @@ public:
     void ArrangeLayout();
     void AddAnchor(HWND newWnd, CSize typeTL, CSize typeBR = AnchorNone);
     void AddAnchor(UINT nCtrlID, CSize typeTL, CSize typeBR = AnchorNone);
-    void SetMaximizedRect(const CRect &rc); 
+    void SetMaximizedRect(const CRect &rc);
     void ResetMaximizedRect();
     void SetMinTrackSize(const CSize &size);
     void ResetMinTrackSize();

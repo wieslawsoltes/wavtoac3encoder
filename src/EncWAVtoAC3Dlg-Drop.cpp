@@ -33,8 +33,8 @@
 
 typedef struct TDRAGANDDROP
 {
-	CEncWAVtoAC3Dlg *pDlg;
-	HDROP hDropInfo;
+    CEncWAVtoAC3Dlg *pDlg;
+    HDROP hDropInfo;
 } DRAGANDDROP, *PDRAGANDDROP;
 
 static volatile bool bHandleDrop = true;
@@ -44,26 +44,26 @@ static volatile DRAGANDDROP m_DDParam;
 
 DWORD WINAPI DragAndDropThread(LPVOID lpParam)
 {
-	PDRAGANDDROP m_ThreadParam = (PDRAGANDDROP)lpParam;
-	m_ThreadParam->pDlg->HandleDropFiles(m_ThreadParam->hDropInfo);
-	bHandleDrop = true;
-	return ::CloseHandle(hDDThread);
+    PDRAGANDDROP m_ThreadParam = (PDRAGANDDROP)lpParam;
+    m_ThreadParam->pDlg->HandleDropFiles(m_ThreadParam->hDropInfo);
+    bHandleDrop = true;
+    return ::CloseHandle(hDDThread);
 }
 
 void CEncWAVtoAC3Dlg::OnDropFiles(HDROP hDropInfo)
 {
-	if (bHandleDrop == true)
-	{
-		bHandleDrop = false;
-		m_DDParam.pDlg = this;
-		m_DDParam.hDropInfo = hDropInfo;
+    if (bHandleDrop == true)
+    {
+        bHandleDrop = false;
+        m_DDParam.pDlg = this;
+        m_DDParam.hDropInfo = hDropInfo;
 
-		hDDThread = ::CreateThread(NULL, 0, DragAndDropThread, (LPVOID)&m_DDParam, 0, &dwDDThreadID);
-		if (hDDThread == NULL)
-			bHandleDrop = true;
-	}
+        hDDThread = ::CreateThread(NULL, 0, DragAndDropThread, (LPVOID)&m_DDParam, 0, &dwDDThreadID);
+        if (hDDThread == NULL)
+            bHandleDrop = true;
+    }
 
-	// under Win9x this does not work, we use separate thread to handle drop
-	// this->HandleDropFiles(hDropInfo);
-	CResizeDialog::OnDropFiles(hDropInfo);
+    // under Win9x this does not work, we use separate thread to handle drop
+    // this->HandleDropFiles(hDropInfo);
+    CResizeDialog::OnDropFiles(hDropInfo);
 }

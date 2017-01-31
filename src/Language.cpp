@@ -23,150 +23,150 @@
 
 void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
 {
-	try
-	{
-		WIN32_FIND_DATA w32FileData;
-		HANDLE hSearch = NULL;
-		BOOL fFinished = FALSE;
-		TCHAR cTempBuf[(MAX_PATH * 2) + 1];
+    try
+    {
+        WIN32_FIND_DATA w32FileData;
+        HANDLE hSearch = NULL;
+        BOOL fFinished = FALSE;
+        TCHAR cTempBuf[(MAX_PATH * 2) + 1];
 
-		ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
-		ZeroMemory(cTempBuf, MAX_PATH * 2);
+        ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
+        ZeroMemory(cTempBuf, MAX_PATH * 2);
 
-		// remove '\' or '/' from end of search path
-		szPath.TrimRight(_T("\\"));
-		szPath.TrimRight(_T("/"));
+        // remove '\' or '/' from end of search path
+        szPath.TrimRight(_T("\\"));
+        szPath.TrimRight(_T("/"));
 
-		wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
+        wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
 
-		hSearch = FindFirstFile(cTempBuf, &w32FileData);
-		if (hSearch == INVALID_HANDLE_VALUE)
-			return;
+        hSearch = FindFirstFile(cTempBuf, &w32FileData);
+        if (hSearch == INVALID_HANDLE_VALUE)
+            return;
 
-		while (fFinished == FALSE)
-		{
-			if (w32FileData.cFileName[0] != '.' &&
-				!(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
-			{
-				CString szTempBuf;
-				szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
+        while (fFinished == FALSE)
+        {
+            if (w32FileData.cFileName[0] != '.' &&
+                !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+            {
+                CString szTempBuf;
+                szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
 
-				// apply filter and add only .txt files
-				CString szExt = ::PathFindExtension(szTempBuf);
-				szExt.MakeLower();
-				szExt.Remove('.');
+                // apply filter and add only .txt files
+                CString szExt = ::PathFindExtension(szTempBuf);
+                szExt.MakeLower();
+                szExt.Remove('.');
 
-				// add only files with proper file extensions
-				if (szExt.CompareNoCase(_T("txt")) == 0)
-				{
-					Lang lang;
-					LangMap_t *lm = new LangMap_t();
+                // add only files with proper file extensions
+                if (szExt.CompareNoCase(_T("txt")) == 0)
+                {
+                    Lang lang;
+                    LangMap_t *lm = new LangMap_t();
 
-					if (::LoadLang(szTempBuf, lm) == true)
-					{
-						lang.lm = lm;
-						lang.szFileName = szTempBuf;
-						lang.szEnglishName = (*lang.lm)[0x00000001];
-						lang.szTargetName = (*lang.lm)[0x00000002];
+                    if (::LoadLang(szTempBuf, lm) == true)
+                    {
+                        lang.lm = lm;
+                        lang.szFileName = szTempBuf;
+                        lang.szEnglishName = (*lang.lm)[0x00000001];
+                        lang.szTargetName = (*lang.lm)[0x00000002];
 
-						m_LangLst.AddTail(lang);
-					}
-				}
-			}
+                        m_LangLst.AddTail(lang);
+                    }
+                }
+            }
 
-			if (w32FileData.cFileName[0] != '.' &&
-				w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-			{
-				wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
+            if (w32FileData.cFileName[0] != '.' &&
+                w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+                wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
 
-				// recurse subdirs
-				if (bRecurse == true)
-					SearchFolderForLang(cTempBuf, true, m_LangLst);
-			}
+                // recurse subdirs
+                if (bRecurse == true)
+                    SearchFolderForLang(cTempBuf, true, m_LangLst);
+            }
 
-			if (FindNextFile(hSearch, &w32FileData) == FALSE)
-			{
-				if (GetLastError() == ERROR_NO_MORE_FILES)
-					fFinished = TRUE;
-				else
-					return;
-			}
-		}
+            if (FindNextFile(hSearch, &w32FileData) == FALSE)
+            {
+                if (GetLastError() == ERROR_NO_MORE_FILES)
+                    fFinished = TRUE;
+                else
+                    return;
+            }
+        }
 
-		if (FindClose(hSearch) == FALSE)
-			return;
-	}
-	catch (...)
-	{
-		MessageBox(NULL,
-			HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
-			HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
-			MB_OK | MB_ICONERROR);
-	}
+        if (FindClose(hSearch) == FALSE)
+            return;
+    }
+    catch (...)
+    {
+        MessageBox(NULL,
+            HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
+            HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+            MB_OK | MB_ICONERROR);
+    }
 }
 
 void CleanLangList(LangList_t& m_LangLst)
 {
-	POSITION pos = m_LangLst.GetHeadPosition();
-	while (pos)
-	{
-		Lang lang = m_LangLst.GetNext(pos);
-		delete lang.lm;
-	}
+    POSITION pos = m_LangLst.GetHeadPosition();
+    while (pos)
+    {
+        Lang lang = m_LangLst.GetNext(pos);
+        delete lang.lm;
+    }
 }
 
 bool LoadLang(CString &szFileName, LangMap_t *lm)
 {
-	try
-	{
-		CMyFile fp;
-		if (fp.FOpen(szFileName, false) == false)
-			return false;
+    try
+    {
+        CMyFile fp;
+        if (fp.FOpen(szFileName, false) == false)
+            return false;
 
-		// clear list
-		lm->RemoveAll();
+        // clear list
+        lm->RemoveAll();
 
-		TCHAR Buffer;
-		const ULONGLONG nLength = fp.FSize();
-		CString szBuffer = _T("");
+        TCHAR Buffer;
+        const ULONGLONG nLength = fp.FSize();
+        CString szBuffer = _T("");
 
-		int key;
-		CString szKey = _T("");
-		CString szValue = _T("");
+        int key;
+        CString szKey = _T("");
+        CString szValue = _T("");
 
-		while (fp.FRead(Buffer) == true)
-		{
-			if ((Buffer != '\r') && (Buffer != '\n'))
-				szBuffer += Buffer;
+        while (fp.FRead(Buffer) == true)
+        {
+            if ((Buffer != '\r') && (Buffer != '\n'))
+                szBuffer += Buffer;
 
-			// we have full line if there is end of line mark or end of file
-			if ((Buffer == '\n') || (fp.FPos() == nLength))
-			{
-				szBuffer += _T("\0");
+            // we have full line if there is end of line mark or end of file
+            if ((Buffer == '\n') || (fp.FPos() == nLength))
+            {
+                szBuffer += _T("\0");
 
-				int nPos = szBuffer.Find('=', 0);
-				if (nPos != -1)
-				{
-					szKey = szBuffer.Mid(0, nPos);
-					szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                int nPos = szBuffer.Find('=', 0);
+                if (nPos != -1)
+                {
+                    szKey = szBuffer.Mid(0, nPos);
+                    szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
 
-					szValue.Replace(_T("\\n"), _T("\n"));
-					szValue.Replace(_T("\\t"), _T("\t"));
+                    szValue.Replace(_T("\\n"), _T("\n"));
+                    szValue.Replace(_T("\\t"), _T("\t"));
 
-					_stscanf(szKey, _T("%x"), &key);
+                    _stscanf(szKey, _T("%x"), &key);
 
-					(*lm)[key] = szValue;
-				}
+                    (*lm)[key] = szValue;
+                }
 
-				szBuffer = _T("");
-			}
-		}
+                szBuffer = _T("");
+            }
+        }
 
-		fp.FClose();
-		return true;
-	}
-	catch (...)
-	{
-		return false;
-	}
+        fp.FClose();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
 }

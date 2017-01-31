@@ -22,10 +22,10 @@ typedef CMap<int, int, CString, CString&> LangMap_t;
 
 typedef struct TLang
 {
-	CString szFileName;
-	CString szEnglishName;
-	CString szTargetName;
-	LangMap_t *lm;
+    CString szFileName;
+    CString szEnglishName;
+    CString szTargetName;
+    LangMap_t *lm;
 } Lang;
 
 typedef CList<Lang, Lang&> LangList_t;

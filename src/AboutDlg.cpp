@@ -23,7 +23,7 @@
 IMPLEMENT_DYNAMIC(CAboutDlg, CDialogEx)
 
 CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
-: CDialogEx(CAboutDlg::IDD, pParent)
+    : CDialogEx(CAboutDlg::IDD, pParent)
 {
 
 }
@@ -48,52 +48,52 @@ BOOL CAboutDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
-	SetBuildInfo();
-	InitLang();
+    SetBuildInfo();
+    InitLang();
 
     return TRUE;
 }
 
 void CAboutDlg::SetBuildInfo()
 {
-	CString szBuildInfo = _T("");
+    CString szBuildInfo = _T("");
 
-	szBuildInfo.Format(_T("%s %s,"),
-		HaveLangStrings() ? GetLangString(0x00901004) : _T("Version"),
-		ENCWAVTOAC3_VERSION);
+    szBuildInfo.Format(_T("%s %s,"),
+        HaveLangStrings() ? GetLangString(0x00901004) : _T("Version"),
+        ENCWAVTOAC3_VERSION);
 
 #if defined(_WIN32) & !defined(_WIN64)
-	szBuildInfo += _T(" x86, Win32");
+    szBuildInfo += _T(" x86, Win32");
 #else
-	szBuildInfo += _T(" AMD64, Win64");
+    szBuildInfo += _T(" AMD64, Win64");
 #endif // _WIN32
 
 #if defined(_UNICODE)
-	szBuildInfo += _T(" Unicode");
+    szBuildInfo += _T(" Unicode");
 #else
-	szBuildInfo += _T(" Ansi");
+    szBuildInfo += _T(" Ansi");
 #endif // _UNICODE
 
 #if defined(_DEBUG)
-	szBuildInfo += _T(" DEBUG");
+    szBuildInfo += _T(" DEBUG");
 #endif // _DEBUG
 
-	szBuildInfo += _T(", ");
-	szBuildInfo += __DATE__;
-	szBuildInfo += _T(" ");
-	szBuildInfo += __TIME__;
+    szBuildInfo += _T(", ");
+    szBuildInfo += __DATE__;
+    szBuildInfo += _T(" ");
+    szBuildInfo += __TIME__;
 
-	szBuildInfo += theApp.m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
+    szBuildInfo += theApp.m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
 
-	this->m_StcBuildInfo.SetWindowText(szBuildInfo);
+    this->m_StcBuildInfo.SetWindowText(szBuildInfo);
 }
 
 void CAboutDlg::InitLang()
 {
-	if (HaveLangStrings())
-	{
-		this->SetWindowText(GetLangString(0x00901002));
-		this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00901001));
-		this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(GetLangString(0x00901003));
-	}
+    if (HaveLangStrings())
+    {
+        this->SetWindowText(GetLangString(0x00901002));
+        this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00901001));
+        this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(GetLangString(0x00901003));
+    }
 }

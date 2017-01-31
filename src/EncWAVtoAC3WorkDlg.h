@@ -45,9 +45,9 @@ class CEncWAVtoAC3WorkDlg;
 typedef struct TWorkerParam
 {
     CEncWAVtoAC3WorkDlg *pWorkDlg;
-    CList<CString,CString> *list;
-    CList<bool,bool> *listStatus;
-	EncoderPreset preset;
+    CList<CString, CString> *list;
+    CList<bool, bool> *listStatus;
+    EncoderPreset preset;
     bool bUseOutPath;
     CString szOutPath;
     bool bMultiMonoInput;
@@ -57,8 +57,8 @@ typedef struct TWorkerParam
     double fTimeEncoding;
     double fTimeIORead;
     double fTimeIOWrite;
-	__int64 nInTotalSize;
-	__int64 nOutTotalSize;
+    __int64 nInTotalSize;
+    __int64 nOutTotalSize;
 } WorkerParam;
 
 class CEncWAVtoAC3WorkDlg : public CDialogEx
@@ -72,12 +72,12 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
 protected:
-	void InitSettings();
-	void InitCtrls();
-	void InitLang();
-	void CreateWorker();
-	void UpdateFileTimer();
-	void UpdateTotalTimer();
+    void InitSettings();
+    void InitCtrls();
+    void InitLang();
+    void CreateWorker();
+    void UpdateFileTimer();
+    void UpdateTotalTimer();
 protected:
     DECLARE_MESSAGE_MAP()
 public:
@@ -93,9 +93,9 @@ public:
     double m_ElapsedTimeTotal;
     int nCount;
     WorkerParam workParam;
-	CString szSpeedEncoderAvg;
-	CString szSpeedReadsAvg;
-	CString szSpeedWritesAvg;
+    CString szSpeedEncoderAvg;
+    CString szSpeedReadsAvg;
+    CString szSpeedWritesAvg;
 public:
     CMyStatic m_StcOut;
     CMyStatic m_StcOutInfo;
