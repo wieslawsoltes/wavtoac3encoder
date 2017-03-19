@@ -1,4 +1,4 @@
-﻿# WAV to AC3 Encoder
+# WAV to AC3 Encoder
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/wavtoac3encoder.svg)](https://gitter.im/wieslawsoltes/wavtoac3encoder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
