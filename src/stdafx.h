@@ -137,8 +137,6 @@
 #endif
 #include <shlwapi.h>
 
-#include <VersionHelpers.h>
-
 //
 // AFTEN
 //

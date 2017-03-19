@@ -420,7 +420,7 @@ void CEncWAVtoAC3Dlg::OnFileLoadPresets()
                 this->m_CmbPresets.AddString(encPresets.GetAt(encPresets.FindIndex(i)).szName);
             }
 
-            SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
+            SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
             // select first preset
             this->nCurrentPreset = 0;

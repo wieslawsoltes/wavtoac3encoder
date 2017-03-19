@@ -190,7 +190,7 @@ void CEncWAVtoAC3MuxDlg::InitCtrls()
         HaveLangStrings() ? GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
     // set fixed height of combobox controls
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
     // channel buttons
     this->m_BtnChannelFL.SetTooltipText(HaveLangStrings() ? GetLangString(0x00C0100A) : _T("Front Left Channel"));

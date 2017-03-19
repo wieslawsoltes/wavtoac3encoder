@@ -344,7 +344,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
     this->m_CmbPresets.InsertString(this->nCurrentPreset, newPreset.szName);
     this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 }
 
 void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel()
@@ -376,7 +376,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel()
             this->nCurrentPreset = nPreset;
         }
 
-        SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
+        SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
         // update all controls
         this->OnCbnSelchangeComboPresets();

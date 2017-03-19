@@ -858,7 +858,7 @@ void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
     while (posNames != NULL)
         this->m_CmbValue.AddString(encOpt[nItem].listOptNames.GetNext(posNames));
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
     // select default value or last selected
     if (this->encPresets.GetSize() <= 0)

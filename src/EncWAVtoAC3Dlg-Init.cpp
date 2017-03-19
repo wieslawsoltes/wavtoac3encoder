@@ -516,10 +516,10 @@ BOOL CEncWAVtoAC3Dlg::OnInitDialog()
     }
 
     // set fixed height of combobox controls
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
+    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
 
     // subclass edit control in presets combobox dropdown
     COMBOBOXINFO cbi;

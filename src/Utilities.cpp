@@ -97,47 +97,11 @@ CString FormatTime(double fTime, int nFormat)
     return szTime;
 }
 
-void SetComboBoxHeight(HWND hDlg, int nComboBoxID)
+void SetComboBoxHeight(HWND hDlg, int nComboBoxID, int nSizeLimit)
 {
-    // limit the size default to: 8 to 30, system default is 30
-    const int nSizeLimit = 12;
-
-    HWND hComboxBox = ::GetDlgItem(hDlg, nComboBoxID);
-
-    // on WinXP standard method does not work 
-    // but we are using CB_SETMINVISIBLE message
-    // version >= 5.1 (Windows XP or later windows)
-    if (::IsWindowsXPOrGreater())
-    {
-        // well we using right now 5.0 NT define, but we need this for XP
-#if !defined(CBM_FIRST) | !defined(CB_SETMINVISIBLE)
-#define CBM_FIRST 0x1700
-#define	CB_SETMINVISIBLE (CBM_FIRST + 1)
-#endif
-
-        ::SendMessage(hComboxBox, CB_SETMINVISIBLE, (WPARAM)nSizeLimit, 0);
-        return;
-    }
-
-    int nCount = (int) ::SendDlgItemMessage(hDlg, nComboBoxID, CB_GETCOUNT, 0, 0);
-    int nHeight = (int) ::SendDlgItemMessage(hDlg, nComboBoxID, CB_GETITEMHEIGHT, 0, 0);
-    RECT rcCB;
-    int nCY = 0;
-
-    ::GetWindowRect(hComboxBox, &rcCB);
-
-    if (nCount > nSizeLimit)
-        nCY = nHeight * nSizeLimit;
-    else
-        nCY = 2 * nHeight * nCount;
-
-    ::SetWindowPos(hComboxBox,
-        NULL,
-        0,
-        0,
-        rcCB.right - rcCB.left,
-        nCY,
-        SWP_NOZORDER | SWP_NOMOVE | SWP_SHOWWINDOW);
+	HWND hComboxBox = ::GetDlgItem(hDlg, nComboBoxID);
+	if (hComboxBox != NULL)
+		::SendMessage(hComboxBox, CB_SETMINVISIBLE, (WPARAM)nSizeLimit, 0);
 }
 
 ULONGLONG GetFileSize64(CString szFileName)

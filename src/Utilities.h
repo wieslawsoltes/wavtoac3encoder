@@ -30,7 +30,7 @@ public:
 };
 
 CString FormatTime(double fTime, int nFormat);
-void SetComboBoxHeight(HWND hDlg, int nComboBoxID);
+void SetComboBoxHeight(HWND hDlg, int nComboBoxID, int nSizeLimit);
 ULONGLONG GetFileSize64(CString szFileName);
 __int64 GetFileSizeInt64(FILE *fp);
 CString GetFileExt(CString szFilePath);
