@@ -1,5 +1,9 @@
 ﻿## Changelog
 
+### Version 5.6:
+
+- Updated project to Visual Studio 2017.
+
 ### Version 5.5:
 
 - Updated project to Visual Studio 2015.
