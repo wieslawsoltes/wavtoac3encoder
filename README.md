@@ -195,11 +195,22 @@ https://github.com/wieslawsoltes/wavtoac3encoder
 
 ## Build
 
-* Download latest `Aften` sources and binaries from https://github.com/wieslawsoltes/wavtoac3encoder.
-* Extract them in `aften` sub-directory in project source tree.
-* Use `Microsoft Visual Studio Community 2017` to build `Release` binaries.
-* Distribute `Release` binaries with `libaften.dll`.
-* You can also build installer using `Inno Setup`.
+### Prerequisites
+
+```
+git clone https://github.com/wieslawsoltes/wavtoac3encoder.git
+cd wavtoac3encoder
+git submodule update --init --recursive
+```
+
+## Install Visual Studio 2017
+
+* [VS 2017](https://www.visualstudio.com/pl/downloads/)
+
+## Build
+```
+Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
+```
 
 ## Resources
 
