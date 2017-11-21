@@ -365,10 +365,10 @@
     <ClCompile Include="controls\MyStatic.cpp" />
     <ClCompile Include="controls\ResizeDialog.cpp" />
     <ClCompile Include="dialogs\AboutDlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3EngDlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3MuxDlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3WorkDlg.cpp" />
+    <ClCompile Include="dialogs\MainDlg.cpp" />
+    <ClCompile Include="dialogs\EnginesDlg.cpp" />
+    <ClCompile Include="dialogs\MuxDlg.cpp" />
+    <ClCompile Include="dialogs\WorkDlg.cpp" />
     <ClCompile Include="utilities\MyFile.cpp" />
     <ClCompile Include="utilities\Utilities.cpp" />
   </ItemGroup>
@@ -404,10 +404,10 @@
     <ClInclude Include="controls\MyStatic.h" />
     <ClInclude Include="controls\ResizeDialog.h" />
     <ClInclude Include="dialogs\AboutDlg.h" />
-    <ClInclude Include="dialogs\EncWAVtoAC3Dlg.h" />
-    <ClInclude Include="dialogs\EncWAVtoAC3EngDlg.h" />
-    <ClInclude Include="dialogs\EncWAVtoAC3MuxDlg.h" />
-    <ClInclude Include="dialogs\EncWAVtoAC3WorkDlg.h" />
+    <ClInclude Include="dialogs\MainDlg.h" />
+    <ClInclude Include="dialogs\EnginesDlg.h" />
+    <ClInclude Include="dialogs\MuxDlg.h" />
+    <ClInclude Include="dialogs\WorkDlg.h" />
     <ClInclude Include="utilities\MyFile.h" />
     <ClInclude Include="utilities\Utilities.h" />
   </ItemGroup>

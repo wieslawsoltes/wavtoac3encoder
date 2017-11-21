@@ -18,16 +18,16 @@
 
 #include "StdAfx.h"
 #include "..\MainApp.h"
-#include "EncWAVtoAC3WorkDlg.h"
+#include "WorkDlg.h"
 #include "..\EncoderOptions.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
 #include "..\EncWorkThread.h"
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3WorkDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CWorkDlg, CDialogEx)
 
-CEncWAVtoAC3WorkDlg::CEncWAVtoAC3WorkDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(CEncWAVtoAC3WorkDlg::IDD, pParent)
+CWorkDlg::CWorkDlg(CWnd* pParent /*=NULL*/)
+    : CDialogEx(CWorkDlg::IDD, pParent)
 {
     nIDIn[0] = IDC_STATIC_IN_00;
     nIDIn[1] = IDC_STATIC_IN_01;
@@ -52,12 +52,12 @@ CEncWAVtoAC3WorkDlg::CEncWAVtoAC3WorkDlg(CWnd* pParent /*=NULL*/)
     this->m_ElapsedTimeTotal = 0;
 }
 
-CEncWAVtoAC3WorkDlg::~CEncWAVtoAC3WorkDlg()
+CWorkDlg::~CWorkDlg()
 {
 
 }
 
-void CEncWAVtoAC3WorkDlg::DoDataExchange(CDataExchange* pDX)
+void CWorkDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDCANCEL, m_BtnCancel);
@@ -70,14 +70,14 @@ void CEncWAVtoAC3WorkDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_PROGRESS_TOTAL, m_PrgTotal);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3WorkDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CWorkDlg, CDialogEx)
     ON_WM_CLOSE()
     ON_WM_DESTROY()
     ON_WM_TIMER()
-    ON_BN_CLICKED(IDCANCEL, &CEncWAVtoAC3WorkDlg::OnBnClickedCancel)
+    ON_BN_CLICKED(IDCANCEL, &CWorkDlg::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
-BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
+BOOL CWorkDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
@@ -89,7 +89,7 @@ BOOL CEncWAVtoAC3WorkDlg::OnInitDialog()
     return TRUE;
 }
 
-void CEncWAVtoAC3WorkDlg::OnClose()
+void CWorkDlg::OnClose()
 {
     // stop file timer
     KillTimer(WM_FILE_TIMER);
@@ -109,7 +109,7 @@ void CEncWAVtoAC3WorkDlg::OnClose()
     CDialogEx::OnClose();
 }
 
-void CEncWAVtoAC3WorkDlg::OnDestroy()
+void CWorkDlg::OnDestroy()
 {
     CDialogEx::OnDestroy();
 
@@ -121,7 +121,7 @@ void CEncWAVtoAC3WorkDlg::OnDestroy()
     }
 }
 
-void CEncWAVtoAC3WorkDlg::OnTimer(UINT_PTR nIDEvent)
+void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 {
     switch (nIDEvent)
     {
@@ -136,7 +136,7 @@ void CEncWAVtoAC3WorkDlg::OnTimer(UINT_PTR nIDEvent)
     CDialogEx::OnTimer(nIDEvent);
 }
 
-void CEncWAVtoAC3WorkDlg::OnBnClickedCancel()
+void CWorkDlg::OnBnClickedCancel()
 {
     // stop encoding process and close work dialog
     if (this->bTerminate == false)
@@ -147,12 +147,12 @@ void CEncWAVtoAC3WorkDlg::OnBnClickedCancel()
     // OnCancel();
 }
 
-void CEncWAVtoAC3WorkDlg::InitSettings()
+void CWorkDlg::InitSettings()
 {
     workParam.pWorkDlg = this;
 }
 
-void CEncWAVtoAC3WorkDlg::InitCtrls()
+void CWorkDlg::InitCtrls()
 {
     if (this->workParam.bMultiMonoInput == false)
     {
@@ -288,7 +288,7 @@ void CEncWAVtoAC3WorkDlg::InitCtrls()
     }
 }
 
-void CEncWAVtoAC3WorkDlg::UpdateTotalTimer()
+void CWorkDlg::UpdateTotalTimer()
 {
     TCHAR strTime[32] = _T("");
     m_ElapsedTimeTotal += 0.25;
@@ -325,7 +325,7 @@ void CEncWAVtoAC3WorkDlg::UpdateTotalTimer()
     }
 }
 
-void CEncWAVtoAC3WorkDlg::UpdateFileTimer()
+void CWorkDlg::UpdateFileTimer()
 {
     TCHAR strTime[32] = _T("");
     m_ElapsedTimeFile += 0.25;
@@ -370,7 +370,7 @@ void CEncWAVtoAC3WorkDlg::UpdateFileTimer()
     }
 }
 
-void CEncWAVtoAC3WorkDlg::CreateWorker()
+void CWorkDlg::CreateWorker()
 {
     this->hThread = ::CreateThread(NULL,
         0,
@@ -390,7 +390,7 @@ void CEncWAVtoAC3WorkDlg::CreateWorker()
     }
 }
 
-void CEncWAVtoAC3WorkDlg::InitLang()
+void CWorkDlg::InitLang()
 {
     if (HaveLangStrings())
     {

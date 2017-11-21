@@ -62,11 +62,11 @@ typedef struct TItemToMove
     int nItem1;
 } ItemToMove;
 
-class CEncWAVtoAC3Dlg : public CResizeDialog
+class CMainDlg : public CResizeDialog
 {
 public:
-    CEncWAVtoAC3Dlg(CWnd* pParent = NULL);
-    enum { IDD = IDD_ENCWAVTOAC3_DIALOG };
+    CMainDlg(CWnd* pParent = NULL);
+    enum { IDD = IDD_DIALOG_MAIN };
 protected:
     HICON m_hIcon;
     HACCEL m_hAccelTable;

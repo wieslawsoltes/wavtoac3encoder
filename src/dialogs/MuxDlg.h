@@ -30,13 +30,13 @@
 
 #include "EncoderOptions.h"
 
-class CEncWAVtoAC3MuxDlg : public CDialogEx
+class CMuxDlg : public CDialogEx
 {
-    DECLARE_DYNAMIC(CEncWAVtoAC3MuxDlg)
+    DECLARE_DYNAMIC(CMuxDlg)
 public:
-    CEncWAVtoAC3MuxDlg(CWnd* pParent = NULL);
-    virtual ~CEncWAVtoAC3MuxDlg();
-    enum { IDD = IDD_MUX_DIALOG };
+    CMuxDlg(CWnd* pParent = NULL);
+    virtual ~CMuxDlg();
+    enum { IDD = IDD_DIALOG_MUX };
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()

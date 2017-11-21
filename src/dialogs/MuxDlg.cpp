@@ -18,7 +18,7 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
-#include "EncWAVtoAC3MuxDlg.h"
+#include "MuxDlg.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
 
@@ -75,10 +75,10 @@ const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
     {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("SL"),  _T("SR") }  // 3/2
 };
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3MuxDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CMuxDlg, CDialogEx)
 
-CEncWAVtoAC3MuxDlg::CEncWAVtoAC3MuxDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(CEncWAVtoAC3MuxDlg::IDD, pParent)
+CMuxDlg::CMuxDlg(CWnd* pParent /*=NULL*/)
+    : CDialogEx(CMuxDlg::IDD, pParent)
 {
     for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
@@ -90,12 +90,12 @@ CEncWAVtoAC3MuxDlg::CEncWAVtoAC3MuxDlg(CWnd* pParent /*=NULL*/)
     this->bLFE = true;
 }
 
-CEncWAVtoAC3MuxDlg::~CEncWAVtoAC3MuxDlg()
+CMuxDlg::~CMuxDlg()
 {
 
 }
 
-void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
+void CMuxDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
@@ -121,29 +121,29 @@ void CEncWAVtoAC3MuxDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3MuxDlg, CDialogEx)
-    ON_BN_CLICKED(IDC_BUTTON_FL, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFl)
-    ON_BN_CLICKED(IDC_BUTTON_FR, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFr)
-    ON_BN_CLICKED(IDC_BUTTON_FC, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonFc)
-    ON_BN_CLICKED(IDC_BUTTON_LFE, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonLfe)
-    ON_BN_CLICKED(IDC_BUTTON_SL, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonSl)
-    ON_BN_CLICKED(IDC_BUTTON_SR, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonSr)
-    ON_BN_CLICKED(IDC_BUTTON_S, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonS)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FL, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFl)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FC, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFc)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FR, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFr)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_LFE, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_SL, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl)
-    ON_BN_CLICKED(IDC_BUTTON_CLEAR_SR, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSr)
-    ON_BN_CLICKED(IDC_BUTTON_EXPORT, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport)
-    ON_BN_CLICKED(IDC_BUTTON_IMPORT, &CEncWAVtoAC3MuxDlg::OnBnClickedButtonImport)
-    ON_BN_CLICKED(IDCANCEL, &CEncWAVtoAC3MuxDlg::OnBnClickedCancel)
-    ON_BN_CLICKED(IDOK, &CEncWAVtoAC3MuxDlg::OnBnClickedOk)
-    ON_BN_CLICKED(IDC_CHECK_CHANNEL_CONFIG_LFE, &CEncWAVtoAC3MuxDlg::OnBnClickedCheckChannelConfigLfe)
-    ON_CBN_SELCHANGE(IDC_COMBO_CHANNEL_CONFIG, &CEncWAVtoAC3MuxDlg::OnCbnSelchangeComboChannelConfig)
+BEGIN_MESSAGE_MAP(CMuxDlg, CDialogEx)
+    ON_BN_CLICKED(IDC_BUTTON_FL, &CMuxDlg::OnBnClickedButtonFl)
+    ON_BN_CLICKED(IDC_BUTTON_FR, &CMuxDlg::OnBnClickedButtonFr)
+    ON_BN_CLICKED(IDC_BUTTON_FC, &CMuxDlg::OnBnClickedButtonFc)
+    ON_BN_CLICKED(IDC_BUTTON_LFE, &CMuxDlg::OnBnClickedButtonLfe)
+    ON_BN_CLICKED(IDC_BUTTON_SL, &CMuxDlg::OnBnClickedButtonSl)
+    ON_BN_CLICKED(IDC_BUTTON_SR, &CMuxDlg::OnBnClickedButtonSr)
+    ON_BN_CLICKED(IDC_BUTTON_S, &CMuxDlg::OnBnClickedButtonS)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FL, &CMuxDlg::OnBnClickedButtonClearFl)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FC, &CMuxDlg::OnBnClickedButtonClearFc)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_FR, &CMuxDlg::OnBnClickedButtonClearFr)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_LFE, &CMuxDlg::OnBnClickedButtonClearLfe)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_SL, &CMuxDlg::OnBnClickedButtonClearSl)
+    ON_BN_CLICKED(IDC_BUTTON_CLEAR_SR, &CMuxDlg::OnBnClickedButtonClearSr)
+    ON_BN_CLICKED(IDC_BUTTON_EXPORT, &CMuxDlg::OnBnClickedButtonExport)
+    ON_BN_CLICKED(IDC_BUTTON_IMPORT, &CMuxDlg::OnBnClickedButtonImport)
+    ON_BN_CLICKED(IDCANCEL, &CMuxDlg::OnBnClickedCancel)
+    ON_BN_CLICKED(IDOK, &CMuxDlg::OnBnClickedOk)
+    ON_BN_CLICKED(IDC_CHECK_CHANNEL_CONFIG_LFE, &CMuxDlg::OnBnClickedCheckChannelConfigLfe)
+    ON_CBN_SELCHANGE(IDC_COMBO_CHANNEL_CONFIG, &CMuxDlg::OnCbnSelchangeComboChannelConfig)
 END_MESSAGE_MAP()
 
-BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
+BOOL CMuxDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
@@ -160,7 +160,7 @@ BOOL CEncWAVtoAC3MuxDlg::OnInitDialog()
     return TRUE;
 }
 
-void CEncWAVtoAC3MuxDlg::InitCtrls()
+void CMuxDlg::InitCtrls()
 {
     // init channel configuration ComboBox
     for (int i = 0; i < nNumChannelConfig; i++)
@@ -204,7 +204,7 @@ void CEncWAVtoAC3MuxDlg::InitCtrls()
     this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
 }
 
-void CEncWAVtoAC3MuxDlg::InitLang()
+void CMuxDlg::InitLang()
 {
     if (HaveLangStrings())
     {
@@ -223,7 +223,7 @@ void CEncWAVtoAC3MuxDlg::InitLang()
     }
 }
 
-void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
+void CMuxDlg::RemapFilesToChannels()
 {
     for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
         this->szInputFiles[i] = _T("");
@@ -315,7 +315,7 @@ void CEncWAVtoAC3MuxDlg::RemapFilesToChannels()
     };
 }
 
-void CEncWAVtoAC3MuxDlg::SetFilePaths()
+void CMuxDlg::SetFilePaths()
 {
     this->m_EdtChannelFL.SetWindowText(szInputFiles[0]);
     this->m_EdtChannelFR.SetWindowText(szInputFiles[1]);
@@ -325,7 +325,7 @@ void CEncWAVtoAC3MuxDlg::SetFilePaths()
     this->m_EdtChannelSR.SetWindowText(szInputFiles[5]);
 }
 
-void CEncWAVtoAC3MuxDlg::SetControlsState()
+void CMuxDlg::SetControlsState()
 {
     // enable/disable buttons
     this->m_BtnChannelFL.EnableWindow(nChannelConfigStates[this->nChannelConfig][0] == 1 ? TRUE : FALSE);
@@ -387,7 +387,7 @@ void CEncWAVtoAC3MuxDlg::SetControlsState()
     this->m_BtnChannelSR.SetBold((szInputFiles[5].GetLength() > 0) ? true : false);
 }
 
-bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
+bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
     // reset input files
     for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
@@ -462,7 +462,7 @@ bool CEncWAVtoAC3MuxDlg::LoadFilesList(CString &szFileName)
     }
 }
 
-bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
+bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
     // format
     // 0 (*.files) -> file_path+ext
@@ -586,7 +586,7 @@ bool CEncWAVtoAC3MuxDlg::SaveFilesList(CString &szFileName, int nFormat)
     return true;
 }
 
-void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
+void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
 {
     if (m_BtnCurrent == NULL || m_EdtCurrent == NULL)
         return;
@@ -613,42 +613,42 @@ void CEncWAVtoAC3MuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEd
     }
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFl()
+void CMuxDlg::OnBnClickedButtonFl()
 {
     this->ShowOpenFileDlg(0, &this->m_BtnChannelFL, &this->m_EdtChannelFL);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFr()
+void CMuxDlg::OnBnClickedButtonFr()
 {
     this->ShowOpenFileDlg(1, &this->m_BtnChannelFR, &this->m_EdtChannelFR);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonFc()
+void CMuxDlg::OnBnClickedButtonFc()
 {
     this->ShowOpenFileDlg(2, &this->m_BtnChannelFC, &this->m_EdtChannelFC);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonLfe()
+void CMuxDlg::OnBnClickedButtonLfe()
 {
     this->ShowOpenFileDlg(3, &this->m_BtnChannelLFE, &this->m_EdtChannelLFE);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonSl()
+void CMuxDlg::OnBnClickedButtonSl()
 {
     this->ShowOpenFileDlg(4, &this->m_BtnChannelSL, &this->m_EdtChannelSL);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonSr()
+void CMuxDlg::OnBnClickedButtonSr()
 {
     this->ShowOpenFileDlg(5, &this->m_BtnChannelSR, &this->m_EdtChannelSR);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonS()
+void CMuxDlg::OnBnClickedButtonS()
 {
     this->ShowOpenFileDlg(4, &this->m_BtnChannelS, &this->m_EdtChannelSL);
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFl()
+void CMuxDlg::OnBnClickedButtonClearFl()
 {
     this->m_BtnChannelFL.SetBold(false);
     this->m_EdtChannelFL.SetWindowText(_T(""));
@@ -657,7 +657,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFl()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFc()
+void CMuxDlg::OnBnClickedButtonClearFc()
 {
     this->m_BtnChannelFC.SetBold(false);
     this->m_EdtChannelFC.SetWindowText(_T(""));
@@ -666,7 +666,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFc()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFr()
+void CMuxDlg::OnBnClickedButtonClearFr()
 {
     this->m_BtnChannelFR.SetBold(false);
     this->m_EdtChannelFR.SetWindowText(_T(""));
@@ -675,7 +675,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearFr()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe()
+void CMuxDlg::OnBnClickedButtonClearLfe()
 {
     this->m_BtnChannelLFE.SetBold(false);
     this->m_EdtChannelLFE.SetWindowText(_T(""));
@@ -684,7 +684,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearLfe()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
+void CMuxDlg::OnBnClickedButtonClearSl()
 {
     if (nChannelConfigStates[nChannelConfig][3] == 1)
     {
@@ -701,7 +701,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSl()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSr()
+void CMuxDlg::OnBnClickedButtonClearSr()
 {
     this->m_BtnChannelSR.SetBold(false);
     this->m_EdtChannelSR.SetWindowText(_T(""));
@@ -710,7 +710,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonClearSr()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport()
+void CMuxDlg::OnBnClickedButtonExport()
 {
     CFileDialog fd(FALSE,
         _T("files"),
@@ -734,7 +734,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonExport()
     }
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedButtonImport()
+void CMuxDlg::OnBnClickedButtonImport()
 {
     CFileDialog fd(TRUE,
         _T("files"),
@@ -754,7 +754,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedButtonImport()
     }
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedCheckChannelConfigLfe()
+void CMuxDlg::OnBnClickedCheckChannelConfigLfe()
 {
     const int bCheck = this->m_ChkChannelConfigLFE.GetCheck();
 
@@ -768,7 +768,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedCheckChannelConfigLfe()
     this->SetControlsState();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedCancel()
+void CMuxDlg::OnBnClickedCancel()
 {
     for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
@@ -779,7 +779,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedCancel()
     OnCancel();
 }
 
-void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
+void CMuxDlg::OnBnClickedOk()
 {
     // clear unused channels
     switch (this->nChannelConfig)
@@ -850,7 +850,7 @@ void CEncWAVtoAC3MuxDlg::OnBnClickedOk()
     OnOK();
 }
 
-void CEncWAVtoAC3MuxDlg::OnCbnSelchangeComboChannelConfig()
+void CMuxDlg::OnCbnSelchangeComboChannelConfig()
 {
     int nSel = this->m_CmbChannelConfig.GetCurSel();
     if (nSel != CB_ERR)

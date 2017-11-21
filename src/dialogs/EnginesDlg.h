@@ -34,13 +34,13 @@
 
 #include "EncoderOptions.h"
 
-class CEncWAVtoAC3EngDlg : public CDialogEx
+class CEnginesDlg : public CDialogEx
 {
-    DECLARE_DYNAMIC(CEncWAVtoAC3EngDlg)
+    DECLARE_DYNAMIC(CEnginesDlg)
 public:
-    CEncWAVtoAC3EngDlg(CWnd* pParent = NULL);
-    virtual ~CEncWAVtoAC3EngDlg();
-    enum { IDD = IDD_ENGINES_DIALOG };
+    CEnginesDlg(CWnd* pParent = NULL);
+    virtual ~CEnginesDlg();
+    enum { IDD = IDD_DIALOG_ENGINES };
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()

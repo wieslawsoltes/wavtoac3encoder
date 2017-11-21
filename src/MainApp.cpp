@@ -18,8 +18,8 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
-#include "dialogs\EncWAVtoAC3Dlg.h"
-#include "dialogs\EncWAVtoAC3MuxDlg.h"
+#include "dialogs\MainDlg.h"
+#include "dialogs\MuxDlg.h"
 
 #include "CommandLine.h"
 #include "OptionsParser.h"
@@ -201,7 +201,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
     InitShellManager();
 
     // main dialog object
-    CEncWAVtoAC3Dlg dlg;
+    CMainDlg dlg;
 
     // command-line helper variables
     int nNumArgs = 1;
@@ -314,7 +314,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
             case CLOP_MUX_WIZARD:
             {
                 // show standalone MUX Wizard window
-                CEncWAVtoAC3MuxDlg dlg;
+                CMuxDlg dlg;
                 m_pMainWnd = &dlg;
                 dlg.DoModal();
 

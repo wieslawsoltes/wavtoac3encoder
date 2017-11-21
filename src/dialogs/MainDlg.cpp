@@ -18,10 +18,10 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
-#include "EncWAVtoAC3Dlg.h"
-#include "EncWAVtoAC3WorkDlg.h"
-#include "EncWAVtoAC3MuxDlg.h"
-#include "EncWAVtoAC3EngDlg.h"
+#include "MainDlg.h"
+#include "WorkDlg.h"
+#include "MuxDlg.h"
+#include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
@@ -31,8 +31,8 @@
 #define new DEBUG_NEW
 #endif
 
-CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
-    : CResizeDialog(CEncWAVtoAC3Dlg::IDD, pParent)
+CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
+    : CResizeDialog(CMainDlg::IDD, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -57,7 +57,7 @@ CEncWAVtoAC3Dlg::CEncWAVtoAC3Dlg(CWnd* pParent /*=NULL*/)
     this->bSaveConfig = true;
 }
 
-void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
+void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
     CResizeDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
@@ -93,7 +93,7 @@ void CEncWAVtoAC3Dlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
+BEGIN_MESSAGE_MAP(CMainDlg, CResizeDialog)
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_WM_WINDOWPOSCHANGING()
@@ -103,74 +103,74 @@ BEGIN_MESSAGE_MAP(CEncWAVtoAC3Dlg, CResizeDialog)
     ON_WM_DROPFILES()
     ON_WM_HSCROLL()
     ON_WM_VSCROLL()
-    ON_COMMAND(ID_FILE_ADDFILES, &CEncWAVtoAC3Dlg::OnFileAddFiles)
-    ON_COMMAND(ID_FILE_ADDDIRECTORY, &CEncWAVtoAC3Dlg::OnFileAddDirectory)
-    ON_COMMAND(ID_FILE_MUXWIZARD, &CEncWAVtoAC3Dlg::OnFileMuxWizard)
-    ON_COMMAND(ID_FILE_LOADPRESETS, &CEncWAVtoAC3Dlg::OnFileLoadPresets)
-    ON_COMMAND(ID_FILE_SAVEPRESETS, &CEncWAVtoAC3Dlg::OnFileSavePresets)
-    ON_COMMAND(ID_FILE_LOADFILESLIST, &CEncWAVtoAC3Dlg::OnFileLoadFilesList)
-    ON_COMMAND(ID_FILE_SAVEFILESLIST, &CEncWAVtoAC3Dlg::OnFileSaveFilesList)
-    ON_COMMAND(ID_FILE_EXIT, &CEncWAVtoAC3Dlg::OnFileExit)
-    ON_COMMAND(ID_OPTIONS_DISABLEALLWARNINGS, &CEncWAVtoAC3Dlg::OnOptionsDisableAllWarnings)
-    ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit)
-    ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration)
-    ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CEncWAVtoAC3Dlg::OnOptionsLoadConfiguration)
-    ON_COMMAND(ID_LANGUAGE_DEFAULT, &CEncWAVtoAC3Dlg::OnLanguageChangeDefault)
-    ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CEncWAVtoAC3Dlg::OnLanguageChange)
-    ON_COMMAND(ID_HELP_COMMAND_LINE, &CEncWAVtoAC3Dlg::OnHelpCommandLine)
-    ON_COMMAND(ID_HELP_WEBSITE, &CEncWAVtoAC3Dlg::OnHelpWebsite)
-    ON_COMMAND(ID_HELP_ABOUT, &CEncWAVtoAC3Dlg::OnHelpAbout)
-    ON_COMMAND(ID_LIST_ADDFILES, &CEncWAVtoAC3Dlg::OnListAddFiles)
-    ON_COMMAND(ID_LIST_ADDDIRECTORY, &CEncWAVtoAC3Dlg::OnListAddDirectory)
-    ON_COMMAND(ID_LIST_MUXWIZARD, &CEncWAVtoAC3Dlg::OnListMuxWizard)
-    ON_COMMAND(ID_LIST_LOADLIST, &CEncWAVtoAC3Dlg::OnListLoadList)
-    ON_COMMAND(ID_LIST_SAVELIST, &CEncWAVtoAC3Dlg::OnListSavelist)
-    ON_COMMAND(ID_LIST_DELFILES, &CEncWAVtoAC3Dlg::OnListDelFiles)
-    ON_COMMAND(ID_LIST_CLEARLIST, &CEncWAVtoAC3Dlg::OnListClearList)
-    ON_COMMAND(ID_LIST_MOVEUP, &CEncWAVtoAC3Dlg::OnListMoveUp)
-    ON_COMMAND(ID_LIST_MOVEDOWN, &CEncWAVtoAC3Dlg::OnListMoveDown)
-    ON_BN_CLICKED(IDC_BUTTON_ADD, &CEncWAVtoAC3Dlg::OnBnClickedButtonAdd)
-    ON_BN_CLICKED(IDC_BUTTON_ENCODE, &CEncWAVtoAC3Dlg::OnBnClickedButtonEncode)
-    ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CEncWAVtoAC3Dlg::OnBnClickedButtonBrowse)
-    ON_BN_CLICKED(IDC_BUTTON_PRESETS_DEFAULTS, &CEncWAVtoAC3Dlg::OnBnClickedButtonPresetsDefaults)
-    ON_BN_CLICKED(IDC_BUTTON_PRESET_ADD, &CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd)
-    ON_BN_CLICKED(IDC_BUTTON_PRESET_DEL, &CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel)
-    ON_BN_CLICKED(IDC_CHECK_VBR, &CEncWAVtoAC3Dlg::OnBnClickedCheckVbr)
-    ON_BN_CLICKED(IDC_CHECK_SIMD_MMX, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdMmx)
-    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse)
-    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE2, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse2)
-    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE3, &CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse3)
-    ON_BN_CLICKED(IDC_CHECK_MULTIPLE_MONO_INPUT, &CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput)
-    ON_BN_CLICKED(IDC_BUTTON_MUX_WIZARD, &CEncWAVtoAC3Dlg::OnBnClickedButtonMuxWizard)
-    ON_CBN_SELCHANGE(IDC_COMBO_SETTING, &CEncWAVtoAC3Dlg::OnCbnSelchangeComboSetting)
-    ON_CBN_SELCHANGE(IDC_COMBO_PRESETS, &CEncWAVtoAC3Dlg::OnCbnSelchangeComboPresets)
-    ON_CBN_SELCHANGE(IDC_COMBO_ENGINES, &CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines)
-    ON_CBN_SELCHANGE(IDC_COMBO_RAW_SAMPLE_FORMAT, &CEncWAVtoAC3Dlg::OnCbnSelchangeComboRawSampleFormat)
-    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnLvnItemchangedListSettings)
-    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnLvnKeydownListFiles)
-    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnLvnKeydownListSettings)
-    ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnLvnColumnclickListFiles)
-    ON_NOTIFY(NM_RCLICK, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnNMRclickListFiles)
-    ON_NOTIFY(NM_RCLICK, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnNMRclickListSettings)
-    ON_NOTIFY(NM_DBLCLK, IDC_LIST_SETTINGS, &CEncWAVtoAC3Dlg::OnNMDblclkListSettings)
-    ON_NOTIFY(NM_DBLCLK, IDC_LIST_FILES, &CEncWAVtoAC3Dlg::OnNMDblclkListFiles)
-    ON_EN_CHANGE(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnChangeEditThreads)
-    ON_EN_CHANGE(IDC_EDIT_RAW_SAMPLE_RATE, &CEncWAVtoAC3Dlg::OnEnChangeEditRawSampleRate)
-    ON_EN_CHANGE(IDC_EDIT_RAW_CHANNELS, &CEncWAVtoAC3Dlg::OnEnChangeEditRawChannels)
-    ON_EN_CHANGE(IDC_EDIT_OUTPUT_PATH, &CEncWAVtoAC3Dlg::OnEnChangeEditOutputPath)
-    ON_EN_SETFOCUS(IDC_EDIT_OUTPUT_PATH, &CEncWAVtoAC3Dlg::OnEnSetfocusEditOutputPath)
-    ON_EN_SETFOCUS(IDC_EDIT_RAW_SAMPLE_RATE, &CEncWAVtoAC3Dlg::OnEnSetfocusEditRawSampleRate)
-    ON_EN_SETFOCUS(IDC_EDIT_RAW_CHANNELS, &CEncWAVtoAC3Dlg::OnEnSetfocusEditRawChannels)
-    ON_EN_SETFOCUS(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnSetfocusEditThreads)
-    ON_EN_KILLFOCUS(IDC_EDIT_OUTPUT_PATH, &CEncWAVtoAC3Dlg::OnEnKillfocusEditOutputPath)
-    ON_EN_KILLFOCUS(IDC_EDIT_RAW_SAMPLE_RATE, &CEncWAVtoAC3Dlg::OnEnKillfocusEditRawSampleRate)
-    ON_EN_KILLFOCUS(IDC_EDIT_RAW_CHANNELS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditRawChannels)
-    ON_EN_KILLFOCUS(IDC_EDIT_THREADS, &CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads)
+    ON_COMMAND(ID_FILE_ADDFILES, &CMainDlg::OnFileAddFiles)
+    ON_COMMAND(ID_FILE_ADDDIRECTORY, &CMainDlg::OnFileAddDirectory)
+    ON_COMMAND(ID_FILE_MUXWIZARD, &CMainDlg::OnFileMuxWizard)
+    ON_COMMAND(ID_FILE_LOADPRESETS, &CMainDlg::OnFileLoadPresets)
+    ON_COMMAND(ID_FILE_SAVEPRESETS, &CMainDlg::OnFileSavePresets)
+    ON_COMMAND(ID_FILE_LOADFILESLIST, &CMainDlg::OnFileLoadFilesList)
+    ON_COMMAND(ID_FILE_SAVEFILESLIST, &CMainDlg::OnFileSaveFilesList)
+    ON_COMMAND(ID_FILE_EXIT, &CMainDlg::OnFileExit)
+    ON_COMMAND(ID_OPTIONS_DISABLEALLWARNINGS, &CMainDlg::OnOptionsDisableAllWarnings)
+    ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CMainDlg::OnOptionsSaveConfigurationOnExit)
+    ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CMainDlg::OnOptionsSaveConfiguration)
+    ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CMainDlg::OnOptionsLoadConfiguration)
+    ON_COMMAND(ID_LANGUAGE_DEFAULT, &CMainDlg::OnLanguageChangeDefault)
+    ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CMainDlg::OnLanguageChange)
+    ON_COMMAND(ID_HELP_COMMAND_LINE, &CMainDlg::OnHelpCommandLine)
+    ON_COMMAND(ID_HELP_WEBSITE, &CMainDlg::OnHelpWebsite)
+    ON_COMMAND(ID_HELP_ABOUT, &CMainDlg::OnHelpAbout)
+    ON_COMMAND(ID_LIST_ADDFILES, &CMainDlg::OnListAddFiles)
+    ON_COMMAND(ID_LIST_ADDDIRECTORY, &CMainDlg::OnListAddDirectory)
+    ON_COMMAND(ID_LIST_MUXWIZARD, &CMainDlg::OnListMuxWizard)
+    ON_COMMAND(ID_LIST_LOADLIST, &CMainDlg::OnListLoadList)
+    ON_COMMAND(ID_LIST_SAVELIST, &CMainDlg::OnListSavelist)
+    ON_COMMAND(ID_LIST_DELFILES, &CMainDlg::OnListDelFiles)
+    ON_COMMAND(ID_LIST_CLEARLIST, &CMainDlg::OnListClearList)
+    ON_COMMAND(ID_LIST_MOVEUP, &CMainDlg::OnListMoveUp)
+    ON_COMMAND(ID_LIST_MOVEDOWN, &CMainDlg::OnListMoveDown)
+    ON_BN_CLICKED(IDC_BUTTON_ADD, &CMainDlg::OnBnClickedButtonAdd)
+    ON_BN_CLICKED(IDC_BUTTON_ENCODE, &CMainDlg::OnBnClickedButtonEncode)
+    ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMainDlg::OnBnClickedButtonBrowse)
+    ON_BN_CLICKED(IDC_BUTTON_PRESETS_DEFAULTS, &CMainDlg::OnBnClickedButtonPresetsDefaults)
+    ON_BN_CLICKED(IDC_BUTTON_PRESET_ADD, &CMainDlg::OnBnClickedButtonPresetAdd)
+    ON_BN_CLICKED(IDC_BUTTON_PRESET_DEL, &CMainDlg::OnBnClickedButtonPresetDel)
+    ON_BN_CLICKED(IDC_CHECK_VBR, &CMainDlg::OnBnClickedCheckVbr)
+    ON_BN_CLICKED(IDC_CHECK_SIMD_MMX, &CMainDlg::OnBnClickedCheckSimdMmx)
+    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE, &CMainDlg::OnBnClickedCheckSimdSse)
+    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE2, &CMainDlg::OnBnClickedCheckSimdSse2)
+    ON_BN_CLICKED(IDC_CHECK_SIMD_SSE3, &CMainDlg::OnBnClickedCheckSimdSse3)
+    ON_BN_CLICKED(IDC_CHECK_MULTIPLE_MONO_INPUT, &CMainDlg::OnBnClickedCheckMultipleMonoInput)
+    ON_BN_CLICKED(IDC_BUTTON_MUX_WIZARD, &CMainDlg::OnBnClickedButtonMuxWizard)
+    ON_CBN_SELCHANGE(IDC_COMBO_SETTING, &CMainDlg::OnCbnSelchangeComboSetting)
+    ON_CBN_SELCHANGE(IDC_COMBO_PRESETS, &CMainDlg::OnCbnSelchangeComboPresets)
+    ON_CBN_SELCHANGE(IDC_COMBO_ENGINES, &CMainDlg::OnCbnSelchangeComboEngines)
+    ON_CBN_SELCHANGE(IDC_COMBO_RAW_SAMPLE_FORMAT, &CMainDlg::OnCbnSelchangeComboRawSampleFormat)
+    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_SETTINGS, &CMainDlg::OnLvnItemchangedListSettings)
+    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_FILES, &CMainDlg::OnLvnKeydownListFiles)
+    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_SETTINGS, &CMainDlg::OnLvnKeydownListSettings)
+    ON_NOTIFY(LVN_COLUMNCLICK, IDC_LIST_FILES, &CMainDlg::OnLvnColumnclickListFiles)
+    ON_NOTIFY(NM_RCLICK, IDC_LIST_FILES, &CMainDlg::OnNMRclickListFiles)
+    ON_NOTIFY(NM_RCLICK, IDC_LIST_SETTINGS, &CMainDlg::OnNMRclickListSettings)
+    ON_NOTIFY(NM_DBLCLK, IDC_LIST_SETTINGS, &CMainDlg::OnNMDblclkListSettings)
+    ON_NOTIFY(NM_DBLCLK, IDC_LIST_FILES, &CMainDlg::OnNMDblclkListFiles)
+    ON_EN_CHANGE(IDC_EDIT_THREADS, &CMainDlg::OnEnChangeEditThreads)
+    ON_EN_CHANGE(IDC_EDIT_RAW_SAMPLE_RATE, &CMainDlg::OnEnChangeEditRawSampleRate)
+    ON_EN_CHANGE(IDC_EDIT_RAW_CHANNELS, &CMainDlg::OnEnChangeEditRawChannels)
+    ON_EN_CHANGE(IDC_EDIT_OUTPUT_PATH, &CMainDlg::OnEnChangeEditOutputPath)
+    ON_EN_SETFOCUS(IDC_EDIT_OUTPUT_PATH, &CMainDlg::OnEnSetfocusEditOutputPath)
+    ON_EN_SETFOCUS(IDC_EDIT_RAW_SAMPLE_RATE, &CMainDlg::OnEnSetfocusEditRawSampleRate)
+    ON_EN_SETFOCUS(IDC_EDIT_RAW_CHANNELS, &CMainDlg::OnEnSetfocusEditRawChannels)
+    ON_EN_SETFOCUS(IDC_EDIT_THREADS, &CMainDlg::OnEnSetfocusEditThreads)
+    ON_EN_KILLFOCUS(IDC_EDIT_OUTPUT_PATH, &CMainDlg::OnEnKillfocusEditOutputPath)
+    ON_EN_KILLFOCUS(IDC_EDIT_RAW_SAMPLE_RATE, &CMainDlg::OnEnKillfocusEditRawSampleRate)
+    ON_EN_KILLFOCUS(IDC_EDIT_RAW_CHANNELS, &CMainDlg::OnEnKillfocusEditRawChannels)
+    ON_EN_KILLFOCUS(IDC_EDIT_THREADS, &CMainDlg::OnEnKillfocusEditThreads)
     ON_MESSAGE(WM_MY_EN_CHANGE, EditChangeComboPresets)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CEncWAVtoAC3Dlg::OnBnClickedButtonEngines)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES, &CMainDlg::OnBnClickedButtonEngines)
 END_MESSAGE_MAP()
 
-void CEncWAVtoAC3Dlg::OnPaint()
+void CMainDlg::OnPaint()
 {
     if (IsIconic())
     {
@@ -190,12 +190,12 @@ void CEncWAVtoAC3Dlg::OnPaint()
     }
 }
 
-HCURSOR CEncWAVtoAC3Dlg::OnQueryDragIcon()
+HCURSOR CMainDlg::OnQueryDragIcon()
 {
     return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CEncWAVtoAC3Dlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+void CMainDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
     // by default hide main window
     if (this->bVisible == false)
@@ -204,20 +204,20 @@ void CEncWAVtoAC3Dlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
     CResizeDialog::OnWindowPosChanging(lpwndpos);
 }
 
-void CEncWAVtoAC3Dlg::UpdateView(int nMode)
+void CMainDlg::UpdateView(int nMode)
 {
     // reset dialog anchors
     this->InitDialogAnchors();
 }
 
-void CEncWAVtoAC3Dlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CMainDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
     this->UpdateBitrateText();
 
     CResizeDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
-void CEncWAVtoAC3Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CMainDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
     if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_THREADS)
     {
@@ -263,7 +263,7 @@ void CEncWAVtoAC3Dlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     CResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
-void CEncWAVtoAC3Dlg::OnClose()
+void CMainDlg::OnClose()
 {
     // save configuration to disk (does not work in read-only mode)
     if (this->bSaveConfig == true)
@@ -272,7 +272,7 @@ void CEncWAVtoAC3Dlg::OnClose()
     CResizeDialog::OnClose();
 }
 
-void CEncWAVtoAC3Dlg::OnDestroy()
+void CMainDlg::OnDestroy()
 {
     CResizeDialog::OnDestroy();
 
@@ -281,7 +281,7 @@ void CEncWAVtoAC3Dlg::OnDestroy()
     this->m_LstSettings.DeleteAllItems();
 }
 
-BOOL CEncWAVtoAC3Dlg::PreTranslateMessage(MSG* pMsg)
+BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
 {
     if (m_hAccelTable)
     {
@@ -292,12 +292,12 @@ BOOL CEncWAVtoAC3Dlg::PreTranslateMessage(MSG* pMsg)
     return CResizeDialog::PreTranslateMessage(pMsg);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonAdd()
+void CMainDlg::OnBnClickedButtonAdd()
 {
     this->OnFileAddFiles();
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
+void CMainDlg::OnBnClickedButtonEncode()
 {
     static bool bWorking = false;
     if (bWorking == true)
@@ -344,7 +344,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
         return;
     }
 
-    CEncWAVtoAC3WorkDlg dlg;
+    CWorkDlg dlg;
 
     // get all files from list
     CList<CString, CString> list;
@@ -536,35 +536,35 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEncode()
     bWorking = false;
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckSimdMmx()
+void CMainDlg::OnBnClickedCheckSimdMmx()
 {
     EncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse()
+void CMainDlg::OnBnClickedCheckSimdSse()
 {
     EncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse2()
+void CMainDlg::OnBnClickedCheckSimdSse2()
 {
     EncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckSimdSse3()
+void CMainDlg::OnBnClickedCheckSimdSse3()
 {
     EncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckVbr()
+void CMainDlg::OnBnClickedCheckVbr()
 {
     if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
     {
@@ -590,7 +590,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedCheckVbr()
     this->UpdateBitrateText();
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
+void CMainDlg::OnBnClickedButtonPresetAdd()
 {
     EncoderPreset newPreset = GetCurrentPreset();
 
@@ -608,7 +608,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetAdd()
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel()
+void CMainDlg::OnBnClickedButtonPresetDel()
 {
     // we need at least one preset present
     if (this->encPresets.GetCount() >= 2)
@@ -644,7 +644,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetDel()
     }
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonBrowse()
+void CMainDlg::OnBnClickedButtonBrowse()
 {
     // mono input uses output dir to set output file name
     // if file name is not present then 'mux.ac3' is used
@@ -725,7 +725,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonBrowse()
     return;
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetsDefaults()
+void CMainDlg::OnBnClickedButtonPresetsDefaults()
 {
     int nPreset = this->m_CmbPresets.GetCurSel();
     if (nPreset != CB_ERR)
@@ -742,7 +742,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonPresetsDefaults()
     }
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput()
+void CMainDlg::OnBnClickedCheckMultipleMonoInput()
 {
     this->bMultipleMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
 
@@ -765,14 +765,14 @@ void CEncWAVtoAC3Dlg::OnBnClickedCheckMultipleMonoInput()
     }
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonMuxWizard()
+void CMainDlg::OnBnClickedButtonMuxWizard()
 {
     this->OnFileMuxWizard();
 }
 
-void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
+void CMainDlg::OnBnClickedButtonEngines()
 {
-    CEncWAVtoAC3EngDlg dlg;
+    CEnginesDlg dlg;
 
     dlg.nCurrSel = this->m_CmbEngines.GetCurSel();
 
@@ -819,7 +819,7 @@ void CEncWAVtoAC3Dlg::OnBnClickedButtonEngines()
     }
 }
 
-void CEncWAVtoAC3Dlg::OnCbnSelchangeComboSetting()
+void CMainDlg::OnCbnSelchangeComboSetting()
 {
 	POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
 	if (pos != NULL)
@@ -841,7 +841,7 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboSetting()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnCbnSelchangeComboPresets()
+void CMainDlg::OnCbnSelchangeComboPresets()
 {
 	int nPreset = this->m_CmbPresets.GetCurSel();
 	if (nPreset != CB_ERR)
@@ -856,7 +856,7 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboPresets()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines()
+void CMainDlg::OnCbnSelchangeComboEngines()
 {
 	// unload currently used aften library
 	CloseAftenAPI(&this->api);
@@ -929,14 +929,14 @@ void CEncWAVtoAC3Dlg::OnCbnSelchangeComboEngines()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnCbnSelchangeComboRawSampleFormat()
+void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
 {
 	EncoderPreset tmpPreset = GetCurrentPreset();
 	tmpPreset.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
 	UpdateCurrentPreset(tmpPreset);
 }
 
-LRESULT CEncWAVtoAC3Dlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
+LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 {
 	if ((lParam == (LPARAM)0) && (wParam != NULL))
 	{
@@ -964,7 +964,7 @@ LRESULT CEncWAVtoAC3Dlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 	return(0);
 }
 
-bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
+bool CMainDlg::LoadProgramConfig(CString szFileName)
 {
 	ConfigList_t m_ConfigList;
 
@@ -1134,7 +1134,7 @@ bool CEncWAVtoAC3Dlg::LoadProgramConfig(CString szFileName)
 	return false;
 }
 
-bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
+bool CMainDlg::SaveProgramConfig(CString szFileName)
 {
 	ConfigList_t m_ConfigList;
 
@@ -1201,7 +1201,7 @@ bool CEncWAVtoAC3Dlg::SaveProgramConfig(CString szFileName)
 	return ::SaveConfig(szFileName, m_ConfigList);
 }
 
-bool CEncWAVtoAC3Dlg::UpdateProgramEngines()
+bool CMainDlg::UpdateProgramEngines()
 {
 	int nSize = this->m_EngineList.GetSize();
 
@@ -1276,7 +1276,7 @@ bool CEncWAVtoAC3Dlg::UpdateProgramEngines()
 	return true;
 }
 
-bool CEncWAVtoAC3Dlg::LoadProgramEngines(CString szFileName)
+bool CMainDlg::LoadProgramEngines(CString szFileName)
 {
 	// init engines configuration
 	this->m_EngineList.RemoveAll();
@@ -1311,13 +1311,13 @@ bool CEncWAVtoAC3Dlg::LoadProgramEngines(CString szFileName)
 	return false;
 }
 
-bool CEncWAVtoAC3Dlg::SaveProgramEngines(CString szFileName)
+bool CMainDlg::SaveProgramEngines(CString szFileName)
 {
 	// save engines configuration
 	return ::SaveConfig(szFileName, this->m_EngineList);
 }
 
-bool CEncWAVtoAC3Dlg::LoadFilesList(CString &szFileName)
+bool CMainDlg::LoadFilesList(CString &szFileName)
 {
 	try
 	{
@@ -1375,7 +1375,7 @@ bool CEncWAVtoAC3Dlg::LoadFilesList(CString &szFileName)
 	}
 }
 
-bool CEncWAVtoAC3Dlg::SaveFilesList(CString &szFileName, int nFormat)
+bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
 	int nItems = this->m_LstFiles.GetItemCount();
 	try
@@ -1416,7 +1416,7 @@ bool CEncWAVtoAC3Dlg::SaveFilesList(CString &szFileName, int nFormat)
 	return true;
 }
 
-void CEncWAVtoAC3Dlg::LoadAllConfiguration()
+void CMainDlg::LoadAllConfiguration()
 {
 	bool bRet = false;
 
@@ -1506,7 +1506,7 @@ void CEncWAVtoAC3Dlg::LoadAllConfiguration()
 	}
 }
 
-void CEncWAVtoAC3Dlg::SaveAllConfiguration()
+void CMainDlg::SaveAllConfiguration()
 {
 	bool bRet = false;
 
@@ -1527,7 +1527,7 @@ void CEncWAVtoAC3Dlg::SaveAllConfiguration()
 	::LogMessage((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_szFilesListFilePath);
 }
 
-void CEncWAVtoAC3Dlg::UpdateBitrateText()
+void CMainDlg::UpdateBitrateText()
 {
 	int nCurPos = this->m_SldBitrate.GetPos();
 	CString szBuff;
@@ -1570,17 +1570,17 @@ void CEncWAVtoAC3Dlg::UpdateBitrateText()
 	this->m_StcBitrate.SetWindowText(szBuff);
 }
 
-EncoderPreset CEncWAVtoAC3Dlg::GetCurrentPreset()
+EncoderPreset CMainDlg::GetCurrentPreset()
 {
 	return this->encPresets.GetAt(this->encPresets.FindIndex(this->nCurrentPreset));
 }
 
-void CEncWAVtoAC3Dlg::UpdateCurrentPreset(EncoderPreset updatePreset)
+void CMainDlg::UpdateCurrentPreset(EncoderPreset updatePreset)
 {
 	this->encPresets.SetAt(this->encPresets.FindIndex(this->nCurrentPreset), updatePreset);
 }
 
-void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
+void CMainDlg::AddItemToFileList(CString szPath)
 {
 	// add file to list
 	CString szSize = _T("");
@@ -1643,7 +1643,7 @@ void CEncWAVtoAC3Dlg::AddItemToFileList(CString szPath)
 	this->m_LstFiles.SetItemText(nItem, 1, szSize);
 }
 
-void CEncWAVtoAC3Dlg::ApplyPresetToDlg(EncoderPreset &Preset)
+void CMainDlg::ApplyPresetToDlg(EncoderPreset &Preset)
 {
 	// fill advanced encoder options list
 	for (int i = 0; i < nNumEncoderOptions; i++)
@@ -1739,7 +1739,7 @@ void CEncWAVtoAC3Dlg::ApplyPresetToDlg(EncoderPreset &Preset)
 	}
 }
 
-void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
+void CMainDlg::HandleDropFiles(HDROP hDropInfo)
 {
 	int nCount = ::DragQueryFile(hDropInfo, (UINT)0xFFFFFFFF, NULL, 0);
 	if (nCount > 0)
@@ -1781,7 +1781,7 @@ void CEncWAVtoAC3Dlg::HandleDropFiles(HDROP hDropInfo)
 	::DragFinish(hDropInfo);
 }
 
-void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
+void CMainDlg::UpdateSettingsComboBox(int nItem)
 {
 	// remove all items from value combobox
 	this->m_CmbValue.ResetContent();
@@ -1800,7 +1800,7 @@ void CEncWAVtoAC3Dlg::UpdateSettingsComboBox(int nItem)
 		this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
 }
 
-void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
+void CMainDlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
 {
 	try
 	{
@@ -1872,7 +1872,7 @@ void CEncWAVtoAC3Dlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
 	}
 }
 
-void CEncWAVtoAC3Dlg::ShowOptionPopup(bool bUseRect)
+void CMainDlg::ShowOptionPopup(bool bUseRect)
 {
 	// get starting point for context menu
 	POINT point;
@@ -1931,7 +1931,7 @@ void CEncWAVtoAC3Dlg::ShowOptionPopup(bool bUseRect)
 
 typedef struct TDRAGANDDROP
 {
-	CEncWAVtoAC3Dlg *pDlg;
+	CMainDlg *pDlg;
 	HDROP hDropInfo;
 } DRAGANDDROP, *PDRAGANDDROP;
 
@@ -1948,7 +1948,7 @@ DWORD WINAPI DragAndDropThread(LPVOID lpParam)
 	return ::CloseHandle(hDDThread);
 }
 
-void CEncWAVtoAC3Dlg::OnDropFiles(HDROP hDropInfo)
+void CMainDlg::OnDropFiles(HDROP hDropInfo)
 {
 	if (bHandleDrop == true)
 	{
@@ -1966,7 +1966,7 @@ void CEncWAVtoAC3Dlg::OnDropFiles(HDROP hDropInfo)
 	CResizeDialog::OnDropFiles(hDropInfo);
 }
 
-void CEncWAVtoAC3Dlg::OnEnChangeEditRawSampleRate()
+void CMainDlg::OnEnChangeEditRawSampleRate()
 {
 	// check if number is in range
 	CString szBuff;
@@ -2003,7 +2003,7 @@ void CEncWAVtoAC3Dlg::OnEnChangeEditRawSampleRate()
 	UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnEnChangeEditRawChannels()
+void CMainDlg::OnEnChangeEditRawChannels()
 {
 	// check if number is in range
 	CString szBuff;
@@ -2040,7 +2040,7 @@ void CEncWAVtoAC3Dlg::OnEnChangeEditRawChannels()
 	UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnEnChangeEditThreads()
+void CMainDlg::OnEnChangeEditThreads()
 {
 	// check if number is in range
 	CString szBuff;
@@ -2077,7 +2077,7 @@ void CEncWAVtoAC3Dlg::OnEnChangeEditThreads()
 	UpdateCurrentPreset(tmpPreset);
 }
 
-void CEncWAVtoAC3Dlg::OnEnChangeEditOutputPath()
+void CMainDlg::OnEnChangeEditOutputPath()
 {
 	CString szBuff;
 
@@ -2090,7 +2090,7 @@ void CEncWAVtoAC3Dlg::OnEnChangeEditOutputPath()
 		this->szOutputPath = szBuff;
 }
 
-void CEncWAVtoAC3Dlg::OnEnSetfocusEditOutputPath()
+void CMainDlg::OnEnSetfocusEditOutputPath()
 {
 	CString szBuff;
 	this->m_EdtOutPath.GetWindowText(szBuff);
@@ -2098,7 +2098,7 @@ void CEncWAVtoAC3Dlg::OnEnSetfocusEditOutputPath()
 		this->m_EdtOutPath.SetWindowText(_T(""));
 }
 
-void CEncWAVtoAC3Dlg::OnEnSetfocusEditRawSampleRate()
+void CMainDlg::OnEnSetfocusEditRawSampleRate()
 {
 	CString szBuff;
 	this->m_EdtRawSamplerate.GetWindowText(szBuff);
@@ -2106,7 +2106,7 @@ void CEncWAVtoAC3Dlg::OnEnSetfocusEditRawSampleRate()
 		this->m_EdtRawSamplerate.SetWindowText(_T(""));
 }
 
-void CEncWAVtoAC3Dlg::OnEnSetfocusEditRawChannels()
+void CMainDlg::OnEnSetfocusEditRawChannels()
 {
 	CString szBuff;
 	this->m_EdtRawChannels.GetWindowText(szBuff);
@@ -2114,7 +2114,7 @@ void CEncWAVtoAC3Dlg::OnEnSetfocusEditRawChannels()
 		this->m_EdtRawChannels.SetWindowText(_T(""));
 }
 
-void CEncWAVtoAC3Dlg::OnEnSetfocusEditThreads()
+void CMainDlg::OnEnSetfocusEditThreads()
 {
 	CString szBuff;
 	this->m_EdtThreads.GetWindowText(szBuff);
@@ -2122,7 +2122,7 @@ void CEncWAVtoAC3Dlg::OnEnSetfocusEditThreads()
 		this->m_EdtThreads.SetWindowText(_T(""));
 }
 
-void CEncWAVtoAC3Dlg::OnEnKillfocusEditOutputPath()
+void CMainDlg::OnEnKillfocusEditOutputPath()
 {
 	CString szBuff;
 	this->m_EdtOutPath.GetWindowText(szBuff);
@@ -2142,7 +2142,7 @@ void CEncWAVtoAC3Dlg::OnEnKillfocusEditOutputPath()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnEnKillfocusEditRawSampleRate()
+void CMainDlg::OnEnKillfocusEditRawSampleRate()
 {
 	CString szBuff;
 	this->m_EdtRawSamplerate.GetWindowText(szBuff);
@@ -2150,7 +2150,7 @@ void CEncWAVtoAC3Dlg::OnEnKillfocusEditRawSampleRate()
 		this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
 }
 
-void CEncWAVtoAC3Dlg::OnEnKillfocusEditRawChannels()
+void CMainDlg::OnEnKillfocusEditRawChannels()
 {
 	CString szBuff;
 	this->m_EdtRawChannels.GetWindowText(szBuff);
@@ -2158,7 +2158,7 @@ void CEncWAVtoAC3Dlg::OnEnKillfocusEditRawChannels()
 		this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
 }
 
-void CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads()
+void CMainDlg::OnEnKillfocusEditThreads()
 {
 	CString szBuff;
 	this->m_EdtThreads.GetWindowText(szBuff);
@@ -2166,7 +2166,7 @@ void CEncWAVtoAC3Dlg::OnEnKillfocusEditThreads()
 		this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
 }
 
-void CEncWAVtoAC3Dlg::InitTitle()
+void CMainDlg::InitTitle()
 {
 	// set program name and version in main dialog title
 	CString szDialogTitle = _T("");
@@ -2174,7 +2174,7 @@ void CEncWAVtoAC3Dlg::InitTitle()
 	this->SetWindowText(szDialogTitle);
 }
 
-void CEncWAVtoAC3Dlg::InitDialogAnchors()
+void CMainDlg::InitDialogAnchors()
 {
 	CleanUp();
 	AddAnchor(IDC_STATIC_QUALITY, AnchorTopLeft);
@@ -2219,7 +2219,7 @@ void CEncWAVtoAC3Dlg::InitDialogAnchors()
 	AddAnchor(IDC_STATUSBAR, AnchorBottomLeft, AnchorBottomRight);
 }
 
-void CEncWAVtoAC3Dlg::InitTooltips()
+void CMainDlg::InitTooltips()
 {
 	// set tooltips
 	CString szTmpText;
@@ -2346,7 +2346,7 @@ void CEncWAVtoAC3Dlg::InitTooltips()
 	this->m_BtnEngines.SetTooltipText(szTmpText);
 }
 
-void CEncWAVtoAC3Dlg::InitSettingsList()
+void CMainDlg::InitSettingsList()
 {
 	int nGroupCounter = -1;
 
@@ -2388,7 +2388,7 @@ void CEncWAVtoAC3Dlg::InitSettingsList()
 	this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 }
 
-void CEncWAVtoAC3Dlg::InitDefaultPreset()
+void CMainDlg::InitDefaultPreset()
 {
 	// set current settings to defaults
 	for (int i = 0; i < nNumEncoderOptions; i++)
@@ -2478,7 +2478,7 @@ void CEncWAVtoAC3Dlg::InitDefaultPreset()
 	}
 }
 
-void CEncWAVtoAC3Dlg::InitRawSamleFormatComboBox()
+void CMainDlg::InitRawSamleFormatComboBox()
 {
 	CString szIgnored = DEFAULT_TEXT_IGNORED;
 
@@ -2493,7 +2493,7 @@ void CEncWAVtoAC3Dlg::InitRawSamleFormatComboBox()
 		this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
 }
 
-void CEncWAVtoAC3Dlg::InitSettingsListGroups()
+void CMainDlg::InitSettingsListGroups()
 {
 	LVGROUP lg;
 	lg.cbSize = sizeof(LVGROUP);
@@ -2513,7 +2513,7 @@ void CEncWAVtoAC3Dlg::InitSettingsListGroups()
 	}
 }
 
-void CEncWAVtoAC3Dlg::InitDialogControls()
+void CMainDlg::InitDialogControls()
 {
 	// set text style to normal or bold for static controls and buttons
 	m_StcQualityBitrate.SetBold(false);
@@ -2607,7 +2607,7 @@ void CEncWAVtoAC3Dlg::InitDialogControls()
 		this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
 }
 
-BOOL CEncWAVtoAC3Dlg::OnInitDialog()
+BOOL CMainDlg::OnInitDialog()
 {
 	CResizeDialog::OnInitDialog();
 
@@ -2705,7 +2705,7 @@ void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, CString& text)
 	listCtrl.SetColumn(nCol, &lvCol);
 }
 
-void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
+void CMainDlg::InitLang(bool initLangMenu)
 {
 	this->InitRawSamleFormatComboBox();
 
@@ -2757,7 +2757,7 @@ void CEncWAVtoAC3Dlg::InitLang(bool initLangMenu)
 		this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath);
 }
 
-void CEncWAVtoAC3Dlg::InitLangButtons()
+void CMainDlg::InitLangButtons()
 {
 	m_BtnEncode.SetWindowTextW(GetLangString(0x00201001));
 	m_BtnResetCurrent.SetWindowTextW(GetLangString(0x00201002));
@@ -2769,7 +2769,7 @@ void CEncWAVtoAC3Dlg::InitLangButtons()
 	m_BtnEngines.SetWindowTextW(GetLangString(0x00201008));
 }
 
-void CEncWAVtoAC3Dlg::InitLangStaticText()
+void CMainDlg::InitLangStaticText()
 {
 	this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(GetLangString(0x00202001));
 
@@ -2792,13 +2792,13 @@ void CEncWAVtoAC3Dlg::InitLangStaticText()
 		this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(GetLangString(0x0020200C));
 }
 
-void CEncWAVtoAC3Dlg::InitLangFilesList()
+void CMainDlg::InitLangFilesList()
 {
 	SetListCtrlColumnText(this->m_LstFiles, 0, GetLangString(0x00203001));
 	SetListCtrlColumnText(this->m_LstFiles, 1, GetLangString(0x00203002));
 }
 
-void CEncWAVtoAC3Dlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
+void CMainDlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
 {
 	m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, GetLangString(0x00204001));
 	m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, GetLangString(0x00204002));
@@ -2812,13 +2812,13 @@ void CEncWAVtoAC3Dlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
 	m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, GetLangString(0x0020400A));
 }
 
-void CEncWAVtoAC3Dlg::InitLangSettingsList()
+void CMainDlg::InitLangSettingsList()
 {
 	SetListCtrlColumnText(this->m_LstSettings, 0, GetLangString(0x00205001));
 	SetListCtrlColumnText(this->m_LstSettings, 1, GetLangString(0x00205002));
 }
 
-void CEncWAVtoAC3Dlg::InitLangMainMenu()
+void CMainDlg::InitLangMainMenu()
 {
 	// get main menu handle
 	CMenu *m_hMenu = this->GetMenu();
@@ -2862,7 +2862,7 @@ void CEncWAVtoAC3Dlg::InitLangMainMenu()
 	this->DrawMenuBar();
 }
 
-void CEncWAVtoAC3Dlg::InitLangMenu()
+void CMainDlg::InitLangMenu()
 {
 	// insert languages to Language sub-menu
 	if (theApp.m_LangLst.GetCount() > 0)
@@ -2901,7 +2901,7 @@ void CEncWAVtoAC3Dlg::InitLangMenu()
 
 int CALLBACK CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamData)
 {
-	CEncWAVtoAC3Dlg *pDlg = (CEncWAVtoAC3Dlg *)lParamData;
+	CMainDlg *pDlg = (CMainDlg *)lParamData;
 
 	LVFINDINFO pInfo1, pInfo2;
 	pInfo1.flags = LVFI_PARAM;
@@ -2923,32 +2923,32 @@ int CALLBACK CompareFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamData)
 	return 0;
 }
 
-void CEncWAVtoAC3Dlg::OnListAddFiles()
+void CMainDlg::OnListAddFiles()
 {
 	this->OnFileAddFiles();
 }
 
-void CEncWAVtoAC3Dlg::OnListAddDirectory()
+void CMainDlg::OnListAddDirectory()
 {
 	this->OnFileAddDirectory();
 }
 
-void CEncWAVtoAC3Dlg::OnListMuxWizard()
+void CMainDlg::OnListMuxWizard()
 {
 	this->OnFileMuxWizard();
 }
 
-void CEncWAVtoAC3Dlg::OnListLoadList()
+void CMainDlg::OnListLoadList()
 {
 	this->OnFileLoadFilesList();
 }
 
-void CEncWAVtoAC3Dlg::OnListSavelist()
+void CMainDlg::OnListSavelist()
 {
 	this->OnFileSaveFilesList();
 }
 
-void CEncWAVtoAC3Dlg::OnListMoveUp()
+void CMainDlg::OnListMoveUp()
 {
 	// move files list items one position up
 	POSITION pos;
@@ -2983,7 +2983,7 @@ void CEncWAVtoAC3Dlg::OnListMoveUp()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnListMoveDown()
+void CMainDlg::OnListMoveDown()
 {
 	// move files list items one position down
 	POSITION pos;
@@ -3035,7 +3035,7 @@ void CEncWAVtoAC3Dlg::OnListMoveDown()
 	listSel.RemoveAll();
 }
 
-void CEncWAVtoAC3Dlg::OnListDelFiles()
+void CMainDlg::OnListDelFiles()
 {
 	CList<int, int> list;
 	POSITION pos;
@@ -3051,12 +3051,12 @@ void CEncWAVtoAC3Dlg::OnListDelFiles()
 		this->m_LstFiles.DeleteItem(list.GetPrev(pos));
 }
 
-void CEncWAVtoAC3Dlg::OnListClearList()
+void CMainDlg::OnListClearList()
 {
 	this->m_LstFiles.DeleteAllItems();
 }
 
-void CEncWAVtoAC3Dlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 	static int nLastItem = -1;
@@ -3077,7 +3077,7 @@ void CEncWAVtoAC3Dlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResu
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
 
@@ -3108,7 +3108,7 @@ void CEncWAVtoAC3Dlg::OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
@@ -3124,7 +3124,7 @@ void CEncWAVtoAC3Dlg::OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
 
@@ -3206,7 +3206,7 @@ void CEncWAVtoAC3Dlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	// get starting point for context menu
 	POINT point;
@@ -3228,7 +3228,7 @@ void CEncWAVtoAC3Dlg::OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	// show option values in popup menu
 	this->ShowOptionPopup(true);
@@ -3236,7 +3236,7 @@ void CEncWAVtoAC3Dlg::OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
 	if (pos != NULL)
@@ -3251,7 +3251,7 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 }
 
 #ifndef DISABLE_AVISYNTH
-bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
+bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
 {
 	TCHAR *pszInPath = szFileName.GetBuffer();
 
@@ -3294,7 +3294,7 @@ bool CEncWAVtoAC3Dlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInf
 }
 #endif
 
-void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
+void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	POSITION pos = m_LstFiles.GetFirstSelectedItemPosition();
 	if (pos != NULL)
@@ -3379,7 +3379,7 @@ void CEncWAVtoAC3Dlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 	*pResult = 0;
 }
 
-void CEncWAVtoAC3Dlg::OnFileAddFiles()
+void CMainDlg::OnFileAddFiles()
 {
 	TCHAR *pFiles = NULL;
 	const DWORD dwMaxSize = (4096 * MAX_PATH);
@@ -3438,7 +3438,7 @@ void CEncWAVtoAC3Dlg::OnFileAddFiles()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileAddDirectory()
+void CMainDlg::OnFileAddDirectory()
 {
 	LPMALLOC pMalloc;
 	BROWSEINFO bi;
@@ -3495,9 +3495,9 @@ void CEncWAVtoAC3Dlg::OnFileAddDirectory()
 	pMalloc->Release();
 }
 
-void CEncWAVtoAC3Dlg::OnFileMuxWizard()
+void CMainDlg::OnFileMuxWizard()
 {
-	CEncWAVtoAC3MuxDlg dlg;
+	CMuxDlg dlg;
 
 	// get number of files to process
 	int nItemsCount = this->m_LstFiles.GetItemCount();
@@ -3701,7 +3701,7 @@ void CEncWAVtoAC3Dlg::OnFileMuxWizard()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileLoadFilesList()
+void CMainDlg::OnFileLoadFilesList()
 {
 	CFileDialog fd(TRUE,
 		_T("files"),
@@ -3720,7 +3720,7 @@ void CEncWAVtoAC3Dlg::OnFileLoadFilesList()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileSaveFilesList()
+void CMainDlg::OnFileSaveFilesList()
 {
 	CFileDialog fd(FALSE,
 		_T("files"),
@@ -3743,7 +3743,7 @@ void CEncWAVtoAC3Dlg::OnFileSaveFilesList()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileLoadPresets()
+void CMainDlg::OnFileLoadPresets()
 {
 	CFileDialog fd(TRUE,
 		_T("presets"),
@@ -3780,7 +3780,7 @@ void CEncWAVtoAC3Dlg::OnFileLoadPresets()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileSavePresets()
+void CMainDlg::OnFileSavePresets()
 {
 	CFileDialog fd(FALSE,
 		_T("presets"),
@@ -3799,37 +3799,37 @@ void CEncWAVtoAC3Dlg::OnFileSavePresets()
 	}
 }
 
-void CEncWAVtoAC3Dlg::OnFileExit()
+void CMainDlg::OnFileExit()
 {
 	this->EndDialog(IDOK);
 }
 
-void CEncWAVtoAC3Dlg::OnOptionsDisableAllWarnings()
+void CMainDlg::OnOptionsDisableAllWarnings()
 {
 	this->bDisableAllWarnings = this->bDisableAllWarnings ? false : true;
 	this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
 		this->bDisableAllWarnings ? MF_CHECKED : MF_UNCHECKED);
 }
 
-void CEncWAVtoAC3Dlg::OnOptionsSaveConfigurationOnExit()
+void CMainDlg::OnOptionsSaveConfigurationOnExit()
 {
 	this->bSaveConfig = this->bSaveConfig ? false : true;
 	this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
 		this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 }
 
-void CEncWAVtoAC3Dlg::OnOptionsLoadConfiguration()
+void CMainDlg::OnOptionsLoadConfiguration()
 {
 	this->LoadAllConfiguration();
 }
 
-void CEncWAVtoAC3Dlg::OnOptionsSaveConfiguration()
+void CMainDlg::OnOptionsSaveConfiguration()
 {
 	// save configuration to disk (works also in read-only mode)
 	this->SaveAllConfiguration();
 }
 
-void CEncWAVtoAC3Dlg::OnLanguageChangeDefault()
+void CMainDlg::OnLanguageChangeDefault()
 {
 	// set language to default
 	theApp.m_nLangId = -1;
@@ -3855,7 +3855,7 @@ void CEncWAVtoAC3Dlg::OnLanguageChangeDefault()
 	InitLang(false);
 }
 
-void CEncWAVtoAC3Dlg::OnLanguageChange(UINT nID)
+void CMainDlg::OnLanguageChange(UINT nID)
 {
 	// set language by ID
 	POSITION pos = theApp.m_LangLst.FindIndex(nID - ID_LANGUAGE_MENU_START);
@@ -3891,18 +3891,18 @@ void CEncWAVtoAC3Dlg::OnLanguageChange(UINT nID)
 	this->InitLang(false);
 }
 
-void CEncWAVtoAC3Dlg::OnHelpCommandLine()
+void CMainDlg::OnHelpCommandLine()
 {
 	ShowCommandLineHelp(this->GetSafeHwnd());
 }
 
-void CEncWAVtoAC3Dlg::OnHelpWebsite()
+void CMainDlg::OnHelpWebsite()
 {
 	// go to program website using default Internet browser
 	LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
 }
 
-void CEncWAVtoAC3Dlg::OnHelpAbout()
+void CMainDlg::OnHelpAbout()
 {
 	CAboutDlg dlg;
 

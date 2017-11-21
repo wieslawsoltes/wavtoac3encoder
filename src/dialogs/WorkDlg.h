@@ -39,12 +39,12 @@
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 
-class CEncWAVtoAC3WorkDlg;
+class CWorkDlg;
 
 // params used in worker thread
 typedef struct TWorkerParam
 {
-    CEncWAVtoAC3WorkDlg *pWorkDlg;
+    CWorkDlg *pWorkDlg;
     CList<CString, CString> *list;
     CList<bool, bool> *listStatus;
     EncoderPreset preset;
@@ -61,13 +61,13 @@ typedef struct TWorkerParam
     __int64 nOutTotalSize;
 } WorkerParam;
 
-class CEncWAVtoAC3WorkDlg : public CDialogEx
+class CWorkDlg : public CDialogEx
 {
-    DECLARE_DYNAMIC(CEncWAVtoAC3WorkDlg)
+    DECLARE_DYNAMIC(CWorkDlg)
 public:
-    CEncWAVtoAC3WorkDlg(CWnd* pParent = NULL);
-    virtual ~CEncWAVtoAC3WorkDlg();
-    enum { IDD = IDD_ENCODING_DIALOG };
+    CWorkDlg(CWnd* pParent = NULL);
+    virtual ~CWorkDlg();
+    enum { IDD = IDD_DIALOG_WORK };
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();

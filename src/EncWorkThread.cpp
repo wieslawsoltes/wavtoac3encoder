@@ -19,7 +19,7 @@
 #include "StdAfx.h"
 #include "MainApp.h"
 #include "EncWorkThread.h"
-#include "dialogs\EncWAVtoAC3WorkDlg.h"
+#include "dialogs\WorkDlg.h"
 #include "EncoderOptions.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"

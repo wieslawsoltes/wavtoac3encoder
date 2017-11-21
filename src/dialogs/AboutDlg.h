@@ -35,7 +35,7 @@ public:
     CAboutDlg(CWnd* pParent = NULL);
     virtual ~CAboutDlg();
 public:
-    enum { IDD = IDD_ABOUT_DIALOG };
+    enum { IDD = IDD_DIALOG_ABOUT };
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();

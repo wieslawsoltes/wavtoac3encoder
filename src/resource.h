@@ -3,14 +3,14 @@
 // Used by EncWAVtoAC3.rc
 //
 #define IDR_MAINFRAME                   102
-#define IDD_ENCWAVTOAC3_DIALOG          128
-#define IDD_ENCODING_DIALOG             129
+#define IDD_DIALOG_MAIN                 128
+#define IDD_DIALOG_WORK                 129
 #define IDR_MENU_MAIN                   130
-#define IDD_ABOUT_DIALOG                131
+#define IDD_DIALOG_ABOUT                131
 #define IDB_ABOUT_BITMAP                132
 #define IDR_MENU_LIST                   133
-#define IDD_MUX_DIALOG                  134
-#define IDD_ENGINES_DIALOG              135
+#define IDD_DIALOG_MUX                  134
+#define IDD_DIALOG_ENGINES              135
 #define IDR_ACCELERATOR_MAIN_MENU       136
 #define IDC_PROGRESS_CURRENT            1001
 #define IDC_PROGRESS_TOTAL              1002

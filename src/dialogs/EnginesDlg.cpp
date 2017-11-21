@@ -18,25 +18,25 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
-#include "EncWAVtoAC3EngDlg.h"
+#include "EnginesDlg.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
 
-IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CEnginesDlg, CDialogEx)
 
-CEncWAVtoAC3EngDlg::CEncWAVtoAC3EngDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(CEncWAVtoAC3EngDlg::IDD, pParent)
+CEnginesDlg::CEnginesDlg(CWnd* pParent /*=NULL*/)
+    : CDialogEx(CEnginesDlg::IDD, pParent)
 {
     bUpdateList = true;
     nCurrSel = 0;
 }
 
-CEncWAVtoAC3EngDlg::~CEncWAVtoAC3EngDlg()
+CEnginesDlg::~CEnginesDlg()
 {
 
 }
 
-void CEncWAVtoAC3EngDlg::DoDataExchange(CDataExchange* pDX)
+void CEnginesDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST_ENGINES, m_LstEngines);
@@ -44,21 +44,21 @@ void CEncWAVtoAC3EngDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_ENGINE_PATH, m_EdtEnginePath);
 }
 
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3EngDlg, CDialogEx)
-    ON_BN_CLICKED(IDOK, &CEncWAVtoAC3EngDlg::OnBnClickedOk)
-    ON_BN_CLICKED(IDCANCEL, &CEncWAVtoAC3EngDlg::OnBnClickedCancel)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES_BROWSE, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES_IMPORT, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES_EXPORT, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES_ADD, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd)
-    ON_BN_CLICKED(IDC_BUTTON_ENGINES_REMOVE, &CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove)
-    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_ENGINES, &CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines)
-    ON_EN_CHANGE(IDC_EDIT_ENGINE_NAME, &CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName)
-    ON_EN_CHANGE(IDC_EDIT_ENGINE_PATH, &CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath)
-    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_ENGINES, &CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines)
+BEGIN_MESSAGE_MAP(CEnginesDlg, CDialogEx)
+    ON_BN_CLICKED(IDOK, &CEnginesDlg::OnBnClickedOk)
+    ON_BN_CLICKED(IDCANCEL, &CEnginesDlg::OnBnClickedCancel)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES_BROWSE, &CEnginesDlg::OnBnClickedButtonEnginesBrowse)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES_IMPORT, &CEnginesDlg::OnBnClickedButtonEnginesImport)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES_EXPORT, &CEnginesDlg::OnBnClickedButtonEnginesExport)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES_ADD, &CEnginesDlg::OnBnClickedButtonEnginesAdd)
+    ON_BN_CLICKED(IDC_BUTTON_ENGINES_REMOVE, &CEnginesDlg::OnBnClickedButtonEnginesRemove)
+    ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST_ENGINES, &CEnginesDlg::OnLvnItemchangedListEngines)
+    ON_EN_CHANGE(IDC_EDIT_ENGINE_NAME, &CEnginesDlg::OnEnChangeEditEngineName)
+    ON_EN_CHANGE(IDC_EDIT_ENGINE_PATH, &CEnginesDlg::OnEnChangeEditEnginePath)
+    ON_NOTIFY(LVN_KEYDOWN, IDC_LIST_ENGINES, &CEnginesDlg::OnLvnKeydownListEngines)
 END_MESSAGE_MAP()
 
-BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
+BOOL CEnginesDlg::OnInitDialog()
 {
     CDialogEx::OnInitDialog();
 
@@ -85,17 +85,17 @@ BOOL CEncWAVtoAC3EngDlg::OnInitDialog()
     return TRUE;
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedOk()
+void CEnginesDlg::OnBnClickedOk()
 {
     OnOK();
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedCancel()
+void CEnginesDlg::OnBnClickedCancel()
 {
     OnCancel();
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
+void CEnginesDlg::OnBnClickedButtonEnginesBrowse()
 {
     CFileDialog fd(TRUE,
         _T("dll"),
@@ -114,7 +114,7 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesBrowse()
     }
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
+void CEnginesDlg::OnBnClickedButtonEnginesImport()
 {
     CFileDialog fd(TRUE,
         _T("engines"),
@@ -133,7 +133,7 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesImport()
     }
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
+void CEnginesDlg::OnBnClickedButtonEnginesExport()
 {
     CFileDialog fd(FALSE,
         _T("engines"),
@@ -152,7 +152,7 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesExport()
     }
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd()
+void CEnginesDlg::OnBnClickedButtonEnginesAdd()
 {
     int nSize = this->m_EngineList.GetSize();
     ConfigEntry ce;
@@ -166,7 +166,7 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesAdd()
     this->m_LstEngines.SetItemText(nSize, 1, ce.szData);
 }
 
-void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove()
+void CEnginesDlg::OnBnClickedButtonEnginesRemove()
 {
     CList<int, int> list;
     POSITION pos;
@@ -188,7 +188,7 @@ void CEncWAVtoAC3EngDlg::OnBnClickedButtonEnginesRemove()
     }
 }
 
-bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
+bool CEnginesDlg::InsertProgramEngines()
 {
     int nSize = this->m_EngineList.GetSize();
 
@@ -217,7 +217,7 @@ bool CEncWAVtoAC3EngDlg::InsertProgramEngines()
     return true;
 }
 
-bool CEncWAVtoAC3EngDlg::LoadProgramEngines(CString szFileName)
+bool CEnginesDlg::LoadProgramEngines(CString szFileName)
 {
     // init engines configuration
     this->m_EngineList.RemoveAll();
@@ -231,13 +231,13 @@ bool CEncWAVtoAC3EngDlg::LoadProgramEngines(CString szFileName)
     return false;
 }
 
-bool CEncWAVtoAC3EngDlg::SaveProgramEngines(CString szFileName)
+bool CEnginesDlg::SaveProgramEngines(CString szFileName)
 {
     // save engines configuration
     return ::SaveConfig(szFileName, this->m_EngineList);
 }
 
-void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
+void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
@@ -267,7 +267,7 @@ void CEncWAVtoAC3EngDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pRe
     *pResult = 0;
 }
 
-void CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName()
+void CEnginesDlg::OnEnChangeEditEngineName()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
     if (pos != NULL)
@@ -287,7 +287,7 @@ void CEncWAVtoAC3EngDlg::OnEnChangeEditEngineName()
     }
 }
 
-void CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath()
+void CEnginesDlg::OnEnChangeEditEnginePath()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
     if (pos != NULL)
@@ -308,7 +308,7 @@ void CEncWAVtoAC3EngDlg::OnEnChangeEditEnginePath()
     }
 }
 
-void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
+void CEnginesDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
 
@@ -327,7 +327,7 @@ void CEncWAVtoAC3EngDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult
     *pResult = 0;
 }
 
-void CEncWAVtoAC3EngDlg::InitLang()
+void CEnginesDlg::InitLang()
 {
     if (HaveLangStrings())
     {
