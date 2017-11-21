@@ -19,8 +19,8 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "EncWAVtoAC3EngDlg.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "..\utilities\Utilities.h"
+#include "..\utilities\MyFile.h"
 
 IMPLEMENT_DYNAMIC(CEncWAVtoAC3EngDlg, CDialogEx)
 

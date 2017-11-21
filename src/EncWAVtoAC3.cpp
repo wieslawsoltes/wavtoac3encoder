@@ -18,13 +18,13 @@
 
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
-#include "EncWAVtoAC3Dlg.h"
-#include "EncWAVtoAC3MuxDlg.h"
+#include "dialogs\EncWAVtoAC3Dlg.h"
+#include "dialogs\EncWAVtoAC3MuxDlg.h"
 
 #include "CommandLine.h"
 #include "OptionsParser.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

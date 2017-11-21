@@ -19,8 +19,8 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "EncWAVtoAC3MuxDlg.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "..\utilities\Utilities.h"
+#include "..\utilities\MyFile.h"
 
 // Correct channel to file mapping:
 // FL    -> szInputFiles[0]

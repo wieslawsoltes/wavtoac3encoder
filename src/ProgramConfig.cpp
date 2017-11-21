@@ -19,7 +19,7 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "ProgramConfig.h"
-#include "MyFile.h"
+#include "utilities\MyFile.h"
 
 bool LoadConfig(CString &szFileName, ConfigList_t &cl)
 {

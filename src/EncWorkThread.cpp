@@ -19,10 +19,10 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "EncWorkThread.h"
-#include "EncWAVtoAC3WorkDlg.h"
+#include "dialogs\EncWAVtoAC3WorkDlg.h"
 #include "EncoderOptions.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
 
 #ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"

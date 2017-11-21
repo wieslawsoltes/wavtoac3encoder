@@ -82,6 +82,18 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">obj\$(Configuration)\$(Platform)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>.\;$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>.\;$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>.\;$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>.\;$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -225,45 +237,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="AftenAPI.cpp" />
     <ClCompile Include="Avs2Raw.cpp" />
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="EncoderOptions.cpp" />
     <ClCompile Include="EncWAVtoAC3.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Button.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-ComboBox.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Config.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Drop.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Edit.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Init.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-List.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Menu.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg.cpp" />
-    <ClCompile Include="EncWAVtoAC3Dlg-Lang.cpp" />
-    <ClCompile Include="EncWAVtoAC3EngDlg.cpp" />
-    <ClCompile Include="EncWAVtoAC3MuxDlg.cpp" />
-    <ClCompile Include="EncWAVtoAC3WorkDlg.cpp" />
     <ClCompile Include="EncWorkThread.cpp" />
     <ClCompile Include="Language.cpp" />
-    <ClCompile Include="MyButton.cpp" />
-    <ClCompile Include="MyComboBox.cpp" />
-    <ClCompile Include="MyComboBoxEdit.cpp" />
-    <ClCompile Include="MyEdit.cpp" />
-    <ClCompile Include="MyFile.cpp" />
-    <ClCompile Include="MyListCtrl.cpp" />
-    <ClCompile Include="MySliderCtrl.cpp" />
-    <ClCompile Include="MyStatic.cpp" />
     <ClCompile Include="OptionsParser.cpp" />
     <ClCompile Include="ProgramConfig.cpp" />
-    <ClCompile Include="ResizeDialog.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Utilities.cpp" />
     <ClCompile Include="aften\pcm\aiff.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
@@ -368,9 +356,32 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="controls\MyButton.cpp" />
+    <ClCompile Include="controls\MyComboBox.cpp" />
+    <ClCompile Include="controls\MyComboBoxEdit.cpp" />
+    <ClCompile Include="controls\MyEdit.cpp" />
+    <ClCompile Include="controls\MyListCtrl.cpp" />
+    <ClCompile Include="controls\MySliderCtrl.cpp" />
+    <ClCompile Include="controls\MyStatic.cpp" />
+    <ClCompile Include="controls\ResizeDialog.cpp" />
+    <ClCompile Include="dialogs\AboutDlg.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Button.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-ComboBox.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Config.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Drop.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Edit.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Init.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-List.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Menu.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Lang.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3EngDlg.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3MuxDlg.cpp" />
+    <ClCompile Include="dialogs\EncWAVtoAC3WorkDlg.cpp" />
+    <ClCompile Include="utilities\MyFile.cpp" />
+    <ClCompile Include="utilities\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="AftenAPI.h" />
     <ClInclude Include="avisynth64\core\avisynth.h" />
     <ClInclude Include="avisynth64\internal.h" />
@@ -378,28 +389,14 @@
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="EncoderOptions.h" />
     <ClInclude Include="EncWAVtoAC3.h" />
-    <ClInclude Include="EncWAVtoAC3Dlg.h" />
-    <ClInclude Include="EncWAVtoAC3EngDlg.h" />
-    <ClInclude Include="EncWAVtoAC3MuxDlg.h" />
-    <ClInclude Include="EncWAVtoAC3WorkDlg.h" />
     <ClInclude Include="EncWorkThread.h" />
     <ClInclude Include="Language.h" />
-    <ClInclude Include="MyButton.h" />
-    <ClInclude Include="MyComboBox.h" />
-    <ClInclude Include="MyComboBoxEdit.h" />
-    <ClInclude Include="MyEdit.h" />
-    <ClInclude Include="MyFile.h" />
-    <ClInclude Include="MyListCtrl.h" />
-    <ClInclude Include="MySliderCtrl.h" />
-    <ClInclude Include="MyStatic.h" />
     <ClInclude Include="OptionsParser.h" />
     <ClInclude Include="ProgramConfig.h" />
-    <ClInclude Include="ResizeDialog.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Utilities.h" />
     <ClInclude Include="aften\libaften\aften.h" />
     <ClInclude Include="aften\pcm\byteio.h" />
     <ClInclude Include="aften\pcm\formats.h" />
@@ -407,6 +404,21 @@
     <ClInclude Include="aften\pcm\pcmfile.h" />
     <ClInclude Include="avisynth\core\avisynth.h" />
     <ClInclude Include="avisynth\internal.h" />
+    <ClInclude Include="controls\MyButton.h" />
+    <ClInclude Include="controls\MyComboBox.h" />
+    <ClInclude Include="controls\MyComboBoxEdit.h" />
+    <ClInclude Include="controls\MyEdit.h" />
+    <ClInclude Include="controls\MyListCtrl.h" />
+    <ClInclude Include="controls\MySliderCtrl.h" />
+    <ClInclude Include="controls\MyStatic.h" />
+    <ClInclude Include="controls\ResizeDialog.h" />
+    <ClInclude Include="dialogs\AboutDlg.h" />
+    <ClInclude Include="dialogs\EncWAVtoAC3Dlg.h" />
+    <ClInclude Include="dialogs\EncWAVtoAC3EngDlg.h" />
+    <ClInclude Include="dialogs\EncWAVtoAC3MuxDlg.h" />
+    <ClInclude Include="dialogs\EncWAVtoAC3WorkDlg.h" />
+    <ClInclude Include="utilities\MyFile.h" />
+    <ClInclude Include="utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\EncWAVtoAC3.bmp" />
@@ -415,12 +427,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="EncWAVtoAC3.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\lang\de.txt" />
-    <Text Include="..\lang\en.txt" />
-    <Text Include="..\lang\jp.txt" />
-    <Text Include="..\lang\pl.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

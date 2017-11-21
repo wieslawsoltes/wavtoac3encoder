@@ -17,12 +17,12 @@
 //
 
 #include "stdafx.h"
-#include "EncWAVtoAC3.h"
+#include "..\EncWAVtoAC3.h"
 #include "EncWAVtoAC3WorkDlg.h"
-#include "EncoderOptions.h"
-#include "Utilities.h"
-#include "MyFile.h"
-#include "EncWorkThread.h"
+#include "..\EncoderOptions.h"
+#include "..\utilities\Utilities.h"
+#include "..\utilities\MyFile.h"
+#include "..\EncWorkThread.h"
 
 IMPLEMENT_DYNAMIC(CEncWAVtoAC3WorkDlg, CDialogEx)
 

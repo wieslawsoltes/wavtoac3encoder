@@ -18,13 +18,13 @@
 
 #pragma once
 
-#include "MyButton.h"
-#include "MyStatic.h"
-#include "MyEdit.h"
-#include "MyComboBoxEdit.h"
-#include "MyListCtrl.h"
-#include "MyComboBox.h"
-#include "MySliderCtrl.h"
+#include "..\controls\MyButton.h"
+#include "..\controls\MyStatic.h"
+#include "..\controls\MyEdit.h"
+#include "..\controls\MyComboBoxEdit.h"
+#include "..\controls\MyListCtrl.h"
+#include "..\controls\MyComboBox.h"
+#include "..\controls\MySliderCtrl.h"
 
 #include "afxwin.h"
 

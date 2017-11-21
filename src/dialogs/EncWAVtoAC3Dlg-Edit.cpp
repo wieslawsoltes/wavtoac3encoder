@@ -23,8 +23,8 @@
 #include "EncWAVtoAC3MuxDlg.h"
 #include "EncWAVtoAC3EngDlg.h"
 #include "AboutDlg.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "..\utilities\Utilities.h"
+#include "..\utilities\MyFile.h"
 #include "EncWorkThread.h"
 
 #ifdef _DEBUG

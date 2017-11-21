@@ -19,7 +19,7 @@
 #include "stdafx.h"
 #include "EncWAVtoAC3.h"
 #include "Language.h"
-#include "MyFile.h"
+#include "utilities\MyFile.h"
 
 void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
 {

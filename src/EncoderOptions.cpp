@@ -20,8 +20,8 @@
 #include "EncWAVtoAC3.h"
 #include "EncoderOptions.h"
 #include "ProgramConfig.h"
-#include "Utilities.h"
-#include "MyFile.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
 
 // valid CBR mode bitrates
 const int nValidCbrBitrates[nNumValidCbrBitrates] =

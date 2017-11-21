@@ -17,7 +17,7 @@
 //
 
 #include "stdafx.h"
-#include "Utilities.h"
+#include "..\utilities\Utilities.h"
 
 LogCtx logCtx;
 
