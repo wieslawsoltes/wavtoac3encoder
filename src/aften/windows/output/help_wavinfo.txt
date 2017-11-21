@@ -1,1 +1,0 @@
-usage: wavinfo [test.wav]

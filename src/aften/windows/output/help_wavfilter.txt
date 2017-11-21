@@ -1,1 +1,0 @@
-usage: wavfilter <lp | hp> <cutoff> <in.wav> <out.wav>
