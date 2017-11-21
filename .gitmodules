@@ -1,0 +1,3 @@
+[submodule "src/aften"]
+	path = src/aften
+	url = https://github.com/wieslawsoltes/AftenWindowsBuilds
