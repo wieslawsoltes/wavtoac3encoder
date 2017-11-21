@@ -146,33 +146,6 @@
     <ClCompile Include="dialogs\AboutDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Lang.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Init.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Config.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Button.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-ComboBox.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Edit.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Menu.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-List.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Drop.cpp">
-      <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="utilities\MyFile.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>

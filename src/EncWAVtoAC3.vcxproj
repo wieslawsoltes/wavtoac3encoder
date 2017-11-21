@@ -365,16 +365,7 @@
     <ClCompile Include="controls\MyStatic.cpp" />
     <ClCompile Include="controls\ResizeDialog.cpp" />
     <ClCompile Include="dialogs\AboutDlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Button.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-ComboBox.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Config.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Drop.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Edit.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Init.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-List.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Menu.cpp" />
     <ClCompile Include="dialogs\EncWAVtoAC3Dlg.cpp" />
-    <ClCompile Include="dialogs\EncWAVtoAC3Dlg-Lang.cpp" />
     <ClCompile Include="dialogs\EncWAVtoAC3EngDlg.cpp" />
     <ClCompile Include="dialogs\EncWAVtoAC3MuxDlg.cpp" />
     <ClCompile Include="dialogs\EncWAVtoAC3WorkDlg.cpp" />
