@@ -16,8 +16,8 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-#include "stdafx.h"
-#include "EncWAVtoAC3.h"
+#include "StdAfx.h"
+#include "MainApp.h"
 #include "AftenAPI.h"
 
 bool OpenAftenAPI(AftenAPI *pAftenApi)
