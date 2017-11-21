@@ -3,6 +3,7 @@
 [![Gitter](https://badges.gitter.im/wieslawsoltes/wavtoac3encoder.svg)](https://gitter.im/wieslawsoltes/wavtoac3encoder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/xgpr76v102iu86wr/branch/master?svg=true)](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/branch/master)
+
 [![Github All Releases](https://img.shields.io/github/downloads/wieslawsoltes/wavtoac3encoder/total.svg)](https://github.com/wieslawsoltes/wavtoac3encoder)
 [![GitHub release](https://img.shields.io/github/release/wieslawsoltes/wavtoac3encoder.svg)](https://github.com/wieslawsoltes/wavtoac3encoder)
 [![Github Releases](https://img.shields.io/github/downloads/wieslawsoltes/wavtoac3encoder/latest/total.svg)](https://github.com/wieslawsoltes/wavtoac3encoder)
