@@ -3,6 +3,8 @@
 
 #pragma once
 
+#define WM_ITEMCHANGED (WM_USER + 0x20)
+
 class CMyListCtrl : public CListCtrl
 {
     DECLARE_DYNAMIC(CMyListCtrl)
@@ -15,6 +17,8 @@ protected:
     afx_msg BOOL OnToolTipText(UINT id, NMHDR *pNMHDR, LRESULT *pResult);
 protected:
     DECLARE_MESSAGE_MAP()
+public:
+    afx_msg void OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult);
 protected:
     virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
 private:

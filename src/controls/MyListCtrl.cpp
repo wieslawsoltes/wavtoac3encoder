@@ -35,9 +35,29 @@ void CMyListCtrl::PreSubclassWindow()
 
 BEGIN_MESSAGE_MAP(CMyListCtrl, CListCtrl)
     ON_WM_CREATE()
+    ON_NOTIFY_REFLECT(LVN_ENDLABELEDIT, OnLvnEndlabeledit)
     ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
     ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 END_MESSAGE_MAP()
+
+void CMyListCtrl::OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+    if (pDispInfo->item.pszText != NULL)
+    {
+        CString szText;
+        this->GetEditControl()->GetWindowText(szText);
+        if (szText.GetLength() > 0)
+        {
+            this->SetItemText(pDispInfo->item.iItem, 0, szText);
+            GetParent()->SendMessage(WM_ITEMCHANGED,
+                (WPARAM)pDispInfo->item.iItem,
+                (LPARAM)szText.GetBuffer(szText.GetLength()));
+            szText.ReleaseBuffer();
+        }
+    }
+    *pResult = 0;
+}
 
 void CMyListCtrl::SetTooltipText(CString szText)
 {
