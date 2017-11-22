@@ -174,6 +174,7 @@ void ConvertAnsiToUnicode(const char *szAnsi, wchar_t *szUnicode, ULONG nLength)
     // use always + 1 to null-terminate string
     _mbstowcsz(szUnicode, szAnsi, nLength + 1);
 }
+
 void ConvertUnicodeToAnsi(const wchar_t *szUnicode, char *szAnsi, ULONG nLength)
 {
     // use always + 1 to null-terminate string
