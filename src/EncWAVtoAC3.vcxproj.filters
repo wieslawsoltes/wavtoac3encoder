@@ -39,6 +39,12 @@
     <Filter Include="Header Files\Avisynth64">
       <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Configuration">
+      <UniqueIdentifier>{6a5e7b1c-216b-4109-a6c7-29b10eb6bd31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Configuration">
+      <UniqueIdentifier>{66f98277-720d-4d1f-bb32-ee9c65c9c4e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CommandLine.cpp">
@@ -50,16 +56,7 @@
     <ClCompile Include="OptionsParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramConfig.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Language.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AftenAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EncoderOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Avs2Raw.cpp">
@@ -116,6 +113,15 @@
     <ClCompile Include="dialogs\WorkDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="EncoderOptions.cpp">
+      <Filter>Source Files\Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="Language.cpp">
+      <Filter>Source Files\Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramConfig.cpp">
+      <Filter>Source Files\Configuration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandLine.h">
@@ -127,9 +133,6 @@
     <ClInclude Include="OptionsParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProgramConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -139,13 +142,7 @@
     <ClInclude Include="Avs2Raw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Language.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AftenAPI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EncoderOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="version.h">
@@ -198,6 +195,15 @@
     </ClInclude>
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="EncoderOptions.h">
+      <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="Language.h">
+      <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramConfig.h">
+      <Filter>Header Files\Configuration</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
