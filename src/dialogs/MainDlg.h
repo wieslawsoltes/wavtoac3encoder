@@ -62,7 +62,7 @@ typedef struct TItemToMove
     int nItem1;
 } ItemToMove;
 
-class CMainDlg : public CResizeDialog
+class CMainDlg : public CMyResizeDialog
 {
 public:
     CMainDlg(CWnd* pParent = NULL);
