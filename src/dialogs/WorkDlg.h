@@ -21,6 +21,7 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
+#include "..\configuration\EncoderOptions.h"
 #include "..\controls\MyButton.h"
 #include "..\controls\MyStatic.h"
 #include "..\controls\MyEdit.h"
@@ -28,8 +29,6 @@
 #include "..\controls\MyListCtrl.h"
 #include "..\controls\MyComboBox.h"
 #include "..\controls\MySliderCtrl.h"
-
-#include "EncoderOptions.h"
 
 // return values from work thread
 #define WORKDLG_RETURN_SUCCESS 0

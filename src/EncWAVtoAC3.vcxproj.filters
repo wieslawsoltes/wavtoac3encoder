@@ -40,16 +40,16 @@
       <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Configuration">
-      <UniqueIdentifier>{6a5e7b1c-216b-4109-a6c7-29b10eb6bd31}</UniqueIdentifier>
+      <UniqueIdentifier>{9d8ba3b1-f572-4b2a-9361-93d2d98c2eda}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Configuration">
-      <UniqueIdentifier>{66f98277-720d-4d1f-bb32-ee9c65c9c4e5}</UniqueIdentifier>
+      <UniqueIdentifier>{2c51b635-a238-43d2-ba35-3d0522f3249d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Worker">
-      <UniqueIdentifier>{6ac44470-d447-4158-b092-f025c6ce44a7}</UniqueIdentifier>
+      <UniqueIdentifier>{d6f0c6f6-0ae5-45e3-876e-a1d7ad8ebbb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Worker">
-      <UniqueIdentifier>{6fce0b1d-8a4b-4db9-bbbc-2817c8ff8768}</UniqueIdentifier>
+      <UniqueIdentifier>{16df7ea6-7b10-4f53-bb7a-048f7f298cd2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -110,16 +110,16 @@
     <ClCompile Include="dialogs\WorkDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="EncoderOptions.cpp">
+    <ClCompile Include="configuration\EncoderOptions.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="Language.cpp">
+    <ClCompile Include="configuration\Language.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramConfig.cpp">
+    <ClCompile Include="configuration\ProgramConfig.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="WorkThread.cpp">
+    <ClCompile Include="worker\WorkThread.cpp">
       <Filter>Source Files\Worker</Filter>
     </ClCompile>
   </ItemGroup>
@@ -187,16 +187,16 @@
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="EncoderOptions.h">
+    <ClInclude Include="configuration\EncoderOptions.h">
       <Filter>Header Files\Configuration</Filter>
     </ClInclude>
-    <ClInclude Include="Language.h">
+    <ClInclude Include="configuration\Language.h">
       <Filter>Header Files\Configuration</Filter>
     </ClInclude>
-    <ClInclude Include="ProgramConfig.h">
+    <ClInclude Include="configuration\ProgramConfig.h">
       <Filter>Header Files\Configuration</Filter>
     </ClInclude>
-    <ClInclude Include="WorkThread.h">
+    <ClInclude Include="worker\WorkThread.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,7 +26,7 @@
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
 #include "..\utilities\TimeCount.h"
-#include "WorkThread.h"
+#include "..\worker\WorkThread.h"
 
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
     : CMyResizeDialog(CMainDlg::IDD, pParent)

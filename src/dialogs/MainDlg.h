@@ -21,8 +21,9 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
-#include "ProgramConfig.h"
-#include "Language.h"
+#include "..\configuration\ProgramConfig.h"
+#include "..\configuration\Language.h"
+#include "..\configuration\EncoderOptions.h"
 #include "..\controls\MyResizeDialog.h"
 #include "..\controls\MyButton.h"
 #include "..\controls\MyStatic.h"
@@ -38,7 +39,6 @@
 #include "Avs2Raw.h"
 #endif
 
-#include "EncoderOptions.h"
 #include "afxpropertygridctrl.h"
 
 // define main window status bar id

@@ -20,9 +20,9 @@
 #include "MainApp.h"
 #include "WorkThread.h"
 #include "dialogs\WorkDlg.h"
-#include "EncoderOptions.h"
-#include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
+#include "..\configuration\EncoderOptions.h"
+#include "..\utilities\Utilities.h"
+#include "..\utilities\MyFile.h"
 #include "..\utilities\TimeCount.h"
 
 #ifndef DISABLE_AVISYNTH

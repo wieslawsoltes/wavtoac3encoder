@@ -21,7 +21,8 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
-#include "ProgramConfig.h"
+#include "..\configuration\ProgramConfig.h"
+#include "..\configuration\EncoderOptions.h"
 #include "..\controls\MyResizeDialog.h"
 #include "..\controls\MyButton.h"
 #include "..\controls\MyStatic.h"
@@ -30,8 +31,6 @@
 #include "..\controls\MyListCtrl.h"
 #include "..\controls\MyComboBox.h"
 #include "..\controls\MySliderCtrl.h"
-
-#include "EncoderOptions.h"
 
 class CEnginesDlg : public CDialogEx
 {

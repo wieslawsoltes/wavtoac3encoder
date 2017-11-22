@@ -24,7 +24,7 @@
 
 #include "resource.h"
 
-#include "Language.h"
+#include "configuration\Language.h"
 
 void ShowCommandLineHelp(HWND hWnd);
 

@@ -243,11 +243,10 @@
   <ItemGroup>
     <ClCompile Include="AftenAPI.cpp" />
     <ClCompile Include="Avs2Raw.cpp" />
-    <ClCompile Include="EncoderOptions.cpp" />
+    <ClCompile Include="configuration\EncoderOptions.cpp" />
+    <ClCompile Include="configuration\Language.cpp" />
+    <ClCompile Include="configuration\ProgramConfig.cpp" />
     <ClCompile Include="MainApp.cpp" />
-    <ClCompile Include="WorkThread.cpp" />
-    <ClCompile Include="Language.cpp" />
-    <ClCompile Include="ProgramConfig.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -363,17 +362,17 @@
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
+    <ClCompile Include="worker\WorkThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AftenAPI.h" />
     <ClInclude Include="avisynth64\core\avisynth.h" />
     <ClInclude Include="avisynth64\internal.h" />
     <ClInclude Include="Avs2Raw.h" />
-    <ClInclude Include="EncoderOptions.h" />
+    <ClInclude Include="configuration\EncoderOptions.h" />
+    <ClInclude Include="configuration\Language.h" />
+    <ClInclude Include="configuration\ProgramConfig.h" />
     <ClInclude Include="MainApp.h" />
-    <ClInclude Include="WorkThread.h" />
-    <ClInclude Include="Language.h" />
-    <ClInclude Include="ProgramConfig.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="StdAfx.h" />
@@ -390,6 +389,7 @@
     <ClInclude Include="dialogs\EnginesDlg.h" />
     <ClInclude Include="dialogs\MuxDlg.h" />
     <ClInclude Include="dialogs\WorkDlg.h" />
+    <ClInclude Include="worker\WorkThread.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\EncWAVtoAC3.bmp" />
