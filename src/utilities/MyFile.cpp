@@ -20,6 +20,7 @@
 #include "MyFile.h"
 
 static const unsigned int nBomHeaderSize = 2;
+
 static const unsigned char szUnicode[nBomHeaderSize] = { 0xFF, 0xFE };
 
 CMyFile::CMyFile()
