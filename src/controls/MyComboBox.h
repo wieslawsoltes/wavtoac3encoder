@@ -5,6 +5,7 @@
 
 class CMyComboBox : public CComboBox
 {
+    DECLARE_DYNAMIC(CMyComboBox)
 public:
     CMyComboBox();
     virtual ~CMyComboBox();

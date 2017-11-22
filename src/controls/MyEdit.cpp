@@ -5,10 +5,6 @@
 #include "MainApp.h"
 #include "MyEdit.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 IMPLEMENT_DYNAMIC(CMyEdit, CEdit)
 
 CMyEdit::CMyEdit()

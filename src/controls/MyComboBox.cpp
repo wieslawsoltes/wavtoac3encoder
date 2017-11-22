@@ -5,9 +5,7 @@
 #include "MainApp.h"
 #include "MyComboBox.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+IMPLEMENT_DYNAMIC(CMyComboBox, CComboBox)
 
 CMyComboBox::CMyComboBox()
 {

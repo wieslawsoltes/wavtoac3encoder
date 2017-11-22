@@ -5,10 +5,6 @@
 #include "MainApp.h"
 #include "MyButton.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 CMyButton::CMyButton()
 {
     this->bIsBold = false;

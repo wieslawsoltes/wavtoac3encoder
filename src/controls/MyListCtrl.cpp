@@ -7,10 +7,6 @@
 
 #include <afxpriv.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 IMPLEMENT_DYNAMIC(CMyListCtrl, CListCtrl)
 
 CMyListCtrl::CMyListCtrl()
