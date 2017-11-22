@@ -240,6 +240,8 @@
     <ClCompile Include="AftenAPI.cpp" />
     <ClCompile Include="Avs2Raw.cpp" />
     <ClCompile Include="CommandLine.cpp" />
+    <ClCompile Include="controls\Hyperlink.cpp" />
+    <ClCompile Include="controls\MyStatusBarCtrl.cpp" />
     <ClCompile Include="EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="EncWorkThread.cpp" />
@@ -378,6 +380,8 @@
     <ClInclude Include="avisynth64\internal.h" />
     <ClInclude Include="Avs2Raw.h" />
     <ClInclude Include="CommandLine.h" />
+    <ClInclude Include="controls\Hyperlink.h" />
+    <ClInclude Include="controls\MyStatusBarCtrl.h" />
     <ClInclude Include="EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="EncWorkThread.h" />
