@@ -39,12 +39,6 @@
     <Filter Include="Header Files\Avisynth64">
       <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Utilities">
-      <UniqueIdentifier>{63038a6b-018a-4578-81f9-c7884469e7b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Utilities">
-      <UniqueIdentifier>{2351e964-d19a-4082-ace0-698dcd9baeec}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CommandLine.cpp">
@@ -104,12 +98,6 @@
     <ClCompile Include="dialogs\AboutDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="utilities\MyFile.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\Utilities.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="MainApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -127,12 +115,6 @@
     </ClCompile>
     <ClCompile Include="dialogs\WorkDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\UnicodeUtf8.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="utilities\Utf8String.cpp">
-      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -199,12 +181,6 @@
     <ClInclude Include="dialogs\AboutDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="utilities\MyFile.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\Utilities.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="MainApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -222,15 +198,6 @@
     </ClInclude>
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\TimeCount.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\UnicodeUtf8.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="utilities\Utf8String.h">
-      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

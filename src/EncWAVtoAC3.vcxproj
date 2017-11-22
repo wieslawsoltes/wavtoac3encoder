@@ -365,10 +365,6 @@
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
-    <ClCompile Include="utilities\MyFile.cpp" />
-    <ClCompile Include="utilities\UnicodeUtf8.cpp" />
-    <ClCompile Include="utilities\Utf8String.cpp" />
-    <ClCompile Include="utilities\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AftenAPI.h" />
@@ -383,9 +379,6 @@
     <ClInclude Include="OptionsParser.h" />
     <ClInclude Include="ProgramConfig.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="utilities\TimeCount.h" />
-    <ClInclude Include="utilities\UnicodeUtf8.h" />
-    <ClInclude Include="utilities\Utf8String.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="targetver.h" />
@@ -401,8 +394,6 @@
     <ClInclude Include="dialogs\EnginesDlg.h" />
     <ClInclude Include="dialogs\MuxDlg.h" />
     <ClInclude Include="dialogs\WorkDlg.h" />
-    <ClInclude Include="utilities\MyFile.h" />
-    <ClInclude Include="utilities\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\EncWAVtoAC3.bmp" />
@@ -415,6 +406,9 @@
   <ItemGroup>
     <ProjectReference Include="controls\MFC.Controls.vcxproj">
       <Project>{5936eb01-037a-4148-a512-dad975c24cbd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="utilities\MFC.Utilities.vcxproj">
+      <Project>{4b291d95-c2ca-49e3-9eb5-b9f855d32aa0}</Project>
     </ProjectReference>
     <ProjectReference Include="xml\TinyXml2.vcxproj">
       <Project>{284538ac-d315-437e-ad31-d40934a43236}</Project>
