@@ -22,8 +22,7 @@
 #include "afxwin.h"
 
 #include "ProgramConfig.h"
-#include "..\controls\ResizeDialog.h"
-
+#include "..\controls\MyResizeDialog.h"
 #include "..\controls\MyButton.h"
 #include "..\controls\MyStatic.h"
 #include "..\controls\MyEdit.h"
