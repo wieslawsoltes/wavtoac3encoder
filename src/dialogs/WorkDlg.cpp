@@ -17,7 +17,7 @@
 //
 
 #include "StdAfx.h"
-#include "..\MainApp.h"
+#include "MainApp.h"
 #include "WorkDlg.h"
 #include "..\EncoderOptions.h"
 #include "..\utilities\Utilities.h"
