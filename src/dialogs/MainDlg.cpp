@@ -28,10 +28,6 @@
 #include "..\utilities\TimeCount.h"
 #include "EncWorkThread.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
     : CResizeDialog(CMainDlg::IDD, pParent)
 {

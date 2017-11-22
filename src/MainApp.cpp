@@ -26,10 +26,6 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 // command-line help message
 const CString szHelpMessage =
 _T("WAV to AC3 Encoder Command-Line Help\n\n")
