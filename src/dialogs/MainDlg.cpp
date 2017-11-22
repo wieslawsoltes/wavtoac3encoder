@@ -25,6 +25,7 @@
 #include "AboutDlg.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
+#include "..\utilities\TimeCount.h"
 #include "EncWorkThread.h"
 
 #ifdef _DEBUG
@@ -485,10 +486,8 @@ void CMainDlg::OnBnClickedButtonEncode()
     dlg.workParam.api = this->api;
 
     // execution time counter variables
-    CMyCounter countTime;
+    CTimeCount countTime;
     CString szText;
-
-    countTime.Init();
 
     // show work dialog
     countTime.Start();
@@ -514,8 +513,8 @@ void CMainDlg::OnBnClickedButtonEncode()
         {
             szText.Format(HaveLangStrings() ? GetLangString(0x00207018) : _T("Encoded %d mono files in %s (%0.3lf sec)"),
                 dlg.nCount,
-                FormatTime(countTime.Time(), 3),
-                countTime.Time());
+				countTime.Format(countTime.ElapsedTime(), 3),
+				countTime.ElapsedTime());
 
             ::LogMessage(szText);
         }
@@ -525,8 +524,8 @@ void CMainDlg::OnBnClickedButtonEncode()
                 dlg.nCount,
                 dlg.nCount == 1 ? _T("") :
                 (HaveLangStrings() ? GetLangString(0x0020701A) : _T("s")),
-                FormatTime(countTime.Time(), 3),
-                countTime.Time());
+				countTime.Format(countTime.ElapsedTime(), 3),
+				countTime.ElapsedTime());
 
             ::LogMessage(szText);
         }

@@ -23,6 +23,7 @@
 #include "EncoderOptions.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
+#include "..\utilities\TimeCount.h"
 
 #ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
@@ -465,12 +466,7 @@ int RunAftenEncoder(AftenAPI &api,
     pWork->nInTotalSize = 0;
 
     // encoding, IO reading, IO writing counters
-    CMyCounter cEncoding, cIORead, cIOWrite;
-
-    // init counters
-    cEncoding.Init();
-    cIORead.Init();
-    cIOWrite.Init();
+    CTimeCount cEncoding, cIORead, cIOWrite;
 
     // get string buffers
     TCHAR *pszInPath[6] = { { NULL } };
@@ -963,16 +959,16 @@ int RunAftenEncoder(AftenAPI &api,
                     CString szTmpBuff;
 
                     // update current encoder speed
-                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.Time() + 1.0e-16));
+                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.ElapsedTime() + 1.0e-16));
                     pWork->pWorkDlg->szSpeedEncoderAvg = szTmpBuff;
 
                     // update current read speed
-                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.Time() + 1.0e-16));
+                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.ElapsedTime() + 1.0e-16));
                     pWork->pWorkDlg->szSpeedReadsAvg = szTmpBuff;
 
                     nInPrevCurPos = nCurPos;
-                    fPrevTimeEncoding = cEncoding.Time();
-                    fPrevTimeIORead = cIORead.Time();
+                    fPrevTimeEncoding = cEncoding.ElapsedTime();
+                    fPrevTimeIORead = cIORead.ElapsedTime();
 
                     pWork->pWorkDlg->bCanUpdateWindow = true;
                 }
@@ -1016,11 +1012,11 @@ int RunAftenEncoder(AftenAPI &api,
 
                 CString szTmpBuff;
 
-                szTmpBuff.Format(_T("%0.1lf"), ((double)(_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.Time() + 1.0e-16));
+                szTmpBuff.Format(_T("%0.1lf"), ((double)(_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.ElapsedTime() + 1.0e-16));
                 pWork->pWorkDlg->szSpeedWritesAvg = szTmpBuff;
 
                 nOutPrevCurPos = _ftelli64(ofp);
-                fPrevTimeIOWrite = cIOWrite.Time();
+                fPrevTimeIOWrite = cIOWrite.ElapsedTime();
 
                 pWork->pWorkDlg->bCanUpdateWindow = true;
             }
@@ -1032,9 +1028,9 @@ int RunAftenEncoder(AftenAPI &api,
     } while (nr > 0 || fs > 0 || !frame_cnt);
 
     // gather performance statistics
-    pWork->fTimeEncoding = cEncoding.Time();
-    pWork->fTimeIORead = cIORead.Time();
-    pWork->fTimeIOWrite = cIOWrite.Time();
+    pWork->fTimeEncoding = cEncoding.ElapsedTime();
+    pWork->fTimeIORead = cIORead.ElapsedTime();
+    pWork->fTimeIOWrite = cIOWrite.ElapsedTime();
 
     // get output file size
     pWork->nOutTotalSize = GetFileSizeInt64(ofp);
