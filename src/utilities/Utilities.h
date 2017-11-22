@@ -49,4 +49,5 @@ bool MakeFullPath(CString szPath);
 void LaunchAndWait(LPCTSTR file, LPCTSTR params, BOOL bWait);
 
 void ConvertAnsiToUnicode(const char *szAnsi, wchar_t *szUnicode, ULONG nLength);
+
 void ConvertUnicodeToAnsi(const wchar_t *szUnicode, char *szAnsi, ULONG nLength);
