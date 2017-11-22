@@ -458,7 +458,7 @@ int RunAftenEncoder(AftenAPI &api,
 
 #ifndef DISABLE_AVISYNTH
     // check if we have Avisynth script as input
-    if (GetFileExt(szInPath[0]).MakeLower() == _T("avs"))
+    if (GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
 #endif
 
@@ -630,7 +630,7 @@ int RunAftenEncoder(AftenAPI &api,
     else
     {
         // check file extension to set input file format (using only first file)
-        input_file_format = GetSupportedInputFormat(GetFileExt(szInPath[0]));
+        input_file_format = GetSupportedInputFormat(GetFileExtension(szInPath[0]));
     }
 
     if (bAvisynthInput == false)
@@ -1218,7 +1218,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
             // prepare output file name
             szOutPath = szInPath[0];
-            szOutPath.Truncate(szOutPath.GetLength() - GetFileExt(szOutPath).GetLength());
+            szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(szSupportedOutputExt[0]);
 
             // use different output path
@@ -1313,7 +1313,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
         // prepare output file name (using first file path from the list)
         szOutPath = szInPath[0];
-        szOutPath.Truncate(szOutPath.GetLength() - GetFileExt(szOutPath).GetLength());
+        szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
         szOutPath.Append(szSupportedOutputExt[0]);
 
         // use user selected output file path

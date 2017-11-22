@@ -357,7 +357,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
 
 #ifndef DISABLE_AVISYNTH
-        if (GetFileExt(szFileBuffer).MakeLower() == _T("avs"))
+        if (GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
             bAvisynthInput = true;
 #endif
 
@@ -1349,7 +1349,7 @@ bool CMainDlg::LoadFilesList(CString &szFileName)
 					szBuffer.TrimRight('"');
 
 					// // add only files with proper file extensions
-					if (IsSupportedInputExt(GetFileExt(szBuffer)) == true)
+					if (IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
 					{
 						this->AddItemToFileList(szBuffer);
 					}
@@ -1619,7 +1619,7 @@ void CMainDlg::AddItemToFileList(CString szPath)
 
 #ifndef DISABLE_AVISYNTH
 	// get AVS file size
-	if (GetFileExt(szPath).MakeLower() == _T("avs"))
+	if (GetFileExtension(szPath).MakeLower() == _T("avs"))
 	{
 		// get input Audio stream information from Avisynth
 		AvsAudioInfo infoAVS;
@@ -3299,7 +3299,7 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 
 #ifndef DISABLE_AVISYNTH
 		// show AVS file information text
-		if (GetFileExt(szFileName).MakeLower() == _T("avs"))
+		if (GetFileExtension(szFileName).MakeLower() == _T("avs"))
 		{
 			// get input Audio stream information from Avisynth
 			AvsAudioInfo infoAVS;

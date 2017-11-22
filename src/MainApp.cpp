@@ -166,14 +166,14 @@ BOOL CEncWAVtoAC3App::InitInstance()
     }
     else
     {
-        CreateDirectory(GetSettingsFilePath(_T("")), NULL);
+        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), NULL);
 
-        m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME);
-        m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME);
-        m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME);
-        m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME);
-        m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME);
-        m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME);
+        m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
     }
 
     // initialize log file
