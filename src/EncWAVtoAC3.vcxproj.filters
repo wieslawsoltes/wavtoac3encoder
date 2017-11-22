@@ -277,6 +277,9 @@
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="utilities\TimeCount.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
     <ClInclude Include="controls\Hyperlink.h">
       <Filter>Header Files\Controls</Filter>
     </ClInclude>

@@ -389,6 +389,7 @@
     <ClInclude Include="OptionsParser.h" />
     <ClInclude Include="ProgramConfig.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="utilities\TimeCount.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="targetver.h" />
