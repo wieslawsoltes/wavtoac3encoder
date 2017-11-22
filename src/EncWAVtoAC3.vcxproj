@@ -366,6 +366,8 @@
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
     <ClCompile Include="utilities\MyFile.cpp" />
+    <ClCompile Include="utilities\UnicodeUtf8.cpp" />
+    <ClCompile Include="utilities\Utf8String.cpp" />
     <ClCompile Include="utilities\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -382,6 +384,8 @@
     <ClInclude Include="ProgramConfig.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="utilities\TimeCount.h" />
+    <ClInclude Include="utilities\UnicodeUtf8.h" />
+    <ClInclude Include="utilities\Utf8String.h" />
     <ClInclude Include="version.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="targetver.h" />
