@@ -246,7 +246,7 @@
     <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
-    <ClCompile Include="EncWorkThread.cpp" />
+    <ClCompile Include="WorkThread.cpp" />
     <ClCompile Include="Language.cpp" />
     <ClCompile Include="OptionsParser.cpp" />
     <ClCompile Include="ProgramConfig.cpp" />
@@ -374,7 +374,7 @@
     <ClInclude Include="CommandLine.h" />
     <ClInclude Include="EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
-    <ClInclude Include="EncWorkThread.h" />
+    <ClInclude Include="WorkThread.h" />
     <ClInclude Include="Language.h" />
     <ClInclude Include="OptionsParser.h" />
     <ClInclude Include="ProgramConfig.h" />

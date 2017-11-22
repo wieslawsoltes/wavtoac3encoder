@@ -45,12 +45,15 @@
     <Filter Include="Source Files\Configuration">
       <UniqueIdentifier>{66f98277-720d-4d1f-bb32-ee9c65c9c4e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Worker">
+      <UniqueIdentifier>{6ac44470-d447-4158-b092-f025c6ce44a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker">
+      <UniqueIdentifier>{6fce0b1d-8a4b-4db9-bbbc-2817c8ff8768}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CommandLine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EncWorkThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OptionsParser.cpp">
@@ -122,12 +125,12 @@
     <ClCompile Include="ProgramConfig.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
+    <ClCompile Include="WorkThread.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CommandLine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EncWorkThread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="OptionsParser.h">
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="ProgramConfig.h">
       <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkThread.h">
+      <Filter>Header Files\Worker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

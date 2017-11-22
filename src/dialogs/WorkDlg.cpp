@@ -22,7 +22,7 @@
 #include "..\EncoderOptions.h"
 #include "..\utilities\Utilities.h"
 #include "..\utilities\MyFile.h"
-#include "..\EncWorkThread.h"
+#include "..\WorkThread.h"
 
 IMPLEMENT_DYNAMIC(CWorkDlg, CDialogEx)
 

@@ -18,7 +18,7 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
-#include "EncWorkThread.h"
+#include "WorkThread.h"
 #include "dialogs\WorkDlg.h"
 #include "EncoderOptions.h"
 #include "utilities\Utilities.h"
