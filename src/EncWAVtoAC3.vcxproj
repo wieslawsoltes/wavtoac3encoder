@@ -243,12 +243,10 @@
   <ItemGroup>
     <ClCompile Include="AftenAPI.cpp" />
     <ClCompile Include="Avs2Raw.cpp" />
-    <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="WorkThread.cpp" />
     <ClCompile Include="Language.cpp" />
-    <ClCompile Include="OptionsParser.cpp" />
     <ClCompile Include="ProgramConfig.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -371,12 +369,10 @@
     <ClInclude Include="avisynth64\core\avisynth.h" />
     <ClInclude Include="avisynth64\internal.h" />
     <ClInclude Include="Avs2Raw.h" />
-    <ClInclude Include="CommandLine.h" />
     <ClInclude Include="EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="WorkThread.h" />
     <ClInclude Include="Language.h" />
-    <ClInclude Include="OptionsParser.h" />
     <ClInclude Include="ProgramConfig.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="version.h" />

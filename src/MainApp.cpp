@@ -21,8 +21,8 @@
 #include "dialogs\MainDlg.h"
 #include "dialogs\MuxDlg.h"
 
-#include "CommandLine.h"
-#include "OptionsParser.h"
+#include "utilities\CommandLine.h"
+#include "utilities\OptionsParser.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
