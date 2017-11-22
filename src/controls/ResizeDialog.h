@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <afxdialogex.h>
+
 const CSize AnchorNone(-1, -1);
 const CSize AnchorTopLeft(0, 0);
 const CSize AnchorTopCenter(50, 0);

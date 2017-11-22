@@ -302,7 +302,7 @@ void CResizeDialog::SetWindowRectStr(CString szData)
     GetWindowPlacement(&wp);
     RECT &rc = wp.rcNormalPosition;
 
-    if (_stscanf(szData, _T("%d %d %d %d %d %d"),
+    if (_stscanf_s(szData, _T("%d %d %d %d %d %d"),
         &rc.left, &rc.top,
         &rc.right, &rc.bottom,
         &wp.showCmd, &wp.flags) == 6)

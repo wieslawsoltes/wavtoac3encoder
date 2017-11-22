@@ -240,8 +240,6 @@
     <ClCompile Include="AftenAPI.cpp" />
     <ClCompile Include="Avs2Raw.cpp" />
     <ClCompile Include="CommandLine.cpp" />
-    <ClCompile Include="controls\Hyperlink.cpp" />
-    <ClCompile Include="controls\MyStatusBarCtrl.cpp" />
     <ClCompile Include="EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="EncWorkThread.cpp" />
@@ -358,14 +356,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="controls\MyButton.cpp" />
-    <ClCompile Include="controls\MyComboBox.cpp" />
-    <ClCompile Include="controls\MyComboBoxEdit.cpp" />
-    <ClCompile Include="controls\MyEdit.cpp" />
-    <ClCompile Include="controls\MyListCtrl.cpp" />
-    <ClCompile Include="controls\MySliderCtrl.cpp" />
-    <ClCompile Include="controls\MyStatic.cpp" />
-    <ClCompile Include="controls\ResizeDialog.cpp" />
     <ClCompile Include="dialogs\AboutDlg.cpp" />
     <ClCompile Include="dialogs\MainDlg.cpp" />
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
@@ -380,8 +370,6 @@
     <ClInclude Include="avisynth64\internal.h" />
     <ClInclude Include="Avs2Raw.h" />
     <ClInclude Include="CommandLine.h" />
-    <ClInclude Include="controls\Hyperlink.h" />
-    <ClInclude Include="controls\MyStatusBarCtrl.h" />
     <ClInclude Include="EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="EncWorkThread.h" />
@@ -400,14 +388,6 @@
     <ClInclude Include="aften\pcm\pcmfile.h" />
     <ClInclude Include="avisynth\core\avisynth.h" />
     <ClInclude Include="avisynth\internal.h" />
-    <ClInclude Include="controls\MyButton.h" />
-    <ClInclude Include="controls\MyComboBox.h" />
-    <ClInclude Include="controls\MyComboBoxEdit.h" />
-    <ClInclude Include="controls\MyEdit.h" />
-    <ClInclude Include="controls\MyListCtrl.h" />
-    <ClInclude Include="controls\MySliderCtrl.h" />
-    <ClInclude Include="controls\MyStatic.h" />
-    <ClInclude Include="controls\ResizeDialog.h" />
     <ClInclude Include="dialogs\AboutDlg.h" />
     <ClInclude Include="dialogs\MainDlg.h" />
     <ClInclude Include="dialogs\EnginesDlg.h" />
@@ -425,6 +405,9 @@
     <ResourceCompile Include="EncWAVtoAC3.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="controls\MFC.Controls.vcxproj">
+      <Project>{5936eb01-037a-4148-a512-dad975c24cbd}</Project>
+    </ProjectReference>
     <ProjectReference Include="xml\TinyXml2.vcxproj">
       <Project>{284538ac-d315-437e-ad31-d40934a43236}</Project>
     </ProjectReference>
