@@ -1,3 +1,6 @@
 [submodule "src/aften"]
 	path = src/aften
 	url = https://github.com/wieslawsoltes/AftenWindowsBuilds.git
+[submodule "src/common"]
+	path = src/common
+	url = https://github.com/wieslawsoltes/MfcToolkit.git
