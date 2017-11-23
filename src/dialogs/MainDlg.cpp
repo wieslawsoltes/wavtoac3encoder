@@ -23,10 +23,10 @@
 #include "MuxDlg.h"
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
-#include "..\utilities\Utilities.h"
-#include "..\utilities\MyFile.h"
-#include "..\utilities\TimeCount.h"
-#include "..\worker\WorkThread.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
+#include "utilities\TimeCount.h"
+#include "worker\WorkThread.h"
 
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
     : CMyResizeDialog(CMainDlg::IDD, pParent)

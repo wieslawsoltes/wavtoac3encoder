@@ -19,8 +19,8 @@
 #include "StdAfx.h"
 #include "MainApp.h"
 #include "MuxDlg.h"
-#include "..\utilities\Utilities.h"
-#include "..\utilities\MyFile.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
 
 // Correct channel to file mapping:
 // FL    -> szInputFiles[0]

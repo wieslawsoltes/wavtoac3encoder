@@ -19,10 +19,10 @@
 #include "StdAfx.h"
 #include "MainApp.h"
 #include "WorkDlg.h"
-#include "..\configuration\EncoderOptions.h"
-#include "..\utilities\Utilities.h"
-#include "..\utilities\MyFile.h"
-#include "..\worker\WorkThread.h"
+#include "configuration\EncoderOptions.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
+#include "worker\WorkThread.h"
 
 IMPLEMENT_DYNAMIC(CWorkDlg, CDialogEx)
 

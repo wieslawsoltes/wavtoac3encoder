@@ -19,8 +19,8 @@
 #include "StdAfx.h"
 #include "MainApp.h"
 #include "EnginesDlg.h"
-#include "..\utilities\Utilities.h"
-#include "..\utilities\MyFile.h"
+#include "utilities\Utilities.h"
+#include "utilities\MyFile.h"
 
 IMPLEMENT_DYNAMIC(CEnginesDlg, CDialogEx)
 

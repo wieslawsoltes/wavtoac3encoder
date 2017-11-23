@@ -21,16 +21,16 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
-#include "..\configuration\ProgramConfig.h"
-#include "..\configuration\EncoderOptions.h"
-#include "..\controls\MyResizeDialog.h"
-#include "..\controls\MyButton.h"
-#include "..\controls\MyStatic.h"
-#include "..\controls\MyEdit.h"
-#include "..\controls\MyComboBoxEdit.h"
-#include "..\controls\MyListCtrl.h"
-#include "..\controls\MyComboBox.h"
-#include "..\controls\MySliderCtrl.h"
+#include "configuration\ProgramConfig.h"
+#include "configuration\EncoderOptions.h"
+#include "controls\MyResizeDialog.h"
+#include "controls\MyButton.h"
+#include "controls\MyStatic.h"
+#include "controls\MyEdit.h"
+#include "controls\MyComboBoxEdit.h"
+#include "controls\MyListCtrl.h"
+#include "controls\MyComboBox.h"
+#include "controls\MySliderCtrl.h"
 
 class CEnginesDlg : public CDialogEx
 {

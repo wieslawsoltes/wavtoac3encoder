@@ -20,14 +20,14 @@
 
 #include "afxwin.h"
 
-#include "..\configuration\EncoderOptions.h"
-#include "..\controls\MyButton.h"
-#include "..\controls\MyStatic.h"
-#include "..\controls\MyEdit.h"
-#include "..\controls\MyComboBoxEdit.h"
-#include "..\controls\MyListCtrl.h"
-#include "..\controls\MyComboBox.h"
-#include "..\controls\MySliderCtrl.h"
+#include "configuration\EncoderOptions.h"
+#include "controls\MyButton.h"
+#include "controls\MyStatic.h"
+#include "controls\MyEdit.h"
+#include "controls\MyComboBoxEdit.h"
+#include "controls\MyListCtrl.h"
+#include "controls\MyComboBox.h"
+#include "controls\MySliderCtrl.h"
 
 class CMuxDlg : public CDialogEx
 {
