@@ -31,8 +31,6 @@ Provided binaries should work under Windows XP Service Pack 3 (SP3) for x86, Win
 
 Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 
-Command-line tools may have different hardware and software requirements. All tools have been tested under Windows 10 Anniversary Update.
-
 ## CI Builds
 
 [Download](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/build/artifacts) bleeding edge builds from the CI server.
