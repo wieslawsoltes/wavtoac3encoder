@@ -170,28 +170,24 @@ Running `avisynth` requires properly setup Input Options (e.g. override wave hea
 
 You can double-click in the file list on avisynth script to get e.g. number of audio channels.
 
-## Troubleshooting
-
-Please first check the `*.log` file in program directory for more information.
-
-To report issues please use: 
-* https://github.com/wieslawsoltes/wavtoac3encoder/issues
-
-For more informations and help please visit:
-* http://forum.doom9.org/showthread.php?t=113074
-
-## Sources
-
-Source code is available in Git repository.
-
-https://github.com/wieslawsoltes/wavtoac3encoder
-
 ## Translations
 
 * English (Wiesław Šoltés)
 * German (A. Haack)
 * Japanese (http://donkichirou.blog27.fc2.com/blog-entry-277.html)
 * Polish (Wiesław Šoltés)
+
+## Troubleshooting
+
+Please first check the `*.log` file in program directory for more information.
+
+To report issues please use: https://github.com/wieslawsoltes/wavtoac3encoder/issues
+
+For more informations and help please visit: http://forum.doom9.org/showthread.php?t=113074
+
+## Sources
+
+Sources are available in the [git source code repository](https://github.com/wieslawsoltes/wavtoac3encoder/).
 
 ## Build
 
@@ -203,20 +199,28 @@ cd wavtoac3encoder
 git submodule update --init --recursive
 ```
 
-## Install Visual Studio 2017
+### Install Visual Studio 2017
 
 * [VS 2017](https://www.visualstudio.com/pl/downloads/)
 
-## Build
+### Windows 7 SDK
+
+For Windows XP compatibility program is compiled using `Platform Toolset` for `Visual Studio 2017 - Windows XP (v141_xp)`.
+
+For more details please read [Configuring Programs for Windows XP](https://msdn.microsoft.com/en-us/library/jj851139.aspx).
+
+### Build Solution
 ```
 Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 ```
 
-## Resources
+### Dependencies
 
-* https://github.com/wieslawsoltes/wavtoac3encoder
-* http://aften.sourceforge.net/
-* http://sourceforge.net/projects/aften/
+* [MfcToolkit](https://github.com/wieslawsoltes/MfcToolkit)
+* [AftenWindowsBuilds](https://github.com/wieslawsoltes/AftenWindowsBuilds)
+* [Aften Website](http://aften.sourceforge.net/)
+* [Aften Sources](http://sourceforge.net/projects/aften/)
+* [TinyXml-2 v5.0.1](https://github.com/leethomason/tinyxml2)
 
 ## Copyrights
 
