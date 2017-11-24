@@ -10,11 +10,11 @@
 
 WAV to AC3 Encoder an audio encoder which generates compressed audio streams based on [ATSC A/52 specification](https://en.wikipedia.org/wiki/Dolby_Digital).
 
-### Support WAV to AC3 Encoder
+## Support WAV to AC3 Encoder
 
 [![PayPal - The safer, easier way to pay online!](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GFQMG36HPYT6W)
 
-### Download WAV to AC3 Encoder
+## Download WAV to AC3 Encoder
 
 | Platforn              | Type        | Version       | Download                                                                                                                               |
 |-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
@@ -23,17 +23,35 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 | Windows 32-bit        | Portable    | 5.5           | [EncWAVtoAC3-5.5.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5.zip)                      |
 | Windows 64-bit        | Portable    | 5.5           | [EncWAVtoAC3-5.5-AMD64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/EncWAVtoAC3-5.5-AMD64.zip)          |
 
-### Download Aften
+## System requirements
 
-| Platforn              | Type        | Version       | Download                                                                                                                                                               |
-|-----------------------|-------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -                     | Sources     | git-20091226  | [aften-git-20091226-icl11_1_054-src.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-src.zip)                |
-| Windows 32-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win32-bin.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-win32-bin.zip)    |
-| Windows 64-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win64-bin.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/5.5/aften-git-20091226-icl11_1_054-win64-bin.zip)    |
+Minimum supported Windows version is Windows 7 SP1 or above, recommended is Windows 10 Anniversary Update.
 
-### Mirrors
+Provided binaries should work under Windows XP Service Pack 3 (SP3) for x86, Windows XP Service Pack 2 (SP2) for x64.
+
+Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
+
+Command-line tools may have different hardware and software requirements. All tools have been tested under Windows 10 Anniversary Update.
+
+### CI Builds
+
+[Download](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/build/artifacts) bleeding edge builds from the CI server.
+
+## Download Aften
+
+| Platforn              | Type        | Version       | Download                                                                                                                                                                           |
+|-----------------------|-------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -                     | Sources     | git-20091226  | [aften-git-20091226-icl11_1_054-src.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-src.zip)                |
+| Windows 32-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win32-bin.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-win32-bin.zip)    |
+| Windows 64-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win64-bin.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-win64-bin.zip)    |
+
+## Mirrors
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
+
+## Language Editor
+
+Download latest version of the language editor from [here](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor).
 
 ## About
 
@@ -160,11 +178,9 @@ automaticaly loaded/saved by program every time the program is started/closed.
 
 ## AviSynth Support
 
-To run `64-bit` version you need to install `avisynth64`:
-* http://code.google.com/p/avisynth64/
+To run `64-bit` version you need to install [avisynth64](http://code.google.com/p/avisynth64/).
 
-Additional help and informations is available here: 
-* http://forum.doom9.org/showthread.php?t=152800
+Additional help and informations is available [here](http://forum.doom9.org/showthread.php?t=152800). 
 
 Running `avisynth` requires properly setup Input Options (e.g. override wave header settings).
 
@@ -172,18 +188,27 @@ You can double-click in the file list on avisynth script to get e.g. number of a
 
 ## Translations
 
-* English (Wiesław Šoltés)
-* German (A. Haack)
-* Japanese (http://donkichirou.blog27.fc2.com/blog-entry-277.html)
-* Polish (Wiesław Šoltés)
+* [English (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/en.txt)
+* [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/de.txt)
+* [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/jp.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
+* [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/pl.txt)
+
+Use only UTF-8 compatible text editors (e.g. Notepad or Visual Studio Code) to edit xml language files
+and [use special characters in XML](https://www.dvteclipse.com/documentation/svlinter/How_to_use_special_characters_in_XML.3F.html#gsc.tab=0).
+
+Language files have to be placed in the same directory as the `BatchEncoder.exe` executable to be loaded automatically.
+
+Language files can also be edited in dedicated [LanguageEditor](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor) program. LanguageEditor requires .NET Framework 4.5 and Windows 7 SP1 or above.
+
+The default language files can be found [here](https://github.com/wieslawsoltes/wavtoac3encoder/tree/master/lang).
 
 ## Troubleshooting
 
-Please first check the `*.log` file in program directory for more information.
+To report issues please use [issues tracker](https://github.com/wieslawsoltes/wavtoac3encoder/issues).
 
-To report issues please use: https://github.com/wieslawsoltes/wavtoac3encoder/issues
+For more informations and help please visit [this forum thread](http://forum.doom9.org/showthread.php?t=113074).
 
-For more informations and help please visit: http://forum.doom9.org/showthread.php?t=113074
+Please also check the `*.log` file in program directory for detailed information.
 
 ## Sources
 
