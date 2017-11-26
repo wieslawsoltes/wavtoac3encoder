@@ -1,6 +1,433 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <Language id="en-US" original="English" translated="English">
 
+    <!-- Translation Language Name: in English -->
 
+    <String key="0x00000001" value="English" />
+
+    <!-- Translation Language Name: in target language -->
+
+    <String key="0x00000002" value="English" />
+
+    <!-- Main Dialog: Main Menu -->
+
+    <String key="0x00101001" value="&File" />
+    <String key="0x00101002" value="Add &Files...\tCtrl+F" />
+    <String key="0x00101003" value="Add &Directory...\tCtrl+D" />
+    <String key="0x00101004" value="&MUX Wizard...\tCtrl+M" />
+    <String key="0x00101005" value="L&oad Files List...\tCtrl+O" />
+    <String key="0x00101006" value="Sa&ve Files List...\tCtrl+S" />
+    <String key="0x00101007" value="&Load Presets...\tCtrl+Shitf+O" />
+    <String key="0x00101008" value="&Save Presets...\tCtrl+Shitf+S" />
+    <String key="0x00101009" value="E&xit\tAlt+F4" />
+
+    <String key="0x00102001" value="&Options" />
+    <String key="0x00102002" value="Disable All &Warnings\tCtrl+Shift+W" />
+    <String key="0x00102003" value="Save Configuration On E&xit\tCtrl+Shift+C" />
+    <String key="0x00102004" value="Loa&d Configuration\tF7" />
+    <String key="0x00102005" value="Sav&e Configuration\tF8" />
+
+    <String key="0x00103001" value="&Language" />
+    <String key="0x00103002" value="&Default (English)" />
+
+    <String key="0x00104001" value="&Help" />
+    <String key="0x00104002" value="Command-&Line Help\tCtrl+F1" />
+    <String key="0x00104003" value="&Website\tCtrl+Shift+W" />
+    <String key="0x00104004" value="&About...\tCtrl+Shift+A" />
+
+    <!-- Main Dialog: Buttons -->
+
+    <String key="0x00201001" value="&Encode" />
+    <String key="0x00201002" value="Rese&t" />
+    <String key="0x00201003" value="&Remove" />
+    <String key="0x00201004" value="A&dd" />
+    <String key="0x00201005" value="&Add files..." />
+    <String key="0x00201006" value="&..." />
+    <String key="0x00201007" value="MU&X Wizard..." />
+    <String key="0x00201008" value="Ed&it" />
+
+    <!-- Main Dialog: Static Text -->
+
+    <String key="0x00202001" value="Preset:" />
+    <String key="0x00202002" value="Quality:" />
+    <String key="0x00202003" value="Bitrate:" />
+    <String key="0x00202004" value="Value:" />
+    <String key="0x00202005" value="Sample format:" />
+    <String key="0x00202006" value="Sample rate:" />
+    <String key="0x00202007" value="Channels:" />
+    <String key="0x00202008" value="Engine:" />
+    <String key="0x00202009" value="Threads:" />
+    <String key="0x0020200A" value="M&ultiple mono input" />
+    <String key="0x0020200B" value="Output file:" />
+    <String key="0x0020200C" value="Output path:" />
+
+    <!-- Main Dialog: Files List -->
+
+    <String key="0x00203001" value="File path" />
+    <String key="0x00203002" value="File size (bytes)" />
+
+    <!-- Main Dialog: Files List Context-Menu -->
+
+    <String key="0x00204001" value="&List" />
+    <String key="0x00204002" value="Add &Files...\tCtrl+F" />
+    <String key="0x00204003" value="Add &Directory...\tCtrl+D" />
+    <String key="0x00204004" value="&MUX Wizard...\tCtrl+M" />
+    <String key="0x00204005" value="L&oad Files List...\tCtrl+O" />
+    <String key="0x00204006" value="Sa&ve Files List...\tCtrl+S" />
+    <String key="0x00204007" value="Move &Up\tCtrl+Up" />
+    <String key="0x00204008" value="Move Dow&n\tCtrl+Down" />
+    <String key="0x00204009" value="Remove &Selected Files\tDel" />
+    <String key="0x0020400A" value="Remove &All Files\tCtrl+Del" />
+
+    <!-- Main Dialog: Settings List -->
+
+    <String key="0x00205001" value="Option
+    <String key="0x00205002" value="Value
+
+    <!-- Main Dialog: Tooltips -->
+
+    <String key="0x00206001" value="CBR bitrate in kbps:\n\nCBR mode is selected by default. This option allows for\nsetting the fixed bitrate. The default bitrate depends\non the number of channels (not including LFE).\n1 = 96 kbps\n2 = 192 kbps\n3 = 256 kbps\n4 = 384 kbps\n5 = 448 kbps\n\nVBR quality:\n\nA value 0 to 1023 which corresponds to SNR offset, where\nq=240 equates to an SNR offset of 0. 240 is the default\nvalue. This scale will most likely be replaced in the\nfuture with a better quality measurement." />
+    <String key="0x00206002" value="Enable VBR mode. If unchecked the CBR mode is used instead." />
+    <String key="0x00206003" value="Set currently used encoder preset. You can load/save presets from/to file\nfrom File menu. All presets are automatically loaded/saved from/to text file." />
+    <String key="0x00206004" value="Aften will auto-detect available SIMD instruction sets\nfor your CPU, so you shouldn't need to disable sets\nexplicitly - unless for speed or debugging reasons." />
+    <String key="0x00206005" value="This option enables MMX optimizations (if supported by CPU).\n\n" />
+    <String key="0x00206006" value="This option enables SSE optimizations (if supported by CPU).\n\n" />
+    <String key="0x00206007" value="This option enables SSE2 optimizations (if supported by CPU).\n\n" />
+    <String key="0x00206008" value="This option enables SSE3 optimizations (if supported by CPU).\n\n" />
+    <String key="0x00206009" value="Raw audio input sample format specifies the sample format\nwhen using raw audio input. Using this option forces Aften to\ntreat the input as raw audio. The choices for the\npre-defined sample formats are (default: s16_le):\nu8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,\ns32_le, s32_be, float_le, float_be, double_le, double_be" />
+    <String key="0x0020600A" value="Raw audio input sample rate option forces Aften to\ntreat the input as raw audio (default: 48000)." />
+    <String key="0x0020600B" value="Raw audio input channels forces Aften to treat the input as\nraw audio (default: 2)." />
+    <String key="0x0020600C" value="Aften can use multiple threads to speed up encoding.\nBy default, Aften uses one thread for each logical CPU\nyour system has, but you can override this value. A\nvalue of 0 is the default and indicates that Aften\nshould try to detect the number of CPUs." />
+    <String key="0x0020600D" value="Set currently used Aften library. By selecting optimized Aften\nlibrary you can speedup the encoding process." />
+    <String key="0x0020600E" value="Set default output path for encoded files. By default files\nare encoded to the same directory as input files. When using\nmultiple mono input than here is set the output file path." />
+    <String key="0x0020600F" value="Enable multiple mono input mode. By adding multiple mono input\nfiles to the files list (minimum 2, maximum 6) in correct channel\norder the mono input files will be encoded into single ac3 file." />
+    <String key="0x00206010" value="Edit currently available Aften engines." />
+
+    <!-- Main Dialog: Misc. -->
+
+    <String key="0x00207001" value="Default" />
+    <String key="0x00207002" value="<Auto>" />
+    <String key="0x00207003" value="<Ignored>" />
+    <String key="0x00207004" value="<Same as input file path>" />
+    <String key="0x00207005" value="<Same as first input file path + output.ac3>" />
+    <String key="0x00207006" value="Supported Files" />
+    <String key="0x00207007" value="Files" />
+    <String key="0x00207008" value="All Files" />
+    <String key="0x00207009" value="Failed to allocate memory for filenames buffer!" />
+    <String key="0x0020700A" value="Fatal Error" />
+    <String key="0x0020700B" value="Add directory with supported input files:" />
+    <String key="0x0020700C" value="Remove all files from list and add files selected in MUX Wizard?\n\nNote: The channel configuration for current preset will be adjusted." />
+    <String key="0x0020700D" value="MUX Wizard" />
+    <String key="0x0020700E" value="Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||" />
+    <String key="0x0020700F" value="Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||" />
+    <String key="0x00207010" value="Error" />
+    <String key="0x00207011" value="Add at least one file to the file list!" />
+    <String key="0x00207012" value="Supported are minimum 1 and maximum 6 mono input files!" />
+    <String key="0x00207013" value="Failed to load libaften.dll dynamic library!" />
+    <String key="0x00207014" value="Disable 'Multiple mono input' mode in order to use Avisynth scripts!" />
+    <String key="0x00207015" value="Invalid output path!" />
+    <String key="0x00207016" value="Invalid output file!" />
+    <String key="0x00207017" value="Failed to create output path!" />
+    <String key="0x00207018" value="Encoded %d mono files in %s (%0.3lf sec)" />
+    <String key="0x00207019" value="Encoded %d file%s in %s (%0.3lf sec)" />
+    <String key="0x0020701A" value="s" />
+    <String key="0x0020701B" value="New preset" />
+    <String key="0x0020701C" value="AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||" />
+    <String key="0x0020701D" value="Select default output path:" />
+    <String key="0x0020701E" value="Failed to load" />
+    <String key="0x0020701F" value="library" />
+    <String key="0x00207020" value="Loaded" />
+    <String key="0x00207021" value="version" />
+    <String key="0x00207022" value="Failed to initialize Avisynth" />
+    <String key="0x00207023" value="Sample format" />
+    <String key="0x00207024" value="unknown" />
+    <String key="0x00207025" value="Sample rate" />
+    <String key="0x00207026" value="Channels" />
+    <String key="0x00207027" value="Audio samples" />
+    <String key="0x00207028" value="Decoded size" />
+    <String key="0x00207029" value="AVS File Properties" />
+    <String key="0x0020702A" value="Error while searching for files!" />
+
+    <!-- Main Dialog: Advanced Encoder Options Groups -->
+
+    <String key="0x00208001" value="Encoding options" />
+    <String key="0x00208002" value="Bitstream info metadata" />
+    <String key="0x00208003" value="Dynamic range compression and dialog normalization" />
+    <String key="0x00208004" value="Input options" />
+    <String key="0x00208005" value="Input filters" />
+    <String key="0x00208006" value="Alternate bit stream syntax" />
+
+    <!-- Main Dialog: (1) Encoding options -->
+
+    <String key="0x00301001" value="Fast bit allocation" />
+    <String key="0x00301002" value="Fast bit allocation is a less-accurate search method\nfor CBR bit allocation. It only narrows down the SNR\nvalue to within 16 of the optimal value. The result\nis lower overall quality, but faster encoding. This\nmay not give the same results each time when using\nparallel encoding." />
+    <String key="0x00301003" value="More accurate encoding (default)" />
+    <String key="0x00301004" value="Faster encoding" />
+
+    <String key="0x00302001" value="Exponent strategy search size" />
+    <String key="0x00302002" value="The encoder determines the best combination of\nexponent strategies for a frame by searching through\na list of pre-defined exponent strategies. This option\ncontrols the size of the list to be searched. The\nvalue can range from 1 (lower quality but faster) to\n32 (higher quality but slower). The default value is 8." />
+    <String key="0x00302003" value="1 (lower quality but faster)" />
+    <String key="0x00302004" value="8 (default)" />
+    <String key="0x00302005" value="32 (higher quality but slower)" />
+
+    <String key="0x00303001" value="Start-of-stream padding" />
+    <String key="0x00303002" value="The AC-3 format uses an overlap/add cycle for encoding\neach block. By default, Aften pads the delay buffer\nwith a block of silence to avoid inaccurate encoding\nof the first frame of audio. If this behavior is not\nwanted, it can be disabled. The pad value can be a\n1 (default) to use padding or 0 to not use padding." />
+    <String key="0x00303003" value="No padding" />
+    <String key="0x00303004" value="256 samples of padding (default)" />
+
+    <String key="0x00304001" value="Bandwidth" />
+    <String key="0x00304002" value="The bandwidth setting corresponds to the high-frequency\ncutoff. Specifically, it sets the highest frequency bin\nwhich is encoded. The AC-3 format uses a 512-point MDCT\nwhich gives 256 frequency levels from 0 to 1/2 of the\nsamplerate. The formula to give the number of coded\nfrequency bins from bandwidth setting is:\n(w * 3) + 73, which gives a range of 73 to 253\nThere are 2 special values, -1 and -2.\nWhen -1 is used, Aften automatically selects what\nit thinks is an appropriate bandwidth. This is the\ndefault setting.\nWhen -2 is used, a bandwidth is chosen for each frame\nbased on CBR frame size and a target quality of 240.\nVariable bandwidth cannot be used with VBR mode." />
+    <String key="0x00304003" value="Fixed adaptive bandwidth (default)" />
+    <String key="0x00304004" value="Variable adaptive bandwidth" />
+    <String key="0x00304005" value="0 (28% of full bandwidth)" />
+    <String key="0x00304006" value="60 (99% of full bandwidth)" />
+
+    <String key="0x00305001" value="Minimum bandwidth" />
+    <String key="0x00305002" value="For variable bandwidth mode (-2), this option sets the\nminimum value for the bandwidth code. This allows the\nuser to avoid a harsh cutoff frequency by sacrificing\ngeneral audio quality. The default value is 0." />
+    <String key="0x00305003" value="0 (default)" />
+
+    <String key="0x00306001" value="Maximum bandwidth" />
+    <String key="0x00306002" value="For variable bandwidth mode (-2), this option sets the\nmaximum value for the bandwidth code. This can be used\nto speed up encoding by using a lower value than 60,\nwhich is the default." />
+    <String key="0x00306003" value="60 (default)" />
+
+    <String key="0x00307001" value="Stereo rematrixing" />
+    <String key="0x00307002" value="Using stereo rematrixing can increase quality by\nremoving redundant information between the left and\nright channels. This technique is common in audio\nencoding, and is sometimes called mid/side encoding.\nWhen this setting is turned on, Aften adaptively turns\nrematrixing on or off for each of 4 frequency bands for\neach block. When this setting is turned off,\nrematrixing is not used for any blocks. The default\nvalue is 1." />
+    <String key="0x00307003" value="Independent L+R channels" />
+    <String key="0x00307004" value="Mid/side rematrixing (default)" />
+
+    <String key="0x00308001" value="Block switching" />
+    <String key="0x00308002" value="The AC-3 format allows for 2 different types of MDCT\ntransformations to translate from time-domain to\nfrequency-domain. The default is a 512-point transform,\nwhich gives better frequency resolution. There is also\na 256-point transform, which gives better time\nresolution. The specification gives a suggested method\nfor determining when to use the 256-point transform.\nWhen block switching is turned on, Aften uses the spec\nmethod for selecting the 256-point MDCT. When it is\nturned off, only the 512-point MDCT is used, which is\nfaster. Block switching is turned off by default." />
+    <String key="0x00308003" value="Use only 512-point MDCT (default)" />
+    <String key="0x00308004" value="Selectively use 256-point MDCT" />
+
+    <!-- Main Dialog: (2) Bitstream info metadata -->
+
+    <String key="0x00401001" value="Center mix level" />
+    <String key="0x00401002" value="When three front channels are in use, this code\nindicates the nominal down mix level of the center\nchannel with respect to the left and right channels.\n0 = -3.0 dB (default)\n1 = -4.5 dB\n2 = -6.0 dB" />
+    <String key="0x00401003" value="-3.0 dB (default)" />
+
+    <String key="0x00402001" value="Surround mix level" />
+    <String key="0x00402002" value="If surround channels are in use, this code indicates\nthe nominal down mix level of the surround channels.\n0 = -3 dB (default)\n1 = -6 dB\n2 = 0" />
+    <String key="0x00402003" value="-3 dB (default)" />
+
+    <String key="0x00403001" value="Dolby Surround mode" />
+    <String key="0x00403002" value="When operating in the two channel mode, this code\nindicates whether or not the program has been encoded in\nDolby Surround. This information is not used by the\nAC-3 decoder, but may be used by other portions of the\naudio reproduction equipment.\n0 = not indicated (default)\n1 = not Dolby surround encoded\n2 = Dolby surround encoded" />
+    <String key="0x00403003" value="Not indicated (default)" />
+    <String key="0x00403004" value="Not Dolby surround encoded" />
+    <String key="0x00403005" value="Dolby surround encoded" />
+
+    <!-- Main Dialog: (3) Dynamic range compression and dialog normalization -->
+
+    <String key="0x00501001" value="Dialog normalization" />
+    <String key="0x00501002" value="The dialog normalization value sets the average dialog\nlevel. The value is typically constant for a particular\naudio program. The decoder has a target output dialog\nlevel of -31dB, so if the dialog level is specified as\nbeing -31dB already (default), the output volume is not\naltered. Otherwise, the overall output volume is\ndecreased so that the dialog level is adjusted down to\n-31dB." />
+    <String key="0x00501003" value="31 (default)" />
+
+    <String key="0x00502001" value="Dynamic Range Compression profile" />
+    <String key="0x00502002" value="Dynamic Range Compression allows for the final output\ndynamic range to be limited without sacrificing quality.\nThe full dynamic range audio is still encoded, but a\ncode is given for each block which tells the decoder to\nadjust the output volume for that block. The encoder\nmust analyze the input audio to determine the best way\nto compress the dynamic range based on the loudness and\ntype of input (film, music, speech).\n0 = Film Light\n1 = Film Standard\n2 = Music Light\n3 = Music Standard\n4 = Speech\n5 = None (default)" />
+    <String key="0x00502003" value="Film Light" />
+    <String key="0x00502004" value="Film Standard" />
+    <String key="0x00502005" value="Music Light" />
+    <String key="0x00502006" value="Music Standard" />
+    <String key="0x00502007" value="Speech" />
+    <String key="0x00502008" value="None (default)" />
+
+    <!-- Main Dialog: (4) Input options -->
+
+    <String key="0x00601001" value="Audio coding mode (overrides wav header)" />
+    <String key="0x00601002" value="The acmod and lfe options allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 0 = 1+1 (Ch1,Ch2)\n1 = 1/0 (C)\n2 = 2/0 (L,R)\n3 = 3/0 (L,R,C)\n4 = 2/1 (L,R,S)\n5 = 3/1 (L,R,C,S)\n6 = 2/2 (L,R,SL,SR)\n7 = 3/2 (L,R,C,SL,SR)" />
+
+    <String key="0x00602001" value="Specify use of LFE channel (overrides wav header)" />
+    <String key="0x00602002" value="The acmod and lfe options allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 0 = LFE channel is not present\n1 = LFE channel is present" />
+    <String key="0x00602003" value="LFE channel is not present" />
+    <String key="0x00602004" value="LFE channel is present" />
+
+    <String key="0x00603001" value="Specify channel configuration (overrides wav header)" />
+    <String key="0x00603002" value="The chconfig option allow the user to explicitly select the\ndesired channel layout. This only controls the interpretation\nof the input, so no downmixing or upmixing is done.\n 1+1 = (Ch1,Ch2)\n1/0 = (C)\n2/0 = (L,R)\n3/0 = (L,R,C)\n2/1 = (L,R,S)\n3/1 = (L,R,C,S)\n2/2 = (L,R,SL,SR)\n3/2 = (L,R,C,SL,SR)\nAdding +LFE indicates use of the LFE channel" />
+
+    <String key="0x00604001" value="Channel mapping order of input audio" />
+    <String key="0x00604002" value="Some programs create WAVE files which use a channel\nmapping other than the standard WAVE mapping. This\noption allows the user to specify if the input file\nuses WAVE, AC-3, or MPEG channel mapping. The MPEG\nchannel mapping is used by DTS and by MPEG-2/4 formats\nsuch as MP2 and AAC.\n0 = WAVE mapping (default)\n1 = AC-3 mapping\n2 = MPEG mapping" />
+    <String key="0x00604003" value="WAV mapping (default)" />
+    <String key="0x00604004" value="AC-3 mapping" />
+    <String key="0x00604005" value="MPEG mapping" />
+
+    <String key="0x00605001" value="Read input WAVE audio data until the end-of-file" />
+    <String key="0x00605002" value="This overrides the data size in the WAVE header, and\ncan be useful for streaming input or files larger than\n4 GB.\n0 = use data size in header (default)\n1 = read data until end-of-file" />
+    <String key="0x00605003" value="Use data size in header (default)" />
+    <String key="0x00605004" value="Read data until end-of-file" />
+
+    <!-- Main Dialog: (5) Input filters -->
+
+    <String key="0x00701001" value="Specify use of the bandwidth low-pass filter" />
+    <String key="0x00701002" value="The bandwidth low-pass filter pre-filters the input\naudio before converting to frequency-domain. This\nsmooths the cutoff frequency transition for slightly\nbetter quality.\n0 = do not apply filter (default)\n1 = apply filter" />
+    <String key="0x00701003" value="Do not apply filter (default)" />
+    <String key="0x00701004" value="Apply filter" />
+
+    <String key="0x00702001" value="Specify use of the DC high-pass filter" />
+    <String key="0x00702002" value="The DC high-pass filter is listed as optional by the\nAC-3 specification. The implementation, as suggested,\nis a single pole filter at 3 Hz.\n0 = do not apply filter (default)\n1 = apply filter" />
+    <String key="0x00702003" value="Do not apply filter (default)" />
+    <String key="0x00702004" value="Apply filter" />
+
+    <String key="0x00703001" value="Specify use of the LFE low-pass filter" />
+    <String key="0x00703002" value="The LFE low-pass filter is recommended by the AC-3\nspecification. The cutoff is 120 Hz. The specification\nrecommends an 8th order elliptic filter, but instead,\nAften uses a Butterworth 2nd order cascaded direct\nform II filter.\n0 = do not apply filter (default)\n1 = apply filter" />
+    <String key="0x00703003" value="Do not apply filter (default)" />
+    <String key="0x00703004" value="Apply filter" />
+
+    <!-- Main Dialog: (6) Alternate bit stream syntax -->
+
+    <String key="0x00801001" value="Specify use of extended bitstream info 1" />
+    <String key="0x00801002" value="Extended bitstream info 1 contains the dmixmod,\nltrtcmix, ltrtsmix, lorocmix, and lorosmix fields. If\nthis option is turned on, all these values are written\nto the output stream.\n0 = do not write xbsi1\n1 = write xbsi1" />
+    <String key="0x00801003" value="Do not write xbsi1" />
+    <String key="0x00801004" value="Write xbsi1" />
+
+    <String key="0x00802001" value="Preferred stereo downmix mode" />
+    <String key="0x00802002" value="This code indicates the type of stereo downmix preferred\nby the mastering engineer, and can be optionally used,\noverridden, or ignored by the decoder.\n0 = not indicated (default)\n1 = Lt/Rt downmix preferred\n2 = Lo/Ro downmix preferred" />
+    <String key="0x00802003" value="Not indicated (default)" />
+    <String key="0x00802004" value="Lt/Rt downmix preferred" />
+    <String key="0x00802005" value="Lo/Ro downmix preferred" />
+
+    <String key="0x00803001" value="Lt/Rt center mix level" />
+    <String key="0x00803002" value="This code indicates the nominal down mix level of the\ncenter channel with respect to the left and right\nchannels in an Lt/Rt downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (default)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB" />
+    <String key="0x00803003" value="-3.0 dB (default)" />
+
+    <String key="0x00804001" value="Lt/Rt surround mix level" />
+    <String key="0x00804002" value="This code indicates the nominal down mix level of the\nsurround channels with respect to the left and right\nchannels in an Lt/Rt downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (default)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB" />
+    <String key="0x00804003" value="-3.0 dB (default)" />
+
+    <String key="0x00805001" value="Lo/Ro center mix level" />
+    <String key="0x00805002" value="This code indicates the nominal down mix level of the\ncenter channel with respect to the left and right\nchannels in an Lo/Ro downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (default)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB" />
+    <String key="0x00805003" value="-3.0 dB (default)" />
+
+    <String key="0x00806001" value="Lo/Ro surround mix level" />
+    <String key="0x00806002" value="This code indicates the nominal down mix level of the\nsurround channels with respect to the left and right\nchannels in an Lo/Ro downmix.\n0 = +3.0 dB\n1 = +1.5 dB\n2 =  0.0 dB\n3 = -1.5 dB\n4 = -3.0 dB (default)\n5 = -4.5 dB\n6 = -6.0 dB\n7 = -inf dB" />
+    <String key="0x00806003" value="-3.0 dB (default)" />
+
+    <String key="0x00807001" value="Specify use of extended bitstream info 2" />
+    <String key="0x00807002" value="Extended bitstream info 2 contains the dsurexmod,\ndheadphon, and adconvtyp fields. If this option is\nturned on, all these values are written to the output\nstream. These options are not used by the AC-3 decoder,\nbut may be used by other portions of the audio\nreproduction equipment.\n0 = do not write xbsi2\n1 = write xbsi2" />
+    <String key="0x00807003" value="Do not write xbsi2" />
+    <String key="0x00807004" value="Write xbsi2" />
+
+    <String key="0x00808001" value="Dolby Surround EX mode" />
+    <String key="0x00808002" value="This code indicates whether or not the program has been\nencoded in Dolby Surround EX.\n0 = not indicated (default)\n1 = Not Dolby Surround EX encoded\n2 = Dolby Surround EX encoded" />
+    <String key="0x00808003" value="Not indicated (default)" />
+    <String key="0x00808004" value="Not Dolby Surround EX encoded" />
+    <String key="0x00808005" value="Dolby Surround EX encoded" />
+
+    <String key="0x00809001" value="Dolby Headphone mode" />
+    <String key="0x00809002" value="This code indicates whether or not the program has been\nDolby Headphone-encoded.\n0 = not indicated (default)\n1 = Not Dolby Headphone encoded\n2 = Dolby Headphone encoded" />
+    <String key="0x00809003" value="Not indicated (default)" />
+    <String key="0x00809004" value="Not Dolby Headphone encoded" />
+    <String key="0x00809005" value="Dolby Headphone encoded" />
+
+    <String key="0x0080A001" value="A/D converter type" />
+    <String key="0x0080A002" value="This code indicates the type of A/D converter technology\nused to capture the PCM audio.\n0 = Standard (default)\n1 = HDCD" />
+    <String key="0x0080A003" value="Standard (default)" />
+    <String key="0x0080A004" value="HDCD" />
+
+    <!-- About Dialog -->
+
+    <String key="0x00901001" value="&OK" />
+    <String key="0x00901002" value="About WAV to AC3 Encoder" />
+    <String key="0x00901003" value="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License." />
+    <String key="0x00901004" value="Version" />
+
+    <!-- Work Dialog -->
+
+    <String key="0x00A01001" value="Encoding..." />
+    <String key="0x00A01002" value="&Cancel" />
+    <String key="0x00A01003" value="From:" />
+    <String key="0x00A01004" value="To:" />
+    <String key="0x00A01005" value="Elapsed time:" />
+    <String key="0x00A01006" value="Total elapsed time:" />
+    <String key="0x00A01007" value="Encoding:" />
+    <String key="0x00A01008" value="I/O Reads:" />
+    <String key="0x00A01009" value="I/O Writes:" />
+    <String key="0x00A0100A" value="Fatal Error" />
+    <String key="0x00A0100B" value="Failed to create worker thread!" />
+    <String key="0x00A0100C" value="Encoding file %d of %d" />
+    <String key="0x00A0100D" value="Encoding %d mono files" />
+
+    <!-- Work Dialog: Current Job Info -->
+
+    <String key="0x00A02001" value="?" />
+    <String key="0x00A02002" value="?-channel" />
+    <String key="0x00A02003" value="Unsigned" />
+    <String key="0x00A02004" value="Signed" />
+    <String key="0x00A02005" value="Floating-point" />
+    <String key="0x00A02006" value="[unsupported type]" />
+    <String key="0x00A02007" value="1.1-channel" />
+    <String key="0x00A02008" value="2.1-channel" />
+    <String key="0x00A02009" value="3.1-channel" />
+    <String key="0x00A0200A" value="4.1-channel" />
+    <String key="0x00A0200B" value="5.1-channel" />
+    <String key="0x00A0200C" value="multi-channel with LFE" />
+    <String key="0x00A0200D" value="mono" />
+    <String key="0x00A0200E" value="stereo" />
+    <String key="0x00A0200F" value="3-channel" />
+    <String key="0x00A02010" value="4-channel" />
+    <String key="0x00A02011" value="5-channel" />
+    <String key="0x00A02012" value="6-channel" />
+    <String key="0x00A02013" value="multi-channel" />
+    <String key="0x00A02014" value="unknown" />
+    <String key="0x00A02015" value="little-endian" />
+    <String key="0x00A02016" value="big-endian" />
+    <String key="0x00A02017" value="Avisynth: Raw PCM Floating-point 32-bit little-endian" />
+    <String key="0x00A02018" value="dual mono (1+1)" />
+    <String key="0x00A02019" value="mono (1/0)" />
+    <String key="0x00A0201A" value="stereo (2/0)" />
+    <String key="0x00A0201B" value="NONE" />
+    <String key="0x00A0201C" value="Threads: Auto" />
+    <String key="0x00A0201D" value="Threads:" />
+
+    <!-- Engines Dialog -->
+
+    <String key="0x00B01001" value="Engines Editor" />
+    <String key="0x00B01002" value="Engine" />
+    <String key="0x00B01003" value="Name:" />
+    <String key="0x00B01004" value="Path:" />
+    <String key="0x00B01005" value="&..." />
+    <String key="0x00B01006" value="&Import..." />
+    <String key="0x00B01007" value="&Export..." />
+    <String key="0x00B01008" value="&Add" />
+    <String key="0x00B01009" value="&Remove" />
+    <String key="0x00B0100A" value="&OK" />
+    <String key="0x00B0100B" value="&Cancel" />
+    <String key="0x00B0100C" value="Name" />
+    <String key="0x00B0100D" value="Path" />
+    <String key="0x00B0100E" value="DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||" />
+    <String key="0x00B0100F" value="Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||" />
+
+    <!-- MUX Dialog -->
+
+    <String key="0x00C01001" value="MUX Wizard" />
+    <String key="0x00C01002" value="Channel config:" />
+    <String key="0x00C01003" value="&Import MUX..." />
+    <String key="0x00C01004" value="&Export MUX..." />
+    <String key="0x00C01005" value="&OK" />
+    <String key="0x00C01006" value="&Cancel" />
+    <String key="0x00C01007" value="CLEAR" />
+    <String key="0x00C01008" value="Specify channel configuration:\n1+1 = (Ch1,Ch2)\n1/0 = (C)\n2/0 = (L,R)\n3/0 = (L,R,C)\n2/1 = (L,R,S)\n3/1 = (L,R,C,S)\n2/2 = (L,R,SL,SR)\n3/2 = (L,R,C,SL,SR)" />
+    <String key="0x00C01009" value="Indicates use of the LFE channel." />
+    <String key="0x00C0100A" value="Front Left Channel" />
+    <String key="0x00C0100B" value="Front Right Channel" />
+    <String key="0x00C0100C" value="Front Center Channel" />
+    <String key="0x00C0100D" value="Low Frequency Effect Channel" />
+    <String key="0x00C0100E" value="Surround Left Channel" />
+    <String key="0x00C0100F" value="Surround Right Channel" />
+    <String key="0x00C01010" value="Surround Channel" />
+    <String key="0x00C01011" value="Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||" />
+
+    <!-- Command-Line -->
+
+    <String key="0x00D01001" value="WAV to AC3 Encoder Command-Line Help\n\nUsage: EncWAVtoAC3 [Options]\n\nOptions:\n\n-h, --help\nShow command-line help message.\n\n-x,--encode-and-exit\nEncode input files and exit.\n\n-r, --read-only\nDo not save configuration on exit.\n\n-i, --input-file <file.ext>\nSet input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).\n\n-o, --output-file <file.ext>\nSet output file path (*.ac3).\n\n-d, --output-path <path>\nSet default output path (default: input file path is used).\n\n-c, --load-config <file.ext>\nLoad program configation (*.config).\n\n-f, --load-files <file.ext>\nLoad list of files to encode (*.files, *.mux).\n\n-p, --load-presets <file.ext>\nLoad list of preconfigured presets (*.presets).\n\n-e, --load-engines <file.ext>\nLoad list of Aften engines (*.engines).\n\n-m, --mux-wizard\nShow standalone MUX Wizard window.\n" />
+    <String key="0x00D01002" value="WAV to AC3 Encoder Command-Line Help\n\nUsage: EncWAVtoAC3 [Options]\n\nOptions:\n\n-h, --help\nShow command-line help message.\n\n-x,--encode-and-exit\nEncode input files and exit.\n\n-r, --read-only\nDo not save configuration on exit.\n\n-i, --input-file <file.ext>\nSet input files path (*.wav, *.bin, *.pcm, *.raw).\n\n-o, --output-file <file.ext>\nSet output file path (*.ac3).\n\n-d, --output-path <path>\nSet default output path (default: input file path is used).\n\n-c, --load-config <file.ext>\nLoad program configation (*.config).\n\n-f, --load-files <file.ext>\nLoad list of files to encode (*.files, *.mux).\n\n-p, --load-presets <file.ext>\nLoad list of preconfigured presets (*.presets).\n\n-e, --load-engines <file.ext>\nLoad list of Aften engines (*.engines).\n\n-m, --mux-wizard\nShow standalone MUX Wizard window.\n" />
+    <String key="0x00D01003" value="Command-Line Help" />
+    <String key="0x00D01004" value="Error" />
+    <String key="0x00D01005" value="Use --help option to obtain more informations." />
+    <String key="0x00D01006" value="Invalid command-line argument!" />
+    <String key="0x00D01007" value="Unknown option Id!" />
+    <String key="0x00D01008" value="Input file is missing! Please use also --input-file option!." />
+    <String key="0x00D01009" value="Can not combine --input-file with --load-files option!" />
+    <String key="0x00D0100A" value="Can not combine --output-file with --load-files option!" />
+    <String key="0x00D0100B" value="Can not combine --output-file with --output-path option!" />
 
 </Language>
