@@ -11,40 +11,40 @@
 
     <!-- Main Dialog: Main Menu -->
 
-    <String key="0x00101001" value="&File" />
-    <String key="0x00101002" value="Add &Files...\tCtrl+F" />
-    <String key="0x00101003" value="Add &Directory...\tCtrl+D" />
-    <String key="0x00101004" value="&MUX Wizard...\tCtrl+M" />
-    <String key="0x00101005" value="L&oad Files List...\tCtrl+O" />
-    <String key="0x00101006" value="Sa&ve Files List...\tCtrl+S" />
-    <String key="0x00101007" value="&Load Presets...\tCtrl+Shitf+O" />
-    <String key="0x00101008" value="&Save Presets...\tCtrl+Shitf+S" />
-    <String key="0x00101009" value="E&xit\tAlt+F4" />
+    <String key="0x00101001" value="&amp;File" />
+    <String key="0x00101002" value="Add &amp;Files...\tCtrl+F" />
+    <String key="0x00101003" value="Add &amp;Directory...\tCtrl+D" />
+    <String key="0x00101004" value="&amp;MUX Wizard...\tCtrl+M" />
+    <String key="0x00101005" value="L&amp;oad Files List...\tCtrl+O" />
+    <String key="0x00101006" value="Sa&amp;ve Files List...\tCtrl+S" />
+    <String key="0x00101007" value="&amp;Load Presets...\tCtrl+Shitf+O" />
+    <String key="0x00101008" value="&amp;Save Presets...\tCtrl+Shitf+S" />
+    <String key="0x00101009" value="E&amp;xit\tAlt+F4" />
 
-    <String key="0x00102001" value="&Options" />
-    <String key="0x00102002" value="Disable All &Warnings\tCtrl+Shift+W" />
-    <String key="0x00102003" value="Save Configuration On E&xit\tCtrl+Shift+C" />
-    <String key="0x00102004" value="Loa&d Configuration\tF7" />
-    <String key="0x00102005" value="Sav&e Configuration\tF8" />
+    <String key="0x00102001" value="&amp;Options" />
+    <String key="0x00102002" value="Disable All &amp;Warnings\tCtrl+Shift+W" />
+    <String key="0x00102003" value="Save Configuration On E&amp;xit\tCtrl+Shift+C" />
+    <String key="0x00102004" value="Loa&amp;d Configuration\tF7" />
+    <String key="0x00102005" value="Sav&amp;e Configuration\tF8" />
 
-    <String key="0x00103001" value="&Language" />
-    <String key="0x00103002" value="&Default (English)" />
+    <String key="0x00103001" value="&amp;Language" />
+    <String key="0x00103002" value="&amp;Default (English)" />
 
-    <String key="0x00104001" value="&Help" />
-    <String key="0x00104002" value="Command-&Line Help\tCtrl+F1" />
-    <String key="0x00104003" value="&Website\tCtrl+Shift+W" />
-    <String key="0x00104004" value="&About...\tCtrl+Shift+A" />
+    <String key="0x00104001" value="&amp;Help" />
+    <String key="0x00104002" value="Command-&amp;Line Help\tCtrl+F1" />
+    <String key="0x00104003" value="&amp;Website\tCtrl+Shift+W" />
+    <String key="0x00104004" value="&amp;About...\tCtrl+Shift+A" />
 
     <!-- Main Dialog: Buttons -->
 
-    <String key="0x00201001" value="&Encode" />
-    <String key="0x00201002" value="Rese&t" />
-    <String key="0x00201003" value="&Remove" />
-    <String key="0x00201004" value="A&dd" />
-    <String key="0x00201005" value="&Add files..." />
-    <String key="0x00201006" value="&..." />
-    <String key="0x00201007" value="MU&X Wizard..." />
-    <String key="0x00201008" value="Ed&it" />
+    <String key="0x00201001" value="&amp;Encode" />
+    <String key="0x00201002" value="Rese&amp;t" />
+    <String key="0x00201003" value="&amp;Remove" />
+    <String key="0x00201004" value="A&amp;dd" />
+    <String key="0x00201005" value="&amp;Add files..." />
+    <String key="0x00201006" value="&amp;..." />
+    <String key="0x00201007" value="MU&amp;X Wizard..." />
+    <String key="0x00201008" value="Ed&amp;it" />
 
     <!-- Main Dialog: Static Text -->
 
@@ -57,7 +57,7 @@
     <String key="0x00202007" value="Channels:" />
     <String key="0x00202008" value="Engine:" />
     <String key="0x00202009" value="Threads:" />
-    <String key="0x0020200A" value="M&ultiple mono input" />
+    <String key="0x0020200A" value="M&amp;ultiple mono input" />
     <String key="0x0020200B" value="Output file:" />
     <String key="0x0020200C" value="Output path:" />
 
@@ -68,16 +68,16 @@
 
     <!-- Main Dialog: Files List Context-Menu -->
 
-    <String key="0x00204001" value="&List" />
-    <String key="0x00204002" value="Add &Files...\tCtrl+F" />
-    <String key="0x00204003" value="Add &Directory...\tCtrl+D" />
-    <String key="0x00204004" value="&MUX Wizard...\tCtrl+M" />
-    <String key="0x00204005" value="L&oad Files List...\tCtrl+O" />
-    <String key="0x00204006" value="Sa&ve Files List...\tCtrl+S" />
-    <String key="0x00204007" value="Move &Up\tCtrl+Up" />
-    <String key="0x00204008" value="Move Dow&n\tCtrl+Down" />
-    <String key="0x00204009" value="Remove &Selected Files\tDel" />
-    <String key="0x0020400A" value="Remove &All Files\tCtrl+Del" />
+    <String key="0x00204001" value="&amp;List" />
+    <String key="0x00204002" value="Add &amp;Files...\tCtrl+F" />
+    <String key="0x00204003" value="Add &amp;Directory...\tCtrl+D" />
+    <String key="0x00204004" value="&amp;MUX Wizard...\tCtrl+M" />
+    <String key="0x00204005" value="L&amp;oad Files List...\tCtrl+O" />
+    <String key="0x00204006" value="Sa&amp;ve Files List...\tCtrl+S" />
+    <String key="0x00204007" value="Move &amp;Up\tCtrl+Up" />
+    <String key="0x00204008" value="Move Dow&amp;n\tCtrl+Down" />
+    <String key="0x00204009" value="Remove &amp;Selected Files\tDel" />
+    <String key="0x0020400A" value="Remove &amp;All Files\tCtrl+Del" />
 
     <!-- Main Dialog: Settings List -->
 
@@ -325,7 +325,7 @@
 
     <!-- About Dialog -->
 
-    <String key="0x00901001" value="&OK" />
+    <String key="0x00901001" value="&amp;OK" />
     <String key="0x00901002" value="About WAV to AC3 Encoder" />
     <String key="0x00901003" value="This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License." />
     <String key="0x00901004" value="Version" />
@@ -333,7 +333,7 @@
     <!-- Work Dialog -->
 
     <String key="0x00A01001" value="Encoding..." />
-    <String key="0x00A01002" value="&Cancel" />
+    <String key="0x00A01002" value="&amp;Cancel" />
     <String key="0x00A01003" value="From:" />
     <String key="0x00A01004" value="To:" />
     <String key="0x00A01005" value="Elapsed time:" />
@@ -384,13 +384,13 @@
     <String key="0x00B01002" value="Engine" />
     <String key="0x00B01003" value="Name:" />
     <String key="0x00B01004" value="Path:" />
-    <String key="0x00B01005" value="&..." />
-    <String key="0x00B01006" value="&Import..." />
-    <String key="0x00B01007" value="&Export..." />
-    <String key="0x00B01008" value="&Add" />
-    <String key="0x00B01009" value="&Remove" />
-    <String key="0x00B0100A" value="&OK" />
-    <String key="0x00B0100B" value="&Cancel" />
+    <String key="0x00B01005" value="&amp;..." />
+    <String key="0x00B01006" value="&amp;Import..." />
+    <String key="0x00B01007" value="&amp;Export..." />
+    <String key="0x00B01008" value="&amp;Add" />
+    <String key="0x00B01009" value="&amp;Remove" />
+    <String key="0x00B0100A" value="&amp;OK" />
+    <String key="0x00B0100B" value="&amp;Cancel" />
     <String key="0x00B0100C" value="Name" />
     <String key="0x00B0100D" value="Path" />
     <String key="0x00B0100E" value="DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||" />
@@ -400,10 +400,10 @@
 
     <String key="0x00C01001" value="MUX Wizard" />
     <String key="0x00C01002" value="Channel config:" />
-    <String key="0x00C01003" value="&Import MUX..." />
-    <String key="0x00C01004" value="&Export MUX..." />
-    <String key="0x00C01005" value="&OK" />
-    <String key="0x00C01006" value="&Cancel" />
+    <String key="0x00C01003" value="&amp;Import MUX..." />
+    <String key="0x00C01004" value="&amp;Export MUX..." />
+    <String key="0x00C01005" value="&amp;OK" />
+    <String key="0x00C01006" value="&amp;Cancel" />
     <String key="0x00C01007" value="CLEAR" />
     <String key="0x00C01008" value="Specify channel configuration:\n1+1 = (Ch1,Ch2)\n1/0 = (C)\n2/0 = (L,R)\n3/0 = (L,R,C)\n2/1 = (L,R,S)\n3/1 = (L,R,C,S)\n2/2 = (L,R,SL,SR)\n3/2 = (L,R,C,SL,SR)" />
     <String key="0x00C01009" value="Indicates use of the LFE channel." />
