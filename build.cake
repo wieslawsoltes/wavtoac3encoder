@@ -20,13 +20,24 @@ var platforms = new [] { "Win32", "x64" }.ToList();
 var configurations = new [] { "Debug", "Release" }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var versionHeaderPath = (FilePath)File("./src/version.h");
-var installerScript = MakeAbsolute((FilePath)File("SetupScript.iss"));
-var installerScriptAMD64 = MakeAbsolute((FilePath)File("SetupScriptAMD64.iss"));
+var installerScript = MakeAbsolute((FilePath)File("./setup/setup.iss"));
 var iscc = @"C:/Program Files (x86)/Inno Setup 5/ISCC.exe";
 var artifactsDir = (DirectoryPath)Directory("./artifacts");
 var binDir = (DirectoryPath)Directory("./src/bin");
 var objDir = (DirectoryPath)Directory("./src/obj");
-var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
+
+///////////////////////////////////////////////////////////////////////////////
+// RELEASE
+///////////////////////////////////////////////////////////////////////////////
+
+var isAppVeyorBuild = AppVeyor.IsRunningOnAppVeyor;
+var isLocalBuild = BuildSystem.IsLocalBuild;
+var isPullRequest = BuildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
+var isMainRepo = StringComparer.OrdinalIgnoreCase.Equals("wieslawsoltes/wavtoac3encoder", BuildSystem.AppVeyor.Environment.Repository.Name);
+var isMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", BuildSystem.AppVeyor.Environment.Repository.Branch);
+var isTagged = BuildSystem.AppVeyor.Environment.Repository.Tag.IsTag 
+               && !string.IsNullOrWhiteSpace(BuildSystem.AppVeyor.Environment.Repository.Tag.Name);
+var isRelease =  !isLocalBuild && !isPullRequest && isMainRepo && isMasterBranch && isTagged;
 
 ///////////////////////////////////////////////////////////////////////////////
 // VERSION
@@ -39,9 +50,84 @@ var minor = split[1].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEn
 var revision = split[2].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var build = split[3].Split(new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[2];
 var version = major + "." + minor;
+var suffix = (isRelease || !isAppVeyorBuild) ? "" : "-build" + EnvironmentVariable("APPVEYOR_BUILD_NUMBER") + "-alpha";
 
 Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
-Information("Release Version: {0}", version);
+Information("Release Version: {0}", version + suffix);
+
+///////////////////////////////////////////////////////////////////////////////
+// ACTIONS
+///////////////////////////////////////////////////////////////////////////////
+
+var buildSolutionAction = new Action<string,string,string> ((solution, configuration, platform) => 
+{
+    Information("Building: {0}, {1} / {2}", solution, configuration, platform);
+    MSBuild(solution, settings => {
+        settings.SetConfiguration(configuration);
+        settings.WithProperty("Platform", "\"" + platform + "\"");
+        settings.SetVerbosity(Verbosity.Minimal); });
+});
+
+var packageBinariesAction = new Action<string,string> ((configuration, platform) => 
+{
+    var path = "./src/bin/" + configuration + "/" + platform + "/";
+    var output = "EncWAVtoAC3-" + version + suffix + "-" + platform + (configuration == "Release" ? "" : ("-(" + configuration + ")"));
+    var outputDir = artifactsDir.Combine(output);
+    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    var langDir = outputDir.Combine("Lang");
+    var exeFile = File(path + "EncWAVtoAC3.exe");
+    var portableFile = File("EncWAVtoAC3.portable");
+
+    CleanDirectory(outputDir);
+    CopyFileToDirectory(File("README.md"), outputDir);
+    CopyFileToDirectory(File("CHANGELOG.md"), outputDir);
+    CopyFileToDirectory(File("COPYING.TXT"), outputDir);
+    CopyFileToDirectory(exeFile, outputDir);
+    CopyFileToDirectory(portableFile, outputDir);
+    CleanDirectory(langDir);
+    CopyFiles("./lang/*.txt", langDir);
+
+    var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
+    var aftenDll = "libaften.dll";
+    var aftenDllsWin32 = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
+    var aftenDllsAMD64 = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
+    var enginesFileWin32 = File("./engines/unicode/Win32/EncWAVtoAC3.engines");
+    var enginesFileAMD64 = File("./engines/unicode/Win64/EncWAVtoAC3.engines");
+
+    if (platform == "Win32")
+    {
+        CopyFileToDirectory(enginesFileWin32, outputDir);
+        foreach (var dir in aftenDllsWin32)
+        {
+            CleanDirectory(outputDir.Combine(dir));
+            CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+        }
+    }
+
+    if (platform == "x64")
+    {
+        CopyFileToDirectory(enginesFileAMD64, outputDir);
+        foreach (var dir in aftenDllsAMD64)
+        {
+            CleanDirectory(outputDir.Combine(dir));
+            CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+        }
+    }
+
+    Zip(outputDir, outputZip);
+});
+
+var packageInstallersAction = new Action<string,string> ((configuration, platform) => 
+{
+    StartProcess(iscc, new ProcessSettings { 
+        Arguments = 
+            "\"" + installerScript.FullPath + "\""
+            + " /DCONFIGURATION=" + configuration
+            + " /DBUILD=" + platform
+            + " /DVERSION=" + version
+            + " /DSUFFIX=" + suffix, 
+        WorkingDirectory = MakeAbsolute(artifactsDir) });
+});
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASKS
@@ -59,117 +145,21 @@ Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    configurations.ForEach(configuration => {
-        platforms.ForEach(platform => {
-            Information("Building: {0}, {1} / {2}", solution, configuration, platform);
-            MSBuild(solution, settings => {
-                settings.SetConfiguration(configuration);
-                settings.WithProperty("Platform", "\"" + platform + "\"");
-                settings.SetVerbosity(Verbosity.Minimal);
-            });
-        });
-    });
+    configurations.ForEach(configuration => platforms.ForEach(platform => buildSolutionAction(solution, configuration, platform)));
 });
 
-Task("Package-Binaries-x86")
+Task("Package-Binaries")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var output = "EncWAVtoAC3-" + version;
-    var outputDir = artifactsDir.Combine(output);
-    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
-    var langDir = outputDir.Combine("Lang");
-    var aftenDll = "libaften.dll";
-    var aftenDllsWin32 = new [] { 
-        "libaftendll_x86",
-        "libaftendll_x86_SSE",
-        "libaftendll_x86_SSE2",
-        "libaftendll_x86_SSE3",
-    };
-    var exeFile = File("./src/bin/Release/Win32/EncWAVtoAC3.exe");
-    var enginesFile = File("./engines/unicode/Win32/EncWAVtoAC3.engines");
-    var portableFile = File("EncWAVtoAC3.portable");
-
-    CleanDirectory(outputDir);
-
-    CopyFileToDirectory(File("README.md"), outputDir);
-    CopyFileToDirectory(File("CHANGELOG.md"), outputDir);
-    CopyFileToDirectory(File("COPYING.TXT"), outputDir);
-    CopyFileToDirectory(exeFile, outputDir);
-    CopyFileToDirectory(enginesFile, outputDir);
-    CopyFileToDirectory(portableFile, outputDir);
-
-    CleanDirectory(langDir);
-    CopyFiles("./lang/*.txt", langDir);
-    
-    foreach (var dir in aftenDllsWin32)
-    {
-        CleanDirectory(outputDir.Combine(dir));
-        CopyFileToDirectory(
-            aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), 
-            outputDir.Combine(dir));
-    }
-
-    Zip(outputDir, outputZip);
+    configurations.ForEach(configuration => platforms.ForEach(platform => packageBinariesAction(configuration, platform)));
 });
 
-Task("Package-Binaries-AMD64")
+Task("Package-Installers")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var output = "EncWAVtoAC3-" + version + "-AMD64";
-    var outputDir = artifactsDir.Combine(output);
-    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
-    var langDir = outputDir.Combine("Lang");
-    var aftenDll = "libaften.dll";
-    var aftenDllsWin32 = new [] { 
-        "libaftendll_AMD64",
-        "libaftendll_AMD64_SSE2",
-        "libaftendll_AMD64_SSE3"
-    };
-    var exeFile = File("./src/bin/Release/x64/EncWAVtoAC3.exe");
-    var enginesFile = File("./engines/unicode/Win64/EncWAVtoAC3.engines");
-    var portableFile = File("EncWAVtoAC3.portable");
-
-    CleanDirectory(outputDir);
-
-    CopyFileToDirectory(File("README.md"), outputDir);
-    CopyFileToDirectory(File("CHANGELOG.md"), outputDir);
-    CopyFileToDirectory(File("COPYING.TXT"), outputDir);
-    CopyFileToDirectory(exeFile, outputDir);
-    CopyFileToDirectory(enginesFile, outputDir);
-    CopyFileToDirectory(portableFile, outputDir);
-
-    CleanDirectory(langDir);
-    CopyFiles("./lang/*.txt", langDir);
-    
-    foreach (var dir in aftenDllsWin32)
-    {
-        CleanDirectory(outputDir.Combine(dir));
-        CopyFileToDirectory(
-            aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), 
-            outputDir.Combine(dir));
-    }
-
-    Zip(outputDir, outputZip);
-});
-
-Task("Package-Installer-x86")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
-    StartProcess(iscc, new ProcessSettings { 
-        Arguments = "\"" + installerScript.FullPath + "\"" + " " + "/DVERSION=" + version, 
-        WorkingDirectory = MakeAbsolute(artifactsDir) });
-});
-
-Task("Package-Installer-AMD64")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
-    StartProcess(iscc, new ProcessSettings { 
-        Arguments = "\"" + installerScriptAMD64.FullPath + "\"" + " " + "/DVERSION=" + version, 
-        WorkingDirectory = MakeAbsolute(artifactsDir) });
+    configurations.ForEach(configuration => platforms.ForEach(platform => packageInstallersAction(configuration, platform)));
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -177,13 +167,11 @@ Task("Package-Installer-AMD64")
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Package")
-  .IsDependentOn("Package-Binaries-x86")
-  .IsDependentOn("Package-Binaries-AMD64")
-  .IsDependentOn("Package-Installer-x86")
-  .IsDependentOn("Package-Installer-AMD64");
+  .IsDependentOn("Package-Binaries")
+  .IsDependentOn("Package-Installers");
 
 Task("Default")
-  .IsDependentOn("Package");
+  .IsDependentOn("Build");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTE
