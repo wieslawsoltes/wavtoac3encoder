@@ -76,7 +76,7 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
     var langDir = outputDir.Combine("Lang");
     var exeFile = File(path + "EncWAVtoAC3.exe");
-    var portableFile = File("EncWAVtoAC3.portable");
+    var portableFile = File("./setup/EncWAVtoAC3.portable");
 
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
@@ -90,9 +90,9 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
     var aftenDll = "libaften.dll";
     var aftenDllsWin32 = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
-    var aftenDllsAMD64 = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
-    var enginesFileWin32 = File("./engines/unicode/Win32/EncWAVtoAC3.engines");
-    var enginesFileAMD64 = File("./engines/unicode/Win64/EncWAVtoAC3.engines");
+    var aftenDllsX64 = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
+    var enginesFileWin32 = File("./engines/Win32/EncWAVtoAC3.engines");
+    var enginesFileX64 = File("./engines/x64/EncWAVtoAC3.engines");
 
     if (platform == "Win32")
     {
@@ -106,8 +106,8 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
 
     if (platform == "x64")
     {
-        CopyFileToDirectory(enginesFileAMD64, outputDir);
-        foreach (var dir in aftenDllsAMD64)
+        CopyFileToDirectory(enginesFileX64, outputDir);
+        foreach (var dir in aftenDllsX64)
         {
             CleanDirectory(outputDir.Combine(dir));
             CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
