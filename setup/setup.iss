@@ -1,4 +1,4 @@
-#define ProgramName "WAV to AC3 Encoder"
+#define ProgramName "EncWAVtoAC3"
 #define ProgramExe "EncWAVtoAC3.exe"
 #define ProgramConfiguration CONFIGURATION
 #define ProgramBuild BUILD
