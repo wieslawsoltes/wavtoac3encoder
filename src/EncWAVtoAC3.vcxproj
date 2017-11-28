@@ -366,8 +366,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AftenAPI.h" />
-    <ClInclude Include="avisynth64\core\avisynth.h" />
-    <ClInclude Include="avisynth64\internal.h" />
+    <ClInclude Include="avisynth64\src\core\avisynth.h" />
+    <ClInclude Include="avisynth64\src\internal.h" />
+    <ClInclude Include="avisynth\src\core\avisynth.h" />
+    <ClInclude Include="avisynth\src\internal.h" />
     <ClInclude Include="Avs2Raw.h" />
     <ClInclude Include="configuration\EncoderOptions.h" />
     <ClInclude Include="configuration\Language.h" />
@@ -382,8 +384,6 @@
     <ClInclude Include="aften\pcm\formats.h" />
     <ClInclude Include="aften\pcm\pcm.h" />
     <ClInclude Include="aften\pcm\pcmfile.h" />
-    <ClInclude Include="avisynth\core\avisynth.h" />
-    <ClInclude Include="avisynth\internal.h" />
     <ClInclude Include="dialogs\AboutDlg.h" />
     <ClInclude Include="dialogs\MainDlg.h" />
     <ClInclude Include="dialogs\EnginesDlg.h" />

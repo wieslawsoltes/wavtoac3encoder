@@ -154,18 +154,6 @@
     <ClInclude Include="aften\libaften\aften.h">
       <Filter>Header Files\Aften</Filter>
     </ClInclude>
-    <ClInclude Include="avisynth\core\avisynth.h">
-      <Filter>Header Files\Avisynth</Filter>
-    </ClInclude>
-    <ClInclude Include="avisynth\internal.h">
-      <Filter>Header Files\Avisynth</Filter>
-    </ClInclude>
-    <ClInclude Include="avisynth64\internal.h">
-      <Filter>Header Files\Avisynth64</Filter>
-    </ClInclude>
-    <ClInclude Include="avisynth64\core\avisynth.h">
-      <Filter>Header Files\Avisynth64</Filter>
-    </ClInclude>
     <ClInclude Include="dialogs\AboutDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
@@ -198,6 +186,18 @@
     </ClInclude>
     <ClInclude Include="worker\WorkThread.h">
       <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth64\src\core\avisynth.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth64\src\internal.h">
+      <Filter>Header Files\Avisynth64</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth\src\core\avisynth.h">
+      <Filter>Header Files\Avisynth</Filter>
+    </ClInclude>
+    <ClInclude Include="avisynth\src\internal.h">
+      <Filter>Header Files\Avisynth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
