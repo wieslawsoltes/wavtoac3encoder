@@ -108,7 +108,7 @@ project was started on `27th January 2007` by `Wiesław Šoltés`.
     -i, --input-file <file.ext>     Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).
     -o, --output-file <file.ext>    Set output file path (*.ac3).
     -d, --output-path <path>        Set default output path (default: input file path is used).
-    -c, --load-config <file.ext>    Load program configation (*.config).
+    -c, --load-config <file.ext>    Load program configuration (*.config).
     -f, --load-files <file.ext>     Load list of files to encode (*.files, *.mux).
     -p, --load-presets <file.ext>   Load list of preconfigured presets (*.presets).
     -e, --load-engines <file.ext>   Load list of Aften engines (*.engines).
