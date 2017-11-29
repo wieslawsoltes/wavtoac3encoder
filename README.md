@@ -35,14 +35,6 @@ Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 
 [Download](https://ci.appveyor.com/project/wieslawsoltes/wavtoac3encoder/build/artifacts) bleeding edge builds from the CI server.
 
-## Download Aften
-
-| Platforn              | Type        | Version       | Download                                                                                                                                                                           |
-|-----------------------|-------------|---------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| -                     | Sources     | git-20091226  | [aften-git-20091226-icl11_1_054-src.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-src.zip)                |
-| Windows 32-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win32-bin.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-win32-bin.zip)    |
-| Windows 64-bit        | Binaries    | git-20091226  | [aften-git-20091226-icl11_1_054-win64-bin.zip](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases/download/git-20091226/aften-git-20091226-icl11_1_054-win64-bin.zip)    |
-
 ## Mirrors
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
@@ -50,6 +42,10 @@ Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 ## Language Editor
 
 Download latest version of the language editor from [here](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor).
+
+## Aften
+
+Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
 
 ## About
 
