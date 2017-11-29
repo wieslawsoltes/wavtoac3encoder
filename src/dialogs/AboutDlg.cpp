@@ -23,7 +23,7 @@
 IMPLEMENT_DYNAMIC(CAboutDlg, CDialog)
 
 CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
-    : CMyResizeDialog(CAboutDlg::IDD, pParent)
+    : CMyDialogEx(CAboutDlg::IDD, pParent)
 {
 
 }
@@ -35,18 +35,18 @@ CAboutDlg::~CAboutDlg()
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CMyResizeDialog::DoDataExchange(pDX);
+    CMyDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDOK, m_BtnOK);
     DDX_Control(pDX, IDC_STATIC_BUILD_INFO, m_StcBuildInfo);
     DDX_Control(pDX, IDC_STATIC_LICENSE, m_StcLicense);
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CMyResizeDialog)
+BEGIN_MESSAGE_MAP(CAboutDlg, CMyDialogEx)
 END_MESSAGE_MAP()
 
 BOOL CAboutDlg::OnInitDialog()
 {
-    CMyResizeDialog::OnInitDialog();
+    CMyDialogEx::OnInitDialog();
 
     SetBuildInfo();
     InitLang();

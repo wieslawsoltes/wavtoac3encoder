@@ -24,7 +24,7 @@
 #include "configuration\ProgramConfig.h"
 #include "configuration\Language.h"
 #include "configuration\EncoderOptions.h"
-#include "controls\MyResizeDialog.h"
+#include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
 #include "controls\MyEdit.h"
@@ -61,7 +61,7 @@ typedef struct TItemToMove
     int nItem1;
 } ItemToMove;
 
-class CMainDlg : public CMyResizeDialog
+class CMainDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CMainDlg)
 public:

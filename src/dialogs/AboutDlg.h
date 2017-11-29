@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "controls\MyResizeDialog.h"
+#include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
 #include "controls\MyEdit.h"
@@ -29,7 +29,7 @@
 
 #include "afxwin.h"
 
-class CAboutDlg : public CMyResizeDialog
+class CAboutDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CAboutDlg)
 public:

@@ -27,7 +27,7 @@
 IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
 
 CWorkDlg::CWorkDlg(CWnd* pParent /*=NULL*/)
-    : CMyResizeDialog(CWorkDlg::IDD, pParent)
+    : CMyDialogEx(CWorkDlg::IDD, pParent)
 {
     nIDIn[0] = IDC_STATIC_IN_00;
     nIDIn[1] = IDC_STATIC_IN_01;
@@ -59,7 +59,7 @@ CWorkDlg::~CWorkDlg()
 
 void CWorkDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CMyResizeDialog::DoDataExchange(pDX);
+    CMyDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDCANCEL, m_BtnCancel);
     DDX_Control(pDX, IDC_STATIC_ELAPSED_CURRENT, m_StcTimeCurrent);
     DDX_Control(pDX, IDC_STATIC_ELAPSED_TOTAL, m_StcTimeTotal);
@@ -70,7 +70,7 @@ void CWorkDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_PROGRESS_TOTAL, m_PrgTotal);
 }
 
-BEGIN_MESSAGE_MAP(CWorkDlg, CMyResizeDialog)
+BEGIN_MESSAGE_MAP(CWorkDlg, CMyDialogEx)
     ON_WM_CLOSE()
     ON_WM_DESTROY()
     ON_WM_TIMER()
@@ -79,7 +79,7 @@ END_MESSAGE_MAP()
 
 BOOL CWorkDlg::OnInitDialog()
 {
-    CMyResizeDialog::OnInitDialog();
+    CMyDialogEx::OnInitDialog();
 
     InitSettings();
     InitCtrls();
@@ -106,12 +106,12 @@ void CWorkDlg::OnClose()
     else
         this->EndDialog(IDOK);
 
-    CMyResizeDialog::OnClose();
+    CMyDialogEx::OnClose();
 }
 
 void CWorkDlg::OnDestroy()
 {
-    CMyResizeDialog::OnDestroy();
+    CMyDialogEx::OnDestroy();
 
     if (this->hThread != NULL)
     {
@@ -133,7 +133,7 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
         return;
     };
 
-    CMyResizeDialog::OnTimer(nIDEvent);
+    CMyDialogEx::OnTimer(nIDEvent);
 }
 
 void CWorkDlg::OnBnClickedCancel()

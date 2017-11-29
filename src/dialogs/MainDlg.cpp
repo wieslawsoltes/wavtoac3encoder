@@ -31,7 +31,7 @@
 IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
 
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
-    : CMyResizeDialog(CMainDlg::IDD, pParent)
+    : CMyDialogEx(CMainDlg::IDD, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -58,7 +58,7 @@ CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
 
 void CMainDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CMyResizeDialog::DoDataExchange(pDX);
+    CMyDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST_FILES, m_LstFiles);
     DDX_Control(pDX, IDC_LIST_SETTINGS, m_LstSettings);
     DDX_Control(pDX, IDC_SLIDER_BITRATE, m_SldBitrate);
@@ -92,7 +92,7 @@ void CMainDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_BUTTON_ENGINES, m_BtnEngines);
 }
 
-BEGIN_MESSAGE_MAP(CMainDlg, CMyResizeDialog)
+BEGIN_MESSAGE_MAP(CMainDlg, CMyDialogEx)
     ON_WM_PAINT()
     ON_WM_QUERYDRAGICON()
     ON_WM_WINDOWPOSCHANGING()
@@ -185,7 +185,7 @@ void CMainDlg::OnPaint()
     }
     else
     {
-        CMyResizeDialog::OnPaint();
+        CMyDialogEx::OnPaint();
     }
 }
 
@@ -200,14 +200,14 @@ void CMainDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
     if (this->bVisible == false)
         lpwndpos->flags &= ~SWP_SHOWWINDOW;
 
-    CMyResizeDialog::OnWindowPosChanging(lpwndpos);
+    CMyDialogEx::OnWindowPosChanging(lpwndpos);
 }
 
 void CMainDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
     this->UpdateBitrateText();
 
-    CMyResizeDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+    CMyDialogEx::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CMainDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
@@ -250,10 +250,10 @@ void CMainDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     }
     else
     {
-        CMyResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+        CMyDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
     }
 
-    CMyResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);
+    CMyDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CMainDlg::OnClose()
@@ -262,12 +262,12 @@ void CMainDlg::OnClose()
     if (this->bSaveConfig == true)
         this->SaveAllConfiguration();
 
-    CMyResizeDialog::OnClose();
+    CMyDialogEx::OnClose();
 }
 
 void CMainDlg::OnDestroy()
 {
-    CMyResizeDialog::OnDestroy();
+    CMyDialogEx::OnDestroy();
 
     // clean-up memory used by tooltips
     this->m_LstFiles.DeleteAllItems();
@@ -282,7 +282,7 @@ BOOL CMainDlg::PreTranslateMessage(MSG* pMsg)
             return(TRUE);
     }
 
-    return CMyResizeDialog::PreTranslateMessage(pMsg);
+    return CMyDialogEx::PreTranslateMessage(pMsg);
 }
 
 void CMainDlg::OnBnClickedButtonAdd()
@@ -1954,7 +1954,7 @@ void CMainDlg::OnDropFiles(HDROP hDropInfo)
 
     // under Win9x this does not work, we use separate thread to handle drop
     // this->HandleDropFiles(hDropInfo);
-    CMyResizeDialog::OnDropFiles(hDropInfo);
+    CMyDialogEx::OnDropFiles(hDropInfo);
 }
 
 void CMainDlg::OnEnChangeEditRawSampleRate()
@@ -2558,7 +2558,7 @@ void CMainDlg::InitDialogControls()
 
 BOOL CMainDlg::OnInitDialog()
 {
-    CMyResizeDialog::OnInitDialog();
+    CMyDialogEx::OnInitDialog();
 
     // set dialog icons
     SetIcon(m_hIcon, TRUE);

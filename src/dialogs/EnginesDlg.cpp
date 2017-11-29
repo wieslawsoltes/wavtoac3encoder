@@ -25,7 +25,7 @@
 IMPLEMENT_DYNAMIC(CEnginesDlg, CDialog)
 
 CEnginesDlg::CEnginesDlg(CWnd* pParent /*=NULL*/)
-    : CMyResizeDialog(CEnginesDlg::IDD, pParent)
+    : CMyDialogEx(CEnginesDlg::IDD, pParent)
 {
     bUpdateList = true;
     nCurrSel = 0;
@@ -38,13 +38,13 @@ CEnginesDlg::~CEnginesDlg()
 
 void CEnginesDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CMyResizeDialog::DoDataExchange(pDX);
+    CMyDialogEx::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_LIST_ENGINES, m_LstEngines);
     DDX_Control(pDX, IDC_EDIT_ENGINE_NAME, m_EdtEngineName);
     DDX_Control(pDX, IDC_EDIT_ENGINE_PATH, m_EdtEnginePath);
 }
 
-BEGIN_MESSAGE_MAP(CEnginesDlg, CMyResizeDialog)
+BEGIN_MESSAGE_MAP(CEnginesDlg, CMyDialogEx)
     ON_BN_CLICKED(IDOK, &CEnginesDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &CEnginesDlg::OnBnClickedCancel)
     ON_BN_CLICKED(IDC_BUTTON_ENGINES_BROWSE, &CEnginesDlg::OnBnClickedButtonEnginesBrowse)
@@ -60,7 +60,7 @@ END_MESSAGE_MAP()
 
 BOOL CEnginesDlg::OnInitDialog()
 {
-    CMyResizeDialog::OnInitDialog();
+    CMyDialogEx::OnInitDialog();
 
     // set style of the engines list
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
