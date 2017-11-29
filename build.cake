@@ -80,7 +80,6 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
 
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
-    CopyFileToDirectory(File("CHANGELOG.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
     CopyFileToDirectory(exeFile, outputDir);
     CopyFileToDirectory(portableFile, outputDir);
