@@ -1,6 +1,6 @@
 ﻿## Changelog
 
-### Version 5.6:
+### Version 6.0:
 
 - Updated project to Visual Studio 2017.
 
