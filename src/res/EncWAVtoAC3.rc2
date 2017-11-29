@@ -1,13 +1,43 @@
 //
 // EncWAVtoAC3.RC2 - resources Microsoft Visual C++ does not edit directly
 //
+#include "resource.h"
+#include "version.h"
 
 #ifdef APSTUDIO_INVOKED
 #error this file is not editable by Microsoft Visual C++
 #endif //APSTUDIO_INVOKED
 
-
 /////////////////////////////////////////////////////////////////////////////
-// Add manually edited resources here...
+//
+// Version
+//
 
-/////////////////////////////////////////////////////////////////////////////
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VER_FILE_VERSION
+ PRODUCTVERSION VER_PRODUCT_VERSION
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS VER_FILEFLAGS
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VER_FILETYPE
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", VER_FILE_COMPANY_NAME_STR "\0"
+            VALUE "FileDescription", VER_FILE_DESCRIPTION_STR "\0"
+            VALUE "FileVersion", VER_FILE_VERSION_LONG_STR "\0"
+            VALUE "InternalName", VER_INTERNAL_NAME_STR "\0"
+            VALUE "LegalCopyright", VER_COPYRIGHT_STR "\0"
+            VALUE "OriginalFilename", VER_ORIGINAL_FILENAME_STR "\0"
+            VALUE "ProductName", VER_PRODUCTNAME_STR "\0"
+            VALUE "ProductVersion", VER_PRODUCT_VERSION_STR "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
