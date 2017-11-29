@@ -148,7 +148,7 @@
 #pragma warning(default:4005)
 
 // include Aften API wrapper headers
-#include "AftenAPI.h"
+#include "worker\AftenAPI.h"
 
 // include aften wav reader headers
 #ifdef __cplusplus

@@ -53,12 +53,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AftenAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Avs2Raw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="aften\pcm\aiff.c">
       <Filter>Source Files\Aften\Pcm</Filter>
     </ClCompile>
@@ -122,18 +116,18 @@
     <ClCompile Include="worker\WorkThread.cpp">
       <Filter>Source Files\Worker</Filter>
     </ClCompile>
+    <ClCompile Include="worker\AftenAPI.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
+    <ClCompile Include="worker\Avs2Raw.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="res\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Avs2Raw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AftenAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="version.h">
@@ -198,6 +192,12 @@
     </ClInclude>
     <ClInclude Include="avisynth\src\internal.h">
       <Filter>Header Files\Avisynth</Filter>
+    </ClInclude>
+    <ClInclude Include="worker\AftenAPI.h">
+      <Filter>Header Files\Worker</Filter>
+    </ClInclude>
+    <ClInclude Include="worker\Avs2Raw.h">
+      <Filter>Header Files\Worker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

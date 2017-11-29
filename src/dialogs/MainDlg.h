@@ -36,7 +36,7 @@
 #include "libaften/aften.h"
 
 #ifndef DISABLE_AVISYNTH
-#include "Avs2Raw.h"
+#include "worker\Avs2Raw.h"
 #endif
 
 #include "afxpropertygridctrl.h"

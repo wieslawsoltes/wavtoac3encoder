@@ -241,8 +241,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AftenAPI.cpp" />
-    <ClCompile Include="Avs2Raw.cpp" />
     <ClCompile Include="configuration\EncoderOptions.cpp" />
     <ClCompile Include="configuration\Language.cpp" />
     <ClCompile Include="configuration\ProgramConfig.cpp" />
@@ -362,15 +360,15 @@
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
+    <ClCompile Include="worker\AftenAPI.cpp" />
+    <ClCompile Include="worker\Avs2Raw.cpp" />
     <ClCompile Include="worker\WorkThread.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AftenAPI.h" />
     <ClInclude Include="avisynth64\src\core\avisynth.h" />
     <ClInclude Include="avisynth64\src\internal.h" />
     <ClInclude Include="avisynth\src\core\avisynth.h" />
     <ClInclude Include="avisynth\src\internal.h" />
-    <ClInclude Include="Avs2Raw.h" />
     <ClInclude Include="configuration\EncoderOptions.h" />
     <ClInclude Include="configuration\Language.h" />
     <ClInclude Include="configuration\ProgramConfig.h" />
@@ -389,6 +387,8 @@
     <ClInclude Include="dialogs\EnginesDlg.h" />
     <ClInclude Include="dialogs\MuxDlg.h" />
     <ClInclude Include="dialogs\WorkDlg.h" />
+    <ClInclude Include="worker\AftenAPI.h" />
+    <ClInclude Include="worker\Avs2Raw.h" />
     <ClInclude Include="worker\WorkThread.h" />
   </ItemGroup>
   <ItemGroup>
