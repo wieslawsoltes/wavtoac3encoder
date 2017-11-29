@@ -22,7 +22,7 @@
 #error "include 'StdAfx.h' before including this file for PCH"
 #endif
 
-#include "resource.h"
+#include "res\resource.h"
 
 #include "configuration\Language.h"
 
