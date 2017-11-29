@@ -79,7 +79,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\EncWAVtoAC3.ico"
+IDR_MAINFRAME           ICON                    "EncWAVtoAC3.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ END
 // Bitmap
 //
 
-IDB_ABOUT_BITMAP        BITMAP                  "res\\EncWAVtoAC3.bmp"
+IDB_ABOUT_BITMAP        BITMAP                  "EncWAVtoAC3.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
