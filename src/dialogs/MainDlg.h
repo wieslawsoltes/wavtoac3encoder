@@ -63,6 +63,7 @@ typedef struct TItemToMove
 
 class CMainDlg : public CMyResizeDialog
 {
+    DECLARE_DYNAMIC(CMainDlg)
 public:
     CMainDlg(CWnd* pParent = NULL);
     enum { IDD = IDD_DIALOG_MAIN };
@@ -141,7 +142,6 @@ protected:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
 protected:
     void InitTitle();
-    void InitDialogAnchors();
     void InitTooltips();
     void InitSettingsList();
     void InitDefaultPreset();
@@ -177,7 +177,6 @@ public:
     void UpdateSettingsComboBox(int nItem);
     void ApplyPresetToDlg(EncoderPreset &Preset);
     void ShowOptionPopup(bool bUseRect);
-    void UpdateView(int nMode);
 public:
 #ifndef DISABLE_AVISYNTH
     bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);

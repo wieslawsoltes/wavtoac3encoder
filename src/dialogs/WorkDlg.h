@@ -22,6 +22,7 @@
 #include "afxcmn.h"
 
 #include "configuration\EncoderOptions.h"
+#include "controls\MyResizeDialog.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
 #include "controls\MyEdit.h"
@@ -60,7 +61,7 @@ typedef struct TWorkerParam
     __int64 nOutTotalSize;
 } WorkerParam;
 
-class CWorkDlg : public CDialogEx
+class CWorkDlg : public CMyResizeDialog
 {
     DECLARE_DYNAMIC(CWorkDlg)
 public:

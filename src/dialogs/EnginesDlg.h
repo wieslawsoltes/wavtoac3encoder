@@ -21,6 +21,7 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 
+#include "controls\MyResizeDialog.h"
 #include "configuration\ProgramConfig.h"
 #include "configuration\EncoderOptions.h"
 #include "controls\MyResizeDialog.h"
@@ -32,7 +33,7 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-class CEnginesDlg : public CDialogEx
+class CEnginesDlg : public CMyResizeDialog
 {
     DECLARE_DYNAMIC(CEnginesDlg)
 public:

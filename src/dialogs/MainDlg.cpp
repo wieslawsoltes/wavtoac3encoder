@@ -28,6 +28,8 @@
 #include "utilities\TimeCount.h"
 #include "worker\WorkThread.h"
 
+IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
+
 CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
     : CMyResizeDialog(CMainDlg::IDD, pParent)
 {
@@ -201,12 +203,6 @@ void CMainDlg::OnWindowPosChanging(WINDOWPOS* lpwndpos)
     CMyResizeDialog::OnWindowPosChanging(lpwndpos);
 }
 
-void CMainDlg::UpdateView(int nMode)
-{
-    // reset dialog anchors
-    this->InitDialogAnchors();
-}
-
 void CMainDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
     this->UpdateBitrateText();
@@ -254,7 +250,7 @@ void CMainDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     }
     else
     {
-        CDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
+        CMyResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);
     }
 
     CMyResizeDialog::OnVScroll(nSBCode, nPos, pScrollBar);
@@ -2169,51 +2165,6 @@ void CMainDlg::InitTitle()
     this->SetWindowText(szDialogTitle);
 }
 
-void CMainDlg::InitDialogAnchors()
-{
-    CleanUp();
-    AddAnchor(IDC_STATIC_QUALITY, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_BITRATE, AnchorTopRight);
-    AddAnchor(IDC_SLIDER_BITRATE, AnchorTopLeft, AnchorTopRight);
-    AddAnchor(IDC_CHECK_VBR, AnchorTopRight);
-    AddAnchor(IDC_STATIC_ENGINE, AnchorTopLeft);
-    AddAnchor(IDC_COMBO_ENGINES, AnchorTopLeft);
-    AddAnchor(IDC_BUTTON_ENGINES, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_THREADS, AnchorTopLeft);
-    AddAnchor(IDC_EDIT_THREADS, AnchorTopLeft);
-    AddAnchor(IDC_SPIN_THREADS, AnchorTopLeft);
-    AddAnchor(IDC_LIST_SETTINGS, AnchorTopLeft, AnchorTopRight);
-    AddAnchor(IDC_STATIC_OPTION_VALUE, AnchorTopLeft);
-    AddAnchor(IDC_COMBO_SETTING, AnchorTopLeft, AnchorTopRight);
-    AddAnchor(IDC_STATIC_PRESET, AnchorTopLeft);
-    AddAnchor(IDC_COMBO_PRESETS, AnchorTopLeft);
-    AddAnchor(IDC_BUTTON_PRESETS_DEFAULTS, AnchorTopLeft);
-    AddAnchor(IDC_BUTTON_PRESET_DEL, AnchorTopLeft);
-    AddAnchor(IDC_BUTTON_PRESET_ADD, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_SIMD, AnchorTopLeft);
-    AddAnchor(IDC_CHECK_SIMD_MMX, AnchorTopLeft);
-    AddAnchor(IDC_CHECK_SIMD_SSE, AnchorTopLeft);
-    AddAnchor(IDC_CHECK_SIMD_SSE2, AnchorTopLeft);
-    AddAnchor(IDC_CHECK_SIMD_SSE3, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_SAMPLE_FORMAT, AnchorTopLeft);
-    AddAnchor(IDC_COMBO_RAW_SAMPLE_FORMAT, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_SAMPLE_RATE, AnchorTopLeft);
-    AddAnchor(IDC_EDIT_RAW_SAMPLE_RATE, AnchorTopLeft);
-    AddAnchor(IDC_SPIN_RAW_SAMPLE_RATE, AnchorTopLeft);
-    AddAnchor(IDC_STATIC_CHANNELS, AnchorTopLeft);
-    AddAnchor(IDC_EDIT_RAW_CHANNELS, AnchorTopLeft);
-    AddAnchor(IDC_SPIN_RAW_CHANNELS, AnchorTopLeft);
-    AddAnchor(IDC_LIST_FILES, AnchorTopLeft, AnchorBottomRight);
-    AddAnchor(IDC_BUTTON_ADD, AnchorBottomLeft);
-    AddAnchor(IDC_STATIC_OUTPUT, AnchorBottomLeft);
-    AddAnchor(IDC_EDIT_OUTPUT_PATH, AnchorBottomLeft, AnchorBottomRight);
-    AddAnchor(IDC_BUTTON_BROWSE, AnchorBottomRight);
-    AddAnchor(IDC_CHECK_MULTIPLE_MONO_INPUT, AnchorBottomLeft);
-    AddAnchor(IDC_BUTTON_MUX_WIZARD, AnchorBottomLeft);
-    AddAnchor(IDC_BUTTON_ENCODE, AnchorBottomRight);
-    AddAnchor(IDC_STATUSBAR, AnchorBottomLeft, AnchorBottomRight);
-}
-
 void CMainDlg::InitTooltips()
 {
     // set tooltips
@@ -2527,6 +2478,9 @@ void CMainDlg::InitDialogControls()
     // int nStatusBarParts[3] = { 150, 150, -1 };
     // m_StatusBar.SetParts(3, nStatusBarParts);
 
+    CMFCDynamicLayout* layout = this->GetDynamicLayout();
+    layout->AddItem(IDC_STATUSBAR, CMFCDynamicLayout::MoveVertical(100), CMFCDynamicLayout::SizeHorizontal(100));
+
     // set range for work threads spinner
     m_SpnThreads.SetRange32(0, INT_MAX);
     m_SpnThreads.SetPos(0);
@@ -2630,9 +2584,6 @@ BOOL CMainDlg::OnInitDialog()
 
     // enable files/dirs drag & drop for dialog
     this->DragAcceptFiles(TRUE);
-
-    // add resize anchors for main dialog
-    this->InitDialogAnchors();
 
     // load all program configuration and settings
     this->LoadAllConfiguration();

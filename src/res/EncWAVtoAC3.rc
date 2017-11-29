@@ -175,7 +175,7 @@ BEGIN
 END
 
 IDD_DIALOG_MUX DIALOGEX 0, 0, 525, 218
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "WAV to AC3 Encoder - MUX Wizard"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -220,13 +220,13 @@ BEGIN
     EDITTEXT        IDC_EDIT_SR,253,169,200,14,ES_AUTOHSCROLL | ES_READONLY
 END
 
-IDD_DIALOG_ENGINES DIALOGEX 0, 0, 424, 180
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_DIALOG_ENGINES DIALOGEX 0, 0, 425, 180
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "WAV to AC3 Encoder - Engines Editor"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     PUSHBUTTON      "&Cancel",IDCANCEL,368,160,50,14
-    CONTROL         "",IDC_LIST_ENGINES,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_TABSTOP,6,6,412,98,WS_EX_CLIENTEDGE
+    CONTROL         "",IDC_LIST_ENGINES,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,6,6,412,98,WS_EX_CLIENTEDGE
     EDITTEXT        IDC_EDIT_ENGINE_NAME,60,120,240,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_ENGINE_PATH,60,136,296,12,ES_AUTOHSCROLL
     PUSHBUTTON      "&...",IDC_BUTTON_ENGINES_BROWSE,362,136,50,12
@@ -241,7 +241,7 @@ BEGIN
 END
 
 IDD_DIALOG_ABOUT DIALOGEX 0, 0, 349, 212
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "About WAV to AC3 Encoder"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -393,6 +393,159 @@ BEGIN
 0x4146, 0x534c, 0x3c45, 0x4d2f, 0x4346, 0x7542, 0x7474, 0x6e6f, 0x495f, 
 0x616d, 0x6567, 0x6e4f, 0x6952, 0x6867, 0x3e74, 
     0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DIALOG_MAIN, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_WORK, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_MUX, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_ENGINES, DIALOG
+    BEGIN
+    END
+
+    IDD_DIALOG_ABOUT, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DIALOG_ABOUT AFX_DIALOG_LAYOUT
+BEGIN
+    0,
+    100, 100, 0, 0,
+    50, 50, 0, 0,
+    0, 100, 100, 0,
+    0, 100, 100, 0,
+    50, 50, 0, 0
+END
+
+IDD_DIALOG_ENGINES AFX_DIALOG_LAYOUT
+BEGIN
+    0,
+    100, 100, 0, 0,
+    0, 0, 100, 100,
+    0, 100, 100, 0,
+    0, 100, 100, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 100, 0,
+    100, 100, 0, 0
+END
+
+IDD_DIALOG_MUX AFX_DIALOG_LAYOUT
+BEGIN
+    0,
+    100, 100, 0, 0,
+    0, 0, 0, 0,
+    100, 0, 0, 0,
+    50, 0, 0, 0,
+    50, 50, 0, 0,
+    0, 100, 0, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    0, 0, 100, 100,
+    100, 0, 0, 0,
+    0, 0, 50, 0,
+    50, 0, 50, 0,
+    0, 100, 100, 0,
+    0, 0, 0, 100,
+    100, 0, 0, 100,
+    0, 100, 100, 0,
+    100, 100, 0, 0,
+    0, 100, 0, 0,
+    50, 50, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0
+END
+
+IDD_DIALOG_MAIN AFX_DIALOG_LAYOUT
+BEGIN
+    0,
+    0, 0, 0, 0,
+    100, 0, 0, 0,
+    100, 0, 0, 0,
+    0, 0, 100, 0,
+    0, 0, 100, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 100, 100,
+    0, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 100, 0,
+    100, 100, 0, 0,
+    100, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 100, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 100, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0
 END
 
 #endif    // English (United States) resources

@@ -20,10 +20,10 @@
 #include "MainApp.h"
 #include "AboutDlg.h"
 
-IMPLEMENT_DYNAMIC(CAboutDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CAboutDlg, CDialog)
 
 CAboutDlg::CAboutDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(CAboutDlg::IDD, pParent)
+    : CMyResizeDialog(CAboutDlg::IDD, pParent)
 {
 
 }
@@ -35,18 +35,18 @@ CAboutDlg::~CAboutDlg()
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
+    CMyResizeDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDOK, m_BtnOK);
     DDX_Control(pDX, IDC_STATIC_BUILD_INFO, m_StcBuildInfo);
     DDX_Control(pDX, IDC_STATIC_LICENSE, m_StcLicense);
 }
 
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CAboutDlg, CMyResizeDialog)
 END_MESSAGE_MAP()
 
 BOOL CAboutDlg::OnInitDialog()
 {
-    CDialogEx::OnInitDialog();
+    CMyResizeDialog::OnInitDialog();
 
     SetBuildInfo();
     InitLang();

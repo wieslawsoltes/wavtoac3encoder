@@ -2,6 +2,7 @@
 
 ### Version 6.0:
 
+- Added dynamic layout for dialogs.
 - Updated project to Visual Studio 2017.
 
 ### Version 5.5:

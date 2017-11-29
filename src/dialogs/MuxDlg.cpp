@@ -75,10 +75,10 @@ const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
     {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("SL"),  _T("SR") }  // 3/2
 };
 
-IMPLEMENT_DYNAMIC(CMuxDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
 
 CMuxDlg::CMuxDlg(CWnd* pParent /*=NULL*/)
-    : CDialogEx(CMuxDlg::IDD, pParent)
+    : CMyResizeDialog(CMuxDlg::IDD, pParent)
 {
     for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
     {
@@ -97,7 +97,7 @@ CMuxDlg::~CMuxDlg()
 
 void CMuxDlg::DoDataExchange(CDataExchange* pDX)
 {
-    CDialogEx::DoDataExchange(pDX);
+    CMyResizeDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_BUTTON_FL, m_BtnChannelFL);
     DDX_Control(pDX, IDC_BUTTON_FR, m_BtnChannelFR);
     DDX_Control(pDX, IDC_BUTTON_FC, m_BtnChannelFC);
@@ -121,7 +121,7 @@ void CMuxDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_EDIT_SR, m_EdtChannelSR);
 }
 
-BEGIN_MESSAGE_MAP(CMuxDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CMuxDlg, CMyResizeDialog)
     ON_BN_CLICKED(IDC_BUTTON_FL, &CMuxDlg::OnBnClickedButtonFl)
     ON_BN_CLICKED(IDC_BUTTON_FR, &CMuxDlg::OnBnClickedButtonFr)
     ON_BN_CLICKED(IDC_BUTTON_FC, &CMuxDlg::OnBnClickedButtonFc)
@@ -145,7 +145,7 @@ END_MESSAGE_MAP()
 
 BOOL CMuxDlg::OnInitDialog()
 {
-    CDialogEx::OnInitDialog();
+    CMyResizeDialog::OnInitDialog();
 
     InitCtrls();
     InitLang();
