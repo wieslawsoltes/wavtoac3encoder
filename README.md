@@ -1,4 +1,4 @@
-# WAV to AC3 Encoder
+﻿# WAV to AC3 Encoder
 
 [![Gitter](https://badges.gitter.im/wieslawsoltes/wavtoac3encoder.svg)](https://gitter.im/wieslawsoltes/wavtoac3encoder?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -251,7 +251,7 @@ Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
 ## License
 
 WAV to AC3 Encoder
-Copyright (C) 2007-2016 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007-2017 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
