@@ -51,47 +51,15 @@ BEGIN
     "#define _AFX_NO_TRACKER_RESOURCES\r\n"
     "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
     "\r\n"
-    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)\r\n"
-    "LANGUAGE 21, 1\r\n"
-    "#include ""res\\EncWAVtoAC3.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
-    "#include ""afxres.rc""      // Standard components\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#include ""EncWAVtoAC3.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""        // Standard components\r\n"
     "#endif\r\n"
     "\0"
 END
 
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Accelerator
-//
-
-IDR_ACCELERATOR_MAIN_MENU ACCELERATORS
-BEGIN
-    "F",            ID_FILE_ADDFILES,       VIRTKEY, CONTROL, NOINVERT
-    "D",            ID_FILE_ADDDIRECTORY,   VIRTKEY, CONTROL, NOINVERT
-    "M",            ID_FILE_MUXWIZARD,      VIRTKEY, CONTROL, NOINVERT
-    "O",            ID_FILE_LOADFILESLIST,  VIRTKEY, CONTROL, NOINVERT
-    "S",            ID_FILE_SAVEFILESLIST,  VIRTKEY, CONTROL, NOINVERT
-    "O",            ID_FILE_LOADPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "S",            ID_FILE_SAVEPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
-    VK_F5,          IDC_BUTTON_ENCODE,      VIRTKEY, NOINVERT
-    "E",            IDC_BUTTON_ENGINES,     VIRTKEY, CONTROL, NOINVERT
-    "W",            ID_OPTIONS_DISABLEALLWARNINGS, VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "C",            ID_OPTIONS_SAVECONFIGURATIONONEXIT, VIRTKEY, SHIFT, CONTROL, NOINVERT
-    VK_F7,          ID_OPTIONS_LOADCONFIGURATION, VIRTKEY, NOINVERT
-    VK_F8,          ID_OPTIONS_SAVECONFIGURATION, VIRTKEY, NOINVERT
-    VK_F1,          ID_HELP_COMMAND_LINE,   VIRTKEY, CONTROL, NOINVERT
-    "W",            ID_HELP_WEBSITE,        VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "A",            ID_HELP_ABOUT,          VIRTKEY, SHIFT, CONTROL, NOINVERT
-    VK_UP,          ID_LIST_MOVEUP,         VIRTKEY, CONTROL, NOINVERT
-    VK_DOWN,        ID_LIST_MOVEDOWN,       VIRTKEY, CONTROL, NOINVERT
-    VK_DELETE,      ID_LIST_CLEARLIST,      VIRTKEY, CONTROL, NOINVERT
-    "R",            IDC_BUTTON_PRESETS_DEFAULTS, VIRTKEY, SHIFT, CONTROL, NOINVERT
-    "D",            IDC_BUTTON_PRESET_DEL,  VIRTKEY, SHIFT, CONTROL, NOINVERT
-    VK_F9,          IDC_BUTTON_PRESET_ADD,  VIRTKEY, NOINVERT
-END
 
 #endif    // Polish (Poland) resources
 /////////////////////////////////////////////////////////////////////////////
@@ -112,6 +80,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\EncWAVtoAC3.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -205,18 +174,6 @@ BEGIN
     RTEXT           "0.0",IDC_STATIC_WRITES_SPEED_AVG,333,261,28,8,SS_PATHELLIPSIS
 END
 
-IDD_DIALOG_ABOUT DIALOGEX 0, 0, 349, 212
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
-CAPTION "About WAV to AC3 Encoder"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    PUSHBUTTON      "&OK",IDOK,292,191,50,14
-    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,53,145,243,23
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,180,335,2,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
-    LTEXT           "",IDC_STATIC_BUILD_INFO,7,191,278,14,SS_CENTERIMAGE | WS_DISABLED
-    CONTROL         "",IDC_MFCBUTTON_ABOUT_BITMAP,"MfcButton",0x0,7,7,335,124
-END
-
 IDD_DIALOG_MUX DIALOGEX 0, 0, 525, 218
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
 CAPTION "WAV to AC3 Encoder - MUX Wizard"
@@ -283,39 +240,16 @@ BEGIN
     PUSHBUTTON      "&OK",IDOK,311,160,50,14
 END
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Version
-//
-
-VS_VERSION_INFO VERSIONINFO
- FILEVERSION VER_FILE_VERSION
- PRODUCTVERSION VER_PRODUCT_VERSION
- FILEFLAGSMASK 0x3fL
- FILEFLAGS VER_FILEFLAGS
- FILEOS VOS_NT_WINDOWS32
- FILETYPE VER_FILETYPE
- FILESUBTYPE 0x0L
+IDD_DIALOG_ABOUT DIALOGEX 0, 0, 349, 212
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "About WAV to AC3 Encoder"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904e4"
-        BEGIN
-            VALUE "CompanyName", VER_FILE_COMPANY_NAME_STR "\0"
-            VALUE "FileDescription", VER_FILE_DESCRIPTION_STR "\0"
-            VALUE "FileVersion", VER_FILE_VERSION_LONG_STR "\0"
-            VALUE "InternalName", VER_INTERNAL_NAME_STR "\0"
-            VALUE "LegalCopyright", VER_COPYRIGHT_STR "\0"
-            VALUE "OriginalFilename", VER_ORIGINAL_FILENAME_STR "\0"
-            VALUE "ProductName", VER_PRODUCTNAME_STR "\0"
-            VALUE "ProductVersion", VER_PRODUCT_VERSION_STR "\0"
-        END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1252
-    END
+    PUSHBUTTON      "&OK",IDOK,292,191,50,14
+    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,53,145,243,23
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,180,335,2,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
+    LTEXT           "",IDC_STATIC_BUILD_INFO,7,191,278,14,SS_CENTERIMAGE | WS_DISABLED
+    CONTROL         "",IDC_MFCBUTTON_ABOUT_BITMAP,"MfcButton",0x0,7,7,335,124
 END
 
 
@@ -386,45 +320,42 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Accelerator
+//
+
+IDR_ACCELERATOR_MAIN_MENU ACCELERATORS
+BEGIN
+    "F",            ID_FILE_ADDFILES,       VIRTKEY, CONTROL, NOINVERT
+    "D",            ID_FILE_ADDDIRECTORY,   VIRTKEY, CONTROL, NOINVERT
+    "M",            ID_FILE_MUXWIZARD,      VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEFILESLIST,  VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_LOADPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEPRESETS,    VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F5,          IDC_BUTTON_ENCODE,      VIRTKEY, NOINVERT
+    "E",            IDC_BUTTON_ENGINES,     VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_OPTIONS_DISABLEALLWARNINGS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "C",            ID_OPTIONS_SAVECONFIGURATIONONEXIT, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F7,          ID_OPTIONS_LOADCONFIGURATION, VIRTKEY, NOINVERT
+    VK_F8,          ID_OPTIONS_SAVECONFIGURATION, VIRTKEY, NOINVERT
+    VK_F1,          ID_HELP_COMMAND_LINE,   VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_HELP_WEBSITE,        VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "A",            ID_HELP_ABOUT,          VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_UP,          ID_LIST_MOVEUP,         VIRTKEY, CONTROL, NOINVERT
+    VK_DOWN,        ID_LIST_MOVEDOWN,       VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_LIST_CLEARLIST,      VIRTKEY, CONTROL, NOINVERT
+    "R",            IDC_BUTTON_PRESETS_DEFAULTS, VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "D",            IDC_BUTTON_PRESET_DEL,  VIRTKEY, SHIFT, CONTROL, NOINVERT
+    VK_F9,          IDC_BUTTON_PRESET_ADD,  VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Bitmap
 //
 
 IDB_ABOUT_BITMAP        BITMAP                  "res\\EncWAVtoAC3.bmp"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_DIALOG_MAIN, DIALOG
-    BEGIN
-        BOTTOMMARGIN, 320
-    END
-
-    IDD_DIALOG_WORK, DIALOG
-    BEGIN
-    END
-
-    IDD_DIALOG_ABOUT, DIALOG
-    BEGIN
-        VERTGUIDE, 7
-        VERTGUIDE, 342
-        HORZGUIDE, 7
-        HORZGUIDE, 131
-    END
-
-    IDD_DIALOG_MUX, DIALOG
-    BEGIN
-    END
-
-    IDD_DIALOG_ENGINES, DIALOG
-    BEGIN
-    END
-END
-#endif    // APSTUDIO_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -479,10 +410,10 @@ END
 #define _AFX_NO_TRACKER_RESOURCES
 #define _AFX_NO_PROPERTY_RESOURCES
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_PLK)
-LANGUAGE 21, 1
-#include "res\EncWAVtoAC3.rc2"  // non-Microsoft Visual C++ edited resources
-#include "afxres.rc"      // Standard components
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#include "EncWAVtoAC3.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"        // Standard components
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
