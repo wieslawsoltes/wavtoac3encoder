@@ -86,7 +86,6 @@ Filename: {app}\{#ProgramName}.url; Section: InternetShortcut; Key: URL; String:
 
 Name: {group}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Components: main
 Name: {group}\{#ProgramName} README; Filename: {app}\README.MD; WorkingDir: {app}; Components: docs
-Name: {group}\{#ProgramName} CHANGELOG; Filename: {app}\CHANGELOG.md; WorkingDir: {app}; Components: docs
 Name: {group}\{#ProgramName} License; Filename: {app}\COPYING.TXT; WorkingDir: {app}; Components: docs
 Name: {group}\{#ProgramName} Web Site; Filename: {app}\{#ProgramName}.url; WorkingDir: {app}; Components: main
 Name: {group}\Uninstall {#ProgramName}; Filename: {uninstallexe}; WorkingDir: {app}; Components: main
