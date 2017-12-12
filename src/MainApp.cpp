@@ -187,7 +187,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
     // initialize application
     INITCOMMONCONTROLSEX InitCtrls;
     InitCtrls.dwSize = sizeof(InitCtrls);
-
     InitCtrls.dwICC = ICC_WIN95_CLASSES;
     InitCommonControlsEx(&InitCtrls);
 
