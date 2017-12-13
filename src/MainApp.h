@@ -56,7 +56,7 @@ public:
     void LoadLangStrings();
     BOOL HaveLangStrings();
     CString& GetLangString(int id);
-}
+};
 
 //
 // APP
