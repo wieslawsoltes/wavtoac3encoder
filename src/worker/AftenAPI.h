@@ -1,6 +1,18 @@
 ﻿#pragma once
 
+#pragma warning(disable:4005)
+#include "common.h"
+#pragma warning(default:4005)
+
 #include "libaften/aften.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "pcm.h"
+#if defined(__cplusplus)
+}
+#endif
 
 //
 // AFTEN_API const char *aften_get_version(void);

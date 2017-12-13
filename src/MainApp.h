@@ -1,30 +1,11 @@
 ﻿#pragma once
 
 #ifndef __AFXWIN_H__
-#error "include 'StdAfx.h' before including this file for PCH"
+#error "Include 'StdAfx.h' before including this file for PCH"
 #endif
 
 #include "res\resource.h"
-
-typedef struct TConfigEntry
-{
-    CString szKey;
-    CString szData;
-} ConfigEntry, *PConfigEntry;
-
-typedef CList<ConfigEntry, ConfigEntry&> ConfigList_t;
-
-typedef CMap<int, int, CString, CString&> LangMap_t;
-
-typedef struct TLang
-{
-    CString szFileName;
-    CString szEnglishName;
-    CString szTargetName;
-    LangMap_t *lm;
-} Lang;
-
-typedef CList<Lang, Lang&> LangList_t;
+#include "configuration\Config.h"
 
 class CEncWAVtoAC3App : public CWinAppEx
 {
@@ -47,7 +28,6 @@ public:
     CString m_szEnginesFilePath;
     CString m_szFilesListFilePath;
     CString m_szLangFilePath;
-    CString m_szLogFilePath;
 public:
     bool LoadConfig(CString &szFileName, ConfigList_t &cl);
     bool SaveConfig(CString &szFileName, ConfigList_t &cl);

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncWAVtoAC3", "src\EncWAVtoAC3.vcxproj", "{952D8A09-0CBF-4EE8-9536-389632BC5E7F}"
 EndProject
@@ -8,11 +8,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Controls", "src\common\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Language", "src\common\language\MFC.Language.vcxproj", "{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TinyXml2", "src\common\tinyxml2\TinyXml2.vcxproj", "{284538AC-D315-437E-AD31-D40934A43236}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Utilities", "src\common\utilities\MFC.Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Xml", "src\common\xml\MFC.Xml.vcxproj", "{575068FE-F001-47EF-AFB6-AF7A10435B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,14 +42,6 @@ Global
 		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|Win32.Build.0 = Release|Win32
 		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|x64.ActiveCfg = Release|x64
 		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|x64.Build.0 = Release|x64
-		{284538AC-D315-437E-AD31-D40934A43236}.Debug|Win32.ActiveCfg = Debug|Win32
-		{284538AC-D315-437E-AD31-D40934A43236}.Debug|Win32.Build.0 = Debug|Win32
-		{284538AC-D315-437E-AD31-D40934A43236}.Debug|x64.ActiveCfg = Debug|x64
-		{284538AC-D315-437E-AD31-D40934A43236}.Debug|x64.Build.0 = Debug|x64
-		{284538AC-D315-437E-AD31-D40934A43236}.Release|Win32.ActiveCfg = Release|Win32
-		{284538AC-D315-437E-AD31-D40934A43236}.Release|Win32.Build.0 = Release|Win32
-		{284538AC-D315-437E-AD31-D40934A43236}.Release|x64.ActiveCfg = Release|x64
-		{284538AC-D315-437E-AD31-D40934A43236}.Release|x64.Build.0 = Release|x64
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|Win32.Build.0 = Debug|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|x64.ActiveCfg = Debug|x64
@@ -62,14 +50,6 @@ Global
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|Win32.Build.0 = Release|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|x64.ActiveCfg = Release|x64
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|x64.Build.0 = Release|x64
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Debug|Win32.ActiveCfg = Debug|Win32
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Debug|Win32.Build.0 = Debug|Win32
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Debug|x64.ActiveCfg = Debug|x64
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Debug|x64.Build.0 = Debug|x64
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Release|Win32.ActiveCfg = Release|Win32
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Release|Win32.Build.0 = Release|Win32
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Release|x64.ActiveCfg = Release|x64
-		{575068FE-F001-47EF-AFB6-AF7A10435B8A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

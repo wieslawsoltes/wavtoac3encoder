@@ -140,12 +140,12 @@ void CEnginesDlg::OnBnClickedButtonEnginesAdd()
     ConfigEntry ce;
 
     this->m_EdtEngineName.GetWindowText(ce.szKey);
-    this->m_EdtEnginePath.GetWindowText(ce.szData);
+    this->m_EdtEnginePath.GetWindowText(ce.szValue);
 
     this->m_EngineList.AddTail(ce);
 
     this->m_LstEngines.InsertItem(nSize, ce.szKey);
-    this->m_LstEngines.SetItemText(nSize, 1, ce.szData);
+    this->m_LstEngines.SetItemText(nSize, 1, ce.szValue);
 }
 
 void CEnginesDlg::OnBnClickedButtonEnginesRemove()
@@ -190,7 +190,7 @@ bool CEnginesDlg::InsertProgramEngines()
         // ce.szKey  - name of engine   
         // ce.szData - path to libaften.dll
         this->m_LstEngines.InsertItem(i, ce.szKey);
-        this->m_LstEngines.SetItemText(i, 1, ce.szData);
+        this->m_LstEngines.SetItemText(i, 1, ce.szValue);
     }
 
     // always selected first item in the list
@@ -233,7 +233,7 @@ void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
             ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
 
             this->m_EdtEngineName.SetWindowText(ce.szKey);
-            this->m_EdtEnginePath.SetWindowText(ce.szData);
+            this->m_EdtEnginePath.SetWindowText(ce.szValue);
         }
         else
         {
@@ -282,7 +282,7 @@ void CEnginesDlg::OnEnChangeEditEnginePath()
 
         POSITION posEngine = this->m_EngineList.FindIndex(nIndex);
         ConfigEntry ce = this->m_EngineList.GetAt(posEngine);
-        ce.szData = szText;
+        ce.szValue = szText;
         this->m_EngineList.SetAt(posEngine, ce);
 
         bUpdateList = false;

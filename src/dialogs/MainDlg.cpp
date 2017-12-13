@@ -844,7 +844,7 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     ::SetCurrentDirectory(GetExeFilePath());
 
     // load new aften library
-    this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+    this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
     if (OpenAftenAPI(&this->api) == false)
     {
         CString szLogMessage =
@@ -948,14 +948,14 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             // key: MainWindow
             if (ce.szKey.Compare(_T("MainWindow")) == 0)
             {
-                this->SetWindowRectStr(ce.szData);
+                this->SetWindowRectStr(ce.szValue);
             }
 
             // key: ColumnSizeSettings
             else if (ce.szKey.Compare(_T("ColumnSizeSettings")) == 0)
             {
                 int nColumn[2] = { 0, 0 };
-                if (_stscanf(ce.szData, _T("%d %d"),
+                if (_stscanf(ce.szValue, _T("%d %d"),
                     &nColumn[0], &nColumn[1]) == 2)
                 {
                     this->m_LstSettings.SetColumnWidth(0, nColumn[0]);
@@ -967,7 +967,7 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             else if (ce.szKey.Compare(_T("ColumnSizeFiles")) == 0)
             {
                 int nColumn[2] = { 0, 0 };
-                if (_stscanf(ce.szData, _T("%d %d"),
+                if (_stscanf(ce.szValue, _T("%d %d"),
                     &nColumn[0], &nColumn[1]) == 2)
                 {
                     this->m_LstFiles.SetColumnWidth(0, nColumn[0]);
@@ -978,18 +978,18 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             // key: OutputPath
             else if (ce.szKey.Compare(_T("OutputPath")) == 0)
             {
-                if (ce.szData.Compare(_T("")) != 0 && ce.szData.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0)
+                if (ce.szValue.Compare(_T("")) != 0 && ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0)
                 {
-                    this->szOutputPath = ce.szData;
+                    this->szOutputPath = ce.szValue;
                 }
             }
 
             // key: OutputFile
             else if (ce.szKey.Compare(_T("OutputFile")) == 0)
             {
-                if (ce.szData.Compare(_T("")) != 0 && ce.szData.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
+                if (ce.szValue.Compare(_T("")) != 0 && ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
                 {
-                    this->szOutputFile = ce.szData;
+                    this->szOutputFile = ce.szValue;
                 }
             }
 
@@ -997,7 +997,7 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             else if (ce.szKey.Compare(_T("SelectedPreset")) == 0)
             {
                 int nPreset = 0;
-                if (_stscanf(ce.szData, _T("%d"),
+                if (_stscanf(ce.szValue, _T("%d"),
                     &nPreset) == 1)
                 {
                     // reset preset selection if the current preset value is invalid
@@ -1016,13 +1016,13 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             // key: MultipleMonoInput
             else if (ce.szKey.Compare(_T("MultipleMonoInput")) == 0)
             {
-                if (ce.szData.Compare(_T("true")) == 0)
+                if (ce.szValue.Compare(_T("true")) == 0)
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                     this->bMultipleMonoInput = true;
                     this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(theApp.HaveLangStrings() ? theApp.GetLangString(0x0020200B) : _T("Output file:"));
                 }
-                else if (ce.szData.Compare(_T("false")) == 0)
+                else if (ce.szValue.Compare(_T("false")) == 0)
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                     this->bMultipleMonoInput = false;
@@ -1039,12 +1039,12 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             // key: DisableAllWarnings
             else if (ce.szKey.Compare(_T("DisableAllWarnings")) == 0)
             {
-                if (ce.szData.Compare(_T("true")) == 0)
+                if (ce.szValue.Compare(_T("true")) == 0)
                 {
                     this->bDisableAllWarnings = true;
                     this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_CHECKED);
                 }
-                else if (ce.szData.Compare(_T("false")) == 0)
+                else if (ce.szValue.Compare(_T("false")) == 0)
                 {
                     this->bDisableAllWarnings = false;
                     this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
@@ -1059,12 +1059,12 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
             // key: SaveConfig
             else if (ce.szKey.Compare(_T("SaveConfig")) == 0)
             {
-                if (ce.szData.Compare(_T("true")) == 0)
+                if (ce.szValue.Compare(_T("true")) == 0)
                 {
                     this->bSaveConfig = true;
                     this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
                 }
-                else if (ce.szData.Compare(_T("false")) == 0)
+                else if (ce.szValue.Compare(_T("false")) == 0)
                 {
                     this->bSaveConfig = false;
                     this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
@@ -1110,56 +1110,56 @@ bool CMainDlg::SaveProgramConfig(CString szFileName)
 
     // key: MainWindow
     ce.szKey = _T("MainWindow");
-    ce.szData = this->GetWindowRectStr();
+    ce.szValue = this->GetWindowRectStr();
     m_ConfigList.AddTail(ce);
 
     // key: ColumnSizeSettings
     ce.szKey = _T("ColumnSizeSettings");
-    ce.szData.Format(_T("%d %d"),
+    ce.szValue.Format(_T("%d %d"),
         this->m_LstSettings.GetColumnWidth(0),
         this->m_LstSettings.GetColumnWidth(1));
     m_ConfigList.AddTail(ce);
 
     // key: ColumnSizeFiles
     ce.szKey = _T("ColumnSizeFiles");
-    ce.szData.Format(_T("%d %d"),
+    ce.szValue.Format(_T("%d %d"),
         this->m_LstFiles.GetColumnWidth(0),
         this->m_LstFiles.GetColumnWidth(1));
     m_ConfigList.AddTail(ce);
 
     // key: OutputPath
     ce.szKey = _T("OutputPath");
-    ce.szData = this->szOutputPath;
-    if (ce.szData.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
-        ce.szData = _T("");
+    ce.szValue = this->szOutputPath;
+    if (ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
+        ce.szValue = _T("");
     m_ConfigList.AddTail(ce);
 
     // key: OutputFile
     ce.szKey = _T("OutputFile");
-    ce.szData = this->szOutputFile;
-    if (ce.szData.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
-        ce.szData = _T("");
+    ce.szValue = this->szOutputFile;
+    if (ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
+        ce.szValue = _T("");
     m_ConfigList.AddTail(ce);
 
     // key: SelectedPreset
     ce.szKey = _T("SelectedPreset");
-    ce.szData.Format(_T("%d"),
+    ce.szValue.Format(_T("%d"),
         this->m_CmbPresets.GetCurSel());
     m_ConfigList.AddTail(ce);
 
     // key: MultipleMonoInput
     ce.szKey = _T("MultipleMonoInput");
-    ce.szData = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
+    ce.szValue = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
     m_ConfigList.AddTail(ce);
 
     // key: DisableAllWarnings
     ce.szKey = _T("DisableAllWarnings");
-    ce.szData = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
+    ce.szValue = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
     m_ConfigList.AddTail(ce);
 
     // key: SaveConfig
     ce.szKey = _T("SaveConfig");
-    ce.szData = (this->bSaveConfig == true) ? _T("true") : _T("false");
+    ce.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
     m_ConfigList.AddTail(ce);
 
     // save program configuration
@@ -1177,7 +1177,7 @@ bool CMainDlg::UpdateProgramEngines()
         ConfigEntry ce;
 
         ce.szKey = _T("Aften");
-        ce.szData = _T("libaften.dll");
+        ce.szValue = _T("libaften.dll");
 
         this->m_EngineList.RemoveAll();
         this->m_EngineList.AddTail(ce);
@@ -1189,7 +1189,7 @@ bool CMainDlg::UpdateProgramEngines()
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
         OpenAftenAPI(&this->api);
 
         return false;
@@ -1221,7 +1221,7 @@ bool CMainDlg::UpdateProgramEngines()
     if ((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
     {
         // load new aften library
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
         if (OpenAftenAPI(&this->api) == false)
         {
             // select 'None' aften engine
@@ -1257,7 +1257,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         ConfigEntry ce;
 
         ce.szKey = _T("Aften");
-        ce.szData = _T("libaften.dll");
+        ce.szValue = _T("libaften.dll");
 
         this->m_EngineList.RemoveAll();
         this->m_EngineList.AddTail(ce);
@@ -1269,7 +1269,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
+        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
         OpenAftenAPI(&this->api);
     }
 

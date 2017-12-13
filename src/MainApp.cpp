@@ -30,7 +30,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
         m_szEnginesFilePath = GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME;
         m_szFilesListFilePath = GetExeFilePath() + DEFAULT_FILES_FILE_NAME;
         m_szLangFilePath = GetExeFilePath() + DEFAULT_LANG_FILE_NAME;
-        m_szLogFilePath = GetExeFilePath() + DEFAULT_LOG_FILE_NAME;
     }
     else
     {
@@ -41,7 +40,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
         m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
         m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
         m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
     }
 
     LoadLangConfig(m_szLangFilePath);
@@ -97,7 +95,7 @@ bool CEncWAVtoAC3App::LoadConfig(CString &szFileName, ConfigList_t &cl)
                 if (nPos != -1)
                 {
                     ce.szKey = szBuffer.Mid(0, nPos);
-                    ce.szData = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                    ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
                     cl.AddTail(ce);
                 }
 
@@ -129,7 +127,7 @@ bool CEncWAVtoAC3App::SaveConfig(CString &szFileName, ConfigList_t &cl)
             ConfigEntry ce = cl.GetAt(cl.FindIndex(i));
 
             // format and save key/data pair
-            szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szData);
+            szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szValue);
             fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
             szBuffer.ReleaseBuffer();
         }
@@ -380,7 +378,15 @@ bool CEncWAVtoAC3App::SaveLangConfig(CString &szFileName)
 
 void CEncWAVtoAC3App::LoadLangStrings()
 {
-    CString szLangPath = GetExeFilePath() + DEFAULT_LANG_DIRECTORY;
+    CString szLangPath;
+    if (m_bIsPortable == true)
+    {
+        szLangPath = GetExeFilePath() + _T("lang");
+    }
+    else
+    {
+        szLangPath = GetSettingsFilePath(_T(""), CString(DEFAULT_CONFIG_DIRECTORY) + _T("\\lang"));
+    }
 
     SearchFolderForLang(szLangPath, false, m_LangLst);
 

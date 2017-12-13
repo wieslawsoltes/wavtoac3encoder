@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "AftenAPI.h"
+
 typedef struct TAftenOpt
 {
     int pad_start;

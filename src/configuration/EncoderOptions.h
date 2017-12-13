@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "worker\AftenAPI.h"
+
 // define max number of input files
 #define NUM_MAX_INPUT_FILES 6
 

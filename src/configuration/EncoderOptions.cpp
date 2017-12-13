@@ -1,5 +1,6 @@
 ﻿#include "StdAfx.h"
 #include "MainApp.h"
+#include "worker\AftenAPI.h"
 #include "EncoderOptions.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
@@ -1120,7 +1121,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         // encoder engine number
         if (ce.szKey.Compare(_T("engine")) == 0)
         {
-            preset.nCurrentEngine = _tstoi(ce.szData);
+            preset.nCurrentEngine = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1128,42 +1129,42 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szThreadsOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nThreads = _tstoi(ce.szData);
+            preset.nThreads = _tstoi(ce.szValue);
             continue;
         }
 
         // SIMD instructions: MMX
         if (ce.szKey.Compare(_T("mmx")) == 0)
         {
-            preset.nUsedSIMD[0] = _tstoi(ce.szData);
+            preset.nUsedSIMD[0] = _tstoi(ce.szValue);
             continue;
         }
 
         // SIMD instructions: SSE
         if (ce.szKey.Compare(_T("sse")) == 0)
         {
-            preset.nUsedSIMD[1] = _tstoi(ce.szData);
+            preset.nUsedSIMD[1] = _tstoi(ce.szValue);
             continue;
         }
 
         // SIMD instructions: SSE2
         if (ce.szKey.Compare(_T("sse2")) == 0)
         {
-            preset.nUsedSIMD[2] = _tstoi(ce.szData);
+            preset.nUsedSIMD[2] = _tstoi(ce.szValue);
             continue;
         }
 
         // SIMD instructions: SSE3
         if (ce.szKey.Compare(_T("sse3")) == 0)
         {
-            preset.nUsedSIMD[3] = _tstoi(ce.szData);
+            preset.nUsedSIMD[3] = _tstoi(ce.szValue);
             continue;
         }
 
         // mode
         if (ce.szKey.Compare(_T("mode")) == 0)
         {
-            preset.nMode = (AftenEncMode)_tstoi(ce.szData);
+            preset.nMode = (AftenEncMode)_tstoi(ce.szValue);
             continue;
         }
 
@@ -1171,7 +1172,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szCbrOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nBitrate = _tstoi(ce.szData);
+            preset.nBitrate = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1179,7 +1180,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szVbrOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nQuality = _tstoi(ce.szData);
+            preset.nQuality = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1187,7 +1188,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szRawSampleFormatOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nRawSampleFormat = _tstoi(ce.szData);
+            preset.nRawSampleFormat = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1195,7 +1196,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szRawSampleRateOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nRawSampleRate = _tstoi(ce.szData);
+            preset.nRawSampleRate = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1203,7 +1204,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         szBuffer = szRawChannelsOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
-            preset.nRawChannels = _tstoi(ce.szData);
+            preset.nRawChannels = _tstoi(ce.szValue);
             continue;
         }
 
@@ -1213,7 +1214,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
             szBuffer = encOpt[i].szOption;
             if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
             {
-                preset.nSetting[i] = _tstoi(ce.szData);
+                preset.nSetting[i] = _tstoi(ce.szValue);
                 break;
             }
         }
@@ -1310,19 +1311,19 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
                                 ceTmp.szKey.TrimRight(_T("\t"));
                             }
 
-                            ceTmp.szData = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                            ceTmp.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
 
                             // remove 'spaces' and 'tabs'
-                            while (ceTmp.szData.Left(1) == _T(" ") || ceTmp.szData.Left(1) == _T("\t"))
+                            while (ceTmp.szValue.Left(1) == _T(" ") || ceTmp.szValue.Left(1) == _T("\t"))
                             {
-                                ceTmp.szData.TrimLeft(_T(" "));
-                                ceTmp.szData.TrimLeft(_T("\t"));
+                                ceTmp.szValue.TrimLeft(_T(" "));
+                                ceTmp.szValue.TrimLeft(_T("\t"));
                             }
 
-                            while (ceTmp.szData.Right(1) == _T(" ") || ceTmp.szData.Right(1) == _T("\t"))
+                            while (ceTmp.szValue.Right(1) == _T(" ") || ceTmp.szValue.Right(1) == _T("\t"))
                             {
-                                ceTmp.szData.TrimRight(_T(" "));
-                                ceTmp.szData.TrimRight(_T("\t"));
+                                ceTmp.szValue.TrimRight(_T(" "));
+                                ceTmp.szValue.TrimRight(_T("\t"));
                             }
 
                             // add to the list (data will be parsed later)
