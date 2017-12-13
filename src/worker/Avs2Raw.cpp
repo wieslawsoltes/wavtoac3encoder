@@ -77,7 +77,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
             return false;
         }
     }
-    catch (AvisynthError e)
+    catch (AvisynthError)
     {
 #ifdef _UNICODE
         // _T("Avisynth Error: Loading Avisynth script message"), e.msg
@@ -185,7 +185,7 @@ int CAvs2Raw::GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     {
         (*Video)->GetAudio(pBuffer, pStatus->nStart, pStatus->nSamplesToRead, env);
     }
-    catch (AvisynthError e)
+    catch (AvisynthError)
     {
 #ifdef _UNICODE
         // _T("Avisynth Error: GetAudio() error message"), e.msg
