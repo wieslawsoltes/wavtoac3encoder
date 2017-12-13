@@ -5,7 +5,18 @@
 #endif
 
 #include "res\resource.h"
-#include "configuration\Language.h"
+
+typedef CMap<int, int, CString, CString&> LangMap_t;
+
+typedef struct TLang
+{
+    CString szFileName;
+    CString szEnglishName;
+    CString szTargetName;
+    LangMap_t *lm;
+} Lang;
+
+typedef CList<Lang, Lang&> LangList_t;
 
 class CLangManager
 {
@@ -15,6 +26,10 @@ public:
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
     int m_nLangId = -1;
+public:
+    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
+    void CleanLangList(LangList_t& m_LangLst);
+    bool LoadLang(CString &szFileName, LangMap_t *lm);
 public:
     bool LoadLangConfig(CString &szFileName);
     bool SaveLangConfig(CString &szFileName);
