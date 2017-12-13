@@ -31,9 +31,8 @@
     <String key="0x00103002" value="&amp;Default (English)" />
 
     <String key="0x00104001" value="&amp;Help" />
-    <String key="0x00104002" value="Command-&amp;Line Help\tCtrl+F1" />
-    <String key="0x00104003" value="&amp;Website\tCtrl+Shift+W" />
-    <String key="0x00104004" value="&amp;About...\tCtrl+Shift+A" />
+    <String key="0x00104002" value="&amp;Website\tCtrl+Shift+W" />
+    <String key="0x00104003" value="&amp;About...\tCtrl+Shift+A" />
 
     <!-- Main Dialog: Buttons -->
 
