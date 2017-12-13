@@ -283,7 +283,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     // do nothing if there are no files in list
     if (nItemsCount <= 0)
     {
-        ::LogMessage(_T("Error: Add at least one file to the file list!"));
+        // _T("Error: Add at least one file to the file list!")
 
         MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207011) : _T("Add at least one file to the file list!"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -295,7 +295,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     // check if correct number of mono input files is present
     if ((this->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
     {
-        ::LogMessage(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
+        // _T("Error: Supported are minimum 1 and maximum 6 mono input files!")
 
         MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207012) : _T("Supported are minimum 1 and maximum 6 mono input files!"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -308,7 +308,7 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     if (OpenAftenAPI(&this->api) == false)
     {
-        ::LogMessage(_T("Error: Failed to load libaften.dll dynamic library!"));
+        // _T("Error: Failed to load libaften.dll dynamic library!")
 
         MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -354,7 +354,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     // 1. 'Multiple mono input' mode - off
     if ((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
-        ::LogMessage(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
+        // _T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!")
 
         MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207014) : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -381,7 +381,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     int nLen = dlg.workParam.szOutPath.GetLength();
     if (nLen < 3)
     {
-        ::LogMessage(_T("Error: Invalid output path!"));
+        // _T("Error: Invalid output path!")
 
         this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207015) : _T("Invalid output path!"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -398,7 +398,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         {
             if ((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
             {
-                ::LogMessage(_T("Error: Invalid output file!"));
+                // _T("Error: Invalid output file!")
 
                 this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207016) : _T("Invalid output file!"),
                     theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -418,8 +418,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         {
             if (MakeFullPath(dlg.workParam.szOutPath) == false)
             {
-                // show error message
-                ::LogMessage(_T("Error: Failed to create output path!"));
+                // _T("Error: Failed to create output path!")
 
                 this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207017) : _T("Failed to create output path!"),
                     theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -437,8 +436,7 @@ void CMainDlg::OnBnClickedButtonEncode()
             szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
             if (MakeFullPath(szTmpOutPath) == false)
             {
-                // show error message
-                ::LogMessage(_T("Error: Failed to create output path!"));
+                // _T("Error: Failed to create output path!")
 
                 this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207017) : _T("Failed to create output path!"),
                     theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
@@ -478,7 +476,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     if (dlg.nCount <= 0)
     {
         szText.Format(_T(""));
-        ::LogMessage(_T("Error: Failed to encode all files."));
+        // _T("Error: Failed to encode all files.")
     }
     else
     {
@@ -488,8 +486,6 @@ void CMainDlg::OnBnClickedButtonEncode()
                 dlg.nCount,
                 countTime.Format(countTime.ElapsedTime(), 3),
                 countTime.ElapsedTime());
-
-            ::LogMessage(szText);
         }
         else
         {
@@ -499,8 +495,6 @@ void CMainDlg::OnBnClickedButtonEncode()
                 (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x0020701A) : _T("s")),
                 countTime.Format(countTime.ElapsedTime(), 3),
                 countTime.ElapsedTime());
-
-            ::LogMessage(szText);
         }
     }
 
@@ -853,7 +847,6 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szData;
     if (OpenAftenAPI(&this->api) == false)
     {
-        // show error message in status bar
         CString szLogMessage =
             (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x0020701E) : _T("Failed to load")) +
             _T(" '") +
