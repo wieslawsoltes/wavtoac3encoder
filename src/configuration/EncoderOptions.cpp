@@ -1368,6 +1368,8 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
     return true;
 }
 
+#define SAVE_ONLY_DEFAULTS
+
 bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset)
 {
     const int nSize = (const int)encPresets.GetSize();
@@ -1401,104 +1403,156 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
             // save only values different than default and ignore
 
             // save encoder engine number
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nCurrentEngine != defaultPreset.nCurrentEngine)
             {
+#endif
                 szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save number of threads
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nThreads != defaultPreset.nThreads)
             {
+#endif
                 szTmpBuffer = szThreadsOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save SIMD instructions: MMX
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nUsedSIMD[0] != defaultPreset.nUsedSIMD[0])
             {
+#endif
                 szBuffer.Format(_T("mmx=%d\r\n"), preset.nUsedSIMD[0]);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save SIMD instructions: SSE
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nUsedSIMD[1] != defaultPreset.nUsedSIMD[1])
             {
+#endif
                 szBuffer.Format(_T("sse=%d\r\n"), preset.nUsedSIMD[1]);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save SIMD instructions: SSE2
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nUsedSIMD[2] != defaultPreset.nUsedSIMD[2])
             {
+#endif
                 szBuffer.Format(_T("sse2=%d\r\n"), preset.nUsedSIMD[2]);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save SIMD instructions: SSE3
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nUsedSIMD[3] != defaultPreset.nUsedSIMD[3])
             {
+#endif
                 szBuffer.Format(_T("sse3=%d\r\n"), preset.nUsedSIMD[3]);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save mode
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nMode != defaultPreset.nMode)
             {
+#endif
                 szBuffer.Format(_T("mode=%d\r\n"), preset.nMode);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save bitrate
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nBitrate != defaultPreset.nBitrate)
             {
+#endif
                 szTmpBuffer = szCbrOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save quality
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nQuality != defaultPreset.nQuality)
             {
+#endif
                 szTmpBuffer = szVbrOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save raw input audio format
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nRawSampleFormat != defaultPreset.nRawSampleFormat)
             {
+#endif
                 szTmpBuffer = szRawSampleFormatOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
 
+#endif
             // save raw input audio sample rate
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nRawSampleRate != defaultPreset.nRawSampleRate)
             {
+#endif
                 szTmpBuffer = szRawSampleRateOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save raw input audio channels
+#ifdef SAVE_ONLY_DEFAULTS
             if (preset.nRawChannels != defaultPreset.nRawChannels)
             {
+#endif
                 szTmpBuffer = szRawChannelsOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
                 WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
             }
+#endif
 
             // save all other settings
             for (int j = 0; j < nNumEncoderOptions; j++)
             {
+#ifdef SAVE_ONLY_DEFAULTS
                 if ((encOpt[j].nIgnoreValue != preset.nSetting[j]) && (encOpt[j].nDefaultValue != preset.nSetting[j]))
                 {
+#endif
                     szTmpBuffer = encOpt[j].szOption;
                     szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
                     WriteBufferToFile();
+#ifdef SAVE_ONLY_DEFAULTS
                 }
+#endif
             }
         }
 
