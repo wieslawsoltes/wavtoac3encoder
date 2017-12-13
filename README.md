@@ -148,8 +148,8 @@ automaticaly loaded/saved by program every time the program is started/closed.
 
 * Program configuration is stored in `EncWAVtoAC3.config` file.
 * Presets for encoder are stored in `EncWAVtoAC3.presets` file.
-* Paths to libaften.dll engines are stored in `EncWAVtoAC3.engines` file.
-* User interface trasnlation files are located in Lang sub-directory.
+* Paths to libaften.dll engines are stored in `EncWAVtoAC3-x86.engines` and `EncWAVtoAC3-x64.engines` file.
+* User interface trasnlation files are located in `lang` sub-directory.
 * Translation files must be saved with `Unicode` charset and `BOM header`.
 
 ## AviSynth Support
@@ -164,10 +164,10 @@ You can double-click in the file list on avisynth script to get e.g. number of a
 
 ## Translations
 
-* [English (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/en.txt)
-* [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/de.txt)
-* [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/jp.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
-* [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/lang/pl.txt)
+* [English (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/en.txt)
+* [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/de.txt)
+* [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/jp.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
+* [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/pl.txt)
 
 Use only UTF-8 compatible text editors (e.g. Notepad or Visual Studio Code) to edit xml language files
 and [use special characters in XML](https://www.dvteclipse.com/documentation/svlinter/How_to_use_special_characters_in_XML.3F.html#gsc.tab=0).
@@ -176,7 +176,7 @@ Language files have to be placed in the same directory as the `BatchEncoder.exe`
 
 Language files can also be edited in dedicated [LanguageEditor](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor) program. LanguageEditor requires .NET Framework 4.5 and Windows 7 SP1 or above.
 
-The default language files can be found [here](https://github.com/wieslawsoltes/wavtoac3encoder/tree/master/lang).
+The default language files can be found [here](https://github.com/wieslawsoltes/wavtoac3encoder/tree/master/config/lang).
 
 ## Troubleshooting
 
