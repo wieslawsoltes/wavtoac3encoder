@@ -363,7 +363,7 @@ BOOL CConfiguration::HaveLangStrings()
     return m_bHaveLang;
 }
 
-CString& CConfiguration::GetLangString(int id)
+CString CConfiguration::GetLangString(int id)
 {
     CString szValue = _T("");
     if (m_Lang != NULL)
