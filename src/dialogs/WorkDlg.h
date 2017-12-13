@@ -22,13 +22,13 @@
 
 class CWorkDlg;
 
-// params used in worker thread
-typedef struct TWorkerParam
+class CWorkerParam
 {
+public:
     CWorkDlg *pWorkDlg;
     CList<CString, CString> *list;
     CList<bool, bool> *listStatus;
-    EncoderPreset preset;
+    CEncoderPreset preset;
     bool bUseOutPath;
     CString szOutPath;
     bool bMultiMonoInput;
@@ -40,7 +40,7 @@ typedef struct TWorkerParam
     double fTimeIOWrite;
     __int64 nInTotalSize;
     __int64 nOutTotalSize;
-} WorkerParam;
+};
 
 class CWorkDlg : public CMyDialogEx
 {
@@ -73,7 +73,7 @@ public:
     double m_ElapsedTimeFile;
     double m_ElapsedTimeTotal;
     int nCount;
-    WorkerParam workParam;
+    CWorkerParam workParam;
     CString szSpeedEncoderAvg;
     CString szSpeedReadsAvg;
     CString szSpeedWritesAvg;

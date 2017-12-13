@@ -504,28 +504,28 @@ void CMainDlg::OnBnClickedButtonEncode()
 
 void CMainDlg::OnBnClickedCheckSimdMmx()
 {
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse()
 {
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse2()
 {
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse3()
 {
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
     UpdateCurrentPreset(tmpPreset);
 }
@@ -535,7 +535,7 @@ void CMainDlg::OnBnClickedCheckVbr()
     if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
     {
         // switch to VBR mode
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nMode = AFTEN_ENC_MODE_VBR;
         UpdateCurrentPreset(tmpPreset);
         this->m_SldBitrate.SetRange(0, 1023, TRUE);
@@ -545,7 +545,7 @@ void CMainDlg::OnBnClickedCheckVbr()
     else
     {
         // switch to CBR mode
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nMode = AFTEN_ENC_MODE_CBR;
         UpdateCurrentPreset(tmpPreset);
         this->m_SldBitrate.SetRange(0, 19, TRUE);
@@ -558,7 +558,7 @@ void CMainDlg::OnBnClickedCheckVbr()
 
 void CMainDlg::OnBnClickedButtonPresetAdd()
 {
-    EncoderPreset newPreset = GetCurrentPreset();
+    CEncoderPreset newPreset = GetCurrentPreset();
 
     static int nCount = 0;
 
@@ -699,7 +699,7 @@ void CMainDlg::OnBnClickedButtonPresetsDefaults()
         this->nCurrentPreset = nPreset;
 
         // load default preset and set all settings
-        EncoderPreset tmpPreset = defaultPreset;
+        CEncoderPreset tmpPreset = defaultPreset;
         tmpPreset.szName = GetCurrentPreset().szName;
         UpdateCurrentPreset(tmpPreset);
 
@@ -795,7 +795,7 @@ void CMainDlg::OnCbnSelchangeComboSetting()
         // get current selection index in value combobox
         int nVal = this->m_CmbValue.GetCurSel();
 
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nSetting[nItem] = nVal;
 
         UpdateCurrentPreset(tmpPreset);
@@ -815,7 +815,7 @@ void CMainDlg::OnCbnSelchangeComboPresets()
         this->nCurrentPreset = nPreset;
 
         // load selected preset and set all settings
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
 
         // apply current preset to main dialog
         this->ApplyPresetToDlg(tmpPreset);
@@ -836,7 +836,7 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     }
 
     // update current engine id
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nCurrentEngine = nSel;
     UpdateCurrentPreset(tmpPreset);
 
@@ -896,7 +896,7 @@ void CMainDlg::OnCbnSelchangeComboEngines()
 
 void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
 {
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
     UpdateCurrentPreset(tmpPreset);
 }
@@ -914,7 +914,7 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
             DWORD dwEditSel = this->m_CmbPresets.GetEditSel();
 
             // update current preset name
-            EncoderPreset tmpPreset = GetCurrentPreset();
+            CEncoderPreset tmpPreset = GetCurrentPreset();
             tmpPreset.szName = *szName;
             UpdateCurrentPreset(tmpPreset);
 
@@ -1182,7 +1182,7 @@ bool CMainDlg::UpdateProgramEngines()
         this->m_EngineList.RemoveAll();
         this->m_EngineList.AddTail(ce);
 
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nCurrentEngine = 0;
         UpdateCurrentPreset(tmpPreset);
 
@@ -1212,7 +1212,7 @@ bool CMainDlg::UpdateProgramEngines()
     // reset current engine if it's to big
     if (GetCurrentPreset().nCurrentEngine > nSize)
     {
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nCurrentEngine = 0;
         UpdateCurrentPreset(tmpPreset);
     }
@@ -1227,7 +1227,7 @@ bool CMainDlg::UpdateProgramEngines()
             // select 'None' aften engine
             this->m_CmbEngines.SetCurSel(0);
 
-            EncoderPreset tmpPreset = GetCurrentPreset();
+            CEncoderPreset tmpPreset = GetCurrentPreset();
             tmpPreset.nCurrentEngine = 0;
             UpdateCurrentPreset(tmpPreset);
         }
@@ -1262,7 +1262,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         this->m_EngineList.RemoveAll();
         this->m_EngineList.AddTail(ce);
 
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nCurrentEngine = 0;
         UpdateCurrentPreset(tmpPreset);
 
@@ -1401,7 +1401,7 @@ void CMainDlg::LoadAllConfiguration()
             // add all preset names to preset combobox
             for (int i = 0; i < encPresets.GetCount(); i++)
             {
-                EncoderPreset encTmp = encPresets.GetAt(encPresets.FindIndex(i));
+                CEncoderPreset encTmp = encPresets.GetAt(encPresets.FindIndex(i));
 
                 this->m_CmbPresets.InsertString(i, encTmp.szName);
             }
@@ -1465,7 +1465,7 @@ void CMainDlg::UpdateBitrateText()
 
         szBuff.Format(_T("%d"), nCurPos);
 
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         tmpPreset.nQuality = nCurPos;
         UpdateCurrentPreset(tmpPreset);
     }
@@ -1484,7 +1484,7 @@ void CMainDlg::UpdateBitrateText()
             else
                 szBuff.Format(_T("%d kbps"), nValidCbrBitrates[nCurPos]);
 
-            EncoderPreset tmpPreset = GetCurrentPreset();
+            CEncoderPreset tmpPreset = GetCurrentPreset();
             tmpPreset.nBitrate = nValidCbrBitrates[nCurPos];
             UpdateCurrentPreset(tmpPreset);
         }
@@ -1493,12 +1493,12 @@ void CMainDlg::UpdateBitrateText()
     this->m_StcBitrate.SetWindowText(szBuff);
 }
 
-EncoderPreset CMainDlg::GetCurrentPreset()
+CEncoderPreset CMainDlg::GetCurrentPreset()
 {
     return this->encPresets.GetAt(this->encPresets.FindIndex(this->nCurrentPreset));
 }
 
-void CMainDlg::UpdateCurrentPreset(EncoderPreset updatePreset)
+void CMainDlg::UpdateCurrentPreset(CEncoderPreset updatePreset)
 {
     this->encPresets.SetAt(this->encPresets.FindIndex(this->nCurrentPreset), updatePreset);
 }
@@ -1566,10 +1566,10 @@ void CMainDlg::AddItemToFileList(CString szPath)
     this->m_LstFiles.SetItemText(nItem, 1, szSize);
 }
 
-void CMainDlg::ApplyPresetToDlg(EncoderPreset &Preset)
+void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
 {
     // fill advanced encoder options list
-    for (int i = 0; i < nNumEncoderOptions; i++)
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         // set all values
         this->m_LstSettings.SetItemText(i,
@@ -1921,7 +1921,7 @@ void CMainDlg::OnEnChangeEditRawSampleRate()
         }
     }
 
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nRawSampleRate = nPos;
     UpdateCurrentPreset(tmpPreset);
 }
@@ -1958,7 +1958,7 @@ void CMainDlg::OnEnChangeEditRawChannels()
         }
     }
 
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nRawChannels = nPos;
     UpdateCurrentPreset(tmpPreset);
 }
@@ -1995,7 +1995,7 @@ void CMainDlg::OnEnChangeEditThreads()
         }
     }
 
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
     tmpPreset.nThreads = nPos;
     UpdateCurrentPreset(tmpPreset);
 }
@@ -2236,7 +2236,7 @@ void CMainDlg::InitSettingsList()
     ListView_DeleteAllItems(listSettings);
 
     // fill advanced encoder options list
-    for (int i = 0; i < nNumEncoderOptions; i++)
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         if (encOpt[i].bBeginGroup == true)
             nGroupCounter++;
@@ -2269,7 +2269,7 @@ void CMainDlg::InitSettingsList()
 void CMainDlg::InitDefaultPreset()
 {
     // set current settings to defaults
-    for (int i = 0; i < nNumEncoderOptions; i++)
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
 
     // set default preset name
@@ -2580,7 +2580,7 @@ void CMainDlg::InitLang(bool initLangMenu)
     // restore settings list
     if (initLangMenu == false)
     {
-        EncoderPreset tmpPreset = GetCurrentPreset();
+        CEncoderPreset tmpPreset = GetCurrentPreset();
         this->ApplyPresetToDlg(tmpPreset);
     }
 
@@ -2995,7 +2995,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
                 return;
             }
 
-            EncoderPreset tmpPreset = GetCurrentPreset();
+            CEncoderPreset tmpPreset = GetCurrentPreset();
             tmpPreset.nSetting[nItem] = nVal;
 
             UpdateCurrentPreset(tmpPreset);
@@ -3028,7 +3028,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
                 return;
             }
 
-            EncoderPreset tmpPreset = GetCurrentPreset();
+            CEncoderPreset tmpPreset = GetCurrentPreset();
             tmpPreset.nSetting[nItem] = nVal;
 
             UpdateCurrentPreset(tmpPreset);
@@ -3361,7 +3361,7 @@ void CMainDlg::OnFileMuxWizard()
     bool bUpdateChconfig = false;
 
     // get current preset
-    EncoderPreset tmpPreset = GetCurrentPreset();
+    CEncoderPreset tmpPreset = GetCurrentPreset();
 
     // set MUX dialog initial values
     if (encOpt[nIndexChconfig].nIgnoreValue != tmpPreset.nSetting[nIndexChconfig])

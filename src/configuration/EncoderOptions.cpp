@@ -12,7 +12,7 @@ const int nValidCbrBitrates[nNumValidCbrBitrates] =
      160, 192, 224, 256, 320, 384, 448, 512, 576, 640
 };
 
-const ChannelConfig ccAften[nNumChannelConfigAften] =
+const CChannelConfig ccAften[nNumChannelConfigAften] =
 {
     { 0, 0, _T("1+1") },
     { 1, 0, _T("1/0") },
@@ -53,7 +53,7 @@ LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
 };
 
 // advanced options global variable
-EncoderOptions encOpt[nNumEncoderOptions];
+CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
 
 // encoder options groups
 CString pszGroups[nNumEncoderOptionsGroups] =
@@ -160,7 +160,7 @@ int FindValidBitratePos(const int nBitrate)
 
 int FindOptionIndex(CString szOption)
 {
-    for (int i = 0; i < nNumEncoderOptions; i++)
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         CString szBuffer = encOpt[i].szOption;
         if (szOption.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
@@ -174,7 +174,7 @@ int FindOptionIndex(CString szOption)
 
 void ResetEncoderOptionsLists()
 {
-    for (int i = 0; i < nNumEncoderOptions; i++)
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         if (encOpt[i].listOptNames.GetCount() > 0)
             encOpt[i].listOptNames.RemoveAll();
@@ -1109,7 +1109,7 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A004) : _T("HDCD"), 1);
 }
 
-void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
+void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
 {
     POSITION pos = clTmp.GetHeadPosition();
     while (pos)
@@ -1208,7 +1208,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
         }
 
         // check all other Aften options
-        for (int i = 0; i < nNumEncoderOptions; i++)
+        for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         {
             szBuffer = encOpt[i].szOption;
             if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
@@ -1220,7 +1220,7 @@ void ParseEncoderPreset(EncoderPreset &preset, ConfigList_t &clTmp)
     }
 }
 
-bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset)
+bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     try
     {
@@ -1228,7 +1228,7 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
         if (fp.FOpen(szFileName, false) == false)
             return false;
 
-        EncoderPreset preset;
+        CEncoderPreset preset;
         ConfigList_t clTmp;
         ConfigEntry ceTmp;
 
@@ -1370,7 +1370,7 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
 
 #define SAVE_ONLY_DEFAULTS
 
-bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset)
+bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     const int nSize = (const int)encPresets.GetSize();
     try
@@ -1381,7 +1381,7 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
 
         CString szBuffer;
         CString szTmpBuffer;
-        EncoderPreset preset;
+        CEncoderPreset preset;
 
 #define WriteBufferToFile() \
             fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); \
@@ -1541,7 +1541,7 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
 #endif
 
             // save all other settings
-            for (int j = 0; j < nNumEncoderOptions; j++)
+            for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
             {
 #ifdef SAVE_ONLY_DEFAULTS
                 if ((encOpt[j].nIgnoreValue != preset.nSetting[j]) && (encOpt[j].nDefaultValue != preset.nSetting[j]))

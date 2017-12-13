@@ -28,23 +28,25 @@
 #define DEFAULT_TEXT_OUTPUT_PATH (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
 #define DEFAULT_TEXT_OUTPUT_FILE (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
-typedef struct TConfigEntry
+class ConfigEntry
 {
+public:
     CString szKey;
     CString szValue;
-} ConfigEntry, *PConfigEntry;
+};
 
 typedef CList<ConfigEntry, ConfigEntry&> ConfigList_t;
 
 typedef CMap<int, int, CString, CString&> LangMap_t;
 
-typedef struct TLang
+class Lang
 {
+public:
     CString szFileName;
     CString szEnglishName;
     CString szTargetName;
     LangMap_t *lm;
-} Lang;
+};
 
 typedef CList<Lang, Lang&> LangList_t;
 

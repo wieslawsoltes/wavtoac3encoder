@@ -55,7 +55,7 @@ public:
     ConfigList_t m_EngineList;
 public:
     EncoderPresetList_t encPresets;
-    EncoderPreset defaultPreset;
+    CEncoderPreset defaultPreset;
     int nCurrentPreset = 0;
 public:
     CString szOutputPath;
@@ -140,15 +140,15 @@ public:
     void LoadAllConfiguration();
     void SaveAllConfiguration();
 public:
-    EncoderPreset GetCurrentPreset();
-    void UpdateCurrentPreset(EncoderPreset updatePreset);
+    CEncoderPreset GetCurrentPreset();
+    void UpdateCurrentPreset(CEncoderPreset updatePreset);
 public:
     void HandleDropFiles(HDROP hDropInfo);
     void SearchFolderForFiles(CString szFile, const bool bRecurse);
     void AddItemToFileList(CString szPath);
     void UpdateBitrateText();
     void UpdateSettingsComboBox(int nItem);
-    void ApplyPresetToDlg(EncoderPreset &Preset);
+    void ApplyPresetToDlg(CEncoderPreset &Preset);
     void ShowOptionPopup(bool bUseRect);
 public:
 #ifndef DISABLE_AVISYNTH

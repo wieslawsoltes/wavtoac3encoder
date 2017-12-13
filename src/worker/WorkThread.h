@@ -2,8 +2,9 @@
 
 #include "AftenAPI.h"
 
-typedef struct TAftenOpt
+class AftenOpt
 {
+public:
     int pad_start;
     int chmap;
     int read_to_eof;
@@ -12,10 +13,11 @@ typedef struct TAftenOpt
     int raw_ch;
     enum PcmSampleFormat raw_fmt;
     int raw_order;
-} AftenOpt;
+};
 
-typedef struct TSingleWorkerData
+class SingleWorkerData
 {
+public:
     // input and output files
     CString szInPath;
     CString szOutPath;
@@ -31,7 +33,7 @@ typedef struct TSingleWorkerData
     int nID;
     // success flag
     bool bSuccess;
-} SingleWorkerData;
+};
 
 #define WM_WORKER_PROGRESS WM_USER + 0x10
 
