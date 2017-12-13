@@ -2726,7 +2726,7 @@ void CMainDlg::InitLangMenu()
             szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
             m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
 
-            if (theApp.m_nLangId == i)
+            if (theLangManager.m_nLangId == i)
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
             else
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
@@ -3675,10 +3675,10 @@ void CMainDlg::OnOptionsSaveConfiguration()
 void CMainDlg::OnLanguageChangeDefault()
 {
     // set language to default
-    theApp.m_nLangId = -1;
-    theApp.m_bHaveLang = FALSE;
-    theApp.m_Lang = NULL;
-    theApp.m_szLangFileName = _T("");
+    theLangManager.m_nLangId = -1;
+    theLangManager.m_bHaveLang = FALSE;
+    theLangManager.m_Lang = NULL;
+    theLangManager.m_szLangFileName = _T("");
 
     // update Language menu checked status
     CMenu *m_hMenu = this->GetMenu();
@@ -3705,10 +3705,10 @@ void CMainDlg::OnLanguageChange(UINT nID)
     if (pos != NULL)
     {
         Lang lang = theLangManager.m_LangLst.GetAt(pos);
-        theApp.m_nLangId = nID - ID_LANGUAGE_MENU_START;
-        theApp.m_bHaveLang = TRUE;
-        theApp.m_Lang = lang.lm;
-        theApp.m_szLangFileName = lang.szFileName;
+        theLangManager.m_nLangId = nID - ID_LANGUAGE_MENU_START;
+        theLangManager.m_bHaveLang = TRUE;
+        theLangManager.m_Lang = lang.lm;
+        theLangManager.m_szLangFileName = lang.szFileName;
     }
 
     // update Language menu checked status
@@ -3722,7 +3722,7 @@ void CMainDlg::OnLanguageChange(UINT nID)
     while (pos)
     {
         Lang lang = theLangManager.m_LangLst.GetNext(pos);
-        if (theApp.m_nLangId == i)
+        if (theLangManager.m_nLangId == i)
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
         else
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
