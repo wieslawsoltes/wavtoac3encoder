@@ -141,7 +141,6 @@
 #define ID_FILE_SAVEFILESLIST           32783
 #define ID_LIST_MOVEUP                  32784
 #define ID_LIST_MOVEDOWN                32785
-#define ID_HELP_COMMAND_LINE            32786
 #define ID_FILE_ADDFILES                32788
 #define ID_FILE_ADDDIRECTORY            32789
 #define ID_FILE_MUXWIZARD               32790
