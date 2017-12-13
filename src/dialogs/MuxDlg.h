@@ -36,8 +36,8 @@ public:
 public:
     int nChannelConfig;
     bool bLFE;
-    CString szInputFiles[NUM_MAX_INPUT_FILES];
-    CString szTmpInputFiles[NUM_MAX_INPUT_FILES];
+    CString szInputFiles[nNumMaxInputFiles];
+    CString szTmpInputFiles[nNumMaxInputFiles];
 public:
     CMyButton m_BtnChannelFL;
     CMyButton m_BtnChannelFR;

@@ -399,7 +399,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, WorkerParam *
     uint8_t *frame = NULL;
     FLOAT *fwav = NULL;
     int nr, fs;
-    FILE *ifp[NUM_MAX_INPUT_FILES];
+    FILE *ifp[nNumMaxInputFiles];
     FILE *ofp = NULL;
     PcmContext pf;
     uint32_t samplecount, bytecount, t0, t1, percent;
@@ -433,7 +433,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, WorkerParam *
         pszInPath[i] = szInPath[i].GetBuffer();
 
     pszOutPath = szOutPath.GetBuffer();
-    memset(ifp, 0, NUM_MAX_INPUT_FILES * sizeof(FILE *));
+    memset(ifp, 0, nNumMaxInputFiles * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
     // Avisynth data

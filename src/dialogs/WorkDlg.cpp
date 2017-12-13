@@ -146,7 +146,7 @@ void CWorkDlg::InitCtrls()
         }
 
         // move other controls
-        CRect rcIn[NUM_MAX_INPUT_FILES], rcInInfo[NUM_MAX_INPUT_FILES];
+        CRect rcIn[nNumMaxInputFiles], rcInInfo[nNumMaxInputFiles];
         CRect rcSpeedInfo[3][3];
         CRect rcOut, rcOutInfo;
         CRect rcSIMD;
@@ -155,7 +155,7 @@ void CWorkDlg::InitCtrls()
         CRect rcGroup, rcGroupStats, rcBtnCancel;
         CRect rcDlg;
 
-        for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+        for (int i = 0; i < nNumMaxInputFiles; i++)
         {
             this->GetDlgItem(this->nIDIn[i])->GetWindowRect(rcIn[i]);
             this->GetDlgItem(this->nIDInInfo[i])->GetWindowRect(rcInInfo[i]);

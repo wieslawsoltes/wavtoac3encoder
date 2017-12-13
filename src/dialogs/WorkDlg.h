@@ -62,8 +62,8 @@ protected:
 protected:
     DECLARE_MESSAGE_MAP()
 public:
-    int nIDIn[NUM_MAX_INPUT_FILES];
-    int nIDInInfo[NUM_MAX_INPUT_FILES];
+    int nIDIn[nNumMaxInputFiles];
+    int nIDInInfo[nNumMaxInputFiles];
 public:
     volatile bool bTerminate;
     volatile bool bCanUpdateWindow;

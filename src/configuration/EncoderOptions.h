@@ -2,36 +2,12 @@
 
 #include "worker\AftenAPI.h"
 
-// define max number of input files
-#define NUM_MAX_INPUT_FILES 6
-
-// current version of presets configuration (format: #.###)
-#define CURRENT_PRESETS_VERSION _T("1.1.0.0")
-
-// number of valid CBR mode bitrates
-const int nNumValidCbrBitrates = 20;
-
-extern const int nValidCbrBitrates[nNumValidCbrBitrates];
-
 typedef struct TChannelConfig
 {
     int acmod;
     int lfe;
     CString chconfig;
 } ChannelConfig;
-
-const int nNumChannelConfigAften = 16;
-
-extern const ChannelConfig ccAften[nNumChannelConfigAften];
-
-// number of valid raw audio input formats
-const int nNumRawSampleFormats = 15;
-
-// default values for raw audio input
-extern LPTSTR szRawSampleFormats[nNumRawSampleFormats];
-
-// find valid bitrate index
-int FindValidBitratePos(const int nBitrate);
 
 typedef struct TEncoderOptions
 {
@@ -49,38 +25,8 @@ typedef struct TEncoderOptions
 // number of advanced encoder options
 const int nNumEncoderOptions = 31;
 
-// number of advanced encoder options groups
-const int nNumEncoderOptionsGroups = 6;
-
 // number of SIMD instructions
 const int nNumSIMDIntructions = 4;
-
-// advanced options global variable
-extern EncoderOptions encOpt[nNumEncoderOptions];
-
-// encoder options groups
-extern CString pszGroups[nNumEncoderOptionsGroups];
-
-// option for CBR encoding mode for aften
-extern const CString szCbrOption;
-
-// option for VBR encoding mode for aften
-extern const CString szVbrOption;
-
-// option for number of threads for aften
-extern const CString szThreadsOption;
-
-// option for SIMD instructions for aften
-extern const CString szSimdOption;
-
-// option for raw audio input sample format for aften
-extern const CString szRawSampleFormatOption;
-
-// option for raw audio input sample rate for aften
-extern const CString szRawSampleRateOption;
-
-// option for raw audio input channels for aften
-extern const CString szRawChannelsOption;
 
 // encoder preset settings
 typedef struct TEncoderPreset
@@ -110,6 +56,75 @@ typedef struct TEncoderPreset
 
 typedef CList<EncoderPreset, EncoderPreset&> EncoderPresetList_t;
 
+// define max number of input files
+const int nNumMaxInputFiles = 6;
+
+// current version of presets configuration (format: #.###)
+const LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+
+// number of valid CBR mode bitrates
+const int nNumValidCbrBitrates = 20;
+
+extern const int nValidCbrBitrates[nNumValidCbrBitrates];
+
+const int nNumChannelConfigAften = 16;
+
+extern const ChannelConfig ccAften[nNumChannelConfigAften];
+
+// number of valid raw audio input formats
+const int nNumRawSampleFormats = 15;
+
+// default values for raw audio input
+extern LPTSTR szRawSampleFormats[nNumRawSampleFormats];
+
+// number of advanced encoder options groups
+const int nNumEncoderOptionsGroups = 6;
+
+// advanced options global variable
+extern EncoderOptions encOpt[nNumEncoderOptions];
+
+// encoder options groups
+extern CString pszGroups[nNumEncoderOptionsGroups];
+
+// option for CBR encoding mode for aften
+extern const CString szCbrOption;
+
+// option for VBR encoding mode for aften
+extern const CString szVbrOption;
+
+// option for number of threads for aften
+extern const CString szThreadsOption;
+
+// option for SIMD instructions for aften
+extern const CString szSimdOption;
+
+// option for raw audio input sample format for aften
+extern const CString szRawSampleFormatOption;
+
+// option for raw audio input sample rate for aften
+extern const CString szRawSampleRateOption;
+
+// option for raw audio input channels for aften
+extern const CString szRawChannelsOption;
+
+// define supported input file extension
+const int nNumSupportedInputExt = 8;
+
+// define supported output file extension
+const int nNumSupportedOutputExt = 1;
+
+// supported input file extensions
+extern const TCHAR szSupportedInputExt[nNumSupportedInputExt][8];
+
+// supported input file formats
+extern const int nSupportedInputFormats[nNumSupportedInputExt];
+
+// supported output file extensions
+extern const TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8];
+
+// find valid bitrate index
+int FindValidBitratePos(const int nBitrate);
+
 int FindOptionIndex(CString szOption);
 
 void ResetEncoderOptionsLists();
@@ -122,21 +137,6 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
 
 // save encoder presets
 bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, EncoderPreset& defaultPreset);
-
-// define supported input file extension
-#define NUM_SUPPORTED_INPUT_EXT 8
-
-// define supported output file extension
-#define NUM_SUPPORTED_OUTPUT_EXT 1
-
-// supported input file extensions
-extern const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8];
-
-// supported input file formats
-extern const int nSupportedInputFormats[NUM_SUPPORTED_INPUT_EXT];
-
-// supported output file extensions
-extern const TCHAR szSupportedOutputExt[NUM_SUPPORTED_OUTPUT_EXT][8];
 
 // check if file extension is supported
 bool IsSupportedInputExt(CString &szExt);

@@ -3346,8 +3346,8 @@ void CMainDlg::OnFileMuxWizard()
     int nItemsCount = this->m_LstFiles.GetItemCount();
 
     // limit number of processed items
-    if (nItemsCount > NUM_MAX_INPUT_FILES)
-        nItemsCount = NUM_MAX_INPUT_FILES;
+    if (nItemsCount > nNumMaxInputFiles)
+        nItemsCount = nNumMaxInputFiles;
 
     for (int i = 0; i < nItemsCount; i++)
     {

@@ -31,7 +31,7 @@ const int nNumInputFiles[nNumChannelConfig] =
     2, 1, 2, 3, 3, 4, 4, 5
 };
 
-const int nChannelConfigStates[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
+const int nChannelConfigStates[nNumChannelConfig][nNumMaxInputFiles] =
 {
     // FL FR FC S  SL SR
     {  1, 1, 0, 0, 0, 0 }, // 1+1
@@ -44,7 +44,7 @@ const int nChannelConfigStates[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
     {  1, 1, 1, 0, 1, 1 }  // 3/2
 };
 
-const CString szChannelConfigNames[nNumChannelConfig][NUM_MAX_INPUT_FILES] =
+const CString szChannelConfigNames[nNumChannelConfig][nNumMaxInputFiles] =
 {
     // FL FR FC S  SL SR
     {  _T("Ch1"), _T("Ch2"), _T("-"), _T("-"), _T("-"),   _T("-")  }, // 1+1
@@ -62,7 +62,7 @@ IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
 CMuxDlg::CMuxDlg(CWnd* pParent /*=NULL*/)
     : CMyDialogEx(CMuxDlg::IDD, pParent)
 {
-    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < nNumMaxInputFiles; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");
@@ -207,7 +207,7 @@ void CMuxDlg::InitLang()
 
 void CMuxDlg::RemapFilesToChannels()
 {
-    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < nNumMaxInputFiles; i++)
         this->szInputFiles[i] = _T("");
 
     switch (this->nChannelConfig)
@@ -372,7 +372,7 @@ void CMuxDlg::SetControlsState()
 bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
     // reset input files
-    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < nNumMaxInputFiles; i++)
         szTmpInputFiles[i] = _T("");
 
     try
@@ -402,7 +402,7 @@ bool CMuxDlg::LoadFilesList(CString &szFileName)
                 szBuffer += _T("\0");
 
                 // terminate reading if max of input files is reached
-                if (nFileCounter >= NUM_MAX_INPUT_FILES)
+                if (nFileCounter >= nNumMaxInputFiles)
                 {
                     fp.FClose();
                     return true;
@@ -752,7 +752,7 @@ void CMuxDlg::OnBnClickedCheckChannelConfigLfe()
 
 void CMuxDlg::OnBnClickedCancel()
 {
-    for (int i = 0; i < NUM_MAX_INPUT_FILES; i++)
+    for (int i = 0; i < nNumMaxInputFiles; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");

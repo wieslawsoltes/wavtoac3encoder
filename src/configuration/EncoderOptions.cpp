@@ -115,7 +115,7 @@ const CString szRawSampleRateOption = _T("-raw_sr");
 const CString szRawChannelsOption = _T("-raw_ch");
 
 // supported input file extensions
-const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8] =
+const TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
 {
     _T("wav"),
     _T("pcm"),
@@ -130,7 +130,7 @@ const TCHAR szSupportedInputExt[NUM_SUPPORTED_INPUT_EXT][8] =
 };
 
 // supported input file formats
-const int nSupportedInputFormats[NUM_SUPPORTED_INPUT_EXT] =
+const int nSupportedInputFormats[nNumSupportedInputExt] =
 {
     PCM_FORMAT_WAVE,
     PCM_FORMAT_RAW,
@@ -142,7 +142,7 @@ const int nSupportedInputFormats[NUM_SUPPORTED_INPUT_EXT] =
 };
 
 // supported output file extensions
-const TCHAR szSupportedOutputExt[NUM_SUPPORTED_OUTPUT_EXT][8] =
+const TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
 {
     _T("ac3")
 };
@@ -1251,7 +1251,7 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
                 if (bHaveVersion == false)
                 {
                     // check presets version
-                    if (szBuffer.Compare(CURRENT_PRESETS_VERSION) != 0)
+                    if (szBuffer.Compare(szCurrentPresetsVersion) != 0)
                     {
                         // invalid presets version
                         fp.FClose();
@@ -1386,7 +1386,7 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
             szBuffer.ReleaseBuffer();
 
         // write current presets version
-        szBuffer.Format(_T("%s\r\n"), CURRENT_PRESETS_VERSION);
+        szBuffer.Format(_T("%s\r\n"), szCurrentPresetsVersion);
         WriteBufferToFile();
 
         // write all presets
@@ -1515,7 +1515,7 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, Enc
 
 bool IsSupportedInputExt(CString &szExt)
 {
-    for (int i = 0; i < NUM_SUPPORTED_INPUT_EXT; i++)
+    for (int i = 0; i < nNumSupportedInputExt; i++)
     {
         if (szExt.CompareNoCase(szSupportedInputExt[i]) == 0)
             return true;
@@ -1526,7 +1526,7 @@ bool IsSupportedInputExt(CString &szExt)
 
 int GetSupportedInputFormat(CString &szExt)
 {
-    for (int i = 0; i < NUM_SUPPORTED_INPUT_EXT; i++)
+    for (int i = 0; i < nNumSupportedInputExt; i++)
     {
         if (szExt.CompareNoCase(szSupportedInputExt[i]) == 0)
         {
@@ -1544,18 +1544,18 @@ CString GetSupportedInputFilesFilter()
     CString szExtU = _T("");
     CString szBuff = _T("");
 
-    for (int i = 0; i < NUM_SUPPORTED_INPUT_EXT; i++)
+    for (int i = 0; i < nNumSupportedInputExt; i++)
     {
         szExtL = szSupportedInputExt[i];
         szBuff = _T("*.") + szExtL.MakeLower();
-        szBuff += (i < NUM_SUPPORTED_INPUT_EXT - 1) ? _T(";") : _T("");
+        szBuff += (i < nNumSupportedInputExt - 1) ? _T(";") : _T("");
         szFilter += szBuff;
     }
 
     szFilter = (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207006) : _T("Supported Files")) +
         _T(" (") + szFilter + _T(")|") + szFilter + _T("|");
 
-    for (int i = 0; i < NUM_SUPPORTED_INPUT_EXT; i++)
+    for (int i = 0; i < nNumSupportedInputExt; i++)
     {
         szExtL = szExtU = szSupportedInputExt[i];
         szExtU.MakeUpper();
