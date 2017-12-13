@@ -5,14 +5,68 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-CLangManager theLangManager;
 CEncWAVtoAC3App theApp;
 
-//
-// CONFIG
-//
+BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
+    ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
+END_MESSAGE_MAP()
 
-bool LoadConfig(CString &szFileName, ConfigList_t &cl)
+CEncWAVtoAC3App::CEncWAVtoAC3App()
+{
+}
+
+CEncWAVtoAC3App::~CEncWAVtoAC3App()
+{
+}
+
+BOOL CEncWAVtoAC3App::InitInstance()
+{
+    m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
+
+    if (m_bIsPortable == true)
+    {
+        m_szPresetsFilePath = GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME;
+        m_szConfigFilePath = GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME;
+        m_szEnginesFilePath = GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME;
+        m_szFilesListFilePath = GetExeFilePath() + DEFAULT_FILES_FILE_NAME;
+        m_szLangFilePath = GetExeFilePath() + DEFAULT_LANG_FILE_NAME;
+        m_szLogFilePath = GetExeFilePath() + DEFAULT_LOG_FILE_NAME;
+    }
+    else
+    {
+        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), NULL);
+
+        m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+    }
+
+    LoadLangConfig(m_szLangFilePath);
+    LoadLangStrings();
+
+    INITCOMMONCONTROLSEX InitCtrls;
+    InitCtrls.dwSize = sizeof(InitCtrls);
+    InitCtrls.dwICC = ICC_WIN95_CLASSES;
+    InitCommonControlsEx(&InitCtrls);
+
+    CWinAppEx::InitInstance();
+    AfxEnableControlContainer();
+    InitShellManager();
+
+    CMainDlg dlg;
+    m_pMainWnd = &dlg;
+    dlg.DoModal();
+
+    SaveLangConfig(m_szLangFilePath);
+    CleanLangList(m_LangLst);
+
+    return FALSE;
+}
+
+bool CEncWAVtoAC3App::LoadConfig(CString &szFileName, ConfigList_t &cl)
 {
     try
     {
@@ -60,7 +114,7 @@ bool LoadConfig(CString &szFileName, ConfigList_t &cl)
     }
 }
 
-bool SaveConfig(CString &szFileName, ConfigList_t &cl)
+bool CEncWAVtoAC3App::SaveConfig(CString &szFileName, ConfigList_t &cl)
 {
     int nSize = (int)cl.GetSize();
     try
@@ -89,11 +143,7 @@ bool SaveConfig(CString &szFileName, ConfigList_t &cl)
     }
 }
 
-//
-// LANG
-//
-
-void CLangManager::SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
+void CEncWAVtoAC3App::SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
 {
     try
     {
@@ -177,7 +227,7 @@ void CLangManager::SearchFolderForLang(CString szPath, const bool bRecurse, Lang
     }
 }
 
-void CLangManager::CleanLangList(LangList_t& m_LangLst)
+void CEncWAVtoAC3App::CleanLangList(LangList_t& m_LangLst)
 {
     POSITION pos = m_LangLst.GetHeadPosition();
     while (pos)
@@ -187,7 +237,7 @@ void CLangManager::CleanLangList(LangList_t& m_LangLst)
     }
 }
 
-bool CLangManager::LoadLang(CString &szFileName, LangMap_t *lm)
+bool CEncWAVtoAC3App::LoadLang(CString &szFileName, LangMap_t *lm)
 {
     try
     {
@@ -243,7 +293,7 @@ bool CLangManager::LoadLang(CString &szFileName, LangMap_t *lm)
     }
 }
 
-bool CLangManager::LoadLangConfig(CString &szFileName)
+bool CEncWAVtoAC3App::LoadLangConfig(CString &szFileName)
 {
     try
     {
@@ -303,7 +353,7 @@ bool CLangManager::LoadLangConfig(CString &szFileName)
     }
 }
 
-bool CLangManager::SaveLangConfig(CString &szFileName)
+bool CEncWAVtoAC3App::SaveLangConfig(CString &szFileName)
 {
     try
     {
@@ -328,7 +378,7 @@ bool CLangManager::SaveLangConfig(CString &szFileName)
     return true;
 }
 
-void CLangManager::LoadLangStrings()
+void CEncWAVtoAC3App::LoadLangStrings()
 {
     CString szLangPath = GetExeFilePath() + DEFAULT_LANG_DIRECTORY;
 
@@ -373,76 +423,13 @@ void CLangManager::LoadLangStrings()
     }
 }
 
-BOOL CLangManager::HaveLangStrings()
+BOOL CEncWAVtoAC3App::HaveLangStrings()
 {
     return m_bHaveLang;
 }
 
-CString& CLangManager::GetLangString(int id)
+CString& CEncWAVtoAC3App::GetLangString(int id)
 {
     // return (*m_Lang)[id];
     return m_Lang->PLookup(id)->value;
-}
-
-//
-// APP
-//
-
-BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
-    ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
-END_MESSAGE_MAP()
-
-CEncWAVtoAC3App::CEncWAVtoAC3App()
-{
-}
-
-CEncWAVtoAC3App::~CEncWAVtoAC3App()
-{
-}
-
-BOOL CEncWAVtoAC3App::InitInstance()
-{
-    m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
-
-    if (m_bIsPortable == true)
-    {
-        m_szPresetsFilePath = GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME;
-        m_szConfigFilePath = GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME;
-        m_szEnginesFilePath = GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME;
-        m_szFilesListFilePath = GetExeFilePath() + DEFAULT_FILES_FILE_NAME;
-        m_szLangFilePath = GetExeFilePath() + DEFAULT_LANG_FILE_NAME;
-        m_szLogFilePath = GetExeFilePath() + DEFAULT_LOG_FILE_NAME;
-    }
-    else
-    {
-        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), NULL);
-
-        m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_szLogFilePath = GetSettingsFilePath(DEFAULT_LOG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-    }
-
-    theLangManager.LoadLangConfig(m_szLangFilePath);
-    theLangManager.LoadLangStrings();
-
-    INITCOMMONCONTROLSEX InitCtrls;
-    InitCtrls.dwSize = sizeof(InitCtrls);
-    InitCtrls.dwICC = ICC_WIN95_CLASSES;
-    InitCommonControlsEx(&InitCtrls);
-
-    CWinAppEx::InitInstance();
-    AfxEnableControlContainer();
-    InitShellManager();
-
-    CMainDlg dlg;
-    m_pMainWnd = &dlg;
-    dlg.DoModal();
-
-    theLangManager.SaveLangConfig(m_szLangFilePath);
-    theLangManager.CleanLangList(theLangManager.m_LangLst);
-
-    return FALSE;
 }

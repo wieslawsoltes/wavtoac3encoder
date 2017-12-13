@@ -68,19 +68,19 @@
 #define ENCWAVTOAC3_VERSION _T(VER_FILE_VERSION_SHORT_STR)
 
 // default preset name
-#define DEFAULT_PRESET_NAME (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207001) : _T("Default"))
+#define DEFAULT_PRESET_NAME (theApp.HaveLangStrings() ? theApp.GetLangString(0x00207001) : _T("Default"))
 
 // default text for auto value
-#define DEFAULT_TEXT_AUTO (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207002) : _T("<Auto>"))
+#define DEFAULT_TEXT_AUTO (theApp.HaveLangStrings() ? theApp.GetLangString(0x00207002) : _T("<Auto>"))
 
 // default text for ignored value
-#define DEFAULT_TEXT_IGNORED (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207003) : _T("<Ignored>"))
+#define DEFAULT_TEXT_IGNORED (theApp.HaveLangStrings() ? theApp.GetLangString(0x00207003) : _T("<Ignored>"))
 
 // default text for same as source file output path value
-#define DEFAULT_TEXT_OUTPUT_PATH (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207004) : _T("<Same as input file path>"))
+#define DEFAULT_TEXT_OUTPUT_PATH (theApp.HaveLangStrings() ? theApp.GetLangString(0x00207004) : _T("<Same as input file path>"))
 
 // default text for same as source file output path value (multi mono input)
-#define DEFAULT_TEXT_OUTPUT_FILE (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
+#define DEFAULT_TEXT_OUTPUT_FILE (theApp.HaveLangStrings() ? theApp.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
 // default directory for roaming data
 #ifdef _M_X64

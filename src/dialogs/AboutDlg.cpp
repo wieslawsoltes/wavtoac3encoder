@@ -39,7 +39,7 @@ void CAboutDlg::SetBuildInfo()
     CString szBuildInfo = _T("");
 
     szBuildInfo.Format(_T("%s %s,"),
-        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00901004) : _T("Version"),
+        theApp.HaveLangStrings() ? theApp.GetLangString(0x00901004) : _T("Version"),
         ENCWAVTOAC3_VERSION);
 
 #if defined(_WIN32) & !defined(_WIN64)
@@ -70,10 +70,10 @@ void CAboutDlg::SetBuildInfo()
 
 void CAboutDlg::InitLang()
 {
-    if (theLangManager.HaveLangStrings())
+    if (theApp.HaveLangStrings())
     {
-        this->SetWindowText(theLangManager.GetLangString(0x00901002));
-        this->GetDlgItem(IDOK)->SetWindowText(theLangManager.GetLangString(0x00901001));
-        this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(theLangManager.GetLangString(0x00901003));
+        this->SetWindowText(theApp.GetLangString(0x00901002));
+        this->GetDlgItem(IDOK)->SetWindowText(theApp.GetLangString(0x00901001));
+        this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(theApp.GetLangString(0x00901003));
     }
 }

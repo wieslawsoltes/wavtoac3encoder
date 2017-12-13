@@ -218,49 +218,49 @@ void ShowCurrentJobInfo(int nInputFiles,
             TCHAR *type, *chan, *order;
             TCHAR fmt[64] = _T("");
 
-            type = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02001) : _T("?");
-            chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02002) : _T("?-channel");
+            type = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02001) : _T("?");
+            chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02002) : _T("?-channel");
             order = _T("");
 
             if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
             {
                 if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                    type = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02003) : _T("Unsigned");
+                    type = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02003) : _T("Unsigned");
                 else
-                    type = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02004) : _T("Signed");
+                    type = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02004) : _T("Signed");
             }
             else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
             {
-                type = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02005) : _T("Floating-point");
+                type = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02005) : _T("Floating-point");
             }
             else
             {
-                type = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02006) : _T("[unsupported type]");
+                type = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02006) : _T("[unsupported type]");
             }
 
             if (pf_info->ch_mask & 0x08)
             {
                 switch (pf_info->channels - 1)
                 {
-                case 1: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02007) : _T("1.1-channel"); break;
-                case 2: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02008) : _T("2.1-channel"); break;
-                case 3: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02009) : _T("3.1-channel"); break;
-                case 4: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200A) : _T("4.1-channel"); break;
-                case 5: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200B) : _T("5.1-channel"); break;
-                default: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
+                case 1: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02007) : _T("1.1-channel"); break;
+                case 2: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02008) : _T("2.1-channel"); break;
+                case 3: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02009) : _T("3.1-channel"); break;
+                case 4: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200A) : _T("4.1-channel"); break;
+                case 5: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200B) : _T("5.1-channel"); break;
+                default: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
                 }
             }
             else
             {
                 switch (pf_info->channels)
                 {
-                case 1: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200D) : _T("mono"); break;
-                case 2: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200E) : _T("stereo"); break;
-                case 3: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200F) : _T("3-channel"); break;
-                case 4: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02010) : _T("4-channel"); break;
-                case 5: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02011) : _T("5-channel"); break;
-                case 6: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02012) : _T("6-channel"); break;
-                default: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02013) : _T("multi-channel"); break;
+                case 1: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200D) : _T("mono"); break;
+                case 2: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200E) : _T("stereo"); break;
+                case 3: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200F) : _T("3-channel"); break;
+                case 4: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02010) : _T("4-channel"); break;
+                case 5: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02011) : _T("5-channel"); break;
+                case 6: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02012) : _T("6-channel"); break;
+                default: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02013) : _T("multi-channel"); break;
                 }
             }
 
@@ -277,15 +277,15 @@ void ShowCurrentJobInfo(int nInputFiles,
             else
             {
                 _stprintf(fmt, _T("%s"),
-                    theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02014) : _T("unknown"));
+                    theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02014) : _T("unknown"));
             }
 
             if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
             {
                 switch (pf_info->order)
                 {
-                case PCM_BYTE_ORDER_LE: order = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02015) : _T("little-endian"); break;
-                case PCM_BYTE_ORDER_BE: order = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02016) : _T("big-endian"); break;
+                case PCM_BYTE_ORDER_LE: order = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02015) : _T("little-endian"); break;
+                case PCM_BYTE_ORDER_BE: order = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02016) : _T("big-endian"); break;
                 }
             }
             else
@@ -308,17 +308,17 @@ void ShowCurrentJobInfo(int nInputFiles,
 
         switch (infoAVS.nAudioChannels)
         {
-        case 1: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200D) : _T("mono"); break;
-        case 2: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200E) : _T("stereo"); break;
-        case 3: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0200F) : _T("3-channel"); break;
-        case 4: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02010) : _T("4-channel"); break;
-        case 5: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02011) : _T("5-channel"); break;
-        case 6: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02012) : _T("6-channel"); break;
-        default: chan = theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02013) : _T("multi-channel"); break;
+        case 1: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200D) : _T("mono"); break;
+        case 2: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200E) : _T("stereo"); break;
+        case 3: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0200F) : _T("3-channel"); break;
+        case 4: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02010) : _T("4-channel"); break;
+        case 5: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02011) : _T("5-channel"); break;
+        case 6: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02012) : _T("6-channel"); break;
+        default: chan = theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02013) : _T("multi-channel"); break;
         }
 
         szInputInfo.Format(_T("\t%s %d Hz %s"),
-            theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
+            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
             infoAVS.nSamplesPerSecond, chan);
 
         pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[0])->SetWindowText(szInputInfo);
@@ -329,9 +329,9 @@ void ShowCurrentJobInfo(int nInputFiles,
     {
         TCHAR *acmod_str[32] =
         {
-            theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02018) : _T("dual mono (1+1)"),
-            theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A02019) : _T("mono (1/0)"),
-            theLangManager.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theLangManager.GetLangString(0x00A0201A) : _T("stereo (2/0)"),
+            theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02018) : _T("dual mono (1+1)"),
+            theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A02019) : _T("mono (1/0)"),
+            theApp.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.GetLangString(0x00A0201A) : _T("stereo (2/0)"),
             _T("3/0"),
             _T("2/1"),
             _T("3/1"),
@@ -383,17 +383,17 @@ void ShowCurrentJobInfo(int nInputFiles,
         }
 
         if (nCountSimd == 0)
-            szSimdInfo += _T(" ") + (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0201B) : _T("NONE"));
+            szSimdInfo += _T(" ") + (theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0201B) : _T("NONE"));
 
         CString szBuff;
         if (s.system.n_threads == 0)
         {
-            szBuff = _T(" | ") + (theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0201C) : _T("Threads: Auto"));
+            szBuff = _T(" | ") + (theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0201C) : _T("Threads: Auto"));
         }
         else
         {
             szBuff.Format(_T(" | %s %i"),
-                theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0201D) : _T("Threads:"),
+                theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0201D) : _T("Threads:"),
                 s.system.n_threads);
         }
 
@@ -504,7 +504,7 @@ int RunAftenEncoder(AftenAPI &api,
 
                 CString szBuff;
                 szBuff.Format(_T("%s %s"),
-                    theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                    theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
                     _T("00:00:00"));
 
                 pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
@@ -530,7 +530,7 @@ int RunAftenEncoder(AftenAPI &api,
     {
         CString szBuff;
         szBuff.Format(_T("%s %s"),
-            theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
 
         // stop file timer
@@ -558,7 +558,7 @@ int RunAftenEncoder(AftenAPI &api,
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
 	CString szBuff; \
 	szBuff.Format(_T("%s %s"), \
-		theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"), \
+		theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"), \
 		_T("00:00:00")); \
 	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff); \
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L; \
@@ -1074,7 +1074,7 @@ int RunAftenEncoder(AftenAPI &api,
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     CString szBuff;
     szBuff.Format(_T("%s %s"),
-        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+        theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
         _T("00:00:00"));
     pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
@@ -1128,7 +1128,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
     szBuff.Format(_T("%s %s"),
-        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+        theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01006) : _T("Total elapsed time:"),
         _T("00:00:00"));
     pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(szBuff);
     pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, NULL);
@@ -1170,25 +1170,25 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
             // update encoding windows title
             CString szTitle;
-            szTitle.Format(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
+            szTitle.Format(theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
                 nFileCounter + 1,
                 nTotalFiles);
             pWork->pWorkDlg->SetWindowText(szTitle);
 
             // update input and output file labels
             szBuff.Format(_T("%s\t%s"),
-                theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01003) : _T("From:"),
+                theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01003) : _T("From:"),
                 szInPath[0]);
             pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
 
             szBuff.Format(_T("%s\t%s"),
-                theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01004) : _T("To:"),
+                theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01004) : _T("To:"),
                 szOutPath);
             pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
             // start file timer
             szBuff.Format(_T("%s %s"),
-                theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
                 _T("00:00:00"));
             pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
             pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
@@ -1257,13 +1257,13 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
         // update encoding windows title
         CString szTitle;
-        szTitle.Format(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
+        szTitle.Format(theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
             nTotalFiles);
         pWork->pWorkDlg->SetWindowText(szTitle);
 
         // update input and output file labels
         szBuff.Format(_T("%s\t%s"),
-            theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01003) : _T("From:"),
+            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01003) : _T("From:"),
             szInPath[0]);
         pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
 
@@ -1271,13 +1271,13 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[i])->SetWindowText(_T("\t") + szInPath[i]);
 
         szBuff.Format(_T("%s\t%s"),
-            theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01004) : _T("To:"),
+            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01004) : _T("To:"),
             szOutPath);
         pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
         // start file timer
         szBuff.Format(_T("%s %s"),
-            theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;

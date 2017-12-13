@@ -6,10 +6,6 @@
 
 #include "res\resource.h"
 
-//
-// CONFIG
-//
-
 typedef struct TConfigEntry
 {
     CString szKey;
@@ -17,13 +13,6 @@ typedef struct TConfigEntry
 } ConfigEntry, *PConfigEntry;
 
 typedef CList<ConfigEntry, ConfigEntry&> ConfigList_t;
-
-bool LoadConfig(CString &szFileName, ConfigList_t &cl);
-bool SaveConfig(CString &szFileName, ConfigList_t &cl);
-
-//
-// LANG
-//
 
 typedef CMap<int, int, CString, CString&> LangMap_t;
 
@@ -37,14 +26,31 @@ typedef struct TLang
 
 typedef CList<Lang, Lang&> LangList_t;
 
-class CLangManager
+class CEncWAVtoAC3App : public CWinAppEx
 {
 public:
-    LangMap_t *m_Lang;
+    CEncWAVtoAC3App();
+    virtual ~CEncWAVtoAC3App();
+public:
+    virtual BOOL InitInstance();
+    DECLARE_MESSAGE_MAP()
+public:
+    LangMap_t * m_Lang;
     LangList_t m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
     int m_nLangId = -1;
+public:
+    bool m_bIsPortable = true;
+    CString m_szPresetsFilePath;
+    CString m_szConfigFilePath;
+    CString m_szEnginesFilePath;
+    CString m_szFilesListFilePath;
+    CString m_szLangFilePath;
+    CString m_szLogFilePath;
+public:
+    bool LoadConfig(CString &szFileName, ConfigList_t &cl);
+    bool SaveConfig(CString &szFileName, ConfigList_t &cl);
 public:
     void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
     void CleanLangList(LangList_t& m_LangLst);
@@ -58,27 +64,4 @@ public:
     CString& GetLangString(int id);
 };
 
-//
-// APP
-//
-
-class CEncWAVtoAC3App : public CWinAppEx
-{
-public:
-    CEncWAVtoAC3App();
-    virtual ~CEncWAVtoAC3App();
-public:
-    virtual BOOL InitInstance();
-    DECLARE_MESSAGE_MAP()
-public:
-    bool m_bIsPortable = true;
-    CString m_szPresetsFilePath;
-    CString m_szConfigFilePath;
-    CString m_szEnginesFilePath;
-    CString m_szFilesListFilePath;
-    CString m_szLangFilePath;
-    CString m_szLogFilePath;
-};
-
-extern CLangManager theLangManager;
 extern CEncWAVtoAC3App theApp;
