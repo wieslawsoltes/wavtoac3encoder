@@ -585,7 +585,6 @@ int RunAftenEncoder(AftenAPI &api,
     for(int i = 0; i < nInputFiles; i++) \
         szInPath[i].ReleaseBuffer(); \
     szOutPath.ReleaseBuffer(); \
-    // message); \
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     return(WORKDLG_RETURN_FAILURE);
