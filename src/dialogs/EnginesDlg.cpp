@@ -49,10 +49,10 @@ BOOL CEnginesDlg::OnInitDialog()
 
     // add columns to engines list
     this->m_LstEngines.InsertColumn(0,
-        HaveLangStrings() ? GetLangString(0x00B0100C) : _T("Name"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00B0100C) : _T("Name"),
         0, 150);
     this->m_LstEngines.InsertColumn(1,
-        HaveLangStrings() ? GetLangString(0x00B0100D) : _T("Path"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00B0100D) : _T("Path"),
         0, 440);
 
     // populate engines list
@@ -83,7 +83,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesBrowse()
         _T("dll"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        HaveLangStrings() ? GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -102,7 +102,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesImport()
         _T("engines"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -121,7 +121,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesExport()
         _T("engines"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        HaveLangStrings() ? GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -311,20 +311,20 @@ void CEnginesDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CEnginesDlg::InitLang()
 {
-    if (HaveLangStrings())
+    if (theLangManager.HaveLangStrings())
     {
-        this->SetWindowText(_T("WAV to AC3 Encoder - ") + GetLangString(0x00B01001));
+        this->SetWindowText(_T("WAV to AC3 Encoder - ") + theLangManager.GetLangString(0x00B01001));
 
-        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(GetLangString(0x00B01002));
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(GetLangString(0x00B01003));
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(GetLangString(0x00B01004));
+        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(theLangManager.GetLangString(0x00B01002));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(theLangManager.GetLangString(0x00B01003));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(theLangManager.GetLangString(0x00B01004));
 
-        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(GetLangString(0x00B01005));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(GetLangString(0x00B01006));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(GetLangString(0x00B01007));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(GetLangString(0x00B01008));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(GetLangString(0x00B01009));
-        this->GetDlgItem(IDOK)->SetWindowText(GetLangString(0x00B0100A));
-        this->GetDlgItem(IDCANCEL)->SetWindowText(GetLangString(0x00B0100B));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(theLangManager.GetLangString(0x00B01005));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(theLangManager.GetLangString(0x00B01006));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(theLangManager.GetLangString(0x00B01007));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(theLangManager.GetLangString(0x00B01008));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(theLangManager.GetLangString(0x00B01009));
+        this->GetDlgItem(IDOK)->SetWindowText(theLangManager.GetLangString(0x00B0100A));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(theLangManager.GetLangString(0x00B0100B));
     }
 }
