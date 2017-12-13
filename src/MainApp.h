@@ -6,6 +6,25 @@
 
 #include "res\resource.h"
 
+//
+// CONFIG
+//
+
+typedef struct TConfigEntry
+{
+    CString szKey;
+    CString szData;
+} ConfigEntry, *PConfigEntry;
+
+typedef CList<ConfigEntry, ConfigEntry&> ConfigList_t;
+
+bool LoadConfig(CString &szFileName, ConfigList_t &cl);
+bool SaveConfig(CString &szFileName, ConfigList_t &cl);
+
+//
+// LANG
+//
+
 typedef CMap<int, int, CString, CString&> LangMap_t;
 
 typedef struct TLang
@@ -38,6 +57,10 @@ public:
     BOOL HaveLangStrings();
     CString& GetLangString(int id);
 }
+
+//
+// APP
+//
 
 class CEncWAVtoAC3App : public CWinAppEx
 {
