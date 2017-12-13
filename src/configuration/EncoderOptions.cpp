@@ -108,7 +108,6 @@ const CString szRawSampleFormatOption = _T("-raw_fmt");
 */
 const CString szRawSampleRateOption = _T("-raw_sr");
 
-
 // option for raw audio input channels for aften
 /*
 [-raw_ch #]    Raw audio input channels (default: 2)
