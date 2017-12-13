@@ -2708,7 +2708,7 @@ void CMainDlg::InitLangMainMenu()
 void CMainDlg::InitLangMenu()
 {
     // insert languages to Language sub-menu
-    if (theApp.m_LangLst.GetCount() > 0)
+    if (theLangManager.m_LangLst.GetCount() > 0)
     {
         CMenu *m_hMenu = this->GetMenu();
         CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
@@ -2717,11 +2717,11 @@ void CMainDlg::InitLangMenu()
         //m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
         //m_hLangMenu->AppendMenu(MF_SEPARATOR);
 
-        POSITION pos = theApp.m_LangLst.GetHeadPosition();
+        POSITION pos = theLangManager.m_LangLst.GetHeadPosition();
         int i = 0;
         while (pos)
         {
-            Lang lang = theApp.m_LangLst.GetNext(pos);
+            Lang lang = theLangManager.m_LangLst.GetNext(pos);
             CString szBuff;
             szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
             m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
@@ -3686,7 +3686,7 @@ void CMainDlg::OnLanguageChangeDefault()
 
     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 
-    POSITION pos = theApp.m_LangLst.GetHeadPosition();
+    POSITION pos = theLangManager.m_LangLst.GetHeadPosition();
     int i = 0;
     while (pos)
     {
@@ -3701,10 +3701,10 @@ void CMainDlg::OnLanguageChangeDefault()
 void CMainDlg::OnLanguageChange(UINT nID)
 {
     // set language by ID
-    POSITION pos = theApp.m_LangLst.FindIndex(nID - ID_LANGUAGE_MENU_START);
+    POSITION pos = theLangManager.m_LangLst.FindIndex(nID - ID_LANGUAGE_MENU_START);
     if (pos != NULL)
     {
-        Lang lang = theApp.m_LangLst.GetAt(pos);
+        Lang lang = theLangManager.m_LangLst.GetAt(pos);
         theApp.m_nLangId = nID - ID_LANGUAGE_MENU_START;
         theApp.m_bHaveLang = TRUE;
         theApp.m_Lang = lang.lm;
@@ -3717,11 +3717,11 @@ void CMainDlg::OnLanguageChange(UINT nID)
 
     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-    pos = theApp.m_LangLst.GetHeadPosition();
+    pos = theLangManager.m_LangLst.GetHeadPosition();
     int i = 0;
     while (pos)
     {
-        Lang lang = theApp.m_LangLst.GetNext(pos);
+        Lang lang = theLangManager.m_LangLst.GetNext(pos);
         if (theApp.m_nLangId == i)
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
         else
