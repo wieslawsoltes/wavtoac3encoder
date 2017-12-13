@@ -1,26 +1,7 @@
-﻿//
-// WAV to AC3 Encoder
-// Copyright (C) 2007-2017 Wiesław Šoltés <wieslaw.soltes@gmail.com>
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-
-#pragma once
+﻿#pragma once
 
 #include "afxcmn.h"
 #include "afxwin.h"
-
 #include "configuration\ProgramConfig.h"
 #include "configuration\Language.h"
 #include "configuration\EncoderOptions.h"
@@ -32,13 +13,10 @@
 #include "controls\MyListCtrl.h"
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
-
 #include "libaften/aften.h"
-
 #ifndef DISABLE_AVISYNTH
 #include "worker\Avs2Raw.h"
 #endif
-
 #include "afxpropertygridctrl.h"
 
 // define main window status bar id
@@ -72,8 +50,6 @@ protected:
     HACCEL m_hAccelTable;
 public:
     bool bVisible;
-public:
-    CommandLineOpt cmdLineOpt;
 public:
     AftenAPI api;
     int nSortColumn;
@@ -211,7 +187,6 @@ public:
     afx_msg void OnLanguageChangeDefault();
     afx_msg void OnLanguageChange(UINT nID);
 public:
-    afx_msg void OnHelpCommandLine();
     afx_msg void OnHelpWebsite();
     afx_msg void OnHelpAbout();
 public:
