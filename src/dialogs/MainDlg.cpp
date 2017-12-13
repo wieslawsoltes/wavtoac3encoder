@@ -1,22 +1,4 @@
-﻿//
-// WAV to AC3 Encoder
-// Copyright (C) 2007-2017 Wiesław Šoltés <wieslaw.soltes@gmail.com>
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; version 2 of the License.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "MainDlg.h"
 #include "WorkDlg.h"
@@ -116,7 +98,6 @@ BEGIN_MESSAGE_MAP(CMainDlg, CMyDialogEx)
     ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CMainDlg::OnOptionsLoadConfiguration)
     ON_COMMAND(ID_LANGUAGE_DEFAULT, &CMainDlg::OnLanguageChangeDefault)
     ON_COMMAND_RANGE(ID_LANGUAGE_MENU_START, ID_LANGUAGE_MENU_MAX, &CMainDlg::OnLanguageChange)
-    ON_COMMAND(ID_HELP_COMMAND_LINE, &CMainDlg::OnHelpCommandLine)
     ON_COMMAND(ID_HELP_WEBSITE, &CMainDlg::OnHelpWebsite)
     ON_COMMAND(ID_HELP_ABOUT, &CMainDlg::OnHelpAbout)
     ON_COMMAND(ID_LIST_ADDFILES, &CMainDlg::OnListAddFiles)
@@ -2793,9 +2774,8 @@ void CMainDlg::InitLangMainMenu()
 
     // Help menu
     m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, GetLangString(0x00104001));
-    m_hMenu->ModifyMenuW(ID_HELP_COMMAND_LINE, 0, ID_HELP_COMMAND_LINE, GetLangString(0x00104002));
-    m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00104003));
-    m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00104004));
+    m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, GetLangString(0x00104002));
+    m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, GetLangString(0x00104003));
 
     // restore options checked state
     m_hMenu->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
@@ -3837,11 +3817,6 @@ void CMainDlg::OnLanguageChange(UINT nID)
     this->InitLang(false);
 }
 
-void CMainDlg::OnHelpCommandLine()
-{
-    ShowCommandLineHelp(this->GetSafeHwnd());
-}
-
 void CMainDlg::OnHelpWebsite()
 {
     // go to program website using default Internet browser
@@ -3851,7 +3826,5 @@ void CMainDlg::OnHelpWebsite()
 void CMainDlg::OnHelpAbout()
 {
     CAboutDlg dlg;
-
-    // show program about dialog box
     dlg.DoModal();
 }
