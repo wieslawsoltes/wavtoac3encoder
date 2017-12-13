@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "utilities\ListT.h"
 #include "worker\AftenAPI.h"
 
 class CChannelConfig
@@ -8,6 +9,35 @@ public:
     int acmod;
     int lfe;
     CString chconfig;
+public:
+    CChannelConfig()
+    {
+    }
+    CChannelConfig(int acmod, int lfe, CString chconfig)
+    {
+        this->acmod = acmod;
+        this->lfe = lfe;
+        this->chconfig = chconfig;
+    }
+    CChannelConfig(const CChannelConfig &other)
+    {
+        Copy(other);
+    }
+    CChannelConfig& operator=(const CChannelConfig &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~CChannelConfig()
+    {
+    }
+public:
+    void Copy(const CChannelConfig &other)
+    {
+        this->acmod = other.acmod;
+        this->lfe = other.lfe;
+        this->chconfig = other.chconfig;
+    }
 };
 
 class CEncoderOptions
@@ -16,12 +46,41 @@ public:
     CString szName;
     CString szOption;
     CString szHelpText;
-    CList<CString, CString&> listOptNames;
-    CList<int, int&> listOptValues;
+    CListT<CString> listOptNames;
+    CListT<int> listOptValues;
     int nDefaultValue;
     int nIgnoreValue;
     CString szGroupName;
     bool bBeginGroup;
+public:
+    CEncoderOptions()
+    {
+    }
+    CEncoderOptions(const CEncoderOptions &other)
+    {
+        Copy(other);
+    }
+    CEncoderOptions& operator=(const CEncoderOptions &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~CEncoderOptions()
+    {
+    }
+public:
+    void Copy(const CEncoderOptions &other)
+    {
+        this->szName = other.szName;
+        this->szOption = other.szOption;
+        this->szHelpText = other.szHelpText;
+        this->listOptNames = other.listOptNames;
+        this->listOptValues = other.listOptValues;
+        this->nDefaultValue = other.nDefaultValue;
+        this->nIgnoreValue = other.nIgnoreValue;
+        this->szGroupName = other.szGroupName;
+        this->bBeginGroup = other.bBeginGroup;
+    }
 };
 
 class CEncoderPreset
@@ -51,9 +110,49 @@ public:
     int nCurrentEngine;
     // list of encoder settings
     int nSetting[nNumEncoderOptions];
+public:
+    CEncoderPreset()
+    {
+    }
+    CEncoderPreset(const CEncoderPreset &other)
+    {
+        Copy(other);
+    }
+    CEncoderPreset& operator=(const CEncoderPreset &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~CEncoderPreset()
+    {
+    }
+public:
+    void Copy(const CEncoderPreset &other)
+    {
+        this->szName = other.szName;
+        this->nMode = other.nMode;
+        this->nBitrate = other.nBitrate;
+        this->nQuality = other.nQuality;
+        this->nRawSampleFormat = other.nRawSampleFormat;
+        this->nRawSampleRate = other.nRawSampleRate;
+        this->nRawChannels = other.nRawChannels;
+
+        for (int i = 0; i < nNumSIMDIntructions; i++)
+        {
+            this->nUsedSIMD[i] = other.nUsedSIMD[i];
+        }
+
+        this->nThreads = other.nThreads;
+        this->nCurrentEngine = other.nCurrentEngine;
+
+        for (int i = 0; i < nNumEncoderOptions; i++)
+        {
+            this->nSetting[i] = other.nSetting[i];
+        }
+    }
 };
 
-typedef CList<CEncoderPreset, CEncoderPreset&> EncoderPresetList_t;
+typedef CListT<CEncoderPreset> EncoderPresetList_t;
 
 const static int nNumMaxInputFiles = 6;
 const static int nNumValidCbrBitrates = 20;

@@ -321,8 +321,8 @@ void CMainDlg::OnBnClickedButtonEncode()
     CWorkDlg dlg;
 
     // get all files from list
-    CList<CString, CString> list;
-    CList<bool, bool> listStatus;
+    CListT<CString> list;
+    CListT<bool> listStatus;
     dlg.nTotalSize = 0;
     CString szSizeBuff;
     CString szFileBuffer;
@@ -339,10 +339,11 @@ void CMainDlg::OnBnClickedButtonEncode()
 #endif
 
         // get item file path
-        list.AddTail(szFileBuffer);
+        list.Insert(szFileBuffer);
 
         // set encoded status
-        listStatus.AddTail(false);
+        bool status = false;
+        listStatus.Insert(status);
 
         // get item file size
         szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
@@ -366,7 +367,7 @@ void CMainDlg::OnBnClickedButtonEncode()
 #endif
 
     // set preset
-    dlg.workParam.preset = this->GetCurrentPreset();
+    dlg.workParam.preset = &this->GetCurrentPreset();
 
     // set pointer to files list
     dlg.workParam.list = &list;
@@ -466,9 +467,9 @@ void CMainDlg::OnBnClickedButtonEncode()
     countTime.Stop();
 
     // remove encoded files from list
-    for (INT_PTR i = listStatus.GetSize() - 1; i >= 0; i--)
+    for (int i = listStatus.Count() - 1; i >= 0; i--)
     {
-        if (listStatus.GetAt(listStatus.FindIndex(i)) == true)
+        if (listStatus.Get(i) == true)
             this->m_LstFiles.DeleteItem(i);
     }
 
@@ -504,30 +505,26 @@ void CMainDlg::OnBnClickedButtonEncode()
 
 void CMainDlg::OnBnClickedCheckSimdMmx()
 {
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse()
 {
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse2()
 {
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
 }
 
 void CMainDlg::OnBnClickedCheckSimdSse3()
 {
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
 }
 
 void CMainDlg::OnBnClickedCheckVbr()
@@ -535,9 +532,8 @@ void CMainDlg::OnBnClickedCheckVbr()
     if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
     {
         // switch to VBR mode
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nMode = AFTEN_ENC_MODE_VBR;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nMode = AFTEN_ENC_MODE_VBR;
         this->m_SldBitrate.SetRange(0, 1023, TRUE);
         int nNewPos = GetCurrentPreset().nQuality;
         this->m_SldBitrate.SetPos(nNewPos);
@@ -545,9 +541,8 @@ void CMainDlg::OnBnClickedCheckVbr()
     else
     {
         // switch to CBR mode
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nMode = AFTEN_ENC_MODE_CBR;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nMode = AFTEN_ENC_MODE_CBR;
         this->m_SldBitrate.SetRange(0, 19, TRUE);
         int nNewPos = FindValidBitratePos(GetCurrentPreset().nBitrate);
         this->m_SldBitrate.SetPos(nNewPos);
@@ -558,17 +553,17 @@ void CMainDlg::OnBnClickedCheckVbr()
 
 void CMainDlg::OnBnClickedButtonPresetAdd()
 {
-    CEncoderPreset newPreset = GetCurrentPreset();
+    auto preset = GetCurrentPreset();
 
     static int nCount = 0;
 
-    newPreset.szName.Format(_T("%s (%d)"),
+    preset.szName.Format(_T("%s (%d)"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701B) : _T("New preset"),
         nCount++);
-    this->encPresets.AddTail(newPreset);
+    this->encPresets.Insert(preset);
 
-    this->nCurrentPreset = this->encPresets.GetCount() - 1;
-    this->m_CmbPresets.InsertString(this->nCurrentPreset, newPreset.szName);
+    this->nCurrentPreset = this->encPresets.Count() - 1;
+    this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName);
     this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
@@ -577,12 +572,12 @@ void CMainDlg::OnBnClickedButtonPresetAdd()
 void CMainDlg::OnBnClickedButtonPresetDel()
 {
     // we need at least one preset present
-    if (this->encPresets.GetCount() >= 2)
+    if (this->encPresets.Count() >= 2)
     {
         int nCount = this->m_CmbPresets.GetCount();
         int nPreset = this->m_CmbPresets.GetCurSel();
 
-        this->encPresets.RemoveAt(this->encPresets.FindIndex(nPreset));
+        this->encPresets.Remove(nPreset);
         this->m_CmbPresets.DeleteString(nPreset);
 
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
@@ -699,12 +694,11 @@ void CMainDlg::OnBnClickedButtonPresetsDefaults()
         this->nCurrentPreset = nPreset;
 
         // load default preset and set all settings
-        CEncoderPreset tmpPreset = defaultPreset;
-        tmpPreset.szName = GetCurrentPreset().szName;
-        UpdateCurrentPreset(tmpPreset);
+        auto preset = defaultPreset;
+        this->encPresets.Set(preset, nPreset);
 
         // apply current preset to main dialog
-        this->ApplyPresetToDlg(tmpPreset);
+        this->ApplyPresetToDlg(GetCurrentPreset());
     }
 }
 
@@ -743,18 +737,7 @@ void CMainDlg::OnBnClickedButtonEngines()
     dlg.nCurrSel = this->m_CmbEngines.GetCurSel();
 
     // copy engines list to engines editor dialog
-    int nSize = this->m_EngineList.GetSize();
-    POSITION pos = this->m_EngineList.GetHeadPosition();
-    for (INT_PTR i = 0; i < nSize; i++)
-    {
-        ConfigEntry ce;
-
-        // get next entry in configuration list
-        ce = this->m_EngineList.GetNext(pos);
-
-        // insert all items to new engines list
-        dlg.m_EngineList.AddTail(ce);
-    }
+    dlg.m_EngineList = this->m_EngineList;
 
     // show engines editor dialog box
     if (dlg.DoModal() == IDOK)
@@ -764,18 +747,7 @@ void CMainDlg::OnBnClickedButtonEngines()
         this->m_CmbEngines.ResetContent();
 
         // copy new engines from editor dialog to list
-        int nSize = dlg.m_EngineList.GetSize();
-        POSITION pos = dlg.m_EngineList.GetHeadPosition();
-        for (INT_PTR i = 0; i < nSize; i++)
-        {
-            ConfigEntry ce;
-
-            // get next entry in configuration list
-            ce = dlg.m_EngineList.GetNext(pos);
-
-            // insert all items to new engines list
-            this->m_EngineList.AddTail(ce);
-        }
+        this->m_EngineList = dlg.m_EngineList;
 
         // update currently loaded program engines
         this->UpdateProgramEngines();
@@ -795,12 +767,10 @@ void CMainDlg::OnCbnSelchangeComboSetting()
         // get current selection index in value combobox
         int nVal = this->m_CmbValue.GetCurSel();
 
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nSetting[nItem] = nVal;
+        auto& preset = GetCurrentPreset();
+        preset.nSetting[nItem] = nVal;
 
-        UpdateCurrentPreset(tmpPreset);
-
-        CString szName = ::encOpt[nItem].listOptNames.GetAt(::encOpt[nItem].listOptNames.FindIndex(nVal));
+        CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
 
         // set new value name in settings list
         this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -836,21 +806,20 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     }
 
     // update current engine id
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nCurrentEngine = nSel;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nCurrentEngine = nSel;
 
     // change current directory
     ::SetCurrentDirectory(GetExeFilePath());
 
     // load new aften library
-    this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
+    this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
     if (OpenAftenAPI(&this->api) == false)
     {
         CString szLogMessage =
             (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701E) : _T("Failed to load")) +
             _T(" '") +
-            m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szKey +
+            m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
             _T("' ") +
             (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701F) : _T("library")) +
             _T("!");
@@ -883,7 +852,7 @@ void CMainDlg::OnCbnSelchangeComboEngines()
         CString szLogMessage =
             (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207020) : _T("Loaded")) +
             _T(" '") +
-            m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szKey +
+            m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
             _T("' ") +
             (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701F) : _T("library")) +
             _T(", ") +
@@ -896,9 +865,8 @@ void CMainDlg::OnCbnSelchangeComboEngines()
 
 void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
 {
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
 }
 
 LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
@@ -914,9 +882,8 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
             DWORD dwEditSel = this->m_CmbPresets.GetEditSel();
 
             // update current preset name
-            CEncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.szName = *szName;
-            UpdateCurrentPreset(tmpPreset);
+            auto& preset = GetCurrentPreset();
+            preset.szName = *szName;
 
             // update preset name in combobox
             this->m_CmbPresets.DeleteString(nPreset);
@@ -936,14 +903,11 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
     // init program configuration
     if (theApp.m_Config.LoadConfig(szFileName, m_ConfigList) == true)
     {
-        int nSize = m_ConfigList.GetSize();
-        POSITION pos = m_ConfigList.GetHeadPosition();
-        for (INT_PTR i = 0; i < nSize; i++)
+        int nSize = m_ConfigList.Count();
+        for (int i = 0; i < nSize; i++)
         {
-            ConfigEntry ce;
-
             // get next entry in configuration list
-            ce = m_ConfigList.GetNext(pos);
+            ConfigEntry ce = m_ConfigList.Get(i);
 
             // key: MainWindow
             if (ce.szKey.Compare(_T("MainWindow")) == 0)
@@ -1106,61 +1070,67 @@ bool CMainDlg::SaveProgramConfig(CString szFileName)
     // prepare program configuration
     m_ConfigList.RemoveAll();
 
-    ConfigEntry ce;
-
     // key: MainWindow
-    ce.szKey = _T("MainWindow");
-    ce.szValue = this->GetWindowRectStr();
-    m_ConfigList.AddTail(ce);
+    ConfigEntry mainWindow;
+    mainWindow.szKey = _T("MainWindow");
+    mainWindow.szValue = this->GetWindowRectStr();
+    m_ConfigList.Insert(mainWindow);
 
     // key: ColumnSizeSettings
-    ce.szKey = _T("ColumnSizeSettings");
-    ce.szValue.Format(_T("%d %d"),
+    ConfigEntry columnSizeSettings;
+    columnSizeSettings.szKey = _T("ColumnSizeSettings");
+    columnSizeSettings.szValue.Format(_T("%d %d"),
         this->m_LstSettings.GetColumnWidth(0),
         this->m_LstSettings.GetColumnWidth(1));
-    m_ConfigList.AddTail(ce);
+    m_ConfigList.Insert(columnSizeSettings);
 
     // key: ColumnSizeFiles
-    ce.szKey = _T("ColumnSizeFiles");
-    ce.szValue.Format(_T("%d %d"),
+    ConfigEntry columnSizeFiles;
+    columnSizeFiles.szKey = _T("ColumnSizeFiles");
+    columnSizeFiles.szValue.Format(_T("%d %d"),
         this->m_LstFiles.GetColumnWidth(0),
         this->m_LstFiles.GetColumnWidth(1));
-    m_ConfigList.AddTail(ce);
+    m_ConfigList.Insert(columnSizeFiles);
 
     // key: OutputPath
-    ce.szKey = _T("OutputPath");
-    ce.szValue = this->szOutputPath;
-    if (ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
-        ce.szValue = _T("");
-    m_ConfigList.AddTail(ce);
+    ConfigEntry outputPath;
+    outputPath.szKey = _T("OutputPath");
+    outputPath.szValue = this->szOutputPath;
+    if (outputPath.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
+        outputPath.szValue = _T("");
+    m_ConfigList.Insert(outputPath);
 
     // key: OutputFile
-    ce.szKey = _T("OutputFile");
-    ce.szValue = this->szOutputFile;
-    if (ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
-        ce.szValue = _T("");
-    m_ConfigList.AddTail(ce);
+    ConfigEntry outputFile;
+    outputFile.szKey = _T("OutputFile");
+    outputFile.szValue = this->szOutputFile;
+    if (outputFile.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
+        outputFile.szValue = _T("");
+    m_ConfigList.Insert(outputFile);
 
     // key: SelectedPreset
-    ce.szKey = _T("SelectedPreset");
-    ce.szValue.Format(_T("%d"),
-        this->m_CmbPresets.GetCurSel());
-    m_ConfigList.AddTail(ce);
+    ConfigEntry selectedPreset;
+    selectedPreset.szKey = _T("SelectedPreset");
+    selectedPreset.szValue.Format(_T("%d"), this->m_CmbPresets.GetCurSel());
+    m_ConfigList.Insert(selectedPreset);
 
     // key: MultipleMonoInput
-    ce.szKey = _T("MultipleMonoInput");
-    ce.szValue = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
-    m_ConfigList.AddTail(ce);
+    ConfigEntry multipleMonoInput;
+    multipleMonoInput.szKey = _T("MultipleMonoInput");
+    multipleMonoInput.szValue = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
+    m_ConfigList.Insert(multipleMonoInput);
 
     // key: DisableAllWarnings
-    ce.szKey = _T("DisableAllWarnings");
-    ce.szValue = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
-    m_ConfigList.AddTail(ce);
+    ConfigEntry disableAllWarnings;
+    disableAllWarnings.szKey = _T("DisableAllWarnings");
+    disableAllWarnings.szValue = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
+    m_ConfigList.Insert(disableAllWarnings);
 
     // key: SaveConfig
-    ce.szKey = _T("SaveConfig");
-    ce.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
-    m_ConfigList.AddTail(ce);
+    ConfigEntry saveConfig;
+    saveConfig.szKey = _T("SaveConfig");
+    saveConfig.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
+    m_ConfigList.Insert(saveConfig);
 
     // save program configuration
     return theApp.m_Config.SaveConfig(szFileName, m_ConfigList);
@@ -1168,10 +1138,8 @@ bool CMainDlg::SaveProgramConfig(CString szFileName)
 
 bool CMainDlg::UpdateProgramEngines()
 {
-    int nSize = this->m_EngineList.GetSize();
-
     // if there is no engine then return error
-    if (nSize == 0)
+    if (this->m_EngineList.Count() == 0)
     {
         // add default engine to the list
         ConfigEntry ce;
@@ -1180,28 +1148,25 @@ bool CMainDlg::UpdateProgramEngines()
         ce.szValue = _T("libaften.dll");
 
         this->m_EngineList.RemoveAll();
-        this->m_EngineList.AddTail(ce);
+        this->m_EngineList.Insert(ce);
 
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nCurrentEngine = 0;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nCurrentEngine = 0;
 
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
+        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         OpenAftenAPI(&this->api);
 
         return false;
     }
 
-    POSITION pos = this->m_EngineList.GetHeadPosition();
-    for (INT_PTR i = 0; i < nSize; i++)
+    int nSize = this->m_EngineList.Count();
+    for (int i = 0; i < nSize; i++)
     {
-        ConfigEntry ce;
-
         // get next entry in configuration list
-        ce = this->m_EngineList.GetNext(pos);
+        auto& ce = this->m_EngineList.Get(i);
 
         // insert all items to engines combobox
         // ce.szKey  - name of engine   
@@ -1212,24 +1177,22 @@ bool CMainDlg::UpdateProgramEngines()
     // reset current engine if it's to big
     if (GetCurrentPreset().nCurrentEngine > nSize)
     {
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nCurrentEngine = 0;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nCurrentEngine = 0;
     }
 
     // load and select current engine
     if ((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
     {
         // load new aften library
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
+        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         if (OpenAftenAPI(&this->api) == false)
         {
             // select 'None' aften engine
             this->m_CmbEngines.SetCurSel(0);
 
-            CEncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nCurrentEngine = 0;
-            UpdateCurrentPreset(tmpPreset);
+            auto& preset = GetCurrentPreset();
+            preset.nCurrentEngine = 0;
         }
         else
         {
@@ -1260,16 +1223,15 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         ce.szValue = _T("libaften.dll");
 
         this->m_EngineList.RemoveAll();
-        this->m_EngineList.AddTail(ce);
+        this->m_EngineList.Insert(ce);
 
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nCurrentEngine = 0;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nCurrentEngine = 0;
 
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
-        this->api.szLibPath = m_EngineList.GetAt(m_EngineList.FindIndex(GetCurrentPreset().nCurrentEngine)).szValue;
+        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         OpenAftenAPI(&this->api);
     }
 
@@ -1393,21 +1355,20 @@ void CMainDlg::LoadAllConfiguration()
     if (bRet == true)
     {
         // get first preset from loaded list
-        if (encPresets.GetSize() > 0)
+        if (encPresets.Count() > 0)
         {
             // reset presets combobox
             this->m_CmbPresets.ResetContent();
 
             // add all preset names to preset combobox
-            for (int i = 0; i < encPresets.GetCount(); i++)
+            for (int i = 0; i < encPresets.Count(); i++)
             {
-                CEncoderPreset encTmp = encPresets.GetAt(encPresets.FindIndex(i));
-
-                this->m_CmbPresets.InsertString(i, encTmp.szName);
+                auto& preset = encPresets.Get(i);
+                this->m_CmbPresets.InsertString(i, preset.szName);
             }
 
             // select current preset
-            if ((this->nCurrentPreset >= encPresets.GetCount()) || (this->nCurrentPreset < 0))
+            if ((this->nCurrentPreset >= encPresets.Count()) || (this->nCurrentPreset < 0))
                 this->nCurrentPreset = 0;
 
             this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
@@ -1465,9 +1426,8 @@ void CMainDlg::UpdateBitrateText()
 
         szBuff.Format(_T("%d"), nCurPos);
 
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        tmpPreset.nQuality = nCurPos;
-        UpdateCurrentPreset(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        preset.nQuality = nCurPos;
     }
     else
     {
@@ -1484,23 +1444,17 @@ void CMainDlg::UpdateBitrateText()
             else
                 szBuff.Format(_T("%d kbps"), nValidCbrBitrates[nCurPos]);
 
-            CEncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nBitrate = nValidCbrBitrates[nCurPos];
-            UpdateCurrentPreset(tmpPreset);
+            auto& preset = GetCurrentPreset();
+            preset.nBitrate = nValidCbrBitrates[nCurPos];
         }
     }
 
     this->m_StcBitrate.SetWindowText(szBuff);
 }
 
-CEncoderPreset CMainDlg::GetCurrentPreset()
+CEncoderPreset& CMainDlg::GetCurrentPreset()
 {
-    return this->encPresets.GetAt(this->encPresets.FindIndex(this->nCurrentPreset));
-}
-
-void CMainDlg::UpdateCurrentPreset(CEncoderPreset updatePreset)
-{
-    this->encPresets.SetAt(this->encPresets.FindIndex(this->nCurrentPreset), updatePreset);
+    return this->encPresets.Get(this->nCurrentPreset);
 }
 
 void CMainDlg::AddItemToFileList(CString szPath)
@@ -1572,9 +1526,7 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         // set all values
-        this->m_LstSettings.SetItemText(i,
-            1,
-            encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(Preset.nSetting[i])));
+        this->m_LstSettings.SetItemText(i, 1, encOpt[i].listOptNames.Get(Preset.nSetting[i]));
     }
 
     // set bitrate or quality value
@@ -1710,14 +1662,15 @@ void CMainDlg::UpdateSettingsComboBox(int nItem)
     this->m_CmbValue.ResetContent();
 
     // add new items to combobox
-    POSITION posNames = encOpt[nItem].listOptNames.GetHeadPosition();
-    while (posNames != NULL)
-        this->m_CmbValue.AddString(encOpt[nItem].listOptNames.GetNext(posNames));
+    for (int i = 0; i < encOpt[nItem].listOptNames.Count(); i++)
+    {
+        this->m_CmbValue.AddString(encOpt[nItem].listOptNames.Get(i));
+    }
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
     // select default value or last selected
-    if (this->encPresets.GetSize() <= 0)
+    if (this->encPresets.Count() <= 0)
         this->m_CmbValue.SetCurSel(encOpt[nItem].nDefaultValue);
     else
         this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
@@ -1826,10 +1779,9 @@ void CMainDlg::ShowOptionPopup(bool bUseRect)
     menu->CreatePopupMenu();
 
     UINT nItemCount = ID_OPTIONS_MENU_START;
-    POSITION posNames = encOpt[nItem].listOptNames.GetHeadPosition();
-    while (posNames != NULL)
+    for (int i = 0; i < encOpt[nItem].listOptNames.Count(); i++)
     {
-        menu->AppendMenu(MF_STRING, nItemCount, encOpt[nItem].listOptNames.GetNext(posNames));
+        menu->AppendMenu(MF_STRING, nItemCount, encOpt[nItem].listOptNames.Get(i));
         nItemCount++;
     }
 
@@ -1921,9 +1873,8 @@ void CMainDlg::OnEnChangeEditRawSampleRate()
         }
     }
 
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nRawSampleRate = nPos;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nRawSampleRate = nPos;
 }
 
 void CMainDlg::OnEnChangeEditRawChannels()
@@ -1958,9 +1909,8 @@ void CMainDlg::OnEnChangeEditRawChannels()
         }
     }
 
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nRawChannels = nPos;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nRawChannels = nPos;
 }
 
 void CMainDlg::OnEnChangeEditThreads()
@@ -1995,9 +1945,8 @@ void CMainDlg::OnEnChangeEditThreads()
         }
     }
 
-    CEncoderPreset tmpPreset = GetCurrentPreset();
-    tmpPreset.nThreads = nPos;
-    UpdateCurrentPreset(tmpPreset);
+    auto& preset = GetCurrentPreset();
+    preset.nThreads = nPos;
 }
 
 void CMainDlg::OnEnChangeEditOutputPath()
@@ -2250,12 +2199,12 @@ void CMainDlg::InitSettingsList()
 
             ListView_InsertItem(listSettings, &li);
             ListView_SetItemText(listSettings, i, 1,
-                encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).GetBuffer());
+                encOpt[i].listOptNames.Get(encOpt[i].nDefaultValue).GetBuffer());
 
             this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
 
             encOpt[i].szName.ReleaseBuffer();
-            encOpt[i].listOptNames.GetAt(encOpt[i].listOptNames.FindIndex(encOpt[i].nDefaultValue)).ReleaseBuffer();
+            encOpt[i].listOptNames.Get(encOpt[i].nDefaultValue).ReleaseBuffer();
         }
     }
 
@@ -2291,7 +2240,6 @@ void CMainDlg::InitDefaultPreset()
     defaultPreset.nUsedSIMD[3] = 1;
 
     // add default preset to presets list
-    encPresets.AddTail(defaultPreset);
     this->nCurrentPreset = 0;
     this->m_CmbPresets.InsertString(0, defaultPreset.szName);
     this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
@@ -2354,6 +2302,9 @@ void CMainDlg::InitDefaultPreset()
         this->m_SldBitrate.SetPos(defaultPreset.nQuality);
         this->m_ChkVbr.SetCheck(BST_CHECKED);
     }
+
+    auto preset = defaultPreset;
+    encPresets.Insert(preset);
 }
 
 void CMainDlg::InitRawSamleFormatComboBox()
@@ -2708,7 +2659,7 @@ void CMainDlg::InitLangMainMenu()
 void CMainDlg::InitLangMenu()
 {
     // insert languages to Language sub-menu
-    if (theApp.m_Config.m_LangLst.GetCount() > 0)
+    if (theApp.m_Config.m_LangLst.Count() > 0)
     {
         CMenu *m_hMenu = this->GetMenu();
         CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
@@ -2717,11 +2668,9 @@ void CMainDlg::InitLangMenu()
         //m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
         //m_hLangMenu->AppendMenu(MF_SEPARATOR);
 
-        POSITION pos = theApp.m_Config.m_LangLst.GetHeadPosition();
-        int i = 0;
-        while (pos)
+        for (int i = 0; i < theApp.m_Config.m_LangLst.Count(); i++)
         {
-            Lang lang = theApp.m_Config.m_LangLst.GetNext(pos);
+            auto& lang = theApp.m_Config.m_LangLst.Get(i);
             CString szBuff;
             szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
             m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
@@ -2730,8 +2679,6 @@ void CMainDlg::InitLangMenu()
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
             else
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
-
-            i++;
         }
     }
     else
@@ -2832,7 +2779,7 @@ void CMainDlg::OnListMoveDown()
     POSITION pos;
     CString szPath[2] = { _T(""), _T("") };
     CString szSize[2] = { _T(""), _T("") };
-    CList<ItemToMove, ItemToMove> listSel;
+    CListT<ItemToMove> listSel;
 
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
     while (pos != NULL)
@@ -2845,7 +2792,7 @@ void CMainDlg::OnListMoveDown()
             item.nItem0 = nItem;
             item.nItem1 = nItem + 1;
 
-            listSel.AddTail(item);
+            listSel.Insert(item);
         }
         else
         {
@@ -2853,11 +2800,10 @@ void CMainDlg::OnListMoveDown()
         }
     }
 
-    pos = listSel.GetTailPosition();
-    while (pos != NULL)
+
+    for (int i = listSel.Count() - 1; i >= 0; i--)
     {
-        ItemToMove item;
-        item = listSel.GetPrev(pos);
+        auto& item = listSel.Get(i);
 
         szPath[0] = this->m_LstFiles.GetItemText(item.nItem0, 0);
         szSize[0] = this->m_LstFiles.GetItemText(item.nItem0, 1);
@@ -2880,18 +2826,22 @@ void CMainDlg::OnListMoveDown()
 
 void CMainDlg::OnListDelFiles()
 {
-    CList<int, int> list;
+    CListT<int> list;
     POSITION pos;
 
     // get all selected items
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
     while (pos != NULL)
-        list.AddTail(this->m_LstFiles.GetNextSelectedItem(pos));
+    {
+        int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
+        list.Insert(nItem);
+    }
 
     // remove all selected items
-    pos = list.GetTailPosition();
-    while (pos != NULL)
-        this->m_LstFiles.DeleteItem(list.GetPrev(pos));
+    for (int i = list.Count() - 1; i >= 0; i--)
+    {
+        this->m_LstFiles.DeleteItem(list.Get(i));
+    }
 }
 
 void CMainDlg::OnListClearList()
@@ -2995,12 +2945,10 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
                 return;
             }
 
-            CEncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nSetting[nItem] = nVal;
+            auto& preset = GetCurrentPreset();
+            preset.nSetting[nItem] = nVal;
 
-            UpdateCurrentPreset(tmpPreset);
-
-            CString szName = ::encOpt[nItem].listOptNames.GetAt(::encOpt[nItem].listOptNames.FindIndex(nVal));
+            CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
 
             // set new value name in settings list
             this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -3028,12 +2976,10 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
                 return;
             }
 
-            CEncoderPreset tmpPreset = GetCurrentPreset();
-            tmpPreset.nSetting[nItem] = nVal;
+            auto& preset = GetCurrentPreset();
+            preset.nSetting[nItem] = nVal;
 
-            UpdateCurrentPreset(tmpPreset);
-
-            CString szName = ::encOpt[nItem].listOptNames.GetAt(::encOpt[nItem].listOptNames.FindIndex(nVal));
+            CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
 
             // set new value name in settings list
             this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -3361,28 +3307,28 @@ void CMainDlg::OnFileMuxWizard()
     bool bUpdateChconfig = false;
 
     // get current preset
-    CEncoderPreset tmpPreset = GetCurrentPreset();
+    auto& preset = GetCurrentPreset();
 
     // set MUX dialog initial values
-    if (encOpt[nIndexChconfig].nIgnoreValue != tmpPreset.nSetting[nIndexChconfig])
+    if (encOpt[nIndexChconfig].nIgnoreValue != preset.nSetting[nIndexChconfig])
     {
-        dlg.nChannelConfig = ccAften[encOpt[nIndexChconfig].listOptValues.GetAt(encOpt[nIndexChconfig].listOptValues.FindIndex(tmpPreset.nSetting[nIndexChconfig]))].acmod;
-        dlg.bLFE = (ccAften[encOpt[nIndexChconfig].listOptValues.GetAt(encOpt[nIndexChconfig].listOptValues.FindIndex(tmpPreset.nSetting[nIndexChconfig]))].lfe == 1) ? true : false;
+        dlg.nChannelConfig = ccAften[encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].acmod;
+        dlg.bLFE = (ccAften[encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].lfe == 1) ? true : false;
         bUpdateChconfig = true;
     }
     else
     {
-        if (encOpt[nIndexAcmod].nIgnoreValue != tmpPreset.nSetting[nIndexAcmod])
+        if (encOpt[nIndexAcmod].nIgnoreValue != preset.nSetting[nIndexAcmod])
         {
-            dlg.nChannelConfig = tmpPreset.nSetting[nIndexAcmod];
+            dlg.nChannelConfig = preset.nSetting[nIndexAcmod];
         }
         else
         {
-            int nDefault = encOpt[nIndexAcmod].listOptValues.GetCount() - 2;
-            dlg.nChannelConfig = encOpt[nIndexAcmod].listOptValues.GetAt(encOpt[nIndexAcmod].listOptValues.FindIndex(nDefault));
+            int nDefault = encOpt[nIndexAcmod].listOptValues.Count() - 2;
+            dlg.nChannelConfig = encOpt[nIndexAcmod].listOptValues.Get(nDefault);
         }
 
-        dlg.bLFE = (tmpPreset.nSetting[nIndexLfe] == 1) ? true : false;
+        dlg.bLFE = (preset.nSetting[nIndexLfe] == 1) ? true : false;
         bUpdateChconfig = false;
     }
 
@@ -3494,18 +3440,18 @@ void CMainDlg::OnFileMuxWizard()
             };
 
             // update acmod value
-            tmpPreset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
+            preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
             // set new acmod name value in settings list
             this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                ::encOpt[nIndexAcmod].listOptNames.GetAt(::encOpt[nIndexAcmod].listOptNames.FindIndex(tmpPreset.nSetting[nIndexAcmod])));
+                ::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]));
 
             // get index of lfe and update its value
-            tmpPreset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
+            preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
             // set new acmod name value in settings list
             this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                ::encOpt[nIndexLfe].listOptNames.GetAt(::encOpt[nIndexLfe].listOptNames.FindIndex(tmpPreset.nSetting[nIndexLfe])));
+                ::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]));
 
             // set new chconfig name value in settings list
             if (bUpdateChconfig == true)
@@ -3517,19 +3463,19 @@ void CMainDlg::OnFileMuxWizard()
                 {
                     if ((ccAften[i].acmod == acmod) && (ccAften[i].lfe == lfe))
                     {
-                        tmpPreset.nSetting[nIndexChconfig] = i;
+                        preset.nSetting[nIndexChconfig] = i;
                         break;
                     }
                 }
             }
             else
             {
-                tmpPreset.nSetting[nIndexChconfig] = encOpt[nIndexChconfig].nIgnoreValue;
+                preset.nSetting[nIndexChconfig] = encOpt[nIndexChconfig].nIgnoreValue;
             }
 
             // set new chconfig name value in settings list
             this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                ::encOpt[nIndexChconfig].listOptNames.GetAt(::encOpt[nIndexChconfig].listOptNames.FindIndex(tmpPreset.nSetting[nIndexChconfig])));
+                ::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]));
 
             // enable multi mono input if not enabled already
             if (this->bMultipleMonoInput == false)
@@ -3537,9 +3483,6 @@ void CMainDlg::OnFileMuxWizard()
                 this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                 this->OnBnClickedCheckMultipleMonoInput();
             }
-
-            // update current preset
-            UpdateCurrentPreset(tmpPreset);
         }
     }
 }
@@ -3606,9 +3549,9 @@ void CMainDlg::OnFileLoadPresets()
             // populate presets list
             this->m_CmbPresets.ResetContent();
 
-            for (int i = 0; i < encPresets.GetCount(); i++)
+            for (int i = 0; i < encPresets.Count(); i++)
             {
-                this->m_CmbPresets.AddString(encPresets.GetAt(encPresets.FindIndex(i)).szName);
+                this->m_CmbPresets.AddString(encPresets.Get(i).szName);
             }
 
             SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
@@ -3686,12 +3629,9 @@ void CMainDlg::OnLanguageChangeDefault()
 
     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 
-    POSITION pos = theApp.m_Config.m_LangLst.GetHeadPosition();
-    int i = 0;
-    while (pos)
+    for (int i = 0; i < theApp.m_Config.m_LangLst.Count(); i++)
     {
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
-        i++;
     }
 
     // init language
@@ -3700,14 +3640,16 @@ void CMainDlg::OnLanguageChangeDefault()
 
 void CMainDlg::OnLanguageChange(UINT nID)
 {
+    int nLangId = nID - ID_LANGUAGE_MENU_START;
+
     // set language by ID
-    POSITION pos = theApp.m_Config.m_LangLst.FindIndex(nID - ID_LANGUAGE_MENU_START);
-    if (pos != NULL)
+    
+    if (nLangId >= 0 && nLangId < theApp.m_Config.m_LangLst.Count())
     {
-        Lang lang = theApp.m_Config.m_LangLst.GetAt(pos);
+        auto& lang = theApp.m_Config.m_LangLst.Get(nLangId);
         theApp.m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
         theApp.m_Config.m_bHaveLang = TRUE;
-        theApp.m_Config.m_Lang = lang.lm;
+        theApp.m_Config.m_Lang = &lang.lm;
         theApp.m_Config.m_szLangFileName = lang.szFileName;
     }
 
@@ -3717,17 +3659,13 @@ void CMainDlg::OnLanguageChange(UINT nID)
 
     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-    pos = theApp.m_Config.m_LangLst.GetHeadPosition();
-    int i = 0;
-    while (pos)
+    for (int i = 0; i < theApp.m_Config.m_LangLst.Count(); i++)
     {
-        Lang lang = theApp.m_Config.m_LangLst.GetNext(pos);
+        auto& lang = theApp.m_Config.m_LangLst.Get(i);
         if (theApp.m_Config.m_nLangId == i)
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
         else
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
-
-        i++;
     }
 
     // init language

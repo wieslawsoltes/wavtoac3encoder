@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "utilities\ListT.h"
+#include "utilities\MapT.h"
+
 #define ENCWAVTOAC3_VERSION _T(VER_FILE_VERSION_SHORT_STR)
 #define ENCWAVTOAC3_URL_HOME _T("https://github.com/wieslawsoltes/wavtoac3encoder/")
 
@@ -33,11 +36,33 @@ class ConfigEntry
 public:
     CString szKey;
     CString szValue;
+public:
+    ConfigEntry()
+    {
+    }
+    ConfigEntry(const ConfigEntry &other)
+    {
+        Copy(other);
+    }
+    ConfigEntry& operator=(const ConfigEntry &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~ConfigEntry()
+    {
+    }
+public:
+    void Copy(const ConfigEntry &other)
+    {
+        this->szKey = other.szKey;
+        this->szValue = other.szValue;
+    }
 };
 
-typedef CList<ConfigEntry, ConfigEntry&> ConfigList_t;
+typedef CListT<ConfigEntry> ConfigList_t;
 
-typedef CMap<int, int, CString, CString&> LangMap_t;
+typedef CMapT<int, CString> LangMap_t;
 
 class Lang
 {
@@ -45,10 +70,34 @@ public:
     CString szFileName;
     CString szEnglishName;
     CString szTargetName;
-    LangMap_t *lm;
+    LangMap_t lm;
+public:
+    Lang()
+    {
+    }
+    Lang(const Lang &other)
+    {
+        Copy(other);
+    }
+    Lang& operator=(const Lang &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~Lang()
+    {
+    }
+public:
+    void Copy(const Lang &other)
+    {
+        this->szFileName = other.szFileName;
+        this->szEnglishName = other.szEnglishName;
+        this->szTargetName = other.szTargetName;
+        this->lm = other.lm;
+    }
 };
 
-typedef CList<Lang, Lang&> LangList_t;
+typedef CListT<Lang> LangList_t;
 
 class CConfiguration
 {
@@ -56,7 +105,7 @@ public:
     CConfiguration();
     virtual ~CConfiguration();
 public:
-    LangMap_t * m_Lang;
+    LangMap_t *m_Lang;
     LangList_t m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
@@ -73,8 +122,7 @@ public:
     bool SaveConfig(CString &szFileName, ConfigList_t &cl);
 public:
     void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
-    void CleanLangList(LangList_t& m_LangLst);
-    bool LoadLang(CString &szFileName, LangMap_t *lm);
+    bool LoadLang(CString &szFileName, LangMap_t &lm);
 public:
     bool LoadLangConfig(CString &szFileName);
     bool SaveLangConfig(CString &szFileName);

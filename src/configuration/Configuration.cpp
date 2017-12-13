@@ -21,8 +21,6 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
         if (fp.FOpen(szFileName, false) == false)
             return false;
 
-        ConfigEntry ce;
-
         // clear list
         cl.RemoveAll();
 
@@ -43,9 +41,10 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
                 int nPos = szBuffer.Find('=', 0);
                 if (nPos != -1)
                 {
+                    ConfigEntry ce;
                     ce.szKey = szBuffer.Mid(0, nPos);
                     ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-                    cl.AddTail(ce);
+                    cl.Insert(ce);
                 }
 
                 szBuffer = _T("");
@@ -63,7 +62,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
 
 bool CConfiguration::SaveConfig(CString &szFileName, ConfigList_t &cl)
 {
-    int nSize = (int)cl.GetSize();
+    int nSize = cl.Count();
     try
     {
         CMyFile fp;
@@ -73,7 +72,7 @@ bool CConfiguration::SaveConfig(CString &szFileName, ConfigList_t &cl)
         for (int i = 0; i < nSize; i++)
         {
             CString szBuffer;
-            ConfigEntry ce = cl.GetAt(cl.FindIndex(i));
+            auto& ce = cl.Get(i);
 
             // format and save key/data pair
             szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szValue);
@@ -129,16 +128,14 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
                 if (szExt.CompareNoCase(_T("txt")) == 0)
                 {
                     Lang lang;
-                    LangMap_t *lm = new LangMap_t();
 
-                    if (this->LoadLang(szTempBuf, lm) == true)
+                    if (this->LoadLang(szTempBuf, lang.lm) == true)
                     {
-                        lang.lm = lm;
                         lang.szFileName = szTempBuf;
-                        lang.szEnglishName = (*lang.lm)[0x00000001];
-                        lang.szTargetName = (*lang.lm)[0x00000002];
+                        lang.szEnglishName = lang.lm.Get(0x00000001);
+                        lang.szTargetName = lang.lm.Get(0x00000002);
 
-                        m_LangLst.AddTail(lang);
+                        m_LangLst.Insert(lang);
                     }
                 }
             }
@@ -174,17 +171,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
     }
 }
 
-void CConfiguration::CleanLangList(LangList_t& m_LangLst)
-{
-    POSITION pos = m_LangLst.GetHeadPosition();
-    while (pos)
-    {
-        Lang lang = m_LangLst.GetNext(pos);
-        delete lang.lm;
-    }
-}
-
-bool CConfiguration::LoadLang(CString &szFileName, LangMap_t *lm)
+bool CConfiguration::LoadLang(CString &szFileName, LangMap_t& lm)
 {
     try
     {
@@ -193,7 +180,7 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap_t *lm)
             return false;
 
         // clear list
-        lm->RemoveAll();
+        lm.RemoveAll();
 
         TCHAR Buffer;
         const ULONGLONG nLength = fp.FSize();
@@ -224,7 +211,7 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap_t *lm)
 
                     _stscanf(szKey, _T("%x"), &key);
 
-                    (*lm)[key] = szValue;
+                    lm.Set(key, szValue);
                 }
 
                 szBuffer = _T("");
@@ -339,35 +326,28 @@ void CConfiguration::LoadLangStrings()
 
     SearchFolderForLang(szLangPath, false, m_LangLst);
 
-    if (m_LangLst.GetCount() > 0)
+    if (m_LangLst.Count() > 0)
     {
         bool haveLang = false;
-
-        POSITION pos = m_LangLst.GetHeadPosition();
-        int i = 0;
-        while (pos)
+        for (int i = 0; i < m_LangLst.Count(); i++)
         {
-            Lang lang = m_LangLst.GetNext(pos);
-
+            auto& lang = m_LangLst.Get(i);
             if (lang.szFileName.Compare(m_szLangFileName) == 0)
             {
                 m_nLangId = i;
                 m_bHaveLang = TRUE;
-                m_Lang = lang.lm;
+                m_Lang = &lang.lm;
                 haveLang = true;
                 break;
             }
-
-            i++;
         }
 
         if (haveLang == false)
         {
-            Lang lang = m_LangLst.GetHead();
-
+            auto& lang = m_LangLst.Get(0);
             m_nLangId = 0;
             m_bHaveLang = TRUE;
-            m_Lang = lang.lm;
+            m_Lang = &lang.lm;
             m_szLangFileName = lang.szFileName;
         }
     }
@@ -385,6 +365,10 @@ BOOL CConfiguration::HaveLangStrings()
 
 CString& CConfiguration::GetLangString(int id)
 {
-    // return (*m_Lang)[id];
-    return m_Lang->PLookup(id)->value;
+    CString szValue = _T("");
+    if (m_Lang != NULL)
+    {
+        m_Lang->TryGet(id, szValue);
+    }
+    return szValue;
 }

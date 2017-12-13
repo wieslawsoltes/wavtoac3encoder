@@ -26,9 +26,9 @@ class CWorkerParam
 {
 public:
     CWorkDlg *pWorkDlg;
-    CList<CString, CString> *list;
-    CList<bool, bool> *listStatus;
-    CEncoderPreset preset;
+    CListT<CString> *list;
+    CListT<bool> *listStatus;
+    CEncoderPreset *preset;
     bool bUseOutPath;
     CString szOutPath;
     bool bMultiMonoInput;

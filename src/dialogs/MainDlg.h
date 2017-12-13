@@ -30,11 +30,34 @@
 #define ID_LANGUAGE_MENU_START 2000
 #define ID_LANGUAGE_MENU_MAX 2999
 
-typedef struct TItemToMove
+class ItemToMove
 {
+public:
     int nItem0;
     int nItem1;
-} ItemToMove;
+public:
+    ItemToMove()
+    {
+    }
+    ItemToMove(const ItemToMove &other)
+    {
+        Copy(other);
+    }
+    ItemToMove& operator=(const ItemToMove &other)
+    {
+        Copy(other);
+        return *this;
+    }
+    virtual ~ItemToMove()
+    {
+    }
+public:
+    void Copy(const ItemToMove &other)
+    {
+        this->nItem0 = other.nItem0;
+        this->nItem1 = other.nItem1;
+    }
+};
 
 class CMainDlg : public CMyDialogEx
 {
@@ -140,8 +163,7 @@ public:
     void LoadAllConfiguration();
     void SaveAllConfiguration();
 public:
-    CEncoderPreset GetCurrentPreset();
-    void UpdateCurrentPreset(CEncoderPreset updatePreset);
+    CEncoderPreset& GetCurrentPreset();
 public:
     void HandleDropFiles(HDROP hDropInfo);
     void SearchFolderForFiles(CString szFile, const bool bRecurse);

@@ -57,7 +57,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
     dlg.DoModal();
 
     m_Config.SaveLangConfig(m_Config.m_szLangFilePath);
-    m_Config.CleanLangList(m_Config.m_LangLst);
 
     return FALSE;
 }

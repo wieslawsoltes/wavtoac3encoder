@@ -3,6 +3,7 @@
 #include "WorkThread.h"
 #include "dialogs\WorkDlg.h"
 #include "configuration\EncoderOptions.h"
+#include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 #include "utilities\TimeCount.h"
@@ -10,7 +11,7 @@
 #include "Avs2Raw.h"
 #endif
 
-CList<SingleWorkerData, SingleWorkerData> workList;
+CListT<SingleWorkerData> workList;
 
 CRITICAL_SECTION csQue;
 int nNextInQue;
@@ -20,29 +21,29 @@ DWORD *pdwThreadsID;
 DWORD dwWorkThreads;
 bool *pbTerminate;
 
-void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset &preset, AftenOpt &opt, CWorkerParam *pWork)
+void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
 {
     // get default settings from aften library
     api.LibAften_aften_set_defaults(&s);
 
     // set Aften quality options
-    s.params.encoding_mode = preset.nMode;
-    s.params.bitrate = preset.nBitrate;
-    s.params.quality = preset.nQuality;
+    s.params.encoding_mode = preset->nMode;
+    s.params.bitrate = preset->nBitrate;
+    s.params.quality = preset->nQuality;
 
     // set number of Aften threads
-    s.system.n_threads = preset.nThreads;
+    s.system.n_threads = preset->nThreads;
 
     // enable of disable specific SIMD instructions
-    s.system.wanted_simd_instructions.mmx = preset.nUsedSIMD[0];
-    s.system.wanted_simd_instructions.sse = preset.nUsedSIMD[1];
-    s.system.wanted_simd_instructions.sse2 = preset.nUsedSIMD[2];
-    s.system.wanted_simd_instructions.sse3 = preset.nUsedSIMD[3];
+    s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
+    s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
+    s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
+    s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
 
     // set raw audio input sample format
-    if (preset.nRawSampleFormat != 0)
+    if (preset->nRawSampleFormat != 0)
     {
-        switch (preset.nRawSampleFormat)
+        switch (preset->nRawSampleFormat)
         {
         case 1: opt.raw_fmt = PCM_SAMPLE_FMT_U8; opt.raw_order = PCM_BYTE_ORDER_LE; break; // u8
         case 2: opt.raw_fmt = PCM_SAMPLE_FMT_S8; opt.raw_order = PCM_BYTE_ORDER_LE; break; // s8
@@ -64,16 +65,16 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset &preset, Aft
     }
 
     // set raw audio input sample rate
-    if (preset.nRawSampleRate != 0)
+    if (preset->nRawSampleRate != 0)
     {
-        opt.raw_sr = preset.nRawSampleRate;
+        opt.raw_sr = preset->nRawSampleRate;
         opt.raw_input = 1;
     }
 
     // set raw audio input channels
-    if (preset.nRawChannels != 0)
+    if (preset->nRawChannels != 0)
     {
-        opt.raw_ch = preset.nRawChannels;
+        opt.raw_ch = preset->nRawChannels;
         opt.raw_input = 1;
     }
 
@@ -82,8 +83,8 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset &preset, Aft
 
     // use this macro to prepare aften settings
 #define SET_AFTEN_SETTING(set, type) \
-		if(encOpt[nSetting].nIgnoreValue != preset.nSetting[nSetting]) \
-		(set) = (type) encOpt[nSetting].listOptValues.GetAt(encOpt[nSetting].listOptValues.FindIndex(preset.nSetting[nSetting]));
+		if(encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
+		(set) = (type) encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
 
     // process all aften options for encoder context
 
@@ -134,10 +135,10 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset &preset, Aft
 
         // chconfig
         nSetting++;
-    if (encOpt[nSetting].nIgnoreValue != preset.nSetting[nSetting])
+    if (encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
     {
-        s.acmod = ccAften[encOpt[nSetting].listOptValues.GetAt(encOpt[nSetting].listOptValues.FindIndex(preset.nSetting[nSetting]))].acmod;
-        s.lfe = ccAften[encOpt[nSetting].listOptValues.GetAt(encOpt[nSetting].listOptValues.FindIndex(preset.nSetting[nSetting]))].lfe;
+        s.acmod = ccAften[encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
+        s.lfe = ccAften[encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
     }
 
     // chmap
@@ -1091,10 +1092,8 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         return(WORKDLG_RETURN_FAILURE);
     }
 
-    CList<CString, CString> *list = pWork->list;
-    CList<bool, bool> *listStatus = pWork->listStatus;
-    POSITION pos;
-    POSITION posStatus;
+    CListT<CString> *list = pWork->list;
+    CListT<bool> *listStatus = pWork->listStatus;
 
     // update progress bars
     pWork->pWorkDlg->m_PrgCurrent.SetRange(0, 100);
@@ -1113,22 +1112,21 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, NULL);
 
     int nFileCounter = 0;
-    int nTotalFiles = list->GetSize();
+    int nTotalFiles = list->Count();
 
     // get first status item from the list
-    posStatus = listStatus->GetHeadPosition();
+    int posStatus = 0;
 
     if (pWork->bMultiMonoInput == false)
     {
         // process all files in list
-        pos = list->GetHeadPosition();
-        while (pos != NULL)
+        for (int i = 0; i < list->Count(); i++)
         {
             CString szInPath[6] = { _T("-"), _T("-"), _T("-"), _T("-"), _T("-"), _T("-") };
             CString szOutPath = _T("");
 
             // get next file path
-            szInPath[0] = list->GetNext(pos);
+            szInPath[0] = list->Get(i);
 
             // prepare output file name
             szOutPath = szInPath[0];
@@ -1184,7 +1182,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             ZeroMemory(&opt, sizeof(AftenOpt));
 
             // get currently selected preset
-            CEncoderPreset preset = pWork->preset;
+            auto preset = pWork->preset;
 
             // prepare aften context for encoding process
             SetAftenOptions(api, s, preset, opt, pWork);
@@ -1192,16 +1190,18 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             // encode input .wav file to output .ac3 file
             if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, 1, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
             {
-                listStatus->SetAt(posStatus, false);
+                bool result = false;
+                listStatus->Set(result, posStatus);
                 return(WORKDLG_RETURN_FAILURE);
             }
             else
             {
-                listStatus->SetAt(posStatus, true);
+                bool result = true;
+                listStatus->Set(result, posStatus);
             }
 
             // update status list position
-            listStatus->GetNext(posStatus);
+            posStatus++;
 
             // update progress bars
             nFileCounter++;
@@ -1216,13 +1216,12 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         CString szOutPath = _T("");
 
         // process all files in list
-        nFileCounter = 0;
-        pos = list->GetHeadPosition();
-        while (pos != NULL)
+        nFileCounter = list->Count();
+
+        for (int i = 0; i < nFileCounter; i++)
         {
             // get next file path
-            szInPath[nFileCounter] = list->GetNext(pos);
-            nFileCounter++;
+            szInPath[i] = list->Get(i);
         }
 
         // prepare output file name (using first file path from the list)
@@ -1273,7 +1272,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         ZeroMemory(&opt, sizeof(AftenOpt));
 
         // get currently selected preset
-        CEncoderPreset preset = pWork->preset;
+        auto preset = pWork->preset;
 
         // prepare aften context for encoding process
         SetAftenOptions(api, s, preset, opt, pWork);
@@ -1282,10 +1281,10 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, nFileCounter, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
         {
             // update status list position
-            while (posStatus != NULL)
+            for (int i = 0; i < listStatus->Count(); i++)
             {
-                listStatus->SetAt(posStatus, false);
-                listStatus->GetNext(posStatus);
+                bool result = false;
+                listStatus->Set(result, i);
             }
 
             // update work dialog file counter
@@ -1296,10 +1295,10 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         else
         {
             // update status list position
-            while (posStatus != NULL)
+            for (int i = 0; i < listStatus->Count(); i++)
             {
-                listStatus->SetAt(posStatus, true);
-                listStatus->GetNext(posStatus);
+                bool result = true;
+                listStatus->Set(result, i);
             }
 
             // update work dialog file counter

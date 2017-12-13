@@ -136,13 +136,13 @@ void CEnginesDlg::OnBnClickedButtonEnginesExport()
 
 void CEnginesDlg::OnBnClickedButtonEnginesAdd()
 {
-    int nSize = this->m_EngineList.GetSize();
+    int nSize = this->m_EngineList.Count();
     ConfigEntry ce;
 
     this->m_EdtEngineName.GetWindowText(ce.szKey);
     this->m_EdtEnginePath.GetWindowText(ce.szValue);
 
-    this->m_EngineList.AddTail(ce);
+    this->m_EngineList.Insert(ce);
 
     this->m_LstEngines.InsertItem(nSize, ce.szKey);
     this->m_LstEngines.SetItemText(nSize, 1, ce.szValue);
@@ -150,41 +150,38 @@ void CEnginesDlg::OnBnClickedButtonEnginesAdd()
 
 void CEnginesDlg::OnBnClickedButtonEnginesRemove()
 {
-    CList<int, int> list;
+    CListT<int> list;
     POSITION pos;
 
     // get all selected items
     pos = this->m_LstEngines.GetFirstSelectedItemPosition();
     while (pos != NULL)
     {
-        list.AddTail(this->m_LstEngines.GetNextSelectedItem(pos));
+        int nItem = this->m_LstEngines.GetNextSelectedItem(pos);
+        list.Insert(nItem);
     }
 
     // remove all selected items
-    pos = list.GetTailPosition();
-    while (pos != NULL)
+    for (int i = list.Count() - 1; i >= 0; i--)
     {
-        int nIndex = list.GetPrev(pos);
+        int nIndex = list.Get(i);
         this->m_LstEngines.DeleteItem(nIndex);
-        this->m_EngineList.RemoveAt(m_EngineList.FindIndex(nIndex));
+        this->m_EngineList.Remove(nIndex);
     }
 }
 
 bool CEnginesDlg::InsertProgramEngines()
 {
-    int nSize = this->m_EngineList.GetSize();
+    int nSize = this->m_EngineList.Count();
 
     // no engine return error
     if (nSize == 0)
         return false;
 
-    POSITION pos = this->m_EngineList.GetHeadPosition();
-    for (INT_PTR i = 0; i < nSize; i++)
+    for (int i = 0; i < nSize; i++)
     {
-        ConfigEntry ce;
-
         // get next entry in configuration list
-        ce = this->m_EngineList.GetNext(pos);
+        auto& ce = this->m_EngineList.Get(i);
 
         // insert all items to engines list
         // ce.szKey  - name of engine   
@@ -230,7 +227,7 @@ void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
         {
             int nItem = m_LstEngines.GetNextSelectedItem(pos);
 
-            ConfigEntry ce = this->m_EngineList.GetAt(this->m_EngineList.FindIndex(nItem));
+            auto& ce = this->m_EngineList.Get(nItem);
 
             this->m_EdtEngineName.SetWindowText(ce.szKey);
             this->m_EdtEnginePath.SetWindowText(ce.szValue);
@@ -259,10 +256,8 @@ void CEnginesDlg::OnEnChangeEditEngineName()
         int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
         this->m_EdtEngineName.GetWindowText(szText);
 
-        POSITION posEngine = this->m_EngineList.FindIndex(nIndex);
-        ConfigEntry ce = this->m_EngineList.GetAt(posEngine);
+        auto& ce = this->m_EngineList.Get(nIndex);
         ce.szKey = szText;
-        this->m_EngineList.SetAt(posEngine, ce);
 
         bUpdateList = false;
         this->m_LstEngines.SetItemText(nIndex, 0, szText);
@@ -279,11 +274,8 @@ void CEnginesDlg::OnEnChangeEditEnginePath()
         int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
         this->m_EdtEnginePath.GetWindowText(szText);
 
-
-        POSITION posEngine = this->m_EngineList.FindIndex(nIndex);
-        ConfigEntry ce = this->m_EngineList.GetAt(posEngine);
+        auto& ce = this->m_EngineList.Get(nIndex);
         ce.szValue = szText;
-        this->m_EngineList.SetAt(posEngine, ce);
 
         bUpdateList = false;
         this->m_LstEngines.SetItemText(nIndex, 1, szText);
@@ -314,11 +306,9 @@ void CEnginesDlg::InitLang()
     if (theApp.m_Config.HaveLangStrings())
     {
         this->SetWindowText(_T("WAV to AC3 Encoder - ") + theApp.m_Config.GetLangString(0x00B01001));
-
         this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(theApp.m_Config.GetLangString(0x00B01002));
         this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(theApp.m_Config.GetLangString(0x00B01003));
         this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(theApp.m_Config.GetLangString(0x00B01004));
-
         this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(theApp.m_Config.GetLangString(0x00B01005));
         this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00B01006));
         this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00B01007));

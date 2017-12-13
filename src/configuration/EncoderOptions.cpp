@@ -176,10 +176,10 @@ void ResetEncoderOptionsLists()
 {
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
-        if (encOpt[i].listOptNames.GetCount() > 0)
+        if (encOpt[i].listOptNames.Count() > 0)
             encOpt[i].listOptNames.RemoveAll();
 
-        if (encOpt[i].listOptValues.GetCount() > 0)
+        if (encOpt[i].listOptValues.Count() > 0)
             encOpt[i].listOptValues.RemoveAll();
     }
 }
@@ -203,9 +203,9 @@ void InitEncoderOptions()
 
 #define AddEncoderOptionValue(name, value) \
         szName = name; \
-        encOpt[nCurOpt].listOptNames.AddTail(szName); \
+        encOpt[nCurOpt].listOptNames.Insert(szName); \
         nValue = value; \
-        encOpt[nCurOpt].listOptValues.AddTail(nValue);
+        encOpt[nCurOpt].listOptValues.Insert(nValue);
 
     // reset encoder options lists
     ResetEncoderOptionsLists();
@@ -1111,11 +1111,10 @@ void InitEncoderOptions()
 
 void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
 {
-    POSITION pos = clTmp.GetHeadPosition();
-    while (pos)
+    for (int i = 0; i < clTmp.Count(); i++)
     {
         CString szBuffer;
-        ConfigEntry ce = clTmp.GetNext(pos);
+        auto& ce = clTmp.Get(i);
 
         // encoder engine number
         if (ce.szKey.Compare(_T("engine")) == 0)
@@ -1228,9 +1227,8 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
         if (fp.FOpen(szFileName, false) == false)
             return false;
 
-        CEncoderPreset preset;
+        CEncoderPreset presetTmp;
         ConfigList_t clTmp;
-        ConfigEntry ceTmp;
 
         bool bHaveVersion = false;
         bool bHavePreset = false;
@@ -1241,6 +1239,8 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
 
         while (fp.FRead(Buffer) == true)
         {
+            ConfigEntry ceTmp;
+
             if ((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
 
@@ -1268,10 +1268,10 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                         if (bHavePreset == true)
                         {
                             // parse all options in clTmp list
-                            ParseEncoderPreset(preset, clTmp);
+                            ParseEncoderPreset(presetTmp, clTmp);
 
                             // add to presets list
-                            encPresets.AddTail(preset);
+                            encPresets.Insert(presetTmp);
 
                             // clear temp list
                             clTmp.RemoveAll();
@@ -1283,10 +1283,10 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                         }
 
                         // set defaults for new preset
-                        preset = defaultPreset;
+                        presetTmp = defaultPreset;
 
                         // get next preset name
-                        preset.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
+                        presetTmp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
 
                         bHavePreset = true;
                     }
@@ -1326,7 +1326,8 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                             }
 
                             // add to the list (data will be parsed later)
-                            clTmp.AddTail(ceTmp);
+                            auto ce = ceTmp;
+                            clTmp.Insert(ce);
                         }
                         else
                         {
@@ -1345,10 +1346,11 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                 if (bHavePreset == true)
                 {
                     // parse all options in clTmp list
-                    ParseEncoderPreset(preset, clTmp);
+                    ParseEncoderPreset(presetTmp, clTmp);
 
                     // add to presets list
-                    encPresets.AddTail(preset);
+                    auto preset = presetTmp;
+                    encPresets.Insert(preset);
 
                     // clear temp list
                     clTmp.RemoveAll();
@@ -1372,7 +1374,7 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
 
 bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
-    const int nSize = (const int)encPresets.GetSize();
+    const int nSize = (const int)encPresets.Count();
     try
     {
         CMyFile fp;
@@ -1381,7 +1383,6 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
 
         CString szBuffer;
         CString szTmpBuffer;
-        CEncoderPreset preset;
 
 #define WriteBufferToFile() \
             fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); \
@@ -1394,7 +1395,7 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
         // write all presets
         for (int i = 0; i < nSize; i++)
         {
-            preset = encPresets.GetAt(encPresets.FindIndex(i));
+            auto& preset = encPresets.Get(i);
 
             // save name
             szBuffer.Format(_T("[%s]\r\n"), preset.szName);
