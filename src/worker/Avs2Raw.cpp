@@ -31,7 +31,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     hAvisynthDLL = LoadLibrary(_T("avisynth"));
     if (!hAvisynthDLL)
     {
-        ::LogMessage(_T("Avisynth Error: Could not load avisynth.dll!"));
+        // _T("Avisynth Error: Could not load avisynth.dll!"))
         return false;
     }
 
@@ -40,7 +40,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
         "CreateScriptEnvironment");
     if (!CreateEnv)
     {
-        ::LogMessage(_T("Avisynth Error: Could not access CreateScriptEnvironment!"));
+        // _T("Avisynth Error: Could not access CreateScriptEnvironment!")
         return false;
     }
 
@@ -48,7 +48,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     env = CreateEnv(AVISYNTH_INTERFACE_VERSION);
     if (!env)
     {
-        ::LogMessage(_T("Avisynth Error: Could not create scriptenvironment!"));
+        // _T("Avisynth Error: Could not create scriptenvironment!")
         return false;
     }
 
@@ -80,11 +80,9 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     catch (AvisynthError e)
     {
 #ifdef _UNICODE
-        ::LogAnsiMessage(_T("Avisynth Error: Loading Avisynth script message"), e.msg);
+        // _T("Avisynth Error: Loading Avisynth script message"), e.msg
 #else
-        CString szBuff;
-        szBuff.Format(_T("Avisynth Error: Loading Avisynth script message: %s"), e.msg);
-        ::LogMessage(szBuff);
+        // _T("Avisynth Error: Loading Avisynth script message: %s"), e.msg
 #endif
         delete env;
         env = NULL;
@@ -92,7 +90,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     }
     catch (...)
     {
-        ::LogMessage(_T("Avisynth Error: Unknown error while loading Avisynth script!"));
+        // _T("Avisynth Error: Unknown error while loading Avisynth script!")
 
         delete env;
         env = NULL;
@@ -121,7 +119,7 @@ bool CAvs2Raw::OpenAvisynth(const char *szAvsFileName)
     }
     else
     {
-        ::LogMessage(_T("Avisynth Error: No audio stream!"));
+        // _T("Avisynth Error: No audio stream!")
 
         delete Video;
         delete env;
@@ -162,7 +160,7 @@ bool CAvs2Raw::CloseAvisynth()
     }
     catch (...)
     {
-        ::LogMessage(_T("Avisynth Error: Failed to close Avs2Raw!"));
+        // _T("Avisynth Error: Failed to close Avs2Raw!")
     }
 
     return true;
@@ -190,11 +188,9 @@ int CAvs2Raw::GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     catch (AvisynthError e)
     {
 #ifdef _UNICODE
-        ::LogAnsiMessage(_T("Avisynth Error: GetAudio() error message"), e.msg);
+        // _T("Avisynth Error: GetAudio() error message"), e.msg
 #else
-        CString szBuff;
-        szBuff.Format(_T("Avisynth Error: GetAudio() error message: %s"), e.msg);
-        ::LogMessage(szBuff);
+        // _T("Avisynth Error: GetAudio() error message: %s"), e.msg
 #endif
         delete Video;
         delete env;
@@ -202,7 +198,7 @@ int CAvs2Raw::GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     }
     catch (...)
     {
-        ::LogMessage(_T("Avisynth Error: Unknown error in GetAudio()!"));
+        // _T("Avisynth Error: Unknown error in GetAudio()!")
 
         delete Video;
         delete env;
