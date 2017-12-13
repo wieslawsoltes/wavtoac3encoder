@@ -8,6 +8,91 @@
 CLangManager theLangManager
 CEncWAVtoAC3App theApp;
 
+//
+// CONFIG
+//
+
+bool LoadConfig(CString &szFileName, ConfigList_t &cl)
+{
+    try
+    {
+        CMyFile fp;
+        if (fp.FOpen(szFileName, false) == false)
+            return false;
+
+        ConfigEntry ce;
+
+        // clear list
+        cl.RemoveAll();
+
+        TCHAR Buffer;
+        const ULONGLONG nLength = fp.FSize();
+        CString szBuffer = _T("");
+
+        while (fp.FRead(Buffer) == true)
+        {
+            if ((Buffer != '\r') && (Buffer != '\n'))
+                szBuffer += Buffer;
+
+            // we have full line if there is end of line mark or end of file
+            if ((Buffer == '\n') || (fp.FPos() == nLength))
+            {
+                szBuffer += _T("\0");
+
+                int nPos = szBuffer.Find('=', 0);
+                if (nPos != -1)
+                {
+                    ce.szKey = szBuffer.Mid(0, nPos);
+                    ce.szData = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                    cl.AddTail(ce);
+                }
+
+                szBuffer = _T("");
+            }
+        }
+
+        fp.FClose();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+bool SaveConfig(CString &szFileName, ConfigList_t &cl)
+{
+    int nSize = (int)cl.GetSize();
+    try
+    {
+        CMyFile fp;
+        if (fp.FOpen(szFileName, true) == false)
+            return false;
+
+        for (int i = 0; i < nSize; i++)
+        {
+            CString szBuffer;
+            ConfigEntry ce = cl.GetAt(cl.FindIndex(i));
+
+            // format and save key/data pair
+            szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szData);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
+            szBuffer.ReleaseBuffer();
+        }
+
+        fp.FClose();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+//
+// LANG
+//
+
 void CLangManager::SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
 {
     try
@@ -298,6 +383,10 @@ CString& CLangManager::GetLangString(int id)
     // return (*m_Lang)[id];
     return m_Lang->PLookup(id)->value;
 }
+
+//
+// APP
+//
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
     ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
