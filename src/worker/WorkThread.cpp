@@ -20,11 +20,7 @@ DWORD *pdwThreadsID;
 DWORD dwWorkThreads;
 bool *pbTerminate;
 
-void SetAftenOptions(AftenAPI &api,
-    AftenContext &s,
-    EncoderPreset &preset,
-    AftenOpt &opt,
-    WorkerParam *pWork)
+void SetAftenOptions(AftenAPI &api, AftenContext &s, EncoderPreset &preset, AftenOpt &opt, WorkerParam *pWork)
 {
     // get default settings from aften library
     api.LibAften_aften_set_defaults(&s);
@@ -191,18 +187,9 @@ void SetAftenOptions(AftenAPI &api,
 }
 
 #ifndef DISABLE_AVISYNTH
-void ShowCurrentJobInfo(int nInputFiles,
-    PcmContext &pf,
-    WorkerParam *pWork,
-    AftenContext &s,
-    bool bAvisynthInput,
-    AvsAudioInfo &infoAVS)
+void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, WorkerParam *pWork, AftenContext &s, bool bAvisynthInput, AvsAudioInfo &infoAVS)
 #else
-void ShowCurrentJobInfo(int nInputFiles,
-    PcmContext &pf,
-    WorkerParam *pWork,
-    AftenContext &s,
-    bool bAvisynthInput)
+void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, WorkerParam *pWork, AftenContext &s, bool bAvisynthInput)
 #endif
 {
     CString szInputInfo = _T("");
@@ -405,15 +392,7 @@ void ShowCurrentJobInfo(int nInputFiles,
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int RunAftenEncoder(AftenAPI &api,
-    AftenContext &s,
-    AftenOpt &opt,
-    WorkerParam *pWork,
-    CString szInPath[6],
-    CString szOutPath,
-    int nInputFiles = 1,
-    __int64 *nTotalSizeCounter = NULL,
-    SingleWorkerData *pworkData = NULL)
+int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, WorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = NULL, SingleWorkerData *pworkData = NULL)
 {
     // function is using modified code from aften.c (C) by Justin Ruggles
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = NULL;
