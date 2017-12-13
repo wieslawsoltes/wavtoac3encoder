@@ -1,7 +1,6 @@
 ﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "EncoderOptions.h"
-#include "ProgramConfig.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
