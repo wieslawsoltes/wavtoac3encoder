@@ -94,23 +94,6 @@ project was started on `27th January 2007` by `Wiesław Šoltés`.
 
 [![Mux Wizard](screenshots/MuxWizard.png)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/screenshots/MuxWizard.png)
 
-## Command-Line
-
-    Usage: EncWAVtoAC3 [Options]
-    Options:
-    -h, --help                      Show command-line help message.
-    -x, --encode-and-exit           Encode input files and exit.
-    -r, --read-only                 Do not save configuration on exit.
-    -i, --input-file <file.ext>     Set input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).
-    -o, --output-file <file.ext>    Set output file path (*.ac3).
-    -d, --output-path <path>        Set default output path (default: input file path is used).
-    -c, --load-config <file.ext>    Load program configuration (*.config).
-    -f, --load-files <file.ext>     Load list of files to encode (*.files, *.mux).
-    -p, --load-presets <file.ext>   Load list of preconfigured presets (*.presets).
-    -e, --load-engines <file.ext>   Load list of Aften engines (*.engines).
-    -m, --mux-wizard                Show standalone MUX Wizard window.
-    Notes: AviSynth is not supported under x64 platforms.
-
 ## Keyboard Shortcuts
 
 ### Main Menu
