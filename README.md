@@ -112,7 +112,6 @@ project was started on `27th January 2007` by `Wiesław Šoltés`.
 | Ctrl+Shift+C      | Save Configuration On Exit    |
 | F7                | Load Configuration            |
 | F8                | Save Configuration            |
-| Ctrl+F1           | Command-Line Help             |
 | Ctrl+Shift+W      | Website                       |
 | Ctrl+Shift+A      | About                         |
 
