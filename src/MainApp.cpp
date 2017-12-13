@@ -5,7 +5,7 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-CLangManager theLangManager
+CLangManager theLangManager;
 CEncWAVtoAC3App theApp;
 
 //
@@ -134,7 +134,7 @@ void CLangManager::SearchFolderForLang(CString szPath, const bool bRecurse, Lang
                     Lang lang;
                     LangMap_t *lm = new LangMap_t();
 
-                    if (::LoadLang(szTempBuf, lm) == true)
+                    if (this->LoadLang(szTempBuf, lm) == true)
                     {
                         lang.lm = lm;
                         lang.szFileName = szTempBuf;
