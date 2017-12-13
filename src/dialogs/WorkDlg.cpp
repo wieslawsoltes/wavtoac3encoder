@@ -363,7 +363,7 @@ void CWorkDlg::CreateWorker()
 
     if (this->hThread == NULL)
     {
-        ::LogMessage(_T("Error: Failed to create worker thread!"));
+        // _T("Error: Failed to create worker thread!")
 
         // show critical error message
         this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
