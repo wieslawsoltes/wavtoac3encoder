@@ -241,6 +241,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="configuration\Configuration.cpp" />
     <ClCompile Include="configuration\EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="StdAfx.cpp">
@@ -367,7 +368,7 @@
     <ClInclude Include="avisynth64\src\internal.h" />
     <ClInclude Include="avisynth\src\core\avisynth.h" />
     <ClInclude Include="avisynth\src\internal.h" />
-    <ClInclude Include="configuration\Config.h" />
+    <ClInclude Include="configuration\Configuration.h" />
     <ClInclude Include="configuration\EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="res\resource.h" />

@@ -5,7 +5,7 @@
 #endif
 
 #include "res\resource.h"
-#include "configuration\Config.h"
+#include "configuration\Configuration.h"
 
 class CEncWAVtoAC3App : public CWinAppEx
 {
@@ -16,32 +16,7 @@ public:
     virtual BOOL InitInstance();
     DECLARE_MESSAGE_MAP()
 public:
-    LangMap_t * m_Lang;
-    LangList_t m_LangLst;
-    CString m_szLangFileName = _T("");
-    BOOL m_bHaveLang = FALSE;
-    int m_nLangId = -1;
-public:
-    bool m_bIsPortable = true;
-    CString m_szPresetsFilePath;
-    CString m_szConfigFilePath;
-    CString m_szEnginesFilePath;
-    CString m_szFilesListFilePath;
-    CString m_szLangFilePath;
-public:
-    bool LoadConfig(CString &szFileName, ConfigList_t &cl);
-    bool SaveConfig(CString &szFileName, ConfigList_t &cl);
-public:
-    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
-    void CleanLangList(LangList_t& m_LangLst);
-    bool LoadLang(CString &szFileName, LangMap_t *lm);
-public:
-    bool LoadLangConfig(CString &szFileName);
-    bool SaveLangConfig(CString &szFileName);
-public:
-    void LoadLangStrings();
-    BOOL HaveLangStrings();
-    CString& GetLangString(int id);
+    CConfiguration m_Config;
 };
 
 extern CEncWAVtoAC3App theApp;

@@ -49,10 +49,10 @@ BOOL CEnginesDlg::OnInitDialog()
 
     // add columns to engines list
     this->m_LstEngines.InsertColumn(0,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00B0100C) : _T("Name"),
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100C) : _T("Name"),
         0, 150);
     this->m_LstEngines.InsertColumn(1,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00B0100D) : _T("Path"),
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100D) : _T("Path"),
         0, 440);
 
     // populate engines list
@@ -83,7 +83,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesBrowse()
         _T("dll"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100E) : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -102,7 +102,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesImport()
         _T("engines"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -121,7 +121,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesExport()
         _T("engines"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100F) : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -205,7 +205,7 @@ bool CEnginesDlg::LoadProgramEngines(CString szFileName)
     this->m_EngineList.RemoveAll();
     this->m_LstEngines.DeleteAllItems();
 
-    if (theApp.LoadConfig(szFileName, this->m_EngineList) == true)
+    if (theApp.m_Config.LoadConfig(szFileName, this->m_EngineList) == true)
     {
         return InsertProgramEngines();
     }
@@ -216,7 +216,7 @@ bool CEnginesDlg::LoadProgramEngines(CString szFileName)
 bool CEnginesDlg::SaveProgramEngines(CString szFileName)
 {
     // save engines configuration
-    return theApp.SaveConfig(szFileName, this->m_EngineList);
+    return theApp.m_Config.SaveConfig(szFileName, this->m_EngineList);
 }
 
 void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
@@ -311,20 +311,20 @@ void CEnginesDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CEnginesDlg::InitLang()
 {
-    if (theApp.HaveLangStrings())
+    if (theApp.m_Config.HaveLangStrings())
     {
-        this->SetWindowText(_T("WAV to AC3 Encoder - ") + theApp.GetLangString(0x00B01001));
+        this->SetWindowText(_T("WAV to AC3 Encoder - ") + theApp.m_Config.GetLangString(0x00B01001));
 
-        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(theApp.GetLangString(0x00B01002));
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(theApp.GetLangString(0x00B01003));
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(theApp.GetLangString(0x00B01004));
+        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(theApp.m_Config.GetLangString(0x00B01002));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(theApp.m_Config.GetLangString(0x00B01003));
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(theApp.m_Config.GetLangString(0x00B01004));
 
-        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(theApp.GetLangString(0x00B01005));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(theApp.GetLangString(0x00B01006));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(theApp.GetLangString(0x00B01007));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(theApp.GetLangString(0x00B01008));
-        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(theApp.GetLangString(0x00B01009));
-        this->GetDlgItem(IDOK)->SetWindowText(theApp.GetLangString(0x00B0100A));
-        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.GetLangString(0x00B0100B));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(theApp.m_Config.GetLangString(0x00B01005));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00B01006));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00B01007));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(theApp.m_Config.GetLangString(0x00B01008));
+        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(theApp.m_Config.GetLangString(0x00B01009));
+        this->GetDlgItem(IDOK)->SetWindowText(theApp.m_Config.GetLangString(0x00B0100A));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.m_Config.GetLangString(0x00B0100B));
     }
 }

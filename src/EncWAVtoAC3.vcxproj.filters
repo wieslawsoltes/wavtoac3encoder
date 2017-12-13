@@ -116,6 +116,9 @@
     <ClCompile Include="worker\Avs2Raw.cpp">
       <Filter>Source Files\Worker</Filter>
     </ClCompile>
+    <ClCompile Include="configuration\Configuration.cpp">
+      <Filter>Source Files\Configuration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="res\resource.h">
@@ -187,7 +190,7 @@
     <ClInclude Include="worker\Avs2Raw.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
-    <ClInclude Include="configuration\Config.h">
+    <ClInclude Include="configuration\Configuration.h">
       <Filter>Header Files\Configuration</Filter>
     </ClInclude>
   </ItemGroup>

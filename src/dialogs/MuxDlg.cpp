@@ -154,7 +154,7 @@ void CMuxDlg::InitCtrls()
     CString szTmpText;
 
     // channel config ComboBox
-    szTmpText = theApp.HaveLangStrings() ? theApp.GetLangString(0x00C01008) :
+    szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01008) :
         _T("Specify channel configuration:\n")
         _T("1+1 = (Ch1,Ch2)\n")
         _T("1/0 = (C)\n")
@@ -169,39 +169,39 @@ void CMuxDlg::InitCtrls()
 
     // +LFE CheckBox
     this->m_ChkChannelConfigLFE.SetTooltipText(
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
     // set fixed height of combobox controls
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
     // channel buttons
-    this->m_BtnChannelFL.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100A) : _T("Front Left Channel"));
-    this->m_BtnChannelFR.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100B) : _T("Front Right Channel"));
-    this->m_BtnChannelFC.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100C) : _T("Front Center Channel"));
-    this->m_BtnChannelLFE.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
-    this->m_BtnChannelSL.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100E) : _T("Surround Left Channel"));
-    this->m_BtnChannelSR.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C0100F) : _T("Surround Right Channel"));
-    this->m_BtnChannelS.SetTooltipText(theApp.HaveLangStrings() ? theApp.GetLangString(0x00C01010) : _T("Surround Channel"));
+    this->m_BtnChannelFL.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
+    this->m_BtnChannelFR.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
+    this->m_BtnChannelFC.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100C) : _T("Front Center Channel"));
+    this->m_BtnChannelLFE.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
+    this->m_BtnChannelSL.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100E) : _T("Surround Left Channel"));
+    this->m_BtnChannelSR.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100F) : _T("Surround Right Channel"));
+    this->m_BtnChannelS.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01010) : _T("Surround Channel"));
 
     this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
 }
 
 void CMuxDlg::InitLang()
 {
-    if (theApp.HaveLangStrings())
+    if (theApp.m_Config.HaveLangStrings())
     {
-        this->SetWindowText(_T("WAV to AC3 Encoder - ") + theApp.GetLangString(0x00C01001));
-        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(theApp.GetLangString(0x00C01002));
-        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(theApp.GetLangString(0x00C01003));
-        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(theApp.GetLangString(0x00C01004));
-        this->GetDlgItem(IDOK)->SetWindowText(theApp.GetLangString(0x00C01005));
-        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.GetLangString(0x00C01006));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(theApp.GetLangString(0x00C01007));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(theApp.GetLangString(0x00C01007));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(theApp.GetLangString(0x00C01007));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(theApp.GetLangString(0x00C01007));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(theApp.GetLangString(0x00C01007));
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(theApp.GetLangString(0x00C01007));
+        this->SetWindowText(_T("WAV to AC3 Encoder - ") + theApp.m_Config.GetLangString(0x00C01001));
+        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(theApp.m_Config.GetLangString(0x00C01002));
+        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00C01003));
+        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(theApp.m_Config.GetLangString(0x00C01004));
+        this->GetDlgItem(IDOK)->SetWindowText(theApp.m_Config.GetLangString(0x00C01005));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.m_Config.GetLangString(0x00C01006));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(theApp.m_Config.GetLangString(0x00C01007));
     }
 }
 
@@ -698,7 +698,7 @@ void CMuxDlg::OnBnClickedButtonExport()
         _T("files"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00C01011) :
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01011) :
         _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 
@@ -722,7 +722,7 @@ void CMuxDlg::OnBnClickedButtonImport()
         _T("files"),
         _T(""),
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        theApp.HaveLangStrings() ? theApp.GetLangString(0x00C01011) :
+        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01011) :
         _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
         this);
 

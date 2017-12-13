@@ -279,20 +279,20 @@ void CWorkDlg::UpdateTotalTimer()
     if (m_ElapsedTimeTotal <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             (unsigned long)m_ElapsedTimeTotal); // ss
     }
     else if (m_ElapsedTimeTotal <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             ((unsigned long)m_ElapsedTimeTotal / 60), // mm
             ((unsigned long)m_ElapsedTimeTotal % 60)); // ss
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             ((unsigned long)m_ElapsedTimeTotal / 60) / 60, // hh
             ((unsigned long)m_ElapsedTimeTotal / 60) % 60, // mm
             ((((unsigned long)m_ElapsedTimeTotal / 60) % 60) * 60) % 60); // ss
@@ -316,20 +316,20 @@ void CWorkDlg::UpdateFileTimer()
     if (m_ElapsedTimeFile <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             (unsigned long)m_ElapsedTimeFile); // ss
     }
     else if (m_ElapsedTimeFile <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             ((unsigned long)m_ElapsedTimeFile / 60), // mm
             ((unsigned long)m_ElapsedTimeFile % 60)); // ss
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-            theApp.HaveLangStrings() ? (LPCTSTR)theApp.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             ((unsigned long)m_ElapsedTimeFile / 60) / 60, // hh
             ((unsigned long)m_ElapsedTimeFile / 60) % 60, // mm
             ((((unsigned long)m_ElapsedTimeFile / 60) % 60) * 60) % 60); // ss
@@ -366,20 +366,20 @@ void CWorkDlg::CreateWorker()
         // _T("Error: Failed to create worker thread!")
 
         // show critical error message
-        this->MessageBox(theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
-            theApp.HaveLangStrings() ? theApp.GetLangString(0x00A0100A) : _T("Fatal Error"),
+        this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
+            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
             MB_OK | MB_ICONERROR);
     }
 }
 
 void CWorkDlg::InitLang()
 {
-    if (theApp.HaveLangStrings())
+    if (theApp.m_Config.HaveLangStrings())
     {
-        this->SetWindowText(theApp.GetLangString(0x00A01001));
-        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.GetLangString(0x00A01002));
-        this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->SetWindowText(theApp.GetLangString(0x00A01007));
-        this->GetDlgItem(IDC_STATIC_READS_LABEL)->SetWindowText(theApp.GetLangString(0x00A01008));
-        this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->SetWindowText(theApp.GetLangString(0x00A01009));
+        this->SetWindowText(theApp.m_Config.GetLangString(0x00A01001));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01002));
+        this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01007));
+        this->GetDlgItem(IDC_STATIC_READS_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01008));
+        this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01009));
     }
 }
