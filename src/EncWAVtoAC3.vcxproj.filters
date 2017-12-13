@@ -13,31 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
-    <Filter Include="Header Files\Aften">
-      <UniqueIdentifier>{5306D685-0357-4421-8171-1B3938A8E39A}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Avisynth">
-      <UniqueIdentifier>{e8d2e766-cc00-4acb-a0bd-8c95b0f482f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Aften">
-      <UniqueIdentifier>{163E7C10-BAFC-49f5-9D0D-B6B408E4843F}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files\Dialogs">
       <UniqueIdentifier>{247886b1-c93b-44f3-b425-a72daed3925a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Dialogs">
       <UniqueIdentifier>{86d7ea29-032d-4be0-8906-2eb61c061c35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Aften\Pcm">
-      <UniqueIdentifier>{add96fa5-f613-4ca4-b3ab-2a8209e32912}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Aften\Pcm">
-      <UniqueIdentifier>{08dd14d6-02c3-4669-804b-71a63c9a6996}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Avisynth64">
-      <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Configuration">
       <UniqueIdentifier>{9d8ba3b1-f572-4b2a-9361-93d2d98c2eda}</UniqueIdentifier>
@@ -51,37 +31,57 @@
     <Filter Include="Source Files\Worker">
       <UniqueIdentifier>{16df7ea6-7b10-4f53-bb7a-048f7f298cd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Worker\Aften">
+      <UniqueIdentifier>{5306D685-0357-4421-8171-1B3938A8E39A}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Worker\Aften\Pcm">
+      <UniqueIdentifier>{08dd14d6-02c3-4669-804b-71a63c9a6996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker\Avisynth">
+      <UniqueIdentifier>{e8d2e766-cc00-4acb-a0bd-8c95b0f482f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Worker\Avisynth64">
+      <UniqueIdentifier>{d52b80cb-71c5-45f6-b93d-0e069fe01cd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Worker\Aften">
+      <UniqueIdentifier>{163E7C10-BAFC-49f5-9D0D-B6B408E4843F}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Worker\Aften\Pcm">
+      <UniqueIdentifier>{add96fa5-f613-4ca4-b3ab-2a8209e32912}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aften\pcm\aiff.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\wav.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\byteio.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\caff.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\convert.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\formats.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\pcm.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\pcm_io.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\pcmfile.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="aften\pcm\raw.c">
-      <Filter>Source Files\Aften\Pcm</Filter>
+      <Filter>Source Files\Worker\Aften\Pcm</Filter>
     </ClCompile>
     <ClCompile Include="dialogs\AboutDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
@@ -134,19 +134,19 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="aften\pcm\pcmfile.h">
-      <Filter>Header Files\Aften\Pcm</Filter>
+      <Filter>Header Files\Worker\Aften\Pcm</Filter>
     </ClInclude>
     <ClInclude Include="aften\pcm\byteio.h">
-      <Filter>Header Files\Aften\Pcm</Filter>
+      <Filter>Header Files\Worker\Aften\Pcm</Filter>
     </ClInclude>
     <ClInclude Include="aften\pcm\formats.h">
-      <Filter>Header Files\Aften\Pcm</Filter>
+      <Filter>Header Files\Worker\Aften\Pcm</Filter>
     </ClInclude>
     <ClInclude Include="aften\pcm\pcm.h">
-      <Filter>Header Files\Aften\Pcm</Filter>
+      <Filter>Header Files\Worker\Aften\Pcm</Filter>
     </ClInclude>
     <ClInclude Include="aften\libaften\aften.h">
-      <Filter>Header Files\Aften</Filter>
+      <Filter>Header Files\Worker\Aften</Filter>
     </ClInclude>
     <ClInclude Include="dialogs\AboutDlg.h">
       <Filter>Header Files\Dialogs</Filter>
@@ -182,16 +182,16 @@
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
     <ClInclude Include="avisynth64\src\core\avisynth.h">
-      <Filter>Header Files\Avisynth64</Filter>
+      <Filter>Header Files\Worker\Avisynth64</Filter>
     </ClInclude>
     <ClInclude Include="avisynth64\src\internal.h">
-      <Filter>Header Files\Avisynth64</Filter>
+      <Filter>Header Files\Worker\Avisynth64</Filter>
     </ClInclude>
     <ClInclude Include="avisynth\src\core\avisynth.h">
-      <Filter>Header Files\Avisynth</Filter>
+      <Filter>Header Files\Worker\Avisynth</Filter>
     </ClInclude>
     <ClInclude Include="avisynth\src\internal.h">
-      <Filter>Header Files\Avisynth</Filter>
+      <Filter>Header Files\Worker\Avisynth</Filter>
     </ClInclude>
     <ClInclude Include="worker\AftenAPI.h">
       <Filter>Header Files\Worker</Filter>
