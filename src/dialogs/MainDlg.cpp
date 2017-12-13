@@ -1386,16 +1386,8 @@ void CMainDlg::LoadAllConfiguration()
     bool bRet = false;
 
     // load presets from file
-    if (this->cmdLineOpt.bHaveLoadPresets == true)
-    {
-        bRet = ::LoadEncoderPresets(this->encPresets, this->cmdLineOpt.szLoadPresets, this->defaultPreset);
-        ::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + this->cmdLineOpt.szLoadPresets);
-    }
-    else
-    {
-        bRet = ::LoadEncoderPresets(this->encPresets, theApp.m_szPresetsFilePath, this->defaultPreset);
-        ::LogMessage((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_szPresetsFilePath);
-    }
+    bRet = ::LoadEncoderPresets(this->encPresets, theApp.m_szPresetsFilePath, this->defaultPreset);
+    // (bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_szPresetsFilePath
 
     // process presets list
     if (bRet == true)
@@ -1426,49 +1418,15 @@ void CMainDlg::LoadAllConfiguration()
     }
 
     // load program settings from file
-    if (this->cmdLineOpt.bHaveLoadConfig == true)
-    {
-        bRet = this->LoadProgramConfig(this->cmdLineOpt.szLoadConfig);
-        ::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + this->cmdLineOpt.szLoadConfig);
-    }
-    else
-    {
-        bRet = this->LoadProgramConfig(theApp.m_szConfigFilePath);
-        ::LogMessage((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_szConfigFilePath);
-    }
+    bRet = this->LoadProgramConfig(theApp.m_szConfigFilePath);
+    // (bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_szConfigFilePath
 
     // load engines settings from file
-    if (this->cmdLineOpt.bHaveLoadEngines == true)
-    {
-        bRet = this->LoadProgramEngines(this->cmdLineOpt.szLoadEngines);
-        ::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + this->cmdLineOpt.szLoadEngines);
-    }
-    else
-    {
-        bRet = this->LoadProgramEngines(theApp.m_szEnginesFilePath);
-        ::LogMessage((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_szEnginesFilePath);
-    }
+    bRet = this->LoadProgramEngines(theApp.m_szEnginesFilePath);
+    // (bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_szEnginesFilePath
 
-    // add input file to the files list
-    if (this->cmdLineOpt.bHaveInputFile == true)
-    {
-        this->OnListClearList();
-        this->AddItemToFileList(this->cmdLineOpt.szInputFile);
-    }
-    else
-    {
-        // load files list from file
-        if (this->cmdLineOpt.bHaveLoadFiles == true)
-        {
-            bRet = this->LoadFilesList(this->cmdLineOpt.szLoadFiles);
-            ::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + this->cmdLineOpt.szLoadFiles);
-        }
-        else
-        {
-            bRet = this->LoadFilesList(theApp.m_szFilesListFilePath);
-            ::LogMessage((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_szFilesListFilePath);
-        }
-    }
+    bRet = this->LoadFilesList(theApp.m_szFilesListFilePath);
+    // (bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_szFilesListFilePath
 }
 
 void CMainDlg::SaveAllConfiguration()
@@ -1477,19 +1435,19 @@ void CMainDlg::SaveAllConfiguration()
 
     // save encoder presets to a file
     bRet = ::SaveEncoderPresets(this->encPresets, theApp.m_szPresetsFilePath, this->defaultPreset);
-    ::LogMessage((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_szPresetsFilePath);
+    // (bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_szPresetsFilePath
 
     // save program configuration to a file
     bRet = this->SaveProgramConfig(theApp.m_szConfigFilePath);
-    ::LogMessage((bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + theApp.m_szConfigFilePath);
+    // (bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + theApp.m_szConfigFilePath
 
     // save engines settings to a file
     bRet = this->SaveProgramEngines(theApp.m_szEnginesFilePath);
-    ::LogMessage((bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_szEnginesFilePath);
+    // (bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_szEnginesFilePath
 
     // save files list to file
     bRet = this->SaveFilesList(theApp.m_szFilesListFilePath, DEFAULT_FILES_FORMAT);
-    ::LogMessage((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_szFilesListFilePath);
+    // (bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_szFilesListFilePath
 }
 
 void CMainDlg::UpdateBitrateText()
@@ -2562,14 +2520,6 @@ BOOL CMainDlg::OnInitDialog()
     // load all program configuration and settings
     this->LoadAllConfiguration();
 
-    // process read-only setting
-    if (this->cmdLineOpt.bHaveSaveConfig == true)
-    {
-        this->bSaveConfig = this->cmdLineOpt.bSaveConfig;
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
-            this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
-    }
-
     // set fixed height of combobox controls
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
@@ -2583,34 +2533,8 @@ BOOL CMainDlg::OnInitDialog()
     this->m_CmbPresets.GetComboBoxInfo(&cbi);
     this->m_EdtCmbPresetName.SubclassWindow(cbi.hwndItem);
 
-    // set output file path
-    if ((this->cmdLineOpt.bHaveOutputFile == true) && (this->cmdLineOpt.bHaveOutputPath == false))
-    {
-        this->szOutputFile = this->cmdLineOpt.szOutputFile;
-        this->m_EdtOutPath.SetWindowText(this->szOutputFile);
-    }
-
-    // set default output path
-    if ((this->cmdLineOpt.bHaveOutputFile == false) && (this->cmdLineOpt.bHaveOutputPath == true))
-    {
-        this->szOutputPath = this->cmdLineOpt.szOutputPath;
-        this->m_EdtOutPath.SetWindowText(this->szOutputPath);
-    }
-
-    // encode input files and close program
-    if (this->cmdLineOpt.bEncodeAndExit == true)
-    {
-        // encode input files
-        this->OnBnClickedButtonEncode();
-
-        // close main dialog window and exit
-        this->OnFileExit();
-    }
-    else
-    {
-        this->bVisible = true;
-        this->ShowWindow(SW_SHOW);
-    }
+    this->bVisible = true;
+    this->ShowWindow(SW_SHOW);
 
     return TRUE;
 }
@@ -3192,7 +3116,7 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
     if (decoderAVS.OpenAvisynth(pszInPath) == false)
 #endif
     {
-        ::LogMessage(_T("Error: Failed to initialize Avisynth!"));
+        // _T("Error: Failed to initialize Avisynth!")
 
         this->MessageBox(theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207022) : _T("Failed to initialize Avisynth"),
             theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00207010) : _T("Error"),
