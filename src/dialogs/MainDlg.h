@@ -11,11 +11,10 @@
 #include "controls\MyListCtrl.h"
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
-#include "libaften/aften.h"
+#include "libaften\aften.h"
 #ifndef DISABLE_AVISYNTH
 #include "worker\Avs2Raw.h"
 #endif
-#include "afxpropertygridctrl.h"
 
 // define main window status bar id
 #define IDC_STATUSBAR 1500
