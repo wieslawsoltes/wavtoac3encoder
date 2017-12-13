@@ -1454,7 +1454,10 @@ void CMainDlg::UpdateBitrateText()
 
 CEncoderPreset& CMainDlg::GetCurrentPreset()
 {
-    return this->encPresets.Get(this->nCurrentPreset);
+    if (this->encPresets.Count() > 0)
+        return this->encPresets.Get(this->nCurrentPreset);
+    else
+        return defaultPreset;
 }
 
 void CMainDlg::AddItemToFileList(CString szPath)
