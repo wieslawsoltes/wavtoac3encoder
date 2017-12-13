@@ -415,9 +415,6 @@ int RunAftenEncoder(AftenAPI &api,
     __int64 *nTotalSizeCounter = NULL,
     SingleWorkerData *pworkData = NULL)
 {
-    // default prefix for encoder log messages
-    const CString szLogMessage = _T("Encoder Error: ");
-
     // function is using modified code from aften.c (C) by Justin Ruggles
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = NULL;
     uint8_t *frame = NULL;
@@ -480,7 +477,7 @@ int RunAftenEncoder(AftenAPI &api,
         if (decoderAVS.OpenAvisynth(pszInPath[0]) == false)
 #endif
         {
-            ::LogMessage(szLogMessage + _T("Failed to initialize Avisynth."));
+            // _T("Failed to initialize Avisynth.")
             return(WORKDLG_RETURN_FAILURE);
         }
         else
@@ -490,7 +487,7 @@ int RunAftenEncoder(AftenAPI &api,
 
             // calculate total size of input raw data
             pWork->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-            ::LogMessage(_T("Avisynth initialized successfully."));
+            // _T("Avisynth initialized successfully.")
         }
 #endif
     }
@@ -513,7 +510,7 @@ int RunAftenEncoder(AftenAPI &api,
                 pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
                 pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
-                ::LogMessage(szLogMessage + _T("Failed to open input file:") + pszInPath[i]);
+                // _T("Failed to open input file:") + pszInPath[i]
 
                 pWork->pWorkDlg->bTerminate = true;
                 ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
@@ -547,7 +544,7 @@ int RunAftenEncoder(AftenAPI &api,
                 fclose(ifp[i]);
         }
 
-        ::LogMessage(szLogMessage + _T("Failed to create output file: ") + pszOutPath);
+        // _T("Failed to create output file: ") + pszOutPath
 
         pWork->pWorkDlg->bTerminate = true;
         ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
@@ -588,7 +585,7 @@ int RunAftenEncoder(AftenAPI &api,
     for(int i = 0; i < nInputFiles; i++) \
         szInPath[i].ReleaseBuffer(); \
     szOutPath.ReleaseBuffer(); \
-    ::LogMessage(szLogMessage + message); \
+    // message); \
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     return(WORKDLG_RETURN_FAILURE);
@@ -1016,50 +1013,8 @@ int RunAftenEncoder(AftenAPI &api,
     // get output file size
     pWork->nOutTotalSize = GetFileSizeInt64(ofp);
 
-    // log performance stats
-
-    // log input file(s) path(s)
-    CString szTmpBuff;
-    for (int i = 0; i < nInputFiles; i++)
-    {
-        szTmpBuff.Format(_T("Input[%d]=%s"), i, szInPath[i]);
-        ::LogMessage(szTmpBuff);
-    }
-
-    // log output file path
-    szTmpBuff.Format(_T("Output=%s"), szOutPath);
-    ::LogMessage(szTmpBuff);
-
     // calculate total time
     pWork->fTimeTotal = pWork->fTimeEncoding + pWork->fTimeIORead + pWork->fTimeIOWrite;
-
-    // log encoder speed
-    szTmpBuff.Format(_T("Tenc=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"),
-        pWork->fTimeEncoding,
-        ((pWork->fTimeEncoding + 1.0e-16) * 100.0f) / (pWork->fTimeTotal + 1.0e-16),
-        pWork->nInTotalSize,
-        ((double)(pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeEncoding + 1.0e-16));
-    ::LogMessage(szTmpBuff);
-
-    // log read speed
-    szTmpBuff.Format(_T("Tread=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"),
-        pWork->fTimeIORead,
-        ((pWork->fTimeIORead + 1.0e-16) * 100.0f) / (pWork->fTimeTotal + 1.0e-16),
-        pWork->nInTotalSize,
-        ((double)(pWork->nInTotalSize) / 1048576.0f) / (pWork->fTimeIORead + 1.0e-16));
-    ::LogMessage(szTmpBuff);
-
-    // log write speed
-    szTmpBuff.Format(_T("Twrite=%0.3lfs (%.0lf%%), %I64d Bytes, %0.3lf MBytes/s"),
-        pWork->fTimeIOWrite,
-        ((pWork->fTimeIOWrite + 1.0e-16) * 100.0f) / (pWork->fTimeTotal + 1.0e-16),
-        pWork->nOutTotalSize,
-        ((double)(pWork->nOutTotalSize) / 1048576.0f) / (pWork->fTimeIOWrite + 1.0e-16));
-    ::LogMessage(szTmpBuff);
-
-    // log total time
-    szTmpBuff.Format(_T("Ttotal=%0.3lfs"), pWork->fTimeTotal);
-    ::LogMessage(szTmpBuff);
 
     // clean-up used memory
     if (fwav)
@@ -1120,7 +1075,7 @@ int RunAftenEncoder(AftenAPI &api,
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     CString szBuff;
     szBuff.Format(_T("%s %s"),
-        HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
+        theLangManager.HaveLangStrings() ? theLangManager.GetLangString(0x00A01005) : _T("Elapsed time:"),
         _T("00:00:00"));
     pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
