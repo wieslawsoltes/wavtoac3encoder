@@ -543,7 +543,7 @@ void CMainDlg::OnBnClickedCheckVbr()
         // switch to CBR mode
         auto& preset = GetCurrentPreset();
         preset.nMode = AFTEN_ENC_MODE_CBR;
-        this->m_SldBitrate.SetRange(0, 19, TRUE);
+        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
         int nNewPos = FindValidBitratePos(GetCurrentPreset().nBitrate);
         this->m_SldBitrate.SetPos(nNewPos);
     }
@@ -785,10 +785,10 @@ void CMainDlg::OnCbnSelchangeComboPresets()
         this->nCurrentPreset = nPreset;
 
         // load selected preset and set all settings
-        CEncoderPreset tmpPreset = GetCurrentPreset();
+        auto& preset = GetCurrentPreset();
 
         // apply current preset to main dialog
-        this->ApplyPresetToDlg(tmpPreset);
+        this->ApplyPresetToDlg(preset);
     }
 }
 
@@ -1536,15 +1536,17 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
     if (Preset.nMode == AFTEN_ENC_MODE_CBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 19);
-        this->m_SldBitrate.SetPos(FindValidBitratePos(Preset.nBitrate));
+        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
+        int nPos = FindValidBitratePos(Preset.nBitrate);
+        this->m_SldBitrate.SetPos(nPos);
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
     else if (Preset.nMode == AFTEN_ENC_MODE_VBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 1023);
+        this->m_SldBitrate.SetRange(0, 1023, TRUE);
         this->m_SldBitrate.SetPos(Preset.nQuality);
+        this->m_SldBitrate.Invalidate();
         this->m_ChkVbr.SetCheck(BST_CHECKED);
     }
 
@@ -2294,14 +2296,14 @@ void CMainDlg::InitDefaultPreset()
     if (defaultPreset.nMode == AFTEN_ENC_MODE_CBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 19);
+        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
         this->m_SldBitrate.SetPos(FindValidBitratePos(defaultPreset.nBitrate));
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
     else if (defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, 1023);
+        this->m_SldBitrate.SetRange(0, 1023, TRUE);
         this->m_SldBitrate.SetPos(defaultPreset.nQuality);
         this->m_ChkVbr.SetCheck(BST_CHECKED);
     }
@@ -2534,8 +2536,8 @@ void CMainDlg::InitLang(bool initLangMenu)
     // restore settings list
     if (initLangMenu == false)
     {
-        CEncoderPreset tmpPreset = GetCurrentPreset();
-        this->ApplyPresetToDlg(tmpPreset);
+        auto& preset = GetCurrentPreset();
+        this->ApplyPresetToDlg(preset);
     }
 
     if (theApp.m_Config.HaveLangStrings())
