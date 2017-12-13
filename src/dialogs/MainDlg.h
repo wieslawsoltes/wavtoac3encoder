@@ -3,7 +3,6 @@
 #include "afxcmn.h"
 #include "afxwin.h"
 #include "configuration\ProgramConfig.h"
-#include "configuration\Language.h"
 #include "configuration\EncoderOptions.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
