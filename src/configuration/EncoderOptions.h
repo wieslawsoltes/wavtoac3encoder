@@ -162,7 +162,7 @@ public:
     {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
-    static constexpr CChannelConfig ccAften[nNumChannelConfigAften]
+    static CChannelConfig ccAften[nNumChannelConfigAften]
     {
         { 0, 0, _T("1+1") },
         { 1, 0, _T("1/0") },
@@ -200,7 +200,7 @@ public:
         _T("double_be")
     };
     static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
-    static constexpr CString pszGroups[nNumEncoderOptionsGroups]
+    static CString pszGroups[nNumEncoderOptionsGroups]
     {
         _T("Encoding options"),
         _T("Bitstream info metadata"),
