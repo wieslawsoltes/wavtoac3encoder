@@ -5,160 +5,17 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-// valid CBR mode bitrates
-const int nValidCbrBitrates[nNumValidCbrBitrates] =
-{
-       0,  32,  40,  48,  56,  64,  80,  96, 112, 128,
-     160, 192, 224, 256, 320, 384, 448, 512, 576, 640
-};
-
-const CChannelConfig ccAften[nNumChannelConfigAften] =
-{
-    { 0, 0, _T("1+1") },
-    { 1, 0, _T("1/0") },
-    { 2, 0, _T("2/0") },
-    { 3, 0, _T("3/0") },
-    { 4, 0, _T("2/1") },
-    { 5, 0, _T("3/1") },
-    { 6, 0, _T("2/2") },
-    { 7, 0, _T("3/2") },
-    { 0, 1, _T("1+1") },
-    { 1, 1, _T("1/0") },
-    { 2, 1, _T("2/0") },
-    { 3, 1, _T("3/0") },
-    { 4, 1, _T("2/1") },
-    { 5, 1, _T("3/1") },
-    { 6, 1, _T("2/2") },
-    { 7, 1, _T("3/2") }
-};
-
-// default values for raw audio input
-LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
-{
-    (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
-    _T("u8"),
-    _T("s8"),
-    _T("s16_le"),
-    _T("s16_be"),
-    _T("s20_le"),
-    _T("s20_be"),
-    _T("s24_le"),
-    _T("s24_be"),
-    _T("s32_le"),
-    _T("s32_be"),
-    _T("float_le"),
-    _T("float_be"),
-    _T("double_le"),
-    _T("double_be")
-};
-
-// advanced options global variable
-CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
-
-// encoder options groups
-CString pszGroups[nNumEncoderOptionsGroups] =
-{
-    _T("Encoding options"),
-    _T("Bitstream info metadata"),
-    _T("Dynamic range compression and dialog normalization"),
-    _T("Input options"),
-    _T("Input filters"),
-    _T("Alternate bit stream syntax")
-};
-
-// option for CBR encoding mode for aften
-/*
-[-b #]         CBR bitrate in kbps (default: about 96kbps per channel)
-*/
-const CString szCbrOption = _T("-b");
-
-// option for VBR encoding mode for aften
-/*
-[-q #]         VBR quality [0 - 1023] (default: 240)
-*/
-const CString szVbrOption = _T("-q");
-
-// option for number of threads for aften
-/*
-[-threads #]   Number of parallel threads to use
-                   0 = detect number of CPUs (default)
-*/
-const CString szThreadsOption = _T("-threads");
-
-// option for SIMD instructions for aften
-/*
-[-nosimd X]    Comma-separated list of SIMD instruction sets not to use
-                   Available sets are mmx, sse, sse2, sse3 and altivec.
-                   No spaces are allowed between the sets and the commas.
-*/
-const CString szSimdOption = _T("-nosimd");
-
-// option for raw audio input sample format for aften
-/*
-[-raw_fmt X]   Raw audio input sample format (default: s16_le)
-                   One of the pre-defined sample formats:
-                   u8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,
-                   s32_le, s32_be, float_le, float_be, double_le, double_be
-*/
-const CString szRawSampleFormatOption = _T("-raw_fmt");
-
-// option for raw audio input sample rate for aften
-/*
-[-raw_sr #]    Raw audio input sample rate (default: 48000)
-*/
-const CString szRawSampleRateOption = _T("-raw_sr");
-
-// option for raw audio input channels for aften
-/*
-[-raw_ch #]    Raw audio input channels (default: 2)
-*/
-const CString szRawChannelsOption = _T("-raw_ch");
-
-// supported input file extensions
-const TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
-{
-    _T("wav"),
-    _T("pcm"),
-    _T("raw"),
-    _T("bin"),
-    _T("aiff"),
-    _T("aif"),
-    _T("aifc"),
-#ifndef DISABLE_AVISYNTH
-    _T("avs")
-#endif
-};
-
-// supported input file formats
-const int nSupportedInputFormats[nNumSupportedInputExt] =
-{
-    PCM_FORMAT_WAVE,
-    PCM_FORMAT_RAW,
-    PCM_FORMAT_RAW,
-    PCM_FORMAT_RAW,
-    PCM_FORMAT_AIFF,
-    PCM_FORMAT_AIFF,
-    PCM_FORMAT_CAFF,
-};
-
-// supported output file extensions
-const TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
-{
-    _T("ac3")
-};
-
-int FindValidBitratePos(const int nBitrate)
+int CEncoderDefaults::FindValidBitratePos(const int nBitrate)
 {
     for (int i = 0; i < nNumValidCbrBitrates; i++)
     {
         if (nValidCbrBitrates[i] == nBitrate)
             return i;
     }
-
     return 0;
 }
 
-int FindOptionIndex(CString szOption)
+int CEncoderDefaults::FindOptionIndex(CString szOption)
 {
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
@@ -168,11 +25,10 @@ int FindOptionIndex(CString szOption)
             return i;
         }
     }
-
     return 0;
 }
 
-void ResetEncoderOptionsLists()
+void CEncoderDefaults::ResetEncoderOptionsLists()
 {
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
@@ -184,39 +40,30 @@ void ResetEncoderOptionsLists()
     }
 }
 
-void InitEncoderOptions()
+void CEncoderDefaults::InitEncoderOptions()
 {
-    // tooltip text is based on Aften command-line help text (aften -longhelp)
     int nCurOpt = -1;
     CString szName = _T("");
     int nValue = -1;
 
 #define SetEncoderOption(name, option, tooltip, defval, ignval, group, begin) \
-        nCurOpt++; \
-        encOpt[nCurOpt].szName = name; \
-        encOpt[nCurOpt].szOption = option; \
-        encOpt[nCurOpt].szHelpText = tooltip; \
-        encOpt[nCurOpt].nDefaultValue = defval; \
-        encOpt[nCurOpt].nIgnoreValue = ignval; \
-        encOpt[nCurOpt].szGroupName = group; \
-        encOpt[nCurOpt].bBeginGroup = begin;
+    nCurOpt++; \
+    encOpt[nCurOpt].szName = name; \
+    encOpt[nCurOpt].szOption = option; \
+    encOpt[nCurOpt].szHelpText = tooltip; \
+    encOpt[nCurOpt].nDefaultValue = defval; \
+    encOpt[nCurOpt].nIgnoreValue = ignval; \
+    encOpt[nCurOpt].szGroupName = group; \
+    encOpt[nCurOpt].bBeginGroup = begin;
 
 #define AddEncoderOptionValue(name, value) \
-        szName = name; \
-        encOpt[nCurOpt].listOptNames.Insert(szName); \
-        nValue = value; \
-        encOpt[nCurOpt].listOptValues.Insert(nValue);
+    szName = name; \
+    encOpt[nCurOpt].listOptNames.Insert(szName); \
+    nValue = value; \
+    encOpt[nCurOpt].listOptValues.Insert(nValue);
 
-    // reset encoder options lists
     ResetEncoderOptionsLists();
 
-    // (1) Encoding options
-
-    /*
-    [-fba #]       Fast bit allocation (default: 0)
-                       0 = more accurate encoding
-                       1 = faster encoding
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00301001) : _T("Fast bit allocation"),
         _T("-fba"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00301002) :
@@ -234,10 +81,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00301003) : _T("More accurate encoding (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00301004) : _T("Faster encoding"), 1);
 
-    /*
-    [-exps #]      Exponent strategy search size (default: 8)
-                       1 to 32 (lower is faster, higher is better quality)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00302001) : _T("Exponent strategy search size"),
         _T("-exps"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00302002) :
@@ -272,11 +115,6 @@ void InitEncoderOptions()
 
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00302005) : _T("32 (higher quality but slower)"), 32);
 
-    /*
-    [-pad #]       Start-of-stream padding
-                       0 = no padding
-                       1 = 256 samples of padding (default)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00303001) : _T("Start-of-stream padding"),
         _T("-pad"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00303002) :
@@ -294,12 +132,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00303003) : _T("No padding"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00303004) : _T("256 samples of padding (default)"), 1);
 
-    /*
-    [-w #]         Bandwidth
-                       0 to 60 = fixed bandwidth (28%-99% of full bandwidth)
-                      -1 = fixed adaptive bandwidth (default)
-                      -2 = variable adaptive bandwidth
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00304001) : _T("Bandwidth"),
         _T("-w"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00304002) :
@@ -335,9 +167,6 @@ void InitEncoderOptions()
 
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00304006) : _T("60 (99% of full bandwidth)"), 60);
 
-    /*
-    [-wmin #]      Minimum bandwidth [0 - 60] (default: 0)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00305001) : _T("Minimum bandwidth"),
         _T("-wmin"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00305002) :
@@ -361,9 +190,6 @@ void InitEncoderOptions()
 
     AddEncoderOptionValue(_T("60"), 60);
 
-    /*
-    [-wmax #]      Maximum bandwidth [0 - 60] (default: 60)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00306001) : _T("Maximum bandwidth"),
         _T("-wmax"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00306002) :
@@ -387,11 +213,6 @@ void InitEncoderOptions()
 
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00306003) : _T("60 (default)"), 60);
 
-    /*
-    [-m #]         Stereo rematrixing
-                       0 = independent L+R channels
-                       1 = mid/side rematrixing (default)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00307001) : _T("Stereo rematrixing"),
         _T("-m"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00307002) :
@@ -412,11 +233,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00307003) : _T("Independent L+R channels"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00307004) : _T("Mid/side rematrixing (default)"), 1);
 
-    /*
-    [-s #]         Block switching
-                       0 = use only 512-point MDCT (default)
-                       1 = selectively use 256-point MDCT
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00308001) : _T("Block switching"),
         _T("-s"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00308002) :
@@ -439,14 +255,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00308003) : _T("Use only 512-point MDCT (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00308004) : _T("Selectively use 256-point MDCT"), 1);
 
-    // (2) Bitstream info metadata
-
-    /*
-    [-cmix #]      Center mix level
-                       0 = -3.0 dB (default)
-                       1 = -4.5 dB
-                       2 = -6.0 dB
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00401001) : _T("Center mix level"),
         _T("-cmix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00401002) :
@@ -465,12 +273,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-4.5 dB"), 1);
     AddEncoderOptionValue(_T("-6.0 dB"), 2);
 
-    /*
-    [-smix #]      Surround mix level
-                       0 = -3 dB (default)
-                       1 = -6 dB
-                       2 = 0
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00402001) : _T("Surround mix level"),
         _T("-smix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00402002) :
@@ -488,12 +290,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-6 dB"), 1);
     AddEncoderOptionValue(_T("0"), 2);
 
-    /*
-    [-dsur #]      Dolby Surround mode
-                       0 = not indicated (default)
-                       1 = not Dolby surround encoded
-                       2 = Dolby surround encoded
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00403001) : _T("Dolby Surround mode"),
         _T("-dsur"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00403002) :
@@ -514,11 +310,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00403004) : _T("Not Dolby surround encoded"), 1);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00403005) : _T("Dolby surround encoded"), 2);
 
-    // (3) Dynamic range compression and dialog normalization
-
-    /*
-    [-dnorm #]     Dialog normalization [0 - 31] (default: 31)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00501001) : _T("Dialog normalization"),
         _T("-dnorm"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00501002) :
@@ -544,15 +335,6 @@ void InitEncoderOptions()
 
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00501003) : _T("31 (default)"), 31);
 
-    /*
-    [-dynrng #]    Dynamic Range Compression profile
-                       0 = Film Light
-                       1 = Film Standard
-                       2 = Music Light
-                       3 = Music Standard
-                       4 = Speech
-                       5 = None (default)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00502001) : _T("Dynamic Range Compression profile"),
         _T("-dynrng"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00502002) :
@@ -582,19 +364,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00502007) : _T("Speech"), 4);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00502008) : _T("None (default)"), 5);
 
-    // (4) Input options
-
-    /*
-    [-acmod #]     Audio coding mode (overrides wav header)
-                       0 = 1+1 (Ch1,Ch2)
-                       1 = 1/0 (C)
-                       2 = 2/0 (L,R)
-                       3 = 3/0 (L,R,C)
-                       4 = 2/1 (L,R,S)
-                       5 = 3/1 (L,R,C,S)
-                       6 = 2/2 (L,R,SL,SR)
-                       7 = 3/2 (L,R,C,SL,SR)
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00601001) : _T("Audio coding mode (overrides wav header)"),
         _T("-acmod"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00601002) :
@@ -624,11 +393,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("3/2 (L,R,C,SL,SR)"), 7);
     AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
 
-    /*
-    [-lfe #]       Specify use of LFE channel (overrides wav header)
-                       0 = LFE channel is not present
-                       1 = LFE channel is present
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00602001) : _T("Specify use of LFE channel (overrides wav header)"),
         _T("-lfe"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00602002) :
@@ -646,18 +410,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00602004) : _T("LFE channel is present"), 1);
     AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
 
-    /*
-    [-chconfig X]  Specify channel configuration (overrides wav header)
-                       1+1 = (Ch1,Ch2)
-                       1/0 = (C)
-                       2/0 = (L,R)
-                       3/0 = (L,R,C)
-                       2/1 = (L,R,S)
-                       3/1 = (L,R,C,S)
-                       2/2 = (L,R,SL,SR)
-                       3/2 = (L,R,C,SL,SR)
-                       adding "+LFE" indicates use of the LFE channel
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00603001) : _T("Specify channel configuration (overrides wav header)"),
         _T("-chconfig"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00603002) :
@@ -696,12 +448,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("3/2+LFE = (L,R,C,SL,SR) + LFE"), 15);
     AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
 
-    /*
-    [-chmap #]     Channel mapping order of input audio
-                       0 = WAVE mapping (default)
-                       1 = AC-3 mapping
-                       2 = MPEG mapping
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00604001) : _T("Channel mapping order of input audio"),
         _T("-chmap"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00604002) :
@@ -723,11 +469,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00604004) : _T("AC-3 mapping"), 1);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00604005) : _T("MPEG mapping"), 2);
 
-    /*
-    [-readtoeof #] Read input WAVE audio data until the end-of-file
-                       0 = use data size in header (default)
-                       1 = read data until end-of-file
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00605001) : _T("Read input WAVE audio data until the end-of-file"),
         _T("-readtoeof"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00605002) :
@@ -744,13 +485,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00605003) : _T("Use data size in header (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00605004) : _T("Read data until end-of-file"), 1);
 
-    // (5) Input filters
-
-    /*
-    [-bwfilter #]  Specify use of the bandwidth low-pass filter
-                       0 = do not apply filter (default)
-                       1 = apply filter
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00701001) : _T("Specify use of the bandwidth low-pass filter"),
         _T("-bwfilter"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00701002) :
@@ -768,11 +502,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00701003) : _T("Do not apply filter (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00701004) : _T("Apply filter"), 1);
 
-    /*
-    [-dcfilter #]  Specify use of the DC high-pass filter
-                       0 = do not apply filter (default)
-                       1 = apply filter
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00702001) : _T("Specify use of the DC high-pass filter"),
         _T("-dcfilter"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00702002) :
@@ -789,11 +518,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00702003) : _T("Do not apply filter (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00702004) : _T("Apply filter"), 1);
 
-    /*
-    [-lfefilter #] Specify use of the LFE low-pass filter
-                       0 = do not apply filter (default)
-                       1 = apply filter
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00703001) : _T("Specify use of the LFE low-pass filter"),
         _T("-lfefilter"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00703002) :
@@ -812,13 +536,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00703003) : _T("Do not apply filter (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00703004) : _T("Apply filter"), 1);
 
-    // (6) Alternate bit stream syntax
-
-    /*
-    [-xbsi1 #]     Specify use of extended bitstream info 1
-                       0 = do not write xbsi1
-                       1 = write xbsi1
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00801001) : _T("Specify use of extended bitstream info 1"),
         _T("-xbsi1"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00801002) :
@@ -837,12 +554,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00801004) : _T("Write xbsi1"), 1);
     AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
 
-    /*
-    [-dmixmod #]   Preferred stereo downmix mode
-                       0 = not indicated (default)
-                       1 = Lt/Rt downmix preferred
-                       2 = Lo/Ro downmix preferred
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00802001) : _T("Preferred stereo downmix mode"),
         _T("-dmixmod"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00802002) :
@@ -861,17 +572,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00802004) : _T("Lt/Rt downmix preferred"), 1);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00802005) : _T("Lo/Ro downmix preferred"), 2);
 
-    /*
-    [-ltrtcmix #]  Lt/Rt center mix level
-                       0 = +3.0 dB
-                       1 = +1.5 dB
-                       2 =  0.0 dB
-                       3 = -1.5 dB
-                       4 = -3.0 dB (default)
-                       5 = -4.5 dB
-                       6 = -6.0 dB
-                       7 = -inf dB
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00803001) : _T("Lt/Rt center mix level"),
         _T("-ltrtcmix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00803002) :
@@ -900,17 +600,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-6.0 dB"), 6);
     AddEncoderOptionValue(_T("-inf dB"), 7);
 
-    /*
-    [-ltrtsmix #]  Lt/Rt surround mix level
-                       0 = +3.0 dB
-                       1 = +1.5 dB
-                       2 =  0.0 dB
-                       3 = -1.5 dB
-                       4 = -3.0 dB (default)
-                       5 = -4.5 dB
-                       6 = -6.0 dB
-                       7 = -inf dB
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00804001) : _T("Lt/Rt surround mix level"),
         _T("-ltrtsmix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00804002) :
@@ -939,17 +628,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-6.0 dB"), 6);
     AddEncoderOptionValue(_T("-inf dB"), 7);
 
-    /*
-    [-lorocmix #]  Lo/Ro center mix level
-                       0 = +3.0 dB
-                       1 = +1.5 dB
-                       2 =  0.0 dB
-                       3 = -1.5 dB
-                       4 = -3.0 dB (default)
-                       5 = -4.5 dB
-                       6 = -6.0 dB
-                       7 = -inf dB
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00805001) : _T("Lo/Ro center mix level"),
         _T("-lorocmix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00805002) :
@@ -978,17 +656,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-6.0 dB"), 6);
     AddEncoderOptionValue(_T("-inf dB"), 7);
 
-    /*
-    [-lorosmix #]  Lo/Ro surround mix level
-                       0 = +3.0 dB
-                       1 = +1.5 dB
-                       2 =  0.0 dB
-                       3 = -1.5 dB
-                       4 = -3.0 dB (default)
-                       5 = -4.5 dB
-                       6 = -6.0 dB
-                       7 = -inf dB
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00806001) : _T("Lo/Ro surround mix level"),
         _T("-lorosmix"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00806002) :
@@ -1017,11 +684,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(_T("-6.0 dB"), 6);
     AddEncoderOptionValue(_T("-inf dB"), 7);
 
-    /*
-    [-xbsi2 #]     Specify use of extended bitstream info 2
-                       0 = do not write xbsi2
-                       1 = write xbsi2
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00807001) : _T("Specify use of extended bitstream info 2"),
         _T("-xbsi2"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00807002) :
@@ -1042,12 +704,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00807004) : _T("Write xbsi2"), 1);
     AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
 
-    /*
-    [-dsurexmod #] Dolby Surround EX mode
-                       0 = not indicated (default)
-                       1 = Not Dolby Surround EX encoded
-                       2 = Dolby Surround EX encoded
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00808001) : _T("Dolby Surround EX mode"),
         _T("-dsurexmod"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00808002) :
@@ -1065,12 +721,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00808004) : _T("Not Dolby Surround EX encoded"), 1);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00808005) : _T("Dolby Surround EX encoded"), 2);
 
-    /*
-    [-dheadphon #] Dolby Headphone mode
-                       0 = not indicated (default)
-                       1 = Not Dolby Headphone encoded
-                       2 = Dolby Headphone encoded
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00809001) : _T("Dolby Headphone mode"),
         _T("-dheadphon"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00809002) :
@@ -1088,11 +738,6 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00809004) : _T("Not Dolby Headphone encoded"), 1);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00809005) : _T("Dolby Headphone encoded"), 2);
 
-    /*
-    [-adconvtyp #] A/D converter type
-                       0 = Standard (default)
-                       1 = HDCD
-    */
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A001) : _T("A/D converter type"),
         _T("-adconvtyp"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A002) :
@@ -1109,21 +754,19 @@ void InitEncoderOptions()
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A004) : _T("HDCD"), 1);
 }
 
-void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
+void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
 {
     for (int i = 0; i < clTmp.Count(); i++)
     {
         CString szBuffer;
         auto& ce = clTmp.Get(i);
 
-        // encoder engine number
         if (ce.szKey.Compare(_T("engine")) == 0)
         {
             preset.nCurrentEngine = _tstoi(ce.szValue);
             continue;
         }
 
-        // number of threads
         szBuffer = szThreadsOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1131,42 +774,36 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // SIMD instructions: MMX
         if (ce.szKey.Compare(_T("mmx")) == 0)
         {
             preset.nUsedSIMD[0] = _tstoi(ce.szValue);
             continue;
         }
 
-        // SIMD instructions: SSE
         if (ce.szKey.Compare(_T("sse")) == 0)
         {
             preset.nUsedSIMD[1] = _tstoi(ce.szValue);
             continue;
         }
 
-        // SIMD instructions: SSE2
         if (ce.szKey.Compare(_T("sse2")) == 0)
         {
             preset.nUsedSIMD[2] = _tstoi(ce.szValue);
             continue;
         }
 
-        // SIMD instructions: SSE3
         if (ce.szKey.Compare(_T("sse3")) == 0)
         {
             preset.nUsedSIMD[3] = _tstoi(ce.szValue);
             continue;
         }
 
-        // mode
         if (ce.szKey.Compare(_T("mode")) == 0)
         {
             preset.nMode = (AftenEncMode)_tstoi(ce.szValue);
             continue;
         }
 
-        // bitrate
         szBuffer = szCbrOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1174,7 +811,6 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // quality
         szBuffer = szVbrOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1182,7 +818,6 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // raw input audio format
         szBuffer = szRawSampleFormatOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1190,7 +825,6 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // raw input audio sample rate
         szBuffer = szRawSampleRateOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1198,7 +832,6 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // raw input audio channels
         szBuffer = szRawChannelsOption;
         if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
         {
@@ -1206,7 +839,6 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
             continue;
         }
 
-        // check all other Aften options
         for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         {
             szBuffer = encOpt[i].szOption;
@@ -1219,7 +851,7 @@ void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
     }
 }
 
-bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     try
     {
@@ -1250,10 +882,8 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
 
                 if (bHaveVersion == false)
                 {
-                    // check presets version
                     if (szBuffer.Compare(szCurrentPresetsVersion) != 0)
                     {
-                        // invalid presets version
                         fp.FClose();
                         return false;
                     }
@@ -1264,30 +894,19 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                 {
                     if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
                     {
-                        // check if we have preset to save
                         if (bHavePreset == true)
                         {
-                            // parse all options in clTmp list
                             ParseEncoderPreset(presetTmp, clTmp);
-
-                            // add to presets list
                             encPresets.Insert(presetTmp);
-
-                            // clear temp list
                             clTmp.RemoveAll();
                         }
                         else
                         {
-                            // remove old presets because we have valid one preset
                             encPresets.RemoveAll();
                         }
 
-                        // set defaults for new preset
                         presetTmp = defaultPreset;
-
-                        // get next preset name
                         presetTmp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
-
                         bHavePreset = true;
                     }
                     else
@@ -1297,7 +916,6 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                         {
                             ceTmp.szKey = szBuffer.Mid(0, nPos);
 
-                            // remove 'spaces' and 'tabs'
                             while (ceTmp.szKey.Left(1) == _T(" ") || ceTmp.szKey.Left(1) == _T("\t"))
                             {
                                 ceTmp.szKey.TrimLeft(_T(" "));
@@ -1312,7 +930,6 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
 
                             ceTmp.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
 
-                            // remove 'spaces' and 'tabs'
                             while (ceTmp.szValue.Left(1) == _T(" ") || ceTmp.szValue.Left(1) == _T("\t"))
                             {
                                 ceTmp.szValue.TrimLeft(_T(" "));
@@ -1325,13 +942,11 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                                 ceTmp.szValue.TrimRight(_T("\t"));
                             }
 
-                            // add to the list (data will be parsed later)
                             auto ce = ceTmp;
                             clTmp.Insert(ce);
                         }
                         else
                         {
-                            // this is not a valid option skip the line
                         }
                     }
                 }
@@ -1339,20 +954,13 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
                 szBuffer = _T("");
             }
 
-            // save last preset if any
             if (fp.FPos() == nLength)
             {
-                // check if we have preset to save
                 if (bHavePreset == true)
                 {
-                    // parse all options in clTmp list
                     ParseEncoderPreset(presetTmp, clTmp);
-
-                    // add to presets list
                     auto preset = presetTmp;
                     encPresets.Insert(preset);
-
-                    // clear temp list
                     clTmp.RemoveAll();
                 }
             }
@@ -1370,9 +978,7 @@ bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
     return true;
 }
 
-#define SAVE_ONLY_DEFAULTS
-
-bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     const int nSize = (const int)encPresets.Count();
     try
@@ -1384,176 +990,63 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
         CString szBuffer;
         CString szTmpBuffer;
 
-#define WriteBufferToFile() \
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); \
-            szBuffer.ReleaseBuffer();
-
-        // write current presets version
         szBuffer.Format(_T("%s\r\n"), szCurrentPresetsVersion);
-        WriteBufferToFile();
+        fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-        // write all presets
         for (int i = 0; i < nSize; i++)
         {
             auto& preset = encPresets.Get(i);
 
-            // save name
             szBuffer.Format(_T("[%s]\r\n"), preset.szName);
-            WriteBufferToFile();
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save only values different than default and ignore
+            szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save encoder engine number
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nCurrentEngine != defaultPreset.nCurrentEngine)
-            {
-#endif
-                szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szTmpBuffer = szThreadsOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save number of threads
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nThreads != defaultPreset.nThreads)
-            {
-#endif
-                szTmpBuffer = szThreadsOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szBuffer.Format(_T("mmx=%d\r\n"), preset.nUsedSIMD[0]);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save SIMD instructions: MMX
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nUsedSIMD[0] != defaultPreset.nUsedSIMD[0])
-            {
-#endif
-                szBuffer.Format(_T("mmx=%d\r\n"), preset.nUsedSIMD[0]);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szBuffer.Format(_T("sse=%d\r\n"), preset.nUsedSIMD[1]);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save SIMD instructions: SSE
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nUsedSIMD[1] != defaultPreset.nUsedSIMD[1])
-            {
-#endif
-                szBuffer.Format(_T("sse=%d\r\n"), preset.nUsedSIMD[1]);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szBuffer.Format(_T("sse2=%d\r\n"), preset.nUsedSIMD[2]);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save SIMD instructions: SSE2
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nUsedSIMD[2] != defaultPreset.nUsedSIMD[2])
-            {
-#endif
-                szBuffer.Format(_T("sse2=%d\r\n"), preset.nUsedSIMD[2]);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szBuffer.Format(_T("sse3=%d\r\n"), preset.nUsedSIMD[3]);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save SIMD instructions: SSE3
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nUsedSIMD[3] != defaultPreset.nUsedSIMD[3])
-            {
-#endif
-                szBuffer.Format(_T("sse3=%d\r\n"), preset.nUsedSIMD[3]);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szBuffer.Format(_T("mode=%d\r\n"), preset.nMode);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save mode
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nMode != defaultPreset.nMode)
-            {
-#endif
-                szBuffer.Format(_T("mode=%d\r\n"), preset.nMode);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szTmpBuffer = szCbrOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save bitrate
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nBitrate != defaultPreset.nBitrate)
-            {
-#endif
-                szTmpBuffer = szCbrOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szTmpBuffer = szVbrOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save quality
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nQuality != defaultPreset.nQuality)
-            {
-#endif
-                szTmpBuffer = szVbrOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szTmpBuffer = szRawSampleFormatOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save raw input audio format
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nRawSampleFormat != defaultPreset.nRawSampleFormat)
-            {
-#endif
-                szTmpBuffer = szRawSampleFormatOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
+            szTmpBuffer = szRawSampleRateOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-#endif
-            // save raw input audio sample rate
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nRawSampleRate != defaultPreset.nRawSampleRate)
-            {
-#endif
-                szTmpBuffer = szRawSampleRateOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
+            szTmpBuffer = szRawChannelsOption;
+            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
+            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
 
-            // save raw input audio channels
-#ifdef SAVE_ONLY_DEFAULTS
-            if (preset.nRawChannels != defaultPreset.nRawChannels)
-            {
-#endif
-                szTmpBuffer = szRawChannelsOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
-                WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-            }
-#endif
-
-            // save all other settings
             for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
             {
-#ifdef SAVE_ONLY_DEFAULTS
-                if ((encOpt[j].nIgnoreValue != preset.nSetting[j]) && (encOpt[j].nDefaultValue != preset.nSetting[j]))
-                {
-#endif
-                    szTmpBuffer = encOpt[j].szOption;
-                    szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
-                    WriteBufferToFile();
-#ifdef SAVE_ONLY_DEFAULTS
-                }
-#endif
+                szTmpBuffer = encOpt[j].szOption;
+                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
+                fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
             }
         }
 
@@ -1561,25 +1054,22 @@ bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEn
     }
     catch (...)
     {
-
         return false;
     }
-
     return true;
 }
 
-bool IsSupportedInputExt(CString &szExt)
+bool CEncoderDefaults::IsSupportedInputExt(CString &szExt)
 {
     for (int i = 0; i < nNumSupportedInputExt; i++)
     {
         if (szExt.CompareNoCase(szSupportedInputExt[i]) == 0)
             return true;
     }
-
     return false;
 }
 
-int GetSupportedInputFormat(CString &szExt)
+int CEncoderDefaults::GetSupportedInputFormat(CString &szExt)
 {
     for (int i = 0; i < nNumSupportedInputExt; i++)
     {
@@ -1588,11 +1078,10 @@ int GetSupportedInputFormat(CString &szExt)
             return nSupportedInputFormats[i];
         }
     }
-
     return PCM_FORMAT_UNKNOWN;
 }
 
-CString GetSupportedInputFilesFilter()
+CString CEncoderDefaults::GetSupportedInputFilesFilter()
 {
     CString szFilter = _T("");
     CString szExtL = _T("");
