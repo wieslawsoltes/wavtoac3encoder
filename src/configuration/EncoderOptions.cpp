@@ -7,6 +7,100 @@
 
 void CEncoderDefaults::InitEncoderOptions()
 {
+    szCurrentPresetsVersion = _T("1.1.0.0");
+
+    nValidCbrBitrates =
+    {
+        0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
+    };
+
+    ccAften =
+    {
+        { 0, 0, _T("1+1") },
+        { 1, 0, _T("1/0") },
+        { 2, 0, _T("2/0") },
+        { 3, 0, _T("3/0") },
+        { 4, 0, _T("2/1") },
+        { 5, 0, _T("3/1") },
+        { 6, 0, _T("2/2") },
+        { 7, 0, _T("3/2") },
+        { 0, 1, _T("1+1") },
+        { 1, 1, _T("1/0") },
+        { 2, 1, _T("2/0") },
+        { 3, 1, _T("3/0") },
+        { 4, 1, _T("2/1") },
+        { 5, 1, _T("3/1") },
+        { 6, 1, _T("2/2") },
+        { 7, 1, _T("3/2") }
+    };
+
+    szRawSampleFormats =
+    {
+        (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
+        _T("u8"),
+        _T("s8"),
+        _T("s16_le"),
+        _T("s16_be"),
+        _T("s20_le"),
+        _T("s20_be"),
+        _T("s24_le"),
+        _T("s24_be"),
+        _T("s32_le"),
+        _T("s32_be"),
+        _T("float_le"),
+        _T("float_be"),
+        _T("double_le"),
+        _T("double_be")
+    };
+
+    pszGroups =
+    {
+        _T("Encoding options"),
+        _T("Bitstream info metadata"),
+        _T("Dynamic range compression and dialog normalization"),
+        _T("Input options"),
+        _T("Input filters"),
+        _T("Alternate bit stream syntax")
+    };
+
+    szCbrOption = _T("-b");
+    szVbrOption = _T("-q");
+    szThreadsOption = _T("-threads");
+    szSimdOption = _T("-nosimd");
+    szRawSampleFormatOption = _T("-raw_fmt");
+    szRawSampleRateOption = _T("-raw_sr");
+    szRawChannelsOption = _T("-raw_ch");
+
+    szSupportedInputExt =
+    {
+        _T("wav"),
+        _T("pcm"),
+        _T("raw"),
+        _T("bin"),
+        _T("aiff"),
+        _T("aif"),
+        _T("aifc"),
+        #ifndef DISABLE_AVISYNTH
+        _T("avs")
+        #endif
+    };
+
+    nSupportedInputFormats =
+    {
+        PCM_FORMAT_WAVE,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_AIFF,
+        PCM_FORMAT_AIFF,
+        PCM_FORMAT_CAFF,
+    };
+
+    szSupportedOutputExt =
+    {
+        _T("ac3")
+    };
+
 #define SetEncoderOption(name, option, tooltip, defval, ignval, group, begin) \
     nCurOpt++; \
     encOpt[nCurOpt].szName = name; \
