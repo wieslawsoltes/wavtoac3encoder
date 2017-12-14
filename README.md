@@ -210,7 +210,6 @@ Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 * [AftenWindowsBuilds](https://github.com/wieslawsoltes/AftenWindowsBuilds)
 * [Aften Website](http://aften.sourceforge.net/)
 * [Aften Sources](http://sourceforge.net/projects/aften/)
-* [TinyXml-2 v5.0.1](https://github.com/leethomason/tinyxml2)
 
 ## Copyrights
 
