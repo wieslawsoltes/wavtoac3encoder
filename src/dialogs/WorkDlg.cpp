@@ -146,7 +146,7 @@ void CWorkDlg::InitCtrls()
         }
 
         // move other controls
-        CRect rcIn[nNumMaxInputFiles], rcInInfo[CEncoderDefaults::nNumMaxInputFiles];
+        CRect rcIn[CEncoderDefaults::nNumMaxInputFiles], rcInInfo[CEncoderDefaults::nNumMaxInputFiles];
         CRect rcSpeedInfo[3][3];
         CRect rcOut, rcOutInfo;
         CRect rcSIMD;
