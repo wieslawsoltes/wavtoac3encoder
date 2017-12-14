@@ -62,7 +62,7 @@ IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
 CMuxDlg::CMuxDlg(CWnd* pParent /*=NULL*/)
     : CMyDialogEx(CMuxDlg::IDD, pParent)
 {
-    for (int i = 0; i < nNumMaxInputFiles; i++)
+    for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");
