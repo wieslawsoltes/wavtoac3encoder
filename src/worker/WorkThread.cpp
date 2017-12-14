@@ -83,108 +83,108 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, Aft
 
     // use this macro to prepare aften settings
 #define SET_AFTEN_SETTING(set, type) \
-		if(encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-		(set) = (type) encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
+    if(CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
+    (set) = (type) CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
 
     // process all aften options for encoder context
 
     // fba
     nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
 
-        // exps
-        nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
+    // exps
+    nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
 
-        // pad
-        nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
+    // pad
+    nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
 
-        // w
-        nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
+    // w
+    nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
 
-        // wmin
-        nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
+    // wmin
+    nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
 
-        // wmax
-        nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
+    // wmax
+    nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
 
-        // m
-        nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
+    // m
+    nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
 
-        // s
-        nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
+    // s
+    nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
 
-        // cmix
-        nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
+    // cmix
+    nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
 
-        // smix
-        nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
+    // smix
+    nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
 
-        // dsur
-        nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
+    // dsur
+    nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
 
-        // dnorm
-        nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
+    // dnorm
+    nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
 
-        // dynrng
-        nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
+    // dynrng
+    nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
 
-        // acmod
-        nSetting++; SET_AFTEN_SETTING(s.acmod, int)
+    // acmod
+    nSetting++; SET_AFTEN_SETTING(s.acmod, int)
 
-        // lfe
-        nSetting++; SET_AFTEN_SETTING(s.lfe, int)
+    // lfe
+    nSetting++; SET_AFTEN_SETTING(s.lfe, int)
 
-        // chconfig
-        nSetting++;
-    if (encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
+    // chconfig
+    nSetting++;
+    if (CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
     {
-        s.acmod = ccAften[encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
-        s.lfe = ccAften[encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
+        s.acmod = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
+        s.lfe = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
     }
 
     // chmap
     nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
 
-        // readtoeof
-        nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
+    // readtoeof
+    nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
 
-        // bwfilter
-        nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
+    // bwfilter
+    nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
 
-        // dcfilter
-        nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
+    // dcfilter
+    nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
 
-        // lfefilter
-        nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
+    // lfefilter
+    nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
 
-        // xbsi1
-        nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
+    // xbsi1
+    nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
 
-        // dmixmod
-        nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
+    // dmixmod
+    nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
 
-        // ltrtcmix
-        nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
+    // ltrtcmix
+    nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
 
-        // ltrtsmix
-        nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
+    // ltrtsmix
+    nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
 
-        // lorocmix
-        nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
+    // lorocmix
+    nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
 
-        // lorosmix
-        nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
+    // lorosmix
+    nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
 
-        // xbsi2
-        nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
+    // xbsi2
+    nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
 
-        // dsurexmod
-        nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
+    // dsurexmod
+    nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
 
-        // dheadphon
-        nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
+    // dheadphon
+    nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
 
-        // adconvtyp
-        nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
+    // adconvtyp
+    nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
 #ifndef DISABLE_AVISYNTH
