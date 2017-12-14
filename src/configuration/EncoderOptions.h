@@ -158,7 +158,10 @@ public:
     const static int nNumSupportedOutputExt = 1;
 public:
     static LPTSTR szCurrentPresetsVersion;
-    static int nValidCbrBitrates[nNumValidCbrBitrates];
+    static constexpr int nValidCbrBitrates[nNumValidCbrBitrates]
+    {
+        0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
+    };
     static CChannelConfig ccAften[nNumChannelConfigAften];
     static LPTSTR szRawSampleFormats[nNumRawSampleFormats];
     static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
