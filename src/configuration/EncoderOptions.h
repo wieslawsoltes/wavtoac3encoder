@@ -159,7 +159,7 @@ public:
 public:
     static constexpr LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
 public:
-    static int nValidCbrBitrates[nNumValidCbrBitrates] =
+    static constexpr int nValidCbrBitrates[nNumValidCbrBitrates] =
     {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
