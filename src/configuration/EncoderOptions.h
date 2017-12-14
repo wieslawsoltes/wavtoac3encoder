@@ -157,123 +157,30 @@ public:
     const static int nNumSupportedInputExt = 8;
     const static int nNumSupportedOutputExt = 1;
 public:
-    static constexpr LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
-public:
-    static constexpr int nValidCbrBitrates[nNumValidCbrBitrates] =
-    {
-        0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
-    };
-public:
-    static constexpr CChannelConfig ccAften[nNumChannelConfigAften] =
-    {
-        { 0, 0, _T("1+1") },
-        { 1, 0, _T("1/0") },
-        { 2, 0, _T("2/0") },
-        { 3, 0, _T("3/0") },
-        { 4, 0, _T("2/1") },
-        { 5, 0, _T("3/1") },
-        { 6, 0, _T("2/2") },
-        { 7, 0, _T("3/2") },
-        { 0, 1, _T("1+1") },
-        { 1, 1, _T("1/0") },
-        { 2, 1, _T("2/0") },
-        { 3, 1, _T("3/0") },
-        { 4, 1, _T("2/1") },
-        { 5, 1, _T("3/1") },
-        { 6, 1, _T("2/2") },
-        { 7, 1, _T("3/2") }
-    };
-public:
-    static constexpr LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
-    {
-        (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
-        _T("u8"),
-        _T("s8"),
-        _T("s16_le"),
-        _T("s16_be"),
-        _T("s20_le"),
-        _T("s20_be"),
-        _T("s24_le"),
-        _T("s24_be"),
-        _T("s32_le"),
-        _T("s32_be"),
-        _T("float_le"),
-        _T("float_be"),
-        _T("double_le"),
-        _T("double_be")
-    };
-public:
-    static constexpr CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
-public:
-    static constexpr CString pszGroups[nNumEncoderOptionsGroups] =
-    {
-        _T("Encoding options"),
-        _T("Bitstream info metadata"),
-        _T("Dynamic range compression and dialog normalization"),
-        _T("Input options"),
-        _T("Input filters"),
-        _T("Alternate bit stream syntax")
-    };
-public:
-    static constexpr CString szCbrOption = _T("-b");
-public:
-    static constexpr CString szVbrOption = _T("-q");
-public:
-    static constexpr CString szThreadsOption = _T("-threads");
-public:
-    static constexpr CString szSimdOption = _T("-nosimd");
-public:
-    static constexpr CString szRawSampleFormatOption = _T("-raw_fmt");
-public:
-    static constexpr CString szRawSampleRateOption = _T("-raw_sr");
-public:
-    static constexpr CString szRawChannelsOption = _T("-raw_ch");
-public:
-    static TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
-    {
-        _T("wav"),
-        _T("pcm"),
-        _T("raw"),
-        _T("bin"),
-        _T("aiff"),
-        _T("aif"),
-        _T("aifc"),
-    #ifndef DISABLE_AVISYNTH
-        _T("avs")
-    #endif
-    };
-public:
-    static constexpr int nSupportedInputFormats[nNumSupportedInputExt] =
-    {
-        PCM_FORMAT_WAVE,
-        PCM_FORMAT_RAW,
-        PCM_FORMAT_RAW,
-        PCM_FORMAT_RAW,
-        PCM_FORMAT_AIFF,
-        PCM_FORMAT_AIFF,
-        PCM_FORMAT_CAFF,
-    };
-public:
-    static constexpr TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
-    {
-        _T("ac3")
-    };
-public:
+    static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+    static int nValidCbrBitrates[nNumValidCbrBitrates];
+    static CChannelConfig ccAften[nNumChannelConfigAften];
+    static LPTSTR szRawSampleFormats[nNumRawSampleFormats];
+    static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
+    static CString pszGroups[nNumEncoderOptionsGroups];
+    static CString szCbrOption;
+    static CString szVbrOption;
+    static CString szThreadsOption;
+    static CString szSimdOption;
+    static CString szRawSampleFormatOption;
+    static CString szRawSampleRateOption;
+    static CString szRawChannelsOption;
+    static TCHAR szSupportedInputExt[nNumSupportedInputExt][8];
+    static int nSupportedInputFormats[nNumSupportedInputExt];
+    static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8];
     static int FindValidBitratePos(const int nBitrate);
 public:
     static int FindOptionIndex(CString szOption);
-public:
     static void ResetEncoderOptionsLists();
-public:
     static void InitEncoderOptions();
-public:
     static bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-public:
     static bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-public:
     static bool IsSupportedInputExt(CString &szExt);
-public:
     static int GetSupportedInputFormat(CString &szExt);
-public:
     static CString GetSupportedInputFilesFilter();
 };
