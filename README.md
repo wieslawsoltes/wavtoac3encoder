@@ -164,10 +164,10 @@ You can double-click in the file list on avisynth script to get e.g. number of a
 
 ## Translations
 
-* [English (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/en.txt)
-* [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/de.txt)
-* [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/jp.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
-* [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/pl.txt)
+* [English (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/en-US.txt)
+* [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/de-DE.txt)
+* [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/ja-JP.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
+* [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/pl-PL.txt)
 
 Use only UTF-8 compatible text editors (e.g. Notepad or Visual Studio Code) to edit xml language files
 and [use special characters in XML](https://www.dvteclipse.com/documentation/svlinter/How_to_use_special_characters_in_XML.3F.html#gsc.tab=0).
