@@ -543,8 +543,8 @@ void CMainDlg::OnBnClickedCheckVbr()
         // switch to CBR mode
         auto& preset = GetCurrentPreset();
         preset.nMode = AFTEN_ENC_MODE_CBR;
-        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
-        int nNewPos = FindValidBitratePos(GetCurrentPreset().nBitrate);
+        this->m_SldBitrate.SetRange(0, CEncoderDefaults::nNumValidCbrBitrates - 1, TRUE);
+        int nNewPos = CEncoderDefaults::FindValidBitratePos(GetCurrentPreset().nBitrate);
         this->m_SldBitrate.SetPos(nNewPos);
     }
 
@@ -613,7 +613,7 @@ void CMainDlg::OnBnClickedButtonBrowse()
     {
         // configure save file dialog
         CFileDialog fd(FALSE,
-            szSupportedOutputExt[0],
+            CEncoderDefaults::szSupportedOutputExt[0],
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701C) : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"));
@@ -770,7 +770,7 @@ void CMainDlg::OnCbnSelchangeComboSetting()
         auto& preset = GetCurrentPreset();
         preset.nSetting[nItem] = nVal;
 
-        CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
+        CString szName = CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
 
         // set new value name in settings list
         this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -1281,7 +1281,7 @@ bool CMainDlg::LoadFilesList(CString &szFileName)
                     szBuffer.TrimRight('"');
 
                     // // add only files with proper file extensions
-                    if (IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
+                    if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
                     {
                         this->AddItemToFileList(szBuffer);
                     }
@@ -1348,7 +1348,7 @@ void CMainDlg::LoadAllConfiguration()
     bool bRet = false;
 
     // load presets from file
-    bRet = ::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
+    bRet = CEncoderDefaults::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
     // (bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath
 
     // process presets list
@@ -1395,7 +1395,7 @@ void CMainDlg::SaveAllConfiguration()
     bool bRet = false;
 
     // save encoder presets to a file
-    bRet = ::SaveEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
+    bRet = CEncoderDefaults::SaveEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
     // (bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath
 
     // save program configuration to a file
@@ -1431,7 +1431,7 @@ void CMainDlg::UpdateBitrateText()
     }
     else
     {
-        if ((nCurPos >= 0) && (nCurPos < nNumValidCbrBitrates))
+        if ((nCurPos >= 0) && (nCurPos < CEncoderDefaults::nNumValidCbrBitrates))
         {
             // indicate that we have selected Bitrate based mode (CBR)
             if (theApp.m_Config.HaveLangStrings())
@@ -1442,10 +1442,10 @@ void CMainDlg::UpdateBitrateText()
             if (nCurPos == 0)
                 szBuff.Format(DEFAULT_TEXT_AUTO);
             else
-                szBuff.Format(_T("%d kbps"), nValidCbrBitrates[nCurPos]);
+                szBuff.Format(_T("%d kbps"), CEncoderDefaults::nValidCbrBitrates[nCurPos]);
 
             auto& preset = GetCurrentPreset();
-            preset.nBitrate = nValidCbrBitrates[nCurPos];
+            preset.nBitrate = CEncoderDefaults::nValidCbrBitrates[nCurPos];
         }
     }
 
@@ -1529,15 +1529,15 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
         // set all values
-        this->m_LstSettings.SetItemText(i, 1, encOpt[i].listOptNames.Get(Preset.nSetting[i]));
+        this->m_LstSettings.SetItemText(i, 1, CEncoderDefaults::encOpt[i].listOptNames.Get(Preset.nSetting[i]));
     }
 
     // set bitrate or quality value
     if (Preset.nMode == AFTEN_ENC_MODE_CBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
-        int nPos = FindValidBitratePos(Preset.nBitrate);
+        this->m_SldBitrate.SetRange(0, CEncoderDefaults::nNumValidCbrBitrates - 1, TRUE);
+        int nPos = CEncoderDefaults::FindValidBitratePos(Preset.nBitrate);
         this->m_SldBitrate.SetPos(nPos);
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
@@ -1649,7 +1649,7 @@ void CMainDlg::HandleDropFiles(HDROP hDropInfo)
                 szExt.Remove('.');
 
                 // add only files with proper file extensions
-                if (IsSupportedInputExt(szExt) == true)
+                if (CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                 {
                     // insert dropped file
                     this->AddItemToFileList(szFile);
@@ -1667,16 +1667,16 @@ void CMainDlg::UpdateSettingsComboBox(int nItem)
     this->m_CmbValue.ResetContent();
 
     // add new items to combobox
-    for (int i = 0; i < encOpt[nItem].listOptNames.Count(); i++)
+    for (int i = 0; i < CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
     {
-        this->m_CmbValue.AddString(encOpt[nItem].listOptNames.Get(i));
+        this->m_CmbValue.AddString(CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
     }
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
     // select default value or last selected
     if (this->encPresets.Count() <= 0)
-        this->m_CmbValue.SetCurSel(encOpt[nItem].nDefaultValue);
+        this->m_CmbValue.SetCurSel(CEncoderDefaults::encOpt[nItem].nDefaultValue);
     else
         this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
 }
@@ -1717,7 +1717,7 @@ void CMainDlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
                 szExt.Remove('.');
 
                 // add only files with proper file extensions
-                if (IsSupportedInputExt(szExt) == true)
+                if (CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                 {
                     this->AddItemToFileList(szTempBuf);
                 }
@@ -1784,9 +1784,9 @@ void CMainDlg::ShowOptionPopup(bool bUseRect)
     menu->CreatePopupMenu();
 
     UINT nItemCount = ID_OPTIONS_MENU_START;
-    for (int i = 0; i < encOpt[nItem].listOptNames.Count(); i++)
+    for (int i = 0; i < CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
     {
-        menu->AppendMenu(MF_STRING, nItemCount, encOpt[nItem].listOptNames.Get(i));
+        menu->AppendMenu(MF_STRING, nItemCount, CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
         nItemCount++;
     }
 
@@ -2056,9 +2056,6 @@ void CMainDlg::InitTooltips()
     // set tooltips
     CString szTmpText;
 
-    // Bitrate/Quality Slider
-    /* [-b #]         CBR bitrate in kbps */
-    /* [-q #]         VBR quality */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206001) :
         _T("CBR bitrate in kbps:\n\n")
         _T("CBR mode is selected by default. This option allows for\n")
@@ -2077,21 +2074,17 @@ void CMainDlg::InitTooltips()
 
     this->m_SldBitrate.SetTooltipText(szTmpText);
 
-    // CBR/VBR CheckBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206002) :
         _T("Enable VBR mode. If unchecked the CBR mode is used instead.");
 
     this->m_ChkVbr.SetTooltipText(szTmpText);
 
-    // Presets ComboBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206003) :
         _T("Set currently used encoder preset. You can load/save presets from/to file\n")
         _T("from File menu. All presets are automatically loaded/saved from/to text file.");
 
     this->m_CmbPresets.SetTooltipText(szTmpText);
 
-    // SIMD instructions CheckBoxes
-    /* [-nosimd X]    Comma-separated list of SIMD instruction sets not to use */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206004) :
         _T("Aften will auto-detect available SIMD instruction sets\n")
         _T("for your CPU, so you shouldn't need to disable sets\n")
@@ -2109,8 +2102,6 @@ void CMainDlg::InitTooltips()
     this->m_ChkSimdSSE3.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206008) + szTmpText :
         _T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
 
-    // Sample format ComboBox
-    /* [-raw_fmt X]   Raw audio input sample format (default: s16_le) */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206009) :
         _T("Raw audio input sample format specifies the sample format\n")
         _T("when using raw audio input. Using this option forces Aften to\n")
@@ -2121,24 +2112,18 @@ void CMainDlg::InitTooltips()
 
     this->m_CmbRawSampleFormat.SetTooltipText(szTmpText);
 
-    // Sample rate EditBox
-    /* [-raw_sr #]    Raw audio input sample rate (default: 48000) */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600A) :
         _T("Raw audio input sample rate option forces Aften to\n")
         _T("treat the input as raw audio (default: 48000).");
 
     this->m_EdtRawSamplerate.SetTooltipText(szTmpText);
 
-    // Channels EditBox
-    /* [-raw_ch #]    Raw audio input channels (default: 2) */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600B) :
         _T("Raw audio input channels forces Aften to treat the input as\n")
         _T("raw audio (default: 2).");
 
     this->m_EdtRawChannels.SetTooltipText(szTmpText);
 
-    // Threads EditBox
-    /* [-threads #]   Number of threads */
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600C) :
         _T("Aften can use multiple threads to speed up encoding.\n")
         _T("By default, Aften uses one thread for each logical CPU\n")
@@ -2148,14 +2133,12 @@ void CMainDlg::InitTooltips()
 
     this->m_EdtThreads.SetTooltipText(szTmpText);
 
-    // Engine ComboBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600D) :
         _T("Set currently used Aften library. By selecting optimized Aften\n")
         _T("library you can speedup the encoding process.");
 
     this->m_CmbEngines.SetTooltipText(szTmpText);
 
-    // Output path EditBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600E) :
         _T("Set default output path for encoded files. By default files\n")
         _T("are encoded to the same directory as input files. When using\n")
@@ -2163,7 +2146,6 @@ void CMainDlg::InitTooltips()
 
     this->m_EdtOutPath.SetTooltipText(szTmpText);
 
-    // Multiple mono input CheckBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020600F) :
         _T("Enable multiple mono input mode. By adding multiple mono input\n")
         _T("files to the files list (minimum 2, maximum 6) in correct channel\n")
@@ -2171,7 +2153,6 @@ void CMainDlg::InitTooltips()
 
     this->m_ChkMultipleMonoInput.SetTooltipText(szTmpText);
 
-    // engines editor
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00206010) :
         _T("Edit currently available Aften engines.");
 
@@ -2192,24 +2173,24 @@ void CMainDlg::InitSettingsList()
     // fill advanced encoder options list
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
-        if (encOpt[i].bBeginGroup == true)
+        if (CEncoderDefaults::encOpt[i].bBeginGroup == true)
             nGroupCounter++;
 
-        if (nGroupCounter >= 0 && nGroupCounter < nNumEncoderOptionsGroups)
+        if (nGroupCounter >= 0 && nGroupCounter < CEncoderDefaults::nNumEncoderOptionsGroups)
         {
-            li.pszText = encOpt[i].szName.GetBuffer();
+            li.pszText = CEncoderDefaults::encOpt[i].szName.GetBuffer();
             li.iItem = i;
             li.iSubItem = 0;
             li.iGroupId = 101 + nGroupCounter;
 
             ListView_InsertItem(listSettings, &li);
             ListView_SetItemText(listSettings, i, 1,
-                encOpt[i].listOptNames.Get(encOpt[i].nDefaultValue).GetBuffer());
+                CEncoderDefaults::encOpt[i].listOptNames.Get(CEncoderDefaults::encOpt[i].nDefaultValue).GetBuffer());
 
-            this->m_LstSettings.listTooltips.AddTail(encOpt[i].szHelpText);
+            this->m_LstSettings.listTooltips.AddTail(CEncoderDefaults::encOpt[i].szHelpText);
 
-            encOpt[i].szName.ReleaseBuffer();
-            encOpt[i].listOptNames.Get(encOpt[i].nDefaultValue).ReleaseBuffer();
+            CEncoderDefaults::encOpt[i].szName.ReleaseBuffer();
+            CEncoderDefaults::encOpt[i].listOptNames.Get(CEncoderDefaults::encOpt[i].nDefaultValue).ReleaseBuffer();
         }
     }
 
@@ -2224,7 +2205,7 @@ void CMainDlg::InitDefaultPreset()
 {
     // set current settings to defaults
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
-        defaultPreset.nSetting[i] = encOpt[i].nDefaultValue;
+        defaultPreset.nSetting[i] = CEncoderDefaults::encOpt[i].nDefaultValue;
 
     // set default preset name
     defaultPreset.szName = DEFAULT_PRESET_NAME;
@@ -2953,7 +2934,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
             auto& preset = GetCurrentPreset();
             preset.nSetting[nItem] = nVal;
 
-            CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
+            CString szName = CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
 
             // set new value name in settings list
             this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -2984,7 +2965,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
             auto& preset = GetCurrentPreset();
             preset.nSetting[nItem] = nVal;
 
-            CString szName = ::encOpt[nItem].listOptNames.Get(nVal);
+            CString szName = CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
 
             // set new value name in settings list
             this->m_LstSettings.SetItemText(nItem, 1, szName);
@@ -3038,7 +3019,7 @@ void CMainDlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
         int nItem = m_LstSettings.GetNextSelectedItem(pos);
 
         // show option help text
-        this->MessageBox(encOpt[nItem].szHelpText, encOpt[nItem].szName, MB_ICONINFORMATION | MB_OK);
+        this->MessageBox(CEncoderDefaults::encOpt[nItem].szHelpText, CEncoderDefaults::encOpt[nItem].szName, MB_ICONINFORMATION | MB_OK);
     }
 
     *pResult = 0;
@@ -3315,22 +3296,22 @@ void CMainDlg::OnFileMuxWizard()
     auto& preset = GetCurrentPreset();
 
     // set MUX dialog initial values
-    if (encOpt[nIndexChconfig].nIgnoreValue != preset.nSetting[nIndexChconfig])
+    if (CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue != preset.nSetting[nIndexChconfig])
     {
-        dlg.nChannelConfig = ccAften[encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].acmod;
-        dlg.bLFE = (ccAften[encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].lfe == 1) ? true : false;
+        dlg.nChannelConfig = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].acmod;
+        dlg.bLFE = (CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].lfe == 1) ? true : false;
         bUpdateChconfig = true;
     }
     else
     {
-        if (encOpt[nIndexAcmod].nIgnoreValue != preset.nSetting[nIndexAcmod])
+        if (CEncoderDefaults::encOpt[nIndexAcmod].nIgnoreValue != preset.nSetting[nIndexAcmod])
         {
             dlg.nChannelConfig = preset.nSetting[nIndexAcmod];
         }
         else
         {
-            int nDefault = encOpt[nIndexAcmod].listOptValues.Count() - 2;
-            dlg.nChannelConfig = encOpt[nIndexAcmod].listOptValues.Get(nDefault);
+            int nDefault = CEncoderDefaults::encOpt[nIndexAcmod].listOptValues.Count() - 2;
+            dlg.nChannelConfig = CEncoderDefaults::encOpt[nIndexAcmod].listOptValues.Get(nDefault);
         }
 
         dlg.bLFE = (preset.nSetting[nIndexLfe] == 1) ? true : false;
@@ -3445,18 +3426,18 @@ void CMainDlg::OnFileMuxWizard()
             };
 
             // update acmod value
-            preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
+            preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? CEncoderDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
             // set new acmod name value in settings list
             this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                ::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]));
+                CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]));
 
             // get index of lfe and update its value
-            preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
+            preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? CEncoderDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
             // set new acmod name value in settings list
             this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                ::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]));
+                CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]));
 
             // set new chconfig name value in settings list
             if (bUpdateChconfig == true)
@@ -3475,12 +3456,12 @@ void CMainDlg::OnFileMuxWizard()
             }
             else
             {
-                preset.nSetting[nIndexChconfig] = encOpt[nIndexChconfig].nIgnoreValue;
+                preset.nSetting[nIndexChconfig] = CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue;
             }
 
             // set new chconfig name value in settings list
             this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                ::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]));
+                CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]));
 
             // enable multi mono input if not enabled already
             if (this->bMultipleMonoInput == false)
