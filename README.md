@@ -39,10 +39,6 @@ Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
 
-## Language Editor
-
-Download latest version of the language editor from [here](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor).
-
 ## Aften
 
 Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
@@ -168,13 +164,6 @@ You can double-click in the file list on avisynth script to get e.g. number of a
 * [German (A. Haack)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/de-DE.txt)
 * [Japanese](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/ja-JP.txt) [(source)](http://donkichirou.blog27.fc2.com/blog-entry-277.html)
 * [Polish (Wiesław Šoltés)](https://github.com/wieslawsoltes/wavtoac3encoder/blob/master/config/lang/pl-PL.txt)
-
-Use only UTF-8 compatible text editors (e.g. Notepad or Visual Studio Code) to edit xml language files
-and [use special characters in XML](https://www.dvteclipse.com/documentation/svlinter/How_to_use_special_characters_in_XML.3F.html#gsc.tab=0).
-
-Language files have to be placed in the same directory as the `BatchEncoder.exe` executable to be loaded automatically.
-
-Language files can also be edited in dedicated [LanguageEditor](https://github.com/wieslawsoltes/LanguageEditor#download-languageeditor) program. LanguageEditor requires .NET Framework 4.5 and Windows 7 SP1 or above.
 
 The default language files can be found [here](https://github.com/wieslawsoltes/wavtoac3encoder/tree/master/config/lang).
 
