@@ -242,7 +242,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="configuration\Configuration.cpp" />
-    <ClCompile Include="configuration\EncoderOptions.cpp" />
     <ClCompile Include="MainApp.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -369,7 +368,6 @@
     <ClInclude Include="avisynth\src\core\avisynth.h" />
     <ClInclude Include="avisynth\src\internal.h" />
     <ClInclude Include="configuration\Configuration.h" />
-    <ClInclude Include="configuration\EncoderOptions.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="res\resource.h" />
     <ClInclude Include="version.h" />
