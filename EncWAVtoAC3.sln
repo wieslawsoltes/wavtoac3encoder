@@ -6,8 +6,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncWAVtoAC3", "src\EncWAVto
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Controls", "src\common\controls\MFC.Controls.vcxproj", "{5936EB01-037A-4148-A512-DAD975C24CBD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Language", "src\common\language\MFC.Language.vcxproj", "{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Utilities", "src\common\utilities\MFC.Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
 EndProject
 Global
@@ -34,14 +32,6 @@ Global
 		{5936EB01-037A-4148-A512-DAD975C24CBD}.Release|Win32.Build.0 = Release|Win32
 		{5936EB01-037A-4148-A512-DAD975C24CBD}.Release|x64.ActiveCfg = Release|x64
 		{5936EB01-037A-4148-A512-DAD975C24CBD}.Release|x64.Build.0 = Release|x64
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Debug|Win32.Build.0 = Debug|Win32
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Debug|x64.ActiveCfg = Debug|x64
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Debug|x64.Build.0 = Debug|x64
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|Win32.ActiveCfg = Release|Win32
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|Win32.Build.0 = Release|Win32
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|x64.ActiveCfg = Release|x64
-		{8F02F1BD-9F9F-439C-9686-3961C64FC8EE}.Release|x64.Build.0 = Release|x64
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|Win32.ActiveCfg = Debug|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|Win32.Build.0 = Debug|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Debug|x64.ActiveCfg = Debug|x64
