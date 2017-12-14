@@ -161,7 +161,6 @@ public:
     static int nValidCbrBitrates[nNumValidCbrBitrates];
     static CChannelConfig ccAften[nNumChannelConfigAften];
     static LPTSTR szRawSampleFormats[nNumRawSampleFormats];
-    static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
     static CString pszGroups[nNumEncoderOptionsGroups];
     static CString szCbrOption;
     static CString szVbrOption;
@@ -170,9 +169,10 @@ public:
     static CString szRawSampleFormatOption;
     static CString szRawSampleRateOption;
     static CString szRawChannelsOption;
-    static TCHAR szSupportedInputExt[nNumSupportedInputExt][8]
+    static TCHAR szSupportedInputExt[nNumSupportedInputExt][8];
     static int nSupportedInputFormats[nNumSupportedInputExt];
-    static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8]
+    static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8];
+    static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
 public:
     static void InitEncoderOptions();
     static int FindValidBitratePos(const int nBitrate);
