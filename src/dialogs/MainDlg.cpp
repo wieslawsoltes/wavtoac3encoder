@@ -2277,8 +2277,8 @@ void CMainDlg::InitDefaultPreset()
     if (defaultPreset.nMode == AFTEN_ENC_MODE_CBR)
     {
         this->m_SldBitrate.SetTic(1);
-        this->m_SldBitrate.SetRange(0, nNumValidCbrBitrates - 1, TRUE);
-        this->m_SldBitrate.SetPos(FindValidBitratePos(defaultPreset.nBitrate));
+        this->m_SldBitrate.SetRange(0, CEncoderDefaults::nNumValidCbrBitrates - 1, TRUE);
+        this->m_SldBitrate.SetPos(CEncoderDefaults::FindValidBitratePos(defaultPreset.nBitrate));
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
     else if (defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
@@ -2298,14 +2298,14 @@ void CMainDlg::InitRawSamleFormatComboBox()
     CString szIgnored = DEFAULT_TEXT_IGNORED;
 
     // update language string
-    szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(szIgnored);
+    CEncoderDefaults::szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(szIgnored);
 
     // remove all items from sample format combobox
     this->m_CmbRawSampleFormat.ResetContent();
 
     // setup default values for raw audio input
-    for (int i = 0; i < nNumRawSampleFormats; i++)
-        this->m_CmbRawSampleFormat.InsertString(i, szRawSampleFormats[i]);
+    for (int i = 0; i < CEncoderDefaults::nNumRawSampleFormats; i++)
+        this->m_CmbRawSampleFormat.InsertString(i, CEncoderDefaults::szRawSampleFormats[i]);
 }
 
 void CMainDlg::InitSettingsListGroups()
@@ -2320,9 +2320,9 @@ void CMainDlg::InitSettingsListGroups()
     ListView_RemoveAllGroups(listView);
 
     // add Groups to settings listctrl
-    for (int i = 0; i < nNumEncoderOptionsGroups; i++)
+    for (int i = 0; i < CEncoderDefaults::nNumEncoderOptionsGroups; i++)
     {
-        lg.pszHeader = (LPTSTR)(LPCTSTR)(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00208000 + i + 1) : pszGroups[i]);
+        lg.pszHeader = (LPTSTR)(LPCTSTR)(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00208000 + i + 1) : CEncoderDefaults::pszGroups[i]);
         lg.iGroupId = 101 + i;
         ListView_InsertGroup(listView, -1, &lg);
     }
@@ -2509,8 +2509,6 @@ void CMainDlg::InitLang(bool initLangMenu)
         // Main Dialog: Settings List
         this->InitLangSettingsList();
     }
-
-    ::InitEncoderOptions();
 
     this->InitSettingsList();
 
@@ -3173,11 +3171,11 @@ void CMainDlg::OnFileAddFiles()
         ZeroMemory(pFiles, dwMaxSize);
 
         // get input file filter
-        CString szFilter = GetSupportedInputFilesFilter();
+        CString szFilter = CEncoderDefaults::GetSupportedInputFilesFilter();
 
         // configure open file dialog
         CFileDialog fd(TRUE,
-            szSupportedInputExt[0],
+            CEncoderDefaults::szSupportedInputExt[0],
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
             szFilter);
@@ -3278,8 +3276,8 @@ void CMainDlg::OnFileMuxWizard()
     int nItemsCount = this->m_LstFiles.GetItemCount();
 
     // limit number of processed items
-    if (nItemsCount > nNumMaxInputFiles)
-        nItemsCount = nNumMaxInputFiles;
+    if (nItemsCount > CEncoderDefaults::nNumMaxInputFiles)
+        nItemsCount = CEncoderDefaults::nNumMaxInputFiles;
 
     for (int i = 0; i < nItemsCount; i++)
     {
@@ -3287,9 +3285,9 @@ void CMainDlg::OnFileMuxWizard()
         dlg.szTmpInputFiles[i] = this->m_LstFiles.GetItemText(i, 0);
     }
 
-    int nIndexAcmod = FindOptionIndex(_T("acmod"));
-    int nIndexLfe = FindOptionIndex(_T("lfe"));
-    int nIndexChconfig = FindOptionIndex(_T("chconfig"));
+    int nIndexAcmod = CEncoderDefaults::FindOptionIndex(_T("acmod"));
+    int nIndexLfe = CEncoderDefaults::FindOptionIndex(_T("lfe"));
+    int nIndexChconfig = CEncoderDefaults::FindOptionIndex(_T("chconfig"));
     bool bUpdateChconfig = false;
 
     // get current preset
@@ -3445,9 +3443,9 @@ void CMainDlg::OnFileMuxWizard()
                 int acmod = dlg.nChannelConfig;
                 int lfe = (dlg.bLFE == true) ? 1 : 0;
 
-                for (int i = 0; i < nNumChannelConfigAften; i++)
+                for (int i = 0; i < CEncoderDefaults::nNumChannelConfigAften; i++)
                 {
-                    if ((ccAften[i].acmod == acmod) && (ccAften[i].lfe == lfe))
+                    if ((CEncoderDefaults::ccAften[i].acmod == acmod) && (CEncoderDefaults::ccAften[i].lfe == lfe))
                     {
                         preset.nSetting[nIndexChconfig] = i;
                         break;
@@ -3530,7 +3528,7 @@ void CMainDlg::OnFileLoadPresets()
         CString szFileName = fd.GetPathName();
 
         // load presets list from file
-        if (::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
+        if (CEncoderDefaults::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
         {
             // populate presets list
             this->m_CmbPresets.ResetContent();
@@ -3567,7 +3565,7 @@ void CMainDlg::OnFileSavePresets()
         CString szFileName = fd.GetPathName();
 
         // save presets list to file
-        ::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
+        CEncoderDefaults::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
     }
 }
 
