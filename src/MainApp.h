@@ -6,6 +6,7 @@
 
 #include "res\resource.h"
 #include "configuration\Configuration.h"
+#include "configuration\EncoderOptions.h"
 
 class CEncWAVtoAC3App : public CWinAppEx
 {
