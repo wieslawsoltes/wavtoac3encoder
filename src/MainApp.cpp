@@ -19,8 +19,6 @@ CEncWAVtoAC3App::~CEncWAVtoAC3App()
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
-    CEncoderDefaults::InitEncoderOptions();
-
     m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
 
     if (m_Config.m_bIsPortable == true)
@@ -44,6 +42,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
 
     m_Config.LoadLangConfig(m_Config.m_szLangFilePath);
     m_Config.LoadLangStrings();
+
+    CEncoderDefaults::InitEncoderOptions();
 
     INITCOMMONCONTROLSEX InitCtrls;
     InitCtrls.dwSize = sizeof(InitCtrls);
