@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "afxwin.h"
-#include "configuration\EncoderOptions.h"
+#include "configuration\Configuration.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
