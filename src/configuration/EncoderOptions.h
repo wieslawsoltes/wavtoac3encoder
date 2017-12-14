@@ -157,14 +157,14 @@ public:
     const static int nNumSupportedInputExt = 8;
     const static int nNumSupportedOutputExt = 1;
 public:
-    static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+    static constexpr LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
 public:
     static int nValidCbrBitrates[nNumValidCbrBitrates] =
     {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
 public:
-    static CChannelConfig ccAften[nNumChannelConfigAften] =
+    static constexpr CChannelConfig ccAften[nNumChannelConfigAften] =
     {
         { 0, 0, _T("1+1") },
         { 1, 0, _T("1/0") },
@@ -184,7 +184,7 @@ public:
         { 7, 1, _T("3/2") }
     };
 public:
-    static LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
+    static constexpr LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
     {
         (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
         _T("u8"),
@@ -203,9 +203,9 @@ public:
         _T("double_be")
     };
 public:
-    static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
+    static constexpr CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
 public:
-    static CString pszGroups[nNumEncoderOptionsGroups] =
+    static constexpr CString pszGroups[nNumEncoderOptionsGroups] =
     {
         _T("Encoding options"),
         _T("Bitstream info metadata"),
@@ -215,19 +215,19 @@ public:
         _T("Alternate bit stream syntax")
     };
 public:
-    static CString szCbrOption = _T("-b");
+    static constexpr CString szCbrOption = _T("-b");
 public:
-    static CString szVbrOption = _T("-q");
+    static constexpr CString szVbrOption = _T("-q");
 public:
-    static CString szThreadsOption = _T("-threads");
+    static constexpr CString szThreadsOption = _T("-threads");
 public:
-    static CString szSimdOption = _T("-nosimd");
+    static constexpr CString szSimdOption = _T("-nosimd");
 public:
-    static CString szRawSampleFormatOption = _T("-raw_fmt");
+    static constexpr CString szRawSampleFormatOption = _T("-raw_fmt");
 public:
-    static CString szRawSampleRateOption = _T("-raw_sr");
+    static constexpr CString szRawSampleRateOption = _T("-raw_sr");
 public:
-    static CString szRawChannelsOption = _T("-raw_ch");
+    static constexpr CString szRawChannelsOption = _T("-raw_ch");
 public:
     static TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
     {
@@ -243,7 +243,7 @@ public:
     #endif
     };
 public:
-    static int nSupportedInputFormats[nNumSupportedInputExt] =
+    static constexpr int nSupportedInputFormats[nNumSupportedInputExt] =
     {
         PCM_FORMAT_WAVE,
         PCM_FORMAT_RAW,
@@ -254,7 +254,7 @@ public:
         PCM_FORMAT_CAFF,
     };
 public:
-    static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
+    static constexpr TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
     {
         _T("ac3")
     };
