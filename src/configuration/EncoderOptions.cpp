@@ -5,41 +5,6 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-int CEncoderDefaults::FindValidBitratePos(const int nBitrate)
-{
-    for (int i = 0; i < nNumValidCbrBitrates; i++)
-    {
-        if (nValidCbrBitrates[i] == nBitrate)
-            return i;
-    }
-    return 0;
-}
-
-int CEncoderDefaults::FindOptionIndex(CString szOption)
-{
-    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
-    {
-        CString szBuffer = encOpt[i].szOption;
-        if (szOption.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
-        {
-            return i;
-        }
-    }
-    return 0;
-}
-
-void CEncoderDefaults::ResetEncoderOptionsLists()
-{
-    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
-    {
-        if (encOpt[i].listOptNames.Count() > 0)
-            encOpt[i].listOptNames.RemoveAll();
-
-        if (encOpt[i].listOptValues.Count() > 0)
-            encOpt[i].listOptValues.RemoveAll();
-    }
-}
-
 void CEncoderDefaults::InitEncoderOptions()
 {
     szCurrentPresetsVersion = _T("1.1.0.0");
@@ -846,6 +811,41 @@ void CEncoderDefaults::InitEncoderOptions()
 
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A003) : _T("Standard (default)"), 0);
     AddEncoderOptionValue(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0080A004) : _T("HDCD"), 1);
+}
+
+int CEncoderDefaults::FindValidBitratePos(const int nBitrate)
+{
+    for (int i = 0; i < nNumValidCbrBitrates; i++)
+    {
+        if (nValidCbrBitrates[i] == nBitrate)
+            return i;
+    }
+    return 0;
+}
+
+int CEncoderDefaults::FindOptionIndex(CString szOption)
+{
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
+    {
+        CString szBuffer = encOpt[i].szOption;
+        if (szOption.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+        {
+            return i;
+        }
+    }
+    return 0;
+}
+
+void CEncoderDefaults::ResetEncoderOptionsLists()
+{
+    for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
+    {
+        if (encOpt[i].listOptNames.Count() > 0)
+            encOpt[i].listOptNames.RemoveAll();
+
+        if (encOpt[i].listOptValues.Count() > 0)
+            encOpt[i].listOptValues.RemoveAll();
+    }
 }
 
 void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
