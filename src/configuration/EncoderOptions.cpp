@@ -9,7 +9,7 @@ void CEncoderDefaults::InitEncoderOptions()
 {
     szCurrentPresetsVersion = _T("1.1.0.0");
 
-    nValidCbrBitrates =
+    nValidCbrBitrates
     {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
