@@ -89,26 +89,16 @@ public:
     const static int nNumEncoderOptions = 31;
     const static int nNumSIMDIntructions = 4;
 public:
-    // preset name
     CString szName;
-    // encoding mode (CBR or VBR)
     AftenEncMode nMode;
-    // bitrate for CBR mode or quality for VBR mode
     int nBitrate;
     int nQuality;
-    // raw audio input
     int nRawSampleFormat;
     int nRawSampleRate;
     int nRawChannels;
-    // enable specific SIMD instructions: 0=MMX, 1=SSE, 2=SSE2, 3=SSE3
     int nUsedSIMD[nNumSIMDIntructions];
-    // number of threads
     int nThreads;
-    // currently used encoder engine
-    // if set to -1 then no engine is used
-    // if set to 0 or above then user engine is used
     int nCurrentEngine;
-    // list of encoder settings
     int nSetting[nNumEncoderOptions];
 public:
     CEncoderPreset()
@@ -154,81 +144,136 @@ public:
 
 typedef CListT<CEncoderPreset> EncoderPresetList_t;
 
-const static int nNumMaxInputFiles = 6;
-const static int nNumValidCbrBitrates = 20;
-const static int nNumChannelConfigAften = 16;
-const static int nNumRawSampleFormats = 15;
-const static int nNumEncoderOptionsGroups = 6;
-const static int nNumSupportedInputExt = 8;
-const static int nNumSupportedOutputExt = 1;
-
-// current version of presets configuration (format: #.###)
-const LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
-
-extern const int nValidCbrBitrates[nNumValidCbrBitrates];
-
-extern const CChannelConfig ccAften[nNumChannelConfigAften];
-
-// default values for raw audio input
-extern LPTSTR szRawSampleFormats[nNumRawSampleFormats];
-
-// advanced options global variable
-extern CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
-
-// encoder options groups
-extern CString pszGroups[nNumEncoderOptionsGroups];
-
-// option for CBR encoding mode for aften
-extern const CString szCbrOption;
-
-// option for VBR encoding mode for aften
-extern const CString szVbrOption;
-
-// option for number of threads for aften
-extern const CString szThreadsOption;
-
-// option for SIMD instructions for aften
-extern const CString szSimdOption;
-
-// option for raw audio input sample format for aften
-extern const CString szRawSampleFormatOption;
-
-// option for raw audio input sample rate for aften
-extern const CString szRawSampleRateOption;
-
-// option for raw audio input channels for aften
-extern const CString szRawChannelsOption;
-
-// supported input file extensions
-extern const TCHAR szSupportedInputExt[nNumSupportedInputExt][8];
-
-// supported input file formats
-extern const int nSupportedInputFormats[nNumSupportedInputExt];
-
-// supported output file extensions
-extern const TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8];
-
-// find valid bitrate index
-int FindValidBitratePos(const int nBitrate);
-
-int FindOptionIndex(CString szOption);
-
-void ResetEncoderOptionsLists();
-
-// initialize advanced encoder options
-void InitEncoderOptions();
-
-// load encoder presets
-bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-
-// save encoder presets
-bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-
-// check if file extension is supported
-bool IsSupportedInputExt(CString &szExt);
-
-// get supported input format
-int GetSupportedInputFormat(CString &szExt);
-
-// create input file filter for open file dialogs
-CString GetSupportedInputFilesFilter();
+class CEncoderDefaults
+{
+private:
+    CEncoderDefaults() { }
+public:
+    const static int nNumMaxInputFiles = 6;
+    const static int nNumValidCbrBitrates = 20;
+    const static int nNumChannelConfigAften = 16;
+    const static int nNumRawSampleFormats = 15;
+    const static int nNumEncoderOptionsGroups = 6;
+    const static int nNumSupportedInputExt = 8;
+    const static int nNumSupportedOutputExt = 1;
+public:
+    const static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+public:
+    const static int nValidCbrBitrates[nNumValidCbrBitrates] =
+    {
+        0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
+    };
+public:
+    const static CChannelConfig ccAften[nNumChannelConfigAften] =
+    {
+        { 0, 0, _T("1+1") },
+        { 1, 0, _T("1/0") },
+        { 2, 0, _T("2/0") },
+        { 3, 0, _T("3/0") },
+        { 4, 0, _T("2/1") },
+        { 5, 0, _T("3/1") },
+        { 6, 0, _T("2/2") },
+        { 7, 0, _T("3/2") },
+        { 0, 1, _T("1+1") },
+        { 1, 1, _T("1/0") },
+        { 2, 1, _T("2/0") },
+        { 3, 1, _T("3/0") },
+        { 4, 1, _T("2/1") },
+        { 5, 1, _T("3/1") },
+        { 6, 1, _T("2/2") },
+        { 7, 1, _T("3/2") }
+    };
+public:
+    static LPTSTR szRawSampleFormats[nNumRawSampleFormats] =
+    {
+        (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
+        _T("u8"),
+        _T("s8"),
+        _T("s16_le"),
+        _T("s16_be"),
+        _T("s20_le"),
+        _T("s20_be"),
+        _T("s24_le"),
+        _T("s24_be"),
+        _T("s32_le"),
+        _T("s32_be"),
+        _T("float_le"),
+        _T("float_be"),
+        _T("double_le"),
+        _T("double_be")
+    };
+public:
+    static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
+public:
+    static CString pszGroups[nNumEncoderOptionsGroups] =
+    {
+        _T("Encoding options"),
+        _T("Bitstream info metadata"),
+        _T("Dynamic range compression and dialog normalization"),
+        _T("Input options"),
+        _T("Input filters"),
+        _T("Alternate bit stream syntax")
+    };
+public:
+    const static CString szCbrOption = _T("-b");
+public:
+    const static CString szVbrOption = _T("-q");
+public:
+    const static CString szThreadsOption = _T("-threads");
+public:
+    const static CString szSimdOption = _T("-nosimd");
+public:
+    const static CString szRawSampleFormatOption = _T("-raw_fmt");
+public:
+    const static CString szRawSampleRateOption = _T("-raw_sr");
+public:
+    const static CString szRawChannelsOption = _T("-raw_ch");
+public:
+    const static TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
+    {
+        _T("wav"),
+        _T("pcm"),
+        _T("raw"),
+        _T("bin"),
+        _T("aiff"),
+        _T("aif"),
+        _T("aifc"),
+    #ifndef DISABLE_AVISYNTH
+        _T("avs")
+    #endif
+    };
+public:
+    const static int nSupportedInputFormats[nNumSupportedInputExt] =
+    {
+        PCM_FORMAT_WAVE,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_RAW,
+        PCM_FORMAT_AIFF,
+        PCM_FORMAT_AIFF,
+        PCM_FORMAT_CAFF,
+    };
+public:
+    const static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
+    {
+        _T("ac3")
+    };
+public:
+    static int FindValidBitratePos(const int nBitrate);
+public:
+    static int FindOptionIndex(CString szOption);
+public:
+    static void ResetEncoderOptionsLists();
+public:
+    static void InitEncoderOptions();
+public:
+    static bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+public:
+    static bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+public:
+    static bool IsSupportedInputExt(CString &szExt);
+public:
+    static int GetSupportedInputFormat(CString &szExt);
+public:
+    static CString GetSupportedInputFilesFilter();
+};
