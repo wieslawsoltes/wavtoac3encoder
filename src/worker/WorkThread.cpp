@@ -2,7 +2,7 @@
 #include "MainApp.h"
 #include "WorkThread.h"
 #include "dialogs\WorkDlg.h"
-#include "configuration\EncoderOptions.h"
+#include "configuration\Configuration.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
