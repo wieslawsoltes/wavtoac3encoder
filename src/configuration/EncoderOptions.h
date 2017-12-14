@@ -157,7 +157,7 @@ public:
     const static int nNumSupportedInputExt = 8;
     const static int nNumSupportedOutputExt = 1;
 public:
-    static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+    static LPTSTR szCurrentPresetsVersion;
     static int nValidCbrBitrates[nNumValidCbrBitrates];
     static CChannelConfig ccAften[nNumChannelConfigAften];
     static LPTSTR szRawSampleFormats[nNumRawSampleFormats];
