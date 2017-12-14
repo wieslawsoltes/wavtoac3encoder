@@ -31,7 +31,7 @@ const int nNumInputFiles[nNumChannelConfig] =
     2, 1, 2, 3, 3, 4, 4, 5
 };
 
-const int nChannelConfigStates[nNumChannelConfig][nNumMaxInputFiles] =
+const int nChannelConfigStates[nNumChannelConfig][CEncoderDefaults::nNumMaxInputFiles] =
 {
     // FL FR FC S  SL SR
     {  1, 1, 0, 0, 0, 0 }, // 1+1
@@ -44,7 +44,7 @@ const int nChannelConfigStates[nNumChannelConfig][nNumMaxInputFiles] =
     {  1, 1, 1, 0, 1, 1 }  // 3/2
 };
 
-const CString szChannelConfigNames[nNumChannelConfig][nNumMaxInputFiles] =
+const CString szChannelConfigNames[nNumChannelConfig][CEncoderDefaults::nNumMaxInputFiles] =
 {
     // FL FR FC S  SL SR
     {  _T("Ch1"), _T("Ch2"), _T("-"), _T("-"), _T("-"),   _T("-")  }, // 1+1
@@ -207,7 +207,7 @@ void CMuxDlg::InitLang()
 
 void CMuxDlg::RemapFilesToChannels()
 {
-    for (int i = 0; i < nNumMaxInputFiles; i++)
+    for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
         this->szInputFiles[i] = _T("");
 
     switch (this->nChannelConfig)
@@ -372,7 +372,7 @@ void CMuxDlg::SetControlsState()
 bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
     // reset input files
-    for (int i = 0; i < nNumMaxInputFiles; i++)
+    for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
         szTmpInputFiles[i] = _T("");
 
     try
@@ -402,7 +402,7 @@ bool CMuxDlg::LoadFilesList(CString &szFileName)
                 szBuffer += _T("\0");
 
                 // terminate reading if max of input files is reached
-                if (nFileCounter >= nNumMaxInputFiles)
+                if (nFileCounter >= CEncoderDefaults::nNumMaxInputFiles)
                 {
                     fp.FClose();
                     return true;
@@ -579,10 +579,10 @@ void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCu
     szCurrentFileName = GetFileName(szCurrentFileName);
 
     CFileDialog fd(TRUE,
-        szSupportedInputExt[0],
+        CEncoderDefaults::szSupportedInputExt[0],
         szCurrentFileName,
         OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-        GetSupportedInputFilesFilter(),
+        CEncoderDefaults::GetSupportedInputFilesFilter(),
         this);
 
     if (fd.DoModal() == IDOK)
@@ -752,7 +752,7 @@ void CMuxDlg::OnBnClickedCheckChannelConfigLfe()
 
 void CMuxDlg::OnBnClickedCancel()
 {
-    for (int i = 0; i < nNumMaxInputFiles; i++)
+    for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
     {
         this->szInputFiles[i] = _T("");
         this->szTmpInputFiles[i] = _T("");
