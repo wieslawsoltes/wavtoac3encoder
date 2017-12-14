@@ -400,7 +400,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     uint8_t *frame = NULL;
     FLOAT *fwav = NULL;
     int nr, fs;
-    FILE *ifp[nNumMaxInputFiles];
+    FILE *ifp[CEncoderDefaults::nNumMaxInputFiles];
     FILE *ofp = NULL;
     PcmContext pf;
     uint32_t samplecount, bytecount, t0, t1, percent;
@@ -434,7 +434,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         pszInPath[i] = szInPath[i].GetBuffer();
 
     pszOutPath = szOutPath.GetBuffer();
-    memset(ifp, 0, nNumMaxInputFiles * sizeof(FILE *));
+    memset(ifp, 0, CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
     // Avisynth data
@@ -587,7 +587,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     else
     {
         // check file extension to set input file format (using only first file)
-        input_file_format = GetSupportedInputFormat(GetFileExtension(szInPath[0]));
+        input_file_format = CEncoderDefaults::GetSupportedInputFormat(GetFileExtension(szInPath[0]));
     }
 
     if (bAvisynthInput == false)
@@ -1131,7 +1131,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             // prepare output file name
             szOutPath = szInPath[0];
             szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
-            szOutPath.Append(szSupportedOutputExt[0]);
+            szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
             // use different output path
             if (pWork->bUseOutPath == true)
@@ -1227,7 +1227,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         // prepare output file name (using first file path from the list)
         szOutPath = szInPath[0];
         szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
-        szOutPath.Append(szSupportedOutputExt[0]);
+        szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
         // use user selected output file path
         if (pWork->bUseOutPath == true)
