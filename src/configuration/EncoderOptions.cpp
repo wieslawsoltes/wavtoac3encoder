@@ -83,7 +83,7 @@ TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] =
     #endif
 };
 
-int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt]s =
+int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] =
 {
     PCM_FORMAT_WAVE,
     PCM_FORMAT_RAW,
