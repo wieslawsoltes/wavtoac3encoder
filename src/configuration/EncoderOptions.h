@@ -157,14 +157,14 @@ public:
     const static int nNumSupportedInputExt = 8;
     const static int nNumSupportedOutputExt = 1;
 public:
-    const static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
+    static LPTSTR szCurrentPresetsVersion = _T("1.1.0.0");
 public:
-    const static int nValidCbrBitrates[nNumValidCbrBitrates] =
+    static int nValidCbrBitrates[nNumValidCbrBitrates] =
     {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
 public:
-    const static CChannelConfig ccAften[nNumChannelConfigAften] =
+    static CChannelConfig ccAften[nNumChannelConfigAften] =
     {
         { 0, 0, _T("1+1") },
         { 1, 0, _T("1/0") },
@@ -215,21 +215,21 @@ public:
         _T("Alternate bit stream syntax")
     };
 public:
-    const static CString szCbrOption = _T("-b");
+    static CString szCbrOption = _T("-b");
 public:
-    const static CString szVbrOption = _T("-q");
+    static CString szVbrOption = _T("-q");
 public:
-    const static CString szThreadsOption = _T("-threads");
+    static CString szThreadsOption = _T("-threads");
 public:
-    const static CString szSimdOption = _T("-nosimd");
+    static CString szSimdOption = _T("-nosimd");
 public:
-    const static CString szRawSampleFormatOption = _T("-raw_fmt");
+    static CString szRawSampleFormatOption = _T("-raw_fmt");
 public:
-    const static CString szRawSampleRateOption = _T("-raw_sr");
+    static CString szRawSampleRateOption = _T("-raw_sr");
 public:
-    const static CString szRawChannelsOption = _T("-raw_ch");
+    static CString szRawChannelsOption = _T("-raw_ch");
 public:
-    const static TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
+    static TCHAR szSupportedInputExt[nNumSupportedInputExt][8] =
     {
         _T("wav"),
         _T("pcm"),
@@ -243,7 +243,7 @@ public:
     #endif
     };
 public:
-    const static int nSupportedInputFormats[nNumSupportedInputExt] =
+    static int nSupportedInputFormats[nNumSupportedInputExt] =
     {
         PCM_FORMAT_WAVE,
         PCM_FORMAT_RAW,
@@ -254,7 +254,7 @@ public:
         PCM_FORMAT_CAFF,
     };
 public:
-    const static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
+    static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8] =
     {
         _T("ac3")
     };
