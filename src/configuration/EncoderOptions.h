@@ -178,7 +178,7 @@ public:
     static void InitEncoderOptions();
     static int FindOptionIndex(CString szOption);
     static void ResetEncoderOptionsLists();
-    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
+    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp);
     static bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool IsSupportedInputExt(CString &szExt);
