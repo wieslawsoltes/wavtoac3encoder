@@ -2510,6 +2510,8 @@ void CMainDlg::InitLang(bool initLangMenu)
         this->InitLangSettingsList();
     }
 
+    CEncoderDefaults::InitEncoderOptions();
+
     this->InitSettingsList();
 
     // restore settings list
