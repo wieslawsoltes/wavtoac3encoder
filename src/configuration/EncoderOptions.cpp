@@ -99,6 +99,8 @@ TCHAR CEncoderDefaults::szSupportedOutputExt[nNumSupportedOutputExt][8] =
     _T("ac3")
 };
 
+CEncoderOptions CEncoderDefaults::encOpt[CEncoderPreset::nNumEncoderOptions];
+
 void CEncoderDefaults::InitEncoderOptions()
 {
 #define SetEncoderOption(name, option, tooltip, defval, ignval, group, begin) \
