@@ -61,9 +61,13 @@ public:
     }
 };
 
-typedef CListT<ConfigEntry> ConfigList_t;
+class ConfigList_t : public CListT<ConfigEntry>
+{
+}
 
-typedef CMapT<int, CString> LangMap_t;
+class LangMap_t : public CMapT<int, CString>
+{
+}
 
 class Lang
 {
@@ -98,7 +102,9 @@ public:
     }
 };
 
-typedef CListT<Lang> LangList_t;
+class LangList_t : public CListT<Lang>
+{
+}
 
 class CConfiguration
 {
@@ -272,7 +278,9 @@ public:
     }
 };
 
-typedef CListT<CEncoderPreset> EncoderPresetList_t;
+class EncoderPresetList_t : public CListT<CEncoderPreset>
+{
+}
 
 class CEncoderDefaults
 {
@@ -315,4 +323,3 @@ public:
     static int GetSupportedInputFormat(CString &szExt);
     static CString GetSupportedInputFilesFilter();
 };
-
