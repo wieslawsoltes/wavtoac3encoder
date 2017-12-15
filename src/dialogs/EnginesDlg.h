@@ -17,7 +17,7 @@ class CEnginesDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CEnginesDlg)
 public:
-    CEnginesDlg(CWnd* pParent = NULL);
+    CEnginesDlg(CWnd* pParent = nullptr);
     virtual ~CEnginesDlg();
     enum { IDD = IDD_DIALOG_ENGINES };
 protected:
