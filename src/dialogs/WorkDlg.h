@@ -46,7 +46,7 @@ class CWorkDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CWorkDlg)
 public:
-    CWorkDlg(CWnd* pParent = NULL);
+    CWorkDlg(CWnd* pParent = nullptr);
     virtual ~CWorkDlg();
     enum { IDD = IDD_DIALOG_WORK };
 protected:
