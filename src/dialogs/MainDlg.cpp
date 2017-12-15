@@ -796,7 +796,7 @@ void CMainDlg::OnCbnSelchangeComboPresets()
 void CMainDlg::OnCbnSelchangeComboEngines()
 {
     // unload currently used aften library
-    CloseAftenAPI(&this->api);
+    this->api.CloseAftenAPI();
 
     // get newly selected engine by user
     int nSel = this->m_CmbEngines.GetCurSel();
