@@ -873,7 +873,7 @@ void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
 
 LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 {
-    if ((lParam == (LPARAM)0) && (wParam != nullptr))
+    if ((lParam == (LPARAM)0) && (wParam != (WPARAM)0))
     {
         int nPreset = this->m_CmbPresets.GetCurSel();
         if (nPreset != CB_ERR)
