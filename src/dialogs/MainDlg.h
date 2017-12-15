@@ -16,17 +16,9 @@
 #include "worker\Avs2Raw.h"
 #endif
 
-// define main window status bar id
 #define IDC_STATUSBAR 1500
-
-// define settings combo box id
 #define IDC_COMBOBOX 1501
-
-// start id for context-menu used in settings list
-
 #define ID_OPTIONS_MENU_START 4000
-
-// start id for language menu
 #define ID_LANGUAGE_MENU_START 2000
 #define ID_LANGUAGE_MENU_MAX 2999
 
@@ -70,50 +62,37 @@ protected:
     HACCEL m_hAccelTable;
 public:
     bool bVisible;
-public:
     AftenAPI api;
     int nSortColumn;
     bool nSortOrder[2];
     bool bSettingsValueVisible;
     ConfigList_t m_EngineList;
-public:
     EncoderPresetList_t encPresets;
     CEncoderPreset defaultPreset;
     int nCurrentPreset = 0;
-public:
     CString szOutputPath;
     CString szOutputFile;
-public:
     bool bMultipleMonoInput;
-public:
     bool bDisableAllWarnings;
-public:
     bool bSaveConfig;
 public:
     CStatusBarCtrl m_StatusBar;
-public:
     CMySliderCtrl m_SldBitrate;
-public:
     CMyListCtrl m_LstSettings;
     CMyListCtrl m_LstFiles;
-public:
     CMyStatic m_StcBitrate;
     CMyStatic m_StcSelected;
     CMyStatic m_StcPreconfigured;
     CMyStatic m_StcQualityBitrate;
-public:
     CMyComboBox m_CmbRawSampleFormat;
     CMyComboBox m_CmbValue;
     CMyComboBox m_CmbPresets;
     CMyComboBox m_CmbEngines;
-public:
     CMyComboBoxEdit m_EdtCmbPresetName;
-public:
     CMyEdit m_EdtRawSamplerate;
     CMyEdit m_EdtRawChannels;
     CMyEdit m_EdtOutPath;
     CMyEdit m_EdtThreads;
-public:
     CMyButton m_ChkVbr;
     CMyButton m_BtnEncode;
     CMyButton m_ChkSimdMMX;
@@ -128,7 +107,6 @@ public:
     CMyButton m_ChkMultipleMonoInput;
     CMyButton m_BtnMuxWizard;
     CMyButton m_BtnEngines;
-public:
     CSpinButtonCtrl m_SpnRawSampleRate;
     CSpinButtonCtrl m_SpnRawChannels;
     CSpinButtonCtrl m_SpnThreads;
