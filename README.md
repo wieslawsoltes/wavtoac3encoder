@@ -173,8 +173,6 @@ To report issues please use [issues tracker](https://github.com/wieslawsoltes/wa
 
 For more informations and help please visit [this forum thread](http://forum.doom9.org/showthread.php?t=113074).
 
-Please also check the `*.log` file in program directory for detailed information.
-
 ## Sources
 
 Sources are available in the [git source code repository](https://github.com/wieslawsoltes/wavtoac3encoder/).
