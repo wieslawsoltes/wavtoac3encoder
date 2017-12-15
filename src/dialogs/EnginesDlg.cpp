@@ -15,7 +15,6 @@ CEnginesDlg::CEnginesDlg(CWnd* pParent /*=nullptr*/)
 
 CEnginesDlg::~CEnginesDlg()
 {
-
 }
 
 void CEnginesDlg::DoDataExchange(CDataExchange* pDX)
@@ -44,21 +43,12 @@ BOOL CEnginesDlg::OnInitDialog()
 {
     CMyDialogEx::OnInitDialog();
 
-    // set style of the engines list
     this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+    this->m_LstEngines.InsertColumn(0, theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100C) : _T("Name"), 0, 150);
+    this->m_LstEngines.InsertColumn(1, theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100D) : _T("Path"), 0, 440);
 
-    // add columns to engines list
-    this->m_LstEngines.InsertColumn(0,
-        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100C) : _T("Name"),
-        0, 150);
-    this->m_LstEngines.InsertColumn(1,
-        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00B0100D) : _T("Path"),
-        0, 440);
-
-    // populate engines list
     this->InsertProgramEngines();
 
-    // select currently used engine
     this->m_LstEngines.SetItemState(-1, 0, LVIS_SELECTED);
     this->m_LstEngines.SetItemState(this->nCurrSel, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -88,10 +78,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesBrowse()
 
     if (fd.DoModal() == IDOK)
     {
-        // get full path from file dialog
         CString szFileName = fd.GetPathName();
-
-        // set engine path
         this->m_EdtEnginePath.SetWindowText(szFileName);
     }
 }
@@ -107,10 +94,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesImport()
 
     if (fd.DoModal() == IDOK)
     {
-        // get full path from file dialog
         CString szFileName = fd.GetPathName();
-
-        // load engines from file
         this->LoadProgramEngines(szFileName);
     }
 }
@@ -126,10 +110,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesExport()
 
     if (fd.DoModal() == IDOK)
     {
-        // get full path from file dialog
         CString szFileName = fd.GetPathName();
-
-        // save engines from file
         this->SaveProgramEngines(szFileName);
     }
 }
@@ -153,7 +134,6 @@ void CEnginesDlg::OnBnClickedButtonEnginesRemove()
     CListT<int> list;
     POSITION pos;
 
-    // get all selected items
     pos = this->m_LstEngines.GetFirstSelectedItemPosition();
     while (pos != nullptr)
     {
@@ -161,7 +141,6 @@ void CEnginesDlg::OnBnClickedButtonEnginesRemove()
         list.Insert(nItem);
     }
 
-    // remove all selected items
     for (int i = list.Count() - 1; i >= 0; i--)
     {
         int nIndex = list.Get(i);
@@ -174,23 +153,16 @@ bool CEnginesDlg::InsertProgramEngines()
 {
     int nSize = this->m_EngineList.Count();
 
-    // no engine return error
     if (nSize == 0)
         return false;
 
     for (int i = 0; i < nSize; i++)
     {
-        // get next entry in configuration list
         auto& ce = this->m_EngineList.Get(i);
-
-        // insert all items to engines list
-        // ce.szKey  - name of engine   
-        // ce.szData - path to libaften.dll
         this->m_LstEngines.InsertItem(i, ce.szKey);
         this->m_LstEngines.SetItemText(i, 1, ce.szValue);
     }
 
-    // always selected first item in the list
     this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
 
     return true;
@@ -198,7 +170,6 @@ bool CEnginesDlg::InsertProgramEngines()
 
 bool CEnginesDlg::LoadProgramEngines(CString szFileName)
 {
-    // init engines configuration
     this->m_EngineList.RemoveAll();
     this->m_LstEngines.DeleteAllItems();
 
@@ -212,7 +183,6 @@ bool CEnginesDlg::LoadProgramEngines(CString szFileName)
 
 bool CEnginesDlg::SaveProgramEngines(CString szFileName)
 {
-    // save engines configuration
     return theApp.m_Config.SaveConfig(szFileName, this->m_EngineList);
 }
 
@@ -226,9 +196,7 @@ void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
         if (pos != nullptr)
         {
             int nItem = m_LstEngines.GetNextSelectedItem(pos);
-
             auto& ce = this->m_EngineList.Get(nItem);
-
             this->m_EdtEngineName.SetWindowText(ce.szKey);
             this->m_EdtEnginePath.SetWindowText(ce.szValue);
         }
@@ -252,13 +220,10 @@ void CEnginesDlg::OnEnChangeEditEngineName()
     if (pos != nullptr)
     {
         CString szText;
-
         int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
         this->m_EdtEngineName.GetWindowText(szText);
-
         auto& ce = this->m_EngineList.Get(nIndex);
         ce.szKey = szText;
-
         bUpdateList = false;
         this->m_LstEngines.SetItemText(nIndex, 0, szText);
     }
@@ -270,13 +235,10 @@ void CEnginesDlg::OnEnChangeEditEnginePath()
     if (pos != nullptr)
     {
         CString szText;
-
         int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
         this->m_EdtEnginePath.GetWindowText(szText);
-
         auto& ce = this->m_EngineList.Get(nIndex);
         ce.szValue = szText;
-
         bUpdateList = false;
         this->m_LstEngines.SetItemText(nIndex, 1, szText);
     }
@@ -285,8 +247,6 @@ void CEnginesDlg::OnEnChangeEditEnginePath()
 void CEnginesDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
-
-    // handle keyboard events here
     switch (pLVKeyDow->wVKey)
     {
     case VK_DELETE:
@@ -294,10 +254,8 @@ void CEnginesDlg::OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult)
         this->OnBnClickedButtonEnginesRemove();
     }
     break;
-
     default: break;
     };
-
     *pResult = 0;
 }
 
