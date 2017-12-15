@@ -21,6 +21,8 @@ BOOL CEncWAVtoAC3App::InitInstance()
 {
     CEncoderDefaults::InitEncoderOptions();
 
+    ::SetCurrentDirectory(GetExeFilePath());
+
     m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
 
     if (m_Config.m_bIsPortable == true)
