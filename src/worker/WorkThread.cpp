@@ -12,7 +12,6 @@
 #endif
 
 CListT<SingleWorkerData> workList;
-
 CRITICAL_SECTION csQue;
 int nNextInQue;
 int nTotalFiles;
@@ -23,24 +22,19 @@ bool *pbTerminate;
 
 void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
 {
-    // get default settings from aften library
     api.LibAften_aften_set_defaults(&s);
 
-    // set Aften quality options
     s.params.encoding_mode = preset->nMode;
     s.params.bitrate = preset->nBitrate;
     s.params.quality = preset->nQuality;
 
-    // set number of Aften threads
     s.system.n_threads = preset->nThreads;
 
-    // enable of disable specific SIMD instructions
     s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
     s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
     s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
     s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
 
-    // set raw audio input sample format
     if (preset->nRawSampleFormat != 0)
     {
         switch (preset->nRawSampleFormat)
@@ -64,126 +58,59 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, Aft
         opt.raw_input = 1;
     }
 
-    // set raw audio input sample rate
     if (preset->nRawSampleRate != 0)
     {
         opt.raw_sr = preset->nRawSampleRate;
         opt.raw_input = 1;
     }
 
-    // set raw audio input channels
     if (preset->nRawChannels != 0)
     {
         opt.raw_ch = preset->nRawChannels;
         opt.raw_input = 1;
     }
 
-    // holds current setting index
     int nSetting;
 
-    // use this macro to prepare aften settings
 #define SET_AFTEN_SETTING(set, type) \
     if(CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
     (set) = (type) CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
 
-    // process all aften options for encoder context
-
-    // fba
     nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
-
-    // exps
     nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
-
-    // pad
     nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
-
-    // w
     nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
-
-    // wmin
     nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
-
-    // wmax
     nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
-
-    // m
     nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
-
-    // s
     nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
-
-    // cmix
     nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
-
-    // smix
     nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
-
-    // dsur
     nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
-
-    // dnorm
     nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
-
-    // dynrng
     nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
-
-    // acmod
     nSetting++; SET_AFTEN_SETTING(s.acmod, int)
-
-    // lfe
     nSetting++; SET_AFTEN_SETTING(s.lfe, int)
-
-    // chconfig
     nSetting++;
     if (CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
     {
         s.acmod = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
         s.lfe = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
     }
-
-    // chmap
     nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
-
-    // readtoeof
     nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
-
-    // bwfilter
     nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
-
-    // dcfilter
     nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
-
-    // lfefilter
     nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
-
-    // xbsi1
     nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
-
-    // dmixmod
     nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
-
-    // ltrtcmix
     nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
-
-    // ltrtsmix
     nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
-
-    // lorocmix
     nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
-
-    // lorosmix
     nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
-
-    // xbsi2
     nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
-
-    // dsurexmod
     nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
-
-    // dheadphon
     nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
-
-    // adconvtyp
     nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
@@ -197,7 +124,6 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
     CString szOutputInfo = _T("");
     CString szSimdInfo = _T("");
 
-    // input info (using Aften code from pcm/pcm.c)
     if (bAvisynthInput == false)
     {
         for (int i = 0; i < nInputFiles; i++)
@@ -290,7 +216,6 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
     else
     {
 #ifndef DISABLE_AVISYNTH
-        // NOTE: type is always Raw PCM but floating-point may change in future and endianes
         TCHAR *chan;
         chan = _T("?-channel");
 
@@ -313,7 +238,6 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
 #endif
     }
 
-    // output info (using code from aften/aften.c)
     {
         TCHAR *acmod_str[32] =
         {
@@ -332,7 +256,6 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
             szOutputInfo += _T(" + LFE");
     }
 
-    // SIMD usage info
     {
         int nCountSimd = 0;
         szSimdInfo = _T("SIMD:");
@@ -388,20 +311,18 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
         szSimdInfo += szBuff;
     }
 
-    // update work dialog informations
     pWork->pWorkDlg->m_StcOutInfo.SetWindowText(szOutputInfo);
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = NULL, SingleWorkerData *pworkData = NULL)
+int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr, SingleWorkerData *pworkData = nullptr)
 {
-    // function is using modified code from aften.c (C) by Justin Ruggles
-    void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = NULL;
-    uint8_t *frame = NULL;
-    FLOAT *fwav = NULL;
+    void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
+    uint8_t *frame = nullptr;
+    FLOAT *fwav = nullptr;
     int nr, fs;
     FILE *ifp[CEncoderDefaults::nNumMaxInputFiles];
-    FILE *ofp = NULL;
+    FILE *ofp = nullptr;
     PcmContext pf;
     uint32_t samplecount, bytecount, t0, t1, percent;
     FLOAT kbps, qual, bw;
@@ -410,25 +331,19 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     int done;
     int input_file_format;
     enum PcmSampleFormat read_format;
-
-    // indicate Avisynth script as input file
     bool bAvisynthInput = false;
 
 #ifndef DISABLE_AVISYNTH
-    // check if we have Avisynth script as input
     if (GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
 #endif
 
-    // total size of input file(s)
     pWork->nInTotalSize = 0;
 
-    // encoding, IO reading, IO writing counters
     CTimeCount cEncoding, cIORead, cIOWrite;
 
-    // get string buffers
-    TCHAR *pszInPath[6] = { { NULL } };
-    TCHAR *pszOutPath = NULL;
+    TCHAR *pszInPath[6] = { { nullptr } };
+    TCHAR *pszOutPath = nullptr;
 
     for (int i = 0; i < nInputFiles; i++)
         pszInPath[i] = szInPath[i].GetBuffer();
@@ -437,7 +352,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     memset(ifp, 0, CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
-    // Avisynth data
     AvsAudioInfo infoAVS;
     Avs2RawStatus statusAVS;
     CAvs2Raw decoderAVS;
@@ -447,9 +361,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     if (bAvisynthInput == true)
     {
 #ifndef DISABLE_AVISYNTH
-
-        // initialize Avisynth - only one input file supported
-        // NOTE: only Ansi file names supported
 #ifdef _UNICODE
         ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
@@ -462,10 +373,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         }
         else
         {
-            // get input Audio stream information from Avisynth
             infoAVS = decoderAVS.GetInputInfo();
-
-            // calculate total size of input raw data
             pWork->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
             // _T("Avisynth initialized successfully.")
         }
@@ -473,13 +381,11 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     }
     else
     {
-        // open input files
         for (int i = 0; i < nInputFiles; i++)
         {
             ifp[i] = _tfopen(pszInPath[i], _T("rb"));
             if (!ifp[i])
             {
-                // stop file timer
                 pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
 
                 CString szBuff;
@@ -504,7 +410,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         }
     }
 
-    // open output file
     ofp = _tfopen(pszOutPath, _T("wb"));
     if (!ofp)
     {
@@ -513,7 +418,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
 
-        // stop file timer
         pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
@@ -532,8 +436,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         return(WORKDLG_RETURN_FAILURE);
     }
 
-    // begin clean-up code used after error
-    //
 #define HandleEncoderError(message) \
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
 	CString szBuff; \
@@ -568,8 +470,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
     return(WORKDLG_RETURN_FAILURE);
-    //
-    // end clean-up code used after error
 
 #ifdef CONFIG_DOUBLE
     read_format = PCM_SAMPLE_FMT_DBL;
@@ -581,12 +481,10 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 
     if ((opt.raw_input) || (bAvisynthInput == true))
     {
-        // user selected raw input format
         input_file_format = PCM_FORMAT_RAW;
     }
     else
     {
-        // check file extension to set input file format (using only first file)
         input_file_format = CEncoderDefaults::GetSupportedInputFormat(GetFileExtension(szInPath[0]));
     }
 
@@ -610,7 +508,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 #ifndef DISABLE_AVISYNTH
         if (opt.raw_input)
         {
-            // NOTE: raw audio settings are ignored at this time, using Avisynth settings
         }
 #endif
     }
@@ -618,26 +515,19 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     if (bAvisynthInput == true)
     {
 #ifndef DISABLE_AVISYNTH
-        // init Avisynth read status structure
         statusAVS.nStart = 0;
         statusAVS.nSamples = infoAVS.nAudioSamples;
         statusAVS.nSamplesLeft = infoAVS.nAudioSamples;
         statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
-
-        // 'pf' is not used by Avisynth, only needed for stats (to share same code with pcm lib)
         pf.samples = infoAVS.nAudioSamples;
         pf.sample_rate = infoAVS.nSamplesPerSecond;
         pf.channels = infoAVS.nAudioChannels;
-        pf.ch_mask = 0xFFFFFFFF; // NOTE: plain WAVE channel selection is assumed
-
-        // TODO: need to set this for proper encoding and check if user has selected other settings
-        // NOTE: currently using ch_mask to set this
+        pf.ch_mask = 0xFFFFFFFF;
         //s.acmod = ;
         //s.lfe = ;
 #endif
     }
 
-    // TODO: need to test this with Avisynth input
     if (s.acmod >= 0)
     {
         static const int acmod_to_ch[8] = { 2, 1, 2, 3, 3, 4, 4, 5 };
@@ -715,28 +605,14 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     else
     {
 #ifndef DISABLE_AVISYNTH
-        // Avs2Raw converts all formats to FLOAT by default
-        /*
-        switch(infoAVS.nSampleType)
-        {
-        case SAMPLE_INT8: s.sample_format = A52_SAMPLE_FMT_S8; break;
-        case SAMPLE_INT16: s.sample_format = A52_SAMPLE_FMT_S16; break;
-        case SAMPLE_INT24: s.sample_format = A52_SAMPLE_FMT_S24; break;
-        case SAMPLE_INT32: s.sample_format = A52_SAMPLE_FMT_S32; break;
-        case SAMPLE_FLOAT: s.sample_format = A52_SAMPLE_FMT_FLT; break;
-        default: s.sample_format = A52_SAMPLE_FMT_FLT; break;
-        }
-        */
         s.sample_format = A52_SAMPLE_FMT_FLT;
         s.channels = infoAVS.nAudioChannels;
         s.samplerate = infoAVS.nSamplesPerSecond;
 #endif
     }
-
-    // allocate memory for audio data
     frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
     fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
-    if (frame == NULL || fwav == NULL)
+    if (frame == nullptr || fwav == nullptr)
     {
         HandleEncoderError(_T("Failed to allocate memory."));
     }
@@ -788,20 +664,18 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         s.initial_samples = fwav;
     }
 
-    // init aften encoder
     if (api.LibAften_aften_encode_init(&s))
     {
         HandleEncoderError(_T("Failed to initialize encoder."));
     }
 
-    // show current job information in work dialog
 #ifndef DISABLE_AVISYNTH
     ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
 #else
     ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput);
 #endif
 
-    int nCurTotalPos = 0; // 0% - 100%
+    int nCurTotalPos = 0;
     __int64 nCurPos = 0;
     bool bUpdateSpeed = false;
 
@@ -811,18 +685,14 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     double fPrevTimeIORead = 0.0;
     double fPrevTimeIOWrite = 0.0;
 
-    // main encoding loop
     do
     {
-        // check if we are can continue job
         if (pWork->pWorkDlg->bTerminate == true)
         {
-            // flush remaining data from encoder
             while (fs > 0)
             {
-                // encode frame
                 cEncoding.Start();
-                fs = api.LibAften_aften_encode_frame(&s, frame, NULL, 0);
+                fs = api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
                 cEncoding.Stop();
 
                 if (fs > 0)
@@ -832,7 +702,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
             HandleEncoderError(_T("User has terminated encoding."));
         }
 
-        // read input data
         if (bAvisynthInput == false)
         {
             cIORead.Start();
@@ -853,15 +722,12 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         if (aften_remap)
             aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
 
-        // encode frame
         cEncoding.Start();
         fs = api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
         cEncoding.Stop();
 
         if (fs < 0)
         {
-            // error encoding frame
-            // break;
             HandleEncoderError(_T("Failed to encode frame."));
         }
         else
@@ -905,7 +771,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                 else
                 {
 #ifndef DISABLE_AVISYNTH
-                    // TODO: use 'nr' to count read samples instead of 'samplecount'
                     nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
 #endif
                 }
@@ -915,11 +780,9 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                     pWork->pWorkDlg->bCanUpdateWindow = false;
                     CString szTmpBuff;
 
-                    // update current encoder speed
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.ElapsedTime() + 1.0e-16));
                     pWork->pWorkDlg->szSpeedEncoderAvg = szTmpBuff;
 
-                    // update current read speed
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.ElapsedTime() + 1.0e-16));
                     pWork->pWorkDlg->szSpeedReadsAvg = szTmpBuff;
 
@@ -930,19 +793,16 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                     pWork->pWorkDlg->bCanUpdateWindow = true;
                 }
 
-                // use ftell to get encoding progress
                 percent = (100 * nCurPos) / pWork->nInTotalSize;
-
-                // update progress bars              
+           
                 if (pWork->pWorkDlg->bCanUpdateWindow == true)
                 {
                     pWork->pWorkDlg->bCanUpdateWindow = false;
                     pWork->pWorkDlg->m_PrgCurrent.SetPos(percent);
-                    // TRACE(_T("PRG_CUR=%3d%%\n"), percent);
                     pWork->pWorkDlg->bCanUpdateWindow = true;
                 }
 
-                if (nTotalSizeCounter != NULL)
+                if (nTotalSizeCounter != nullptr)
                 {
                     nCurTotalPos = (100 * (*nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
 
@@ -950,21 +810,18 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                     {
                         pWork->pWorkDlg->bCanUpdateWindow = false;
                         pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
-                        // TRACE(_T("PRG_TOT=%3d%%\n"), nCurTotalPos);
                         pWork->pWorkDlg->bCanUpdateWindow = true;
                     }
                 }
             }
             t0 = t1;
 
-            // write encoded data
             cIOWrite.Start();
             fwrite(frame, 1, fs, ofp);
             cIOWrite.Stop();
 
             if (pWork->pWorkDlg->bCanUpdateWindow == true)
             {
-                // update current write speed
                 pWork->pWorkDlg->bCanUpdateWindow = false;
 
                 CString szTmpBuff;
@@ -978,24 +835,17 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                 pWork->pWorkDlg->bCanUpdateWindow = true;
             }
 
-            // update frame counter
             frame_cnt++;
             last_frame = nr;
         }
     } while (nr > 0 || fs > 0 || !frame_cnt);
 
-    // gather performance statistics
     pWork->fTimeEncoding = cEncoding.ElapsedTime();
     pWork->fTimeIORead = cIORead.ElapsedTime();
     pWork->fTimeIOWrite = cIOWrite.ElapsedTime();
-
-    // get output file size
     pWork->nOutTotalSize = GetFileSizeInt64(ofp);
-
-    // calculate total time
     pWork->fTimeTotal = pWork->fTimeEncoding + pWork->fTimeIORead + pWork->fTimeIOWrite;
 
-    // clean-up used memory
     if (fwav)
         free(fwav);
 
@@ -1004,7 +854,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 
     if (bAvisynthInput == false)
     {
-        // close PCM file context
         pcm_close(&pf);
     }
     else
@@ -1014,7 +863,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 #endif
     }
 
-    // update total counter
     if (bAvisynthInput == false)
     {
         if (pWork->bMultiMonoInput == false)
@@ -1036,21 +884,17 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 #endif
     }
 
-    // close input files
     for (int i = 0; i < nInputFiles; i++)
     {
         if (ifp[i])
             fclose(ifp[i]);
     }
 
-    // close output file
     if (ofp)
         fclose(ofp);
 
-    // close encoder context
     api.LibAften_aften_encode_close(&s);
 
-    // reset file timer
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     CString szBuff;
     szBuff.Format(_T("%s %s"),
@@ -1059,81 +903,66 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
     pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
 
-    // release string buffers
     for (int i = 0; i < nInputFiles; i++)
         szInPath[i].ReleaseBuffer();
 
     szOutPath.ReleaseBuffer();
 
-    // return success from worker thread
     return(WORKDLG_RETURN_SUCCESS);
 }
 
 DWORD WINAPI EncWorkThread(LPVOID pParam)
 {
-    // get worker configuration data
     CWorkerParam *pWork = (CWorkerParam *)pParam;
     __int64 nTotalSizeCounter = 0;
     AftenAPI api = pWork->api;
 
-    // command-line string for Aften
     CString szCommandLine = _T("");
     CString szBuff = _T("");
 #ifdef _UNICODE
     const unsigned int nAnsiBuffSize = 8192;
     char szAnsiBuff[nAnsiBuffSize] = "";
     int nChars = 0;
-#endif // _UNICODE
+#endif
 
-    // check if we have valid worker dialog object
-    if (pWork->pWorkDlg == NULL)
+    if (pWork->pWorkDlg == nullptr)
     {
-        // fatal error, invalid object
         return(WORKDLG_RETURN_FAILURE);
     }
 
     CListT<CString> *list = pWork->list;
     CListT<bool> *listStatus = pWork->listStatus;
 
-    // update progress bars
     pWork->pWorkDlg->m_PrgCurrent.SetRange(0, 100);
     pWork->pWorkDlg->m_PrgTotal.SetRange32(0, 100);
-
     pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
     pWork->pWorkDlg->m_PrgTotal.SetPos(0);
 
-    // start total timer
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
     szBuff.Format(_T("%s %s"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
         _T("00:00:00"));
     pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(szBuff);
-    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, NULL);
+    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, nullptr);
 
     int nFileCounter = 0;
     int nTotalFiles = list->Count();
 
-    // get first status item from the list
     int posStatus = 0;
 
     if (pWork->bMultiMonoInput == false)
     {
-        // process all files in list
         for (int i = 0; i < list->Count(); i++)
         {
             CString szInPath[6] = { _T("-"), _T("-"), _T("-"), _T("-"), _T("-"), _T("-") };
             CString szOutPath = _T("");
 
-            // get next file path
             szInPath[0] = list->Get(i);
-
-            // prepare output file name
             szOutPath = szInPath[0];
             szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
-            // use different output path
             if (pWork->bUseOutPath == true)
             {
                 CString szFile = GetFileName(szOutPath);
@@ -1145,14 +974,12 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
                     szOutPath = pWork->szOutPath + '\\' + szFile;
             }
 
-            // update encoding windows title
             CString szTitle;
             szTitle.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
                 nFileCounter + 1,
                 nTotalFiles);
             pWork->pWorkDlg->SetWindowText(szTitle);
 
-            // update input and output file labels
             szBuff.Format(_T("%s\t%s"),
                 theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01003) : _T("From:"),
                 szInPath[0]);
@@ -1163,31 +990,23 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
                 szOutPath);
             pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
-            // start file timer
             szBuff.Format(_T("%s %s"),
                 theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
                 _T("00:00:00"));
             pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
             pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-            pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
-
-            // update progress bars
+            pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
             pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
 
-            // variables used by Aften encoder
             AftenContext s;
             AftenOpt opt;
 
-            // zero options
             ZeroMemory(&opt, sizeof(AftenOpt));
 
-            // get currently selected preset
             auto preset = pWork->preset;
 
-            // prepare aften context for encoding process
             SetAftenOptions(api, s, preset, opt, pWork);
 
-            // encode input .wav file to output .ac3 file
             if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, 1, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
             {
                 bool result = false;
@@ -1200,13 +1019,8 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
                 listStatus->Set(result, posStatus);
             }
 
-            // update status list position
             posStatus++;
-
-            // update progress bars
             nFileCounter++;
-
-            // update work dialog file counter
             pWork->pWorkDlg->nCount = nFileCounter;
         }
     }
@@ -1215,31 +1029,25 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
         CString szInPath[6] = { _T("-"), _T("-"), _T("-"), _T("-"), _T("-"), _T("-") };
         CString szOutPath = _T("");
 
-        // process all files in list
         nFileCounter = list->Count();
 
         for (int i = 0; i < nFileCounter; i++)
         {
-            // get next file path
             szInPath[i] = list->Get(i);
         }
 
-        // prepare output file name (using first file path from the list)
         szOutPath = szInPath[0];
         szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
         szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
-        // use user selected output file path
         if (pWork->bUseOutPath == true)
             szOutPath = pWork->szOutPath;
 
-        // update encoding windows title
         CString szTitle;
         szTitle.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
             nTotalFiles);
         pWork->pWorkDlg->SetWindowText(szTitle);
 
-        // update input and output file labels
         szBuff.Format(_T("%s\t%s"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01003) : _T("From:"),
             szInPath[0]);
@@ -1253,66 +1061,50 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
             szOutPath);
         pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
 
-        // start file timer
         szBuff.Format(_T("%s %s"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
-        pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, NULL);
-
-        // update progress bars
+        pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
         pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
 
-        // variables used by Aften encoder
         AftenContext s;
         AftenOpt opt;
 
-        // zero options
         ZeroMemory(&opt, sizeof(AftenOpt));
 
-        // get currently selected preset
         auto preset = pWork->preset;
 
-        // prepare aften context for encoding process
         SetAftenOptions(api, s, preset, opt, pWork);
 
-        // encode input .wav file to output .ac3 file
         if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, nFileCounter, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
         {
-            // update status list position
             for (int i = 0; i < listStatus->Count(); i++)
             {
                 bool result = false;
                 listStatus->Set(result, i);
             }
 
-            // update work dialog file counter
             pWork->pWorkDlg->nCount = 0;
 
             return(WORKDLG_RETURN_FAILURE);
         }
         else
         {
-            // update status list position
             for (int i = 0; i < listStatus->Count(); i++)
             {
                 bool result = true;
                 listStatus->Set(result, i);
             }
 
-            // update work dialog file counter
             pWork->pWorkDlg->nCount = nFileCounter;
         }
     }
 
-    // stop total timer
     pWork->pWorkDlg->KillTimer(WM_TOTAL_TIMER);
-
-    // tell work dialog it is the end of work
     pWork->pWorkDlg->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
-    // return success from worker thread
     return(WORKDLG_RETURN_SUCCESS);
 }
