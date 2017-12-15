@@ -1,5 +1,7 @@
 ﻿## Changelog
 
+### Version 7.0:
+
 ### Version 6.0:
 
 - Added dynamic layout for dialogs.
