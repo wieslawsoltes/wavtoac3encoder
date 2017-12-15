@@ -91,7 +91,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
     try
     {
         WIN32_FIND_DATA w32FileData;
-        HANDLE hSearch = NULL;
+        HANDLE hSearch = nullptr;
         BOOL fFinished = FALSE;
         TCHAR cTempBuf[(MAX_PATH * 2) + 1];
 
@@ -156,7 +156,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
     }
     catch (...)
     {
-        MessageBox(NULL,
+        MessageBox(nullptr,
             HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
             HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
             MB_OK | MB_ICONERROR);
@@ -344,7 +344,7 @@ BOOL CConfiguration::HaveLangStrings()
 CString CConfiguration::GetLangString(int id)
 {
     CString szValue = _T("");
-    if (m_Lang != NULL)
+    if (m_Lang != nullptr)
     {
         m_Lang->TryGet(id, szValue);
     }
