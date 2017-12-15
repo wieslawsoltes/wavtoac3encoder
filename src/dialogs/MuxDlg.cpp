@@ -4,15 +4,8 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-// Channel to file mappings
-// FL    -> szInputFiles[0]
-// FR    -> szInputFiles[1]
-// C     -> szInputFiles[2]
-// LFE   -> szInputFiles[3]
-// SL, S -> szInputFiles[4]
-// SR    -> szInputFiles[5]
-
 const int nNumChannelConfig = 8;
+
 const CString szChannelConfig[nNumChannelConfig] =
 {
     _T("1+1 = (Ch1,Ch2)"),
@@ -25,7 +18,6 @@ const CString szChannelConfig[nNumChannelConfig] =
     _T("3/2 = (L,R,C,SL,SR)")
 };
 
-// correct number of input file for each channel config + LFE channel
 const int nNumInputFiles[nNumChannelConfig] =
 {
     2, 1, 2, 3, 3, 4, 4, 5
@@ -74,7 +66,6 @@ CMuxDlg::CMuxDlg(CWnd* pParent /*=nullptr*/)
 
 CMuxDlg::~CMuxDlg()
 {
-
 }
 
 void CMuxDlg::DoDataExchange(CDataExchange* pDX)
@@ -131,12 +122,8 @@ BOOL CMuxDlg::OnInitDialog()
 
     InitCtrls();
     InitLang();
-
-    // set file paths
     this->RemapFilesToChannels();
     this->SetFilePaths();
-
-    // update state of all controls
     this->SetControlsState();
 
     return TRUE;
@@ -144,16 +131,12 @@ BOOL CMuxDlg::OnInitDialog()
 
 void CMuxDlg::InitCtrls()
 {
-    // init channel configuration ComboBox
     for (int i = 0; i < nNumChannelConfig; i++)
         this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
 
     this->m_CmbChannelConfig.SetCurSel(0);
 
-    // set tooltips
     CString szTmpText;
-
-    // channel config ComboBox
     szTmpText = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01008) :
         _T("Specify channel configuration:\n")
         _T("1+1 = (Ch1,Ch2)\n")
@@ -166,15 +149,10 @@ void CMuxDlg::InitCtrls()
         _T("3/2 = (L,R,C,SL,SR)");
 
     this->m_CmbChannelConfig.SetTooltipText(szTmpText);
+    this->m_ChkChannelConfigLFE.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
-    // +LFE CheckBox
-    this->m_ChkChannelConfigLFE.SetTooltipText(
-        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
-
-    // set fixed height of combobox controls
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
-    // channel buttons
     this->m_BtnChannelFL.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
     this->m_BtnChannelFR.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
     this->m_BtnChannelFC.SetTooltipText(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00C0100C) : _T("Front Center Channel"));
@@ -309,7 +287,6 @@ void CMuxDlg::SetFilePaths()
 
 void CMuxDlg::SetControlsState()
 {
-    // enable/disable buttons
     this->m_BtnChannelFL.EnableWindow(nChannelConfigStates[this->nChannelConfig][0] == 1 ? TRUE : FALSE);
     this->m_BtnChannelFR.EnableWindow(nChannelConfigStates[this->nChannelConfig][1] == 1 ? TRUE : FALSE);
     this->m_BtnChannelFC.EnableWindow(nChannelConfigStates[this->nChannelConfig][2] == 1 ? TRUE : FALSE);
@@ -318,7 +295,6 @@ void CMuxDlg::SetControlsState()
     this->m_BtnChannelSR.EnableWindow(nChannelConfigStates[this->nChannelConfig][5] == 1 ? TRUE : FALSE);
     this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
 
-    // set buttons text
     this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
     this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
     this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2]);
@@ -327,7 +303,6 @@ void CMuxDlg::SetControlsState()
     this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5]);
     this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
 
-    // set labels text
     this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
     this->m_StcLabelFL.SetBold(nChannelConfigStates[this->nChannelConfig][0] == 1 ? true : false);
     this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
@@ -341,10 +316,8 @@ void CMuxDlg::SetControlsState()
     this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
     this->m_StcLabelLFE.SetBold(this->bLFE);
 
-    // set LFE channel state
     this->m_ChkChannelConfigLFE.SetCheck(this->bLFE ? BST_CHECKED : BST_UNCHECKED);
 
-    // set bold state
     this->m_BtnChannelFL.SetBold((szInputFiles[0].GetLength() > 0) ? true : false);
     this->m_BtnChannelFR.SetBold((szInputFiles[1].GetLength() > 0) ? true : false);
     this->m_BtnChannelFC.SetBold((szInputFiles[2].GetLength() > 0) ? true : false);
@@ -371,7 +344,6 @@ void CMuxDlg::SetControlsState()
 
 bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
-    // reset input files
     for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
         szTmpInputFiles[i] = _T("");
 
@@ -401,23 +373,18 @@ bool CMuxDlg::LoadFilesList(CString &szFileName)
             {
                 szBuffer += _T("\0");
 
-                // terminate reading if max of input files is reached
                 if (nFileCounter >= CEncoderDefaults::nNumMaxInputFiles)
                 {
                     fp.FClose();
                     return true;
                 }
 
-                // remove leading and trailing quotes (used for *.mux file format)
                 szBuffer.TrimLeft('"');
                 szBuffer.TrimRight('"');
 
                 szTmpInputFiles[nFileCounter] = szBuffer;
 
-                // update file counter
                 nFileCounter++;
-
-                // reset buffer
                 szBuffer = _T("");
             }
 
@@ -446,14 +413,9 @@ bool CMuxDlg::LoadFilesList(CString &szFileName)
 
 bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
-    // format
-    // 0 (*.files) -> file_path+ext
-    // 1 (*.mux)   -> "file_path+ext"
     try
     {
         CMyFile fp;
-
-        // write *.mux files always in Ansi format
         if (nFormat == 1)
         {
 #ifdef _UNICODE
@@ -588,7 +550,6 @@ void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCu
     if (fd.DoModal() == IDOK)
     {
         CString szFileName = fd.GetPathName();
-
         m_EdtCurrent->SetWindowText(szFileName);
         this->szInputFiles[nID] = szFileName;
         m_BtnCurrent->SetBold(true);
@@ -635,7 +596,6 @@ void CMuxDlg::OnBnClickedButtonClearFl()
     this->m_BtnChannelFL.SetBold(false);
     this->m_EdtChannelFL.SetWindowText(_T(""));
     this->szInputFiles[0] = _T("");
-
     this->SetControlsState();
 }
 
@@ -644,7 +604,6 @@ void CMuxDlg::OnBnClickedButtonClearFc()
     this->m_BtnChannelFC.SetBold(false);
     this->m_EdtChannelFC.SetWindowText(_T(""));
     this->szInputFiles[2] = _T("");
-
     this->SetControlsState();
 }
 
@@ -653,7 +612,6 @@ void CMuxDlg::OnBnClickedButtonClearFr()
     this->m_BtnChannelFR.SetBold(false);
     this->m_EdtChannelFR.SetWindowText(_T(""));
     this->szInputFiles[1] = _T("");
-
     this->SetControlsState();
 }
 
@@ -662,7 +620,6 @@ void CMuxDlg::OnBnClickedButtonClearLfe()
     this->m_BtnChannelLFE.SetBold(false);
     this->m_EdtChannelLFE.SetWindowText(_T(""));
     this->szInputFiles[3] = _T("");
-
     this->SetControlsState();
 }
 
@@ -679,7 +636,6 @@ void CMuxDlg::OnBnClickedButtonClearSl()
 
     this->m_EdtChannelSL.SetWindowText(_T(""));
     this->szInputFiles[4] = _T("");
-
     this->SetControlsState();
 }
 
@@ -688,7 +644,6 @@ void CMuxDlg::OnBnClickedButtonClearSr()
     this->m_BtnChannelSR.SetBold(false);
     this->m_EdtChannelSR.SetWindowText(_T(""));
     this->szInputFiles[5] = _T("");
-
     this->SetControlsState();
 }
 
@@ -729,7 +684,6 @@ void CMuxDlg::OnBnClickedButtonImport()
     if (fd.DoModal() == IDOK)
     {
         CString szFileName = fd.GetPathName();
-
         this->LoadFilesList(szFileName);
         this->SetFilePaths();
         this->SetControlsState();
@@ -739,14 +693,11 @@ void CMuxDlg::OnBnClickedButtonImport()
 void CMuxDlg::OnBnClickedCheckChannelConfigLfe()
 {
     const int bCheck = this->m_ChkChannelConfigLFE.GetCheck();
-
     this->bLFE = (bCheck == BST_CHECKED) ? true : false;
-
     this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
     this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
     this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
     this->m_StcLabelLFE.SetBold(this->bLFE);
-
     this->SetControlsState();
 }
 
@@ -763,7 +714,6 @@ void CMuxDlg::OnBnClickedCancel()
 
 void CMuxDlg::OnBnClickedOk()
 {
-    // clear unused channels
     switch (this->nChannelConfig)
     {
     case 0:
@@ -838,7 +788,6 @@ void CMuxDlg::OnCbnSelchangeComboChannelConfig()
     if (nSel != CB_ERR)
     {
         this->nChannelConfig = nSel;
-
         this->SetControlsState();
     }
 }
