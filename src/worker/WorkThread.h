@@ -18,20 +18,14 @@ public:
 class SingleWorkerData
 {
 public:
-    // input and output files
     CString szInPath;
     CString szOutPath;
-    // aften related data
     AftenOpt opt;
     AftenContext s;
-    // work stats
     int nProgress;
     double fEncTime;
-    // termination flag
     bool bTerminate;
-    // file id
     int nID;
-    // success flag
     bool bSuccess;
 };
 
