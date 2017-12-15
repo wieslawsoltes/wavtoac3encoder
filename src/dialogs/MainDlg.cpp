@@ -259,6 +259,15 @@ void CMainDlg::OnBnClickedButtonEncode()
     if (bWorking == true)
         return;
 
+    if (theApp.m_Config.m_bIsPortable == true)
+    {
+        ::SetCurrentDirectory(GetExeFilePath());
+    }
+    else
+    {
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
+    }
+
     int nItemsCount = this->m_LstFiles.GetItemCount();
     if (nItemsCount <= 0)
     {
@@ -282,16 +291,18 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     bWorking = true;
 
-    this->api.CloseAftenAPI();
-    if (this->api.OpenAftenAPI() == false)
+    if (this->api.IsAftenOpen() == false)
     {
-        // _T("Error: Failed to load libaften.dll dynamic library!")
-        MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
-            MB_ICONERROR | MB_OK);
+        if (this->api.OpenAftenAPI() == false)
+        {
+            // _T("Error: Failed to load libaften.dll dynamic library!")
+            MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
+                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
+                MB_ICONERROR | MB_OK);
 
-        bWorking = false;
-        return;
+            bWorking = false;
+            return;
+        }
     }
 
     CWorkDlg dlg;
@@ -710,7 +721,10 @@ void CMainDlg::OnCbnSelchangeComboPresets()
 
 void CMainDlg::OnCbnSelchangeComboEngines()
 {
-    this->api.CloseAftenAPI();
+    if (this->api.IsAftenOpen())
+    {
+        this->api.CloseAftenAPI();
+    }
 
     int nSel = this->m_CmbEngines.GetCurSel();
     if (nSel == CB_ERR)
@@ -721,9 +735,20 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     auto& preset = GetCurrentPreset();
     preset.nCurrentEngine = nSel;
 
-    ::SetCurrentDirectory(GetExeFilePath());
+    if (theApp.m_Config.m_bIsPortable == true)
+    {
+        ::SetCurrentDirectory(GetExeFilePath());
+    }
+    else
+    {
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
+    }
 
-    this->api.CloseAftenAPI();
+    if (this->api.IsAftenOpen())
+    {
+        this->api.CloseAftenAPI();
+    }
+
     this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
     if (this->api.OpenAftenAPI() == false)
     {
@@ -1018,8 +1043,12 @@ bool CMainDlg::UpdateProgramEngines()
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
+        if (this->api.IsAftenOpen())
+        {
+            this->api.CloseAftenAPI();
+        }
+
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
-        this->api.CloseAftenAPI();
         this->api.OpenAftenAPI();
 
         return false;
@@ -1040,7 +1069,11 @@ bool CMainDlg::UpdateProgramEngines()
 
     if ((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
     {
-        this->api.CloseAftenAPI();
+        if (this->api.IsAftenOpen())
+        {
+            this->api.CloseAftenAPI();
+        }
+
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         if (this->api.OpenAftenAPI() == false)
         {
@@ -1082,7 +1115,11 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
-        this->api.CloseAftenAPI();
+        if (this->api.IsAftenOpen())
+        {
+            this->api.CloseAftenAPI();
+        }
+
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         this->api.OpenAftenAPI();
     }
