@@ -117,7 +117,7 @@ Filename: {app}\{#ProgramName}.url; Section: InternetShortcut; Key: URL; String:
 Name: {group}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: not portablemode; Components: main
 Name: {group}\{#ProgramName} README; Filename: {app}\README.MD; WorkingDir: {app}; Tasks: not portablemode; Components: docs
 Name: {group}\{#ProgramName} License; Filename: {app}\COPYING.TXT; WorkingDir: {app}; Tasks: not portablemode; Components: docs
-Name: {group}\{#ProgramName} Web Site; Filename: {app}\{#ProgramName}.url; WorkingDir; Tasks: not portablemode: {app}; Components: main
+Name: {group}\{#ProgramName} Web Site; Filename: {app}\{#ProgramName}.url; WorkingDir: {app}; Tasks: not portablemode; Components: main
 Name: {group}\Uninstall {#ProgramName}; Filename: {uninstallexe}; WorkingDir: {app}; Tasks: not portablemode; Components: main
 Name: {userdesktop}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: desktopicon; Components: main
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: quicklaunchicon; Components: main
