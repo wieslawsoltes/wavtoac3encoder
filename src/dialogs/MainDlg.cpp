@@ -12,7 +12,7 @@
 
 IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
 
-CMainDlg::CMainDlg(CWnd* pParent /*=NULL*/)
+CMainDlg::CMainDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CMainDlg::IDD, pParent)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -639,7 +639,7 @@ void CMainDlg::OnBnClickedButtonBrowse()
         if (SHGetMalloc(&pMalloc) == E_FAIL)
             return;
 
-        if ((lpBuffer = (TCHAR *)pMalloc->Alloc(MAX_PATH * 2)) == NULL)
+        if ((lpBuffer = (TCHAR *)pMalloc->Alloc(MAX_PATH * 2)) == nullptr)
         {
             pMalloc->Release();
             return;
@@ -660,13 +660,13 @@ void CMainDlg::OnBnClickedButtonBrowse()
         bi.pidlRoot = pidlDesktop;
         bi.pszDisplayName = lpBuffer;
         bi.lpszTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701D) : _T("Select default output path:");
-        bi.lpfn = NULL;
+        bi.lpfn = nullptr;
         bi.lParam = 0;
         bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
         bi.iImage = 0;
 
         pidlBrowse = ::SHBrowseForFolder(&bi);
-        if (pidlBrowse != NULL)
+        if (pidlBrowse != nullptr)
         {
             if (SHGetPathFromIDList(pidlBrowse, lpBuffer))
             {
@@ -761,7 +761,7 @@ void CMainDlg::OnBnClickedButtonEngines()
 void CMainDlg::OnCbnSelchangeComboSetting()
 {
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
 
@@ -873,7 +873,7 @@ void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
 
 LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 {
-    if ((lParam == (LPARAM)0) && (wParam != NULL))
+    if ((lParam == (LPARAM)0) && (wParam != nullptr))
     {
         int nPreset = this->m_CmbPresets.GetCurSel();
         if (nPreset != CB_ERR)
@@ -1608,7 +1608,7 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
 
     // update settings combobox
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         int nItem = m_LstSettings.GetNextSelectedItem(pos);
 
@@ -1626,12 +1626,12 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
 
 void CMainDlg::HandleDropFiles(HDROP hDropInfo)
 {
-    int nCount = ::DragQueryFile(hDropInfo, (UINT)0xFFFFFFFF, NULL, 0);
+    int nCount = ::DragQueryFile(hDropInfo, (UINT)0xFFFFFFFF, nullptr, 0);
     if (nCount > 0)
     {
         for (int i = 0; i < nCount; i++)
         {
-            int nReqChars = ::DragQueryFile(hDropInfo, i, NULL, 0);
+            int nReqChars = ::DragQueryFile(hDropInfo, i, nullptr, 0);
 
             CString szFile;
             ::DragQueryFile(hDropInfo,
@@ -1691,7 +1691,7 @@ void CMainDlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
     try
     {
         WIN32_FIND_DATA w32FileData;
-        HANDLE hSearch = NULL;
+        HANDLE hSearch = nullptr;
         BOOL fFinished = FALSE;
         TCHAR cTempBuf[(MAX_PATH * 2) + 1];
 
@@ -1768,7 +1768,7 @@ void CMainDlg::ShowOptionPopup(bool bUseRect)
 
     // show right click context menu for selected item
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
         nItem = m_LstSettings.GetNextSelectedItem(pos);
     else
         return;
@@ -1801,7 +1801,7 @@ void CMainDlg::ShowOptionPopup(bool bUseRect)
 
     // show popup menu to user
     ::SetForegroundWindow(this->GetSafeHwnd());
-    int nRet = (int)menu->TrackPopupMenu(TPM_RETURNCMD, point.x, point.y, this, NULL);
+    int nRet = (int)menu->TrackPopupMenu(TPM_RETURNCMD, point.x, point.y, this, nullptr);
     if (nRet >= ID_OPTIONS_MENU_START)
     {
         // update setting in value combobox and in options list
@@ -1841,8 +1841,8 @@ void CMainDlg::OnDropFiles(HDROP hDropInfo)
         m_DDParam.pDlg = this;
         m_DDParam.hDropInfo = hDropInfo;
 
-        hDDThread = ::CreateThread(NULL, 0, DragAndDropThread, (LPVOID)&m_DDParam, 0, &dwDDThreadID);
-        if (hDDThread == NULL)
+        hDDThread = ::CreateThread(nullptr, 0, DragAndDropThread, (LPVOID)&m_DDParam, 0, &dwDDThreadID);
+        if (hDDThread == nullptr)
             bHandleDrop = true;
     }
 
@@ -2731,13 +2731,12 @@ void CMainDlg::OnListSavelist()
 
 void CMainDlg::OnListMoveUp()
 {
-    // move files list items one position up
     POSITION pos;
     CString szPath[2] = { _T(""), _T("") };
     CString szSize[2] = { _T(""), _T("") };
 
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
-    while (pos != NULL)
+    while (pos != nullptr)
     {
         int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
         if ((nItem > 0) && (this->m_LstFiles.GetItemCount() >= 2))
@@ -2766,14 +2765,13 @@ void CMainDlg::OnListMoveUp()
 
 void CMainDlg::OnListMoveDown()
 {
-    // move files list items one position down
     POSITION pos;
     CString szPath[2] = { _T(""), _T("") };
     CString szSize[2] = { _T(""), _T("") };
     CListT<ItemToMove> listSel;
 
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
-    while (pos != NULL)
+    while (pos != nullptr)
     {
         int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
         if ((nItem < this->m_LstFiles.GetItemCount() - 1) && (this->m_LstFiles.GetItemCount() >= 2))
@@ -2822,7 +2820,7 @@ void CMainDlg::OnListDelFiles()
 
     // get all selected items
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
-    while (pos != NULL)
+    while (pos != nullptr)
     {
         int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
         list.Insert(nItem);
@@ -2846,7 +2844,7 @@ void CMainDlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     static int nLastItem = -1;
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
 
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         int nItem = m_LstSettings.GetNextSelectedItem(pos);
 
@@ -2918,7 +2916,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     case VK_LEFT:
     {
         POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-        if (pos != NULL)
+        if (pos != nullptr)
         {
             int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
 
@@ -2949,7 +2947,7 @@ void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     case VK_RIGHT:
     {
         POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-        if (pos != NULL)
+        if (pos != nullptr)
         {
             int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
 
@@ -3003,7 +3001,7 @@ void CMainDlg::OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
         InitLangFilesListContextMenu(m_hMenu);
 
     // display menu
-    m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, NULL);
+    m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, nullptr);
 
     *pResult = 0;
 }
@@ -3019,7 +3017,7 @@ void CMainDlg::OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 void CMainDlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
 {
     POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         int nItem = m_LstSettings.GetNextSelectedItem(pos);
 
@@ -3035,7 +3033,7 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
 {
     TCHAR *pszInPath = szFileName.GetBuffer();
 
-    if (pInfoAVS == NULL)
+    if (pInfoAVS == nullptr)
         return false;
 
     memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
@@ -3077,7 +3075,7 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
 void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
     POSITION pos = m_LstFiles.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         int nItem = m_LstFiles.GetNextSelectedItem(pos);
         CString szFileName = m_LstFiles.GetItemText(nItem, 0);
@@ -3161,12 +3159,12 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CMainDlg::OnFileAddFiles()
 {
-    TCHAR *pFiles = NULL;
+    TCHAR *pFiles = nullptr;
     const DWORD dwMaxSize = (4096 * MAX_PATH);
     try
     {
         pFiles = (TCHAR *)malloc(dwMaxSize);
-        if (pFiles == NULL)
+        if (pFiles == nullptr)
         {
             MessageBox(
                 theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207009) : _T("Failed to allocate memory for filenames buffer!"),
@@ -3195,7 +3193,7 @@ void CMainDlg::OnFileAddFiles()
         {
             // get first file position
             POSITION pos = fd.GetStartPosition();
-            while (pos != NULL)
+            while (pos != nullptr)
             {
                 // do not check file extension when using add file dialog because user can use *.* filter
                 this->AddItemToFileList(fd.GetNextPathName(pos));
@@ -3204,17 +3202,17 @@ void CMainDlg::OnFileAddFiles()
     }
     catch (...)
     {
-        if (pFiles != NULL)
+        if (pFiles != nullptr)
         {
             free(pFiles);
-            pFiles = NULL;
+            pFiles = nullptr;
         }
     }
 
-    if (pFiles != NULL)
+    if (pFiles != nullptr)
     {
         free(pFiles);
-        pFiles = NULL;
+        pFiles = nullptr;
     }
 }
 
@@ -3229,7 +3227,7 @@ void CMainDlg::OnFileAddDirectory()
     if (SHGetMalloc(&pMalloc) == E_FAIL)
         return;
 
-    if ((lpBuffer = (TCHAR *)pMalloc->Alloc(MAX_PATH * 2)) == NULL)
+    if ((lpBuffer = (TCHAR *)pMalloc->Alloc(MAX_PATH * 2)) == nullptr)
     {
         pMalloc->Release();
         return;
@@ -3250,13 +3248,13 @@ void CMainDlg::OnFileAddDirectory()
     bi.pidlRoot = pidlDesktop;
     bi.pszDisplayName = lpBuffer;
     bi.lpszTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020700B) : _T("Add directory with supported input files:");
-    bi.lpfn = NULL;
+    bi.lpfn = nullptr;
     bi.lParam = 0;
     bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_NONEWFOLDERBUTTON;
     bi.iImage = 0;
 
     pidlBrowse = ::SHBrowseForFolder(&bi);
-    if (pidlBrowse != NULL)
+    if (pidlBrowse != nullptr)
     {
         if (SHGetPathFromIDList(pidlBrowse, lpBuffer))
         {
@@ -3611,7 +3609,7 @@ void CMainDlg::OnLanguageChangeDefault()
     // set language to default
     theApp.m_Config.m_nLangId = -1;
     theApp.m_Config.m_bHaveLang = FALSE;
-    theApp.m_Config.m_Lang = NULL;
+    theApp.m_Config.m_Lang = nullptr;
     theApp.m_Config.m_szLangFileName = _T("");
 
     // update Language menu checked status
