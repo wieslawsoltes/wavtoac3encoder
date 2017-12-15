@@ -306,7 +306,8 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     bWorking = true;
 
-    if (OpenAftenAPI(&this->api) == false)
+    this->api.CloseAftenAPI();
+    if (this->api.OpenAftenAPI() == false)
     {
         // _T("Error: Failed to load libaften.dll dynamic library!")
 
@@ -813,8 +814,9 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     ::SetCurrentDirectory(GetExeFilePath());
 
     // load new aften library
+    this->api.CloseAftenAPI();
     this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
-    if (OpenAftenAPI(&this->api) == false)
+    if (this->api.OpenAftenAPI() == false)
     {
         CString szLogMessage =
             (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701E) : _T("Failed to load")) +
@@ -1157,7 +1159,8 @@ bool CMainDlg::UpdateProgramEngines()
         this->m_CmbEngines.SetCurSel(0);
 
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
-        OpenAftenAPI(&this->api);
+        this->api.CloseAftenAPI();
+        this->api.OpenAftenAPI();
 
         return false;
     }
@@ -1185,8 +1188,9 @@ bool CMainDlg::UpdateProgramEngines()
     if ((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
     {
         // load new aften library
+        this->api.CloseAftenAPI();
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
-        if (OpenAftenAPI(&this->api) == false)
+        if (this->api.OpenAftenAPI() == false)
         {
             // select 'None' aften engine
             this->m_CmbEngines.SetCurSel(0);
@@ -1231,8 +1235,9 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
         this->m_CmbEngines.InsertString(0, ce.szKey);
         this->m_CmbEngines.SetCurSel(0);
 
+        this->api.CloseAftenAPI();
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
-        OpenAftenAPI(&this->api);
+        this->api.OpenAftenAPI();
     }
 
     return false;
