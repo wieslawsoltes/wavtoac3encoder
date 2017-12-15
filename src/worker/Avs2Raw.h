@@ -32,12 +32,12 @@ public:
     CAvs2Raw()
     {
         this->bHaveDLL = false;
-        hAvisynthDLL = NULL;
-        _szAvsFileName = NULL;
+        hAvisynthDLL = nullptr;
+        _szAvsFileName = nullptr;
         memset(&this->info, 0, sizeof(AvsAudioInfo));
-        CreateEnv = NULL;
-        env = NULL;
-        Video = NULL;
+        CreateEnv = nullptr;
+        env = nullptr;
+        Video = nullptr;
     }
     virtual ~CAvs2Raw()
     {
@@ -100,15 +100,15 @@ public:
                 {
                     delete Video;
                     delete env;
-                    Video = NULL;
-                    env = NULL;
+                    Video = nullptr;
+                    env = nullptr;
                     return false;
                 }
             }
             else
             {
                 delete env;
-                env = NULL;
+                env = nullptr;
                 return false;
             }
         }
@@ -120,7 +120,7 @@ public:
             // _T("Avisynth Error: Loading Avisynth script message: %s"), e.msg
     #endif
             delete env;
-            env = NULL;
+            env = nullptr;
             return false;
         }
         catch (...)
@@ -128,7 +128,7 @@ public:
             // _T("Avisynth Error: Unknown error while loading Avisynth script!")
 
             delete env;
-            env = NULL;
+            env = nullptr;
             return false;
         }
 
@@ -158,8 +158,8 @@ public:
 
             delete Video;
             delete env;
-            Video = NULL;
-            env = NULL;
+            Video = nullptr;
+            env = nullptr;
             this->bHaveDLL = true;
             return false;
         }
@@ -168,29 +168,28 @@ public:
     {
         try
         {
-            // cleanup used memory
             if (Video)
             {
                 delete Video;
-                Video = NULL;
+                Video = nullptr;
             }
 
             if (env)
             {
                 delete env;
-                env = NULL;
+                env = nullptr;
             }
 
             if (hAvisynthDLL)
                 FreeLibrary(hAvisynthDLL);
 
             this->bHaveDLL = false;
-            hAvisynthDLL = NULL;
-            _szAvsFileName = NULL;
+            hAvisynthDLL = nullptr;
+            _szAvsFileName = nullptr;
             memset(&this->info, 0, sizeof(AvsAudioInfo));
-            CreateEnv = NULL;
-            env = NULL;
-            Video = NULL;
+            CreateEnv = nullptr;
+            env = nullptr;
+            Video = nullptr;
         }
         catch (...)
         {
