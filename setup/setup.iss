@@ -10,29 +10,30 @@
 
 [Setup]
 
-AppId               ={#ProgramName}-{#ProgramBuild}
-AppName             ={#ProgramName}
-AppVerName          ={#ProgramName} {#ProgramVersion}{#ProgramVersionSuffix}
-AppCopyright        ={#ProgramCopyright}
-DefaultDirName      ={pf}\{#ProgramName} ({#ProgramBuild})
-OutputDir           ={#BasePath}\artifacts
-VersionInfoVersion  ={#ProgramVersion}
-DefaultGroupName    ={#ProgramName} ({#ProgramBuild})
-AppPublisher        ={#ProgramWebsite}
-AppPublisherURL     ={#ProgramWebsite}
-AppVersion          ={#ProgramVersion}{#ProgramVersionSuffix}
-UsePreviousAppDir   =yes
-AllowNoIcons        =yes
-Compression         =lzma/max
-SolidCompression    =yes
-WindowVisible       =no
-WindowShowCaption   =no
-BackColor           =clBlue
-BackColor2          =clBlack
-BackColorDirection  =toptobottom
-BackSolid           =no
-UserInfoPage        =no
-Uninstallable       =not IsTaskSelected('portablemode')
+AppId                 ={#ProgramName}-{#ProgramBuild}
+AppName               ={#ProgramName}
+AppVerName            ={#ProgramName} {#ProgramVersion}{#ProgramVersionSuffix}
+AppCopyright          ={#ProgramCopyright}
+DefaultDirName        ={pf}\{#ProgramName} ({#ProgramBuild})
+OutputDir             ={#BasePath}\artifacts
+VersionInfoVersion    ={#ProgramVersion}
+DefaultGroupName      ={#ProgramName} ({#ProgramBuild})
+AppPublisher          ={#ProgramWebsite}
+AppPublisherURL       ={#ProgramWebsite}
+AppVersion            ={#ProgramVersion}{#ProgramVersionSuffix}
+UsePreviousAppDir     =yes
+AllowNoIcons          =yes
+Compression           =lzma/max
+SolidCompression      =yes
+WindowVisible         =no
+WindowShowCaption     =no
+BackColor             =clBlue
+BackColor2            =clBlack
+BackColorDirection    =toptobottom
+BackSolid             =no
+UserInfoPage          =no
+Uninstallable         =not IsTaskSelected('portablemode')
+CreateUninstallRegKey =not IsTaskSelected('portablemode')
 
 #if "Release" == ProgramConfiguration
 OutputBaseFilename ={#ProgramName}-{#ProgramVersion}{#ProgramVersionSuffix}-{#ProgramBuild}
