@@ -62,7 +62,6 @@ public:
 
         _szAvsFileName = szAvsFileName;
 
-        // load avisynth.dll
         hAvisynthDLL = LoadLibrary(_T("avisynth"));
         if (!hAvisynthDLL)
         {
@@ -70,7 +69,6 @@ public:
             return false;
         }
 
-        // retrieve address of CreateScriptEnvironment function
         CreateEnv = (IScriptEnvironment *(__stdcall *)(int)) GetProcAddress(hAvisynthDLL,
             "CreateScriptEnvironment");
         if (!CreateEnv)
@@ -79,7 +77,6 @@ public:
             return false;
         }
 
-        // create a new scriptenvironment
         env = CreateEnv(AVISYNTH_INTERFACE_VERSION);
         if (!env)
         {
@@ -87,14 +84,12 @@ public:
             return false;
         }
 
-        // load the Avisynth script
         AVSValue args[1] = { szAvsFileName };
         try
         {
             Video = new PClip();
             if (Video)
             {
-                // NOTE: unable to debug this line in VC++
                 *Video = env->Invoke("Import", AVSValue(args, 1)).AsClip();
                 if (!(*Video))
                 {
@@ -126,23 +121,19 @@ public:
         catch (...)
         {
             // _T("Avisynth Error: Unknown error while loading Avisynth script!")
-
             delete env;
             env = nullptr;
             return false;
         }
 
-        // check for audio streams
         if ((*Video)->GetVideoInfo().HasAudio())
         {
-            // convert audio samples to float (Aften uses by default FLOAT)
             if ((*Video)->GetVideoInfo().SampleType() != SAMPLE_FLOAT)
             {
                 AVSValue args_conv[1] = { *Video };
                 *Video = env->Invoke("ConvertAudioToFloat", AVSValue(args_conv, 1)).AsClip();
             }
 
-            // fill info struct
             this->info.nAudioChannels = (*Video)->GetVideoInfo().AudioChannels();
             this->info.nAudioSamples = (*Video)->GetVideoInfo().num_audio_samples;
             this->info.nBytesPerChannelSample = (*Video)->GetVideoInfo().BytesPerChannelSample();
@@ -155,7 +146,6 @@ public:
         else
         {
             // _T("Avisynth Error: No audio stream!")
-
             delete Video;
             delete env;
             Video = nullptr;
@@ -204,14 +194,12 @@ public:
     }
     int GetAudio(void* pBuffer, Avs2RawStatus *pStatus)
     {
-        // stop decoding when no more data available
         if (pStatus->nSamplesLeft <= 0)
             return 0;
 
         if (pStatus->nSamplesToRead > pStatus->nSamplesLeft)
             pStatus->nSamplesToRead = (int)pStatus->nSamplesLeft;
 
-        // get next chunk of decoded audio data
         try
         {
             (*Video)->GetAudio(pBuffer, pStatus->nStart, pStatus->nSamplesToRead, env);
@@ -230,16 +218,13 @@ public:
         catch (...)
         {
             // _T("Avisynth Error: Unknown error in GetAudio()!")
-
             delete Video;
             delete env;
             return -1;
         }
 
-        // update read counter
         pStatus->nStart += pStatus->nSamplesToRead;
         pStatus->nSamplesLeft -= pStatus->nSamplesToRead;
-
         return pStatus->nSamplesToRead;
     }
 };
