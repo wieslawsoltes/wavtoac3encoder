@@ -114,7 +114,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-protected:
+public:
     void InitTitle();
     void InitTooltips();
     void InitSettingsList();
