@@ -107,12 +107,6 @@
     <ClCompile Include="worker\WorkThread.cpp">
       <Filter>Source Files\Worker</Filter>
     </ClCompile>
-    <ClCompile Include="worker\AftenAPI.cpp">
-      <Filter>Source Files\Worker</Filter>
-    </ClCompile>
-    <ClCompile Include="worker\Avs2Raw.cpp">
-      <Filter>Source Files\Worker</Filter>
-    </ClCompile>
     <ClCompile Include="configuration\Configuration.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
