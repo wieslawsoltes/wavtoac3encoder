@@ -75,14 +75,17 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
     var langDir = outputDir.Combine("lang");
-    var exeFile = File(path + "EncWAVtoAC3.exe");
-    var portableFile = File("./setup/EncWAVtoAC3.portable");
 
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
-    CopyFileToDirectory(exeFile, outputDir);
-    CopyFileToDirectory(portableFile, outputDir);
+    CopyFileToDirectory(File(path + "EncWAVtoAC3.exe"), outputDir);
+    CopyFileToDirectory(File("./setup/EncWAVtoAC3.portable"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.config"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.files"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.lang"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
+
     CleanDirectory(langDir);
     CopyFiles("./config/lang/*.txt", langDir);
 
