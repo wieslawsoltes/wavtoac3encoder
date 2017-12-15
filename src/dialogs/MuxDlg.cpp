@@ -4,7 +4,7 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 
-// Correct channel to file mapping:
+// Channel to file mappings
 // FL    -> szInputFiles[0]
 // FR    -> szInputFiles[1]
 // C     -> szInputFiles[2]
@@ -59,7 +59,7 @@ const CString szChannelConfigNames[nNumChannelConfig][CEncoderDefaults::nNumMaxI
 
 IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
 
-CMuxDlg::CMuxDlg(CWnd* pParent /*=NULL*/)
+CMuxDlg::CMuxDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CMuxDlg::IDD, pParent)
 {
     for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
@@ -570,7 +570,7 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 
 void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
 {
-    if (m_BtnCurrent == NULL || m_EdtCurrent == NULL)
+    if (m_BtnCurrent == nullptr || m_EdtCurrent == nullptr)
         return;
 
     CString szCurrentFileName;
