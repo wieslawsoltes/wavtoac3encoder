@@ -27,9 +27,7 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, Aft
     s.params.encoding_mode = preset->nMode;
     s.params.bitrate = preset->nBitrate;
     s.params.quality = preset->nQuality;
-
     s.system.n_threads = preset->nThreads;
-
     s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
     s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
     s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
@@ -678,7 +676,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     int nCurTotalPos = 0;
     __int64 nCurPos = 0;
     bool bUpdateSpeed = false;
-
     __int64 nInPrevCurPos = 0;
     __int64 nOutPrevCurPos = 0;
     double fPrevTimeEncoding = 0.0;
@@ -750,9 +747,6 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                     percent = (uint32_t)((samplecount * FCONST(100.0)) / pf.samples);
                     percent = CLIP(percent, 0, 100);
                 }
-
-                // int nCurTotalPos = 0; // 0% - 100%
-                // __int64 nCurPos = 0;
 
                 if (bAvisynthInput == false)
                 {
@@ -916,7 +910,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     CWorkerParam *pWork = (CWorkerParam *)pParam;
     __int64 nTotalSizeCounter = 0;
     AftenAPI api = pWork->api;
-
     CString szCommandLine = _T("");
     CString szBuff = _T("");
 #ifdef _UNICODE
@@ -937,7 +930,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->m_PrgTotal.SetRange32(0, 100);
     pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
     pWork->pWorkDlg->m_PrgTotal.SetPos(0);
-
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
     szBuff.Format(_T("%s %s"),
@@ -948,7 +940,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
     int nFileCounter = 0;
     int nTotalFiles = list->Count();
-
     int posStatus = 0;
 
     if (pWork->bMultiMonoInput == false)
