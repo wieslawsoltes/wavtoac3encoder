@@ -55,7 +55,7 @@ class CMainDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CMainDlg)
 public:
-    CMainDlg(CWnd* pParent = NULL);
+    CMainDlg(CWnd* pParent = nullptr);
     enum { IDD = IDD_DIALOG_MAIN };
 protected:
     HICON m_hIcon;
