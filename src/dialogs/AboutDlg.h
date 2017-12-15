@@ -30,6 +30,5 @@ protected:
 public:
     CMyStatic m_StcLicense;
     CMyStatic m_StcBuildInfo;
-public:
     CMyButton m_BtnOK;
 };
