@@ -16,14 +16,12 @@ CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
     nIDIn[3] = IDC_STATIC_IN_03;
     nIDIn[4] = IDC_STATIC_IN_04;
     nIDIn[5] = IDC_STATIC_IN_05;
-
     nIDInInfo[0] = IDC_STATIC_IN_INFO_00;
     nIDInInfo[1] = IDC_STATIC_IN_INFO_01;
     nIDInInfo[2] = IDC_STATIC_IN_INFO_02;
     nIDInInfo[3] = IDC_STATIC_IN_INFO_03;
     nIDInInfo[4] = IDC_STATIC_IN_INFO_04;
     nIDInInfo[5] = IDC_STATIC_IN_INFO_05;
-
     this->bTerminate = false;
     this->bCanUpdateWindow = true;
     this->hThread = nullptr;
@@ -35,7 +33,6 @@ CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
 
 CWorkDlg::~CWorkDlg()
 {
-
 }
 
 void CWorkDlg::DoDataExchange(CDataExchange* pDX)
@@ -72,13 +69,9 @@ BOOL CWorkDlg::OnInitDialog()
 
 void CWorkDlg::OnClose()
 {
-    // stop file timer
     KillTimer(WM_FILE_TIMER);
-
-    // stop total timer
     KillTimer(WM_TOTAL_TIMER);
 
-    // stop encoding process and close work dialog
     if (this->bTerminate == false)
     {
         this->bTerminate = true;
@@ -119,13 +112,10 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CWorkDlg::OnBnClickedCancel()
 {
-    // stop encoding process and close work dialog
     if (this->bTerminate == false)
         this->bTerminate = true;
     else
         this->EndDialog(IDOK);
-
-    // OnCancel();
 }
 
 void CWorkDlg::InitSettings()
@@ -137,14 +127,12 @@ void CWorkDlg::InitCtrls()
 {
     if (this->workParam.bMultiMonoInput == false)
     {
-        // hide unused static controls
         for (int i = 1; i < 6; i++)
         {
             this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
             this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
         }
 
-        // move other controls
         CRect rcIn[CEncoderDefaults::nNumMaxInputFiles], rcInInfo[CEncoderDefaults::nNumMaxInputFiles];
         CRect rcSpeedInfo[3][3];
         CRect rcOut, rcOutInfo;
@@ -173,16 +161,14 @@ void CWorkDlg::InitCtrls()
         this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->GetWindowRect(rcSpeedInfo[0][0]);
         this->GetDlgItem(IDC_STATIC_ENCODER_UNIT)->GetWindowRect(rcSpeedInfo[0][1]);
         this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->GetWindowRect(rcSpeedInfo[0][2]);
-
         this->GetDlgItem(IDC_STATIC_READS_LABEL)->GetWindowRect(rcSpeedInfo[1][0]);
         this->GetDlgItem(IDC_STATIC_READS_UNIT)->GetWindowRect(rcSpeedInfo[1][1]);
         this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->GetWindowRect(rcSpeedInfo[1][2]);
-
         this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->GetWindowRect(rcSpeedInfo[2][0]);
         this->GetDlgItem(IDC_STATIC_WRITES_UNIT)->GetWindowRect(rcSpeedInfo[2][1]);
         this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->GetWindowRect(rcSpeedInfo[2][2]);
-
         this->GetDlgItem(IDC_STATIC_GROUP_STATS)->GetWindowRect(rcGroupStats);
+
         this->GetWindowRect(rcDlg);
 
         int nHeight = 0;
@@ -274,30 +260,28 @@ void CWorkDlg::UpdateTotalTimer()
     TCHAR strTime[32] = _T("");
     m_ElapsedTimeTotal += 0.25;
 
-    // get time in format hh:mm:ss
     if (m_ElapsedTimeTotal <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            (unsigned long)m_ElapsedTimeTotal); // ss
+            (unsigned long)m_ElapsedTimeTotal);
     }
     else if (m_ElapsedTimeTotal <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            ((unsigned long)m_ElapsedTimeTotal / 60), // mm
-            ((unsigned long)m_ElapsedTimeTotal % 60)); // ss
+            ((unsigned long)m_ElapsedTimeTotal / 60),
+            ((unsigned long)m_ElapsedTimeTotal % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            ((unsigned long)m_ElapsedTimeTotal / 60) / 60, // hh
-            ((unsigned long)m_ElapsedTimeTotal / 60) % 60, // mm
-            ((((unsigned long)m_ElapsedTimeTotal / 60) % 60) * 60) % 60); // ss
+            ((unsigned long)m_ElapsedTimeTotal / 60) / 60,
+            ((unsigned long)m_ElapsedTimeTotal / 60) % 60,
+            ((((unsigned long)m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
     }
 
-    // write to dialog
     if (this->bCanUpdateWindow == true)
     {
         this->bCanUpdateWindow = false;
@@ -311,38 +295,34 @@ void CWorkDlg::UpdateFileTimer()
     TCHAR strTime[32] = _T("");
     m_ElapsedTimeFile += 0.25;
 
-    // get time in format hh:mm:ss
     if (m_ElapsedTimeFile <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            (unsigned long)m_ElapsedTimeFile); // ss
+            (unsigned long)m_ElapsedTimeFile);
     }
     else if (m_ElapsedTimeFile <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            ((unsigned long)m_ElapsedTimeFile / 60), // mm
-            ((unsigned long)m_ElapsedTimeFile % 60)); // ss
+            ((unsigned long)m_ElapsedTimeFile / 60),
+            ((unsigned long)m_ElapsedTimeFile % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            ((unsigned long)m_ElapsedTimeFile / 60) / 60, // hh
-            ((unsigned long)m_ElapsedTimeFile / 60) % 60, // mm
-            ((((unsigned long)m_ElapsedTimeFile / 60) % 60) * 60) % 60); // ss
+            ((unsigned long)m_ElapsedTimeFile / 60) / 60,
+            ((unsigned long)m_ElapsedTimeFile / 60) % 60,
+            ((((unsigned long)m_ElapsedTimeFile / 60) % 60) * 60) % 60);
     }
 
-    // write to dialog
     if (this->bCanUpdateWindow == true)
     {
         this->bCanUpdateWindow = false;
 
-        // show current time
         m_StcTimeCurrent.SetWindowText(strTime);
 
-        // show current avg. speed
         this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->SetWindowText(szSpeedEncoderAvg);
         this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->SetWindowText(szSpeedReadsAvg);
         this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->SetWindowText(szSpeedWritesAvg);
@@ -363,8 +343,6 @@ void CWorkDlg::CreateWorker()
     if (this->hThread == nullptr)
     {
         // _T("Error: Failed to create worker thread!")
-
-        // show critical error message
         this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
             MB_OK | MB_ICONERROR);
