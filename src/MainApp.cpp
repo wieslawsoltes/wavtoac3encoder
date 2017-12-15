@@ -33,7 +33,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
     }
     else
     {
-        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), NULL);
+        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), nullptr);
 
         m_Config.m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
         m_Config.m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
