@@ -21,7 +21,7 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 | Windows 32-bit        | Installer   | 6.0           | [EncWAVtoAC3-6.0-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-Win32.exe)          |
 | Windows 64-bit        | Installer   | 6.0           | [EncWAVtoAC3-6.0-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-x64.exe)              |
 | Windows 32-bit        | Portable    | 6.0           | [EncWAVtoAC3-6.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-Win32.zip)          |
-| Windows 64-bit        | Portable    | 6.0           | [EncWAVtoAC3-6.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.6/EncWAVtoAC3-6.0-x64.zip)              |
+| Windows 64-bit        | Portable    | 6.0           | [EncWAVtoAC3-6.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-x64.zip)              |
 
 ## System requirements
 
