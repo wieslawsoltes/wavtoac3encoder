@@ -15,7 +15,7 @@ class CMuxDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CMuxDlg)
 public:
-    CMuxDlg(CWnd* pParent = NULL);
+    CMuxDlg(CWnd* pParent = nullptr);
     virtual ~CMuxDlg();
     enum { IDD = IDD_DIALOG_MUX };
 protected:
