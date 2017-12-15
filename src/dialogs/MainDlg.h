@@ -130,7 +130,6 @@ protected:
     void InitLangSettingsList();
     void InitLangMainMenu();
     void InitLangMenu();
-public:
     bool LoadFilesList(CString &szFileName);
     bool SaveFilesList(CString &szFileName, int nFormat);
     bool LoadProgramConfig(CString szFileName);
@@ -140,9 +139,7 @@ public:
     bool SaveProgramEngines(CString szFileName);
     void LoadAllConfiguration();
     void SaveAllConfiguration();
-public:
     CEncoderPreset& GetCurrentPreset();
-public:
     void HandleDropFiles(HDROP hDropInfo);
     void SearchFolderForFiles(CString szFile, const bool bRecurse);
     void AddItemToFileList(CString szPath);
@@ -150,7 +147,6 @@ public:
     void UpdateSettingsComboBox(int nItem);
     void ApplyPresetToDlg(CEncoderPreset &Preset);
     void ShowOptionPopup(bool bUseRect);
-public:
 #ifndef DISABLE_AVISYNTH
     bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
 #endif
@@ -166,7 +162,6 @@ public:
     afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     afx_msg void OnClose();
     afx_msg void OnDestroy();
-public:
     afx_msg void OnFileAddFiles();
     afx_msg void OnFileAddDirectory();
     afx_msg void OnFileMuxWizard();
@@ -175,18 +170,14 @@ public:
     afx_msg void OnFileLoadPresets();
     afx_msg void OnFileSavePresets();
     afx_msg void OnFileExit();
-public:
     afx_msg void OnOptionsDisableAllWarnings();
     afx_msg void OnOptionsSaveConfigurationOnExit();
     afx_msg void OnOptionsLoadConfiguration();
     afx_msg void OnOptionsSaveConfiguration();
-public:
     afx_msg void OnLanguageChangeDefault();
     afx_msg void OnLanguageChange(UINT nID);
-public:
     afx_msg void OnHelpWebsite();
     afx_msg void OnHelpAbout();
-public:
     afx_msg void OnListAddFiles();
     afx_msg void OnListAddDirectory();
     afx_msg void OnListMuxWizard();
@@ -196,7 +187,6 @@ public:
     afx_msg void OnListMoveDown();
     afx_msg void OnListDelFiles();
     afx_msg void OnListClearList();
-public:
     afx_msg void OnBnClickedCheckVbr();
     afx_msg void OnBnClickedButtonPresetAdd();
     afx_msg void OnBnClickedButtonPresetDel();
@@ -211,36 +201,29 @@ public:
     afx_msg void OnBnClickedButtonPresetsDefaults();
     afx_msg void OnBnClickedButtonMuxWizard();
     afx_msg void OnBnClickedButtonEngines();
-public:
     afx_msg void OnCbnSelchangeComboSetting();
     afx_msg void OnCbnSelchangeComboPresets();
     afx_msg void OnCbnSelchangeComboRawSampleFormat();
     afx_msg void OnCbnSelchangeComboEngines();
-public:
     afx_msg void OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult);
-public:
     afx_msg void OnNMRclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult);
-public:
     afx_msg void OnEnChangeEditRawSampleRate();
     afx_msg void OnEnChangeEditRawChannels();
     afx_msg void OnEnChangeEditThreads();
     afx_msg void OnEnChangeEditOutputPath();
-public:
     afx_msg void OnEnSetfocusEditOutputPath();
     afx_msg void OnEnSetfocusEditRawSampleRate();
     afx_msg void OnEnSetfocusEditRawChannels();
     afx_msg void OnEnSetfocusEditThreads();
-public:
     afx_msg void OnEnKillfocusEditOutputPath();
     afx_msg void OnEnKillfocusEditRawSampleRate();
     afx_msg void OnEnKillfocusEditRawChannels();
     afx_msg void OnEnKillfocusEditThreads();
-public:
     afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
 };
