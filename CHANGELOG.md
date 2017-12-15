@@ -2,6 +2,11 @@
 
 ### Version 7.0:
 
+- Added default configuration files to installer version.
+- Added default configuration files to portable version.
+- Added support for loading language files from relative path to settings folder.
+- Added portable mode to installer.
+
 ### Version 6.0:
 
 - Added dynamic layout for dialogs.
