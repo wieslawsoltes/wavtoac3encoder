@@ -310,7 +310,10 @@ void CConfiguration::LoadLangStrings()
         for (int i = 0; i < m_LangLst.Count(); i++)
         {
             auto& lang = m_LangLst.Get(i);
-            if (lang.szFileName.Compare(m_szLangFileName) == 0)
+            
+            CString szNameLang = GetFileName(lang.szFileName);
+            CString szNameConfig = GetFileName(m_szLangFileName);
+            if (szNameLang.Compare(szNameConfig) == 0)
             {
                 m_nLangId = i;
                 m_bHaveLang = TRUE;
