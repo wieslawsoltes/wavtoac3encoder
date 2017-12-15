@@ -6,7 +6,7 @@
 
 IMPLEMENT_DYNAMIC(CEnginesDlg, CDialog)
 
-CEnginesDlg::CEnginesDlg(CWnd* pParent /*=NULL*/)
+CEnginesDlg::CEnginesDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CEnginesDlg::IDD, pParent)
 {
     bUpdateList = true;
@@ -155,7 +155,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesRemove()
 
     // get all selected items
     pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    while (pos != NULL)
+    while (pos != nullptr)
     {
         int nItem = this->m_LstEngines.GetNextSelectedItem(pos);
         list.Insert(nItem);
@@ -223,7 +223,7 @@ void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
     if (bUpdateList == true)
     {
         POSITION pos = m_LstEngines.GetFirstSelectedItemPosition();
-        if (pos != NULL)
+        if (pos != nullptr)
         {
             int nItem = m_LstEngines.GetNextSelectedItem(pos);
 
@@ -249,7 +249,7 @@ void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
 void CEnginesDlg::OnEnChangeEditEngineName()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         CString szText;
 
@@ -267,7 +267,7 @@ void CEnginesDlg::OnEnChangeEditEngineName()
 void CEnginesDlg::OnEnChangeEditEnginePath()
 {
     POSITION pos = this->m_LstEngines.GetFirstSelectedItemPosition();
-    if (pos != NULL)
+    if (pos != nullptr)
     {
         CString szText;
 
