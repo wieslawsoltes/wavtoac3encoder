@@ -12,11 +12,8 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-// return values from work thread
 #define WORKDLG_RETURN_SUCCESS 0
 #define WORKDLG_RETURN_FAILURE 1
-
-// elapsed time timers message id's
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 
@@ -83,15 +80,12 @@ public:
     CMyStatic m_StcSimdInfo;
     CMyStatic m_StcTimeCurrent;
     CMyStatic m_StcTimeTotal;
-public:
     CProgressCtrl m_PrgCurrent;
     CProgressCtrl m_PrgTotal;
-public:
     CMyButton m_BtnCancel;
 public:
     afx_msg void OnClose();
     afx_msg void OnDestroy();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
-public:
     afx_msg void OnBnClickedCancel();
 };
