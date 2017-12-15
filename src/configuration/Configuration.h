@@ -63,11 +63,11 @@ public:
 
 class ConfigList_t : public CListT<ConfigEntry>
 {
-}
+};
 
 class LangMap_t : public CMapT<int, CString>
 {
-}
+};
 
 class Lang
 {
@@ -104,7 +104,7 @@ public:
 
 class LangList_t : public CListT<Lang>
 {
-}
+};
 
 class CConfiguration
 {
@@ -280,7 +280,7 @@ public:
 
 class EncoderPresetList_t : public CListT<CEncoderPreset>
 {
-}
+};
 
 class CEncoderDefaults
 {
