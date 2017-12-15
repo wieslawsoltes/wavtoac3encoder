@@ -92,20 +92,24 @@ public:
     }
     void CloseAftenAPI()
     {
-        if (hLibAften != nullptr)
-        {
-            FreeLibrary(hLibAften);
-            szLibPath = _T("");
-            hLibAften = nullptr;
-            LibAften_aften_get_version = nullptr;
-            LibAften_aften_set_defaults = nullptr;
-            LibAften_aften_encode_init = nullptr;
-            LibAften_aften_encode_frame = nullptr;
-            LibAften_aften_encode_close = nullptr;
-            LibAften_aften_wav_channels_to_acmod = nullptr;
-            LibAften_aften_remap_wav_to_a52 = nullptr;
-            LibAften_aften_remap_mpeg_to_a52 = nullptr;
-            LibAften_aften_get_float_type = nullptr;
-        }
+        if (hLibAften == nullptr)
+            return;
+
+        FreeLibrary(hLibAften);
+        hLibAften = nullptr;
+
+        LibAften_aften_get_version = nullptr;
+        LibAften_aften_set_defaults = nullptr;
+        LibAften_aften_encode_init = nullptr;
+        LibAften_aften_encode_frame = nullptr;
+        LibAften_aften_encode_close = nullptr;
+        LibAften_aften_wav_channels_to_acmod = nullptr;
+        LibAften_aften_remap_wav_to_a52 = nullptr;
+        LibAften_aften_remap_mpeg_to_a52 = nullptr;
+        LibAften_aften_get_float_type = nullptr;
+    }
+    bool IsAftenOpen()
+    {
+        return hLibAften != nullptr;
     }
 };
