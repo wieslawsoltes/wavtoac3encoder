@@ -7,7 +7,7 @@
 
 IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
 
-CWorkDlg::CWorkDlg(CWnd* pParent /*=NULL*/)
+CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CWorkDlg::IDD, pParent)
 {
     nIDIn[0] = IDC_STATIC_IN_00;
@@ -26,7 +26,7 @@ CWorkDlg::CWorkDlg(CWnd* pParent /*=NULL*/)
 
     this->bTerminate = false;
     this->bCanUpdateWindow = true;
-    this->hThread = NULL;
+    this->hThread = nullptr;
     this->dwThreadId = 0;
     this->nCount = 0;
     this->m_ElapsedTimeFile = 0;
@@ -94,11 +94,11 @@ void CWorkDlg::OnDestroy()
 {
     CMyDialogEx::OnDestroy();
 
-    if (this->hThread != NULL)
+    if (this->hThread != nullptr)
     {
         ::TerminateThread(this->hThread, 0);
         ::CloseHandle(this->hThread);
-        this->hThread = NULL;
+        this->hThread = nullptr;
     }
 }
 
@@ -353,14 +353,14 @@ void CWorkDlg::UpdateFileTimer()
 
 void CWorkDlg::CreateWorker()
 {
-    this->hThread = ::CreateThread(NULL,
+    this->hThread = ::CreateThread(nullptr,
         0,
         EncWorkThread,
         &workParam,
         0,
         &this->dwThreadId);
 
-    if (this->hThread == NULL)
+    if (this->hThread == nullptr)
     {
         // _T("Error: Failed to create worker thread!")
 
