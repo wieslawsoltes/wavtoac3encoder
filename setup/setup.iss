@@ -47,8 +47,8 @@ UserInfoPage        =no
 
 Name: main; Description: Main Program; Types: full compact custom
 Name: docs; Description: Documents; Types: full
-Name: config; Description: libaften.dll Configuration; Types: full compact
-Name: engines; Description: libaften.dll Libraries; Types: full compact
+Name: config; Description: Program Configuration; Types: full compact
+Name: engines; Description: Aften Libraries; Types: full compact
 Name: lang; Description: Languages; Types: full
 
 [Tasks]
@@ -63,12 +63,20 @@ Source: {#BasePath}\*.txt; DestDir: {app}; Flags: ignoreversion; Components: doc
 Source: {#BasePath}\*.md; DestDir: {app}; Flags: ignoreversion; Components: docs
 
 #if "x64" == ProgramBuild
+    Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
     Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x64\lang; Flags: ignoreversion; Components: lang
     Source: {#BasePath}\config\engines\EncWAVtoAC3-x64.engines; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
     Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion; Components: engines
     Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion; Components: engines
     Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion; Components: engines
 #else
+    Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
+    Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
     Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x86\lang; Flags: ignoreversion; Components: lang
     Source: {#BasePath}\config\engines\EncWAVtoAC3-x86.engines; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
     Source: {#BasePath}\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion; Components: engines
