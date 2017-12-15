@@ -358,7 +358,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 #endif
         {
             // _T("Failed to initialize Avisynth.")
-            return(WORKDLG_RETURN_FAILURE);
+            return(FALSE);
         }
         else
         {
@@ -390,7 +390,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
                 pWork->pWorkDlg->bTerminate = true;
                 ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
-                return(WORKDLG_RETURN_FAILURE);
+                return(FALSE);
             }
             else
             {
@@ -422,7 +422,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
         pWork->pWorkDlg->bTerminate = true;
         ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
-        return(WORKDLG_RETURN_FAILURE);
+        return(FALSE);
     }
 
 #define HandleEncoderError(message) \
@@ -458,7 +458,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     szOutPath.ReleaseBuffer(); \
     pWork->pWorkDlg->bTerminate = true; \
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
-    return(WORKDLG_RETURN_FAILURE);
+    return(FALSE);
 
 #ifdef CONFIG_DOUBLE
     read_format = PCM_SAMPLE_FMT_DBL;
@@ -893,7 +893,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
 
     szOutPath.ReleaseBuffer();
 
-    return(WORKDLG_RETURN_SUCCESS);
+    return(TRUE);
 }
 
 DWORD WINAPI EncWorkThread(LPVOID pParam)
@@ -911,7 +911,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
     if (pWork->pWorkDlg == nullptr)
     {
-        return(WORKDLG_RETURN_FAILURE);
+        return(FALSE);
     }
 
     CListT<CString> *list = pWork->list;
@@ -989,11 +989,11 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
             SetAftenOptions(api, s, preset, opt, pWork);
 
-            if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, 1, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
+            if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, 1, &nTotalSizeCounter) == FALSE)
             {
                 bool result = false;
                 listStatus->Set(result, posStatus);
-                return(WORKDLG_RETURN_FAILURE);
+                return(FALSE);
             }
             else
             {
@@ -1060,7 +1060,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
         SetAftenOptions(api, s, preset, opt, pWork);
 
-        if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, nFileCounter, &nTotalSizeCounter) == WORKDLG_RETURN_FAILURE)
+        if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, nFileCounter, &nTotalSizeCounter) == FALSE)
         {
             for (int i = 0; i < listStatus->Count(); i++)
             {
@@ -1070,7 +1070,7 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 
             pWork->pWorkDlg->nCount = 0;
 
-            return(WORKDLG_RETURN_FAILURE);
+            return(FALSE);
         }
         else
         {
@@ -1088,5 +1088,5 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     pWork->pWorkDlg->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
-    return(WORKDLG_RETURN_SUCCESS);
+    return(TRUE);
 }

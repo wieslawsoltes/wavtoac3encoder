@@ -12,8 +12,6 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-#define WORKDLG_RETURN_SUCCESS 0
-#define WORKDLG_RETURN_FAILURE 1
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 
