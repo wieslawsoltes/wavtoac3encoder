@@ -113,3 +113,16 @@ public:
         return hLibAften != nullptr;
     }
 };
+
+class AftenOpt
+{
+public:
+    int pad_start;
+    int chmap;
+    int read_to_eof;
+    int raw_input;
+    int raw_sr;
+    int raw_ch;
+    enum PcmSampleFormat raw_fmt;
+    int raw_order;
+};

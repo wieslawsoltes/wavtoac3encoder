@@ -11,15 +11,6 @@
 #include "Avs2Raw.h"
 #endif
 
-CListT<SingleWorkerData> workList;
-CRITICAL_SECTION csQue;
-int nNextInQue;
-int nTotalFiles;
-HANDLE *phThreads;
-DWORD *pdwThreadsID;
-DWORD dwWorkThreads;
-bool *pbTerminate;
-
 void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
 {
     api.LibAften_aften_set_defaults(&s);
@@ -313,7 +304,7 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr, SingleWorkerData *pworkData = nullptr)
+int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr)
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
     uint8_t *frame = nullptr;
