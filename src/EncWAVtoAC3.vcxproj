@@ -358,8 +358,6 @@
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
-    <ClCompile Include="worker\AftenAPI.cpp" />
-    <ClCompile Include="worker\Avs2Raw.cpp" />
     <ClCompile Include="worker\WorkThread.cpp" />
   </ItemGroup>
   <ItemGroup>
