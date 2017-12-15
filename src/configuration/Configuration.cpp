@@ -22,7 +22,6 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
         if (fp.FOpen(szFileName, false) == false)
             return false;
 
-        // clear list
         cl.RemoveAll();
 
         TCHAR Buffer;
@@ -34,7 +33,6 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
             if ((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
 
-            // we have full line if there is end of line mark or end of file
             if ((Buffer == '\n') || (fp.FPos() == nLength))
             {
                 szBuffer += _T("\0");
@@ -74,8 +72,6 @@ bool CConfiguration::SaveConfig(CString &szFileName, ConfigList_t &cl)
         {
             CString szBuffer;
             auto& ce = cl.Get(i);
-
-            // format and save key/data pair
             szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szValue);
             fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
             szBuffer.ReleaseBuffer();
@@ -102,7 +98,6 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
         ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
         ZeroMemory(cTempBuf, MAX_PATH * 2);
 
-        // remove '\' or '/' from end of search path
         szPath.TrimRight(_T("\\"));
         szPath.TrimRight(_T("/"));
 
@@ -120,12 +115,10 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
                 CString szTempBuf;
                 szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
 
-                // apply filter and add only .txt files
                 CString szExt = ::PathFindExtension(szTempBuf);
                 szExt.MakeLower();
                 szExt.Remove('.');
 
-                // add only files with proper file extensions
                 if (szExt.CompareNoCase(_T("txt")) == 0)
                 {
                     Lang lang;
@@ -145,8 +138,6 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
                 w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
                 wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
-
-                // recurse subdirs
                 if (bRecurse == true)
                     SearchFolderForLang(cTempBuf, true, m_LangLst);
             }
@@ -180,7 +171,6 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap_t& lm)
         if (fp.FOpen(szFileName, false) == false)
             return false;
 
-        // clear list
         lm.RemoveAll();
 
         TCHAR Buffer;
@@ -196,7 +186,6 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap_t& lm)
             if ((Buffer != '\r') && (Buffer != '\n'))
                 szBuffer += Buffer;
 
-            // we have full line if there is end of line mark or end of file
             if ((Buffer == '\n') || (fp.FPos() == nLength))
             {
                 szBuffer += _T("\0");
@@ -206,12 +195,9 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap_t& lm)
                 {
                     szKey = szBuffer.Mid(0, nPos);
                     szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-
                     szValue.Replace(_T("\\n"), _T("\n"));
                     szValue.Replace(_T("\\t"), _T("\t"));
-
                     _stscanf(szKey, _T("%x"), &key);
-
                     lm.Set(key, szValue);
                 }
 
@@ -256,23 +242,16 @@ bool CConfiguration::LoadLangConfig(CString &szFileName)
             {
                 szBuffer += _T("\0");
 
-                // terminate reading if max of input files is reached
                 if (nFileCounter >= 1)
                 {
                     fp.FClose();
                     return true;
                 }
 
-                // remove leading and trailing quotes (used for *.mux file format)
                 szBuffer.TrimLeft('"');
                 szBuffer.TrimRight('"');
-
                 m_szLangFileName = szBuffer;
-
-                // update file counter
                 nFileCounter++;
-
-                // reset buffer
                 szBuffer = _T("");
             }
 
@@ -298,11 +277,9 @@ bool CConfiguration::SaveLangConfig(CString &szFileName)
             return false;
 
         CString szBuffer;
-
         szBuffer.Format(_T("%s\r\n"), m_szLangFileName);
         fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
         szBuffer.ReleaseBuffer();
-
         fp.FClose();
     }
     catch (...)
