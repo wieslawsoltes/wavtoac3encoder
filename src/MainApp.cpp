@@ -21,8 +21,6 @@ BOOL CEncWAVtoAC3App::InitInstance()
 {
     CEncoderDefaults::InitEncoderOptions();
 
-    ::SetCurrentDirectory(GetExeFilePath());
-
     m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
 
     if (m_Config.m_bIsPortable == true)
@@ -42,6 +40,15 @@ BOOL CEncWAVtoAC3App::InitInstance()
         m_Config.m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
         m_Config.m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
         m_Config.m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+    }
+
+    if (m_Config.m_bIsPortable == true)
+    {
+        ::SetCurrentDirectory(GetExeFilePath());
+    }
+    else
+    {
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
     }
 
     m_Config.LoadLangConfig(m_Config.m_szLangFilePath);
