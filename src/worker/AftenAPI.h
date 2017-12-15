@@ -25,8 +25,13 @@ typedef FloatType(*lpLibAften_aften_get_float_type)(void);
 class AftenAPI
 {
 public:
-    AftenAPI() { }
-    virtual ~AftenAPI() { }
+    AftenAPI() 
+    {
+    }
+    virtual ~AftenAPI() 
+    {
+        CloseAftenAPI();
+    }
 public:
     CString szLibPath;
     HMODULE hLibAften;
