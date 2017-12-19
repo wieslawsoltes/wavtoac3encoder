@@ -39,10 +39,6 @@ Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
 
-## Aften
-
-Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
-
 ## About
 
 WAV to AC3 Encoder is an audio encoder which generates compressed 
@@ -208,6 +204,10 @@ Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 * [AftenWindowsBuilds](https://github.com/wieslawsoltes/AftenWindowsBuilds)
 * [Aften Website](http://aften.sourceforge.net/)
 * [Aften Sources](http://sourceforge.net/projects/aften/)
+
+## Aften
+
+Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
 
 ## Copyrights
 
