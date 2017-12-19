@@ -13,17 +13,34 @@
 class CWorker
 {
 public:
-    CWorker() { }
+    CWorker() 
+    {
+        this->nInputFiles = 1;
+        this->nTotalSizeCounter = nullptr;
+    }
     virtual ~CWorker() { }
 public:
-    void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork);
+    CWorkerParam *pWork;
+    CEncoderPreset *preset;
+    __int64 *nTotalSizeCounter;
+    int nInputFiles;
+    CString szInPath[6];
+    CString szOutPath;
+public:
+    AftenAPI api;
+    AftenOpt opt;
+    AftenContext s;
+    PcmContext pf;
+public:
 #ifndef DISABLE_AVISYNTH
-    void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput, AvsAudioInfo &infoAVS);
-#else
-    void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput);
+    bool bAvisynthInput;
+    AvsAudioInfo infoAVS;
 #endif
-    int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr);
-    BOOL EncWork(CWorkerParam *pWork);
+public:
+    void SetAftenOptions();
+    void ShowCurrentJobInfo();
+    int RunAftenEncoder();
+    BOOL EncWork();
 };
 
 DWORD WINAPI EncWorkThread(LPVOID pParam);
