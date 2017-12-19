@@ -2,9 +2,9 @@
 #include "MainApp.h"
 #include "WorkThread.h"
 
-void CWorker::SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
+void CWorker::SetAftenOptions()
 {
-    api.LibAften_aften_set_defaults(&s);
+    pWork->api.LibAften_aften_set_defaults(&s);
 
     s.params.encoding_mode = preset->nMode;
     s.params.bitrate = preset->nBitrate;
@@ -94,11 +94,7 @@ void CWorker::SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *pr
     nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
-#ifndef DISABLE_AVISYNTH
-void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput, AvsAudioInfo &infoAVS)
-#else
-void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput)
-#endif
+void CWorker::ShowCurrentJobInfo()
 {
     CString szInputInfo = _T("");
     CString szOutputInfo = _T("");
@@ -295,7 +291,7 @@ void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles, __int64 *nTotalSizeCounter)
+int CWorker::RunAftenEncoder()
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
     uint8_t *frame = nullptr;
@@ -443,7 +439,7 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
     } \
     if(ofp) \
         fclose(ofp); \
-    api.LibAften_aften_encode_close(&s); \
+    pWork->api.LibAften_aften_encode_close(&s); \
     for(int i = 0; i < nInputFiles; i++) \
         szInPath[i].ReleaseBuffer(); \
     szOutPath.ReleaseBuffer(); \
@@ -503,8 +499,6 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
         pf.sample_rate = infoAVS.nSamplesPerSecond;
         pf.channels = infoAVS.nAudioChannels;
         pf.ch_mask = 0xFFFFFFFF;
-        //s.acmod = ;
-        //s.lfe = ;
 #endif
     }
 
@@ -565,7 +559,7 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
             }
         }
 
-        if (api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
+        if (pWork->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
         {
             HandleEncoderError(_T("Invalid channel configuration."));
         }
@@ -578,7 +572,6 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
 #else
         s.sample_format = A52_SAMPLE_FMT_FLT;
 #endif
-
         s.channels = pf.channels;
         s.samplerate = pf.sample_rate;
     }
@@ -606,9 +599,9 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
     nr = 0;
 
     if (opt.chmap == 0)
-        aften_remap = api.LibAften_aften_remap_wav_to_a52;
+        aften_remap = pWork->api.LibAften_aften_remap_wav_to_a52;
     else if (opt.chmap == 2)
-        aften_remap = api.LibAften_aften_remap_mpeg_to_a52;
+        aften_remap = pWork->api.LibAften_aften_remap_mpeg_to_a52;
 
     if (!opt.pad_start)
     {
@@ -624,7 +617,6 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
         {
 #ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = 256;
-
             cIORead.Start();
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
             cIORead.Stop();
@@ -644,15 +636,15 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
         s.initial_samples = fwav;
     }
 
-    if (api.LibAften_aften_encode_init(&s))
+    if (pWork->api.LibAften_aften_encode_init(&s))
     {
         HandleEncoderError(_T("Failed to initialize encoder."));
     }
 
 #ifndef DISABLE_AVISYNTH
-    ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput, infoAVS);
+    ShowCurrentJobInfo();
 #else
-    ShowCurrentJobInfo(nInputFiles, pf, pWork, s, bAvisynthInput);
+    ShowCurrentJobInfo();
 #endif
 
     int nCurTotalPos = 0;
@@ -671,7 +663,7 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
             while (fs > 0)
             {
                 cEncoding.Start();
-                fs = api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
+                fs = pWork->api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
                 cEncoding.Stop();
 
                 if (fs > 0)
@@ -702,7 +694,7 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
             aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
 
         cEncoding.Start();
-        fs = api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
+        fs = pWork->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
         cEncoding.Stop();
 
         if (fs < 0)
@@ -778,16 +770,13 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
                     pWork->pWorkDlg->bCanUpdateWindow = true;
                 }
 
-                if (nTotalSizeCounter != nullptr)
-                {
-                    nCurTotalPos = (100 * (*nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
+                nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
 
-                    if (pWork->pWorkDlg->bCanUpdateWindow == true)
-                    {
-                        pWork->pWorkDlg->bCanUpdateWindow = false;
-                        pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
-                        pWork->pWorkDlg->bCanUpdateWindow = true;
-                    }
+                if (pWork->pWorkDlg->bCanUpdateWindow == true)
+                {
+                    pWork->pWorkDlg->bCanUpdateWindow = false;
+                    pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
+                    pWork->pWorkDlg->bCanUpdateWindow = true;
                 }
             }
             t0 = t1;
@@ -843,20 +832,20 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
     {
         if (pWork->bMultiMonoInput == false)
         {
-            *nTotalSizeCounter += _ftelli64(ifp[0]);
+            nTotalSizeCounter += _ftelli64(ifp[0]);
         }
         else
         {
             for (int i = 0; i < nInputFiles; i++)
             {
-                *nTotalSizeCounter += _ftelli64(ifp[i]);
+                nTotalSizeCounter += _ftelli64(ifp[i]);
             }
         }
     }
     else
     {
 #ifndef DISABLE_AVISYNTH
-        *nTotalSizeCounter += pWork->nInTotalSize;
+        nTotalSizeCounter += pWork->nInTotalSize;
 #endif
     }
 
@@ -869,7 +858,7 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
     if (ofp)
         fclose(ofp);
 
-    api.LibAften_aften_encode_close(&s);
+    pWork->api.LibAften_aften_encode_close(&s);
 
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
     CString szBuff;
@@ -887,10 +876,8 @@ int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWor
     return(TRUE);
 }
 
-BOOL CWorker::EncWork(CWorkerParam *pWork)
+BOOL CWorker::EncWork()
 {
-    __int64 nTotalSizeCounter = 0;
-    AftenAPI api = pWork->api;
     CString szCommandLine = _T("");
     CString szBuff = _T("");
 #ifdef _UNICODE
@@ -903,9 +890,6 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
     {
         return(FALSE);
     }
-
-    CListT<CString> *list = pWork->list;
-    CListT<bool> *listStatus = pWork->listStatus;
 
     pWork->pWorkDlg->m_PrgCurrent.SetRange(0, 100);
     pWork->pWorkDlg->m_PrgTotal.SetRange32(0, 100);
@@ -920,17 +904,19 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
     pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, nullptr);
 
     int nFileCounter = 0;
-    int nTotalFiles = list->Count();
+    int nTotalFiles = pWork->list->Count();
     int posStatus = 0;
+
+    nTotalSizeCounter = 0;
 
     if (pWork->bMultiMonoInput == false)
     {
-        for (int i = 0; i < list->Count(); i++)
+        for (int i = 0; i < pWork->list->Count(); i++)
         {
             CString szInPath[6] = { _T("-"), _T("-"), _T("-"), _T("-"), _T("-"), _T("-") };
             CString szOutPath = _T("");
 
-            szInPath[0] = list->Get(i);
+            szInPath[0] = pWork->list->Get(i);
             szOutPath = szInPath[0];
             szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
@@ -970,25 +956,24 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
             pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
             pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
 
-            AftenContext s;
-            AftenOpt opt;
-
             ZeroMemory(&opt, sizeof(AftenOpt));
 
             auto preset = pWork->preset;
 
-            SetAftenOptions(api, s, preset, opt, pWork);
+            SetAftenOptions();
 
-            if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, 1, &nTotalSizeCounter) == FALSE)
+            nInputFiles = 1;
+
+            if (RunAftenEncoder() == FALSE)
             {
                 bool result = false;
-                listStatus->Set(result, posStatus);
+                pWork->listStatus->Set(result, posStatus);
                 return(FALSE);
             }
             else
             {
                 bool result = true;
-                listStatus->Set(result, posStatus);
+                pWork->listStatus->Set(result, posStatus);
             }
 
             posStatus++;
@@ -1001,11 +986,11 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
         CString szInPath[6] = { _T("-"), _T("-"), _T("-"), _T("-"), _T("-"), _T("-") };
         CString szOutPath = _T("");
 
-        nFileCounter = list->Count();
+        nFileCounter = pWork->list->Count();
 
         for (int i = 0; i < nFileCounter; i++)
         {
-            szInPath[i] = list->Get(i);
+            szInPath[i] = pWork->list->Get(i);
         }
 
         szOutPath = szInPath[0];
@@ -1050,12 +1035,14 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
 
         SetAftenOptions(api, s, preset, opt, pWork);
 
-        if (RunAftenEncoder(api, s, opt, pWork, szInPath, szOutPath, nFileCounter, &nTotalSizeCounter) == FALSE)
+        nInputFiles = nFileCounter;
+
+        if (RunAftenEncoder() == FALSE)
         {
-            for (int i = 0; i < listStatus->Count(); i++)
+            for (int i = 0; i < pWork->listStatus->Count(); i++)
             {
                 bool result = false;
-                listStatus->Set(result, i);
+                pWork->listStatus->Set(result, i);
             }
 
             pWork->pWorkDlg->nCount = 0;
@@ -1064,10 +1051,10 @@ BOOL CWorker::EncWork(CWorkerParam *pWork)
         }
         else
         {
-            for (int i = 0; i < listStatus->Count(); i++)
+            for (int i = 0; i < pWork->listStatus->Count(); i++)
             {
                 bool result = true;
-                listStatus->Set(result, i);
+                pWork->listStatus->Set(result, i);
             }
 
             pWork->pWorkDlg->nCount = nFileCounter;
