@@ -32,8 +32,8 @@ public:
     AftenContext s;
     PcmContext pf;
 public:
-#ifndef DISABLE_AVISYNTH
     bool bAvisynthInput;
+#ifndef DISABLE_AVISYNTH
     AvsAudioInfo infoAVS;
 #endif
 public:
