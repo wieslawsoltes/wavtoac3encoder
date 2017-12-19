@@ -6,6 +6,13 @@
 - Added default configuration files to portable version.
 - Added support for loading language files from relative path to settings folder.
 - Added portable mode to installer.
+- Fixed encoder error when running for the second time.
+- Refactored encoder worker thread as class.
+- Refactored encoder worker thread error handling.
+- Use nullptr instead of NULL macro.
+- Use class instead of typedef for lists.
+- Refactored Aften api code.
+- Removed unused code and comments.
 
 ### Version 6.0:
 
