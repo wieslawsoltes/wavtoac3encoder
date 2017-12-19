@@ -17,7 +17,6 @@ public:
     virtual ~CWorker() { }
 public:
     CWorkerParam *pWork;
-    CEncoderPreset *preset;
     __int64 nTotalSizeCounter;
     int nInputFiles;
     CString szInPath[6];
