@@ -207,14 +207,11 @@ Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 
 ## Aften
 
-Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
-
-## Copyrights
-
-WAV to AC3 Encoder, Copyright (C) 2007-2016 Wiesław Šoltés
-
+```
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
+```
+Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
 
 ## License
 
