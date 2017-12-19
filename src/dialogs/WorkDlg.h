@@ -57,8 +57,8 @@ protected:
 protected:
     DECLARE_MESSAGE_MAP()
 public:
-    int nIDIn[CEncoderDefaults::nNumMaxInputFiles];
-    int nIDInInfo[CEncoderDefaults::nNumMaxInputFiles];
+    static int nIDIn[CEncoderDefaults::nNumMaxInputFiles];
+    static int nIDInInfo[CEncoderDefaults::nNumMaxInputFiles];
 public:
     volatile bool bTerminate;
     volatile bool bCanUpdateWindow;
