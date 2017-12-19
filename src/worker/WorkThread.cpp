@@ -295,7 +295,7 @@ void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr)
+int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles, __int64 *nTotalSizeCounter)
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
     uint8_t *frame = nullptr;
