@@ -1033,7 +1033,7 @@ BOOL CWorker::EncWork()
 
         auto preset = pWork->preset;
 
-        SetAftenOptions(api, s, preset, opt, pWork);
+        SetAftenOptions();
 
         nInputFiles = nFileCounter;
 
@@ -1072,5 +1072,6 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
 {
     CWorkerParam *pWork = (CWorkerParam *)pParam;
     CWorker m_Worker;
-    return m_Worker.EncWork(pWork);
+	m_Worker.pWork = pWork;
+    return m_Worker.EncWork();
 }
