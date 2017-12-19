@@ -21,20 +21,38 @@ class CWorkerParam
 {
 public:
     CWorkDlg *pWorkDlg;
+public:
+    AftenAPI api;
+public:
     CListT<CString> *list;
     CListT<bool> *listStatus;
+public:
     CEncoderPreset *preset;
+public:
     bool bUseOutPath;
     CString szOutPath;
     bool bMultiMonoInput;
-    AftenAPI api;
     int nThreads;
+public:
     double fTimeTotal;
     double fTimeEncoding;
     double fTimeIORead;
     double fTimeIOWrite;
     __int64 nInTotalSize;
     __int64 nOutTotalSize;
+public:
+    volatile bool bTerminate;
+    volatile bool bCanUpdateWindow;
+    HANDLE hThread;
+    DWORD dwThreadId;
+    __int64 nTotalSize;
+    double m_ElapsedTimeFile;
+    double m_ElapsedTimeTotal;
+    int nCount;
+public:
+    CString szSpeedEncoderAvg;
+    CString szSpeedReadsAvg;
+    CString szSpeedWritesAvg;
 };
 
 class CWorkDlg : public CMyDialogEx
@@ -60,18 +78,7 @@ public:
     static int nIDIn[CEncoderDefaults::nNumMaxInputFiles];
     static int nIDInInfo[CEncoderDefaults::nNumMaxInputFiles];
 public:
-    volatile bool bTerminate;
-    volatile bool bCanUpdateWindow;
-    HANDLE hThread;
-    DWORD dwThreadId;
-    __int64 nTotalSize;
-    double m_ElapsedTimeFile;
-    double m_ElapsedTimeTotal;
-    int nCount;
-    CWorkerParam workParam;
-    CString szSpeedEncoderAvg;
-    CString szSpeedReadsAvg;
-    CString szSpeedWritesAvg;
+    CWorkerParam m_WorkerParam;
 public:
     CMyStatic m_StcOut;
     CMyStatic m_StcOutInfo;

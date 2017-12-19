@@ -300,7 +300,7 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
 		_T("00:00:00"));
 
 	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+    pWork->m_ElapsedTimeFile = 0L;
 
     if(fwav)
         free(fwav);
@@ -334,7 +334,7 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
 
     szOutPath.ReleaseBuffer();
 
-    pWork->pWorkDlg->bTerminate = true;
+    pWork->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
     return(FALSE);
@@ -417,11 +417,11 @@ int CWorker::Run()
                     _T("00:00:00"));
 
                 pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-                pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+                pWork->m_ElapsedTimeFile = 0L;
 
                 // _T("Failed to open input file:") + pszInPath[i]
 
-                pWork->pWorkDlg->bTerminate = true;
+                pWork->bTerminate = true;
                 ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
                 return(FALSE);
@@ -443,7 +443,7 @@ int CWorker::Run()
 
         pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-        pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+        pWork->m_ElapsedTimeFile = 0L;
 
         for (int i = 0; i < nInputFiles; i++)
         {
@@ -453,7 +453,7 @@ int CWorker::Run()
 
         // _T("Failed to create output file: ") + pszOutPath
 
-        pWork->pWorkDlg->bTerminate = true;
+        pWork->bTerminate = true;
         ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
         return(FALSE);
@@ -667,7 +667,7 @@ int CWorker::Run()
 
     do
     {
-        if (pWork->pWorkDlg->bTerminate == true)
+        if (pWork->bTerminate == true)
         {
             while (fs > 0)
             {
@@ -752,40 +752,40 @@ int CWorker::Run()
 #endif
                 }
 
-                if (pWork->pWorkDlg->bCanUpdateWindow == true)
+                if (pWork->bCanUpdateWindow == true)
                 {
-                    pWork->pWorkDlg->bCanUpdateWindow = false;
+                    pWork->bCanUpdateWindow = false;
                     CString szTmpBuff;
 
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.ElapsedTime() + 1.0e-16));
-                    pWork->pWorkDlg->szSpeedEncoderAvg = szTmpBuff;
+                    pWork->szSpeedEncoderAvg = szTmpBuff;
 
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.ElapsedTime() + 1.0e-16));
-                    pWork->pWorkDlg->szSpeedReadsAvg = szTmpBuff;
+                    pWork->szSpeedReadsAvg = szTmpBuff;
 
                     nInPrevCurPos = nCurPos;
                     fPrevTimeEncoding = cEncoding.ElapsedTime();
                     fPrevTimeIORead = cIORead.ElapsedTime();
 
-                    pWork->pWorkDlg->bCanUpdateWindow = true;
+                    pWork->bCanUpdateWindow = true;
                 }
 
                 percent = (100 * nCurPos) / pWork->nInTotalSize;
            
-                if (pWork->pWorkDlg->bCanUpdateWindow == true)
+                if (pWork->bCanUpdateWindow == true)
                 {
-                    pWork->pWorkDlg->bCanUpdateWindow = false;
+                    pWork->bCanUpdateWindow = false;
                     pWork->pWorkDlg->m_PrgCurrent.SetPos(percent);
-                    pWork->pWorkDlg->bCanUpdateWindow = true;
+                    pWork->bCanUpdateWindow = true;
                 }
 
-                nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pWork->pWorkDlg->nTotalSize;
+                nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pWork->nTotalSize;
 
-                if (pWork->pWorkDlg->bCanUpdateWindow == true)
+                if (pWork->bCanUpdateWindow == true)
                 {
-                    pWork->pWorkDlg->bCanUpdateWindow = false;
+                    pWork->bCanUpdateWindow = false;
                     pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
-                    pWork->pWorkDlg->bCanUpdateWindow = true;
+                    pWork->bCanUpdateWindow = true;
                 }
             }
             t0 = t1;
@@ -794,19 +794,19 @@ int CWorker::Run()
             fwrite(frame, 1, fs, ofp);
             cIOWrite.Stop();
 
-            if (pWork->pWorkDlg->bCanUpdateWindow == true)
+            if (pWork->bCanUpdateWindow == true)
             {
-                pWork->pWorkDlg->bCanUpdateWindow = false;
+                pWork->bCanUpdateWindow = false;
 
                 CString szTmpBuff;
 
                 szTmpBuff.Format(_T("%0.1lf"), ((double)(_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.ElapsedTime() + 1.0e-16));
-                pWork->pWorkDlg->szSpeedWritesAvg = szTmpBuff;
+                pWork->szSpeedWritesAvg = szTmpBuff;
 
                 nOutPrevCurPos = _ftelli64(ofp);
                 fPrevTimeIOWrite = cIOWrite.ElapsedTime();
 
-                pWork->pWorkDlg->bCanUpdateWindow = true;
+                pWork->bCanUpdateWindow = true;
             }
 
             frame_cnt++;
@@ -875,7 +875,7 @@ int CWorker::Run()
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
         _T("00:00:00"));
     pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+    pWork->m_ElapsedTimeFile = 0L;
 
     for (int i = 0; i < nInputFiles; i++)
         szInPath[i].ReleaseBuffer();
@@ -905,7 +905,7 @@ BOOL CWorker::Encode()
     pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
     pWork->pWorkDlg->m_PrgTotal.SetPos(0);
     pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-    pWork->pWorkDlg->m_ElapsedTimeTotal = 0L;
+    pWork->m_ElapsedTimeTotal = 0L;
     szBuff.Format(_T("%s %s"),
         theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
         _T("00:00:00"));
@@ -966,7 +966,7 @@ BOOL CWorker::Encode()
                 theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
                 _T("00:00:00"));
             pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-            pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+            pWork->m_ElapsedTimeFile = 0L;
             pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
             pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
 
@@ -990,7 +990,7 @@ BOOL CWorker::Encode()
 
             posStatus++;
             nFileCounter++;
-            pWork->pWorkDlg->nCount = nFileCounter;
+            pWork->nCount = nFileCounter;
         }
     }
     else
@@ -1039,7 +1039,7 @@ BOOL CWorker::Encode()
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
         pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-        pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+        pWork->m_ElapsedTimeFile = 0L;
         pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
         pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
 
@@ -1057,7 +1057,7 @@ BOOL CWorker::Encode()
                 pWork->listStatus->Set(result, i);
             }
 
-            pWork->pWorkDlg->nCount = 0;
+            pWork->nCount = 0;
 
             return(FALSE);
         }
@@ -1069,12 +1069,12 @@ BOOL CWorker::Encode()
                 pWork->listStatus->Set(result, i);
             }
 
-            pWork->pWorkDlg->nCount = nFileCounter;
+            pWork->nCount = nFileCounter;
         }
     }
 
     pWork->pWorkDlg->KillTimer(WM_TOTAL_TIMER);
-    pWork->pWorkDlg->bTerminate = true;
+    pWork->bTerminate = true;
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
     return(TRUE);
