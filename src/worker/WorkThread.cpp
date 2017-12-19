@@ -2,22 +2,22 @@
 #include "MainApp.h"
 #include "WorkThread.h"
 
-void CWorker::SetAftenOptions()
+void CWorker::SetAftenOptions(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
 {
-    pWork->api.LibAften_aften_set_defaults(&s);
+    api.LibAften_aften_set_defaults(&s);
 
-    s.params.encoding_mode = pWork->preset->nMode;
-    s.params.bitrate = pWork->preset->nBitrate;
-    s.params.quality = pWork->preset->nQuality;
-    s.system.n_threads = pWork->preset->nThreads;
-    s.system.wanted_simd_instructions.mmx = pWork->preset->nUsedSIMD[0];
-    s.system.wanted_simd_instructions.sse = pWork->preset->nUsedSIMD[1];
-    s.system.wanted_simd_instructions.sse2 = pWork->preset->nUsedSIMD[2];
-    s.system.wanted_simd_instructions.sse3 = pWork->preset->nUsedSIMD[3];
+    s.params.encoding_mode = preset->nMode;
+    s.params.bitrate = preset->nBitrate;
+    s.params.quality = preset->nQuality;
+    s.system.n_threads = preset->nThreads;
+    s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
+    s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
+    s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
+    s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
 
-    if (pWork->preset->nRawSampleFormat != 0)
+    if (preset->nRawSampleFormat != 0)
     {
-        switch (pWork->preset->nRawSampleFormat)
+        switch (preset->nRawSampleFormat)
         {
         case 1: opt.raw_fmt = PCM_SAMPLE_FMT_U8; opt.raw_order = PCM_BYTE_ORDER_LE; break; // u8
         case 2: opt.raw_fmt = PCM_SAMPLE_FMT_S8; opt.raw_order = PCM_BYTE_ORDER_LE; break; // s8
@@ -38,23 +38,23 @@ void CWorker::SetAftenOptions()
         opt.raw_input = 1;
     }
 
-    if (pWork->preset->nRawSampleRate != 0)
+    if (preset->nRawSampleRate != 0)
     {
-        opt.raw_sr = pWork->preset->nRawSampleRate;
+        opt.raw_sr = preset->nRawSampleRate;
         opt.raw_input = 1;
     }
 
-    if (pWork->preset->nRawChannels != 0)
+    if (preset->nRawChannels != 0)
     {
-        opt.raw_ch = pWork->preset->nRawChannels;
+        opt.raw_ch = preset->nRawChannels;
         opt.raw_input = 1;
     }
 
     int nSetting;
 
 #define SET_AFTEN_SETTING(set, type) \
-    if(CEncoderDefaults::encOpt[nSetting].nIgnoreValue != pWork->preset->nSetting[nSetting]) \
-        (set) = (type) CEncoderDefaults::encOpt[nSetting].listOptValues.Get(pWork->preset->nSetting[nSetting]);
+    if(CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
+        (set) = (type) CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
 
     nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
     nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
@@ -72,10 +72,10 @@ void CWorker::SetAftenOptions()
     nSetting++; SET_AFTEN_SETTING(s.acmod, int)
     nSetting++; SET_AFTEN_SETTING(s.lfe, int)
     nSetting++;
-    if (CEncoderDefaults::encOpt[nSetting].nIgnoreValue != pWork->preset->nSetting[nSetting])
+    if (CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
     {
-        s.acmod = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(pWork->preset->nSetting[nSetting])].acmod;
-        s.lfe = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(pWork->preset->nSetting[nSetting])].lfe;
+        s.acmod = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
+        s.lfe = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
     }
     nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
     nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
@@ -962,8 +962,7 @@ BOOL CWorker::EncWork()
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-
-            SetAftenOptions();
+            SetAftenOptions(pWork->preset, pWork->api, opt, s);
 
             nInputFiles = 1;
 
@@ -1036,8 +1035,7 @@ BOOL CWorker::EncWork()
 
         ZeroMemory(&s, sizeof(AftenContext));
         ZeroMemory(&opt, sizeof(AftenOpt));
-
-        SetAftenOptions();
+        SetAftenOptions(pWork->preset, pWork->api, opt, s);
 
         nInputFiles = nFileCounter;
 

@@ -31,7 +31,8 @@ public:
     AvsAudioInfo infoAVS;
 #endif
 public:
-    void SetAftenOptions();
+    static void SetAftenOptions(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+public:
     void ShowCurrentJobInfo();
     int RunAftenEncoder();
     BOOL EncWork();
