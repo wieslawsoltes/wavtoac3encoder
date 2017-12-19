@@ -299,7 +299,6 @@ int CWorker::RunAftenEncoder()
     int nr, fs;
     FILE *ifp[CEncoderDefaults::nNumMaxInputFiles];
     FILE *ofp = nullptr;
-    PcmContext pf;
     uint32_t samplecount, bytecount, t0, t1, percent;
     FLOAT kbps, qual, bw;
     int last_frame;
@@ -307,7 +306,8 @@ int CWorker::RunAftenEncoder()
     int done;
     int input_file_format;
     enum PcmSampleFormat read_format;
-    bool bAvisynthInput = false;
+
+    bAvisynthInput = false;
 
 #ifndef DISABLE_AVISYNTH
     if (GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
@@ -328,7 +328,6 @@ int CWorker::RunAftenEncoder()
     memset(ifp, 0, CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
-    AvsAudioInfo infoAVS;
     Avs2RawStatus statusAVS;
     CAvs2Raw decoderAVS;
     char szInputFileAVS[MAX_PATH] = "";
@@ -1025,9 +1024,6 @@ BOOL CWorker::EncWork()
         pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
         pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
         pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
-
-        AftenContext s;
-        AftenOpt opt;
 
         ZeroMemory(&opt, sizeof(AftenOpt));
 
