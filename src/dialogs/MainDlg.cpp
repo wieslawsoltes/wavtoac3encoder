@@ -8,7 +8,6 @@
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
 #include "utilities\TimeCount.h"
-#include "worker\WorkThread.h"
 
 IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
 
