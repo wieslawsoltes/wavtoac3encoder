@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "afxwin.h"
+#include <afxwin.h>
 #include "configuration\Configuration.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"

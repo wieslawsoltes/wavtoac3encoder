@@ -9,7 +9,7 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-#include "afxwin.h"
+#include <afxwin.h>
 
 class CAboutDlg : public CMyDialogEx
 {
