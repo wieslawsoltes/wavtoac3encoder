@@ -290,18 +290,20 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     bWorking = true;
 
-    if (this->api.IsAftenOpen() == false)
+    if (this->api.IsAftenOpen())
     {
-        if (this->api.OpenAftenAPI() == false)
-        {
-            // _T("Error: Failed to load libaften.dll dynamic library!")
-            MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
-                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
-                MB_ICONERROR | MB_OK);
+        this->api.CloseAftenAPI();
+    }
 
-            bWorking = false;
-            return;
-        }
+    if (this->api.OpenAftenAPI() == false)
+    {
+        // _T("Error: Failed to load libaften.dll dynamic library!")
+        MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
+            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
+            MB_ICONERROR | MB_OK);
+
+        bWorking = false;
+        return;
     }
 
     CWorkDlg dlg;
