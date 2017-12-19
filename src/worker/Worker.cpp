@@ -1,6 +1,6 @@
 ﻿#include "StdAfx.h"
 #include "MainApp.h"
-#include "WorkThread.h"
+#include "Worker.h"
 
 void CWorker::InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
 {

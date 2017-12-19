@@ -362,7 +362,7 @@
     <ClCompile Include="dialogs\EnginesDlg.cpp" />
     <ClCompile Include="dialogs\MuxDlg.cpp" />
     <ClCompile Include="dialogs\WorkDlg.cpp" />
-    <ClCompile Include="worker\WorkThread.cpp" />
+    <ClCompile Include="worker\Worker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avisynth64\src\core\avisynth.h" />
@@ -387,7 +387,7 @@
     <ClInclude Include="dialogs\WorkDlg.h" />
     <ClInclude Include="worker\AftenAPI.h" />
     <ClInclude Include="worker\Avs2Raw.h" />
-    <ClInclude Include="worker\WorkThread.h" />
+    <ClInclude Include="worker\Worker.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\EncWAVtoAC3.bmp" />

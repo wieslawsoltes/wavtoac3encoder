@@ -3,7 +3,7 @@
 #include "WorkDlg.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
-#include "worker\WorkThread.h"
+#include "worker\Worker.h"
 
 int CWorkDlg::nIDIn[CEncoderDefaults::nNumMaxInputFiles]
 {
