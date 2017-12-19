@@ -1,17 +1,8 @@
 ﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "WorkThread.h"
-#include "dialogs\WorkDlg.h"
-#include "configuration\Configuration.h"
-#include "utilities\ListT.h"
-#include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
-#include "utilities\TimeCount.h"
-#ifndef DISABLE_AVISYNTH
-#include "Avs2Raw.h"
-#endif
 
-void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
+void CWorker::SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, AftenOpt &opt, CWorkerParam *pWork)
 {
     api.LibAften_aften_set_defaults(&s);
 
@@ -104,9 +95,9 @@ void SetAftenOptions(AftenAPI &api, AftenContext &s, CEncoderPreset *preset, Aft
 }
 
 #ifndef DISABLE_AVISYNTH
-void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput, AvsAudioInfo &infoAVS)
+void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput, AvsAudioInfo &infoAVS)
 #else
-void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput)
+void CWorker::ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, AftenContext &s, bool bAvisynthInput)
 #endif
 {
     CString szInputInfo = _T("");
@@ -304,7 +295,7 @@ void ShowCurrentJobInfo(int nInputFiles, PcmContext &pf, CWorkerParam *pWork, Af
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr)
+int CWorker::RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam *pWork, CString szInPath[6], CString szOutPath, int nInputFiles = 1, __int64 *nTotalSizeCounter = nullptr)
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
     uint8_t *frame = nullptr;
@@ -896,7 +887,7 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     return(TRUE);
 }
 
-BOOL EncWork(CWorkerParam *pWork)
+BOOL CWorker::EncWork(CWorkerParam *pWork)
 {
     __int64 nTotalSizeCounter = 0;
     AftenAPI api = pWork->api;
@@ -1093,5 +1084,6 @@ BOOL EncWork(CWorkerParam *pWork)
 DWORD WINAPI EncWorkThread(LPVOID pParam)
 {
     CWorkerParam *pWork = (CWorkerParam *)pParam;
-    return EncWork(pWork);
+    CWorker m_Worker;
+    return m_Worker.EncWork(pWork);
 }
