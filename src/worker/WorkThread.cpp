@@ -2,7 +2,7 @@
 #include "MainApp.h"
 #include "WorkThread.h"
 
-void CWorker::SetAftenOptions(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
+void CWorker::InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
 {
     api.LibAften_aften_set_defaults(&s);
 
@@ -94,7 +94,7 @@ void CWorker::SetAftenOptions(const CEncoderPreset *preset, const AftenAPI &api,
     nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
-void CWorker::ShowCurrentJobInfo()
+void CWorker::UpdateProgress()
 {
     CString szInputInfo = _T("");
     CString szOutputInfo = _T("");
@@ -291,14 +291,59 @@ void CWorker::ShowCurrentJobInfo()
     pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
 }
 
-int CWorker::RunAftenEncoder()
+BOOL CWorker::HandleError(LPTSTR pszMessage)
+{
+    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+	CString szBuff;
+	szBuff.Format(_T("%s %s"),
+		theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+		_T("00:00:00"));
+
+	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
+    pWork->pWorkDlg->m_ElapsedTimeFile = 0L;
+
+    if(fwav)
+        free(fwav);
+
+    if(frame)
+        free(frame);
+
+    if(bAvisynthInput == false)
+    {
+        pcm_close(&pf);
+        for(int i = 0; i < nInputFiles; i++)
+        {
+            if(ifp[i])
+                fclose(ifp[i]);
+        }
+    }
+    else
+    {
+#ifndef DISABLE_AVISYNTH
+        decoderAVS.CloseAvisynth();
+#endif
+    }
+
+    if(ofp)
+        fclose(ofp);
+
+    pWork->api.LibAften_aften_encode_close(&s);
+
+    for(int i = 0; i < nInputFiles; i++)
+        szInPath[i].ReleaseBuffer();
+
+    szOutPath.ReleaseBuffer();
+
+    pWork->pWorkDlg->bTerminate = true;
+    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+
+    return(FALSE);
+}
+
+int CWorker::Run()
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
-    uint8_t *frame = nullptr;
-    FLOAT *fwav = nullptr;
     int nr, fs;
-    FILE *ifp[CEncoderDefaults::nNumMaxInputFiles];
-    FILE *ofp = nullptr;
     uint32_t samplecount, bytecount, t0, t1, percent;
     FLOAT kbps, qual, bw;
     int last_frame;
@@ -306,6 +351,17 @@ int CWorker::RunAftenEncoder()
     int done;
     int input_file_format;
     enum PcmSampleFormat read_format;
+    CTimeCount cEncoding, cIORead, cIOWrite;
+    TCHAR *pszInPath[6] = { { nullptr } };
+    TCHAR *pszOutPath = nullptr;
+
+    frame = nullptr;
+    fwav = nullptr;
+
+    for (int i = 0; i < nInputFiles; i++)
+        ifp[i] = nullptr;
+
+    ofp = nullptr;
 
     bAvisynthInput = false;
 
@@ -316,11 +372,6 @@ int CWorker::RunAftenEncoder()
 
     pWork->nInTotalSize = 0;
 
-    CTimeCount cEncoding, cIORead, cIOWrite;
-
-    TCHAR *pszInPath[6] = { { nullptr } };
-    TCHAR *pszOutPath = nullptr;
-
     for (int i = 0; i < nInputFiles; i++)
         pszInPath[i] = szInPath[i].GetBuffer();
 
@@ -328,11 +379,8 @@ int CWorker::RunAftenEncoder()
     memset(ifp, 0, CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
 #ifndef DISABLE_AVISYNTH
-    Avs2RawStatus statusAVS;
-    CAvs2Raw decoderAVS;
     char szInputFileAVS[MAX_PATH] = "";
 #endif
-
     if (bAvisynthInput == true)
     {
 #ifndef DISABLE_AVISYNTH
@@ -411,41 +459,6 @@ int CWorker::RunAftenEncoder()
         return(FALSE);
     }
 
-#define HandleEncoderError(message) \
-    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER); \
-	CString szBuff; \
-	szBuff.Format(_T("%s %s"), \
-		theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"), \
-		_T("00:00:00")); \
-	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff); \
-    pWork->pWorkDlg->m_ElapsedTimeFile = 0L; \
-    if(fwav) \
-        free(fwav); \
-    if(frame) \
-        free(frame); \
-    if(bAvisynthInput == false) \
-    { \
-        pcm_close(&pf); \
-        for(int i = 0; i < nInputFiles; i++) \
-        { \
-            if(ifp[i]) \
-                fclose(ifp[i]); \
-        } \
-    } \
-    else \
-    { \
-        /* decoderAVS.CloseAvisynth(); */ \
-    } \
-    if(ofp) \
-        fclose(ofp); \
-    pWork->api.LibAften_aften_encode_close(&s); \
-    for(int i = 0; i < nInputFiles; i++) \
-        szInPath[i].ReleaseBuffer(); \
-    szOutPath.ReleaseBuffer(); \
-    pWork->pWorkDlg->bTerminate = true; \
-    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0); \
-    return(FALSE);
-
 #ifdef CONFIG_DOUBLE
     read_format = PCM_SAMPLE_FMT_DBL;
 #else
@@ -467,7 +480,7 @@ int CWorker::RunAftenEncoder()
     {
         if (pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format))
         {
-            HandleEncoderError(_T("Failed to initialize PCM library."));
+            return HandleError(_T("Failed to initialize PCM library."));
         }
 
         if (opt.read_to_eof)
@@ -487,9 +500,9 @@ int CWorker::RunAftenEncoder()
 #endif
     }
 
+#ifndef DISABLE_AVISYNTH
     if (bAvisynthInput == true)
     {
-#ifndef DISABLE_AVISYNTH
         statusAVS.nStart = 0;
         statusAVS.nSamples = infoAVS.nAudioSamples;
         statusAVS.nSamplesLeft = infoAVS.nAudioSamples;
@@ -498,8 +511,9 @@ int CWorker::RunAftenEncoder()
         pf.sample_rate = infoAVS.nSamplesPerSecond;
         pf.channels = infoAVS.nAudioChannels;
         pf.ch_mask = 0xFFFFFFFF;
-#endif
+
     }
+#endif
 
     if (s.acmod >= 0)
     {
@@ -515,7 +529,7 @@ int CWorker::RunAftenEncoder()
             {
                 if (s.lfe != 0)
                 {
-                    HandleEncoderError(_T("Invalid channel configuration."));
+                    return HandleError(_T("Invalid channel configuration."));
                 }
             }
         }
@@ -529,13 +543,13 @@ int CWorker::RunAftenEncoder()
             {
                 if (s.lfe != 1)
                 {
-                    HandleEncoderError(_T("Invalid channel configuration."));
+                    return HandleError(_T("Invalid channel configuration."));
                 }
             }
         }
         else
         {
-            HandleEncoderError(_T("Invalid channel configuration."));
+            return HandleError(_T("Invalid channel configuration."));
         }
     }
     else
@@ -545,11 +559,11 @@ int CWorker::RunAftenEncoder()
         {
             if (s.lfe == 0 && ch == 6)
             {
-                HandleEncoderError(_T("Invalid channel configuration."));
+                return HandleError(_T("Invalid channel configuration."));
             }
             else if (s.lfe == 1 && ch == 1)
             {
-                HandleEncoderError(_T("Invalid channel configuration."));
+                return HandleError(_T("Invalid channel configuration."));
             }
 
             if (s.lfe)
@@ -560,7 +574,7 @@ int CWorker::RunAftenEncoder()
 
         if (pWork->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
         {
-            HandleEncoderError(_T("Invalid channel configuration."));
+            return HandleError(_T("Invalid channel configuration."));
         }
     }
 
@@ -586,7 +600,7 @@ int CWorker::RunAftenEncoder()
     fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
     if (frame == nullptr || fwav == nullptr)
     {
-        HandleEncoderError(_T("Failed to allocate memory."));
+        return HandleError(_T("Failed to allocate memory."));
     }
 
     samplecount = bytecount = t0 = t1 = percent = 0;
@@ -637,14 +651,10 @@ int CWorker::RunAftenEncoder()
 
     if (pWork->api.LibAften_aften_encode_init(&s))
     {
-        HandleEncoderError(_T("Failed to initialize encoder."));
+        return HandleError(_T("Failed to initialize encoder."));
     }
 
-#ifndef DISABLE_AVISYNTH
-    ShowCurrentJobInfo();
-#else
-    ShowCurrentJobInfo();
-#endif
+    UpdateProgress();
 
     int nCurTotalPos = 0;
     __int64 nCurPos = 0;
@@ -669,7 +679,7 @@ int CWorker::RunAftenEncoder()
                     fwrite(frame, 1, fs, ofp);
             }
 
-            HandleEncoderError(_T("User has terminated encoding."));
+            return HandleError(_T("User has terminated encoding."));
         }
 
         if (bAvisynthInput == false)
@@ -698,7 +708,7 @@ int CWorker::RunAftenEncoder()
 
         if (fs < 0)
         {
-            HandleEncoderError(_T("Failed to encode frame."));
+            return HandleError(_T("Failed to encode frame."));
         }
         else
         {
@@ -875,7 +885,7 @@ int CWorker::RunAftenEncoder()
     return(TRUE);
 }
 
-BOOL CWorker::EncWork()
+BOOL CWorker::Encode()
 {
     CString szCommandLine = _T("");
     CString szBuff = _T("");
@@ -962,11 +972,11 @@ BOOL CWorker::EncWork()
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            SetAftenOptions(pWork->preset, pWork->api, opt, s);
+            InitContext(pWork->preset, pWork->api, opt, s);
 
             nInputFiles = 1;
 
-            if (RunAftenEncoder() == FALSE)
+            if (Run() == FALSE)
             {
                 bool result = false;
                 pWork->listStatus->Set(result, posStatus);
@@ -1035,11 +1045,11 @@ BOOL CWorker::EncWork()
 
         ZeroMemory(&s, sizeof(AftenContext));
         ZeroMemory(&opt, sizeof(AftenOpt));
-        SetAftenOptions(pWork->preset, pWork->api, opt, s);
+        InitContext(pWork->preset, pWork->api, opt, s);
 
         nInputFiles = nFileCounter;
 
-        if (RunAftenEncoder() == FALSE)
+        if (Run() == FALSE)
         {
             for (int i = 0; i < pWork->listStatus->Count(); i++)
             {
@@ -1075,5 +1085,5 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     CWorkerParam *pWork = (CWorkerParam *)pParam;
     CWorker m_Worker;
 	m_Worker.pWork = pWork;
-    return m_Worker.EncWork();
+    return m_Worker.Encode();
 }

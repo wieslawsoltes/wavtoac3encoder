@@ -17,25 +17,33 @@ public:
     virtual ~CWorker() { }
 public:
     CWorkerParam *pWork;
+private:
     __int64 nTotalSizeCounter;
     int nInputFiles;
     CString szInPath[6];
     CString szOutPath;
-public:
+private:
     AftenOpt opt;
     AftenContext s;
     PcmContext pf;
-public:
+    uint8_t *frame;
+    FLOAT *fwav;
+    FILE *ifp[CEncoderDefaults::nNumMaxInputFiles];
+    FILE *ofp;
+private:
     bool bAvisynthInput;
 #ifndef DISABLE_AVISYNTH
     AvsAudioInfo infoAVS;
+    CAvs2Raw decoderAVS;
+    Avs2RawStatus statusAVS;
 #endif
 public:
-    static void SetAftenOptions(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+    static void InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
 public:
-    void ShowCurrentJobInfo();
-    int RunAftenEncoder();
-    BOOL EncWork();
+    void UpdateProgress();
+    BOOL HandleError(LPTSTR pszMessage);
+    int Run();
+    BOOL Encode();
 };
 
 DWORD WINAPI EncWorkThread(LPVOID pParam);
