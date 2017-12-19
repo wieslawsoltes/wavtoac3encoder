@@ -13,21 +13,16 @@
 class CWorker
 {
 public:
-    CWorker() 
-    {
-        this->nInputFiles = 1;
-        this->nTotalSizeCounter = nullptr;
-    }
+    CWorker() { }
     virtual ~CWorker() { }
 public:
     CWorkerParam *pWork;
     CEncoderPreset *preset;
-    __int64 *nTotalSizeCounter;
+    __int64 nTotalSizeCounter;
     int nInputFiles;
     CString szInPath[6];
     CString szOutPath;
 public:
-    AftenAPI api;
     AftenOpt opt;
     AftenContext s;
     PcmContext pf;
