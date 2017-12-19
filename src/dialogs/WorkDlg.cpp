@@ -5,23 +5,31 @@
 #include "utilities\MyFile.h"
 #include "worker\WorkThread.h"
 
+int CWorkDlg::nIDIn[CEncoderDefaults::nNumMaxInputFiles]
+{
+    IDC_STATIC_IN_00,
+    IDC_STATIC_IN_01,
+    IDC_STATIC_IN_02,
+    IDC_STATIC_IN_03,
+    IDC_STATIC_IN_04,
+    IDC_STATIC_IN_05
+};
+
+int CWorkDlg::nIDInInfo[CEncoderDefaults::nNumMaxInputFiles]
+{
+    IDC_STATIC_IN_INFO_00,
+    IDC_STATIC_IN_INFO_01,
+    IDC_STATIC_IN_INFO_02,
+    IDC_STATIC_IN_INFO_03,
+    IDC_STATIC_IN_INFO_04,
+    IDC_STATIC_IN_INFO_05
+};
+
 IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
 
 CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CWorkDlg::IDD, pParent)
 {
-    nIDIn[0] = IDC_STATIC_IN_00;
-    nIDIn[1] = IDC_STATIC_IN_01;
-    nIDIn[2] = IDC_STATIC_IN_02;
-    nIDIn[3] = IDC_STATIC_IN_03;
-    nIDIn[4] = IDC_STATIC_IN_04;
-    nIDIn[5] = IDC_STATIC_IN_05;
-    nIDInInfo[0] = IDC_STATIC_IN_INFO_00;
-    nIDInInfo[1] = IDC_STATIC_IN_INFO_01;
-    nIDInInfo[2] = IDC_STATIC_IN_INFO_02;
-    nIDInInfo[3] = IDC_STATIC_IN_INFO_03;
-    nIDInInfo[4] = IDC_STATIC_IN_INFO_04;
-    nIDInInfo[5] = IDC_STATIC_IN_INFO_05;
     this->bTerminate = false;
     this->bCanUpdateWindow = true;
     this->hThread = nullptr;
@@ -127,7 +135,7 @@ void CWorkDlg::InitCtrls()
 {
     if (this->workParam.bMultiMonoInput == false)
     {
-        for (int i = 1; i < 6; i++)
+        for (int i = 1; i < CEncoderDefaults::nNumMaxInputFiles; i++)
         {
             this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
             this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
