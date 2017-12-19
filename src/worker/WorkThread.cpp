@@ -896,9 +896,8 @@ int RunAftenEncoder(AftenAPI &api, AftenContext &s, AftenOpt &opt, CWorkerParam 
     return(TRUE);
 }
 
-DWORD WINAPI EncWorkThread(LPVOID pParam)
+BOOL EncWork(CWorkerParam *pWork)
 {
-    CWorkerParam *pWork = (CWorkerParam *)pParam;
     __int64 nTotalSizeCounter = 0;
     AftenAPI api = pWork->api;
     CString szCommandLine = _T("");
@@ -1089,4 +1088,10 @@ DWORD WINAPI EncWorkThread(LPVOID pParam)
     ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
 
     return(TRUE);
+}
+
+DWORD WINAPI EncWorkThread(LPVOID pParam)
+{
+    CWorkerParam *pWork = (CWorkerParam *)pParam;
+    return EncWork(pWork);
 }
