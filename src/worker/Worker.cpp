@@ -56,51 +56,49 @@ void CWorker::InitContext(const CEncoderPreset *preset, const AftenAPI &api, Aft
         (set) = (type) CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
 
     nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
-    nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
-    nSetting++; SET_AFTEN_SETTING(s.acmod, int)
-    nSetting++; SET_AFTEN_SETTING(s.lfe, int)
-    nSetting++;
+        nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
+        nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
+        nSetting++; SET_AFTEN_SETTING(s.acmod, int)
+        nSetting++; SET_AFTEN_SETTING(s.lfe, int)
+        nSetting++;
     if (CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
     {
         s.acmod = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
         s.lfe = CEncoderDefaults::ccAften[CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
     }
     nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
-    nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
-    nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
-    nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
+        nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
+        nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
+        nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 }
 
 void CWorker::UpdateProgress()
 {
-    CString szInputInfo = _T("");
-    CString szOutputInfo = _T("");
-    CString szSimdInfo = _T("");
-
     if (bAvisynthInput == false)
     {
+        CString szInputInfo = _T("");
+
         for (int i = 0; i < nInputFiles; i++)
         {
             PcmFile *pf_info = &pf.pcm_file[i];
@@ -186,11 +184,12 @@ void CWorker::UpdateProgress()
                 fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
 
             pContext->SetInputTypeInfo(i, szInputInfo);
+            }
         }
-    }
     else
     {
 #ifndef DISABLE_AVISYNTH
+        CString szInputInfo = _T("");
         TCHAR *chan;
         chan = _T("?-channel");
 
@@ -214,6 +213,7 @@ void CWorker::UpdateProgress()
     }
 
     {
+        CString szOutputInfo = _T("");
         TCHAR *acmod_str[32] =
         {
             pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02018) : _T("dual mono (1+1)"),
@@ -229,90 +229,34 @@ void CWorker::UpdateProgress()
         szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod]);
         if (s.lfe)
             szOutputInfo += _T(" + LFE");
+
+        pContext->SetOutputTypeInfo(szOutputInfo);
     }
-
-    {
-        int nCountSimd = 0;
-        szSimdInfo = _T("SIMD:");
-
-        if (s.system.wanted_simd_instructions.mmx && s.system.available_simd_instructions.mmx)
-        {
-            szSimdInfo += _T(" MMX"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.sse && s.system.available_simd_instructions.sse)
-        {
-            szSimdInfo += _T(" SSE"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.sse2 && s.system.available_simd_instructions.sse2)
-        {
-            szSimdInfo += _T(" SSE2"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.sse3 && s.system.available_simd_instructions.sse3)
-        {
-            szSimdInfo += _T(" SSE3"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.ssse3 && s.system.available_simd_instructions.ssse3)
-        {
-            szSimdInfo += _T(" SSSE3"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.amd_3dnow && s.system.available_simd_instructions.amd_3dnow)
-        {
-            szSimdInfo += _T(" 3DNOW"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.amd_3dnowext && s.system.available_simd_instructions.amd_3dnowext)
-        {
-            szSimdInfo += _T(" 3DNOWEXT"); nCountSimd++;
-        }
-        if (s.system.wanted_simd_instructions.amd_sse_mmx && s.system.available_simd_instructions.amd_sse_mmx)
-        {
-            szSimdInfo += _T(" SSE-MMX"); nCountSimd++;
-        }
-
-        if (nCountSimd == 0)
-            szSimdInfo += _T(" ") + (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201B) : _T("NONE"));
-
-        CString szBuff;
-        if (s.system.n_threads == 0)
-        {
-            szBuff = _T(" | ") + (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201C) : _T("Threads: Auto"));
-        }
-        else
-        {
-            szBuff.Format(_T(" | %s %i"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201D) : _T("Threads:"),
-                s.system.n_threads);
-        }
-
-        szSimdInfo += szBuff;
     }
-
-    pContext->SetOutputTypeInfo(szOutputInfo);
-    pContext->SetSimdInfo(szSimdInfo);
-}
 
 BOOL CWorker::HandleError(LPTSTR pszMessage)
 {
     pContext->StopCurrentTimer();
-	CString szBuff;
-	szBuff.Format(_T("%s %s"),
-		pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-		_T("00:00:00"));
+    CString szBuff;
+    szBuff.Format(_T("%s %s"),
+        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
+        _T("00:00:00"));
 
-	pContext->SetCurrentTimerInfo(szBuff);
+    pContext->SetCurrentTimerInfo(szBuff);
     pContext->m_ElapsedTimeFile = 0L;
 
-    if(fwav)
+    if (fwav)
         free(fwav);
 
-    if(frame)
+    if (frame)
         free(frame);
 
-    if(bAvisynthInput == false)
+    if (bAvisynthInput == false)
     {
         pcm_close(&pf);
-        for(int i = 0; i < nInputFiles; i++)
+        for (int i = 0; i < nInputFiles; i++)
         {
-            if(ifp[i])
+            if (ifp[i])
                 fclose(ifp[i]);
         }
     }
@@ -323,12 +267,12 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
 #endif
     }
 
-    if(ofp)
+    if (ofp)
         fclose(ofp);
 
     pContext->api.LibAften_aften_encode_close(&s);
 
-    for(int i = 0; i < nInputFiles; i++)
+    for (int i = 0; i < nInputFiles; i++)
         szInPath[i].ReleaseBuffer();
 
     szOutPath.ReleaseBuffer();
@@ -350,7 +294,6 @@ BOOL CWorker::Run()
     int done;
     int input_file_format;
     enum PcmSampleFormat read_format;
-    CTimeCount cEncoding, cIORead, cIOWrite;
     TCHAR *pszInPath[6] = { { nullptr } };
     TCHAR *pszOutPath = nullptr;
 
@@ -620,17 +563,13 @@ BOOL CWorker::Run()
 
         if (bAvisynthInput == false)
         {
-            cIORead.Start();
             nr = pcm_read_samples(&pf, fwav, 256);
-            cIORead.Stop();
         }
         else
         {
 #ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = 256;
-            cIORead.Start();
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
-            cIORead.Stop();
 #endif
         }
 
@@ -656,12 +595,8 @@ BOOL CWorker::Run()
 
     int nCurTotalPos = 0;
     __int64 nCurPos = 0;
-    bool bUpdateSpeed = false;
     __int64 nInPrevCurPos = 0;
     __int64 nOutPrevCurPos = 0;
-    double fPrevTimeEncoding = 0.0;
-    double fPrevTimeIORead = 0.0;
-    double fPrevTimeIOWrite = 0.0;
 
     do
     {
@@ -669,10 +604,7 @@ BOOL CWorker::Run()
         {
             while (fs > 0)
             {
-                cEncoding.Start();
                 fs = pContext->api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
-                cEncoding.Stop();
-
                 if (fs > 0)
                     fwrite(frame, 1, fs, ofp);
             }
@@ -682,27 +614,20 @@ BOOL CWorker::Run()
 
         if (bAvisynthInput == false)
         {
-            cIORead.Start();
             nr = pcm_read_samples(&pf, fwav, A52_SAMPLES_PER_FRAME);
-            cIORead.Stop();
         }
         else
         {
 #ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
-
-            cIORead.Start();
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
-            cIORead.Stop();
 #endif
         }
 
         if (aften_remap)
             aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
 
-        cEncoding.Start();
         fs = pContext->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
-        cEncoding.Stop();
 
         if (fs < 0)
         {
@@ -753,23 +678,12 @@ BOOL CWorker::Run()
                 if (pContext->bCanUpdateWindow == true)
                 {
                     pContext->bCanUpdateWindow = false;
-                    CString szTmpBuff;
-
-                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.ElapsedTime() + 1.0e-16));
-                    pContext->szSpeedEncoderAvg = szTmpBuff;
-
-                    szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.ElapsedTime() + 1.0e-16));
-                    pContext->szSpeedReadsAvg = szTmpBuff;
-
                     nInPrevCurPos = nCurPos;
-                    fPrevTimeEncoding = cEncoding.ElapsedTime();
-                    fPrevTimeIORead = cIORead.ElapsedTime();
-
                     pContext->bCanUpdateWindow = true;
                 }
 
                 percent = (100 * nCurPos) / pContext->nInTotalSize;
-           
+
                 if (pContext->bCanUpdateWindow == true)
                 {
                     pContext->bCanUpdateWindow = false;
@@ -788,22 +702,12 @@ BOOL CWorker::Run()
             }
             t0 = t1;
 
-            cIOWrite.Start();
             fwrite(frame, 1, fs, ofp);
-            cIOWrite.Stop();
 
             if (pContext->bCanUpdateWindow == true)
             {
                 pContext->bCanUpdateWindow = false;
-
-                CString szTmpBuff;
-
-                szTmpBuff.Format(_T("%0.1lf"), ((double)(_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.ElapsedTime() + 1.0e-16));
-                pContext->szSpeedWritesAvg = szTmpBuff;
-
                 nOutPrevCurPos = _ftelli64(ofp);
-                fPrevTimeIOWrite = cIOWrite.ElapsedTime();
-
                 pContext->bCanUpdateWindow = true;
             }
 
@@ -811,12 +715,6 @@ BOOL CWorker::Run()
             last_frame = nr;
         }
     } while (nr > 0 || fs > 0 || !frame_cnt);
-
-    pContext->fTimeEncoding = cEncoding.ElapsedTime();
-    pContext->fTimeIORead = cIORead.ElapsedTime();
-    pContext->fTimeIOWrite = cIOWrite.ElapsedTime();
-    pContext->nOutTotalSize = GetFileSizeInt64(ofp);
-    pContext->fTimeTotal = pContext->fTimeEncoding + pContext->fTimeIORead + pContext->fTimeIOWrite;
 
     if (fwav)
         free(fwav);

@@ -38,7 +38,6 @@ public:
 public:
     CMyStatic m_StcOut;
     CMyStatic m_StcOutInfo;
-    CMyStatic m_StcSimdInfo;
     CMyStatic m_StcTimeCurrent;
     CMyStatic m_StcTimeTotal;
     CMyProgressCtrl m_PrgCurrent;
@@ -84,10 +83,6 @@ public:
     void SetOutputTypeInfo(CString szInfo)
     {
         pWorkDlg->m_StcOutInfo.SetWindowText(szInfo);
-    }
-    void SetSimdInfo(CString szInfo)
-    {
-        pWorkDlg->m_StcSimdInfo.SetWindowText(szInfo);
     }
     void SetCurrentTimerInfo(CString szInfo)
     {

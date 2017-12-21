@@ -4,7 +4,6 @@
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "utilities\MyFile.h"
-#include "utilities\TimeCount.h"
 #ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
 #endif
@@ -26,10 +25,6 @@ public:
     bool bMultiMonoInput;
     int nThreads;
 public:
-    double fTimeTotal;
-    double fTimeEncoding;
-    double fTimeIORead;
-    double fTimeIOWrite;
     __int64 nInTotalSize;
     __int64 nOutTotalSize;
 public:
@@ -42,10 +37,6 @@ public:
     double m_ElapsedTimeTotal;
     int nCount;
 public:
-    CString szSpeedEncoderAvg;
-    CString szSpeedReadsAvg;
-    CString szSpeedWritesAvg;
-public:
     CWorkerContext() { }
     virtual ~CWorkerContext() { }
 public:
@@ -54,7 +45,6 @@ public:
     virtual void SetInputTypeInfo(int nID, CString szInfo) = 0;
     virtual void SetOutputFileInfo(CString szInfo) = 0;
     virtual void SetOutputTypeInfo(CString szInfo) = 0;
-    virtual void SetSimdInfo(CString szInfo) = 0;
     virtual void SetCurrentTimerInfo(CString szInfo) = 0;
     virtual void SetTotalTimerInfo(CString szInfo) = 0;
 public:

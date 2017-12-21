@@ -54,7 +54,6 @@ void CWorkDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_STATIC_ELAPSED_TOTAL, m_StcTimeTotal);
     DDX_Control(pDX, IDC_STATIC_OUT, m_StcOut);
     DDX_Control(pDX, IDC_STATIC_OUT_INFO, m_StcOutInfo);
-    DDX_Control(pDX, IDC_STATIC_SIMD_INFO, m_StcSimdInfo);
     DDX_Control(pDX, IDC_PROGRESS_CURRENT, m_PrgCurrent);
     DDX_Control(pDX, IDC_PROGRESS_TOTAL, m_PrgTotal);
 }
@@ -139,12 +138,10 @@ void CWorkDlg::InitCtrls()
         }
 
         CRect rcIn[CEncoderDefaults::nNumMaxInputFiles], rcInInfo[CEncoderDefaults::nNumMaxInputFiles];
-        CRect rcSpeedInfo[3][3];
         CRect rcOut, rcOutInfo;
-        CRect rcSIMD;
         CRect rcElapsed[2];
         CRect rcProgress[2];
-        CRect rcGroup, rcGroupStats, rcBtnCancel;
+        CRect rcGroup, rcBtnCancel;
         CRect rcDlg;
 
         for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
@@ -155,24 +152,12 @@ void CWorkDlg::InitCtrls()
 
         this->m_StcOut.GetWindowRect(rcOut);
         this->m_StcOutInfo.GetWindowRect(rcOutInfo);
-        this->m_StcSimdInfo.GetWindowRect(rcSIMD);
         this->m_StcTimeCurrent.GetWindowRect(rcElapsed[0]);
         this->m_StcTimeTotal.GetWindowRect(rcElapsed[1]);
         this->m_PrgCurrent.GetWindowRect(rcProgress[0]);
         this->m_PrgTotal.GetWindowRect(rcProgress[1]);
         this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->GetWindowRect(rcGroup);
         this->m_BtnCancel.GetWindowRect(rcBtnCancel);
-
-        this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->GetWindowRect(rcSpeedInfo[0][0]);
-        this->GetDlgItem(IDC_STATIC_ENCODER_UNIT)->GetWindowRect(rcSpeedInfo[0][1]);
-        this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->GetWindowRect(rcSpeedInfo[0][2]);
-        this->GetDlgItem(IDC_STATIC_READS_LABEL)->GetWindowRect(rcSpeedInfo[1][0]);
-        this->GetDlgItem(IDC_STATIC_READS_UNIT)->GetWindowRect(rcSpeedInfo[1][1]);
-        this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->GetWindowRect(rcSpeedInfo[1][2]);
-        this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->GetWindowRect(rcSpeedInfo[2][0]);
-        this->GetDlgItem(IDC_STATIC_WRITES_UNIT)->GetWindowRect(rcSpeedInfo[2][1]);
-        this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->GetWindowRect(rcSpeedInfo[2][2]);
-        this->GetDlgItem(IDC_STATIC_GROUP_STATS)->GetWindowRect(rcGroupStats);
 
         this->GetWindowRect(rcDlg);
 
@@ -186,10 +171,6 @@ void CWorkDlg::InitCtrls()
         rcOutInfo.MoveToY(rcOutInfo.top - nHeight);
         this->ScreenToClient(rcOutInfo);
         this->m_StcOutInfo.MoveWindow(rcOutInfo);
-
-        rcSIMD.MoveToY(rcSIMD.top - nHeight);
-        this->ScreenToClient(rcSIMD);
-        this->m_StcSimdInfo.MoveWindow(rcSIMD);
 
         rcElapsed[0].MoveToY(rcElapsed[0].top - nHeight);
         this->ScreenToClient(rcElapsed[0]);
@@ -210,46 +191,6 @@ void CWorkDlg::InitCtrls()
         rcBtnCancel.MoveToY(rcBtnCancel.top - nHeight);
         this->ScreenToClient(rcBtnCancel);
         this->m_BtnCancel.MoveWindow(rcBtnCancel);
-
-        rcSpeedInfo[0][0].MoveToY(rcSpeedInfo[0][0].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[0][0]);
-        this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->MoveWindow(rcSpeedInfo[0][0]);
-
-        rcSpeedInfo[0][1].MoveToY(rcSpeedInfo[0][1].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[0][1]);
-        this->GetDlgItem(IDC_STATIC_ENCODER_UNIT)->MoveWindow(rcSpeedInfo[0][1]);
-
-        rcSpeedInfo[0][2].MoveToY(rcSpeedInfo[0][2].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[0][2]);
-        this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->MoveWindow(rcSpeedInfo[0][2]);
-
-        rcSpeedInfo[1][0].MoveToY(rcSpeedInfo[1][0].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[1][0]);
-        this->GetDlgItem(IDC_STATIC_READS_LABEL)->MoveWindow(rcSpeedInfo[1][0]);
-
-        rcSpeedInfo[1][1].MoveToY(rcSpeedInfo[1][1].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[1][1]);
-        this->GetDlgItem(IDC_STATIC_READS_UNIT)->MoveWindow(rcSpeedInfo[1][1]);
-
-        rcSpeedInfo[1][2].MoveToY(rcSpeedInfo[1][2].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[1][2]);
-        this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->MoveWindow(rcSpeedInfo[1][2]);
-
-        rcSpeedInfo[2][0].MoveToY(rcSpeedInfo[2][0].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[2][0]);
-        this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->MoveWindow(rcSpeedInfo[2][0]);
-
-        rcSpeedInfo[2][1].MoveToY(rcSpeedInfo[2][1].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[2][1]);
-        this->GetDlgItem(IDC_STATIC_WRITES_UNIT)->MoveWindow(rcSpeedInfo[2][1]);
-
-        rcSpeedInfo[2][2].MoveToY(rcSpeedInfo[2][2].top - nHeight);
-        this->ScreenToClient(rcSpeedInfo[2][2]);
-        this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->MoveWindow(rcSpeedInfo[2][2]);
-
-        rcGroupStats.MoveToY(rcGroupStats.top - nHeight);
-        this->ScreenToClient(rcGroupStats);
-        this->GetDlgItem(IDC_STATIC_GROUP_STATS)->MoveWindow(rcGroupStats);
 
         rcGroup.bottom -= nHeight;
         this->ScreenToClient(rcGroup);
@@ -325,13 +266,7 @@ void CWorkDlg::UpdateFileTimer()
     if (pWorkerContext->bCanUpdateWindow == true)
     {
         pWorkerContext->bCanUpdateWindow = false;
-
         m_StcTimeCurrent.SetWindowText(strTime);
-
-        this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedEncoderAvg);
-        this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedReadsAvg);
-        this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedWritesAvg);
-
         pWorkerContext->bCanUpdateWindow = true;
     }
 }
@@ -360,8 +295,5 @@ void CWorkDlg::InitLang()
     {
         this->SetWindowText(theApp.m_Config.GetLangString(0x00A01001));
         this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01002));
-        this->GetDlgItem(IDC_STATIC_ENCODER_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01007));
-        this->GetDlgItem(IDC_STATIC_READS_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01008));
-        this->GetDlgItem(IDC_STATIC_WRITES_LABEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01009));
     }
 }
