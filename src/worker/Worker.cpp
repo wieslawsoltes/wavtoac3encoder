@@ -339,7 +339,7 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
     return(FALSE);
 }
 
-int CWorker::Run()
+BOOL CWorker::Run()
 {
     void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
     int nr, fs;

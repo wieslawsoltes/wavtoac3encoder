@@ -102,11 +102,10 @@ private:
     Avs2RawStatus statusAVS;
 #endif
 public:
-    static void InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
-public:
+    void InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
     void UpdateProgress();
     BOOL HandleError(LPTSTR pszMessage);
-    int Run();
+    BOOL Run();
     BOOL Encode();
 };
 
