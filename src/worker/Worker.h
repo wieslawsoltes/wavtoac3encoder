@@ -31,7 +31,7 @@ public:
     virtual void StopTimer() = 0;
 public:
     virtual void Close() = 0;
-}
+};
 
 class CWorkerParam
 {
