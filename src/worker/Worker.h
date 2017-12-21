@@ -9,8 +9,34 @@
 #include "Avs2Raw.h"
 #endif
 
+class CWorkerProgress
+{
+public:
+    CWorkerProgress() { }
+    virtual ~CWorkerProgress() { }
+public:
+    virtual void SetTitletInfo(CString szInfo) = 0;
+    virtual void SetInputFileInfo(int nID, CString szInfo) = 0;
+    virtual void SetInputTypeInfo(int nID, CString szInfo) = 0;
+    virtual void SetOutputFileInfo(CString szInfo) = 0;
+    virtual void SetSimdInfo(CString szInfo) = 0;
+    virtual void SetTimerInfo(CString szInfo) = 0;
+public:
+    virtual void SetCurrentProgressRange(int nMin, int nMax) = 0;
+    virtual void SetTotalProgressRange(int nMin, int nMax) = 0;
+    virtual void SetCurrentProgress(int nPos) = 0;
+    virtual void SetTotalProgress(int nPos) = 0;
+public:
+    virtual void StartTimer(int nResolution) = 0;
+    virtual void StopTimer() = 0;
+public:
+    virtual void Close() = 0;
+}
+
 class CWorkerParam
 {
+public:
+    CWorkerProgress *pProgress;
 public:
     AftenAPI api;
 public:
