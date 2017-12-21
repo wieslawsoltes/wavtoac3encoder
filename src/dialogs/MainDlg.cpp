@@ -605,10 +605,12 @@ void CMainDlg::OnBnClickedButtonBrowse()
 #define BIF_NEWDIALOGSTYLE 0x0040
 #endif
 
+        auto szTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701D) : _T("Select default output path:");
+
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
         bi.pszDisplayName = lpBuffer;
-        bi.lpszTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701D) : _T("Select default output path:");
+        bi.lpszTitle = szTitle;
         bi.lpfn = nullptr;
         bi.lParam = 0;
         bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
@@ -2926,10 +2928,12 @@ void CMainDlg::OnFileAddDirectory()
 #define BIF_NEWDIALOGSTYLE 0x0040
 #endif
 
+    auto szTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020700B) : _T("Add directory with supported input files:");
+
     bi.hwndOwner = this->GetSafeHwnd();
     bi.pidlRoot = pidlDesktop;
     bi.pszDisplayName = lpBuffer;
-    bi.lpszTitle = theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020700B) : _T("Add directory with supported input files:");
+    bi.lpszTitle = szTitle;
     bi.lpfn = nullptr;
     bi.lParam = 0;
     bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_NONEWFOLDERBUTTON;
