@@ -2,15 +2,10 @@
 
 #include <afxwin.h>
 #include <afxcmn.h>
-#include "configuration\Configuration.h"
 #include "controls\MyDialogEx.h"
-#include "controls\MyButton.h"
 #include "controls\MyStatic.h"
-#include "controls\MyEdit.h"
-#include "controls\MyComboBoxEdit.h"
-#include "controls\MyListCtrl.h"
-#include "controls\MyComboBox.h"
-#include "controls\MySliderCtrl.h"
+#include "controls\MyButton.h"
+#include "configuration\Configuration.h"
 #include "worker\Worker.h"
 
 #define WM_FILE_TIMER WM_USER + 0x01

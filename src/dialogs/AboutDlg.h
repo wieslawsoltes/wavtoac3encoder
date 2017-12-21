@@ -1,15 +1,10 @@
 ﻿#pragma once
 
+#include <afxcmn.h>
+#include <afxwin.h>
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
-#include "controls\MyEdit.h"
-#include "controls\MyComboBoxEdit.h"
-#include "controls\MyListCtrl.h"
-#include "controls\MyComboBox.h"
-#include "controls\MySliderCtrl.h"
-
-#include <afxwin.h>
 
 class CAboutDlg : public CMyDialogEx
 {

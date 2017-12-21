@@ -2,7 +2,6 @@
 
 #include <afxcmn.h>
 #include <afxwin.h>
-#include "configuration\Configuration.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
@@ -11,6 +10,8 @@
 #include "controls\MyListCtrl.h"
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
+#include "controls\MyStatusBarCtrl.h"
+#include "configuration\Configuration.h"
 #include "libaften\aften.h"
 #ifndef DISABLE_AVISYNTH
 #include "worker\Avs2Raw.h"
@@ -76,7 +77,7 @@ public:
     bool bDisableAllWarnings;
     bool bSaveConfig;
 public:
-    CStatusBarCtrl m_StatusBar;
+    CMyStatusBarCtrl m_StatusBar;
     CMySliderCtrl m_SldBitrate;
     CMyListCtrl m_LstSettings;
     CMyListCtrl m_LstFiles;
