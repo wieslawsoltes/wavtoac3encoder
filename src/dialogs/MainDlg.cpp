@@ -825,7 +825,7 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 
 bool CMainDlg::LoadProgramConfig(CString szFileName)
 {
-    ConfigList_t m_ConfigList;
+    ConfigList m_ConfigList;
     if (theApp.m_Config.LoadConfig(szFileName, m_ConfigList) == true)
     {
         int nSize = m_ConfigList.Count();
@@ -967,7 +967,7 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
 
 bool CMainDlg::SaveProgramConfig(CString szFileName)
 {
-    ConfigList_t m_ConfigList;
+    ConfigList m_ConfigList;
 
     m_ConfigList.RemoveAll();
 

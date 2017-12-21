@@ -61,11 +61,11 @@ public:
     }
 };
 
-class ConfigList_t : public CListT<ConfigEntry>
+class ConfigList : public CListT<ConfigEntry>
 {
 };
 
-class LangMap_t : public CMapT<int, CString>
+class LangMap : public CMapT<int, CString>
 {
 };
 
@@ -75,7 +75,7 @@ public:
     CString szFileName;
     CString szEnglishName;
     CString szTargetName;
-    LangMap_t lm;
+    LangMap lm;
 public:
     Lang()
     {
@@ -102,7 +102,7 @@ public:
     }
 };
 
-class LangList_t : public CListT<Lang>
+class LangList : public CListT<Lang>
 {
 };
 
@@ -112,8 +112,8 @@ public:
     CConfiguration();
     virtual ~CConfiguration();
 public:
-    LangMap_t *m_Lang;
-    LangList_t m_LangLst;
+    LangMap *m_Lang;
+    LangList m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
     int m_nLangId = -1;
@@ -125,11 +125,11 @@ public:
     CString m_szFilesListFilePath;
     CString m_szLangFilePath;
 public:
-    bool LoadConfig(CString &szFileName, ConfigList_t &cl);
-    bool SaveConfig(CString &szFileName, ConfigList_t &cl);
+    bool LoadConfig(CString &szFileName, ConfigList &cl);
+    bool SaveConfig(CString &szFileName, ConfigList &cl);
 public:
-    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
-    bool LoadLang(CString &szFileName, LangMap_t &lm);
+    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst);
+    bool LoadLang(CString &szFileName, LangMap &lm);
 public:
     bool LoadLangConfig(CString &szFileName);
     bool SaveLangConfig(CString &szFileName);
@@ -278,7 +278,7 @@ public:
     }
 };
 
-class EncoderPresetList_t : public CListT<CEncoderPreset>
+class EncoderPresetList : public CListT<CEncoderPreset>
 {
 };
 
@@ -316,9 +316,9 @@ public:
     static int FindValidBitratePos(const int nBitrate);
     static int FindOptionIndex(CString szOption);
     static void ResetEncoderOptionsLists();
-    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp);
-    static bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-    static bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList &clTmp);
+    static bool LoadEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static bool SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool IsSupportedInputExt(CString &szExt);
     static int GetSupportedInputFormat(CString &szExt);
     static CString GetSupportedInputFilesFilter();

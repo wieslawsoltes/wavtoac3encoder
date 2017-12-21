@@ -66,8 +66,8 @@ public:
     int nSortColumn;
     bool nSortOrder[2];
     bool bSettingsValueVisible;
-    ConfigList_t m_EngineList;
-    EncoderPresetList_t encPresets;
+    ConfigList m_EngineList;
+    EncoderPresetList encPresets;
     CEncoderPreset defaultPreset;
     int nCurrentPreset = 0;
     CString szOutputPath;

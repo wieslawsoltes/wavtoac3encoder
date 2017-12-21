@@ -14,7 +14,7 @@ CConfiguration::~CConfiguration()
 {
 }
 
-bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
+bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
 {
     try
     {
@@ -59,7 +59,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList_t &cl)
     }
 }
 
-bool CConfiguration::SaveConfig(CString &szFileName, ConfigList_t &cl)
+bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
 {
     int nSize = cl.Count();
     try
@@ -86,7 +86,7 @@ bool CConfiguration::SaveConfig(CString &szFileName, ConfigList_t &cl)
     }
 }
 
-void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst)
+void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst)
 {
     try
     {
@@ -163,7 +163,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
     }
 }
 
-bool CConfiguration::LoadLang(CString &szFileName, LangMap_t& lm)
+bool CConfiguration::LoadLang(CString &szFileName, LangMap& lm)
 {
     try
     {
@@ -1199,7 +1199,7 @@ void CEncoderDefaults::ResetEncoderOptionsLists()
     }
 }
 
-void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp)
+void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList &clTmp)
 {
     for (int i = 0; i < clTmp.Count(); i++)
     {
@@ -1296,7 +1296,7 @@ void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &
     }
 }
 
-bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     try
     {
@@ -1305,7 +1305,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList_t& encPresets, CStri
             return false;
 
         CEncoderPreset presetTmp;
-        ConfigList_t clTmp;
+        ConfigList clTmp;
 
         bool bHaveVersion = false;
         bool bHavePreset = false;
@@ -1423,7 +1423,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList_t& encPresets, CStri
     return true;
 }
 
-bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     const int nSize = (const int)encPresets.Count();
     try
