@@ -2817,7 +2817,7 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
                     infoAVS.nSamplesPerSecond);
                 szInfo += szBuff;
 
-                szBuff.Format(_T("%s\t\t: %d\n"),
+                szBuff.Format(_T("%s\t: %d\n"),
                     theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207026) : _T("Channels"),
                     infoAVS.nAudioChannels);
                 szInfo += szBuff;
