@@ -14,6 +14,7 @@
 - Refactored Aften api code.
 - Removed unused code and comments.
 - Added Avisynth 5.1+LFE preset.
+- Fixed browse dialog title.
 
 ### Version 6.0:
 
