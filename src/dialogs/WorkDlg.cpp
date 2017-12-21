@@ -29,17 +29,21 @@ IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
 CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CWorkDlg::IDD, pParent)
 {
-    m_WorkerParam.bTerminate = false;
-    m_WorkerParam.bCanUpdateWindow = true;
-    m_WorkerParam.hThread = nullptr;
-    m_WorkerParam.dwThreadId = 0;
-    m_WorkerParam.nCount = 0;
-    m_WorkerParam.m_ElapsedTimeFile = 0;
-    m_WorkerParam.m_ElapsedTimeTotal = 0;
+    pWorkerContext = new CWorkDlgWorkerContext(this);
+    pWorkerContext->pConfig = &theApp.m_Config;
+    pWorkerContext->bTerminate = false;
+    pWorkerContext->bCanUpdateWindow = true;
+    pWorkerContext->hThread = nullptr;
+    pWorkerContext->dwThreadId = 0;
+    pWorkerContext->nCount = 0;
+    pWorkerContext->m_ElapsedTimeFile = 0;
+    pWorkerContext->m_ElapsedTimeTotal = 0;
 }
 
 CWorkDlg::~CWorkDlg()
 {
+    if (pWorkerContext != nullptr)
+        delete pWorkerContext;
 }
 
 void CWorkDlg::DoDataExchange(CDataExchange* pDX)
@@ -66,7 +70,6 @@ BOOL CWorkDlg::OnInitDialog()
 {
     CMyDialogEx::OnInitDialog();
 
-    InitSettings();
     InitCtrls();
     InitLang();
     CreateWorker();
@@ -79,9 +82,9 @@ void CWorkDlg::OnClose()
     KillTimer(WM_FILE_TIMER);
     KillTimer(WM_TOTAL_TIMER);
 
-    if (m_WorkerParam.bTerminate == false)
+    if (pWorkerContext->bTerminate == false)
     {
-        m_WorkerParam.bTerminate = true;
+        pWorkerContext->bTerminate = true;
         return;
     }
     else
@@ -94,11 +97,11 @@ void CWorkDlg::OnDestroy()
 {
     CMyDialogEx::OnDestroy();
 
-    if (m_WorkerParam.hThread != nullptr)
+    if (pWorkerContext->hThread != nullptr)
     {
-        ::TerminateThread(m_WorkerParam.hThread, 0);
-        ::CloseHandle(m_WorkerParam.hThread);
-        m_WorkerParam.hThread = nullptr;
+        ::TerminateThread(pWorkerContext->hThread, 0);
+        ::CloseHandle(pWorkerContext->hThread);
+        pWorkerContext->hThread = nullptr;
     }
 }
 
@@ -119,20 +122,15 @@ void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CWorkDlg::OnBnClickedCancel()
 {
-    if (m_WorkerParam.bTerminate == false)
-        m_WorkerParam.bTerminate = true;
+    if (pWorkerContext->bTerminate == false)
+        pWorkerContext->bTerminate = true;
     else
         this->EndDialog(IDOK);
 }
 
-void CWorkDlg::InitSettings()
-{
-    m_WorkerParam.pWorkDlg = this;
-}
-
 void CWorkDlg::InitCtrls()
 {
-    if (this->m_WorkerParam.bMultiMonoInput == false)
+    if (pWorkerContext->bMultiMonoInput == false)
     {
         for (int i = 1; i < CEncoderDefaults::nNumMaxInputFiles; i++)
         {
@@ -265,89 +263,89 @@ void CWorkDlg::InitCtrls()
 void CWorkDlg::UpdateTotalTimer()
 {
     TCHAR strTime[32] = _T("");
-    m_WorkerParam.m_ElapsedTimeTotal += 0.25;
+    pWorkerContext->m_ElapsedTimeTotal += 0.25;
 
-    if (m_WorkerParam.m_ElapsedTimeTotal <= 59)
+    if (pWorkerContext->m_ElapsedTimeTotal <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            (unsigned long)m_WorkerParam.m_ElapsedTimeTotal);
+            (unsigned long)pWorkerContext->m_ElapsedTimeTotal);
     }
-    else if (m_WorkerParam.m_ElapsedTimeTotal <= 3599)
+    else if (pWorkerContext->m_ElapsedTimeTotal <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeTotal / 60),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeTotal % 60));
+            ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60),
+            ((unsigned long)pWorkerContext->m_ElapsedTimeTotal % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeTotal / 60) / 60,
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeTotal / 60) % 60,
-            ((((unsigned long)m_WorkerParam.m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
+            ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
+            ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
+            ((((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
     }
 
-    if (m_WorkerParam.bCanUpdateWindow == true)
+    if (pWorkerContext->bCanUpdateWindow == true)
     {
-        m_WorkerParam.bCanUpdateWindow = false;
+        pWorkerContext->bCanUpdateWindow = false;
         m_StcTimeTotal.SetWindowText(strTime);
-        m_WorkerParam.bCanUpdateWindow = true;
+        pWorkerContext->bCanUpdateWindow = true;
     }
 }
 
 void CWorkDlg::UpdateFileTimer()
 {
     TCHAR strTime[32] = _T("");
-    m_WorkerParam.m_ElapsedTimeFile += 0.25;
+    pWorkerContext->m_ElapsedTimeFile += 0.25;
 
-    if (m_WorkerParam.m_ElapsedTimeFile <= 59)
+    if (pWorkerContext->m_ElapsedTimeFile <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            (unsigned long)m_WorkerParam.m_ElapsedTimeFile);
+            (unsigned long)pWorkerContext->m_ElapsedTimeFile);
     }
-    else if (m_WorkerParam.m_ElapsedTimeFile <= 3599)
+    else if (pWorkerContext->m_ElapsedTimeFile <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeFile / 60),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeFile % 60));
+            ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60),
+            ((unsigned long)pWorkerContext->m_ElapsedTimeFile % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
             theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeFile / 60) / 60,
-            ((unsigned long)m_WorkerParam.m_ElapsedTimeFile / 60) % 60,
-            ((((unsigned long)m_WorkerParam.m_ElapsedTimeFile / 60) % 60) * 60) % 60);
+            ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) / 60,
+            ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60,
+            ((((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
     }
 
-    if (m_WorkerParam.bCanUpdateWindow == true)
+    if (pWorkerContext->bCanUpdateWindow == true)
     {
-        m_WorkerParam.bCanUpdateWindow = false;
+        pWorkerContext->bCanUpdateWindow = false;
 
         m_StcTimeCurrent.SetWindowText(strTime);
 
-        this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->SetWindowText(m_WorkerParam.szSpeedEncoderAvg);
-        this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->SetWindowText(m_WorkerParam.szSpeedReadsAvg);
-        this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->SetWindowText(m_WorkerParam.szSpeedWritesAvg);
+        this->GetDlgItem(IDC_STATIC_ENCODER_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedEncoderAvg);
+        this->GetDlgItem(IDC_STATIC_READS_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedReadsAvg);
+        this->GetDlgItem(IDC_STATIC_WRITES_SPEED_AVG)->SetWindowText(pWorkerContext->szSpeedWritesAvg);
 
-        m_WorkerParam.bCanUpdateWindow = true;
+        pWorkerContext->bCanUpdateWindow = true;
     }
 }
 
 void CWorkDlg::CreateWorker()
 {
-    m_WorkerParam.hThread = ::CreateThread(nullptr,
+    pWorkerContext->hThread = ::CreateThread(nullptr,
         0,
         EncWorkThread,
-        &m_WorkerParam,
+        pWorkerContext,
         0,
-        &m_WorkerParam.dwThreadId);
+        &pWorkerContext->dwThreadId);
 
-    if (m_WorkerParam.hThread == nullptr)
+    if (pWorkerContext->hThread == nullptr)
     {
         // _T("Error: Failed to create worker thread!")
         this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),

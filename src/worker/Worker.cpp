@@ -1,5 +1,4 @@
 ﻿#include "StdAfx.h"
-#include "MainApp.h"
 #include "Worker.h"
 
 void CWorker::InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
@@ -108,49 +107,49 @@ void CWorker::UpdateProgress()
             TCHAR *type, *chan, *order;
             TCHAR fmt[64] = _T("");
 
-            type = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02001) : _T("?");
-            chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02002) : _T("?-channel");
+            type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02001) : _T("?");
+            chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02002) : _T("?-channel");
             order = _T("");
 
             if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
             {
                 if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                    type = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02003) : _T("Unsigned");
+                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02003) : _T("Unsigned");
                 else
-                    type = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02004) : _T("Signed");
+                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02004) : _T("Signed");
             }
             else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
             {
-                type = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02005) : _T("Floating-point");
+                type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02005) : _T("Floating-point");
             }
             else
             {
-                type = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02006) : _T("[unsupported type]");
+                type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02006) : _T("[unsupported type]");
             }
 
             if (pf_info->ch_mask & 0x08)
             {
                 switch (pf_info->channels - 1)
                 {
-                case 1: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02007) : _T("1.1-channel"); break;
-                case 2: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02008) : _T("2.1-channel"); break;
-                case 3: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02009) : _T("3.1-channel"); break;
-                case 4: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200A) : _T("4.1-channel"); break;
-                case 5: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200B) : _T("5.1-channel"); break;
-                default: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
+                case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02007) : _T("1.1-channel"); break;
+                case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02008) : _T("2.1-channel"); break;
+                case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02009) : _T("3.1-channel"); break;
+                case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200A) : _T("4.1-channel"); break;
+                case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200B) : _T("5.1-channel"); break;
+                default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
                 }
             }
             else
             {
                 switch (pf_info->channels)
                 {
-                case 1: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200D) : _T("mono"); break;
-                case 2: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200E) : _T("stereo"); break;
-                case 3: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200F) : _T("3-channel"); break;
-                case 4: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02010) : _T("4-channel"); break;
-                case 5: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02011) : _T("5-channel"); break;
-                case 6: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02012) : _T("6-channel"); break;
-                default: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02013) : _T("multi-channel"); break;
+                case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D) : _T("mono"); break;
+                case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E) : _T("stereo"); break;
+                case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F) : _T("3-channel"); break;
+                case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010) : _T("4-channel"); break;
+                case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011) : _T("5-channel"); break;
+                case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012) : _T("6-channel"); break;
+                default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013) : _T("multi-channel"); break;
                 }
             }
 
@@ -167,15 +166,15 @@ void CWorker::UpdateProgress()
             else
             {
                 _stprintf(fmt, _T("%s"),
-                    theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02014) : _T("unknown"));
+                    pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02014) : _T("unknown"));
             }
 
             if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
             {
                 switch (pf_info->order)
                 {
-                case PCM_BYTE_ORDER_LE: order = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02015) : _T("little-endian"); break;
-                case PCM_BYTE_ORDER_BE: order = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02016) : _T("big-endian"); break;
+                case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02015) : _T("little-endian"); break;
+                case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02016) : _T("big-endian"); break;
                 }
             }
             else
@@ -186,7 +185,7 @@ void CWorker::UpdateProgress()
             szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
                 fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
 
-            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[i])->SetWindowText(szInputInfo);
+            pContext->SetInputTypeInfo(i, szInputInfo);
         }
     }
     else
@@ -197,29 +196,29 @@ void CWorker::UpdateProgress()
 
         switch (infoAVS.nAudioChannels)
         {
-        case 1: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200D) : _T("mono"); break;
-        case 2: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200E) : _T("stereo"); break;
-        case 3: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0200F) : _T("3-channel"); break;
-        case 4: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02010) : _T("4-channel"); break;
-        case 5: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02011) : _T("5-channel"); break;
-        case 6: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02012) : _T("6-channel"); break;
-        default: chan = theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02013) : _T("multi-channel"); break;
+        case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D) : _T("mono"); break;
+        case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E) : _T("stereo"); break;
+        case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F) : _T("3-channel"); break;
+        case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010) : _T("4-channel"); break;
+        case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011) : _T("5-channel"); break;
+        case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012) : _T("6-channel"); break;
+        default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013) : _T("multi-channel"); break;
         }
 
         szInputInfo.Format(_T("\t%s %d Hz %s"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
+            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
             infoAVS.nSamplesPerSecond, chan);
 
-        pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDInInfo[0])->SetWindowText(szInputInfo);
+        pContext->SetInputTypeInfo(0, szInputInfo);
 #endif
     }
 
     {
         TCHAR *acmod_str[32] =
         {
-            theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02018) : _T("dual mono (1+1)"),
-            theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A02019) : _T("mono (1/0)"),
-            theApp.m_Config.HaveLangStrings() ? (LPTSTR)(LPCTSTR)theApp.m_Config.GetLangString(0x00A0201A) : _T("stereo (2/0)"),
+            pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02018) : _T("dual mono (1+1)"),
+            pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02019) : _T("mono (1/0)"),
+            pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0201A) : _T("stereo (2/0)"),
             _T("3/0"),
             _T("2/1"),
             _T("3/1"),
@@ -270,37 +269,37 @@ void CWorker::UpdateProgress()
         }
 
         if (nCountSimd == 0)
-            szSimdInfo += _T(" ") + (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0201B) : _T("NONE"));
+            szSimdInfo += _T(" ") + (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201B) : _T("NONE"));
 
         CString szBuff;
         if (s.system.n_threads == 0)
         {
-            szBuff = _T(" | ") + (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0201C) : _T("Threads: Auto"));
+            szBuff = _T(" | ") + (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201C) : _T("Threads: Auto"));
         }
         else
         {
             szBuff.Format(_T(" | %s %i"),
-                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0201D) : _T("Threads:"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201D) : _T("Threads:"),
                 s.system.n_threads);
         }
 
         szSimdInfo += szBuff;
     }
 
-    pWork->pWorkDlg->m_StcOutInfo.SetWindowText(szOutputInfo);
-    pWork->pWorkDlg->m_StcSimdInfo.SetWindowText(szSimdInfo);
+    pContext->SetOutputTypeInfo(szOutputInfo);
+    pContext->SetSimdInfo(szSimdInfo);
 }
 
 BOOL CWorker::HandleError(LPTSTR pszMessage)
 {
-    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+    pContext->StopCurrentTimer();
 	CString szBuff;
 	szBuff.Format(_T("%s %s"),
-		theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+		pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
 		_T("00:00:00"));
 
-	pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-    pWork->m_ElapsedTimeFile = 0L;
+	pContext->SetCurrentTimerInfo(szBuff);
+    pContext->m_ElapsedTimeFile = 0L;
 
     if(fwav)
         free(fwav);
@@ -327,15 +326,15 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
     if(ofp)
         fclose(ofp);
 
-    pWork->api.LibAften_aften_encode_close(&s);
+    pContext->api.LibAften_aften_encode_close(&s);
 
     for(int i = 0; i < nInputFiles; i++)
         szInPath[i].ReleaseBuffer();
 
     szOutPath.ReleaseBuffer();
 
-    pWork->bTerminate = true;
-    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+    pContext->bTerminate = true;
+    pContext->Close();
 
     return(FALSE);
 }
@@ -370,7 +369,7 @@ int CWorker::Run()
         bAvisynthInput = true;
 #endif
 
-    pWork->nInTotalSize = 0;
+    pContext->nInTotalSize = 0;
 
     for (int i = 0; i < nInputFiles; i++)
         pszInPath[i] = szInPath[i].GetBuffer();
@@ -397,7 +396,7 @@ int CWorker::Run()
         else
         {
             infoAVS = decoderAVS.GetInputInfo();
-            pWork->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+            pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
             // _T("Avisynth initialized successfully.")
         }
 #endif
@@ -409,26 +408,26 @@ int CWorker::Run()
             ifp[i] = _tfopen(pszInPath[i], _T("rb"));
             if (!ifp[i])
             {
-                pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+                pContext->StopCurrentTimer();
 
                 CString szBuff;
                 szBuff.Format(_T("%s %s"),
-                    theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                    pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
                     _T("00:00:00"));
 
-                pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-                pWork->m_ElapsedTimeFile = 0L;
+                pContext->SetCurrentTimerInfo(szBuff);
+                pContext->m_ElapsedTimeFile = 0L;
 
                 // _T("Failed to open input file:") + pszInPath[i]
 
-                pWork->bTerminate = true;
-                ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+                pContext->bTerminate = true;
+                pContext->Close();
 
                 return(FALSE);
             }
             else
             {
-                pWork->nInTotalSize += GetFileSizeInt64(ifp[i]);
+                pContext->nInTotalSize += GetFileSizeInt64(ifp[i]);
             }
         }
     }
@@ -438,12 +437,12 @@ int CWorker::Run()
     {
         CString szBuff;
         szBuff.Format(_T("%s %s"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
 
-        pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-        pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-        pWork->m_ElapsedTimeFile = 0L;
+        pContext->StopCurrentTimer();
+        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->m_ElapsedTimeFile = 0L;
 
         for (int i = 0; i < nInputFiles; i++)
         {
@@ -453,8 +452,8 @@ int CWorker::Run()
 
         // _T("Failed to create output file: ") + pszOutPath
 
-        pWork->bTerminate = true;
-        ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+        pContext->bTerminate = true;
+        pContext->Close();
 
         return(FALSE);
     }
@@ -572,7 +571,7 @@ int CWorker::Run()
             }
         }
 
-        if (pWork->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
+        if (pContext->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
         {
             return HandleError(_T("Invalid channel configuration."));
         }
@@ -612,9 +611,9 @@ int CWorker::Run()
     nr = 0;
 
     if (opt.chmap == 0)
-        aften_remap = pWork->api.LibAften_aften_remap_wav_to_a52;
+        aften_remap = pContext->api.LibAften_aften_remap_wav_to_a52;
     else if (opt.chmap == 2)
-        aften_remap = pWork->api.LibAften_aften_remap_mpeg_to_a52;
+        aften_remap = pContext->api.LibAften_aften_remap_mpeg_to_a52;
 
     if (!opt.pad_start)
     {
@@ -649,7 +648,7 @@ int CWorker::Run()
         s.initial_samples = fwav;
     }
 
-    if (pWork->api.LibAften_aften_encode_init(&s))
+    if (pContext->api.LibAften_aften_encode_init(&s))
     {
         return HandleError(_T("Failed to initialize encoder."));
     }
@@ -667,12 +666,12 @@ int CWorker::Run()
 
     do
     {
-        if (pWork->bTerminate == true)
+        if (pContext->bTerminate == true)
         {
             while (fs > 0)
             {
                 cEncoding.Start();
-                fs = pWork->api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
+                fs = pContext->api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
                 cEncoding.Stop();
 
                 if (fs > 0)
@@ -703,7 +702,7 @@ int CWorker::Run()
             aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
 
         cEncoding.Start();
-        fs = pWork->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
+        fs = pContext->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
         cEncoding.Stop();
 
         if (fs < 0)
@@ -733,7 +732,7 @@ int CWorker::Run()
 
                 if (bAvisynthInput == false)
                 {
-                    if (pWork->bMultiMonoInput == false)
+                    if (pContext->bMultiMonoInput == false)
                     {
                         nCurPos = _ftelli64(ifp[0]);
                     }
@@ -752,40 +751,40 @@ int CWorker::Run()
 #endif
                 }
 
-                if (pWork->bCanUpdateWindow == true)
+                if (pContext->bCanUpdateWindow == true)
                 {
-                    pWork->bCanUpdateWindow = false;
+                    pContext->bCanUpdateWindow = false;
                     CString szTmpBuff;
 
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cEncoding.ElapsedTime() + 1.0e-16));
-                    pWork->szSpeedEncoderAvg = szTmpBuff;
+                    pContext->szSpeedEncoderAvg = szTmpBuff;
 
                     szTmpBuff.Format(_T("%0.1lf"), ((double)(nCurPos) / 1048576.0f) / (cIORead.ElapsedTime() + 1.0e-16));
-                    pWork->szSpeedReadsAvg = szTmpBuff;
+                    pContext->szSpeedReadsAvg = szTmpBuff;
 
                     nInPrevCurPos = nCurPos;
                     fPrevTimeEncoding = cEncoding.ElapsedTime();
                     fPrevTimeIORead = cIORead.ElapsedTime();
 
-                    pWork->bCanUpdateWindow = true;
+                    pContext->bCanUpdateWindow = true;
                 }
 
-                percent = (100 * nCurPos) / pWork->nInTotalSize;
+                percent = (100 * nCurPos) / pContext->nInTotalSize;
            
-                if (pWork->bCanUpdateWindow == true)
+                if (pContext->bCanUpdateWindow == true)
                 {
-                    pWork->bCanUpdateWindow = false;
-                    pWork->pWorkDlg->m_PrgCurrent.SetPos(percent);
-                    pWork->bCanUpdateWindow = true;
+                    pContext->bCanUpdateWindow = false;
+                    pContext->SetCurrentProgress(percent);
+                    pContext->bCanUpdateWindow = true;
                 }
 
-                nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pWork->nTotalSize;
+                nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
 
-                if (pWork->bCanUpdateWindow == true)
+                if (pContext->bCanUpdateWindow == true)
                 {
-                    pWork->bCanUpdateWindow = false;
-                    pWork->pWorkDlg->m_PrgTotal.SetPos(nCurTotalPos);
-                    pWork->bCanUpdateWindow = true;
+                    pContext->bCanUpdateWindow = false;
+                    pContext->SetTotalProgress(nCurTotalPos);
+                    pContext->bCanUpdateWindow = true;
                 }
             }
             t0 = t1;
@@ -794,19 +793,19 @@ int CWorker::Run()
             fwrite(frame, 1, fs, ofp);
             cIOWrite.Stop();
 
-            if (pWork->bCanUpdateWindow == true)
+            if (pContext->bCanUpdateWindow == true)
             {
-                pWork->bCanUpdateWindow = false;
+                pContext->bCanUpdateWindow = false;
 
                 CString szTmpBuff;
 
                 szTmpBuff.Format(_T("%0.1lf"), ((double)(_ftelli64(ofp)) / 1048576.0f) / (cIOWrite.ElapsedTime() + 1.0e-16));
-                pWork->szSpeedWritesAvg = szTmpBuff;
+                pContext->szSpeedWritesAvg = szTmpBuff;
 
                 nOutPrevCurPos = _ftelli64(ofp);
                 fPrevTimeIOWrite = cIOWrite.ElapsedTime();
 
-                pWork->bCanUpdateWindow = true;
+                pContext->bCanUpdateWindow = true;
             }
 
             frame_cnt++;
@@ -814,11 +813,11 @@ int CWorker::Run()
         }
     } while (nr > 0 || fs > 0 || !frame_cnt);
 
-    pWork->fTimeEncoding = cEncoding.ElapsedTime();
-    pWork->fTimeIORead = cIORead.ElapsedTime();
-    pWork->fTimeIOWrite = cIOWrite.ElapsedTime();
-    pWork->nOutTotalSize = GetFileSizeInt64(ofp);
-    pWork->fTimeTotal = pWork->fTimeEncoding + pWork->fTimeIORead + pWork->fTimeIOWrite;
+    pContext->fTimeEncoding = cEncoding.ElapsedTime();
+    pContext->fTimeIORead = cIORead.ElapsedTime();
+    pContext->fTimeIOWrite = cIOWrite.ElapsedTime();
+    pContext->nOutTotalSize = GetFileSizeInt64(ofp);
+    pContext->fTimeTotal = pContext->fTimeEncoding + pContext->fTimeIORead + pContext->fTimeIOWrite;
 
     if (fwav)
         free(fwav);
@@ -839,7 +838,7 @@ int CWorker::Run()
 
     if (bAvisynthInput == false)
     {
-        if (pWork->bMultiMonoInput == false)
+        if (pContext->bMultiMonoInput == false)
         {
             nTotalSizeCounter += _ftelli64(ifp[0]);
         }
@@ -854,7 +853,7 @@ int CWorker::Run()
     else
     {
 #ifndef DISABLE_AVISYNTH
-        nTotalSizeCounter += pWork->nInTotalSize;
+        nTotalSizeCounter += pContext->nInTotalSize;
 #endif
     }
 
@@ -867,15 +866,15 @@ int CWorker::Run()
     if (ofp)
         fclose(ofp);
 
-    pWork->api.LibAften_aften_encode_close(&s);
+    pContext->api.LibAften_aften_encode_close(&s);
 
-    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
+    pContext->StopCurrentTimer();
     CString szBuff;
     szBuff.Format(_T("%s %s"),
-        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
         _T("00:00:00"));
-    pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-    pWork->m_ElapsedTimeFile = 0L;
+    pContext->SetCurrentTimerInfo(szBuff);
+    pContext->m_ElapsedTimeFile = 0L;
 
     for (int i = 0; i < nInputFiles; i++)
         szInPath[i].ReleaseBuffer();
@@ -895,32 +894,27 @@ BOOL CWorker::Encode()
     int nChars = 0;
 #endif
 
-    if (pWork->pWorkDlg == nullptr)
-    {
-        return(FALSE);
-    }
-
-    pWork->pWorkDlg->m_PrgCurrent.SetRange(0, 100);
-    pWork->pWorkDlg->m_PrgTotal.SetRange32(0, 100);
-    pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
-    pWork->pWorkDlg->m_PrgTotal.SetPos(0);
-    pWork->pWorkDlg->KillTimer(WM_FILE_TIMER);
-    pWork->m_ElapsedTimeTotal = 0L;
+    pContext->SetCurrentProgressRange(0, 100);
+    pContext->SetTotalProgressRange(0, 100);
+    pContext->SetCurrentProgress(0);
+    pContext->SetTotalProgress(0);
+    pContext->StopCurrentTimer();
+    pContext->m_ElapsedTimeTotal = 0L;
     szBuff.Format(_T("%s %s"),
-        theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006) : _T("Total elapsed time:"),
         _T("00:00:00"));
-    pWork->pWorkDlg->m_StcTimeTotal.SetWindowText(szBuff);
-    pWork->pWorkDlg->SetTimer(WM_TOTAL_TIMER, 250, nullptr);
+    pContext->SetTotalTimerInfo(szBuff);
+    pContext->StartTotalTimer(250);
 
     int nFileCounter = 0;
-    int nTotalFiles = pWork->m_FilesList->Count();
+    int nTotalFiles = pContext->m_FilesList->Count();
     int posStatus = 0;
 
     nTotalSizeCounter = 0;
 
-    if (pWork->bMultiMonoInput == false)
+    if (pContext->bMultiMonoInput == false)
     {
-        for (int i = 0; i < pWork->m_FilesList->Count(); i++)
+        for (int i = 0; i < pContext->m_FilesList->Count(); i++)
         {
             szInPath[0] = _T("-");
             szInPath[1] = _T("-");
@@ -930,67 +924,67 @@ BOOL CWorker::Encode()
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            szInPath[0] = pWork->m_FilesList->Get(i);
+            szInPath[0] = pContext->m_FilesList->Get(i);
             szOutPath = szInPath[0];
             szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
-            if (pWork->bUseOutPath == true)
+            if (pContext->bUseOutPath == true)
             {
                 CString szFile = GetFileName(szOutPath);
 
-                if ((pWork->szOutPath[pWork->szOutPath.GetLength() - 1] == '\\') ||
-                    (pWork->szOutPath[pWork->szOutPath.GetLength() - 1] == '/'))
-                    szOutPath = pWork->szOutPath + szFile;
+                if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
+                    (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))
+                    szOutPath = pContext->szOutPath + szFile;
                 else
-                    szOutPath = pWork->szOutPath + '\\' + szFile;
+                    szOutPath = pContext->szOutPath + '\\' + szFile;
             }
 
             CString szTitle;
-            szTitle.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
+            szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
                 nFileCounter + 1,
                 nTotalFiles);
-            pWork->pWorkDlg->SetWindowText(szTitle);
+            pContext->SetTitleInfo(szTitle);
 
             szBuff.Format(_T("%s\t%s"),
-                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01003) : _T("From:"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : _T("From:"),
                 szInPath[0]);
-            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
+            pContext->SetInputFileInfo(0, szBuff);
 
             szBuff.Format(_T("%s\t%s"),
-                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01004) : _T("To:"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : _T("To:"),
                 szOutPath);
-            pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
+            pContext->SetOutputFileInfo(szBuff);
 
             szBuff.Format(_T("%s %s"),
-                theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
                 _T("00:00:00"));
-            pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-            pWork->m_ElapsedTimeFile = 0L;
-            pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
-            pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
+            pContext->SetCurrentTimerInfo(szBuff);
+            pContext->m_ElapsedTimeFile = 0L;
+            pContext->StartCurrentTimer(250);
+            pContext->SetCurrentProgress(0);
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            InitContext(pWork->m_Preset, pWork->api, opt, s);
+            InitContext(pContext->m_Preset, pContext->api, opt, s);
 
             nInputFiles = 1;
 
             if (Run() == FALSE)
             {
                 bool result = false;
-                pWork->m_StatusList->Set(result, posStatus);
+                pContext->m_StatusList->Set(result, posStatus);
                 return(FALSE);
             }
             else
             {
                 bool result = true;
-                pWork->m_StatusList->Set(result, posStatus);
+                pContext->m_StatusList->Set(result, posStatus);
             }
 
             posStatus++;
             nFileCounter++;
-            pWork->nCount = nFileCounter;
+            pContext->nCount = nFileCounter;
         }
     }
     else
@@ -1003,87 +997,85 @@ BOOL CWorker::Encode()
         szInPath[5] = _T("-");
         szOutPath = _T("");
 
-        nFileCounter = pWork->m_FilesList->Count();
+        nFileCounter = pContext->m_FilesList->Count();
 
         for (int i = 0; i < nFileCounter; i++)
         {
-            szInPath[i] = pWork->m_FilesList->Get(i);
+            szInPath[i] = pContext->m_FilesList->Get(i);
         }
 
         szOutPath = szInPath[0];
         szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
         szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
-        if (pWork->bUseOutPath == true)
-            szOutPath = pWork->szOutPath;
+        if (pContext->bUseOutPath == true)
+            szOutPath = pContext->szOutPath;
 
         CString szTitle;
-        szTitle.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
+        szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
             nTotalFiles);
-        pWork->pWorkDlg->SetWindowText(szTitle);
+        pContext->SetTitleInfo(szTitle);
 
         szBuff.Format(_T("%s\t%s"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01003) : _T("From:"),
+            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : _T("From:"),
             szInPath[0]);
-        pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[0])->SetWindowText(szBuff);
+        pContext->SetInputFileInfo(0, szBuff);
 
         for (int i = 1; i < nFileCounter; i++)
-            pWork->pWorkDlg->GetDlgItem(pWork->pWorkDlg->nIDIn[i])->SetWindowText(_T("\t") + szInPath[i]);
+            pContext->SetInputFileInfo(i, _T("\t") + szInPath[i]);
 
         szBuff.Format(_T("%s\t%s"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01004) : _T("To:"),
+            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : _T("To:"),
             szOutPath);
-        pWork->pWorkDlg->m_StcOut.SetWindowText(szBuff);
+        pContext->SetOutputFileInfo(szBuff);
 
         szBuff.Format(_T("%s %s"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
             _T("00:00:00"));
-        pWork->pWorkDlg->m_StcTimeCurrent.SetWindowText(szBuff);
-        pWork->m_ElapsedTimeFile = 0L;
-        pWork->pWorkDlg->SetTimer(WM_FILE_TIMER, 250, nullptr);
-        pWork->pWorkDlg->m_PrgCurrent.SetPos(0);
+        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->m_ElapsedTimeFile = 0L;
+        pContext->StartCurrentTimer(250);
+        pContext->SetCurrentProgress(0);
 
         ZeroMemory(&s, sizeof(AftenContext));
         ZeroMemory(&opt, sizeof(AftenOpt));
-        InitContext(pWork->m_Preset, pWork->api, opt, s);
+        InitContext(pContext->m_Preset, pContext->api, opt, s);
 
         nInputFiles = nFileCounter;
 
         if (Run() == FALSE)
         {
-            for (int i = 0; i < pWork->m_StatusList->Count(); i++)
+            for (int i = 0; i < pContext->m_StatusList->Count(); i++)
             {
                 bool result = false;
-                pWork->m_StatusList->Set(result, i);
+                pContext->m_StatusList->Set(result, i);
             }
 
-            pWork->nCount = 0;
+            pContext->nCount = 0;
 
             return(FALSE);
         }
         else
         {
-            for (int i = 0; i < pWork->m_StatusList->Count(); i++)
+            for (int i = 0; i < pContext->m_StatusList->Count(); i++)
             {
                 bool result = true;
-                pWork->m_StatusList->Set(result, i);
+                pContext->m_StatusList->Set(result, i);
             }
 
-            pWork->nCount = nFileCounter;
+            pContext->nCount = nFileCounter;
         }
     }
 
-    pWork->pWorkDlg->KillTimer(WM_TOTAL_TIMER);
-    pWork->bTerminate = true;
-    ::PostMessage(pWork->pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+    pContext->StopTotalTimer();
+    pContext->bTerminate = true;
+    pContext->Close();
 
     return(TRUE);
 }
 
 DWORD WINAPI EncWorkThread(LPVOID pParam)
 {
-    CWorkerParam *pWork = (CWorkerParam *)pParam;
-    CWorker m_Worker;
-	m_Worker.pWork = pWork;
+    CWorker m_Worker((CWorkerContext *)pParam);
     return m_Worker.Encode();
 }

@@ -309,7 +309,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     CWorkDlg dlg;
     CListT<CString> list;
     CListT<bool> listStatus;
-    dlg.m_WorkerParam.nTotalSize = 0;
+    dlg.pWorkerContext->nTotalSize = 0;
     CString szSizeBuff;
     CString szFileBuffer;
     bool bAvisynthInput = false;
@@ -327,7 +327,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         listStatus.Insert(status);
 
         szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
-        dlg.m_WorkerParam.nTotalSize += _ttoi64(szSizeBuff);
+        dlg.pWorkerContext->nTotalSize += _ttoi64(szSizeBuff);
     }
 
 #ifndef DISABLE_AVISYNTH
@@ -343,13 +343,13 @@ void CMainDlg::OnBnClickedButtonEncode()
     }
 #endif
 
-    dlg.m_WorkerParam.m_Preset = &this->GetCurrentPreset();
-    dlg.m_WorkerParam.m_FilesList = &list;
-    dlg.m_WorkerParam.m_StatusList = &listStatus;
-    this->m_EdtOutPath.GetWindowText(dlg.m_WorkerParam.szOutPath);
-    dlg.m_WorkerParam.bUseOutPath = false;
+    dlg.pWorkerContext->m_Preset = &this->GetCurrentPreset();
+    dlg.pWorkerContext->m_FilesList = &list;
+    dlg.pWorkerContext->m_StatusList = &listStatus;
+    this->m_EdtOutPath.GetWindowText(dlg.pWorkerContext->szOutPath);
+    dlg.pWorkerContext->bUseOutPath = false;
 
-    int nLen = dlg.m_WorkerParam.szOutPath.GetLength();
+    int nLen = dlg.pWorkerContext->szOutPath.GetLength();
     if (nLen < 3)
     {
         // _T("Error: Invalid output path!")
@@ -361,10 +361,10 @@ void CMainDlg::OnBnClickedButtonEncode()
         return;
     }
 
-    CString szExt = dlg.m_WorkerParam.szOutPath.Right(4);
+    CString szExt = dlg.pWorkerContext->szOutPath.Right(4);
     if (this->bMultipleMonoInput == true)
     {
-        if (dlg.m_WorkerParam.szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
+        if (dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
         {
             if ((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
             {
@@ -379,13 +379,13 @@ void CMainDlg::OnBnClickedButtonEncode()
         }
     }
 
-    if ((dlg.m_WorkerParam.szOutPath.Compare(_T("")) != 0) &&
-        ((dlg.m_WorkerParam.szOutPath.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0 && this->bMultipleMonoInput == false) ||
-        (dlg.m_WorkerParam.szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0 && this->bMultipleMonoInput == true)))
+    if ((dlg.pWorkerContext->szOutPath.Compare(_T("")) != 0) &&
+        ((dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0 && this->bMultipleMonoInput == false) ||
+        (dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0 && this->bMultipleMonoInput == true)))
     {
         if (this->bMultipleMonoInput == false)
         {
-            if (MakeFullPath(dlg.m_WorkerParam.szOutPath) == false)
+            if (MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
             {
                 // _T("Error: Failed to create output path!")
                 this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
@@ -398,8 +398,8 @@ void CMainDlg::OnBnClickedButtonEncode()
         }
         else
         {
-            CString szTmpOutPath = dlg.m_WorkerParam.szOutPath;
-            CString szFile = GetFileName(dlg.m_WorkerParam.szOutPath);
+            CString szTmpOutPath = dlg.pWorkerContext->szOutPath;
+            CString szFile = GetFileName(dlg.pWorkerContext->szOutPath);
 
             szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
             if (MakeFullPath(szTmpOutPath) == false)
@@ -414,11 +414,11 @@ void CMainDlg::OnBnClickedButtonEncode()
             }
         }
 
-        dlg.m_WorkerParam.bUseOutPath = true;
+        dlg.pWorkerContext->bUseOutPath = true;
     }
 
-    dlg.m_WorkerParam.bMultiMonoInput = this->bMultipleMonoInput;
-    dlg.m_WorkerParam.api = this->api;
+    dlg.pWorkerContext->bMultiMonoInput = this->bMultipleMonoInput;
+    dlg.pWorkerContext->api = this->api;
 
     CTimeCount countTime;
     CString szText;
@@ -433,7 +433,7 @@ void CMainDlg::OnBnClickedButtonEncode()
             this->m_LstFiles.DeleteItem(i);
     }
 
-    if (dlg.m_WorkerParam.nCount <= 0)
+    if (dlg.pWorkerContext->nCount <= 0)
     {
         szText.Format(_T(""));
         // _T("Error: Failed to encode all files.")
@@ -443,15 +443,15 @@ void CMainDlg::OnBnClickedButtonEncode()
         if (this->bMultipleMonoInput == true)
         {
             szText.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207018) : _T("Encoded %d mono files in %s (%0.3lf sec)"),
-                dlg.m_WorkerParam.nCount,
+                dlg.pWorkerContext->nCount,
                 countTime.Format(countTime.ElapsedTime(), 3),
                 countTime.ElapsedTime());
         }
         else
         {
             szText.Format(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207019) : _T("Encoded %d file%s in %s (%0.3lf sec)"),
-                dlg.m_WorkerParam.nCount,
-                dlg.m_WorkerParam.nCount == 1 ? _T("") :
+                dlg.pWorkerContext->nCount,
+                dlg.pWorkerContext->nCount == 1 ? _T("") :
                 (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701A) : _T("s")),
                 countTime.Format(countTime.ElapsedTime(), 3),
                 countTime.ElapsedTime());

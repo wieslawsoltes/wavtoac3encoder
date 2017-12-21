@@ -9,41 +9,17 @@
 #include "Avs2Raw.h"
 #endif
 
-class CWorkerProgress
+class CWorkerContext
 {
 public:
-    CWorkerProgress() { }
-    virtual ~CWorkerProgress() { }
-public:
-    virtual void SetTitletInfo(CString szInfo) = 0;
-    virtual void SetInputFileInfo(int nID, CString szInfo) = 0;
-    virtual void SetInputTypeInfo(int nID, CString szInfo) = 0;
-    virtual void SetOutputFileInfo(CString szInfo) = 0;
-    virtual void SetSimdInfo(CString szInfo) = 0;
-    virtual void SetTimerInfo(CString szInfo) = 0;
-public:
-    virtual void SetCurrentProgressRange(int nMin, int nMax) = 0;
-    virtual void SetTotalProgressRange(int nMin, int nMax) = 0;
-    virtual void SetCurrentProgress(int nPos) = 0;
-    virtual void SetTotalProgress(int nPos) = 0;
-public:
-    virtual void StartTimer(int nResolution) = 0;
-    virtual void StopTimer() = 0;
-public:
-    virtual void Close() = 0;
-};
-
-class CWorkerParam
-{
-public:
-    CWorkerProgress *pProgress;
+    CConfiguration *pConfig;
 public:
     AftenAPI api;
 public:
     CListT<CString> *m_FilesList;
     CListT<bool> *m_StatusList;
 public:
-    CEncoderPreset *m_Preset;
+    CEncoderPreset * m_Preset;
 public:
     bool bUseOutPath;
     CString szOutPath;
@@ -69,15 +45,42 @@ public:
     CString szSpeedEncoderAvg;
     CString szSpeedReadsAvg;
     CString szSpeedWritesAvg;
+public:
+    CWorkerContext() { }
+    virtual ~CWorkerContext() { }
+public:
+    virtual void SetTitleInfo(CString szInfo) = 0;
+    virtual void SetInputFileInfo(int nID, CString szInfo) = 0;
+    virtual void SetInputTypeInfo(int nID, CString szInfo) = 0;
+    virtual void SetOutputFileInfo(CString szInfo) = 0;
+    virtual void SetOutputTypeInfo(CString szInfo) = 0;
+    virtual void SetSimdInfo(CString szInfo) = 0;
+    virtual void SetCurrentTimerInfo(CString szInfo) = 0;
+    virtual void SetTotalTimerInfo(CString szInfo) = 0;
+public:
+    virtual void SetCurrentProgressRange(int nMin, int nMax) = 0;
+    virtual void SetTotalProgressRange(int nMin, int nMax) = 0;
+    virtual void SetCurrentProgress(int nPos) = 0;
+    virtual void SetTotalProgress(int nPos) = 0;
+public:
+    virtual void StartCurrentTimer(int nResolution) = 0;
+    virtual void StopCurrentTimer() = 0;
+    virtual void StartTotalTimer(int nResolution) = 0;
+    virtual void StopTotalTimer() = 0;
+public:
+    virtual void Close() = 0;
 };
 
 class CWorker
 {
 public:
-    CWorker() { }
+    CWorker(CWorkerContext* pContext)
+    { 
+        this->pContext = pContext;
+    }
     virtual ~CWorker() { }
 public:
-    CWorkerParam *pWork;
+    CWorkerContext *pContext;
 private:
     __int64 nTotalSizeCounter;
     int nInputFiles;
