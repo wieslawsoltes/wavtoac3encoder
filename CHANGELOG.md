@@ -13,6 +13,7 @@
 - Use class instead of typedef for lists.
 - Refactored Aften api code.
 - Removed unused code and comments.
+- Added Avisynth 5.1+LFE preset.
 
 ### Version 6.0:
 
