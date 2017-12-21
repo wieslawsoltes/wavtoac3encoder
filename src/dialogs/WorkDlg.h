@@ -11,49 +11,10 @@
 #include "controls\MyListCtrl.h"
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
+#include "worker\Worker.h"
 
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
-
-class CWorkDlg;
-
-class CWorkerParam
-{
-public:
-    CWorkDlg *pWorkDlg;
-public:
-    AftenAPI api;
-public:
-    CListT<CString> *m_FilesList;
-    CListT<bool> *m_StatusList;
-public:
-    CEncoderPreset *m_Preset;
-public:
-    bool bUseOutPath;
-    CString szOutPath;
-    bool bMultiMonoInput;
-    int nThreads;
-public:
-    double fTimeTotal;
-    double fTimeEncoding;
-    double fTimeIORead;
-    double fTimeIOWrite;
-    __int64 nInTotalSize;
-    __int64 nOutTotalSize;
-public:
-    volatile bool bTerminate;
-    volatile bool bCanUpdateWindow;
-    HANDLE hThread;
-    DWORD dwThreadId;
-    __int64 nTotalSize;
-    double m_ElapsedTimeFile;
-    double m_ElapsedTimeTotal;
-    int nCount;
-public:
-    CString szSpeedEncoderAvg;
-    CString szSpeedReadsAvg;
-    CString szSpeedWritesAvg;
-};
 
 class CWorkDlg : public CMyDialogEx
 {
