@@ -11,6 +11,7 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 #include "controls\MyStatusBarCtrl.h"
+#include "controls\MySpinButtonCtrl.h"
 #include "configuration\Configuration.h"
 #include "libaften\aften.h"
 #ifndef DISABLE_AVISYNTH
@@ -108,9 +109,9 @@ public:
     CMyButton m_ChkMultipleMonoInput;
     CMyButton m_BtnMuxWizard;
     CMyButton m_BtnEngines;
-    CSpinButtonCtrl m_SpnRawSampleRate;
-    CSpinButtonCtrl m_SpnRawChannels;
-    CSpinButtonCtrl m_SpnThreads;
+    CMySpinButtonCtrl m_SpnRawSampleRate;
+    CMySpinButtonCtrl m_SpnRawChannels;
+    CMySpinButtonCtrl m_SpnThreads;
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();

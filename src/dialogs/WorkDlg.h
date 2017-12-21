@@ -5,6 +5,7 @@
 #include "controls\MyDialogEx.h"
 #include "controls\MyStatic.h"
 #include "controls\MyButton.h"
+#include "controls\MyProgressCtrl.h"
 #include "configuration\Configuration.h"
 #include "worker\Worker.h"
 
@@ -40,8 +41,8 @@ public:
     CMyStatic m_StcSimdInfo;
     CMyStatic m_StcTimeCurrent;
     CMyStatic m_StcTimeTotal;
-    CProgressCtrl m_PrgCurrent;
-    CProgressCtrl m_PrgTotal;
+    CMyProgressCtrl m_PrgCurrent;
+    CMyProgressCtrl m_PrgTotal;
     CMyButton m_BtnCancel;
 public:
     afx_msg void OnClose();
