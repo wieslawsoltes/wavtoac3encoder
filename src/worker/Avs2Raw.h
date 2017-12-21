@@ -65,7 +65,7 @@ public:
         hAvisynthDLL = LoadLibrary(_T("avisynth"));
         if (!hAvisynthDLL)
         {
-            // _T("Avisynth Error: Could not load avisynth.dll!"))
+            OutputDebugString(_T("Avisynth Error: Could not load avisynth.dll!"));
             return false;
         }
 
@@ -73,14 +73,14 @@ public:
             "CreateScriptEnvironment");
         if (!CreateEnv)
         {
-            // _T("Avisynth Error: Could not access CreateScriptEnvironment!")
+            OutputDebugString(_T("Avisynth Error: Could not access CreateScriptEnvironment!"));
             return false;
         }
 
         env = CreateEnv(AVISYNTH_INTERFACE_VERSION);
         if (!env)
         {
-            // _T("Avisynth Error: Could not create scriptenvironment!")
+            OutputDebugString(_T("Avisynth Error: Could not create scriptenvironment!"));
             return false;
         }
 
@@ -107,20 +107,16 @@ public:
                 return false;
             }
         }
-        catch (AvisynthError)
+        catch (AvisynthError e)
         {
-    #ifdef _UNICODE
-            // _T("Avisynth Error: Loading Avisynth script message"), e.msg
-    #else
-            // _T("Avisynth Error: Loading Avisynth script message: %s"), e.msg
-    #endif
+            OutputDebugString(_T("Avisynth Error: Loading Avisynth script message: ") + CString(e.msg));
             delete env;
             env = nullptr;
             return false;
         }
         catch (...)
         {
-            // _T("Avisynth Error: Unknown error while loading Avisynth script!")
+            OutputDebugString(_T("Avisynth Error: Unknown error while loading Avisynth script!"));
             delete env;
             env = nullptr;
             return false;
@@ -145,7 +141,7 @@ public:
         }
         else
         {
-            // _T("Avisynth Error: No audio stream!")
+            OutputDebugString(_T("Avisynth Error: No audio stream!"));
             delete Video;
             delete env;
             Video = nullptr;
@@ -183,7 +179,7 @@ public:
         }
         catch (...)
         {
-            // _T("Avisynth Error: Failed to close Avs2Raw!")
+            OutputDebugString(_T("Avisynth Error: Failed to close Avs2Raw!"));
         }
 
         return true;
@@ -204,20 +200,16 @@ public:
         {
             (*Video)->GetAudio(pBuffer, pStatus->nStart, pStatus->nSamplesToRead, env);
         }
-        catch (AvisynthError)
+        catch (AvisynthError e)
         {
-    #ifdef _UNICODE
-            // _T("Avisynth Error: GetAudio() error message"), e.msg
-    #else
-            // _T("Avisynth Error: GetAudio() error message: %s"), e.msg
-    #endif
+            OutputDebugString(_T("Avisynth Error: GetAudio() error message: ") + CString(e.msg));
             delete Video;
             delete env;
             return -1;
         }
         catch (...)
         {
-            // _T("Avisynth Error: Unknown error in GetAudio()!")
+            OutputDebugString(_T("Avisynth Error: Unknown error in GetAudio()!"));
             delete Video;
             delete env;
             return -1;

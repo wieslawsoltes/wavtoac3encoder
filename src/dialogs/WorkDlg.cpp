@@ -347,7 +347,7 @@ void CWorkDlg::CreateWorker()
 
     if (pWorkerContext->hThread == nullptr)
     {
-        // _T("Error: Failed to create worker thread!")
+        OutputDebugString(_T("Error: Failed to create worker thread!"));
         this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
             MB_OK | MB_ICONERROR);

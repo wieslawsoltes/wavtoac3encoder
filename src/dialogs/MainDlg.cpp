@@ -270,7 +270,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     int nItemsCount = this->m_LstFiles.GetItemCount();
     if (nItemsCount <= 0)
     {
-        // _T("Error: Add at least one file to the file list!")
+        OutputDebugString(_T("Error: Add at least one file to the file list!"));
         MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207011) : _T("Add at least one file to the file list!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_ICONERROR | MB_OK);
@@ -280,7 +280,7 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     if ((this->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
     {
-        // _T("Error: Supported are minimum 1 and maximum 6 mono input files!")
+        OutputDebugString(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
         MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207012) : _T("Supported are minimum 1 and maximum 6 mono input files!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_ICONERROR | MB_OK);
@@ -297,7 +297,7 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     if (this->api.OpenAftenAPI() == false)
     {
-        // _T("Error: Failed to load libaften.dll dynamic library!")
+        OutputDebugString(_T("Error: Failed to load libaften.dll dynamic library!"));
         MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_ICONERROR | MB_OK);
@@ -333,7 +333,7 @@ void CMainDlg::OnBnClickedButtonEncode()
 #ifndef DISABLE_AVISYNTH
     if ((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
-        // _T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!")
+        OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
         MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207014) : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_ICONERROR | MB_OK);
@@ -352,7 +352,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     int nLen = dlg.pWorkerContext->szOutPath.GetLength();
     if (nLen < 3)
     {
-        // _T("Error: Invalid output path!")
+        OutputDebugString(_T("Error: Invalid output path!"));
         this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207015) : _T("Invalid output path!"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_OK | MB_ICONERROR);
@@ -368,7 +368,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         {
             if ((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
             {
-                // _T("Error: Invalid output file!")
+                OutputDebugString(_T("Error: Invalid output file!"));
                 this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207016) : _T("Invalid output file!"),
                     theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
                     MB_OK | MB_ICONERROR);
@@ -387,7 +387,7 @@ void CMainDlg::OnBnClickedButtonEncode()
         {
             if (MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
             {
-                // _T("Error: Failed to create output path!")
+                OutputDebugString(_T("Error: Failed to create output path!"));
                 this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
                     theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
                     MB_OK | MB_ICONERROR);
@@ -404,7 +404,7 @@ void CMainDlg::OnBnClickedButtonEncode()
             szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
             if (MakeFullPath(szTmpOutPath) == false)
             {
-                // _T("Error: Failed to create output path!")
+                OutputDebugString(_T("Error: Failed to create output path!"));
                 this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
                     theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
                     MB_OK | MB_ICONERROR);
@@ -436,7 +436,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     if (dlg.pWorkerContext->nCount <= 0)
     {
         szText.Format(_T(""));
-        // _T("Error: Failed to encode all files.")
+        OutputDebugString(_T("Error: Failed to encode all files."));
     }
     else
     {
@@ -1234,7 +1234,8 @@ void CMainDlg::LoadAllConfiguration()
     bool bRet = false;
 
     bRet = CEncoderDefaults::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
-    // (bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath
+    OutputDebugString((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath);
+
     if (bRet == true)
     {
         if (encPresets.Count() > 0)
@@ -1257,13 +1258,13 @@ void CMainDlg::LoadAllConfiguration()
     }
 
     bRet = this->LoadProgramConfig(theApp.m_Config.m_szConfigFilePath);
-    // (bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath
+    OutputDebugString((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath);
 
     bRet = this->LoadProgramEngines(theApp.m_Config.m_szEnginesFilePath);
-    // (bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath
+    OutputDebugString((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
 
     bRet = this->LoadFilesList(theApp.m_Config.m_szFilesListFilePath);
-    // (bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath
+    OutputDebugString((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath);
 }
 
 void CMainDlg::SaveAllConfiguration()
@@ -1271,16 +1272,16 @@ void CMainDlg::SaveAllConfiguration()
     bool bRet = false;
 
     bRet = CEncoderDefaults::SaveEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
-    // (bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath
+    OutputDebugString((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath);
 
     bRet = this->SaveProgramConfig(theApp.m_Config.m_szConfigFilePath);
-    // (bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + theApp.m_Config.m_szConfigFilePath
+    OutputDebugString((bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + theApp.m_Config.m_szConfigFilePath);
 
     bRet = this->SaveProgramEngines(theApp.m_Config.m_szEnginesFilePath);
-    // (bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath
+    OutputDebugString((bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
 
     bRet = this->SaveFilesList(theApp.m_Config.m_szFilesListFilePath, 0);
-    // (bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_Config.m_szFilesListFilePath
+    OutputDebugString((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_Config.m_szFilesListFilePath);
 }
 
 void CMainDlg::UpdateBitrateText()
@@ -2750,7 +2751,7 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
     if (decoderAVS.OpenAvisynth(pszInPath) == false)
 #endif
     {
-        // _T("Error: Failed to initialize Avisynth!")
+        OutputDebugString(_T("Error: Failed to initialize Avisynth!"));
         this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207022) : _T("Failed to initialize Avisynth"),
             theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207010) : _T("Error"),
             MB_ICONERROR | MB_OK);

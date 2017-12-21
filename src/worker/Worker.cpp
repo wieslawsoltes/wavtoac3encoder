@@ -390,14 +390,14 @@ BOOL CWorker::Run()
         if (decoderAVS.OpenAvisynth(pszInPath[0]) == false)
 #endif
         {
-            // _T("Failed to initialize Avisynth.")
+            OutputDebugString(_T("Failed to initialize Avisynth."));
             return(FALSE);
         }
         else
         {
             infoAVS = decoderAVS.GetInputInfo();
             pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-            // _T("Avisynth initialized successfully.")
+            OutputDebugString(_T("Avisynth initialized successfully."));
         }
 #endif
     }
@@ -415,11 +415,10 @@ BOOL CWorker::Run()
                     pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
                     _T("00:00:00"));
 
+                OutputDebugString(_T("Failed to open input file: ") + CString(pszInPath[i]));
+
                 pContext->SetCurrentTimerInfo(szBuff);
                 pContext->m_ElapsedTimeFile = 0L;
-
-                // _T("Failed to open input file:") + pszInPath[i]
-
                 pContext->bTerminate = true;
                 pContext->Close();
 
@@ -450,7 +449,7 @@ BOOL CWorker::Run()
                 fclose(ifp[i]);
         }
 
-        // _T("Failed to create output file: ") + pszOutPath
+        OutputDebugString(_T("Failed to create output file: ") + CString(pszOutPath));
 
         pContext->bTerminate = true;
         pContext->Close();
