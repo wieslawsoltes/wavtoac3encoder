@@ -21,25 +21,25 @@ BOOL CEncWAVtoAC3App::InitInstance()
 {
     CEncoderDefaults::InitEncoderOptions();
 
-    m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + DEFAULT_PORTABLE_FILE_NAME) == TRUE ? true : false;
+    m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + FILENAME_PORTABLE) == TRUE ? true : false;
 
     if (m_Config.m_bIsPortable == true)
     {
-        m_Config.m_szPresetsFilePath = GetExeFilePath() + DEFAULT_PRESETS_FILE_NAME;
-        m_Config.m_szConfigFilePath = GetExeFilePath() + DEFAULT_CONFIG_FILE_NAME;
-        m_Config.m_szEnginesFilePath = GetExeFilePath() + DEFAULT_ENGINES_FILE_NAME;
-        m_Config.m_szFilesListFilePath = GetExeFilePath() + DEFAULT_FILES_FILE_NAME;
-        m_Config.m_szLangFilePath = GetExeFilePath() + DEFAULT_LANG_FILE_NAME;
+        m_Config.m_szPresetsFilePath = GetExeFilePath() + FILENAME_PRESETS;
+        m_Config.m_szConfigFilePath = GetExeFilePath() + FILENAME_CONFIG;
+        m_Config.m_szEnginesFilePath = GetExeFilePath() + FILENAME_ENGINES;
+        m_Config.m_szFilesListFilePath = GetExeFilePath() + FILENAME_FILES;
+        m_Config.m_szLangFilePath = GetExeFilePath() + FILENAME_LANG;
     }
     else
     {
-        CreateDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY), nullptr);
+        CreateDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG), nullptr);
 
-        m_Config.m_szPresetsFilePath = GetSettingsFilePath(DEFAULT_PRESETS_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_Config.m_szConfigFilePath = GetSettingsFilePath(DEFAULT_CONFIG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_Config.m_szEnginesFilePath = GetSettingsFilePath(DEFAULT_ENGINES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_Config.m_szFilesListFilePath = GetSettingsFilePath(DEFAULT_FILES_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
-        m_Config.m_szLangFilePath = GetSettingsFilePath(DEFAULT_LANG_FILE_NAME, DEFAULT_CONFIG_DIRECTORY);
+        m_Config.m_szPresetsFilePath = GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
+        m_Config.m_szConfigFilePath = GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
+        m_Config.m_szEnginesFilePath = GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
+        m_Config.m_szFilesListFilePath = GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
+        m_Config.m_szLangFilePath = GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
     }
 
     if (m_Config.m_bIsPortable == true)
@@ -48,7 +48,7 @@ BOOL CEncWAVtoAC3App::InitInstance()
     }
     else
     {
-        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     m_Config.LoadLangConfig(m_Config.m_szLangFilePath);

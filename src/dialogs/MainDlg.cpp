@@ -264,7 +264,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     }
     else
     {
-        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     int nItemsCount = this->m_LstFiles.GetItemCount();
@@ -742,7 +742,7 @@ void CMainDlg::OnCbnSelchangeComboEngines()
     }
     else
     {
-        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DEFAULT_CONFIG_DIRECTORY));
+        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     if (this->api.IsAftenOpen())
@@ -1277,7 +1277,7 @@ void CMainDlg::SaveAllConfiguration()
     bRet = this->SaveProgramEngines(theApp.m_Config.m_szEnginesFilePath);
     // (bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath
 
-    bRet = this->SaveFilesList(theApp.m_Config.m_szFilesListFilePath, DEFAULT_FILES_FORMAT);
+    bRet = this->SaveFilesList(theApp.m_Config.m_szFilesListFilePath, 0);
     // (bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + theApp.m_Config.m_szFilesListFilePath
 }
 

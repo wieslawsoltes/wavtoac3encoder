@@ -299,7 +299,7 @@ void CConfiguration::LoadLangStrings()
     }
     else
     {
-        szLangPath = GetSettingsFilePath(_T(""), CString(DEFAULT_CONFIG_DIRECTORY) + _T("\\lang"));
+        szLangPath = GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
     }
 
     SearchFolderForLang(szLangPath, false, m_LangLst);
