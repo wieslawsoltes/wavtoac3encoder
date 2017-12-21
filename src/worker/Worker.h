@@ -16,10 +16,10 @@ public:
 public:
     AftenAPI api;
 public:
-    CListT<CString> *m_FilesList;
-    CListT<bool> *m_StatusList;
+    CListT<CString> *pFilesList;
+    CListT<bool> *pStatusList;
 public:
-    CEncoderPreset * m_Preset;
+    CEncoderPreset * pPreset;
 public:
     bool bUseOutPath;
     CString szOutPath;

@@ -907,14 +907,14 @@ BOOL CWorker::Encode()
     pContext->StartTotalTimer(250);
 
     int nFileCounter = 0;
-    int nTotalFiles = pContext->m_FilesList->Count();
+    int nTotalFiles = pContext->pFilesList->Count();
     int posStatus = 0;
 
     nTotalSizeCounter = 0;
 
     if (pContext->bMultiMonoInput == false)
     {
-        for (int i = 0; i < pContext->m_FilesList->Count(); i++)
+        for (int i = 0; i < pContext->pFilesList->Count(); i++)
         {
             szInPath[0] = _T("-");
             szInPath[1] = _T("-");
@@ -924,7 +924,7 @@ BOOL CWorker::Encode()
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            szInPath[0] = pContext->m_FilesList->Get(i);
+            szInPath[0] = pContext->pFilesList->Get(i);
             szOutPath = szInPath[0];
             szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
@@ -966,20 +966,20 @@ BOOL CWorker::Encode()
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            InitContext(pContext->m_Preset, pContext->api, opt, s);
+            InitContext(pContext->pPreset, pContext->api, opt, s);
 
             nInputFiles = 1;
 
             if (Run() == FALSE)
             {
                 bool result = false;
-                pContext->m_StatusList->Set(result, posStatus);
+                pContext->pStatusList->Set(result, posStatus);
                 return(FALSE);
             }
             else
             {
                 bool result = true;
-                pContext->m_StatusList->Set(result, posStatus);
+                pContext->pStatusList->Set(result, posStatus);
             }
 
             posStatus++;
@@ -997,11 +997,11 @@ BOOL CWorker::Encode()
         szInPath[5] = _T("-");
         szOutPath = _T("");
 
-        nFileCounter = pContext->m_FilesList->Count();
+        nFileCounter = pContext->pFilesList->Count();
 
         for (int i = 0; i < nFileCounter; i++)
         {
-            szInPath[i] = pContext->m_FilesList->Get(i);
+            szInPath[i] = pContext->pFilesList->Get(i);
         }
 
         szOutPath = szInPath[0];
@@ -1039,16 +1039,16 @@ BOOL CWorker::Encode()
 
         ZeroMemory(&s, sizeof(AftenContext));
         ZeroMemory(&opt, sizeof(AftenOpt));
-        InitContext(pContext->m_Preset, pContext->api, opt, s);
+        InitContext(pContext->pPreset, pContext->api, opt, s);
 
         nInputFiles = nFileCounter;
 
         if (Run() == FALSE)
         {
-            for (int i = 0; i < pContext->m_StatusList->Count(); i++)
+            for (int i = 0; i < pContext->pStatusList->Count(); i++)
             {
                 bool result = false;
-                pContext->m_StatusList->Set(result, i);
+                pContext->pStatusList->Set(result, i);
             }
 
             pContext->nCount = 0;
@@ -1057,10 +1057,10 @@ BOOL CWorker::Encode()
         }
         else
         {
-            for (int i = 0; i < pContext->m_StatusList->Count(); i++)
+            for (int i = 0; i < pContext->pStatusList->Count(); i++)
             {
                 bool result = true;
-                pContext->m_StatusList->Set(result, i);
+                pContext->pStatusList->Set(result, i);
             }
 
             pContext->nCount = nFileCounter;

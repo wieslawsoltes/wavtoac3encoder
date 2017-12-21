@@ -343,9 +343,9 @@ void CMainDlg::OnBnClickedButtonEncode()
     }
 #endif
 
-    dlg.pWorkerContext->m_Preset = &this->GetCurrentPreset();
-    dlg.pWorkerContext->m_FilesList = &list;
-    dlg.pWorkerContext->m_StatusList = &listStatus;
+    dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
+    dlg.pWorkerContext->pFilesList = &list;
+    dlg.pWorkerContext->pStatusList = &listStatus;
     this->m_EdtOutPath.GetWindowText(dlg.pWorkerContext->szOutPath);
     dlg.pWorkerContext->bUseOutPath = false;
 
