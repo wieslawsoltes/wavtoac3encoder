@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "dialogs\WorkDlg.h"
 #include "configuration\Configuration.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
@@ -9,6 +8,42 @@
 #ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
 #endif
+
+class CWorkerParam
+{
+public:
+    AftenAPI api;
+public:
+    CListT<CString> *m_FilesList;
+    CListT<bool> *m_StatusList;
+public:
+    CEncoderPreset *m_Preset;
+public:
+    bool bUseOutPath;
+    CString szOutPath;
+    bool bMultiMonoInput;
+    int nThreads;
+public:
+    double fTimeTotal;
+    double fTimeEncoding;
+    double fTimeIORead;
+    double fTimeIOWrite;
+    __int64 nInTotalSize;
+    __int64 nOutTotalSize;
+public:
+    volatile bool bTerminate;
+    volatile bool bCanUpdateWindow;
+    HANDLE hThread;
+    DWORD dwThreadId;
+    __int64 nTotalSize;
+    double m_ElapsedTimeFile;
+    double m_ElapsedTimeTotal;
+    int nCount;
+public:
+    CString szSpeedEncoderAvg;
+    CString szSpeedReadsAvg;
+    CString szSpeedWritesAvg;
+};
 
 class CWorker
 {
