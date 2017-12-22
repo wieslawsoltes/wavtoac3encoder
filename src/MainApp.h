@@ -17,6 +17,9 @@ public:
     DECLARE_MESSAGE_MAP()
 public:
     CConfiguration m_Config;
+public:
+    void LoadConfig();
+    void SaveConfig();
 };
 
 extern CEncWAVtoAC3App theApp;
