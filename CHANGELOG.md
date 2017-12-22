@@ -15,6 +15,8 @@
 - Removed unused code and comments.
 - Added Avisynth 5.1+LFE preset.
 - Fixed browse dialog title.
+- Changed language files encoding to UTF-8.
+- Changed configuration files encoding to UTF-8.
 
 ### Version 6.0:
 
