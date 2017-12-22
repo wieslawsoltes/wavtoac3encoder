@@ -43,9 +43,7 @@ public:
     afx_msg void OnBnClickedButtonEnginesExport();
     afx_msg void OnBnClickedButtonEnginesAdd();
     afx_msg void OnBnClickedButtonEnginesRemove();
-public:
     afx_msg void OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult);
-public:
     afx_msg void OnEnChangeEditEngineName();
     afx_msg void OnEnChangeEditEnginePath();
     afx_msg void OnLvnKeydownListEngines(NMHDR *pNMHDR, LRESULT *pResult);
