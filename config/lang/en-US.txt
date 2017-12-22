@@ -1,6 +1,6 @@
 ﻿//
 // Description: WAV to AC3 Encoder Translation File
-// Version: 5.4
+// Version: 7.0
 // Charset: UTF-8
 // Translator: Wiesław Šoltés
 //
