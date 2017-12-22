@@ -142,7 +142,7 @@ automaticaly loaded/saved by program every time the program is started/closed.
 * Presets for encoder are stored in `EncWAVtoAC3.presets` file.
 * Paths to libaften.dll engines are stored in `EncWAVtoAC3-x86.engines` and `EncWAVtoAC3-x64.engines` file.
 * User interface trasnlation files are located in `lang` sub-directory.
-* Translation files must be saved with `Unicode` charset and `BOM header`.
+* Translation files must be saved with `UTF-8` charset and `BOM header`.
 
 ## AviSynth Support
 
