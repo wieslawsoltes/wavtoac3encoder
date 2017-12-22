@@ -19,6 +19,27 @@ CEncWAVtoAC3App::~CEncWAVtoAC3App()
 
 BOOL CEncWAVtoAC3App::InitInstance()
 {
+    LoadConfig();
+
+    INITCOMMONCONTROLSEX InitCtrls;
+    InitCtrls.dwSize = sizeof(InitCtrls);
+    InitCtrls.dwICC = ICC_WIN95_CLASSES;
+    InitCommonControlsEx(&InitCtrls);
+
+    CWinAppEx::InitInstance();
+    AfxEnableControlContainer();
+    InitShellManager();
+
+    CMainDlg dlg;
+    m_pMainWnd = &dlg;
+    dlg.DoModal();
+
+    SaveConfig();
+    return FALSE;
+}
+
+void CEncWAVtoAC3App::LoadConfig()
+{
     CEncoderDefaults::InitEncoderOptions();
 
     m_Config.m_bIsPortable = PathFileExists(GetExeFilePath() + FILENAME_PORTABLE) == TRUE ? true : false;
@@ -53,21 +74,9 @@ BOOL CEncWAVtoAC3App::InitInstance()
 
     m_Config.LoadLangConfig(m_Config.m_szLangFilePath);
     m_Config.LoadLangStrings();
+}
 
-    INITCOMMONCONTROLSEX InitCtrls;
-    InitCtrls.dwSize = sizeof(InitCtrls);
-    InitCtrls.dwICC = ICC_WIN95_CLASSES;
-    InitCommonControlsEx(&InitCtrls);
-
-    CWinAppEx::InitInstance();
-    AfxEnableControlContainer();
-    InitShellManager();
-
-    CMainDlg dlg;
-    m_pMainWnd = &dlg;
-    dlg.DoModal();
-
+void CEncWAVtoAC3App::SaveConfig()
+{
     m_Config.SaveLangConfig(m_Config.m_szLangFilePath);
-
-    return FALSE;
 }
