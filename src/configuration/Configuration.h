@@ -188,6 +188,9 @@ public:
     CString m_szFilesListFilePath;
     CString m_szLangFilePath;
 public:
+    bool LoadFiles(CString &szFileName, CListT<CString>& fl);
+    bool SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat);
+public:
     void SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst);
     bool LoadLang(CString &szFileName, LangMap &lm);
 public:

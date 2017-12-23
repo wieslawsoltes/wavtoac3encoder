@@ -1145,69 +1145,33 @@ bool CMainDlg::SaveProgramEngines(CString szFileName)
 
 bool CMainDlg::LoadFilesList(CString &szFileName)
 {
-    try
+    CListT<CString> fl;
+    if (theApp.m_Config.LoadFiles(szFileName, fl))
     {
-        FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
-        if (error != 0)
-            return false;
-
-        CStdioFile fp(fs);
-        CString szBuffer = _T("");
-
         this->m_LstFiles.DeleteAllItems();
 
-        while (fp.ReadString(szBuffer))
+        for (int i = 0; i < fl.Count(); i++)
         {
-            if (szBuffer.GetLength() > 0)
-            {
-                szBuffer.TrimLeft('"');
-                szBuffer.TrimRight('"');
-                if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
-                {
-                    this->AddItemToFileList(szBuffer);
-                }
-            }
-            szBuffer = _T("");
+            CString szPath = fl.Get(i);
+            this->AddItemToFileList(szPath);
         }
 
-        fp.Close();
         return true;
     }
-    catch (...)
-    {
-        return false;
-    }
+    return false;
 }
 
 bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
+    CListT<CString> fl;
     int nItems = this->m_LstFiles.GetItemCount();
-    try
+    for (int i = 0; i < nItems; i++)
     {
-        FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
-        if (error != 0)
-            return false;
-
-        CStdioFile fp(fs);
-        CString szBuffer;
-        CString szTmpFileName;
-
-        for (int i = 0; i < nItems; i++)
-        {
-            szTmpFileName = this->m_LstFiles.GetItemText(i, 0);
-            szBuffer.Format(_T("%s%s%s\n"), nFormat == 0 ? _T("") : _T("\""), szTmpFileName, nFormat == 0 ? _T("") : _T("\""));
-            fp.WriteString(szBuffer);
-        }
-
-        fp.Close();
-        return true;
+        CString szPath = this->m_LstFiles.GetItemText(i, 0);
+        fl.Insert(szPath);
     }
-    catch (...)
-    {
-        return false;
-    }
+
+    return theApp.m_Config.SaveFiles(szFileName, fl, nFormat);
 }
 
 void CMainDlg::LoadAllConfiguration()

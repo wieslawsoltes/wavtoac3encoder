@@ -13,6 +13,75 @@ CConfiguration::~CConfiguration()
 {
 }
 
+bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
+{
+    try
+    {
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
+            return false;
+
+        CStdioFile fp(fs);
+        CString szBuffer = _T("");
+
+        while (fp.ReadString(szBuffer))
+        {
+            if (szBuffer.GetLength() > 0)
+            {
+                szBuffer.TrimLeft('"');
+                szBuffer.TrimRight('"');
+                if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
+                {
+                    CString szPath = szBuffer;
+                    fl.Insert(szPath);
+                }
+            }
+            szBuffer = _T("");
+        }
+
+        fp.Close();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+bool CConfiguration::SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat)
+{
+    int nItems = fl.Count();
+    try
+    {
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
+            return false;
+
+        CStdioFile fp(fs);
+        CString szBuffer;
+        CString szTmpFileName;
+
+        for (int i = 0; i < nItems; i++)
+        {
+            CString &szPath = fl.Get(i);
+            szBuffer.Format(_T("%s%s%s\n"),
+                nFormat == 0 ? _T("") : _T("\""),
+                szPath, 
+                nFormat == 0 ? _T("") : _T("\""));
+            fp.WriteString(szBuffer);
+        }
+
+        fp.Close();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
 void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst)
 {
     try
@@ -252,13 +321,11 @@ CString CConfiguration::GetLangString(int id)
 
 LPTSTR CEncoderDefaults::szCurrentPresetsVersion = _T("1.1.0.0");
 
-int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates]
-{
+int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
     0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
 };
 
-CChannelConfig CEncoderDefaults::ccAften[nNumChannelConfigAften] =
-{
+CChannelConfig CEncoderDefaults::ccAften[nNumChannelConfigAften] = {
     { 0, 0, _T("1+1") },
     { 1, 0, _T("1/0") },
     { 2, 0, _T("2/0") },
@@ -277,8 +344,7 @@ CChannelConfig CEncoderDefaults::ccAften[nNumChannelConfigAften] =
     { 7, 1, _T("3/2") }
 };
 
-LPTSTR CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] =
-{
+LPTSTR CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
     (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
     _T("u8"),
     _T("s8"),
@@ -296,8 +362,7 @@ LPTSTR CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] =
     _T("double_be")
 };
 
-CString CEncoderDefaults::pszGroups[nNumEncoderOptionsGroups] =
-{
+CString CEncoderDefaults::pszGroups[nNumEncoderOptionsGroups] = {
     _T("Encoding options"),
     _T("Bitstream info metadata"),
     _T("Dynamic range compression and dialog normalization"),
@@ -314,8 +379,7 @@ CString CEncoderDefaults::szRawSampleFormatOption = _T("-raw_fmt");
 CString CEncoderDefaults::szRawSampleRateOption = _T("-raw_sr");
 CString CEncoderDefaults::szRawChannelsOption = _T("-raw_ch");
 
-TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] =
-{
+TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] = {
     _T("wav"),
     _T("pcm"),
     _T("raw"),
@@ -328,8 +392,7 @@ TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] =
     #endif
 };
 
-int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] =
-{
+int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] = {
     PCM_FORMAT_WAVE,
     PCM_FORMAT_RAW,
     PCM_FORMAT_RAW,
@@ -339,8 +402,7 @@ int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] =
     PCM_FORMAT_CAFF,
 };
 
-TCHAR CEncoderDefaults::szSupportedOutputExt[nNumSupportedOutputExt][8] =
-{
+TCHAR CEncoderDefaults::szSupportedOutputExt[nNumSupportedOutputExt][8] = {
     _T("ac3")
 };
 
