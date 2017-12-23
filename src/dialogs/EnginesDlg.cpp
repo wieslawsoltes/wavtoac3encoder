@@ -117,7 +117,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesExport()
 void CEnginesDlg::OnBnClickedButtonEnginesAdd()
 {
     int nSize = this->m_EngineList.Count();
-    ConfigEntry ce;
+    CConfigEntry ce;
 
     this->m_EdtEngineName.GetWindowText(ce.szKey);
     this->m_EdtEnginePath.GetWindowText(ce.szValue);

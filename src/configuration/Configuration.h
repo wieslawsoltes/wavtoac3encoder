@@ -32,68 +32,68 @@
 #define DEFAULT_TEXT_OUTPUT_PATH (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
 #define DEFAULT_TEXT_OUTPUT_FILE (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
-class ConfigEntry
+class CConfigEntry
 {
 public:
     CString szKey;
     CString szValue;
 public:
-    ConfigEntry()
+    CConfigEntry()
     {
     }
-    ConfigEntry(const ConfigEntry &other)
+    CConfigEntry(const CConfigEntry &other)
     {
         Copy(other);
     }
-    ConfigEntry& operator=(const ConfigEntry &other)
+    CConfigEntry& operator=(const CConfigEntry &other)
     {
         Copy(other);
         return *this;
     }
-    virtual ~ConfigEntry()
+    virtual ~CConfigEntry()
     {
     }
 public:
-    void Copy(const ConfigEntry &other)
+    void Copy(const CConfigEntry &other)
     {
         this->szKey = other.szKey;
         this->szValue = other.szValue;
     }
 };
 
-class ConfigList : public CListT<ConfigEntry>
+class CConfigList : public CListT<CConfigEntry>
 {
 };
 
-class LangMap : public CMapT<int, CString>
+class CLangMap : public CMapT<int, CString>
 {
 };
 
-class Lang
+class CLang
 {
 public:
     CString szFileName;
     CString szEnglishName;
     CString szTargetName;
-    LangMap lm;
+    CLangMap lm;
 public:
-    Lang()
+    CLang()
     {
     }
-    Lang(const Lang &other)
+    CLang(const CLang &other)
     {
         Copy(other);
     }
-    Lang& operator=(const Lang &other)
+    CLang& operator=(const CLang &other)
     {
         Copy(other);
         return *this;
     }
-    virtual ~Lang()
+    virtual ~CLang()
     {
     }
 public:
-    void Copy(const Lang &other)
+    void Copy(const CLang &other)
     {
         this->szFileName = other.szFileName;
         this->szEnglishName = other.szEnglishName;
@@ -102,7 +102,7 @@ public:
     }
 };
 
-class LangList : public CListT<Lang>
+class CLangList : public CListT<CLang>
 {
 };
 
@@ -115,8 +115,8 @@ public:
     constexpr static LPTSTR pszReadMode = _T("rt, ccs=UTF-8");
     constexpr static LPTSTR pszWriteMode = _T("wt, ccs=UTF-8");
 public:
-    LangMap *m_Lang;
-    LangList m_LangLst;
+    CLangMap *m_Lang;
+    CLangList m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
     int m_nLangId = -1;
@@ -128,14 +128,14 @@ public:
     CString m_szFilesListFilePath;
     CString m_szLangFilePath;
 public:
-    static bool LoadConfig(CString &szFileName, ConfigList &cl);
-    static bool SaveConfig(CString &szFileName, ConfigList &cl);
+    static bool LoadConfig(CString &szFileName, CConfigList &cl);
+    static bool SaveConfig(CString &szFileName, CConfigList &cl);
 public:
     bool LoadFiles(CString &szFileName, CListT<CString>& fl);
     bool SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat);
 public:
-    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst);
-    bool LoadLang(CString &szFileName, LangMap &lm);
+    void SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst);
+    bool LoadLang(CString &szFileName, CLangMap &lm);
 public:
     bool LoadLangConfig(CString &szFileName);
     bool SaveLangConfig(CString &szFileName);
@@ -284,7 +284,7 @@ public:
     }
 };
 
-class EncoderPresetList : public CListT<CEncoderPreset>
+class CEncoderPresetList : public CListT<CEncoderPreset>
 {
 };
 
@@ -322,9 +322,9 @@ public:
     static int FindValidBitratePos(const int nBitrate);
     static int FindOptionIndex(CString szOption);
     static void ResetEncoderOptionsLists();
-    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList &cl);
-    static bool LoadEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-    static bool SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
+    static bool LoadEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static bool SaveEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool IsSupportedInputExt(CString &szExt);
     static int GetSupportedInputFormat(CString &szExt);
     static CString GetSupportedInputFilesFilter();

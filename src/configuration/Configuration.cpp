@@ -13,7 +13,7 @@ CConfiguration::~CConfiguration()
 {
 }
 
-bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
+bool CConfiguration::LoadConfig(CString &szFileName, CConfigList &cl)
 {
     try
     {
@@ -30,7 +30,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
             int nPos = szBuffer.Find('=', 0);
             if (nPos != -1)
             {
-                ConfigEntry ce;
+                CConfigEntry ce;
                 ce.szKey = szBuffer.Mid(0, nPos);
                 ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
                 cl.Insert(ce);
@@ -47,7 +47,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
     }
 }
 
-bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
+bool CConfiguration::SaveConfig(CString &szFileName, CConfigList &cl)
 {
     int nSize = cl.Count();
     try
@@ -145,7 +145,7 @@ bool CConfiguration::SaveFiles(CString &szFileName, CListT<CString>& fl, int nFo
     }
 }
 
-void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst)
+void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst)
 {
     try
     {
@@ -180,7 +180,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
 
                 if (szExt.CompareNoCase(_T("txt")) == 0)
                 {
-                    Lang lang;
+                    CLang lang;
 
                     if (this->LoadLang(szTempBuf, lang.lm) == true)
                     {
@@ -222,7 +222,7 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, La
     }
 }
 
-bool CConfiguration::LoadLang(CString &szFileName, LangMap& lm)
+bool CConfiguration::LoadLang(CString &szFileName, CLangMap& lm)
 {
     try
     {
@@ -1220,7 +1220,7 @@ void CEncoderDefaults::ResetEncoderOptionsLists()
     }
 }
 
-void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList &cl)
+void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl)
 {
     for (int i = 0; i < cl.Count(); i++)
     {
@@ -1317,7 +1317,7 @@ void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList &cl
     }
 }
 
-bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::LoadEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     try
     {
@@ -1330,7 +1330,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
         CString szBuffer = _T("");
         auto nLength = fp.GetLength();
         CEncoderPreset temp;
-        ConfigList cl;
+        CConfigList cl;
 
         bool bHavePreset = false;
 
@@ -1364,7 +1364,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
                 int nPos = szBuffer.Find('=', 0);
                 if (nPos != -1)
                 {
-                    ConfigEntry ce;
+                    CConfigEntry ce;
                     ce.szKey = szBuffer.Mid(0, nPos);
                     ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
                     cl.Insert(ce);
@@ -1395,7 +1395,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
     }
 }
 
-bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+bool CEncoderDefaults::SaveEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
 {
     const int nSize = (const int)encPresets.Count();
     try

@@ -18,7 +18,7 @@ protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     DECLARE_MESSAGE_MAP()
 public:
-    ConfigList m_EngineList;
+    CConfigList m_EngineList;
     CString szCurrentFileName;
 public:
     volatile bool bUpdateList;

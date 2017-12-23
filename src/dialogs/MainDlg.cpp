@@ -836,13 +836,13 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 
 bool CMainDlg::LoadProgramConfig(CString szFileName)
 {
-    ConfigList m_ConfigList;
+    CConfigList m_ConfigList;
     if (CConfiguration::LoadConfig(szFileName, m_ConfigList) == true)
     {
         int nSize = m_ConfigList.Count();
         for (int i = 0; i < nSize; i++)
         {
-            ConfigEntry ce = m_ConfigList.Get(i);
+            CConfigEntry ce = m_ConfigList.Get(i);
 
             if (ce.szKey.Compare(_T("MainWindow")) == 0)
             {
@@ -978,59 +978,59 @@ bool CMainDlg::LoadProgramConfig(CString szFileName)
 
 bool CMainDlg::SaveProgramConfig(CString szFileName)
 {
-    ConfigList m_ConfigList;
+    CConfigList m_ConfigList;
 
     m_ConfigList.RemoveAll();
 
-    ConfigEntry mainWindow;
+    CConfigEntry mainWindow;
     mainWindow.szKey = _T("MainWindow");
     mainWindow.szValue = this->GetWindowRectStr();
     m_ConfigList.Insert(mainWindow);
 
-    ConfigEntry columnSizeSettings;
+    CConfigEntry columnSizeSettings;
     columnSizeSettings.szKey = _T("ColumnSizeSettings");
     columnSizeSettings.szValue.Format(_T("%d %d"),
         this->m_LstSettings.GetColumnWidth(0),
         this->m_LstSettings.GetColumnWidth(1));
     m_ConfigList.Insert(columnSizeSettings);
 
-    ConfigEntry columnSizeFiles;
+    CConfigEntry columnSizeFiles;
     columnSizeFiles.szKey = _T("ColumnSizeFiles");
     columnSizeFiles.szValue.Format(_T("%d %d"),
         this->m_LstFiles.GetColumnWidth(0),
         this->m_LstFiles.GetColumnWidth(1));
     m_ConfigList.Insert(columnSizeFiles);
 
-    ConfigEntry outputPath;
+    CConfigEntry outputPath;
     outputPath.szKey = _T("OutputPath");
     outputPath.szValue = this->szOutputPath;
     if (outputPath.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
         outputPath.szValue = _T("");
     m_ConfigList.Insert(outputPath);
 
-    ConfigEntry outputFile;
+    CConfigEntry outputFile;
     outputFile.szKey = _T("OutputFile");
     outputFile.szValue = this->szOutputFile;
     if (outputFile.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
         outputFile.szValue = _T("");
     m_ConfigList.Insert(outputFile);
 
-    ConfigEntry selectedPreset;
+    CConfigEntry selectedPreset;
     selectedPreset.szKey = _T("SelectedPreset");
     selectedPreset.szValue.Format(_T("%d"), this->m_CmbPresets.GetCurSel());
     m_ConfigList.Insert(selectedPreset);
 
-    ConfigEntry multipleMonoInput;
+    CConfigEntry multipleMonoInput;
     multipleMonoInput.szKey = _T("MultipleMonoInput");
     multipleMonoInput.szValue = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
     m_ConfigList.Insert(multipleMonoInput);
 
-    ConfigEntry disableAllWarnings;
+    CConfigEntry disableAllWarnings;
     disableAllWarnings.szKey = _T("DisableAllWarnings");
     disableAllWarnings.szValue = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
     m_ConfigList.Insert(disableAllWarnings);
 
-    ConfigEntry saveConfig;
+    CConfigEntry saveConfig;
     saveConfig.szKey = _T("SaveConfig");
     saveConfig.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
     m_ConfigList.Insert(saveConfig);
@@ -1042,7 +1042,7 @@ bool CMainDlg::UpdateProgramEngines()
 {
     if (this->m_EngineList.Count() == 0)
     {
-        ConfigEntry ce;
+        CConfigEntry ce;
         ce.szKey = _T("Aften");
         ce.szValue = _T("libaften.dll");
 
@@ -1114,7 +1114,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
     }
     else
     {
-        ConfigEntry ce;
+        CConfigEntry ce;
         ce.szKey = _T("Aften");
         ce.szValue = _T("libaften.dll");
 
