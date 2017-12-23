@@ -25,10 +25,10 @@ typedef FloatType(*lpLibAften_aften_get_float_type)(void);
 class AftenAPI
 {
 public:
-    AftenAPI() 
+    AftenAPI()
     {
     }
-    virtual ~AftenAPI() 
+    virtual ~AftenAPI()
     {
         CloseAftenAPI();
     }

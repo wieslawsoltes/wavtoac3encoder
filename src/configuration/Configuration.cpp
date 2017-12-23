@@ -131,7 +131,7 @@ bool CConfiguration::SaveFiles(CString &szFileName, CListT<CString>& fl, int nFo
             CString &szPath = fl.Get(i);
             szBuffer.Format(_T("%s%s%s\n"),
                 nFormat == 0 ? _T("") : _T("\""),
-                szPath, 
+                szPath,
                 nFormat == 0 ? _T("") : _T("\""));
             fp.WriteString(szBuffer);
         }
@@ -228,7 +228,7 @@ bool CConfiguration::LoadLang(CString &szFileName, CLangMap& lm)
     {
         FILE *fs;
         errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
-        if (error  != 0)
+        if (error != 0)
             return false;
 
         CStdioFile fp(fs);
@@ -338,7 +338,7 @@ void CConfiguration::LoadLangStrings()
         for (int i = 0; i < m_LangLst.Count(); i++)
         {
             auto& lang = m_LangLst.Get(i);
-            
+
             CString szNameLang = GetFileName(lang.szFileName);
             CString szNameConfig = GetFileName(m_szLangFileName);
             if (szNameLang.Compare(szNameConfig) == 0)
@@ -384,7 +384,7 @@ CString CConfiguration::GetLangString(int id)
 
 LPTSTR CEncoderDefaults::szCurrentPresetsVersion = _T("1.1.0.0");
 
-int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
+int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates]{
     0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
 };
 
@@ -490,7 +490,7 @@ void CEncoderDefaults::InitEncoderOptions()
     int nCurOpt = -1;
     CString szName = _T("");
     int nValue = -1;
-    
+
     ResetEncoderOptionsLists();
 
     SetEncoderOption(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00301001) : _T("Fast bit allocation"),

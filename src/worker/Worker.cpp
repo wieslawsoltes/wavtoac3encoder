@@ -184,8 +184,8 @@ void CWorker::UpdateProgress()
                 fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
 
             pContext->SetInputTypeInfo(i, szInputInfo);
-            }
         }
+    }
     else
     {
         CString szInputInfo = _T("");
@@ -230,7 +230,7 @@ void CWorker::UpdateProgress()
 
         pContext->SetOutputTypeInfo(szOutputInfo);
     }
-    }
+}
 
 BOOL CWorker::HandleError(LPTSTR pszMessage)
 {

@@ -115,7 +115,7 @@ public:
     constexpr static LPTSTR pszReadMode = _T("rt, ccs=UTF-8");
     constexpr static LPTSTR pszWriteMode = _T("wt, ccs=UTF-8");
 public:
-    CLangMap *m_Lang;
+    CLangMap * m_Lang;
     CLangList m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;

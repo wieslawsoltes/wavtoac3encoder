@@ -34,7 +34,7 @@ public:
     static int nIDIn[CEncoderDefaults::nNumMaxInputFiles];
     static int nIDInInfo[CEncoderDefaults::nNumMaxInputFiles];
 public:
-    CWorkerContext *pWorkerContext;
+    CWorkerContext * pWorkerContext;
 public:
     CMyStatic m_StcOut;
     CMyStatic m_StcOutInfo;

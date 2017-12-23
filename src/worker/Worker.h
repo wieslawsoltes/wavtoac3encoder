@@ -8,7 +8,7 @@
 class CWorkerContext
 {
 public:
-    CConfiguration *pConfig;
+    CConfiguration * pConfig;
 public:
     AftenAPI api;
 public:
@@ -62,12 +62,12 @@ class CWorker
 {
 public:
     CWorker(CWorkerContext* pContext)
-    { 
+    {
         this->pContext = pContext;
     }
     virtual ~CWorker() { }
 public:
-    CWorkerContext *pContext;
+    CWorkerContext * pContext;
 private:
     __int64 nTotalSizeCounter;
     int nInputFiles;
