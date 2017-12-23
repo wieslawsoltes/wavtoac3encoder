@@ -343,51 +343,36 @@ void CMuxDlg::SetControlsState()
 
 bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
+    CListT<CString> fl;
+    if (theApp.m_Config.LoadFiles(szFileName, fl) == false)
+        return false;
+
     for (int i = 0; i < CEncoderDefaults::nNumMaxInputFiles; i++)
-        szTmpInputFiles[i] = _T("");
-
-    try
     {
-        FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
-        if (error != 0)
-            return false;
-
-        CStdioFile fp(fs);
-        CString szBuffer = _T("");
-        int nFileCounter = 0;
-
-        while (fp.ReadString(szBuffer))
-        {
-            if (nFileCounter >= CEncoderDefaults::nNumMaxInputFiles)
-            {
-                fp.Close();
-                return true;
-            }
-
-            szBuffer.TrimLeft('"');
-            szBuffer.TrimRight('"');
-            szTmpInputFiles[nFileCounter] = szBuffer;
-            nFileCounter++;
-            szBuffer = _T("");
-        }
-
-        int nReqNumOfFiles = nNumInputFiles[this->nChannelConfig] + (this->bLFE == true ? 1 : 0);
-        if (nFileCounter != nReqNumOfFiles)
-        {
-            fp.Close();
-            return false;
-        }
-        else
-        {
-            this->RemapFilesToChannels();
-            fp.Close();
-            return true;
-        }
+        szTmpInputFiles[i] = _T("");
     }
-    catch (...)
+
+    int i = 0;
+    for (; i < fl.Count(); i++)
+    {
+        if (i >= CEncoderDefaults::nNumMaxInputFiles)
+            return true;
+
+        CString szPath = fl.Get(i);
+        szPath.TrimLeft('"');
+        szPath.TrimRight('"');
+        szTmpInputFiles[i] = szPath;
+    }
+
+    int nReqNumOfFiles = nNumInputFiles[this->nChannelConfig] + (this->bLFE == true ? 1 : 0);
+    if (i != nReqNumOfFiles)
     {
         return false;
+    }
+    else
+    {
+        this->RemapFilesToChannels();
+        return true;
     }
 }
 
@@ -395,105 +380,98 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
     try
     {
-        FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
-        if (error != 0)
-            return false;
-
-        CStdioFile fp(fs);
+        CListT<CString> fl;
         CString szBuffer;
-        CString szFileName;
 
-#define WriteToFile(index) \
+#define AddFile(index) \
         szBuffer.Format(_T("%s%s%s\n"), \
             nFormat == 0 ? _T("") : _T("\""), \
-            this->szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
-        fp.WriteString(szBuffer);
+            szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
+        fl.Insert(szBuffer);
 
         switch (this->nChannelConfig)
         {
         case 0:
-            WriteToFile(0);
-            WriteToFile(1);
-            WriteToFile(3);
+            AddFile(0);
+            AddFile(1);
+            AddFile(3);
             break;
         case 1:
-            WriteToFile(2);
-            WriteToFile(3);
+            AddFile(2);
+            AddFile(3);
             break;
         case 2:
-            WriteToFile(0);
-            WriteToFile(1);
-            WriteToFile(3);
+            AddFile(0);
+            AddFile(1);
+            AddFile(3);
             break;
         case 3:
-            WriteToFile(0);
-            WriteToFile(1);
-            WriteToFile(2);
-            WriteToFile(3);
+            AddFile(0);
+            AddFile(1);
+            AddFile(2);
+            AddFile(3);
             break;
         case 4:
-            WriteToFile(0);
-            WriteToFile(1);
+            AddFile(0);
+            AddFile(1);
             if (this->bLFE == true)
             {
-                WriteToFile(3);
-                WriteToFile(4);
+                AddFile(3);
+                AddFile(4);
             }
             else
             {
-                WriteToFile(4);
+                AddFile(4);
             }
             break;
         case 5:
-            WriteToFile(0);
-            WriteToFile(1);
-            WriteToFile(2)
+            AddFile(0);
+            AddFile(1);
+            AddFile(2)
                 if (this->bLFE == true)
                 {
-                    WriteToFile(3);
-                    WriteToFile(4);
+                    AddFile(3);
+                    AddFile(4);
                 }
                 else
                 {
-                    WriteToFile(4);
+                    AddFile(4);
                 }
             break;
         case 6:
-            WriteToFile(0);
-            WriteToFile(1);
+            AddFile(0);
+            AddFile(1);
             if (this->bLFE == true)
             {
-                WriteToFile(4);
-                WriteToFile(5);
-                WriteToFile(3);
+                AddFile(4);
+                AddFile(5);
+                AddFile(3);
             }
             else
             {
-                WriteToFile(4);
-                WriteToFile(5);
+                AddFile(4);
+                AddFile(5);
             }
             break;
         case 7:
-            WriteToFile(0);
-            WriteToFile(1);
-            WriteToFile(2);
+            AddFile(0);
+            AddFile(1);
+            AddFile(2);
             if (this->bLFE == true)
             {
-                WriteToFile(3);
-                WriteToFile(4);
-                WriteToFile(5);
+                AddFile(3);
+                AddFile(4);
+                AddFile(5);
             }
             else
             {
-                WriteToFile(4);
-                WriteToFile(5);
+                AddFile(4);
+                AddFile(5);
             }
             break;
         };
 
-        fp.Close();
-        return true;
+        return theApp.m_Config.SaveFiles(szFileName, fl, nFormat);
     }
     catch (...)
     {
