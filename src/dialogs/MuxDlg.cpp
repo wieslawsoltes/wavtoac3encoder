@@ -405,7 +405,7 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
         CString szFileName;
 
 #define WriteToFile(index) \
-        szBuffer.Format(_T("%s%s%s\r\n"), \
+        szBuffer.Format(_T("%s%s%s\n"), \
             nFormat == 0 ? _T("") : _T("\""), \
             this->szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
         fp.WriteString(szBuffer);

@@ -113,7 +113,7 @@ public:
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
-                szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szValue);
+                szBuffer.Format(_T("%s=%s\n"), ce.szKey, ce.szValue);
                 fp.WriteString(szBuffer);
             }
 

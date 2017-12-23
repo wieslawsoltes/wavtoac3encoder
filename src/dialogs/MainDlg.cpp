@@ -1197,7 +1197,7 @@ bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
         for (int i = 0; i < nItems; i++)
         {
             szTmpFileName = this->m_LstFiles.GetItemText(i, 0);
-            szBuffer.Format(_T("%s%s%s\r\n"), nFormat == 0 ? _T("") : _T("\""), szTmpFileName, nFormat == 0 ? _T("") : _T("\""));
+            szBuffer.Format(_T("%s%s%s\n"), nFormat == 0 ? _T("") : _T("\""), szTmpFileName, nFormat == 0 ? _T("") : _T("\""));
             fp.WriteString(szBuffer);
         }
 

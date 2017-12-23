@@ -148,10 +148,13 @@ bool CConfiguration::LoadLangConfig(CString &szFileName)
         if (fp.ReadString(szBuffer) == TRUE)
         {
             m_szLangFileName = szBuffer;
+
+            fp.Close();
+            return true;
         }
 
         fp.Close();
-        return true;
+        return false;
     }
     catch (...)
     {
@@ -171,7 +174,7 @@ bool CConfiguration::SaveLangConfig(CString &szFileName)
         CStdioFile fp(fs);
         CString szBuffer;
 
-        szBuffer.Format(_T("%s\r\n"), m_szLangFileName);
+        szBuffer.Format(_T("%s\n"), m_szLangFileName);
         fp.WriteString(szBuffer);
 
         fp.Close();
@@ -181,8 +184,6 @@ bool CConfiguration::SaveLangConfig(CString &szFileName)
     {
         return false;
     }
-
-    
 }
 
 void CConfiguration::LoadLangStrings()
@@ -1312,62 +1313,62 @@ bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString
         CString szBuffer;
         CString szTmpBuffer;
 
-        szBuffer.Format(_T("%s\r\n"), szCurrentPresetsVersion);
+        szBuffer.Format(_T("%s\n"), szCurrentPresetsVersion);
         fp.WriteString(szBuffer);
 
         for (int i = 0; i < nSize; i++)
         {
             auto& preset = encPresets.Get(i);
 
-            szBuffer.Format(_T("[%s]\r\n"), preset.szName);
+            szBuffer.Format(_T("[%s]\n"), preset.szName);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
+            szBuffer.Format(_T("engine=%d\n"), preset.nCurrentEngine);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szThreadsOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("mmx=%d\r\n"), preset.nUsedSIMD[0]);
+            szBuffer.Format(_T("mmx=%d\n"), preset.nUsedSIMD[0]);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("sse=%d\r\n"), preset.nUsedSIMD[1]);
+            szBuffer.Format(_T("sse=%d\n"), preset.nUsedSIMD[1]);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("sse2=%d\r\n"), preset.nUsedSIMD[2]);
+            szBuffer.Format(_T("sse2=%d\n"), preset.nUsedSIMD[2]);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("sse3=%d\r\n"), preset.nUsedSIMD[3]);
+            szBuffer.Format(_T("sse3=%d\n"), preset.nUsedSIMD[3]);
             fp.WriteString(szBuffer);
 
-            szBuffer.Format(_T("mode=%d\r\n"), preset.nMode);
+            szBuffer.Format(_T("mode=%d\n"), preset.nMode);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szCbrOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szVbrOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawSampleFormatOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawSampleRateOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
             fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawChannelsOption;
-            szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
+            szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
             fp.WriteString(szBuffer);
 
             for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
             {
                 szTmpBuffer = encOpt[j].szOption;
-                szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
+                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
                 fp.WriteString(szBuffer);
             }
         }
