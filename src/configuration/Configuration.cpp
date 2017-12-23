@@ -46,6 +46,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
         return false;
     }
 }
+
 bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
 {
     int nSize = cl.Count();
