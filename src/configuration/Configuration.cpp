@@ -14,78 +14,6 @@ CConfiguration::~CConfiguration()
 {
 }
 
-bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
-{
-    try
-    {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
-            return false;
-
-        cl.RemoveAll();
-
-        TCHAR Buffer;
-        const ULONGLONG nLength = fp.FSize();
-        CString szBuffer = _T("");
-
-        while (fp.FRead(Buffer) == true)
-        {
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if ((Buffer == '\n') || (fp.FPos() == nLength))
-            {
-                szBuffer += _T("\0");
-
-                int nPos = szBuffer.Find('=', 0);
-                if (nPos != -1)
-                {
-                    ConfigEntry ce;
-                    ce.szKey = szBuffer.Mid(0, nPos);
-                    ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-                    cl.Insert(ce);
-                }
-
-                szBuffer = _T("");
-            }
-        }
-
-        fp.FClose();
-        return true;
-    }
-    catch (...)
-    {
-        return false;
-    }
-}
-
-bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
-{
-    int nSize = cl.Count();
-    try
-    {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, true) == false)
-            return false;
-
-        for (int i = 0; i < nSize; i++)
-        {
-            CString szBuffer;
-            auto& ce = cl.Get(i);
-            szBuffer.Format(_T("%s=%s\r\n"), ce.szKey, ce.szValue);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
-            szBuffer.ReleaseBuffer();
-        }
-
-        fp.FClose();
-        return true;
-    }
-    catch (...)
-    {
-        return false;
-    }
-}
-
 void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, LangList& m_LangLst)
 {
     try
@@ -167,45 +95,37 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap& lm)
 {
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error  != 0)
             return false;
+
+        CStdioFile fp(fs);
 
         lm.RemoveAll();
 
-        TCHAR Buffer;
-        const ULONGLONG nLength = fp.FSize();
         CString szBuffer = _T("");
-
-        int key;
         CString szKey = _T("");
         CString szValue = _T("");
+        int key;
 
-        while (fp.FRead(Buffer) == true)
+        while (fp.ReadString(szBuffer))
         {
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if ((Buffer == '\n') || (fp.FPos() == nLength))
+            int nPos = szBuffer.Find('=', 0);
+            if (nPos != -1)
             {
-                szBuffer += _T("\0");
-
-                int nPos = szBuffer.Find('=', 0);
-                if (nPos != -1)
-                {
-                    szKey = szBuffer.Mid(0, nPos);
-                    szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-                    szValue.Replace(_T("\\n"), _T("\n"));
-                    szValue.Replace(_T("\\t"), _T("\t"));
-                    _stscanf(szKey, _T("%x"), &key);
-                    lm.Set(key, szValue);
-                }
-
-                szBuffer = _T("");
+                szKey = szBuffer.Mid(0, nPos);
+                szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                szValue.Replace(_T("\\n"), _T("\n"));
+                szValue.Replace(_T("\\t"), _T("\t"));
+                _stscanf(szKey, _T("%x"), &key);
+                lm.Set(key, szValue);
             }
+            szBuffer = _T("");
         }
 
-        fp.FClose();
+        fp.Close();
+
         return true;
     }
     catch (...)
@@ -218,47 +138,20 @@ bool CConfiguration::LoadLangConfig(CString &szFileName)
 {
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
-        ULONGLONG  nRead = 0, nLength = fp.FSize();
-        if (nLength == 0)
-        {
-            fp.FClose();
-            return true;
-        }
-
-        TCHAR Buffer;
+        CStdioFile fp(fs);
         CString szBuffer = _T("");
-        int nFileCounter = 0;
 
-        while (fp.FRead(Buffer) == true)
+        if (fp.ReadString(szBuffer) == TRUE)
         {
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if (Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1 : sizeof(TCHAR)))
-            {
-                szBuffer += _T("\0");
-
-                if (nFileCounter >= 1)
-                {
-                    fp.FClose();
-                    return true;
-                }
-
-                szBuffer.TrimLeft('"');
-                szBuffer.TrimRight('"');
-                m_szLangFileName = szBuffer;
-                nFileCounter++;
-                szBuffer = _T("");
-            }
-
-            nRead++;
+            m_szLangFileName = szBuffer;
         }
 
-        fp.FClose();
+        fp.Close();
         return true;
     }
     catch (...)
@@ -271,23 +164,26 @@ bool CConfiguration::SaveLangConfig(CString &szFileName)
 {
     try
     {
-        CMyFile fp;
-
-        if (fp.FOpen(szFileName, true) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
+        CStdioFile fp(fs);
         CString szBuffer;
+
         szBuffer.Format(_T("%s\r\n"), m_szLangFileName);
-        fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
-        szBuffer.ReleaseBuffer();
-        fp.FClose();
+        fp.WriteString(szBuffer);
+
+        fp.Close();
+        return true;
     }
     catch (...)
     {
         return false;
     }
 
-    return true;
+    
 }
 
 void CConfiguration::LoadLangStrings()
@@ -1300,106 +1196,87 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
 {
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
             return false;
+
+        CStdioFile fp(fs);
+        CString szBuffer = _T("");
 
         CEncoderPreset presetTmp;
         ConfigList clTmp;
 
-        bool bHaveVersion = false;
         bool bHavePreset = false;
 
-        TCHAR Buffer;
-        const ULONGLONG nLength = fp.FSize();
-        CString szBuffer = _T("");
+        fp.ReadString(szBuffer);
+        if (szBuffer.Compare(szCurrentPresetsVersion) != 0)
+        {
+            fp.Close();
+            return false;
+        }
 
-        while (fp.FRead(Buffer) == true)
+        while (fp.ReadString(szBuffer))
         {
             ConfigEntry ceTmp;
 
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if (Buffer == '\n')
+            if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
             {
-                szBuffer += _T("\0");
-
-                if (bHaveVersion == false)
+                if (bHavePreset == true)
                 {
-                    if (szBuffer.Compare(szCurrentPresetsVersion) != 0)
-                    {
-                        fp.FClose();
-                        return false;
-                    }
-
-                    bHaveVersion = true;
+                    ParseEncoderPreset(presetTmp, clTmp);
+                    auto preset = presetTmp;
+                    encPresets.Insert(preset);
+                    clTmp.RemoveAll();
                 }
                 else
                 {
-                    if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
-                    {
-                        if (bHavePreset == true)
-                        {
-                            ParseEncoderPreset(presetTmp, clTmp);
-                            encPresets.Insert(presetTmp);
-                            clTmp.RemoveAll();
-                        }
-                        else
-                        {
-                            encPresets.RemoveAll();
-                        }
-
-                        presetTmp = defaultPreset;
-                        presetTmp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
-                        bHavePreset = true;
-                    }
-                    else
-                    {
-                        int nPos = szBuffer.Find('=', 0);
-                        if (nPos != -1)
-                        {
-                            ceTmp.szKey = szBuffer.Mid(0, nPos);
-
-                            while (ceTmp.szKey.Left(1) == _T(" ") || ceTmp.szKey.Left(1) == _T("\t"))
-                            {
-                                ceTmp.szKey.TrimLeft(_T(" "));
-                                ceTmp.szKey.TrimLeft(_T("\t"));
-                            }
-
-                            while (ceTmp.szKey.Right(1) == _T(" ") || ceTmp.szKey.Right(1) == _T("\t"))
-                            {
-                                ceTmp.szKey.TrimRight(_T(" "));
-                                ceTmp.szKey.TrimRight(_T("\t"));
-                            }
-
-                            ceTmp.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-
-                            while (ceTmp.szValue.Left(1) == _T(" ") || ceTmp.szValue.Left(1) == _T("\t"))
-                            {
-                                ceTmp.szValue.TrimLeft(_T(" "));
-                                ceTmp.szValue.TrimLeft(_T("\t"));
-                            }
-
-                            while (ceTmp.szValue.Right(1) == _T(" ") || ceTmp.szValue.Right(1) == _T("\t"))
-                            {
-                                ceTmp.szValue.TrimRight(_T(" "));
-                                ceTmp.szValue.TrimRight(_T("\t"));
-                            }
-
-                            auto ce = ceTmp;
-                            clTmp.Insert(ce);
-                        }
-                        else
-                        {
-                        }
-                    }
+                    encPresets.RemoveAll();
                 }
 
-                szBuffer = _T("");
+                presetTmp = defaultPreset;
+                presetTmp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
+                bHavePreset = true;
+            }
+            else
+            {
+                int nPos = szBuffer.Find('=', 0);
+                if (nPos != -1)
+                {
+                    ceTmp.szKey = szBuffer.Mid(0, nPos);
+
+                    while (ceTmp.szKey.Left(1) == _T(" ") || ceTmp.szKey.Left(1) == _T("\t"))
+                    {
+                        ceTmp.szKey.TrimLeft(_T(" "));
+                        ceTmp.szKey.TrimLeft(_T("\t"));
+                    }
+
+                    while (ceTmp.szKey.Right(1) == _T(" ") || ceTmp.szKey.Right(1) == _T("\t"))
+                    {
+                        ceTmp.szKey.TrimRight(_T(" "));
+                        ceTmp.szKey.TrimRight(_T("\t"));
+                    }
+
+                    ceTmp.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+
+                    while (ceTmp.szValue.Left(1) == _T(" ") || ceTmp.szValue.Left(1) == _T("\t"))
+                    {
+                        ceTmp.szValue.TrimLeft(_T(" "));
+                        ceTmp.szValue.TrimLeft(_T("\t"));
+                    }
+
+                    while (ceTmp.szValue.Right(1) == _T(" ") || ceTmp.szValue.Right(1) == _T("\t"))
+                    {
+                        ceTmp.szValue.TrimRight(_T(" "));
+                        ceTmp.szValue.TrimRight(_T("\t"));
+                    }
+
+                    auto ce = ceTmp;
+                    clTmp.Insert(ce);
+                }
             }
 
-            if (fp.FPos() == nLength)
+            if (fp.GetPosition() == fp.GetLength())
             {
                 if (bHavePreset == true)
                 {
@@ -1409,18 +1286,17 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
                     clTmp.RemoveAll();
                 }
             }
+
+            szBuffer = _T("");
         }
 
-        fp.FClose();
-
+        fp.Close();
         return true;
     }
     catch (...)
     {
         return false;
     }
-
-    return true;
 }
 
 bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
@@ -1428,80 +1304,82 @@ bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString
     const int nSize = (const int)encPresets.Count();
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, true) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
+        CStdioFile fp(fs);
         CString szBuffer;
         CString szTmpBuffer;
 
         szBuffer.Format(_T("%s\r\n"), szCurrentPresetsVersion);
-        fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+        fp.WriteString(szBuffer);
 
         for (int i = 0; i < nSize; i++)
         {
             auto& preset = encPresets.Get(i);
 
             szBuffer.Format(_T("[%s]\r\n"), preset.szName);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("engine=%d\r\n"), preset.nCurrentEngine);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szThreadsOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("mmx=%d\r\n"), preset.nUsedSIMD[0]);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("sse=%d\r\n"), preset.nUsedSIMD[1]);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("sse2=%d\r\n"), preset.nUsedSIMD[2]);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("sse3=%d\r\n"), preset.nUsedSIMD[3]);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szBuffer.Format(_T("mode=%d\r\n"), preset.nMode);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szCbrOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szVbrOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawSampleFormatOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawSampleRateOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             szTmpBuffer = szRawChannelsOption;
             szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
 
             for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
             {
                 szTmpBuffer = encOpt[j].szOption;
                 szBuffer.Format(_T("%s=%d\r\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
-                fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); szBuffer.ReleaseBuffer();
+                fp.WriteString(szBuffer);
             }
         }
 
-        fp.FClose();
+        fp.Close();
+        return true;
     }
     catch (...)
     {
         return false;
     }
-    return true;
 }
 
 bool CEncoderDefaults::IsSupportedInputExt(CString &szExt)

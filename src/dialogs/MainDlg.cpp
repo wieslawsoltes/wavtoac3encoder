@@ -224,7 +224,16 @@ void CMainDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 void CMainDlg::OnClose()
 {
     if (this->bSaveConfig == true)
-        this->SaveAllConfiguration();
+    {
+        try
+        {
+            this->SaveAllConfiguration();
+        }
+        catch (...)
+        {
+            OutputDebugString(_T("Failed to save configuration."));
+        }
+    }
 
     CMyDialogEx::OnClose();
 }
@@ -828,7 +837,7 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 bool CMainDlg::LoadProgramConfig(CString szFileName)
 {
     ConfigList m_ConfigList;
-    if (theApp.m_Config.LoadConfig(szFileName, m_ConfigList) == true)
+    if (ConfigList::Load(szFileName, m_ConfigList) == true)
     {
         int nSize = m_ConfigList.Count();
         for (int i = 0; i < nSize; i++)
@@ -1026,7 +1035,7 @@ bool CMainDlg::SaveProgramConfig(CString szFileName)
     saveConfig.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
     m_ConfigList.Insert(saveConfig);
 
-    return theApp.m_Config.SaveConfig(szFileName, m_ConfigList);
+    return ConfigList::Save(szFileName, m_ConfigList);
 }
 
 bool CMainDlg::UpdateProgramEngines()
@@ -1099,7 +1108,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
     this->m_EngineList.RemoveAll();
     this->m_CmbEngines.ResetContent();
 
-    if (theApp.m_Config.LoadConfig(szFileName, this->m_EngineList) == true)
+    if (ConfigList::Load(szFileName, this->m_EngineList) == true)
     {
         return this->UpdateProgramEngines();
     }
@@ -1132,55 +1141,38 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
 
 bool CMainDlg::SaveProgramEngines(CString szFileName)
 {
-    return theApp.m_Config.SaveConfig(szFileName, this->m_EngineList);
+    return ConfigList::Save(szFileName, this->m_EngineList);
 }
 
 bool CMainDlg::LoadFilesList(CString &szFileName)
 {
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
-        ULONGLONG  nRead = 0, nLength = fp.FSize();
-        if (nLength == 0)
-        {
-            fp.FClose();
-            return true;
-        }
+        CStdioFile fp(fs);
+        CString szBuffer = _T("");
 
         this->m_LstFiles.DeleteAllItems();
 
-        TCHAR Buffer;
-        CString szBuffer = _T("");
-
-        while (fp.FRead(Buffer) == true)
+        while (fp.ReadString(szBuffer))
         {
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if (Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1 : sizeof(TCHAR)))
+            if (szBuffer.GetLength() > 0)
             {
-                szBuffer += _T("\0");
-
-                if (szBuffer.GetLength() > 0)
+                szBuffer.TrimLeft('"');
+                szBuffer.TrimRight('"');
+                if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
                 {
-                    szBuffer.TrimLeft('"');
-                    szBuffer.TrimRight('"');
-                    if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
-                    {
-                        this->AddItemToFileList(szBuffer);
-                    }
+                    this->AddItemToFileList(szBuffer);
                 }
-
-                szBuffer = _T("");
             }
-
-            nRead++;
+            szBuffer = _T("");
         }
 
-        fp.FClose();
+        fp.Close();
         return true;
     }
     catch (...)
@@ -1194,20 +1186,12 @@ bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
     int nItems = this->m_LstFiles.GetItemCount();
     try
     {
-        CMyFile fp;
-
-        if (nFormat == 1)
-        {
-#ifdef _UNICODE
-            fp.FSetMode(2);
-#else
-            fp.FSetMode(3);
-#endif
-        }
-
-        if (fp.FOpen(szFileName, true) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
+        CStdioFile fp(fs);
         CString szBuffer;
         CString szTmpFileName;
 
@@ -1215,18 +1199,16 @@ bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
         {
             szTmpFileName = this->m_LstFiles.GetItemText(i, 0);
             szBuffer.Format(_T("%s%s%s\r\n"), nFormat == 0 ? _T("") : _T("\""), szTmpFileName, nFormat == 0 ? _T("") : _T("\""));
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength());
-            szBuffer.ReleaseBuffer();
+            fp.WriteString(szBuffer);
         }
 
-        fp.FClose();
+        fp.Close();
+        return true;
     }
     catch (...)
     {
         return false;
     }
-
-    return true;
 }
 
 void CMainDlg::LoadAllConfiguration()
@@ -2216,7 +2198,15 @@ BOOL CMainDlg::OnInitDialog()
     this->InitDefaultPreset();
     this->UpdateBitrateText();
     this->DragAcceptFiles(TRUE);
-    this->LoadAllConfiguration();
+
+    try
+    {
+        this->LoadAllConfiguration();
+    }
+    catch (...)
+    {
+        OutputDebugString(_T("Failed to load configuration."));
+    }
 
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
     SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
@@ -3252,12 +3242,26 @@ void CMainDlg::OnOptionsSaveConfigurationOnExit()
 
 void CMainDlg::OnOptionsLoadConfiguration()
 {
-    this->LoadAllConfiguration();
+    try
+    {
+        this->LoadAllConfiguration();
+    }
+    catch (...)
+    {
+        OutputDebugString(_T("Failed to load configuration."));
+    }
 }
 
 void CMainDlg::OnOptionsSaveConfiguration()
 {
-    this->SaveAllConfiguration();
+    try
+    {
+        this->SaveAllConfiguration();
+    }
+    catch (...)
+    {
+        OutputDebugString(_T("Failed to save configuration."));
+    }
 }
 
 void CMainDlg::OnLanguageChangeDefault()

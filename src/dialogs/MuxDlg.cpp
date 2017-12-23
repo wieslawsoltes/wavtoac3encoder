@@ -349,59 +349,40 @@ bool CMuxDlg::LoadFilesList(CString &szFileName)
 
     try
     {
-        CMyFile fp;
-        if (fp.FOpen(szFileName, false) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
-        ULONGLONG  nRead = 0, nLength = fp.FSize();
-        if (nLength == 0)
-        {
-            fp.FClose();
-            return true;
-        }
-
-        TCHAR Buffer;
+        CStdioFile fp(fs);
         CString szBuffer = _T("");
         int nFileCounter = 0;
 
-        while (fp.FRead(Buffer) == true)
+        while (fp.ReadString(szBuffer))
         {
-            if ((Buffer != '\r') && (Buffer != '\n'))
-                szBuffer += Buffer;
-
-            if (Buffer == '\n' || nRead == nLength - (fp.FMode() == 1 ? 1 : sizeof(TCHAR)))
+            if (nFileCounter >= CEncoderDefaults::nNumMaxInputFiles)
             {
-                szBuffer += _T("\0");
-
-                if (nFileCounter >= CEncoderDefaults::nNumMaxInputFiles)
-                {
-                    fp.FClose();
-                    return true;
-                }
-
-                szBuffer.TrimLeft('"');
-                szBuffer.TrimRight('"');
-
-                szTmpInputFiles[nFileCounter] = szBuffer;
-
-                nFileCounter++;
-                szBuffer = _T("");
+                fp.Close();
+                return true;
             }
 
-            nRead++;
+            szBuffer.TrimLeft('"');
+            szBuffer.TrimRight('"');
+            szTmpInputFiles[nFileCounter] = szBuffer;
+            nFileCounter++;
+            szBuffer = _T("");
         }
 
         int nReqNumOfFiles = nNumInputFiles[this->nChannelConfig] + (this->bLFE == true ? 1 : 0);
         if (nFileCounter != nReqNumOfFiles)
         {
-            fp.FClose();
+            fp.Close();
             return false;
         }
         else
         {
             this->RemapFilesToChannels();
-
-            fp.FClose();
+            fp.Close();
             return true;
         }
     }
@@ -415,28 +396,20 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
     try
     {
-        CMyFile fp;
-        if (nFormat == 1)
-        {
-#ifdef _UNICODE
-            fp.FSetMode(2);
-#else
-            fp.FSetMode(3);
-#endif
-        }
-
-        if (fp.FOpen(szFileName, true) == false)
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
             return false;
 
+        CStdioFile fp(fs);
         CString szBuffer;
         CString szFileName;
 
 #define WriteToFile(index) \
-            szBuffer.Format(_T("%s%s%s\r\n"), \
-                nFormat == 0 ? _T("") : _T("\""), \
-                this->szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
-            fp.FWriteString(szBuffer.GetBuffer(), szBuffer.GetLength()); \
-            szBuffer.ReleaseBuffer();
+        szBuffer.Format(_T("%s%s%s\r\n"), \
+            nFormat == 0 ? _T("") : _T("\""), \
+            this->szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
+        fp.WriteString(szBuffer);
 
         switch (this->nChannelConfig)
         {
@@ -520,14 +493,13 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
             break;
         };
 
-        fp.FClose();
+        fp.Close();
+        return true;
     }
     catch (...)
     {
         return false;
     }
-
-    return true;
 }
 
 void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
