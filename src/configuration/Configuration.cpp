@@ -18,7 +18,7 @@ bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
         if (error != 0)
             return false;
 
@@ -52,7 +52,7 @@ bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
         if (error != 0)
             return false;
 
@@ -80,7 +80,7 @@ bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
         if (error != 0)
             return false;
 
@@ -117,7 +117,7 @@ bool CConfiguration::SaveFiles(CString &szFileName, CListT<CString>& fl, int nFo
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
         if (error != 0)
             return false;
 
@@ -226,7 +226,7 @@ bool CConfiguration::LoadLang(CString &szFileName, LangMap& lm)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
         if (error  != 0)
             return false;
 
@@ -269,7 +269,7 @@ bool CConfiguration::LoadLangConfig(CString &szFileName)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
         if (error != 0)
             return false;
 
@@ -298,7 +298,7 @@ bool CConfiguration::SaveLangConfig(CString &szFileName)
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
         if (error != 0)
             return false;
 
@@ -1321,7 +1321,7 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, CConfiguration::pszReadMode);
         if (error != 0)
             return false;
 
@@ -1400,7 +1400,7 @@ bool CEncoderDefaults::SaveEncoderPresets(EncoderPresetList& encPresets, CString
     try
     {
         FILE *fs;
-        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        errno_t error = _tfopen_s(&fs, szFileName, CConfiguration::pszWriteMode);
         if (error != 0)
             return false;
 

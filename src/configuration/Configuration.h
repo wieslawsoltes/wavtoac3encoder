@@ -112,6 +112,9 @@ public:
     CConfiguration();
     virtual ~CConfiguration();
 public:
+    constexpr static LPTSTR pszReadMode = _T("rt, ccs=UTF-8");
+    constexpr static LPTSTR pszWriteMode = _T("wt, ccs=UTF-8");
+public:
     LangMap *m_Lang;
     LangList m_LangLst;
     CString m_szLangFileName = _T("");
