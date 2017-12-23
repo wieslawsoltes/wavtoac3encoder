@@ -575,7 +575,8 @@ void CMainDlg::OnBnClickedButtonBrowse()
             CEncoderDefaults::szSupportedOutputExt[0],
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701C) : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"));
+            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x0020701C) : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"),
+            this);
 
         if (fd.DoModal() == IDOK)
         {
@@ -2824,7 +2825,8 @@ void CMainDlg::OnFileAddFiles()
             CEncoderDefaults::szSupportedInputExt[0],
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
-            szFilter);
+            szFilter,
+            this);
 
         fd.m_ofn.lpstrFile = pFiles;
         fd.m_ofn.nMaxFile = (dwMaxSize) / 2;
