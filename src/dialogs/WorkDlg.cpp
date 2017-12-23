@@ -2,7 +2,6 @@
 #include "MainApp.h"
 #include "WorkDlg.h"
 #include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
 
 int CWorkDlg::nIDIn[CEncoderDefaults::nNumMaxInputFiles]
 {

@@ -3,7 +3,6 @@
 #include "configuration\Configuration.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
 #ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
 #endif

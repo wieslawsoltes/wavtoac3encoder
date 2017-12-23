@@ -2,7 +2,6 @@
 #include "MainApp.h"
 #include "MuxDlg.h"
 #include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
 
 const int nNumChannelConfig = 8;
 

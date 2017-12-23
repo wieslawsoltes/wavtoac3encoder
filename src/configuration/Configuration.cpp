@@ -3,7 +3,6 @@
 #include "StdAfx.h"
 #include "MainApp.h"
 #include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
 #include "Configuration.h"
 
 CConfiguration::CConfiguration()

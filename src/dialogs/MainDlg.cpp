@@ -6,7 +6,6 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
-#include "utilities\MyFile.h"
 #include "utilities\TimeCount.h"
 
 IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
