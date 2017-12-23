@@ -13,6 +13,68 @@ CConfiguration::~CConfiguration()
 {
 }
 
+bool CConfiguration::LoadConfig(CString &szFileName, ConfigList &cl)
+{
+    try
+    {
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("rt, ccs=UTF-8"));
+        if (error != 0)
+            return false;
+
+        CStdioFile fp(fs);
+        CString szBuffer = _T("");
+
+        while (fp.ReadString(szBuffer))
+        {
+            int nPos = szBuffer.Find('=', 0);
+            if (nPos != -1)
+            {
+                ConfigEntry ce;
+                ce.szKey = szBuffer.Mid(0, nPos);
+                ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                cl.Insert(ce);
+            }
+            szBuffer = _T("");
+        }
+
+        fp.Close();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+bool CConfiguration::SaveConfig(CString &szFileName, ConfigList &cl)
+{
+    int nSize = cl.Count();
+    try
+    {
+        FILE *fs;
+        errno_t error = _tfopen_s(&fs, szFileName, _T("wt, ccs=UTF-8"));
+        if (error != 0)
+            return false;
+
+        CStdioFile fp(fs);
+        CString szBuffer;
+
+        for (int i = 0; i < nSize; i++)
+        {
+            auto& ce = cl.Get(i);
+            szBuffer.Format(_T("%s=%s\n"), ce.szKey, ce.szValue);
+            fp.WriteString(szBuffer);
+        }
+
+        fp.Close();
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
 bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
 {
     try

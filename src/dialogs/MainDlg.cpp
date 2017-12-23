@@ -836,7 +836,7 @@ LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
 bool CMainDlg::LoadProgramConfig(CString szFileName)
 {
     ConfigList m_ConfigList;
-    if (ConfigList::Load(szFileName, m_ConfigList) == true)
+    if (CConfiguration::LoadConfig(szFileName, m_ConfigList) == true)
     {
         int nSize = m_ConfigList.Count();
         for (int i = 0; i < nSize; i++)
@@ -1034,7 +1034,7 @@ bool CMainDlg::SaveProgramConfig(CString szFileName)
     saveConfig.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
     m_ConfigList.Insert(saveConfig);
 
-    return ConfigList::Save(szFileName, m_ConfigList);
+    return CConfiguration::SaveConfig(szFileName, m_ConfigList);
 }
 
 bool CMainDlg::UpdateProgramEngines()
@@ -1107,7 +1107,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
     this->m_EngineList.RemoveAll();
     this->m_CmbEngines.ResetContent();
 
-    if (ConfigList::Load(szFileName, this->m_EngineList) == true)
+    if (CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
     {
         return this->UpdateProgramEngines();
     }
@@ -1140,7 +1140,7 @@ bool CMainDlg::LoadProgramEngines(CString szFileName)
 
 bool CMainDlg::SaveProgramEngines(CString szFileName)
 {
-    return ConfigList::Save(szFileName, this->m_EngineList);
+    return CConfiguration::SaveConfig(szFileName, this->m_EngineList);
 }
 
 bool CMainDlg::LoadFilesList(CString &szFileName)

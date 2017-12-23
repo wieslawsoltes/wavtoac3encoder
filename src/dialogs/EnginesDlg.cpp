@@ -172,7 +172,7 @@ bool CEnginesDlg::LoadProgramEngines(CString szFileName)
     this->m_EngineList.RemoveAll();
     this->m_LstEngines.DeleteAllItems();
 
-    if (ConfigList::Load(szFileName, this->m_EngineList) == true)
+    if (CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
     {
         return InsertProgramEngines();
     }
@@ -182,7 +182,7 @@ bool CEnginesDlg::LoadProgramEngines(CString szFileName)
 
 bool CEnginesDlg::SaveProgramEngines(CString szFileName)
 {
-    return ConfigList::Save(szFileName, this->m_EngineList);
+    return CConfiguration::SaveConfig(szFileName, this->m_EngineList);
 }
 
 void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
