@@ -1215,15 +1215,6 @@ void CMainDlg::LoadAllConfiguration()
     bool bPresetsRet = CEncoderDefaults::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
     OutputDebugString((bPresetsRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath);
 
-    bool bConfigRet = this->LoadProgramConfig(theApp.m_Config.m_szConfigFilePath);
-    OutputDebugString((bConfigRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath);
-
-    bool bEnginesRet = this->LoadProgramEngines(theApp.m_Config.m_szEnginesFilePath);
-    OutputDebugString((bEnginesRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
-
-    bool bFilesRet = this->LoadFilesList(theApp.m_Config.m_szFilesListFilePath);
-    OutputDebugString((bFilesRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath);
-
     if (bPresetsRet == true)
     {
         if (encPresets.Count() > 0)
@@ -1244,6 +1235,15 @@ void CMainDlg::LoadAllConfiguration()
             this->OnCbnSelchangeComboPresets();
         }
     }
+
+    bool bConfigRet = this->LoadProgramConfig(theApp.m_Config.m_szConfigFilePath);
+    OutputDebugString((bConfigRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath);
+
+    bool bEnginesRet = this->LoadProgramEngines(theApp.m_Config.m_szEnginesFilePath);
+    OutputDebugString((bEnginesRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
+
+    bool bFilesRet = this->LoadFilesList(theApp.m_Config.m_szFilesListFilePath);
+    OutputDebugString((bFilesRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath);
 }
 
 void CMainDlg::SaveAllConfiguration()
@@ -1364,70 +1364,70 @@ void CMainDlg::AddItemToFileList(CString szPath)
     this->m_LstFiles.SetItemText(nItem, 1, szSize);
 }
 
-void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
+void CMainDlg::ApplyPresetToDlg(CEncoderPreset &preset)
 {
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
-        auto nSetting = Preset.nSetting[i];
+        auto nSetting = preset.nSetting[i];
         auto szText = CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
         this->m_LstSettings.SetItemText(i, 1, szText);
     }
 
-    if (Preset.nMode == AFTEN_ENC_MODE_CBR)
+    if (preset.nMode == AFTEN_ENC_MODE_CBR)
     {
         this->m_SldBitrate.SetTic(1);
         this->m_SldBitrate.SetRange(0, CEncoderDefaults::nNumValidCbrBitrates - 1, TRUE);
-        int nPos = CEncoderDefaults::FindValidBitratePos(Preset.nBitrate);
+        int nPos = CEncoderDefaults::FindValidBitratePos(preset.nBitrate);
         this->m_SldBitrate.SetPos(nPos);
         this->m_ChkVbr.SetCheck(BST_UNCHECKED);
     }
-    else if (Preset.nMode == AFTEN_ENC_MODE_VBR)
+    else if (preset.nMode == AFTEN_ENC_MODE_VBR)
     {
         this->m_SldBitrate.SetTic(1);
         this->m_SldBitrate.SetRange(0, 1023, TRUE);
-        this->m_SldBitrate.SetPos(Preset.nQuality);
+        this->m_SldBitrate.SetPos(preset.nQuality);
         this->m_SldBitrate.Invalidate();
         this->m_ChkVbr.SetCheck(BST_CHECKED);
     }
 
-    this->m_ChkSimdMMX.SetCheck(Preset.nUsedSIMD[0] == 0 ? BST_UNCHECKED : BST_CHECKED);
-    this->m_ChkSimdSSE.SetCheck(Preset.nUsedSIMD[1] == 0 ? BST_UNCHECKED : BST_CHECKED);
-    this->m_ChkSimdSSE2.SetCheck(Preset.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
-    this->m_ChkSimdSSE3.SetCheck(Preset.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
+    this->m_ChkSimdMMX.SetCheck(preset.nUsedSIMD[0] == 0 ? BST_UNCHECKED : BST_CHECKED);
+    this->m_ChkSimdSSE.SetCheck(preset.nUsedSIMD[1] == 0 ? BST_UNCHECKED : BST_CHECKED);
+    this->m_ChkSimdSSE2.SetCheck(preset.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
+    this->m_ChkSimdSSE3.SetCheck(preset.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
 
-    if (Preset.nThreads == 0)
+    if (preset.nThreads == 0)
     {
         this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
     }
     else
     {
         CString szBuff;
-        szBuff.Format(_T("%d"), Preset.nThreads);
+        szBuff.Format(_T("%d"), preset.nThreads);
         this->m_EdtThreads.SetWindowText(szBuff);
     }
 
-    this->m_CmbEngines.SetCurSel(Preset.nCurrentEngine);
-    this->m_CmbRawSampleFormat.SetCurSel(Preset.nRawSampleFormat);
+    this->m_CmbEngines.SetCurSel(preset.nCurrentEngine);
+    this->m_CmbRawSampleFormat.SetCurSel(preset.nRawSampleFormat);
 
-    if (Preset.nRawSampleRate == 0)
+    if (preset.nRawSampleRate == 0)
     {
         this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
     }
     else
     {
         CString szBuff;
-        szBuff.Format(_T("%d"), Preset.nRawSampleRate);
+        szBuff.Format(_T("%d"), preset.nRawSampleRate);
         this->m_EdtRawSamplerate.SetWindowText(szBuff);
     }
 
-    if (Preset.nRawChannels == 0)
+    if (preset.nRawChannels == 0)
     {
         this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
     }
     else
     {
         CString szBuff;
-        szBuff.Format(_T("%d"), Preset.nRawChannels);
+        szBuff.Format(_T("%d"), preset.nRawChannels);
         this->m_EdtRawChannels.SetWindowText(szBuff);
     }
     this->UpdateBitrateText();
@@ -1439,13 +1439,13 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
 
         this->m_LstSettings.SetItemState(nItem, LVIS_SELECTED, LVIS_SELECTED);
         this->UpdateSettingsComboBox(nItem);
-        this->m_CmbValue.SetCurSel(Preset.nSetting[nItem]);
+        this->m_CmbValue.SetCurSel(preset.nSetting[nItem]);
     }
     else
     {
         this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
         this->UpdateSettingsComboBox(0);
-        this->m_CmbValue.SetCurSel(Preset.nSetting[0]);
+        this->m_CmbValue.SetCurSel(preset.nSetting[0]);
     }
 }
 

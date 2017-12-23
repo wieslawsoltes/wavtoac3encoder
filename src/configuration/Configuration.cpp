@@ -1095,12 +1095,12 @@ void CEncoderDefaults::ResetEncoderOptionsLists()
     }
 }
 
-void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList &clTmp)
+void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, ConfigList &cl)
 {
-    for (int i = 0; i < clTmp.Count(); i++)
+    for (int i = 0; i < cl.Count(); i++)
     {
         CString szBuffer;
-        auto& ce = clTmp.Get(i);
+        auto& ce = cl.Get(i);
 
         if (ce.szKey.Compare(_T("engine")) == 0)
         {
@@ -1203,9 +1203,9 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
 
         CStdioFile fp(fs);
         CString szBuffer = _T("");
-
-        CEncoderPreset presetTmp;
-        ConfigList clTmp;
+        auto nLength = fp.GetLength();
+        CEncoderPreset temp;
+        ConfigList cl;
 
         bool bHavePreset = false;
 
@@ -1216,26 +1216,22 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
             return false;
         }
 
+        encPresets.RemoveAll();
+
         while (fp.ReadString(szBuffer))
         {
-            ConfigEntry ceTmp;
-
             if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
             {
                 if (bHavePreset == true)
                 {
-                    ParseEncoderPreset(presetTmp, clTmp);
-                    auto preset = presetTmp;
+                    ParseEncoderPreset(temp, cl);
+                    auto preset = temp;
                     encPresets.Insert(preset);
-                    clTmp.RemoveAll();
-                }
-                else
-                {
-                    encPresets.RemoveAll();
+                    cl.RemoveAll();
                 }
 
-                presetTmp = defaultPreset;
-                presetTmp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
+                temp = defaultPreset;
+                temp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
                 bHavePreset = true;
             }
             else
@@ -1243,47 +1239,22 @@ bool CEncoderDefaults::LoadEncoderPresets(EncoderPresetList& encPresets, CString
                 int nPos = szBuffer.Find('=', 0);
                 if (nPos != -1)
                 {
-                    ceTmp.szKey = szBuffer.Mid(0, nPos);
-
-                    while (ceTmp.szKey.Left(1) == _T(" ") || ceTmp.szKey.Left(1) == _T("\t"))
-                    {
-                        ceTmp.szKey.TrimLeft(_T(" "));
-                        ceTmp.szKey.TrimLeft(_T("\t"));
-                    }
-
-                    while (ceTmp.szKey.Right(1) == _T(" ") || ceTmp.szKey.Right(1) == _T("\t"))
-                    {
-                        ceTmp.szKey.TrimRight(_T(" "));
-                        ceTmp.szKey.TrimRight(_T("\t"));
-                    }
-
-                    ceTmp.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-
-                    while (ceTmp.szValue.Left(1) == _T(" ") || ceTmp.szValue.Left(1) == _T("\t"))
-                    {
-                        ceTmp.szValue.TrimLeft(_T(" "));
-                        ceTmp.szValue.TrimLeft(_T("\t"));
-                    }
-
-                    while (ceTmp.szValue.Right(1) == _T(" ") || ceTmp.szValue.Right(1) == _T("\t"))
-                    {
-                        ceTmp.szValue.TrimRight(_T(" "));
-                        ceTmp.szValue.TrimRight(_T("\t"));
-                    }
-
-                    auto ce = ceTmp;
-                    clTmp.Insert(ce);
+                    ConfigEntry ce;
+                    ce.szKey = szBuffer.Mid(0, nPos);
+                    ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                    cl.Insert(ce);
                 }
             }
 
-            if (fp.GetPosition() == fp.GetLength())
+            auto nPos = fp.GetPosition();
+            if (nPos == nLength)
             {
                 if (bHavePreset == true)
                 {
-                    ParseEncoderPreset(presetTmp, clTmp);
-                    auto preset = presetTmp;
+                    ParseEncoderPreset(temp, cl);
+                    auto preset = temp;
                     encPresets.Insert(preset);
-                    clTmp.RemoveAll();
+                    cl.RemoveAll();
                 }
             }
 

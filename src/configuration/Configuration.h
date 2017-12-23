@@ -376,7 +376,7 @@ public:
     static int FindValidBitratePos(const int nBitrate);
     static int FindOptionIndex(CString szOption);
     static void ResetEncoderOptionsLists();
-    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList &clTmp);
+    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList &cl);
     static bool LoadEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool SaveEncoderPresets(EncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool IsSupportedInputExt(CString &szExt);

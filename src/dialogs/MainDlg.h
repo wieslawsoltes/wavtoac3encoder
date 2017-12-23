@@ -147,7 +147,7 @@ public:
     void AddItemToFileList(CString szPath);
     void UpdateBitrateText();
     void UpdateSettingsComboBox(int nItem);
-    void ApplyPresetToDlg(CEncoderPreset &Preset);
+    void ApplyPresetToDlg(CEncoderPreset &preset);
     void ShowOptionPopup(bool bUseRect);
 #ifndef DISABLE_AVISYNTH
     bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
