@@ -64,7 +64,7 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 Source: {#BasePath}\src\bin\{#ProgramConfiguration}\{#ProgramBuild}\{#ProgramExe}; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: {#BasePath}\*.txt; DestDir: {app}; Flags: ignoreversion; Components: docs
 Source: {#BasePath}\*.md; DestDir: {app}; Flags: ignoreversion; Components: docs
-Source: {#BasePath}\setup\EncWAVtoAC3.portable; DestDir: {app}; Flags: ignoreversion; Tasks: portablemode; Components: main
+Source: {#BasePath}\config\EncWAVtoAC3.portable; DestDir: {app}; Flags: ignoreversion; Tasks: portablemode; Components: main
 
 #if "x64" == ProgramBuild
 
@@ -73,14 +73,14 @@ Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramNa
 Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x64\lang; Flags: ignoreversion; Tasks: not portablemode; Components: lang
-Source: {#BasePath}\config\engines\EncWAVtoAC3-x64.engines; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3-x64.engines; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 
 Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\lang\*.txt; DestDir: {app}\lang; Flags: ignoreversion; Tasks: portablemode; Components: lang
-Source: {#BasePath}\config\engines\EncWAVtoAC3-x64.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3-x64.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 
 Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion; Components: engines
 Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion; Components: engines
@@ -93,14 +93,14 @@ Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramNa
 Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x86\lang; Flags: ignoreversion; Tasks: not portablemode; Components: lang
-Source: {#BasePath}\config\engines\EncWAVtoAC3-x86.engines; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3-x86.engines; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
 
 Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 Source: {#BasePath}\config\lang\*.txt; DestDir: {app}\lang; Flags: ignoreversion; Tasks: portablemode; Components: lang
-Source: {#BasePath}\config\engines\EncWAVtoAC3-x86.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3-x86.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
 
 Source: {#BasePath}\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion; Components: engines
 Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion; Components: engines
