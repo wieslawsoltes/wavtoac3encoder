@@ -1212,12 +1212,19 @@ bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
 
 void CMainDlg::LoadAllConfiguration()
 {
-    bool bRet = false;
+    bool bPresetsRet = CEncoderDefaults::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
+    OutputDebugString((bPresetsRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath);
 
-    bRet = CEncoderDefaults::LoadEncoderPresets(this->encPresets, theApp.m_Config.m_szPresetsFilePath, this->defaultPreset);
-    OutputDebugString((bRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + theApp.m_Config.m_szPresetsFilePath);
+    bool bConfigRet = this->LoadProgramConfig(theApp.m_Config.m_szConfigFilePath);
+    OutputDebugString((bConfigRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath);
 
-    if (bRet == true)
+    bool bEnginesRet = this->LoadProgramEngines(theApp.m_Config.m_szEnginesFilePath);
+    OutputDebugString((bEnginesRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
+
+    bool bFilesRet = this->LoadFilesList(theApp.m_Config.m_szFilesListFilePath);
+    OutputDebugString((bFilesRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath);
+
+    if (bPresetsRet == true)
     {
         if (encPresets.Count() > 0)
         {
@@ -1237,15 +1244,6 @@ void CMainDlg::LoadAllConfiguration()
             this->OnCbnSelchangeComboPresets();
         }
     }
-
-    bRet = this->LoadProgramConfig(theApp.m_Config.m_szConfigFilePath);
-    OutputDebugString((bRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + theApp.m_Config.m_szConfigFilePath);
-
-    bRet = this->LoadProgramEngines(theApp.m_Config.m_szEnginesFilePath);
-    OutputDebugString((bRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + theApp.m_Config.m_szEnginesFilePath);
-
-    bRet = this->LoadFilesList(theApp.m_Config.m_szFilesListFilePath);
-    OutputDebugString((bRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + theApp.m_Config.m_szFilesListFilePath);
 }
 
 void CMainDlg::SaveAllConfiguration()
@@ -1370,7 +1368,9 @@ void CMainDlg::ApplyPresetToDlg(CEncoderPreset &Preset)
 {
     for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
     {
-        this->m_LstSettings.SetItemText(i, 1, CEncoderDefaults::encOpt[i].listOptNames.Get(Preset.nSetting[i]));
+        auto nSetting = Preset.nSetting[i];
+        auto szText = CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
+        this->m_LstSettings.SetItemText(i, 1, szText);
     }
 
     if (Preset.nMode == AFTEN_ENC_MODE_CBR)
