@@ -188,7 +188,6 @@ void CWorker::UpdateProgress()
         }
     else
     {
-#ifndef DISABLE_AVISYNTH
         CString szInputInfo = _T("");
         TCHAR *chan;
         chan = _T("?-channel");
@@ -209,7 +208,6 @@ void CWorker::UpdateProgress()
             infoAVS.nSamplesPerSecond, chan);
 
         pContext->SetInputTypeInfo(0, szInputInfo);
-#endif
     }
 
     {
@@ -262,9 +260,7 @@ BOOL CWorker::HandleError(LPTSTR pszMessage)
     }
     else
     {
-#ifndef DISABLE_AVISYNTH
         decoderAVS.CloseAvisynth();
-#endif
     }
 
     if (ofp)
@@ -306,11 +302,8 @@ BOOL CWorker::Run()
     ofp = nullptr;
 
     bAvisynthInput = false;
-
-#ifndef DISABLE_AVISYNTH
     if (GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
-#endif
 
     pContext->nInTotalSize = 0;
 
@@ -320,12 +313,9 @@ BOOL CWorker::Run()
     pszOutPath = szOutPath.GetBuffer();
     memset(ifp, 0, CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
-#ifndef DISABLE_AVISYNTH
     char szInputFileAVS[MAX_PATH] = "";
-#endif
     if (bAvisynthInput == true)
     {
-#ifndef DISABLE_AVISYNTH
 #ifdef _UNICODE
         ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
@@ -342,7 +332,6 @@ BOOL CWorker::Run()
             pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
             OutputDebugString(_T("Avisynth initialized successfully."));
         }
-#endif
     }
     else
     {
@@ -434,14 +423,11 @@ BOOL CWorker::Run()
     }
     else
     {
-#ifndef DISABLE_AVISYNTH
         if (opt.raw_input)
         {
         }
-#endif
     }
 
-#ifndef DISABLE_AVISYNTH
     if (bAvisynthInput == true)
     {
         statusAVS.nStart = 0;
@@ -454,7 +440,6 @@ BOOL CWorker::Run()
         pf.ch_mask = 0xFFFFFFFF;
 
     }
-#endif
 
     if (s.acmod >= 0)
     {
@@ -531,11 +516,9 @@ BOOL CWorker::Run()
     }
     else
     {
-#ifndef DISABLE_AVISYNTH
         s.sample_format = A52_SAMPLE_FMT_FLT;
         s.channels = infoAVS.nAudioChannels;
         s.samplerate = infoAVS.nSamplesPerSecond;
-#endif
     }
     frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
     fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
@@ -567,10 +550,8 @@ BOOL CWorker::Run()
         }
         else
         {
-#ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = 256;
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
-#endif
         }
 
         diff = 256 - nr;
@@ -618,10 +599,8 @@ BOOL CWorker::Run()
         }
         else
         {
-#ifndef DISABLE_AVISYNTH
             statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
             nr = decoderAVS.GetAudio(fwav, &statusAVS);
-#endif
         }
 
         if (aften_remap)
@@ -670,9 +649,7 @@ BOOL CWorker::Run()
                 }
                 else
                 {
-#ifndef DISABLE_AVISYNTH
                     nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-#endif
                 }
 
                 if (pContext->bCanUpdateWindow == true)
@@ -728,9 +705,7 @@ BOOL CWorker::Run()
     }
     else
     {
-#ifndef DISABLE_AVISYNTH
         decoderAVS.CloseAvisynth();
-#endif
     }
 
     if (bAvisynthInput == false)
@@ -749,9 +724,7 @@ BOOL CWorker::Run()
     }
     else
     {
-#ifndef DISABLE_AVISYNTH
         nTotalSizeCounter += pContext->nInTotalSize;
-#endif
     }
 
     for (int i = 0; i < nInputFiles; i++)

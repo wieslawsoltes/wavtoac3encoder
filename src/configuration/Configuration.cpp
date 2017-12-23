@@ -450,9 +450,7 @@ TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] = {
     _T("aiff"),
     _T("aif"),
     _T("aifc"),
-    #ifndef DISABLE_AVISYNTH
     _T("avs")
-    #endif
 };
 
 int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] = {

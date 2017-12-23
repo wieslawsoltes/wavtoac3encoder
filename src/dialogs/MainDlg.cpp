@@ -325,10 +325,9 @@ void CMainDlg::OnBnClickedButtonEncode()
     for (int i = 0; i < nItemsCount; i++)
     {
         szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
-#ifndef DISABLE_AVISYNTH
         if (GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
             bAvisynthInput = true;
-#endif
+
         list.Insert(szFileBuffer);
 
         bool status = false;
@@ -338,7 +337,6 @@ void CMainDlg::OnBnClickedButtonEncode()
         dlg.pWorkerContext->nTotalSize += _ttoi64(szSizeBuff);
     }
 
-#ifndef DISABLE_AVISYNTH
     if ((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
     {
         OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
@@ -349,7 +347,6 @@ void CMainDlg::OnBnClickedButtonEncode()
         bWorking = false;
         return;
     }
-#endif
 
     dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
     dlg.pWorkerContext->pFilesList = &list;
@@ -1313,7 +1310,6 @@ void CMainDlg::AddItemToFileList(CString szPath)
 
     this->m_LstFiles.SetItemText(nItem, 0, szPath);
 
-#ifndef DISABLE_AVISYNTH
     if (GetFileExtension(szPath).MakeLower() == _T("avs"))
     {
         AvsAudioInfo infoAVS;
@@ -1323,7 +1319,6 @@ void CMainDlg::AddItemToFileList(CString szPath)
 
         nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
     }
-#endif
 
     szSize.Format(_T("%I64d"), nFileSize);
     this->m_LstFiles.SetItemText(nItem, 1, szSize);
@@ -2685,7 +2680,6 @@ void CMainDlg::OnNMDblclkListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 }
 
-#ifndef DISABLE_AVISYNTH
 bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
 {
     TCHAR *pszInPath = szFileName.GetBuffer();
@@ -2719,7 +2713,6 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
         return true;
     }
 }
-#endif
 
 void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -2729,7 +2722,6 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
         int nItem = m_LstFiles.GetNextSelectedItem(pos);
         CString szFileName = m_LstFiles.GetItemText(nItem, 0);
 
-#ifndef DISABLE_AVISYNTH
         if (GetFileExtension(szFileName).MakeLower() == _T("avs"))
         {
             AvsAudioInfo infoAVS;
@@ -2796,7 +2788,6 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
                     MB_ICONINFORMATION | MB_OK);
             }
         }
-#endif
     }
 
     *pResult = 0;

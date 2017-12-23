@@ -3,9 +3,7 @@
 #include "configuration\Configuration.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
-#ifndef DISABLE_AVISYNTH
 #include "Avs2Raw.h"
-#endif
 
 class CWorkerContext
 {
@@ -85,11 +83,9 @@ private:
     FILE *ofp;
 private:
     bool bAvisynthInput;
-#ifndef DISABLE_AVISYNTH
     AvsAudioInfo infoAVS;
     CAvs2Raw decoderAVS;
     Avs2RawStatus statusAVS;
-#endif
 public:
     void InitContext(const CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
     void UpdateProgress();

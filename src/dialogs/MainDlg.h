@@ -14,9 +14,7 @@
 #include "controls\MySpinButtonCtrl.h"
 #include "configuration\Configuration.h"
 #include "libaften\aften.h"
-#ifndef DISABLE_AVISYNTH
 #include "worker\Avs2Raw.h"
-#endif
 
 #define IDC_STATUSBAR 1500
 #define IDC_COMBOBOX 1501
@@ -149,9 +147,7 @@ public:
     void UpdateSettingsComboBox(int nItem);
     void ApplyPresetToDlg(CEncoderPreset &preset);
     void ShowOptionPopup(bool bUseRect);
-#ifndef DISABLE_AVISYNTH
     bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
-#endif
 protected:
     afx_msg void OnPaint();
     afx_msg HCURSOR OnQueryDragIcon();
