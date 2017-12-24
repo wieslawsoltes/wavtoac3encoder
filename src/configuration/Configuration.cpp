@@ -181,13 +181,11 @@ void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, CL
                 if (szExt.CompareNoCase(_T("txt")) == 0)
                 {
                     CLang lang;
-
                     if (this->LoadLang(szTempBuf, lang.lm) == true)
                     {
                         lang.szFileName = szTempBuf;
                         lang.szEnglishName = lang.lm.Get(0x00000001);
                         lang.szTargetName = lang.lm.Get(0x00000002);
-
                         m_LangLst.Insert(lang);
                     }
                 }
@@ -338,7 +336,6 @@ void CConfiguration::LoadLangStrings()
         for (int i = 0; i < m_LangLst.Count(); i++)
         {
             auto& lang = m_LangLst.Get(i);
-
             CString szNameLang = GetFileName(lang.szFileName);
             CString szNameConfig = GetFileName(m_szLangFileName);
             if (szNameLang.Compare(szNameConfig) == 0)
@@ -384,7 +381,7 @@ CString CConfiguration::GetLangString(int id)
 
 LPTSTR CEncoderDefaults::szCurrentPresetsVersion = _T("1.1.0.0");
 
-int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates]{
+int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
     0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
 };
 
@@ -435,11 +432,17 @@ CString CEncoderDefaults::pszGroups[nNumEncoderOptionsGroups] = {
 };
 
 CString CEncoderDefaults::szCbrOption = _T("-b");
+
 CString CEncoderDefaults::szVbrOption = _T("-q");
+
 CString CEncoderDefaults::szThreadsOption = _T("-threads");
+
 CString CEncoderDefaults::szSimdOption = _T("-nosimd");
+
 CString CEncoderDefaults::szRawSampleFormatOption = _T("-raw_fmt");
+
 CString CEncoderDefaults::szRawSampleRateOption = _T("-raw_sr");
+
 CString CEncoderDefaults::szRawChannelsOption = _T("-raw_ch");
 
 TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] = {
@@ -519,7 +522,7 @@ void CEncoderDefaults::InitEncoderOptions()
         _T("controls the size of the list to be searched. The\n")
         _T("value can range from 1 (lower quality but faster) to\n")
         _T("32 (higher quality but slower). The default value is 8."),
-        7, // counted from 0 (=1) to 31 (=32)
+        7,
         -1,
         _T(""),
         false);
