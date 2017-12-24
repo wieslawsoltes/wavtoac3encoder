@@ -10,49 +10,52 @@
 
 [Setup]
 
-AppId               ={#ProgramName}-{#ProgramBuild}
-AppName             ={#ProgramName}
-AppVerName          ={#ProgramName} {#ProgramVersion}{#ProgramVersionSuffix}
-AppCopyright        ={#ProgramCopyright}
-DefaultDirName      ={pf}\{#ProgramName} ({#ProgramBuild})
-OutputDir           ={#BasePath}\artifacts
-VersionInfoVersion  ={#ProgramVersion}
-DefaultGroupName    ={#ProgramName} ({#ProgramBuild})
-AppPublisher        ={#ProgramWebsite}
-AppPublisherURL     ={#ProgramWebsite}
-AppVersion          ={#ProgramVersion}{#ProgramVersionSuffix}
-UsePreviousAppDir   =yes
-AllowNoIcons        =yes
-Compression         =lzma/max
-SolidCompression    =yes
-WindowVisible       =no
-WindowShowCaption   =no
-BackColor           =clBlue
-BackColor2          =clBlack
-BackColorDirection  =toptobottom
-BackSolid           =no
-UserInfoPage        =no
+AppId                 ={#ProgramName}-{#ProgramBuild}
+AppName               ={#ProgramName}
+AppVerName            ={#ProgramName} {#ProgramVersion}{#ProgramVersionSuffix}
+AppCopyright          ={#ProgramCopyright}
+DefaultDirName        ={pf}\{#ProgramName} ({#ProgramBuild})
+OutputDir             ={#BasePath}\artifacts
+VersionInfoVersion    ={#ProgramVersion}
+DefaultGroupName      ={#ProgramName} ({#ProgramBuild})
+AppPublisher          ={#ProgramWebsite}
+AppPublisherURL       ={#ProgramWebsite}
+AppVersion            ={#ProgramVersion}{#ProgramVersionSuffix}
+UsePreviousAppDir     =yes
+AllowNoIcons          =yes
+Compression           =lzma/max
+SolidCompression      =yes
+WindowVisible         =no
+WindowShowCaption     =no
+BackColor             =clBlue
+BackColor2            =clBlack
+BackColorDirection    =toptobottom
+BackSolid             =no
+UserInfoPage          =no
+Uninstallable         =not IsTaskSelected('portablemode')
+CreateUninstallRegKey =not IsTaskSelected('portablemode')
 
 #if "Release" == ProgramConfiguration
-    OutputBaseFilename ={#ProgramName}-{#ProgramVersion}{#ProgramVersionSuffix}-{#ProgramBuild}
+OutputBaseFilename ={#ProgramName}-{#ProgramVersion}{#ProgramVersionSuffix}-{#ProgramBuild}
 #else
-    OutputBaseFilename ={#ProgramName}-{#ProgramVersion}{#ProgramVersionSuffix}-{#ProgramBuild}-({#ProgramConfiguration})
+OutputBaseFilename ={#ProgramName}-{#ProgramVersion}{#ProgramVersionSuffix}-{#ProgramBuild}-({#ProgramConfiguration})
 #endif
 
 #if "x64" == ProgramBuild
-    ArchitecturesInstallIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=x64
 #endif
 
 [Components]
 
 Name: main; Description: Main Program; Types: full compact custom
 Name: docs; Description: Documents; Types: full
-Name: config; Description: libaften.dll Configuration; Types: full compact
-Name: engines; Description: libaften.dll Libraries; Types: full compact
+Name: config; Description: Program Configuration; Types: full compact
+Name: engines; Description: Aften Libraries; Types: full compact
 Name: lang; Description: Languages; Types: full
 
 [Tasks]
 
+Name: portablemode; Description: "Portable Mode"; Components: main; Flags: unchecked
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Components: main; Flags: unchecked
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Components: main; Flags: unchecked
 
@@ -61,33 +64,62 @@ Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription
 Source: {#BasePath}\src\bin\{#ProgramConfiguration}\{#ProgramBuild}\{#ProgramExe}; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: {#BasePath}\*.txt; DestDir: {app}; Flags: ignoreversion; Components: docs
 Source: {#BasePath}\*.md; DestDir: {app}; Flags: ignoreversion; Components: docs
+Source: {#BasePath}\config\EncWAVtoAC3.portable; DestDir: {app}; Flags: ignoreversion; Tasks: portablemode; Components: main
 
 #if "x64" == ProgramBuild
-    Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x64\lang; Flags: ignoreversion; Components: lang
-    Source: {#BasePath}\config\engines\EncWAVtoAC3-x64.engines; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Components: config
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion; Components: engines
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion; Components: engines
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion; Components: engines
+
+Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x64\lang; Flags: ignoreversion; Tasks: not portablemode; Components: lang
+Source: {#BasePath}\config\EncWAVtoAC3-x64.engines; DestDir: {userappdata}\{#ProgramName}-x64; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+
+Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\lang\*.txt; DestDir: {app}\lang; Flags: ignoreversion; Tasks: portablemode; Components: lang
+Source: {#BasePath}\config\EncWAVtoAC3-x64.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+
+Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64\libaften.dll; DestDir: {app}\libaftendll_AMD64; Flags: ignoreversion; Components: engines
+Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE2\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE2; Flags: ignoreversion; Components: engines
+Source: {#BasePath}\src\aften\windows\output\libaftendll_AMD64_SSE3\libaften.dll; DestDir: {app}\libaftendll_AMD64_SSE3; Flags: ignoreversion; Components: engines
+
 #else
-    Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x86\lang; Flags: ignoreversion; Components: lang
-    Source: {#BasePath}\config\engines\EncWAVtoAC3-x86.engines; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Components: config
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion; Components: engines
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion; Components: engines
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE2\libaften.dll; DestDir: {app}\libaftendll_x86_SSE2; Flags: ignoreversion; Components: engines
-    Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE3\libaften.dll; DestDir: {app}\libaftendll_x86_SSE3; Flags: ignoreversion; Components: engines
+
+Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+Source: {#BasePath}\config\lang\*.txt; DestDir: {userappdata}\{#ProgramName}-x86\lang; Flags: ignoreversion; Tasks: not portablemode; Components: lang
+Source: {#BasePath}\config\EncWAVtoAC3-x86.engines; DestDir: {userappdata}\{#ProgramName}-x86; Flags: ignoreversion uninsneveruninstall; Tasks: not portablemode; Components: config
+
+Source: {#BasePath}\config\EncWAVtoAC3.config; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.files; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.lang; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\EncWAVtoAC3.presets; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+Source: {#BasePath}\config\lang\*.txt; DestDir: {app}\lang; Flags: ignoreversion; Tasks: portablemode; Components: lang
+Source: {#BasePath}\config\EncWAVtoAC3-x86.engines; DestDir: {app}; Flags: ignoreversion uninsneveruninstall; Tasks: portablemode; Components: config
+
+Source: {#BasePath}\src\aften\windows\output\libaftendll_x86\libaften.dll; DestDir: {app}\libaftendll_x86; Flags: ignoreversion; Components: engines
+Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE\libaften.dll; DestDir: {app}\libaftendll_x86_SSE; Flags: ignoreversion; Components: engines
+Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE2\libaften.dll; DestDir: {app}\libaftendll_x86_SSE2; Flags: ignoreversion; Components: engines
+Source: {#BasePath}\src\aften\windows\output\libaftendll_x86_SSE3\libaften.dll; DestDir: {app}\libaftendll_x86_SSE3; Flags: ignoreversion; Components: engines
+
 #endif
 
 [INI]
 
-Filename: {app}\{#ProgramName}.url; Section: InternetShortcut; Key: URL; String: {#ProgramWebsite}
+Filename: {app}\{#ProgramName}.url; Section: InternetShortcut; Key: URL; String: {#ProgramWebsite}; Tasks: not portablemode
 
 [Icons]
 
-Name: {group}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Components: main
-Name: {group}\{#ProgramName} README; Filename: {app}\README.MD; WorkingDir: {app}; Components: docs
-Name: {group}\{#ProgramName} License; Filename: {app}\COPYING.TXT; WorkingDir: {app}; Components: docs
-Name: {group}\{#ProgramName} Web Site; Filename: {app}\{#ProgramName}.url; WorkingDir: {app}; Components: main
-Name: {group}\Uninstall {#ProgramName}; Filename: {uninstallexe}; WorkingDir: {app}; Components: main
+Name: {group}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: not portablemode; Components: main
+Name: {group}\{#ProgramName} README; Filename: {app}\README.MD; WorkingDir: {app}; Tasks: not portablemode; Components: docs
+Name: {group}\{#ProgramName} License; Filename: {app}\COPYING.TXT; WorkingDir: {app}; Tasks: not portablemode; Components: docs
+Name: {group}\{#ProgramName} Web Site; Filename: {app}\{#ProgramName}.url; WorkingDir: {app}; Tasks: not portablemode; Components: main
+Name: {group}\Uninstall {#ProgramName}; Filename: {uninstallexe}; WorkingDir: {app}; Tasks: not portablemode; Components: main
 Name: {userdesktop}\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: desktopicon; Components: main
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\{#ProgramName}; Filename: {app}\{#ProgramExe}; WorkingDir: {app}; Tasks: quicklaunchicon; Components: main
 
@@ -97,4 +129,4 @@ Filename: {app}\{#ProgramExe}; Description: {cm:LaunchProgram,{#ProgramName}}; W
 
 [UninstallDelete]
 
-Type: files; Name: {app}\{#ProgramName}.url
+Type: files; Name: {app}\{#ProgramName}.url; Tasks: not portablemode

@@ -104,17 +104,11 @@
     <ClCompile Include="dialogs\WorkDlg.cpp">
       <Filter>Source Files\Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="worker\WorkThread.cpp">
-      <Filter>Source Files\Worker</Filter>
-    </ClCompile>
-    <ClCompile Include="worker\AftenAPI.cpp">
-      <Filter>Source Files\Worker</Filter>
-    </ClCompile>
-    <ClCompile Include="worker\Avs2Raw.cpp">
-      <Filter>Source Files\Worker</Filter>
-    </ClCompile>
     <ClCompile Include="configuration\Configuration.cpp">
       <Filter>Source Files\Configuration</Filter>
+    </ClCompile>
+    <ClCompile Include="worker\Worker.cpp">
+      <Filter>Source Files\Worker</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,9 +157,6 @@
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="worker\WorkThread.h">
-      <Filter>Header Files\Worker</Filter>
-    </ClInclude>
     <ClInclude Include="avisynth64\src\core\avisynth.h">
       <Filter>Header Files\Worker\Avisynth64</Filter>
     </ClInclude>
@@ -186,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="configuration\Configuration.h">
       <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="worker\Worker.h">
+      <Filter>Header Files\Worker</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

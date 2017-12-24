@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "version.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
 #include "worker\AftenAPI.h"
@@ -7,89 +8,92 @@
 #define ENCWAVTOAC3_VERSION _T(VER_FILE_VERSION_SHORT_STR)
 #define ENCWAVTOAC3_URL_HOME _T("https://github.com/wieslawsoltes/wavtoac3encoder/")
 
-#define DEFAULT_LANG_FILE_NAME _T("EncWAVtoAC3.lang")
-#define DEFAULT_PORTABLE_FILE_NAME _T("EncWAVtoAC3.portable")
-#define DEFAULT_CONFIG_FILE_NAME _T("EncWAVtoAC3.config")
-#define DEFAULT_PRESETS_FILE_NAME _T("EncWAVtoAC3.presets")
-#define DEFAULT_FILES_FILE_NAME _T("EncWAVtoAC3.files")
-#define DEFAULT_FILES_FORMAT 0
-
 #ifdef _M_X64
-#define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3-x64.engines")
+#define FILENAME_ENGINES _T("EncWAVtoAC3-x64.engines")
 #else
-#define DEFAULT_ENGINES_FILE_NAME _T("EncWAVtoAC3-x86.engines")
+#define FILENAME_ENGINES _T("EncWAVtoAC3-x86.engines")
 #endif
 
 #ifdef _M_X64
-#define DEFAULT_CONFIG_DIRECTORY _T("EncWAVtoAC3-x64")
+#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x64")
 #else
-#define DEFAULT_CONFIG_DIRECTORY _T("EncWAVtoAC3-x86")
+#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x86")
 #endif
 
-#define DEFAULT_PRESET_NAME (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207001) : _T("Default"))
-#define DEFAULT_TEXT_AUTO (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207002) : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207003) : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
+#define FILENAME_LANG _T("EncWAVtoAC3.lang")
+#define FILENAME_PORTABLE _T("EncWAVtoAC3.portable")
+#define FILENAME_CONFIG _T("EncWAVtoAC3.config")
+#define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
+#define FILENAME_FILES _T("EncWAVtoAC3.files")
 
-class ConfigEntry
+#define DEFAULT_PRESET_NAME (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207001) : _T("Default"))
+#define DEFAULT_TEXT_AUTO (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207002) : _T("<Auto>"))
+#define DEFAULT_TEXT_IGNORED (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207003) : _T("<Ignored>"))
+#define DEFAULT_TEXT_OUTPUT_PATH (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
+#define DEFAULT_TEXT_OUTPUT_FILE (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
+
+class CConfigEntry
 {
 public:
     CString szKey;
     CString szValue;
 public:
-    ConfigEntry()
+    CConfigEntry()
     {
     }
-    ConfigEntry(const ConfigEntry &other)
+    CConfigEntry(const CConfigEntry &other)
     {
         Copy(other);
     }
-    ConfigEntry& operator=(const ConfigEntry &other)
+    CConfigEntry& operator=(const CConfigEntry &other)
     {
         Copy(other);
         return *this;
     }
-    virtual ~ConfigEntry()
+    virtual ~CConfigEntry()
     {
     }
 public:
-    void Copy(const ConfigEntry &other)
+    void Copy(const CConfigEntry &other)
     {
         this->szKey = other.szKey;
         this->szValue = other.szValue;
     }
 };
 
-typedef CListT<ConfigEntry> ConfigList_t;
+class CConfigList : public CListT<CConfigEntry>
+{
+};
 
-typedef CMapT<int, CString> LangMap_t;
+class CLangMap : public CMapT<int, CString>
+{
+};
 
-class Lang
+class CLang
 {
 public:
     CString szFileName;
     CString szEnglishName;
     CString szTargetName;
-    LangMap_t lm;
+    CLangMap lm;
 public:
-    Lang()
+    CLang()
     {
     }
-    Lang(const Lang &other)
+    CLang(const CLang &other)
     {
         Copy(other);
     }
-    Lang& operator=(const Lang &other)
+    CLang& operator=(const CLang &other)
     {
         Copy(other);
         return *this;
     }
-    virtual ~Lang()
+    virtual ~CLang()
     {
     }
 public:
-    void Copy(const Lang &other)
+    void Copy(const CLang &other)
     {
         this->szFileName = other.szFileName;
         this->szEnglishName = other.szEnglishName;
@@ -98,7 +102,9 @@ public:
     }
 };
 
-typedef CListT<Lang> LangList_t;
+class CLangList : public CListT<CLang>
+{
+};
 
 class CConfiguration
 {
@@ -106,8 +112,11 @@ public:
     CConfiguration();
     virtual ~CConfiguration();
 public:
-    LangMap_t *m_Lang;
-    LangList_t m_LangLst;
+    constexpr static LPTSTR pszReadMode = _T("rt, ccs=UTF-8");
+    constexpr static LPTSTR pszWriteMode = _T("wt, ccs=UTF-8");
+public:
+    CLangMap * m_Lang;
+    CLangList m_LangLst;
     CString m_szLangFileName = _T("");
     BOOL m_bHaveLang = FALSE;
     int m_nLangId = -1;
@@ -119,11 +128,14 @@ public:
     CString m_szFilesListFilePath;
     CString m_szLangFilePath;
 public:
-    bool LoadConfig(CString &szFileName, ConfigList_t &cl);
-    bool SaveConfig(CString &szFileName, ConfigList_t &cl);
+    static bool LoadConfig(CString &szFileName, CConfigList &cl);
+    static bool SaveConfig(CString &szFileName, CConfigList &cl);
 public:
-    void SearchFolderForLang(CString szPath, const bool bRecurse, LangList_t& m_LangLst);
-    bool LoadLang(CString &szFileName, LangMap_t &lm);
+    bool LoadFiles(CString &szFileName, CListT<CString>& fl);
+    bool SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat);
+public:
+    void SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst);
+    bool LoadLang(CString &szFileName, CLangMap &lm);
 public:
     bool LoadLangConfig(CString &szFileName);
     bool SaveLangConfig(CString &szFileName);
@@ -272,7 +284,9 @@ public:
     }
 };
 
-typedef CListT<CEncoderPreset> EncoderPresetList_t;
+class CEncoderPresetList : public CListT<CEncoderPreset>
+{
+};
 
 class CEncoderDefaults
 {
@@ -308,11 +322,10 @@ public:
     static int FindValidBitratePos(const int nBitrate);
     static int FindOptionIndex(CString szOption);
     static void ResetEncoderOptionsLists();
-    static void ParseEncoderPreset(CEncoderPreset &preset, ConfigList_t &clTmp);
-    static bool LoadEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-    static bool SaveEncoderPresets(EncoderPresetList_t& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
+    static bool LoadEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
+    static bool SaveEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
     static bool IsSupportedInputExt(CString &szExt);
     static int GetSupportedInputFormat(CString &szExt);
     static CString GetSupportedInputFilesFilter();
 };
-

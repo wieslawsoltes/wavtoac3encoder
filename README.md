@@ -18,10 +18,10 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 
 | Platforn              | Type        | Version       | Download                                                                                                                               |
 |-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Installer   | 6.0           | [EncWAVtoAC3-6.0-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-Win32.exe)          |
-| Windows 64-bit        | Installer   | 6.0           | [EncWAVtoAC3-6.0-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-x64.exe)              |
-| Windows 32-bit        | Portable    | 6.0           | [EncWAVtoAC3-6.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-Win32.zip)          |
-| Windows 64-bit        | Portable    | 6.0           | [EncWAVtoAC3-6.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/6.0/EncWAVtoAC3-6.0-x64.zip)              |
+| Windows 32-bit        | Installer   | 7.0           | [EncWAVtoAC3-7.0-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-Win32.exe)          |
+| Windows 64-bit        | Installer   | 7.0           | [EncWAVtoAC3-7.0-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-x64.exe)              |
+| Windows 32-bit        | Portable    | 7.0           | [EncWAVtoAC3-7.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-Win32.zip)          |
+| Windows 64-bit        | Portable    | 7.0           | [EncWAVtoAC3-7.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-x64.zip)              |
 
 ## System requirements
 
@@ -38,10 +38,6 @@ Minimum supported Linux version is Ubutnu 16.10 (using Wine 2.0).
 ## Mirrors
 
 [![Softpedia Download Mirror](http://www.softpedia.com/_img/softpedia_100_free.png)](http://www.softpedia.com/get/Multimedia/Audio/Audio-CD-Rippers-Encoders/WAV-to-AC3-Encoder.shtml)
-
-## Aften
-
-Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
 
 ## About
 
@@ -146,7 +142,7 @@ automaticaly loaded/saved by program every time the program is started/closed.
 * Presets for encoder are stored in `EncWAVtoAC3.presets` file.
 * Paths to libaften.dll engines are stored in `EncWAVtoAC3-x86.engines` and `EncWAVtoAC3-x64.engines` file.
 * User interface trasnlation files are located in `lang` sub-directory.
-* Translation files must be saved with `Unicode` charset and `BOM header`.
+* Translation files must be saved with `UTF-8` charset and `BOM header`.
 
 ## AviSynth Support
 
@@ -209,15 +205,17 @@ Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 * [Aften Website](http://aften.sourceforge.net/)
 * [Aften Sources](http://sourceforge.net/projects/aften/)
 
-## Copyrights
+## Aften
 
-WAV to AC3 Encoder, Copyright (C) 2007-2016 Wiesław Šoltés
-
+```
 Aften, Copyright (c) 2006-2007 Justin Ruggles <justinruggles@bellsouth.net>
                      2006-2007 Prakash Punnoor <prakash@punnoor.de>
+```
+Download latest version of the aften for windows from [here](https://github.com/wieslawsoltes/AftenWindowsBuilds/releases).
 
 ## License
 
+```
 WAV to AC3 Encoder
 Copyright (C) 2007-2017 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
@@ -233,3 +231,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+```

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "afxwin.h"
+#include <afxwin.h>
 #include "configuration\Configuration.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
@@ -15,7 +15,7 @@ class CMuxDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CMuxDlg)
 public:
-    CMuxDlg(CWnd* pParent = NULL);
+    CMuxDlg(CWnd* pParent = nullptr);
     virtual ~CMuxDlg();
     enum { IDD = IDD_DIALOG_MUX };
 protected:
@@ -47,16 +47,13 @@ public:
     CMyButton m_BtnChannelSR;
     CMyButton m_BtnChannelS;
     CMyButton m_ChkChannelConfigLFE;
-public:
     CMyStatic m_StcLabelFL;
     CMyStatic m_StcLabelFR;
     CMyStatic m_StcLabelFC;
     CMyStatic m_StcLabelLFE;
     CMyStatic m_StcLabelSL;
     CMyStatic m_StcLabelSR;
-public:
     CMyComboBox m_CmbChannelConfig;
-public:
     CMyEdit m_EdtChannelFL;
     CMyEdit m_EdtChannelFR;
     CMyEdit m_EdtChannelFC;
@@ -71,21 +68,16 @@ public:
     afx_msg void OnBnClickedButtonSl();
     afx_msg void OnBnClickedButtonSr();
     afx_msg void OnBnClickedButtonS();
-public:
     afx_msg void OnBnClickedButtonClearFl();
     afx_msg void OnBnClickedButtonClearFc();
     afx_msg void OnBnClickedButtonClearFr();
     afx_msg void OnBnClickedButtonClearLfe();
     afx_msg void OnBnClickedButtonClearSl();
     afx_msg void OnBnClickedButtonClearSr();
-public:
     afx_msg void OnBnClickedButtonExport();
     afx_msg void OnBnClickedButtonImport();
-public:
     afx_msg void OnBnClickedCancel();
     afx_msg void OnBnClickedOk();
-public:
     afx_msg void OnBnClickedCheckChannelConfigLfe();
-public:
     afx_msg void OnCbnSelchangeComboChannelConfig();
 };

@@ -1,5 +1,23 @@
 ﻿## Changelog
 
+### Version 7.0:
+
+- Added default configuration files to installer version.
+- Added default configuration files to portable version.
+- Added support for loading language files from relative path to settings folder.
+- Added portable mode to installer.
+- Fixed encoder error when running for the second time.
+- Refactored encoder worker thread as class.
+- Refactored encoder worker thread error handling.
+- Use nullptr instead of NULL macro.
+- Use class instead of typedef for lists.
+- Refactored Aften api code.
+- Removed unused code and comments.
+- Added Avisynth 5.1+LFE preset.
+- Fixed browse dialog title.
+- Changed language files encoding to UTF-8.
+- Changed configuration files encoding to UTF-8.
+
 ### Version 6.0:
 
 - Added dynamic layout for dialogs.

@@ -1,21 +1,16 @@
 ﻿#pragma once
 
+#include <afxcmn.h>
+#include <afxwin.h>
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
-#include "controls\MyEdit.h"
-#include "controls\MyComboBoxEdit.h"
-#include "controls\MyListCtrl.h"
-#include "controls\MyComboBox.h"
-#include "controls\MySliderCtrl.h"
-
-#include "afxwin.h"
 
 class CAboutDlg : public CMyDialogEx
 {
     DECLARE_DYNAMIC(CAboutDlg)
 public:
-    CAboutDlg(CWnd* pParent = NULL);
+    CAboutDlg(CWnd* pParent = nullptr);
     virtual ~CAboutDlg();
 public:
     enum { IDD = IDD_DIALOG_ABOUT };
@@ -30,6 +25,5 @@ protected:
 public:
     CMyStatic m_StcLicense;
     CMyStatic m_StcBuildInfo;
-public:
     CMyButton m_BtnOK;
 };
