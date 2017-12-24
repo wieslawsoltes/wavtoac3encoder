@@ -3,7 +3,8 @@
 #include "dialogs\MainDlg.h"
 #include "utilities\Utilities.h"
 
-CEncWAVtoAC3App theApp;
+CEncWAVtoAC3App m_App;
+CConfiguration m_Config;
 
 BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
     ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)

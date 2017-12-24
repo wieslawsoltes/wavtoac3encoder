@@ -16,10 +16,9 @@ public:
     virtual BOOL InitInstance();
     DECLARE_MESSAGE_MAP()
 public:
-    CConfiguration m_Config;
-public:
     void LoadConfig();
     void SaveConfig();
 };
 
-extern CEncWAVtoAC3App theApp;
+extern CEncWAVtoAC3App m_App;
+extern CConfiguration m_Config;

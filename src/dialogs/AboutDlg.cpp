@@ -35,7 +35,7 @@ BOOL CAboutDlg::OnInitDialog()
 void CAboutDlg::SetBuildInfo()
 {
     CString szBuildInfo = _T("");
-    szBuildInfo.Format(_T("%s %s,"), theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00901004) : _T("Version"), ENCWAVTOAC3_VERSION);
+    szBuildInfo.Format(_T("%s %s,"), m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00901004) : _T("Version"), ENCWAVTOAC3_VERSION);
 #if defined(_WIN32) & !defined(_WIN64)
     szBuildInfo += _T(" x86, Win32");
 #else
@@ -53,16 +53,16 @@ void CAboutDlg::SetBuildInfo()
     szBuildInfo += __DATE__;
     szBuildInfo += _T(" ");
     szBuildInfo += __TIME__;
-    szBuildInfo += theApp.m_Config.m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
+    szBuildInfo += m_Config.m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
     this->m_StcBuildInfo.SetWindowText(szBuildInfo);
 }
 
 void CAboutDlg::InitLang()
 {
-    if (theApp.m_Config.HaveLangStrings())
+    if (m_Config.HaveLangStrings())
     {
-        this->SetWindowText(theApp.m_Config.GetLangString(0x00901002));
-        this->GetDlgItem(IDOK)->SetWindowText(theApp.m_Config.GetLangString(0x00901001));
-        this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(theApp.m_Config.GetLangString(0x00901003));
+        this->SetWindowText(m_Config.GetLangString(0x00901002));
+        this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00901001));
+        this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(m_Config.GetLangString(0x00901003));
     }
 }

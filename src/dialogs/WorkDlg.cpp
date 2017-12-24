@@ -29,7 +29,7 @@ CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
     : CMyDialogEx(CWorkDlg::IDD, pParent)
 {
     pWorkerContext = new CWorkDlgWorkerContext(this);
-    pWorkerContext->pConfig = &theApp.m_Config;
+    pWorkerContext->pConfig = &m_Config;
     pWorkerContext->bTerminate = false;
     pWorkerContext->bCanUpdateWindow = true;
     pWorkerContext->hThread = nullptr;
@@ -208,20 +208,20 @@ void CWorkDlg::UpdateTotalTimer()
     if (pWorkerContext->m_ElapsedTimeTotal <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             (unsigned long)pWorkerContext->m_ElapsedTimeTotal);
     }
     else if (pWorkerContext->m_ElapsedTimeTotal <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60),
             ((unsigned long)pWorkerContext->m_ElapsedTimeTotal % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
             ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
             ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
             ((((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
@@ -243,20 +243,20 @@ void CWorkDlg::UpdateFileTimer()
     if (pWorkerContext->m_ElapsedTimeFile <= 59)
     {
         _stprintf(strTime, _T("%s 00:00:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             (unsigned long)pWorkerContext->m_ElapsedTimeFile);
     }
     else if (pWorkerContext->m_ElapsedTimeFile <= 3599)
     {
         _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60),
             ((unsigned long)pWorkerContext->m_ElapsedTimeFile % 60));
     }
     else
     {
         _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-            theApp.m_Config.HaveLangStrings() ? (LPCTSTR)theApp.m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+            m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
             ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) / 60,
             ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60,
             ((((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
@@ -282,17 +282,17 @@ void CWorkDlg::CreateWorker()
     if (pWorkerContext->hThread == nullptr)
     {
         OutputDebugString(_T("Error: Failed to create worker thread!"));
-        this->MessageBox(theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
-            theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
+        this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
+            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
             MB_OK | MB_ICONERROR);
     }
 }
 
 void CWorkDlg::InitLang()
 {
-    if (theApp.m_Config.HaveLangStrings())
+    if (m_Config.HaveLangStrings())
     {
-        this->SetWindowText(theApp.m_Config.GetLangString(0x00A01001));
-        this->GetDlgItem(IDCANCEL)->SetWindowText(theApp.m_Config.GetLangString(0x00A01002));
+        this->SetWindowText(m_Config.GetLangString(0x00A01001));
+        this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00A01002));
     }
 }

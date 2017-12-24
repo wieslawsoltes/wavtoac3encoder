@@ -26,11 +26,11 @@
 #define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
 #define FILENAME_FILES _T("EncWAVtoAC3.files")
 
-#define DEFAULT_PRESET_NAME (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207001) : _T("Default"))
-#define DEFAULT_TEXT_AUTO (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207002) : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207003) : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (theApp.m_Config.HaveLangStrings() ? theApp.m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
+#define DEFAULT_PRESET_NAME (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207001) : _T("Default"))
+#define DEFAULT_TEXT_AUTO (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207002) : _T("<Auto>"))
+#define DEFAULT_TEXT_IGNORED (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207003) : _T("<Ignored>"))
+#define DEFAULT_TEXT_OUTPUT_PATH (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
+#define DEFAULT_TEXT_OUTPUT_FILE (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
 
 class CConfigEntry
 {
