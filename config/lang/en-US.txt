@@ -459,19 +459,3 @@
 0x00C0100F=Surround Right Channel
 0x00C01010=Surround Channel
 0x00C01011=Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||
-
-//
-// Command-Line
-//
-
-0x00D01001=WAV to AC3 Encoder Command-Line Help\n\nUsage: EncWAVtoAC3 [Options]\n\nOptions:\n\n-h, --help\nShow command-line help message.\n\n-x,--encode-and-exit\nEncode input files and exit.\n\n-r, --read-only\nDo not save configuration on exit.\n\n-i, --input-file <file.ext>\nSet input files path (*.wav, *.bin, *.pcm, *.raw, *.avs).\n\n-o, --output-file <file.ext>\nSet output file path (*.ac3).\n\n-d, --output-path <path>\nSet default output path (default: input file path is used).\n\n-c, --load-config <file.ext>\nLoad program configation (*.config).\n\n-f, --load-files <file.ext>\nLoad list of files to encode (*.files, *.mux).\n\n-p, --load-presets <file.ext>\nLoad list of preconfigured presets (*.presets).\n\n-e, --load-engines <file.ext>\nLoad list of Aften engines (*.engines).\n\n-m, --mux-wizard\nShow standalone MUX Wizard window.\n
-0x00D01002=WAV to AC3 Encoder Command-Line Help\n\nUsage: EncWAVtoAC3 [Options]\n\nOptions:\n\n-h, --help\nShow command-line help message.\n\n-x,--encode-and-exit\nEncode input files and exit.\n\n-r, --read-only\nDo not save configuration on exit.\n\n-i, --input-file <file.ext>\nSet input files path (*.wav, *.bin, *.pcm, *.raw).\n\n-o, --output-file <file.ext>\nSet output file path (*.ac3).\n\n-d, --output-path <path>\nSet default output path (default: input file path is used).\n\n-c, --load-config <file.ext>\nLoad program configation (*.config).\n\n-f, --load-files <file.ext>\nLoad list of files to encode (*.files, *.mux).\n\n-p, --load-presets <file.ext>\nLoad list of preconfigured presets (*.presets).\n\n-e, --load-engines <file.ext>\nLoad list of Aften engines (*.engines).\n\n-m, --mux-wizard\nShow standalone MUX Wizard window.\n
-0x00D01003=Command-Line Help
-0x00D01004=Error
-0x00D01005=Use --help option to obtain more informations.
-0x00D01006=Invalid command-line argument!
-0x00D01007=Unknown option Id!
-0x00D01008=Input file is missing! Please use also --input-file option!.
-0x00D01009=Can not combine --input-file with --load-files option!
-0x00D0100A=Can not combine --output-file with --load-files option!
-0x00D0100B=Can not combine --output-file with --output-path option!

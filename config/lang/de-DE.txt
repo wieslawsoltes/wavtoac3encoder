@@ -459,19 +459,3 @@
 0x00C0100F=Hinten rechts
 0x00C01010=Hinten Mitte
 0x00C01011=Unterstützte Dateien (*.files;*.mux)|*.files;*.mux|Dateiliste (*.files)|*.files|MUX-Dateien (*.mux)|*.mux|Alle Dateien (*.*)|*.*||
-
-//
-// Command-Line
-//
-
-0x00D01001=WAV to AC3 Encoder Befehlszeilenhilfe\n\nVerwendung: EncWAVtoAC3 [Optionen]\n\nOptionen:\n\n-h, --help\nZeigt dieses Befehlszeilenhilfe an.\n\n-x,--encode-and-exit\nEingangsdatei kodieren und beenden.\n\n-r, --read-only\nKonfigurationsdatei beim Beenden nicht speichern.\n\n-i, --input-file <datei.erw>\nSetzt den Eingabedateipfad (*.wav, *.bin, *.pcm, *.raw, *.avs).\n\n-o, --output-file <datei.erw>\nSetzt den Ausgabedateipfad (*.ac3).\n\n-d, --output-path <pfad>\nSetzt den Standardausgabepfad (Standard: Eingabedateipfad wird verwendet).\n\n-c, --load-config <datei.erw>\nLäd die Programmkonfigation (*.config).\n\n-f, --load-files <datei.erw>\nLäd die Dateiliste zum kodieren (*.files, *.mux).\n\n-p, --load-presets <datei.erw>\nLäd die Liste der vorkonfigurierten Voreinstellungen (*.presets).\n\n-e, --load-engines <datei.erw>\nLäd die Liste von Aften Engines (*.engines).\n\n-m, --mux-wizard\nZeigt das eigenständige MUX-Assistent Fenster an.\n
-0x00D01002=WAV to AC3 Encoder Befehlszeilenhilfe\n\nVerwendung: EncWAVtoAC3 [Optionen]\n\nOptionen:\n\n-h, --help\nZeigt dieses Befehlszeilenhilfe an.\n\n-x,--encode-and-exit\nEingangsdatei kodieren und beenden.\n\n-r, --read-only\nKonfigurationsdatei beim Beenden nicht speichern.\n\n-i, --input-file <datei.erw>\nSetzt den Eingabedateipfad (*.wav, *.bin, *.pcm, *.raw).\n\n-o, --output-file <datei.erw>\nSetzt den Ausgabedateipfad (*.ac3).\n\n-d, --output-path <pfad>\nSetzt den Standardausgabepfad (Standard: Eingabedateipfad wird verwendet).\n\n-c, --load-config <datei.erw>\nLäd die Programmkonfigation (*.config).\n\n-f, --load-files <datei.erw>\nLäd die Dateiliste zum kodieren (*.files, *.mux).\n\n-p, --load-presets <datei.erw>\nLäd die Liste der vorkonfigurierten Voreinstellungen (*.presets).\n\n-e, --load-engines <datei.erw>\nLäd die Liste von Aften Engines (*.engines).\n\n-m, --mux-wizard\nZeigt das eigenständige MUX-Assistent Fenster an.\n
-0x00D01003=Befehlszeilenhilfe
-0x00D01004=Fehler
-0x00D01005=Verwenden Sie für weitere Informationen die Option --help.
-0x00D01006=Ungültiges Befehlszeilenargument!
-0x00D01007=Unbekannte Options-Kennung!
-0x00D01008=Eingabedatei fehlt! Bitte nutzen Sie auch die --input-file Option!.
-0x00D01009=Keine Kombination von --input-file mit --load-files Option!
-0x00D0100A=Keine Kombination von --output-file with --load-files Option!
-0x00D0100B=Keine Kombination von --output-file with --output-path Option!
