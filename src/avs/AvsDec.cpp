@@ -1,9 +1,9 @@
-﻿#include "targetver.h"
-#define WIN32_LEAN_AND_MEAN
+﻿#define WIN32_LEAN_AND_MEAN
+#include "targetver.h"
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>
-#include "worker\Avs2Raw.h"
+#include "Avs2Raw.h"
 
 int main(int argc, char *argv[])
 {

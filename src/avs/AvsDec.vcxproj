@@ -168,11 +168,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\avisynth64\src\core\avisynth.h" />
-    <ClInclude Include="..\..\avisynth64\src\internal.h" />
-    <ClInclude Include="..\..\avisynth\src\core\avisynth.h" />
-    <ClInclude Include="..\..\avisynth\src\internal.h" />
-    <ClInclude Include="..\..\worker\Avs2Raw.h" />
+    <ClInclude Include="avisynth64\src\core\avisynth.h" />
+    <ClInclude Include="avisynth64\src\internal.h" />
+    <ClInclude Include="avisynth\src\core\avisynth.h" />
+    <ClInclude Include="avisynth\src\internal.h" />
+    <ClInclude Include="Avs2Raw.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>

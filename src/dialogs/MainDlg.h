@@ -14,7 +14,7 @@
 #include "controls\MySpinButtonCtrl.h"
 #include "configuration\Configuration.h"
 #include "libaften\aften.h"
-#include "worker\Avs2Raw.h"
+#include "avs\Avs2Raw.h"
 
 #define IDC_STATUSBAR 1500
 #define IDC_COMBOBOX 1501

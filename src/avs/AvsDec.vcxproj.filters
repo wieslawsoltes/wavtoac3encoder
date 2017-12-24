@@ -24,19 +24,19 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\avisynth\src\core\avisynth.h">
+    <ClInclude Include="avisynth\src\core\avisynth.h">
       <Filter>Header Files\Avisynth</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\avisynth\src\internal.h">
+    <ClInclude Include="avisynth\src\internal.h">
       <Filter>Header Files\Avisynth</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\avisynth64\src\core\avisynth.h">
+    <ClInclude Include="avisynth64\src\core\avisynth.h">
       <Filter>Header Files\Avisynth64</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\avisynth64\src\internal.h">
+    <ClInclude Include="avisynth64\src\internal.h">
       <Filter>Header Files\Avisynth64</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\worker\Avs2Raw.h">
+    <ClInclude Include="Avs2Raw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

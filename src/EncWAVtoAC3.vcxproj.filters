@@ -157,22 +157,22 @@
     <ClInclude Include="dialogs\WorkDlg.h">
       <Filter>Header Files\Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="avisynth64\src\core\avisynth.h">
+    <ClInclude Include="avs\avisynth64\src\core\avisynth.h">
       <Filter>Header Files\Worker\Avisynth64</Filter>
     </ClInclude>
-    <ClInclude Include="avisynth64\src\internal.h">
+    <ClInclude Include="avs\avisynth64\src\internal.h">
       <Filter>Header Files\Worker\Avisynth64</Filter>
     </ClInclude>
-    <ClInclude Include="avisynth\src\core\avisynth.h">
+    <ClInclude Include="avs\avisynth\src\core\avisynth.h">
       <Filter>Header Files\Worker\Avisynth</Filter>
     </ClInclude>
-    <ClInclude Include="avisynth\src\internal.h">
+    <ClInclude Include="avs\avisynth\src\internal.h">
       <Filter>Header Files\Worker\Avisynth</Filter>
     </ClInclude>
     <ClInclude Include="worker\AftenAPI.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
-    <ClInclude Include="worker\Avs2Raw.h">
+    <ClInclude Include="avs\Avs2Raw.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
     <ClInclude Include="configuration\Configuration.h">
