@@ -109,7 +109,8 @@ public:
         }
         catch (AvisynthError e)
         {
-            OutputDebugString(_T("Avisynth Error: Loading Avisynth script message: ") + CString(e.msg));
+            OutputDebugString(_T("Avisynth Error: Loading Avisynth script message: "));
+            OutputDebugStringA(e.msg);
             delete env;
             env = nullptr;
             return false;
@@ -202,7 +203,8 @@ public:
         }
         catch (AvisynthError e)
         {
-            OutputDebugString(_T("Avisynth Error: GetAudio() error message: ") + CString(e.msg));
+            OutputDebugString(_T("Avisynth Error: GetAudio() error message: "));
+            OutputDebugStringA(e.msg);
             delete Video;
             delete env;
             return -1;
