@@ -201,6 +201,7 @@ Open EncWAVtoAC3.sln in Visual Studios 2017 or above.
 ### Dependencies
 
 * [MfcToolkit](https://github.com/wieslawsoltes/MfcToolkit)
+* [AvsDec](https://github.com/wieslawsoltes/AvsDec)
 * [AftenWindowsBuilds](https://github.com/wieslawsoltes/AftenWindowsBuilds)
 * [Aften Website](http://aften.sourceforge.net/)
 * [Aften Sources](http://sourceforge.net/projects/aften/)
