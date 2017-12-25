@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Controls", "src\common\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Utilities", "src\common\utilities\MFC.Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AvsDec", "src\avs\AvsDec.vcxproj", "{5689D579-90F0-4F6A-B829-CA954FD94F99}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -43,14 +41,6 @@ Global
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|Win32.Build.0 = Release|Win32
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|x64.ActiveCfg = Release|x64
 		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}.Release|x64.Build.0 = Release|x64
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Debug|Win32.Build.0 = Debug|Win32
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Debug|x64.ActiveCfg = Debug|x64
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Debug|x64.Build.0 = Debug|x64
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Release|Win32.ActiveCfg = Release|Win32
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Release|Win32.Build.0 = Release|Win32
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Release|x64.ActiveCfg = Release|x64
-		{5689D579-90F0-4F6A-B829-CA954FD94F99}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
