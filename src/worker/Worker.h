@@ -3,7 +3,7 @@
 #include "configuration\Configuration.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
-#include "avs\Avs2Raw.h"
+#include "avs\src\Avs2Raw.h"
 
 class CWorkerContext
 {
