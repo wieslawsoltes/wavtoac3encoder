@@ -3,6 +3,7 @@
 *.sh text eol=lf
 *.png -text
 *.ico -text
+*.bmp -text
 
 # Custom for Visual Studio
 *.cs     diff=csharp
