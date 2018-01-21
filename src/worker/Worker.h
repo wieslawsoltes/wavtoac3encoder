@@ -12,8 +12,8 @@ public:
 public:
     AftenAPI api;
 public:
-    CListT<CString> *pFilesList;
-    CListT<bool> *pStatusList;
+    util::CListT<CString> *pFilesList;
+    util::CListT<bool> *pStatusList;
 public:
     CEncoderPreset * pPreset;
 public:

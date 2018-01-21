@@ -12,7 +12,7 @@
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 
-class CWorkDlg : public CMyDialogEx
+class CWorkDlg : public controls::CMyDialogEx
 {
     DECLARE_DYNAMIC(CWorkDlg)
 public:
@@ -36,13 +36,13 @@ public:
 public:
     CWorkerContext * pWorkerContext;
 public:
-    CMyStatic m_StcOut;
-    CMyStatic m_StcOutInfo;
-    CMyStatic m_StcTimeCurrent;
-    CMyStatic m_StcTimeTotal;
-    CMyProgressCtrl m_PrgCurrent;
-    CMyProgressCtrl m_PrgTotal;
-    CMyButton m_BtnCancel;
+    controls::CMyStatic m_StcOut;
+    controls::CMyStatic m_StcOutInfo;
+    controls::CMyStatic m_StcTimeCurrent;
+    controls::CMyStatic m_StcTimeTotal;
+    controls::CMyProgressCtrl m_PrgCurrent;
+    controls::CMyProgressCtrl m_PrgTotal;
+    controls::CMyButton m_BtnCancel;
 public:
     afx_msg void OnClose();
     afx_msg void OnDestroy();

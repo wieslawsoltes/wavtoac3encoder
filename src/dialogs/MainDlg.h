@@ -51,7 +51,7 @@ public:
     }
 };
 
-class CMainDlg : public CMyDialogEx
+class CMainDlg : public controls::CMyDialogEx
 {
     DECLARE_DYNAMIC(CMainDlg)
 public:
@@ -76,40 +76,40 @@ public:
     bool bDisableAllWarnings;
     bool bSaveConfig;
 public:
-    CMyStatusBarCtrl m_StatusBar;
-    CMySliderCtrl m_SldBitrate;
-    CMyListCtrl m_LstSettings;
-    CMyListCtrl m_LstFiles;
-    CMyStatic m_StcBitrate;
-    CMyStatic m_StcSelected;
-    CMyStatic m_StcPreconfigured;
-    CMyStatic m_StcQualityBitrate;
-    CMyComboBox m_CmbRawSampleFormat;
-    CMyComboBox m_CmbValue;
-    CMyComboBox m_CmbPresets;
-    CMyComboBox m_CmbEngines;
-    CMyComboBoxEdit m_EdtCmbPresetName;
-    CMyEdit m_EdtRawSamplerate;
-    CMyEdit m_EdtRawChannels;
-    CMyEdit m_EdtOutPath;
-    CMyEdit m_EdtThreads;
-    CMyButton m_ChkVbr;
-    CMyButton m_BtnEncode;
-    CMyButton m_ChkSimdMMX;
-    CMyButton m_ChkSimdSSE;
-    CMyButton m_ChkSimdSSE2;
-    CMyButton m_ChkSimdSSE3;
-    CMyButton m_BtnResetCurrent;
-    CMyButton m_BtnRemove;
-    CMyButton m_BtnAddNew;
-    CMyButton m_BtnAddFiles;
-    CMyButton m_BtnBrowse;
-    CMyButton m_ChkMultipleMonoInput;
-    CMyButton m_BtnMuxWizard;
-    CMyButton m_BtnEngines;
-    CMySpinButtonCtrl m_SpnRawSampleRate;
-    CMySpinButtonCtrl m_SpnRawChannels;
-    CMySpinButtonCtrl m_SpnThreads;
+    controls::CMyStatusBarCtrl m_StatusBar;
+    controls::CMySliderCtrl m_SldBitrate;
+    controls::CMyListCtrl m_LstSettings;
+    controls::CMyListCtrl m_LstFiles;
+    controls::CMyStatic m_StcBitrate;
+    controls::CMyStatic m_StcSelected;
+    controls::CMyStatic m_StcPreconfigured;
+    controls::CMyStatic m_StcQualityBitrate;
+    controls::CMyComboBox m_CmbRawSampleFormat;
+    controls::CMyComboBox m_CmbValue;
+    controls::CMyComboBox m_CmbPresets;
+    controls::CMyComboBox m_CmbEngines;
+    controls::CMyComboBoxEdit m_EdtCmbPresetName;
+    controls::CMyEdit m_EdtRawSamplerate;
+    controls::CMyEdit m_EdtRawChannels;
+    controls::CMyEdit m_EdtOutPath;
+    controls::CMyEdit m_EdtThreads;
+    controls::CMyButton m_ChkVbr;
+    controls::CMyButton m_BtnEncode;
+    controls::CMyButton m_ChkSimdMMX;
+    controls::CMyButton m_ChkSimdSSE;
+    controls::CMyButton m_ChkSimdSSE2;
+    controls::CMyButton m_ChkSimdSSE3;
+    controls::CMyButton m_BtnResetCurrent;
+    controls::CMyButton m_BtnRemove;
+    controls::CMyButton m_BtnAddNew;
+    controls::CMyButton m_BtnAddFiles;
+    controls::CMyButton m_BtnBrowse;
+    controls::CMyButton m_ChkMultipleMonoInput;
+    controls::CMyButton m_BtnMuxWizard;
+    controls::CMyButton m_BtnEngines;
+    controls::CMySpinButtonCtrl m_SpnRawSampleRate;
+    controls::CMySpinButtonCtrl m_SpnRawChannels;
+    controls::CMySpinButtonCtrl m_SpnThreads;
 protected:
     virtual void DoDataExchange(CDataExchange* pDX);
     virtual BOOL OnInitDialog();

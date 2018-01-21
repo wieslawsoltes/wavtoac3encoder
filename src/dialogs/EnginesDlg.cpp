@@ -130,7 +130,7 @@ void CEnginesDlg::OnBnClickedButtonEnginesAdd()
 
 void CEnginesDlg::OnBnClickedButtonEnginesRemove()
 {
-    CListT<int> list;
+    util::CListT<int> list;
     POSITION pos;
 
     pos = this->m_LstEngines.GetFirstSelectedItemPosition();

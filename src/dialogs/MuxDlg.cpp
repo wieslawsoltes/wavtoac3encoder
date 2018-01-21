@@ -150,7 +150,7 @@ void CMuxDlg::InitCtrls()
     this->m_CmbChannelConfig.SetTooltipText(szTmpText);
     this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
     this->m_BtnChannelFL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
     this->m_BtnChannelFR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
@@ -343,7 +343,7 @@ void CMuxDlg::SetControlsState()
 
 bool CMuxDlg::LoadFilesList(CString &szFileName)
 {
-    CListT<CString> fl;
+    util::CListT<CString> fl;
     if (m_Config.LoadFiles(szFileName, fl) == false)
         return false;
 
@@ -380,7 +380,7 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
     try
     {
-        CListT<CString> fl;
+        util::CListT<CString> fl;
         CString szBuffer;
 
 #define AddFile(index) \
@@ -479,7 +479,7 @@ bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
     }
 }
 
-void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent)
+void CMuxDlg::ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent)
 {
     if (m_BtnCurrent == nullptr || m_EdtCurrent == nullptr)
         return;
@@ -487,7 +487,7 @@ void CMuxDlg::ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCu
     CString szCurrentFileName;
 
     m_EdtCurrent->GetWindowText(szCurrentFileName);
-    szCurrentFileName = GetFileName(szCurrentFileName);
+    szCurrentFileName = util::GetFileName(szCurrentFileName);
 
     CFileDialog fd(TRUE,
         CEncoderDefaults::szSupportedInputExt[0],

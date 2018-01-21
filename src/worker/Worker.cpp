@@ -154,7 +154,7 @@ void CWorker::UpdateProgress()
             if (pf_info->pcm_format)
             {
 #ifdef _UNICODE
-                ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
+                util::ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
                     fmt,
                     strlen(pf_info->pcm_format->long_name));
 #else
@@ -302,7 +302,7 @@ BOOL CWorker::Run()
     ofp = nullptr;
 
     bAvisynthInput = false;
-    if (GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
+    if (util::GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
         bAvisynthInput = true;
 
     pContext->nInTotalSize = 0;
@@ -317,7 +317,7 @@ BOOL CWorker::Run()
     if (bAvisynthInput == true)
     {
 #ifdef _UNICODE
-        ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
+        util::ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
 #else
         if (decoderAVS.OpenAvisynth(pszInPath[0]) == false)
@@ -358,7 +358,7 @@ BOOL CWorker::Run()
             }
             else
             {
-                pContext->nInTotalSize += GetFileSizeInt64(ifp[i]);
+                pContext->nInTotalSize += util::GetFileSizeInt64(ifp[i]);
             }
         }
     }
@@ -403,7 +403,7 @@ BOOL CWorker::Run()
     }
     else
     {
-        input_file_format = CEncoderDefaults::GetSupportedInputFormat(GetFileExtension(szInPath[0]));
+        input_file_format = CEncoderDefaults::GetSupportedInputFormat(util::GetFileExtension(szInPath[0]));
     }
 
     if (bAvisynthInput == false)
@@ -796,12 +796,12 @@ BOOL CWorker::Encode()
 
             szInPath[0] = pContext->pFilesList->Get(i);
             szOutPath = szInPath[0];
-            szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
+            szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
             if (pContext->bUseOutPath == true)
             {
-                CString szFile = GetFileName(szOutPath);
+                CString szFile = util::GetFileName(szOutPath);
 
                 if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
                     (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))
@@ -875,7 +875,7 @@ BOOL CWorker::Encode()
         }
 
         szOutPath = szInPath[0];
-        szOutPath.Truncate(szOutPath.GetLength() - GetFileExtension(szOutPath).GetLength());
+        szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
         szOutPath.Append(CEncoderDefaults::szSupportedOutputExt[0]);
 
         if (pContext->bUseOutPath == true)

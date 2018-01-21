@@ -6,7 +6,7 @@
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
 
-class CAboutDlg : public CMyDialogEx
+class CAboutDlg : public controls::CMyDialogEx
 {
     DECLARE_DYNAMIC(CAboutDlg)
 public:
@@ -23,7 +23,7 @@ protected:
 protected:
     DECLARE_MESSAGE_MAP()
 public:
-    CMyStatic m_StcLicense;
-    CMyStatic m_StcBuildInfo;
-    CMyButton m_BtnOK;
+    controls::CMyStatic m_StcLicense;
+    controls::CMyStatic m_StcBuildInfo;
+    controls::CMyButton m_BtnOK;
 };

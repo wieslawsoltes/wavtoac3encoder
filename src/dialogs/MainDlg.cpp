@@ -268,11 +268,11 @@ void CMainDlg::OnBnClickedButtonEncode()
 
     if (m_Config.m_bIsPortable == true)
     {
-        ::SetCurrentDirectory(GetExeFilePath());
+        ::SetCurrentDirectory(util::GetExeFilePath());
     }
     else
     {
-        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+        ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     int nItemsCount = this->m_LstFiles.GetItemCount();
@@ -315,8 +315,8 @@ void CMainDlg::OnBnClickedButtonEncode()
     }
 
     CWorkDlg dlg;
-    CListT<CString> list;
-    CListT<bool> listStatus;
+    util::CListT<CString> list;
+    util::CListT<bool> listStatus;
     dlg.pWorkerContext->nTotalSize = 0;
     CString szSizeBuff;
     CString szFileBuffer;
@@ -325,7 +325,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     for (int i = 0; i < nItemsCount; i++)
     {
         szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
-        if (GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
+        if (util::GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
             bAvisynthInput = true;
 
         list.Insert(szFileBuffer);
@@ -390,7 +390,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     {
         if (this->bMultipleMonoInput == false)
         {
-            if (MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
+            if (util::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
             {
                 OutputDebugString(_T("Error: Failed to create output path!"));
                 this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
@@ -404,10 +404,10 @@ void CMainDlg::OnBnClickedButtonEncode()
         else
         {
             CString szTmpOutPath = dlg.pWorkerContext->szOutPath;
-            CString szFile = GetFileName(dlg.pWorkerContext->szOutPath);
+            CString szFile = util::GetFileName(dlg.pWorkerContext->szOutPath);
 
             szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
-            if (MakeFullPath(szTmpOutPath) == false)
+            if (util::MakeFullPath(szTmpOutPath) == false)
             {
                 OutputDebugString(_T("Error: Failed to create output path!"));
                 this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
@@ -425,7 +425,7 @@ void CMainDlg::OnBnClickedButtonEncode()
     dlg.pWorkerContext->bMultiMonoInput = this->bMultipleMonoInput;
     dlg.pWorkerContext->api = this->api;
 
-    CTimeCount countTime;
+    util::CTimeCount countTime;
     CString szText;
 
     countTime.Start();
@@ -527,7 +527,7 @@ void CMainDlg::OnBnClickedButtonPresetAdd()
     this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName);
     this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 }
 
 void CMainDlg::OnBnClickedButtonPresetDel()
@@ -558,7 +558,7 @@ void CMainDlg::OnBnClickedButtonPresetDel()
             this->nCurrentPreset = nPreset;
         }
 
-        SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
         this->OnCbnSelchangeComboPresets();
     }
@@ -746,11 +746,11 @@ void CMainDlg::OnCbnSelchangeComboEngines()
 
     if (m_Config.m_bIsPortable == true)
     {
-        ::SetCurrentDirectory(GetExeFilePath());
+        ::SetCurrentDirectory(util::GetExeFilePath());
     }
     else
     {
-        ::SetCurrentDirectory(GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+        ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     if (this->api.IsAftenOpen())
@@ -1143,7 +1143,7 @@ bool CMainDlg::SaveProgramEngines(CString szFileName)
 
 bool CMainDlg::LoadFilesList(CString &szFileName)
 {
-    CListT<CString> fl;
+    util::CListT<CString> fl;
     if (m_Config.LoadFiles(szFileName, fl))
     {
         this->m_LstFiles.DeleteAllItems();
@@ -1161,7 +1161,7 @@ bool CMainDlg::LoadFilesList(CString &szFileName)
 
 bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
 {
-    CListT<CString> fl;
+    util::CListT<CString> fl;
     int nItems = this->m_LstFiles.GetItemCount();
     for (int i = 0; i < nItems; i++)
     {
@@ -1310,7 +1310,7 @@ void CMainDlg::AddItemToFileList(CString szPath)
 
     this->m_LstFiles.SetItemText(nItem, 0, szPath);
 
-    if (GetFileExtension(szPath).MakeLower() == _T("avs"))
+    if (util::GetFileExtension(szPath).MakeLower() == _T("avs"))
     {
         AvsAudioInfo infoAVS;
         memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -1456,7 +1456,7 @@ void CMainDlg::UpdateSettingsComboBox(int nItem)
         this->m_CmbValue.AddString(CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
     }
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
     if (this->encPresets.Count() <= 0)
         this->m_CmbValue.SetCurSel(CEncoderDefaults::encOpt[nItem].nDefaultValue);
@@ -2167,10 +2167,10 @@ BOOL CMainDlg::OnInitDialog()
         OutputDebugString(_T("Failed to load configuration."));
     }
 
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
-    SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
+    util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
 
     COMBOBOXINFO cbi;
     ZeroMemory(&cbi, sizeof(COMBOBOXINFO));
@@ -2447,7 +2447,7 @@ void CMainDlg::OnListMoveDown()
     POSITION pos;
     CString szPath[2] = { _T(""), _T("") };
     CString szSize[2] = { _T(""), _T("") };
-    CListT<ItemToMove> listSel;
+    util::CListT<ItemToMove> listSel;
 
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
     while (pos != nullptr)
@@ -2491,7 +2491,7 @@ void CMainDlg::OnListMoveDown()
 
 void CMainDlg::OnListDelFiles()
 {
-    CListT<int> list;
+    util::CListT<int> list;
     POSITION pos;
 
     pos = this->m_LstFiles.GetFirstSelectedItemPosition();
@@ -2693,7 +2693,7 @@ bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
     char szInputFileAVS[MAX_PATH] = "";
 
 #ifdef _UNICODE
-    ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
+    util::ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
     if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
 #else
     if (decoderAVS.OpenAvisynth(pszInPath) == false)
@@ -2722,7 +2722,7 @@ void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
         int nItem = m_LstFiles.GetNextSelectedItem(pos);
         CString szFileName = m_LstFiles.GetItemText(nItem, 0);
 
-        if (GetFileExtension(szFileName).MakeLower() == _T("avs"))
+        if (util::GetFileExtension(szFileName).MakeLower() == _T("avs"))
         {
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -3151,7 +3151,7 @@ void CMainDlg::OnFileLoadPresets()
                 this->m_CmbPresets.AddString(encPresets.Get(i).szName);
             }
 
-            SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+            util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
             this->nCurrentPreset = 0;
             this->m_CmbPresets.SetCurSel(0);
@@ -3270,7 +3270,7 @@ void CMainDlg::OnLanguageChange(UINT nID)
 
 void CMainDlg::OnHelpWebsite()
 {
-    LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
+    util::LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
 }
 
 void CMainDlg::OnHelpAbout()

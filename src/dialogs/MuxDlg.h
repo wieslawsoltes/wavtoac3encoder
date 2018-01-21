@@ -11,7 +11,7 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-class CMuxDlg : public CMyDialogEx
+class CMuxDlg : public controls::CMyDialogEx
 {
     DECLARE_DYNAMIC(CMuxDlg)
 public:
@@ -32,34 +32,34 @@ public:
     void SetControlsState();
     bool LoadFilesList(CString &szFileName);
     bool SaveFilesList(CString &szFileName, int nFormat);
-    void ShowOpenFileDlg(int nID, CMyButton *m_BtnCurrent, CMyEdit *m_EdtCurrent);
+    void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
 public:
     int nChannelConfig;
     bool bLFE;
     CString szInputFiles[CEncoderDefaults::nNumMaxInputFiles];
     CString szTmpInputFiles[CEncoderDefaults::nNumMaxInputFiles];
 public:
-    CMyButton m_BtnChannelFL;
-    CMyButton m_BtnChannelFR;
-    CMyButton m_BtnChannelFC;
-    CMyButton m_BtnChannelLFE;
-    CMyButton m_BtnChannelSL;
-    CMyButton m_BtnChannelSR;
-    CMyButton m_BtnChannelS;
-    CMyButton m_ChkChannelConfigLFE;
-    CMyStatic m_StcLabelFL;
-    CMyStatic m_StcLabelFR;
-    CMyStatic m_StcLabelFC;
-    CMyStatic m_StcLabelLFE;
-    CMyStatic m_StcLabelSL;
-    CMyStatic m_StcLabelSR;
-    CMyComboBox m_CmbChannelConfig;
-    CMyEdit m_EdtChannelFL;
-    CMyEdit m_EdtChannelFR;
-    CMyEdit m_EdtChannelFC;
-    CMyEdit m_EdtChannelLFE;
-    CMyEdit m_EdtChannelSL;
-    CMyEdit m_EdtChannelSR;
+    controls::CMyButton m_BtnChannelFL;
+    controls::CMyButton m_BtnChannelFR;
+    controls::CMyButton m_BtnChannelFC;
+    controls::CMyButton m_BtnChannelLFE;
+    controls::CMyButton m_BtnChannelSL;
+    controls::CMyButton m_BtnChannelSR;
+    controls::CMyButton m_BtnChannelS;
+    controls::CMyButton m_ChkChannelConfigLFE;
+    controls::CMyStatic m_StcLabelFL;
+    controls::CMyStatic m_StcLabelFR;
+    controls::CMyStatic m_StcLabelFC;
+    controls::CMyStatic m_StcLabelLFE;
+    controls::CMyStatic m_StcLabelSL;
+    controls::CMyStatic m_StcLabelSR;
+    controls::CMyComboBox m_CmbChannelConfig;
+    controls::CMyEdit m_EdtChannelFL;
+    controls::CMyEdit m_EdtChannelFR;
+    controls::CMyEdit m_EdtChannelFC;
+    controls::CMyEdit m_EdtChannelLFE;
+    controls::CMyEdit m_EdtChannelSL;
+    controls::CMyEdit m_EdtChannelSR;
 public:
     afx_msg void OnBnClickedButtonFl();
     afx_msg void OnBnClickedButtonFr();

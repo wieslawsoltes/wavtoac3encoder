@@ -61,11 +61,11 @@ public:
     }
 };
 
-class CConfigList : public CListT<CConfigEntry>
+class CConfigList : public util::CListT<CConfigEntry>
 {
 };
 
-class CLangMap : public CMapT<int, CString>
+class CLangMap : public util::CMapT<int, CString>
 {
 };
 
@@ -102,7 +102,7 @@ public:
     }
 };
 
-class CLangList : public CListT<CLang>
+class CLangList : public util::CListT<CLang>
 {
 };
 
@@ -131,8 +131,8 @@ public:
     static bool LoadConfig(CString &szFileName, CConfigList &cl);
     static bool SaveConfig(CString &szFileName, CConfigList &cl);
 public:
-    bool LoadFiles(CString &szFileName, CListT<CString>& fl);
-    bool SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat);
+    bool LoadFiles(CString &szFileName, util::CListT<CString>& fl);
+    bool SaveFiles(CString &szFileName, util::CListT<CString>& fl, int nFormat);
 public:
     void SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst);
     bool LoadLang(CString &szFileName, CLangMap &lm);
@@ -188,8 +188,8 @@ public:
     CString szName;
     CString szOption;
     CString szHelpText;
-    CListT<CString> listOptNames;
-    CListT<int> listOptValues;
+    util::CListT<CString> listOptNames;
+    util::CListT<int> listOptValues;
     int nDefaultValue;
     int nIgnoreValue;
     CString szGroupName;
@@ -284,7 +284,7 @@ public:
     }
 };
 
-class CEncoderPresetList : public CListT<CEncoderPreset>
+class CEncoderPresetList : public util::CListT<CEncoderPreset>
 {
 };
 

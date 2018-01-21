@@ -7,7 +7,7 @@
 #include "controls\MyListCtrl.h"
 #include "configuration\Configuration.h"
 
-class CEnginesDlg : public CMyDialogEx
+class CEnginesDlg : public controls::CMyDialogEx
 {
     DECLARE_DYNAMIC(CEnginesDlg)
 public:
@@ -23,9 +23,9 @@ public:
 public:
     volatile bool bUpdateList;
 public:
-    CMyListCtrl m_LstEngines;
-    CMyEdit m_EdtEngineName;
-    CMyEdit m_EdtEnginePath;
+    controls::CMyListCtrl m_LstEngines;
+    controls::CMyEdit m_EdtEngineName;
+    controls::CMyEdit m_EdtEnginePath;
     int nCurrSel;
 public:
     bool InsertProgramEngines();

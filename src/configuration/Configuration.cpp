@@ -76,7 +76,7 @@ bool CConfiguration::SaveConfig(CString &szFileName, CConfigList &cl)
     }
 }
 
-bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
+bool CConfiguration::LoadFiles(CString &szFileName, util::CListT<CString>& fl)
 {
     try
     {
@@ -94,7 +94,7 @@ bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
             {
                 szBuffer.TrimLeft('"');
                 szBuffer.TrimRight('"');
-                if (CEncoderDefaults::IsSupportedInputExt(GetFileExtension(szBuffer)) == true)
+                if (CEncoderDefaults::IsSupportedInputExt(util::GetFileExtension(szBuffer)) == true)
                 {
                     CString szPath = szBuffer;
                     fl.Insert(szPath);
@@ -112,7 +112,7 @@ bool CConfiguration::LoadFiles(CString &szFileName, CListT<CString>& fl)
     }
 }
 
-bool CConfiguration::SaveFiles(CString &szFileName, CListT<CString>& fl, int nFormat)
+bool CConfiguration::SaveFiles(CString &szFileName, util::CListT<CString>& fl, int nFormat)
 {
     int nItems = fl.Count();
     try
@@ -321,11 +321,11 @@ void CConfiguration::LoadLangStrings()
     CString szLangPath;
     if (m_bIsPortable == true)
     {
-        szLangPath = GetExeFilePath() + _T("lang");
+        szLangPath = util::GetExeFilePath() + _T("lang");
     }
     else
     {
-        szLangPath = GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
+        szLangPath = util::GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
     }
 
     SearchFolderForLang(szLangPath, false, m_LangLst);
@@ -336,8 +336,8 @@ void CConfiguration::LoadLangStrings()
         for (int i = 0; i < m_LangLst.Count(); i++)
         {
             auto& lang = m_LangLst.Get(i);
-            CString szNameLang = GetFileName(lang.szFileName);
-            CString szNameConfig = GetFileName(m_szLangFileName);
+            CString szNameLang = util::GetFileName(lang.szFileName);
+            CString szNameConfig = util::GetFileName(m_szLangFileName);
             if (szNameLang.Compare(szNameConfig) == 0)
             {
                 m_nLangId = i;
