@@ -7,18 +7,21 @@
 #include "res\resource.h"
 #include "configuration\Configuration.h"
 
-class CEncWAVtoAC3App : public CWinAppEx
+namespace app
 {
-public:
-    CEncWAVtoAC3App();
-    virtual ~CEncWAVtoAC3App();
-public:
-    virtual BOOL InitInstance();
-    DECLARE_MESSAGE_MAP()
-public:
-    void LoadConfig();
-    void SaveConfig();
-};
+    class CEncWAVtoAC3App : public CWinAppEx
+    {
+    public:
+        CEncWAVtoAC3App();
+        virtual ~CEncWAVtoAC3App();
+    public:
+        virtual BOOL InitInstance();
+        DECLARE_MESSAGE_MAP()
+    public:
+        void LoadConfig();
+        void SaveConfig();
+    };
 
-extern CEncWAVtoAC3App m_App;
-extern CConfiguration m_Config;
+    extern CEncWAVtoAC3App m_App;
+    extern config::CConfiguration m_Config;
+}

@@ -369,6 +369,7 @@
     <ClInclude Include="avs\avisynth64\src\internal.h" />
     <ClInclude Include="avs\avisynth\src\core\avisynth.h" />
     <ClInclude Include="avs\avisynth\src\internal.h" />
+    <ClInclude Include="avs\src\Avs2Raw.h" />
     <ClInclude Include="configuration\Configuration.h" />
     <ClInclude Include="MainApp.h" />
     <ClInclude Include="res\resource.h" />
@@ -386,7 +387,6 @@
     <ClInclude Include="dialogs\MuxDlg.h" />
     <ClInclude Include="dialogs\WorkDlg.h" />
     <ClInclude Include="worker\AftenAPI.h" />
-    <ClInclude Include="avs\Avs2Raw.h" />
     <ClInclude Include="worker\Worker.h" />
   </ItemGroup>
   <ItemGroup>
