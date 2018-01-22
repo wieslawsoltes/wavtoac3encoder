@@ -317,7 +317,7 @@ namespace app
 
         CWorkDlg dlg;
         util::CListT<CString> list;
-        util::CListT<bool> listStatus;
+        util::CListT<char> listStatus;
         dlg.pWorkerContext->nTotalSize = 0;
         CString szSizeBuff;
         CString szFileBuffer;
@@ -331,7 +331,7 @@ namespace app
 
             list.Insert(szFileBuffer);
 
-            bool status = false;
+            char status = false;
             listStatus.Insert(status);
 
             szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
@@ -435,7 +435,8 @@ namespace app
 
         for (int i = listStatus.Count() - 1; i >= 0; i--)
         {
-            if (listStatus.Get(i) == true)
+            auto status = listStatus.Get(i);
+            if (status == (char)true)
                 this->m_LstFiles.DeleteItem(i);
         }
 

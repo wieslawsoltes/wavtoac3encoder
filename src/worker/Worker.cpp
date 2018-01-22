@@ -844,13 +844,13 @@ namespace worker
 
                 if (Run() == FALSE)
                 {
-                    bool result = false;
+                    char result = false;
                     pContext->pStatusList->Set(result, posStatus);
                     return(FALSE);
                 }
                 else
                 {
-                    bool result = true;
+                    char result = true;
                     pContext->pStatusList->Set(result, posStatus);
                 }
 
@@ -919,7 +919,7 @@ namespace worker
             {
                 for (int i = 0; i < pContext->pStatusList->Count(); i++)
                 {
-                    bool result = false;
+                    char result = false;
                     pContext->pStatusList->Set(result, i);
                 }
 
@@ -931,7 +931,7 @@ namespace worker
             {
                 for (int i = 0; i < pContext->pStatusList->Count(); i++)
                 {
-                    bool result = true;
+                    char result = true;
                     pContext->pStatusList->Set(result, i);
                 }
 

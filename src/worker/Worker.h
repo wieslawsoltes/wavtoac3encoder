@@ -15,7 +15,7 @@ namespace worker
         AftenAPI api;
     public:
         util::CListT<CString> *pFilesList;
-        util::CListT<bool> *pStatusList;
+        util::CListT<char> *pStatusList;
     public:
         config::CEncoderPreset * pPreset;
     public:
