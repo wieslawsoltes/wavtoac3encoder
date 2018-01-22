@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncWAVtoAC3", "src\EncWAVtoAC3.vcxproj", "{952D8A09-0CBF-4EE8-9536-389632BC5E7F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Controls", "src\common\controls\MFC.Controls.vcxproj", "{5936EB01-037A-4148-A512-DAD975C24CBD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Utilities", "src\common\utilities\MFC.Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7CDF6463-5B5E-4710-8584-85429C2088B7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{0A3CDEBE-9BE1-4861-B870-CD74365C424B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4D53682E-4FDC-4C3A-B086-E40FB189CD57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +50,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{952D8A09-0CBF-4EE8-9536-389632BC5E7F} = {7CDF6463-5B5E-4710-8584-85429C2088B7}
+		{5936EB01-037A-4148-A512-DAD975C24CBD} = {0A3CDEBE-9BE1-4861-B870-CD74365C424B}
+		{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0} = {0A3CDEBE-9BE1-4861-B870-CD74365C424B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BF0A631-9DA9-4DCB-B9AD-6B1F70F4CD1F}
