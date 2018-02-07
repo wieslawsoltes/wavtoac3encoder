@@ -269,11 +269,11 @@ namespace app
 
         if (m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         }
         else
         {
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
         }
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
@@ -748,11 +748,11 @@ namespace app
 
         if (m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         }
         else
         {
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
         }
 
         if (this->api.IsAftenOpen())
