@@ -1213,7 +1213,7 @@ namespace config
                 continue;
             }
 
-            if (ce.szKey == L""sse3")
+            if (ce.szKey == L"sse3")
             {
                 preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.szValue);
                 continue;
