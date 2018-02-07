@@ -1307,12 +1307,12 @@ namespace config
         }
     }
 
-    bool CEncoderDefaults::LoadEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+    bool CEncoderDefaults::LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
     {
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, CConfiguration::pszReadMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), CConfiguration::pszReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -1385,13 +1385,13 @@ namespace config
         }
     }
 
-    bool CEncoderDefaults::SaveEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset)
+    bool CEncoderDefaults::SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
     {
         const int nSize = (const int)encPresets.Count();
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, CConfiguration::pszWriteMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), CConfiguration::pszWriteMode.c_str());
             if (error != 0)
                 return false;
 
@@ -1468,11 +1468,11 @@ namespace config
         }
     }
 
-    bool CEncoderDefaults::IsSupportedInputExt(CString &szExt)
+    bool CEncoderDefaults::IsSupportedInputExt(std::wstring &szExt)
     {
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
-            if (szExt.CompareNoCase(szSupportedInputExt[i]) == 0)
+            if (util::StringHelper::CompareNoCase(szExt, szSupportedInputExt[i]))
                 return true;
         }
         return false;
@@ -1482,7 +1482,7 @@ namespace config
     {
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
-            if (szExt.CompareNoCase(szSupportedInputExt[i]) == 0)
+            if (util::StringHelper::CompareNoCase(szExt, szSupportedInputExt[i]))
             {
                 return nSupportedInputFormats[i];
             }

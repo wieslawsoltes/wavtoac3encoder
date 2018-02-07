@@ -190,6 +190,6 @@ namespace config
         static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
         static bool IsSupportedInputExt(std::wstring &szExt);
         static int GetSupportedInputFormat(std::wstring &szExt);
-        static std::wstring GetSupportedInputFilesFilter();
+        static CString GetSupportedInputFilesFilter();
     };
 }
