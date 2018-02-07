@@ -12,6 +12,12 @@ namespace config
     const std::wstring szWriteMode { L"wt, ccs=UTF-8" };
     wchar_t Separator { '=' };
 
+    const std::wstring szSeparator = L"=";
+    const std::wstring szNewCharVar = L"\\n";
+    const std::wstring szNewChar = L"\n";
+    const std::wstring szTabCharVar = L"\\t";
+    const std::wstring szTabChar = L"\t";
+
     std::wstring ReadAllText(const std::wstring& szFileName)
     {
         std::wstring buffer;
@@ -82,7 +88,7 @@ namespace config
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
-                szBuffer = ce.szKey + L"=" + ce.szValue + L"\n";
+                szBuffer = ce.szKey + szSeparator + ce.szValue + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
@@ -142,7 +148,7 @@ namespace config
             for (int i = 0; i < nItems; i++)
             {
                 std::wstring &szPath = fl.Get(i);
-                szBuffer = (nFormat == 0 ? L"" : L"\"" + szPath + (nFormat == 0 ? L"" : L"\"");
+                szBuffer = (nFormat == 0 ? L"" : L"\"") + szPath + (nFormat == 0 ? L"" : L"\"");
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
@@ -160,7 +166,7 @@ namespace config
         try
         {
             std::vector<std::wstring> files;
-            bool bResult = util::Utilities::FindFiles(szPath, files, bRecurseChecked);
+            bool bResult = util::Utilities::FindFiles(szPath, files, false);
             if (bResult == true)
             {
                 for (auto& file : files)
@@ -206,6 +212,7 @@ namespace config
 
             std::wistringstream stream;
             stream.str(data);
+
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
@@ -214,8 +221,8 @@ namespace config
                     CConfigEntry ce;
                     szKey = parts[0];
                     szValue = parts[1];
-                    std::replace(szValue.begin(), szValue.end(), '\\n', '\n');
-                    std::replace(szValue.begin(), szValue.end(), '\\t', '\t');
+                    std::replace(szValue.begin(), szValue.end(), szNewCharVar, szNewChar);
+                    std::replace(szValue.begin(), szValue.end(), szTabCharVar, szTabChar);
                     key = util::StringHelper::ToIntFromHex(szKey);
                     lm.Set(key, szValue);
                 }
@@ -264,7 +271,7 @@ namespace config
             if (error != 0)
                 return false;
 
-            std::wstring szBuffer = m_szLangFileName + L"\n";
+            std::wstring szBuffer = m_szLangFileName + szNewChar;
             std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
             fclose(fs);
@@ -1356,59 +1363,59 @@ namespace config
                 szBuffer = L"[" + preset.szName + L"]\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"engine=" + std::to_wstring(preset.nCurrentEngine) + L"\n";
+                szBuffer = L"engine" + szSeparator + std::to_wstring(preset.nCurrentEngine) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szThreadsOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nThreads) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"mmx=" + std::to_wstring(preset.nUsedSIMD[0]) + L"\n";
+                szBuffer = L"mmx" + szSeparator + std::to_wstring(preset.nUsedSIMD[0]) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"sse=" + std::to_wstring(preset.nUsedSIMD[1]) + L"\n";
+                szBuffer = L"sse" + szSeparator + std::to_wstring(preset.nUsedSIMD[1]) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"sse2=" + std::to_wstring(preset.nUsedSIMD[2]) + L"\n";
+                szBuffer = L"sse2" + szSeparator + std::to_wstring(preset.nUsedSIMD[2]) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"sse3=" + std::to_wstring(preset.nUsedSIMD[3]) + L"\n";
+                szBuffer = L"sse3" + szSeparator + std::to_wstring(preset.nUsedSIMD[3]) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"mode=" + std::to_wstring(preset.nMode) + L"\n";
+                szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szCbrOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nBitrate) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szVbrOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nQuality) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleFormatOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawSampleFormat) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawSampleFormat) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleRateOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawSampleRate) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawSampleRate) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawChannelsOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawChannels) + L"\n";
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawChannels) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
                 {
                     szTmpBuffer = encOpt[j].szOption;
                     util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                    szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nSetting[j]) + L"\n";
+                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nSetting[j]) + szNewChar;
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
                 }
             }
