@@ -221,8 +221,8 @@ namespace config
                     CConfigEntry ce;
                     szKey = parts[0];
                     szValue = parts[1];
-                    std::replace(szValue.begin(), szValue.end(), szNewCharVar, szNewChar);
-                    std::replace(szValue.begin(), szValue.end(), szTabCharVar, szTabChar);
+                    util::StringHelper::Replace(szValue, szNewCharVar, szNewChar);
+                    util::StringHelper::Replace(szValue, szTabCharVar, szTabChar);
                     key = util::StringHelper::ToIntFromHex(szKey);
                     lm.Set(key, szValue);
                 }
