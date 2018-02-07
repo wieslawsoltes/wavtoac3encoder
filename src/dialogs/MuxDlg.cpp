@@ -151,7 +151,7 @@ namespace app
         this->m_CmbChannelConfig.SetTooltipText(szTmpText);
         this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
         this->m_BtnChannelFL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
         this->m_BtnChannelFR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
@@ -488,7 +488,7 @@ namespace app
         CString szCurrentFileName;
 
         m_EdtCurrent->GetWindowText(szCurrentFileName);
-        szCurrentFileName = util::GetFileName(szCurrentFileName);
+        szCurrentFileName = util::Utilities::GetFileName(szCurrentFileName);
 
         CFileDialog fd(TRUE,
             config::CEncoderDefaults::szSupportedInputExt[0],

@@ -269,11 +269,11 @@ namespace app
 
         if (m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath());
         }
         else
         {
-            ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
         }
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
@@ -326,7 +326,7 @@ namespace app
         for (int i = 0; i < nItemsCount; i++)
         {
             szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
-            if (util::GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
+            if (util::Utilities::GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
                 bAvisynthInput = true;
 
             list.Insert(szFileBuffer);
@@ -391,7 +391,7 @@ namespace app
         {
             if (this->bMultipleMonoInput == false)
             {
-                if (util::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
+                if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
                     this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
@@ -405,10 +405,10 @@ namespace app
             else
             {
                 CString szTmpOutPath = dlg.pWorkerContext->szOutPath;
-                CString szFile = util::GetFileName(dlg.pWorkerContext->szOutPath);
+                CString szFile = util::Utilities::GetFileName(dlg.pWorkerContext->szOutPath);
 
                 szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
-                if (util::MakeFullPath(szTmpOutPath) == false)
+                if (util::Utilities::MakeFullPath(szTmpOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
                     this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
@@ -529,7 +529,7 @@ namespace app
         this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName);
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
     }
 
     void CMainDlg::OnBnClickedButtonPresetDel()
@@ -560,7 +560,7 @@ namespace app
                 this->nCurrentPreset = nPreset;
             }
 
-            util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+            util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
             this->OnCbnSelchangeComboPresets();
         }
@@ -748,11 +748,11 @@ namespace app
 
         if (m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath());
         }
         else
         {
-            ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
         }
 
         if (this->api.IsAftenOpen())
@@ -1312,7 +1312,7 @@ namespace app
 
         this->m_LstFiles.SetItemText(nItem, 0, szPath);
 
-        if (util::GetFileExtension(szPath).MakeLower() == _T("avs"))
+        if (util::Utilities::GetFileExtension(szPath).MakeLower() == _T("avs"))
         {
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -1458,7 +1458,7 @@ namespace app
             this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
         }
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
         if (this->encPresets.Count() <= 0)
             this->m_CmbValue.SetCurSel(config::CEncoderDefaults::encOpt[nItem].nDefaultValue);
@@ -2169,10 +2169,10 @@ namespace app
             OutputDebugString(_T("Failed to load configuration."));
         }
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
 
         COMBOBOXINFO cbi;
         ZeroMemory(&cbi, sizeof(COMBOBOXINFO));
@@ -2695,7 +2695,7 @@ namespace app
         char szInputFileAVS[MAX_PATH] = "";
 
     #ifdef _UNICODE
-        util::ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
+        util::Utilities::ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
     #else
         if (decoderAVS.OpenAvisynth(pszInPath) == false)
@@ -2724,7 +2724,7 @@ namespace app
             int nItem = m_LstFiles.GetNextSelectedItem(pos);
             CString szFileName = m_LstFiles.GetItemText(nItem, 0);
 
-            if (util::GetFileExtension(szFileName).MakeLower() == _T("avs"))
+            if (util::Utilities::GetFileExtension(szFileName).MakeLower() == _T("avs"))
             {
                 AvsAudioInfo infoAVS;
                 memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -3153,7 +3153,7 @@ namespace app
                     this->m_CmbPresets.AddString(encPresets.Get(i).szName);
                 }
 
-                util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+                util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
                 this->nCurrentPreset = 0;
                 this->m_CmbPresets.SetCurSel(0);
@@ -3272,7 +3272,7 @@ namespace app
 
     void CMainDlg::OnHelpWebsite()
     {
-        util::LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
+        util::Utilities::LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
     }
 
     void CMainDlg::OnHelpAbout()

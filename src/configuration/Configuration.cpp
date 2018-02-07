@@ -96,7 +96,7 @@ namespace config
                 {
                     szBuffer.TrimLeft('"');
                     szBuffer.TrimRight('"');
-                    if (CEncoderDefaults::IsSupportedInputExt(util::GetFileExtension(szBuffer)) == true)
+                    if (CEncoderDefaults::IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
                     {
                         CString szPath = szBuffer;
                         fl.Insert(szPath);
@@ -323,11 +323,11 @@ namespace config
         CString szLangPath;
         if (m_bIsPortable == true)
         {
-            szLangPath = util::GetExeFilePath() + _T("lang");
+            szLangPath = util::Utilities::GetExeFilePath() + _T("lang");
         }
         else
         {
-            szLangPath = util::GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
+            szLangPath = util::Utilities::GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
         }
 
         SearchFolderForLang(szLangPath, false, m_LangLst);
@@ -338,8 +338,8 @@ namespace config
             for (int i = 0; i < m_LangLst.Count(); i++)
             {
                 auto& lang = m_LangLst.Get(i);
-                CString szNameLang = util::GetFileName(lang.szFileName);
-                CString szNameConfig = util::GetFileName(m_szLangFileName);
+                CString szNameLang = util::Utilities::GetFileName(lang.szFileName);
+                CString szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
                 if (szNameLang.Compare(szNameConfig) == 0)
                 {
                     m_nLangId = i;

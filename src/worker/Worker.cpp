@@ -156,7 +156,7 @@ namespace worker
                 if (pf_info->pcm_format)
                 {
 #ifdef _UNICODE
-                    util::ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
+                    util::Utilities::ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
                         fmt,
                         strlen(pf_info->pcm_format->long_name));
 #else
@@ -304,7 +304,7 @@ namespace worker
         ofp = nullptr;
 
         bAvisynthInput = false;
-        if (util::GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
+        if (util::Utilities::GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
             bAvisynthInput = true;
 
         pContext->nInTotalSize = 0;
@@ -319,7 +319,7 @@ namespace worker
         if (bAvisynthInput == true)
         {
 #ifdef _UNICODE
-            util::ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
+            util::Utilities::ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
             if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
 #else
             if (decoderAVS.OpenAvisynth(pszInPath[0]) == false)
@@ -360,7 +360,7 @@ namespace worker
                 }
                 else
                 {
-                    pContext->nInTotalSize += util::GetFileSizeInt64(ifp[i]);
+                    pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(ifp[i]);
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::GetFileExtension(szInPath[0]));
+            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -798,12 +798,12 @@ namespace worker
 
                 szInPath[0] = pContext->pFilesList->Get(i);
                 szOutPath = szInPath[0];
-                szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
+                szOutPath.Truncate(szOutPath.GetLength() - util::Utilities::GetFileExtension(szOutPath).GetLength());
                 szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
 
                 if (pContext->bUseOutPath == true)
                 {
-                    CString szFile = util::GetFileName(szOutPath);
+                    CString szFile = util::Utilities::GetFileName(szOutPath);
 
                     if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
                         (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))
@@ -877,7 +877,7 @@ namespace worker
             }
 
             szOutPath = szInPath[0];
-            szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
+            szOutPath.Truncate(szOutPath.GetLength() - util::Utilities::GetFileExtension(szOutPath).GetLength());
             szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
 
             if (pContext->bUseOutPath == true)
