@@ -304,7 +304,8 @@ namespace worker
         ofp = nullptr;
 
         bAvisynthInput = false;
-        if (util::Utilities::GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
+        std::wstring szExt = util::Utilities::GetFileExtension(szInPath[0]);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
             bAvisynthInput = true;
 
         pContext->nInTotalSize = 0;
@@ -803,7 +804,7 @@ namespace worker
 
                 if (pContext->bUseOutPath == true)
                 {
-                    CString szFile = util::Utilities::GetFileName(szOutPath);
+                    std::wstring szFile = util::Utilities::GetFileName(szOutPath);
 
                     if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
                         (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))

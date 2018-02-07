@@ -5,6 +5,7 @@
 #include "controls\MyDialogEx.h"
 #include "controls\MyEdit.h"
 #include "controls\MyListCtrl.h"
+#include "utilities\StringHelper.h"
 #include "configuration\Configuration.h"
 
 namespace app

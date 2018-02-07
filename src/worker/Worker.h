@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include <string>
 #include "configuration\Configuration.h"
+#include "utilities\StringHelper.h"
 #include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "avs\src\Avs2Raw.h"
@@ -14,13 +16,13 @@ namespace worker
     public:
         AftenAPI api;
     public:
-        util::CListT<CString> *pFilesList;
+        util::CListT<std::wstring> *pFilesList;
         util::CListT<char> *pStatusList;
     public:
         config::CEncoderPreset * pPreset;
     public:
         bool bUseOutPath;
-        CString szOutPath;
+        std::wstring szOutPath;
         bool bMultiMonoInput;
         int nThreads;
     public:
@@ -39,13 +41,13 @@ namespace worker
         CWorkerContext() { }
         virtual ~CWorkerContext() { }
     public:
-        virtual void SetTitleInfo(CString szInfo) = 0;
-        virtual void SetInputFileInfo(int nID, CString szInfo) = 0;
-        virtual void SetInputTypeInfo(int nID, CString szInfo) = 0;
-        virtual void SetOutputFileInfo(CString szInfo) = 0;
-        virtual void SetOutputTypeInfo(CString szInfo) = 0;
-        virtual void SetCurrentTimerInfo(CString szInfo) = 0;
-        virtual void SetTotalTimerInfo(CString szInfo) = 0;
+        virtual void SetTitleInfo(std::wstring szInfo) = 0;
+        virtual void SetInputFileInfo(int nID, std::wstring szInfo) = 0;
+        virtual void SetInputTypeInfo(int nID, std::wstring szInfo) = 0;
+        virtual void SetOutputFileInfo(std::wstring szInfo) = 0;
+        virtual void SetOutputTypeInfo(std::wstring szInfo) = 0;
+        virtual void SetCurrentTimerInfo(std::wstring szInfo) = 0;
+        virtual void SetTotalTimerInfo(std::wstring szInfo) = 0;
     public:
         virtual void SetCurrentProgressRange(int nMin, int nMax) = 0;
         virtual void SetTotalProgressRange(int nMin, int nMax) = 0;
@@ -73,8 +75,8 @@ namespace worker
     private:
         __int64 nTotalSizeCounter;
         int nInputFiles;
-        CString szInPath[6];
-        CString szOutPath;
+        std::wstring szInPath[6];
+        std::wstring szOutPath;
     private:
         AftenOpt opt;
         AftenContext s;
