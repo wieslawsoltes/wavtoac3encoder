@@ -1295,7 +1295,7 @@ namespace config
             stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                if ((szBuffer[0] =='[') && (szBuffer[szBuffer.size() - 1] == ']')))
+                if ((szBuffer[0] == '[') && (szBuffer[szBuffer.size() - 1] == ']'))
                 {
                     if (bHavePreset == true)
                     {
@@ -1306,7 +1306,9 @@ namespace config
                     }
 
                     temp = defaultPreset;
-                    temp.szName = szBuffer.Mid(1, szBuffer.GetLength() - 2);
+                    util::StringHelper::TrimLeft(szBuffer, '[');
+                    util::StringHelper::TrimRight(szBuffer, ']');
+                    temp.szName = szBuffer;
                     bHavePreset = true;
                 }
                 else
@@ -1320,18 +1322,14 @@ namespace config
                         cl.Insert(ce);
                     }
                 }
+            }
 
-                auto nPos = fp.GetPosition();
-                if (nPos == nLength)
-                {
-                    if (bHavePreset == true)
-                    {
-                        ParseEncoderPreset(temp, cl);
-                        auto preset = temp;
-                        encPresets.Insert(preset);
-                        cl.RemoveAll();
-                    }
-                }
+            if (bHavePreset == true)
+            {
+                ParseEncoderPreset(temp, cl);
+                auto preset = temp;
+                encPresets.Insert(preset);
+                cl.RemoveAll();
             }
 
             return true;

@@ -45,7 +45,7 @@ namespace app
     {
         config::CEncoderDefaults::InitEncoderOptions();
 
-        m_Config.m_bIsPortable = PathFileExists(util::Utilities::GetExeFilePath() + FILENAME_PORTABLE) == TRUE ? true : false;
+        m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
 
         if (m_Config.m_bIsPortable == true)
         {
@@ -57,7 +57,7 @@ namespace app
         }
         else
         {
-            CreateDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG), nullptr);
+            ::CreateDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
 
             m_Config.m_szPresetsFilePath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
             m_Config.m_szConfigFilePath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
@@ -68,11 +68,11 @@ namespace app
 
         if (m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         }
         else
         {
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
         }
 
         m_Config.LoadLangConfig(m_Config.m_szLangFilePath);
