@@ -7,16 +7,16 @@ namespace app
 {
     const int nNumChannelConfig = 8;
 
-    const CString szChannelConfig[nNumChannelConfig] =
+    const std::wstring szChannelConfig[nNumChannelConfig] =
     {
-        _T("1+1 = (Ch1,Ch2)"),
-        _T("1/0 = (C)"),
-        _T("2/0 = (L,R)"),
-        _T("3/0 = (L,R,C)"),
-        _T("2/1 = (L,R,S)"),
-        _T("3/1 = (L,R,C,S)"),
-        _T("2/2 = (L,R,SL,SR)"),
-        _T("3/2 = (L,R,C,SL,SR)")
+        L"1+1 = (Ch1,Ch2)",
+        L"1/0 = (C)",
+        L"2/0 = (L,R)",
+        L"3/0 = (L,R,C)",
+        L"2/1 = (L,R,S)",
+        L"3/1 = (L,R,C,S)",
+        L"2/2 = (L,R,SL,SR)",
+        L"3/2 = (L,R,C,SL,SR)"
     };
 
     const int nNumInputFiles[nNumChannelConfig] =
@@ -37,17 +37,17 @@ namespace app
         {  1, 1, 1, 0, 1, 1 }  // 3/2
     };
 
-    const CString szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const std::wstring szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
     {
         // FL FR FC S  SL SR
-        {  _T("Ch1"), _T("Ch2"), _T("-"), _T("-"), _T("-"),   _T("-")  }, // 1+1
-        {  _T("-"),   _T("-"),   _T("C"), _T("-"), _T("-"),   _T("-")  }, // 1/0
-        {  _T("L"),   _T("R"),   _T("-"), _T("-"), _T("-"),   _T("-")  }, // 2/0
-        {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("-"),   _T("-")  }, // 3/0
-        {  _T("L"),   _T("R"),   _T("-"), _T("S"), _T("-"),   _T("-")  }, // 2/1
-        {  _T("L"),   _T("R"),   _T("C"), _T("S"), _T("-"),   _T("-")  }, // 3/1
-        {  _T("L"),   _T("R"),   _T("-"), _T("-"), _T("SL"),  _T("SR") }, // 2/2
-        {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("SL"),  _T("SR") }  // 3/2
+        {  L"Ch1", L"Ch2", L"-", L"-", L"-",   L"-"  }, // 1+1
+        {  L"-",   L"-",   L"C", L"-", L"-",   L"-"  }, // 1/0
+        {  L"L",   L"R",   L"-", L"-", L"-",   L"-"  }, // 2/0
+        {  L"L",   L"R",   L"C", L"-", L"-",   L"-"  }, // 3/0
+        {  L"L",   L"R",   L"-", L"S", L"-",   L"-"  }, // 2/1
+        {  L"L",   L"R",   L"C", L"S", L"-",   L"-"  }, // 3/1
+        {  L"L",   L"R",   L"-", L"-", L"SL",  L"SR" }, // 2/2
+        {  L"L",   L"R",   L"C", L"-", L"SL",  L"SR" }  // 3/2
     };
 
     IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
@@ -132,12 +132,12 @@ namespace app
     void CMuxDlg::InitCtrls()
     {
         for (int i = 0; i < nNumChannelConfig; i++)
-            this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
+            this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i].c_str());
 
         this->m_CmbChannelConfig.SetCurSel(0);
 
-        CString szTmpText;
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01008).c_str() :
+        std::wstring szTmpText;
+        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01008) :
             _T("Specify channel configuration:\n")
             _T("1+1 = (Ch1,Ch2)\n")
             _T("1/0 = (C)\n")
@@ -148,7 +148,7 @@ namespace app
             _T("2/2 = (L,R,SL,SR)\n")
             _T("3/2 = (L,R,C,SL,SR)");
 
-        this->m_CmbChannelConfig.SetTooltipText(szTmpText);
+        this->m_CmbChannelConfig.SetTooltipText(szTmpText.c_str());
         this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009).c_str() : _T("Indicates use of the LFE channel."));
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
@@ -295,23 +295,23 @@ namespace app
         this->m_BtnChannelSR.EnableWindow(nChannelConfigStates[this->nChannelConfig][5] == 1 ? TRUE : FALSE);
         this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
 
-        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
-        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
-        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2]);
-        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3]);
-        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4]);
-        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5]);
+        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
+        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
+        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
+        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3].c_str());
+        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4].c_str());
+        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
         this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
 
-        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
+        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
         this->m_StcLabelFL.SetBold(nChannelConfigStates[this->nChannelConfig][0] == 1 ? true : false);
-        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
+        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
         this->m_StcLabelFR.SetBold(nChannelConfigStates[this->nChannelConfig][1] == 1 ? true : false);
-        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2]);
+        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
         this->m_StcLabelFC.SetBold(nChannelConfigStates[this->nChannelConfig][2] == 1 ? true : false);
-        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4]);
+        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4].c_str());
         this->m_StcLabelSL.SetBold(nChannelConfigStates[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4] ? true : false);
-        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5]);
+        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
         this->m_StcLabelSR.SetBold(nChannelConfigStates[this->nChannelConfig][5] == 1 ? true : false);
         this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
         this->m_StcLabelLFE.SetBold(this->bLFE);

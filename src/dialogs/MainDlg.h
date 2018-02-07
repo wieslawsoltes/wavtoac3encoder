@@ -74,8 +74,8 @@ namespace app
         config::CEncoderPresetList encPresets;
         config::CEncoderPreset defaultPreset;
         int nCurrentPreset = 0;
-        CString szOutputPath;
-        CString szOutputFile;
+        std::wstring szOutputPath;
+        std::wstring szOutputFile;
         bool bMultipleMonoInput;
         bool bDisableAllWarnings;
         bool bSaveConfig;

@@ -23,7 +23,7 @@ namespace app
         DECLARE_MESSAGE_MAP()
     public:
         config::CConfigList m_EngineList;
-        CString szCurrentFileName;
+        std::wstring szCurrentFileName;
     public:
         volatile bool bUpdateList;
     public:
