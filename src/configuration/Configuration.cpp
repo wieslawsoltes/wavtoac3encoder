@@ -95,7 +95,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadFiles(std::wstring &szFileName, util::CListT<CString>& fl)
+    bool CConfiguration::LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl)
     {
         try
         {
@@ -127,7 +127,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveFiles(CString &szFileName, util::CListT<CString>& fl, int nFormat)
+    bool CConfiguration::SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat)
     {
         int nItems = fl.Count();
         try
@@ -155,77 +155,36 @@ namespace config
         }
     }
 
-    void CConfiguration::SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst)
+    void CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst)
     {
         try
         {
-            WIN32_FIND_DATA w32FileData;
-            HANDLE hSearch = nullptr;
-            BOOL fFinished = FALSE;
-            TCHAR cTempBuf[(MAX_PATH * 2) + 1];
-
-            ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
-            ZeroMemory(cTempBuf, MAX_PATH * 2);
-
-            util::StringHelper::TrimRight(szPath, '\\');
-            util::StringHelper::TrimRight(szPath, '/');
-
-            wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath.c_str());
-
-            hSearch = FindFirstFile(cTempBuf, &w32FileData);
-            if (hSearch == INVALID_HANDLE_VALUE)
-                return;
-
-            while (fFinished == FALSE)
+            std::vector<std::wstring> files;
+            bool bResult = util::Utilities::FindFiles(szPath, files, bRecurseChecked);
+            if (bResult == true)
             {
-                if (w32FileData.cFileName[0] != '.' &&
-                    !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+                for (auto& file : files)
                 {
-                    CString szTempBuf;
-                    szTempBuf.Format(_T("%s\\%s\0"), szPath.c_str(), w32FileData.cFileName);
-
-                    CString szExt = ::PathFindExtension(szTempBuf);
-                    szExt.MakeLower();
-                    szExt.Remove('.');
-
-                    if (szExt.CompareNoCase(_T("txt")) == 0)
+                    std::wstring ext = util::Utilities::GetFileExtension(file);
+                    if (util::StringHelper::TowLower(ext) == L"txt")
                     {
                         CLang lang;
-                        if (this->LoadLang(szTempBuf, lang.lm) == true)
+                        if (this->LoadLang(file, lang.lm) == true)
                         {
-                            lang.szFileName = szTempBuf;
+                            lang.szFileName = file;
                             lang.szEnglishName = lang.lm.Get(0x00000001);
                             lang.szTargetName = lang.lm.Get(0x00000002);
-                            m_LangLst.Insert(lang);
+                            m_LangLst.Insert(std::move(lang));
                         }
                     }
                 }
-
-                if (w32FileData.cFileName[0] != '.' &&
-                    w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
-                    if (bRecurse == true)
-                        SearchFolderForLang(cTempBuf, true, m_LangLst);
-                }
-
-                if (FindNextFile(hSearch, &w32FileData) == FALSE)
-                {
-                    if (GetLastError() == ERROR_NO_MORE_FILES)
-                        fFinished = TRUE;
-                    else
-                        return;
-                }
             }
-
-            if (FindClose(hSearch) == FALSE)
-                return;
         }
         catch (...)
         {
             MessageBox(nullptr,
-                HaveLangStrings() ? GetLangString(0x0020702A) : _T("Error while searching for files!"),
-                HaveLangStrings() ? GetLangString(0x00207010) : _T("Error"),
+                HaveLangStrings() ? GetLangString(0x0020702A).c_str() : _T("Error while searching for files!"),
+                HaveLangStrings() ? GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_OK | MB_ICONERROR);
         }
     }
@@ -296,7 +255,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveLangConfig(CString &szFileName)
+    bool CConfiguration::SaveLangConfig(std::wstring &szFileName)
     {
         try
         {
@@ -490,7 +449,7 @@ namespace config
         encOpt[nCurOpt].listOptValues.Insert(nValue);
 
         int nCurOpt = -1;
-        CString szName = _T("");
+        std::wstring szName = _T("");
         int nValue = -1;
 
         ResetEncoderOptionsLists();
@@ -530,18 +489,14 @@ namespace config
 
         for (int i = 2; i <= 7; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00302004) : _T("8 (default)"), 8);
 
         for (int i = 9; i <= 31; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00302005) : _T("32 (higher quality but slower)"), 32);
@@ -591,9 +546,7 @@ namespace config
 
         for (int i = 1; i <= 59; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00304006) : _T("60 (99% of full bandwidth)"), 60);
@@ -614,9 +567,7 @@ namespace config
 
         for (int i = 1; i <= 59; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(_T("60"), 60);
@@ -637,9 +588,7 @@ namespace config
 
         for (int i = 1; i <= 59; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00306003) : _T("60 (default)"), 60);
@@ -759,9 +708,7 @@ namespace config
 
         for (int i = 0; i <= 30; i++)
         {
-            CString szTmpBuffer;
-            szTmpBuffer.Format(_T("%d"), i);
-            AddEncoderOptionValue(szTmpBuffer, i);
+            AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
         AddEncoderOptionValue(app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00501003) : _T("31 (default)"), 31);
@@ -1195,12 +1142,13 @@ namespace config
         return 0;
     }
 
-    int CEncoderDefaults::FindOptionIndex(CString szOption)
+    int CEncoderDefaults::FindOptionIndex(std::wstring szOption)
     {
         for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         {
-            CString szBuffer = encOpt[i].szOption;
-            if (szOption.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            std::wstring szBuffer = encOpt[i].szOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (szOption == szBuffer)
             {
                 return i;
             }
@@ -1405,55 +1353,62 @@ namespace config
             {
                 auto& preset = encPresets.Get(i);
 
-                szBuffer.Format(_T("[%s]\n"), preset.szName);
+                szBuffer = L"[" + preset.szName + L"]\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("engine=%d\n"), preset.nCurrentEngine);
+                szBuffer = L"engine=" + std::to_wstring(preset.nCurrentEngine) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szThreadsOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nThreads) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("mmx=%d\n"), preset.nUsedSIMD[0]);
+                szBuffer = L"mmx=" + std::to_wstring(preset.nUsedSIMD[0]) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("sse=%d\n"), preset.nUsedSIMD[1]);
+                szBuffer = L"sse=" + std::to_wstring(preset.nUsedSIMD[1]) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("sse2=%d\n"), preset.nUsedSIMD[2]);
+                szBuffer = L"sse2=" + std::to_wstring(preset.nUsedSIMD[2]) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("sse3=%d\n"), preset.nUsedSIMD[3]);
+                szBuffer = L"sse3=" + std::to_wstring(preset.nUsedSIMD[3]) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer.Format(_T("mode=%d\n"), preset.nMode);
+                szBuffer = L"mode=" + std::to_wstring(preset.nMode) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szCbrOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nBitrate) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szVbrOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nQuality) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleFormatOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawSampleFormat) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleRateOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawSampleRate) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawChannelsOption;
-                szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nRawChannels) + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
                 {
                     szTmpBuffer = encOpt[j].szOption;
-                    szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
+                    util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                    szBuffer = szTmpBuffer + L"=" + std::to_wstring(preset.nSetting[j]) + L"\n";
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
                 }
             }
@@ -1504,7 +1459,7 @@ namespace config
             szFilter += szBuff;
         }
 
-        szFilter = (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207006) : _T("Supported Files")) +
+        szFilter = (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207006).c_str() : _T("Supported Files")) +
             _T(" (") + szFilter + _T(")|") + szFilter + _T("|");
 
         for (int i = 0; i < nNumSupportedInputExt; i++)
@@ -1515,13 +1470,13 @@ namespace config
 
             szBuff.Format(_T("%s %s (*.%s)|*.%s|"),
                 szExtU,
-                app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207007) : _T("Files"),
+                app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207007).c_str() : _T("Files"),
                 szExtL, szExtL);
 
             szFilter += szBuff;
         }
 
-        szFilter += (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207008) : _T("All Files")) +
+        szFilter += (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207008).c_str() : _T("All Files")) +
             _T(" (*.*)|*.*||");
 
         return szFilter;

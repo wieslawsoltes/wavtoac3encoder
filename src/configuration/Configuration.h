@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
+#include <utility>
+#include <vector>
 #include "version.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
