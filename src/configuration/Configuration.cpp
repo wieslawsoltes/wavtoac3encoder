@@ -8,22 +8,49 @@
 
 namespace config
 {
+    const std::wstring szReadMode = L"rt, ccs=UTF-8";
+    const std::wstring szWriteMode = L"wt, ccs=UTF-8";
+    wchar_t Separator = '=';
+
+    std::wstring ReadAllText(const std::wstring& szFileName)
+    {
+        std::wstring buffer;
+
+        FILE *fs;
+        errno_t error = _wfopen_s(&fs, szFileName.c_str(), szReadMode);
+        if (error != 0)
+            return buffer;
+
+        struct _stat fileinfo;
+        _wstat(szFileName.c_str(), &fileinfo);
+        size_t size = fileinfo.st_size;
+
+        if (size > 0)
+        {
+            buffer.resize(size);
+            size_t wchars_read = std::fread(&(buffer.front()), sizeof(wchar_t), size, fs);
+            buffer.resize(wchars_read);
+            buffer.shrink_to_fit();
+        }
+
+        fclose(fs);
+
+        return buffer;
+    }
+
     bool CConfiguration::LoadConfig(std::wstring &szFileName, CConfigList &cl)
     {
         try
         {
-            FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
-            if (error != 0)
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
                 return false;
 
-            CStdioFile fp(fs);
-            std::wstring szBuffer;
-
-            wchar_t c = '=';
-            while (fp.ReadString(szBuffer))
+            std::wistringstream stream;
+            stream.str(buffer);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                auto parts = util::StringHelper::Split(szBuffer, c);
+                auto parts = util::StringHelper::Split(szBuffer, Separator);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -31,10 +58,8 @@ namespace config
                     ce.szValue = parts[1];
                     cl.Insert(ce);
                 }
-                szBuffer = L"";
             }
 
-            fp.Close();
             return true;
         }
         catch (...)
@@ -49,21 +74,19 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
-            CStdioFile fp(fs);
             std::wstring szBuffer;
-
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
                 szBuffer = ce.szKey + L"=" + ce.szValue + '\n';
-                fp.WriteString(szBuffer.c_str());
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
-            fp.Close();
+            flose(fp);
             return true;
         }
         catch (...)
@@ -76,15 +99,13 @@ namespace config
     {
         try
         {
-            FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
-            if (error != 0)
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
                 return false;
 
-            CStdioFile fp(fs);
-            std::wstring szBuffer;
-
-            while (fp.ReadString(szBuffer))
+            std::wistringstream stream;
+            stream.str(buffer);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 if (szBuffer.size() > 0)
                 {
@@ -98,7 +119,6 @@ namespace config
                 szBuffer = L"";
             }
 
-            fp.Close();
             return true;
         }
         catch (...)
@@ -113,21 +133,20 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
-            CStdioFile fp(fs);
             std::wstring szBuffer;
 
             for (int i = 0; i < nItems; i++)
             {
                 std::wstring &szPath = fl.Get(i);
                 szBuffer = (nFormat == 0 ? L"" : L"\"" + szPath + (nFormat == 0 ? L"" : L"\"");
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
-            fp.Close();
+            flose(fp);
             return true;
         }
         catch (...)
@@ -215,12 +234,9 @@ namespace config
     {
         try
         {
-            FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
-            if (error != 0)
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
                 return false;
-
-            CStdioFile fp(fs);
 
             lm.RemoveAll();
 
@@ -229,10 +245,11 @@ namespace config
             std::wstring szValue = L"";
             int key;
 
-            wchar_t c = '=';
-            while (fp.ReadString(szBuffer))
+            std::wistringstream stream;
+            stream.str(buffer);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                auto parts = util::StringHelper::Split(szBuffer, c);
+                auto parts = util::StringHelper::Split(szBuffer, Separator);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -246,7 +263,7 @@ namespace config
                 szBuffer = L"";
             }
 
-            fp.Close();
+            flose(fp);
 
             return true;
         }
@@ -260,22 +277,18 @@ namespace config
     {
         try
         {
-            FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
-            if (error != 0)
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
                 return false;
 
-            CStdioFile fp(fs);
-            std::wstring szBuffer = L"";
-
-            if (fp.ReadString(szBuffer) == TRUE)
+            std::wistringstream stream;
+            stream.str(buffer);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 m_szLangFileName = szBuffer;
-                fp.Close();
                 return true;
             }
 
-            fp.Close();
             return false;
         }
         catch (...)
@@ -289,16 +302,14 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
-            CStdioFile fp(fs);
-
             std::wstring szBuffer = m_szLangFileName + '\n';
-            fp.WriteString(szBuffer);
+            std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);;
 
-            fp.Close();
+            flose(fp);
             return true;
         }
         catch (...)
@@ -369,8 +380,6 @@ namespace config
         }
         return szValue;
     }
-
-    std::wstring CEncoderDefaults::szCurrentPresetsVersion = L"1.1.0.0";
 
     int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
@@ -1216,93 +1225,100 @@ namespace config
     {
         for (int i = 0; i < cl.Count(); i++)
         {
-            CString szBuffer;
+            std::wstring szBuffer;
             auto& ce = cl.Get(i);
 
             if (ce.szKey.Compare(_T("engine")) == 0)
             {
-                preset.nCurrentEngine = _tstoi(ce.szValue);
+                preset.nCurrentEngine = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szThreadsOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nThreads = _tstoi(ce.szValue);
+                preset.nThreads = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey.Compare(_T("mmx")) == 0)
+            if (ce.szKey = L"mmx")
             {
-                preset.nUsedSIMD[0] = _tstoi(ce.szValue);
+                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey.Compare(_T("sse")) == 0)
+            if (ce.szKey = L"sse") == 0)
             {
-                preset.nUsedSIMD[1] = _tstoi(ce.szValue);
+                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey.Compare(_T("sse2")) == 0)
+            if (ce.szKey = L"sse2") == 0)
             {
-                preset.nUsedSIMD[2] = _tstoi(ce.szValue);
+                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey.Compare(_T("sse3")) == 0)
+            if (ce.szKey = L""sse3") == 0)
             {
-                preset.nUsedSIMD[3] = _tstoi(ce.szValue);
+                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey.Compare(_T("mode")) == 0)
+            if (ce.szKey = L"mode") == 0)
             {
-                preset.nMode = (AftenEncMode)_tstoi(ce.szValue);
+                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szCbrOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nBitrate = _tstoi(ce.szValue);
+                preset.nBitrate = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szVbrOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nQuality = _tstoi(ce.szValue);
+                preset.nQuality = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szRawSampleFormatOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nRawSampleFormat = _tstoi(ce.szValue);
+                preset.nRawSampleFormat = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szRawSampleRateOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nRawSampleRate = _tstoi(ce.szValue);
+                preset.nRawSampleRate = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             szBuffer = szRawChannelsOption;
-            if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.szKey == szBuffer)
             {
-                preset.nRawChannels = _tstoi(ce.szValue);
+                preset.nRawChannels = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
             for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
             {
                 szBuffer = encOpt[i].szOption;
-                if (ce.szKey.Compare(szBuffer.TrimLeft(_T("-"))) == 0)
+                util::StringHelper::TrimLeft(szBuffer, '-');
+                if (ce.szKey == szBuffer)
                 {
-                    preset.nSetting[i] = _tstoi(ce.szValue);
+                    preset.nSetting[i] = util::StringHelper::ToInt(ce.szValue);
                     break;
                 }
             }
@@ -1313,32 +1329,20 @@ namespace config
     {
         try
         {
-            FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
-            if (error != 0)
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
                 return false;
 
-            CStdioFile fp(fs);
-            CString szBuffer = _T("");
-            auto nLength = fp.GetLength();
             CEncoderPreset temp;
             CConfigList cl;
-
             bool bHavePreset = false;
-
-            fp.ReadString(szBuffer);
-            if (szBuffer.Compare(szCurrentPresetsVersion) != 0)
-            {
-                fp.Close();
-                return false;
-            }
-
             encPresets.RemoveAll();
 
-            wchar_t c = '=';
-            while (fp.ReadString(szBuffer))
+            std::wistringstream stream;
+            stream.str(buffer);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
+                if ((szBuffer[0] =='[') && (szBuffer[szBuffer.size() - 1] == ']')))
                 {
                     if (bHavePreset == true)
                     {
@@ -1354,12 +1358,12 @@ namespace config
                 }
                 else
                 {
-                    int nPos = szBuffer.Find(c, 0);
-                    if (nPos != -1)
+                    auto parts = util::StringHelper::Split(szBuffer, Separator);
+                    if (parts.size() == 2)
                     {
                         CConfigEntry ce;
-                        ce.szKey = szBuffer.Mid(0, nPos);
-                        ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                        ce.szKey = parts[0];
+                        ce.szValue = parts[1];
                         cl.Insert(ce);
                     }
                 }
@@ -1375,11 +1379,8 @@ namespace config
                         cl.RemoveAll();
                     }
                 }
-
-                szBuffer = _T("");
             }
 
-            fp.Close();
             return true;
         }
         catch (...)
@@ -1394,75 +1395,71 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
-            CStdioFile fp(fs);
             CString szBuffer;
             CString szTmpBuffer;
-
-            szBuffer.Format(_T("%s\n"), szCurrentPresetsVersion);
-            fp.WriteString(szBuffer);
 
             for (int i = 0; i < nSize; i++)
             {
                 auto& preset = encPresets.Get(i);
 
                 szBuffer.Format(_T("[%s]\n"), preset.szName);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("engine=%d\n"), preset.nCurrentEngine);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szThreadsOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nThreads);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("mmx=%d\n"), preset.nUsedSIMD[0]);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("sse=%d\n"), preset.nUsedSIMD[1]);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("sse2=%d\n"), preset.nUsedSIMD[2]);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("sse3=%d\n"), preset.nUsedSIMD[3]);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer.Format(_T("mode=%d\n"), preset.nMode);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szCbrOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nBitrate);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szVbrOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nQuality);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleFormatOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleFormat);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleRateOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawSampleRate);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawChannelsOption;
                 szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nRawChannels);
-                fp.WriteString(szBuffer);
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 for (int j = 0; j < CEncoderPreset::nNumEncoderOptions; j++)
                 {
                     szTmpBuffer = encOpt[j].szOption;
                     szBuffer.Format(_T("%s=%d\n"), szTmpBuffer.TrimLeft(_T("-")), preset.nSetting[j]);
-                    fp.WriteString(szBuffer);
+                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
                 }
             }
 
-            fp.Close();
+            flose(fp);
             return true;
         }
         catch (...)

@@ -1,6 +1,10 @@
 ﻿#pragma once
 
 #include <string>
+#include <wchar.h>
+#include <iostream>
+#include <sstream>
+#include <cstdio>
 #include "version.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
@@ -62,9 +66,6 @@ namespace config
     class CLangList : public util::CListT<CLang>
     {
     };
-
-    const std::wstring szReadMode = L"rt, ccs=UTF-8";
-    const std::wstring szWriteMode = L"wt, ccs=UTF-8";
 
     class CConfiguration
     {
@@ -164,7 +165,6 @@ namespace config
         const static int nNumSupportedInputExt = 8;
         const static int nNumSupportedOutputExt = 1;
     public:
-        static std::wstring szCurrentPresetsVersion;
         static int nValidCbrBitrates[nNumValidCbrBitrates];
         static CChannelConfig ccAften[nNumChannelConfigAften];
         static std::wstring szRawSampleFormats[nNumRawSampleFormats];
