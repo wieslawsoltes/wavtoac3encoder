@@ -66,7 +66,6 @@ namespace app
         ON_WM_PAINT()
         ON_WM_QUERYDRAGICON()
         ON_WM_WINDOWPOSCHANGING()
-        //}}AFX_MSG_MAP
         ON_WM_CLOSE()
         ON_WM_DESTROY()
         ON_WM_DROPFILES()
@@ -579,9 +578,8 @@ namespace app
 
             if (fd.DoModal() == IDOK)
             {
-                CString szFileName;
-                szFileName = fd.GetPathName();
-                this->m_EdtOutPath.SetWindowText(szFileName);
+                std::wstring szFileName = fd.GetPathName();
+                this->m_EdtOutPath.SetWindowText(szFileName.c_str());
                 this->szOutputFile = szFileName;
             }
         }
@@ -833,7 +831,7 @@ namespace app
         return(0);
     }
 
-    bool CMainDlg::LoadProgramConfig(CString szFileName)
+    bool CMainDlg::LoadProgramConfig(std::wstring szFileName)
     {
         config::CConfigList m_ConfigList;
         if (config::CConfiguration::LoadConfig(szFileName, m_ConfigList) == true)
@@ -975,7 +973,7 @@ namespace app
         return false;
     }
 
-    bool CMainDlg::SaveProgramConfig(CString szFileName)
+    bool CMainDlg::SaveProgramConfig(std::wstring szFileName)
     {
         config::CConfigList m_ConfigList;
 
@@ -1102,7 +1100,7 @@ namespace app
         return true;
     }
 
-    bool CMainDlg::LoadProgramEngines(CString szFileName)
+    bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
     {
         this->m_EngineList.RemoveAll();
         this->m_CmbEngines.ResetContent();
@@ -1138,12 +1136,12 @@ namespace app
         return false;
     }
 
-    bool CMainDlg::SaveProgramEngines(CString szFileName)
+    bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
     {
         return config::CConfiguration::SaveConfig(szFileName, this->m_EngineList);
     }
 
-    bool CMainDlg::LoadFilesList(CString &szFileName)
+    bool CMainDlg::LoadFilesList(std::wstring &szFileName)
     {
         util::CListT<CString> fl;
         if (m_Config.LoadFiles(szFileName, fl))
@@ -1161,7 +1159,7 @@ namespace app
         return false;
     }
 
-    bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
+    bool CMainDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
     {
         util::CListT<CString> fl;
         int nItems = this->m_LstFiles.GetItemCount();
@@ -1274,7 +1272,7 @@ namespace app
             return defaultPreset;
     }
 
-    void CMainDlg::AddItemToFileList(CString szPath)
+    void CMainDlg::AddItemToFileList(std::wstring szPath)
     {
         CString szSize = _T("");
         ULARGE_INTEGER ulSize;
@@ -1466,7 +1464,7 @@ namespace app
             this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
     }
 
-    void CMainDlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
+    void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
     {
         try
         {
@@ -2186,13 +2184,13 @@ namespace app
         return TRUE;
     }
 
-    void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, CString& text)
+    void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, std::wstring& text)
     {
         LVCOLUMN lvCol;
         ::ZeroMemory((void *)&lvCol, sizeof(LVCOLUMN));
         lvCol.mask = LVCF_TEXT;
         listCtrl.GetColumn(nCol, &lvCol);
-        lvCol.pszText = (LPTSTR)(LPCTSTR)text;
+        lvCol.pszText = (LPTSTR)(LPCTSTR)text.c_str();
         listCtrl.SetColumn(nCol, &lvCol);
     }
 
@@ -2682,7 +2680,7 @@ namespace app
         *pResult = 0;
     }
 
-    bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
+    bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
         TCHAR *pszInPath = szFileName.GetBuffer();
 
@@ -2829,7 +2827,8 @@ namespace app
                 POSITION pos = fd.GetStartPosition();
                 while (pos != nullptr)
                 {
-                    this->AddItemToFileList(fd.GetNextPathName(pos));
+                    std::wstring szFileName = fd.GetNextPathName(pos);
+                    this->AddItemToFileList(szFileName);
                 }
             }
         }
@@ -3104,7 +3103,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             LoadFilesList(szFileName);
         }
     }
@@ -3120,7 +3119,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
 
             int nFormat = 0;
             if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
@@ -3143,7 +3142,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             if (config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
             {
                 this->m_CmbPresets.ResetContent();
@@ -3174,7 +3173,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
         }
     }

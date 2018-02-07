@@ -168,7 +168,7 @@ namespace app
     {
         if (m_Config.HaveLangStrings())
         {
-            this->SetWindowText(_T("WAV to AC3 Encoder - ") + m_Config.GetLangString(0x00C01001).c_str());
+            this->SetWindowText((L"WAV to AC3 Encoder - " + m_Config.GetLangString(0x00C01001)).c_str());
             this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(m_Config.GetLangString(0x00C01002).c_str());
             this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(m_Config.GetLangString(0x00C01003).c_str());
             this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(m_Config.GetLangString(0x00C01004).c_str());
@@ -277,12 +277,12 @@ namespace app
 
     void CMuxDlg::SetFilePaths()
     {
-        this->m_EdtChannelFL.SetWindowText(szInputFiles[0]);
-        this->m_EdtChannelFR.SetWindowText(szInputFiles[1]);
-        this->m_EdtChannelFC.SetWindowText(szInputFiles[2]);
-        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3]);
-        this->m_EdtChannelSL.SetWindowText(szInputFiles[4]);
-        this->m_EdtChannelSR.SetWindowText(szInputFiles[5]);
+        this->m_EdtChannelFL.SetWindowText(szInputFiles[0].c_str());
+        this->m_EdtChannelFR.SetWindowText(szInputFiles[1].c_str());
+        this->m_EdtChannelFC.SetWindowText(szInputFiles[2].c_str());
+        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3].c_str());
+        this->m_EdtChannelSL.SetWindowText(szInputFiles[4].c_str());
+        this->m_EdtChannelSR.SetWindowText(szInputFiles[5].c_str());
     }
 
     void CMuxDlg::SetControlsState()
@@ -318,33 +318,33 @@ namespace app
 
         this->m_ChkChannelConfigLFE.SetCheck(this->bLFE ? BST_CHECKED : BST_UNCHECKED);
 
-        this->m_BtnChannelFL.SetBold((szInputFiles[0].GetLength() > 0) ? true : false);
-        this->m_BtnChannelFR.SetBold((szInputFiles[1].GetLength() > 0) ? true : false);
-        this->m_BtnChannelFC.SetBold((szInputFiles[2].GetLength() > 0) ? true : false);
+        this->m_BtnChannelFL.SetBold((szInputFiles[0].length() > 0) ? true : false);
+        this->m_BtnChannelFR.SetBold((szInputFiles[1].length() > 0) ? true : false);
+        this->m_BtnChannelFC.SetBold((szInputFiles[2].length() > 0) ? true : false);
 
-        this->m_BtnChannelLFE.SetBold((szInputFiles[3].GetLength() > 0) ? true : false);
+        this->m_BtnChannelLFE.SetBold((szInputFiles[3].length() > 0) ? true : false);
 
         if (nChannelConfigStates[nChannelConfig][3] == 1)
         {
-            this->m_BtnChannelS.SetBold((szInputFiles[4].GetLength() > 0) ? true : false);
+            this->m_BtnChannelS.SetBold((szInputFiles[4].length() > 0) ? true : false);
             this->m_BtnChannelSL.SetBold(false);
             this->m_BtnChannelSL.SetWindowText(_T("-"));
             this->m_BtnChannelSL.EnableWindow(FALSE);
         }
         else
         {
-            this->m_BtnChannelSL.SetBold((szInputFiles[4].GetLength() > 0) ? true : false);
+            this->m_BtnChannelSL.SetBold((szInputFiles[4].length() > 0) ? true : false);
             this->m_BtnChannelS.SetBold(false);
             this->m_BtnChannelS.SetWindowText(_T("-"));
             this->m_BtnChannelS.EnableWindow(FALSE);
         }
 
-        this->m_BtnChannelSR.SetBold((szInputFiles[5].GetLength() > 0) ? true : false);
+        this->m_BtnChannelSR.SetBold((szInputFiles[5].length() > 0) ? true : false);
     }
 
-    bool CMuxDlg::LoadFilesList(CString &szFileName)
+    bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<CString> fl;
+        util::CListT<std::wstring> fl;
         if (m_Config.LoadFiles(szFileName, fl) == false)
             return false;
 
@@ -359,9 +359,8 @@ namespace app
             if (i >= config::CEncoderDefaults::nNumMaxInputFiles)
                 return true;
 
-            CString szPath = fl.Get(i);
-            szPath.TrimLeft('"');
-            szPath.TrimRight('"');
+            std::wstring szPath = fl.Get(i);
+            util::StringHelper::Trim(szPath, '"');
             szTmpInputFiles[i] = szPath;
         }
 
@@ -377,17 +376,15 @@ namespace app
         }
     }
 
-    bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
+    bool CMuxDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
     {
         try
         {
-            util::CListT<CString> fl;
-            CString szBuffer;
+            util::CListT<std::wstring> fl;
+            std::wstring szBuffer;
 
 #define AddFile(index) \
-        szBuffer.Format(_T("%s%s%s\n"), \
-            nFormat == 0 ? _T("") : _T("\""), \
-            szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
+        szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
         fl.Insert(szBuffer);
 
             switch (this->nChannelConfig)
@@ -486,21 +483,20 @@ namespace app
             return;
 
         CString szCurrentFileName;
-
         m_EdtCurrent->GetWindowText(szCurrentFileName);
-        szCurrentFileName = util::Utilities::GetFileName(szCurrentFileName);
+        std::wstring szFileName = util::Utilities::GetFileName(std::wstring(szCurrentFileName));
 
         CFileDialog fd(TRUE,
-            config::CEncoderDefaults::szSupportedInputExt[0],
-            szCurrentFileName,
+            config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
+            szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
             config::CEncoderDefaults::GetSupportedInputFilesFilter(),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
-            m_EdtCurrent->SetWindowText(szFileName);
+            std::wstring szFileName = fd.GetPathName();
+            m_EdtCurrent->SetWindowText(szFileName.c_str());
             this->szInputFiles[nID] = szFileName;
             m_BtnCurrent->SetBold(true);
         }
@@ -609,7 +605,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
 
             int nFormat = 0;
             if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
@@ -633,7 +629,7 @@ namespace app
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             this->LoadFilesList(szFileName);
             this->SetFilePaths();
             this->SetControlsState();

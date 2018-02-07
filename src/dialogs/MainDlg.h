@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -133,24 +134,24 @@ namespace app
         void InitLangSettingsList();
         void InitLangMainMenu();
         void InitLangMenu();
-        bool LoadFilesList(CString &szFileName);
-        bool SaveFilesList(CString &szFileName, int nFormat);
-        bool LoadProgramConfig(CString szFileName);
-        bool SaveProgramConfig(CString szFileName);
+        bool LoadFilesList(std::wstring &szFileName);
+        bool SaveFilesList(std::wstring &szFileName, int nFormat);
+        bool LoadProgramConfig(std::wstring szFileName);
+        bool SaveProgramConfig(std::wstring szFileName);
         bool UpdateProgramEngines();
-        bool LoadProgramEngines(CString szFileName);
-        bool SaveProgramEngines(CString szFileName);
+        bool LoadProgramEngines(std::wstring szFileName);
+        bool SaveProgramEngines(std::wstring szFileName);
         void LoadAllConfiguration();
         void SaveAllConfiguration();
         config::CEncoderPreset& GetCurrentPreset();
         void HandleDropFiles(HDROP hDropInfo);
-        void SearchFolderForFiles(CString szFile, const bool bRecurse);
-        void AddItemToFileList(CString szPath);
+        void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
+        void AddItemToFileList(std::wstring szPath);
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
         void ApplyPresetToDlg(config::CEncoderPreset &preset);
         void ShowOptionPopup(bool bUseRect);
-        bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
+        bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS);
     protected:
         afx_msg void OnPaint();
         afx_msg HCURSOR OnQueryDragIcon();

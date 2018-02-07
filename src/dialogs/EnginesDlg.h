@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -32,8 +33,8 @@ namespace app
         int nCurrSel;
     public:
         bool InsertProgramEngines();
-        bool LoadProgramEngines(CString szFileName);
-        bool SaveProgramEngines(CString szFileName);
+        bool LoadProgramEngines(std::wstring szFileName);
+        bool SaveProgramEngines(std::wstring szFileName);
     protected:
         void InitLang();
     public:
