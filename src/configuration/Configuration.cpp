@@ -20,9 +20,10 @@ namespace config
             CStdioFile fp(fs);
             std::wstring szBuffer;
 
+            wchar_t c = '=';
             while (fp.ReadString(szBuffer))
             {
-                auto parts = util::StringHelper::Split(szBuffer, '=');
+                auto parts = util::StringHelper::Split(szBuffer, c);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -228,9 +229,10 @@ namespace config
             std::wstring szValue = L"";
             int key;
 
+            wchar_t c = '=';
             while (fp.ReadString(szBuffer))
             {
-                auto parts = util::StringHelper::Split(szBuffer, '=');
+                auto parts = util::StringHelper::Split(szBuffer, c);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -1333,6 +1335,7 @@ namespace config
 
             encPresets.RemoveAll();
 
+            wchar_t c = '=';
             while (fp.ReadString(szBuffer))
             {
                 if ((szBuffer.Left(1) == _T("[")) && (szBuffer.Right(1) == _T("]")))
@@ -1351,7 +1354,7 @@ namespace config
                 }
                 else
                 {
-                    int nPos = szBuffer.Find('=', 0);
+                    int nPos = szBuffer.Find(c, 0);
                     if (nPos != -1)
                     {
                         CConfigEntry ce;

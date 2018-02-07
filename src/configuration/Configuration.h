@@ -66,8 +66,8 @@ namespace config
     class CConfiguration
     {
     public:
-        constexpr static std::wstring pszReadMode = L"rt, ccs=UTF-8";
-        constexpr static std::wstring pszWriteMode = L"wt, ccs=UTF-8";
+        static std::wstring pszReadMode = L"rt, ccs=UTF-8";
+        static std::wstring pszWriteMode = L"wt, ccs=UTF-8";
     public:
         CLangMap * m_Lang;
         CLangList m_LangLst;
