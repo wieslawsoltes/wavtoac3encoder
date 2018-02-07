@@ -229,7 +229,6 @@ namespace config
                 szBuffer = L"";
             }
 
-            fclose(fs);
             return true;
         }
         catch (...)
