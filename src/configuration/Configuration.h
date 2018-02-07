@@ -63,11 +63,11 @@ namespace config
     {
     };
 
+    const std::wstring szReadMode = L"rt, ccs=UTF-8";
+    const std::wstring szWriteMode = L"wt, ccs=UTF-8";
+
     class CConfiguration
     {
-    public:
-        static std::wstring pszReadMode = L"rt, ccs=UTF-8";
-        static std::wstring pszWriteMode = L"wt, ccs=UTF-8";
     public:
         CLangMap * m_Lang;
         CLangList m_LangLst;

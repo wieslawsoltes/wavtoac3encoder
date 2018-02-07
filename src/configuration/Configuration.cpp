@@ -13,7 +13,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -49,7 +49,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
@@ -77,7 +77,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -113,7 +113,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
@@ -216,7 +216,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -261,7 +261,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -289,7 +289,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
@@ -1314,7 +1314,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), CConfiguration::pszReadMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -1394,7 +1394,7 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName.c_str(), CConfiguration::pszWriteMode.c_str());
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
             if (error != 0)
                 return false;
 
