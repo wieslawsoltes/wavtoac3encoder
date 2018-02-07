@@ -1457,18 +1457,18 @@ namespace config
 
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
-            szExtL = szSupportedInputExt[i];
+            szExtL = szSupportedInputExt[i].c_str();
             szBuff = _T("*.") + szExtL.MakeLower();
             szBuff += (i < nNumSupportedInputExt - 1) ? _T(";") : _T("");
             szFilter += szBuff;
         }
 
-        szFilter = (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207006).c_str() : _T("Supported Files")) +
+        szFilter = (app::m_Config.HaveLangStrings() ? CString(app::m_Config.GetLangString(0x00207006).c_str()) : _T("Supported Files")) +
             _T(" (") + szFilter + _T(")|") + szFilter + _T("|");
 
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
-            szExtL = szExtU = szSupportedInputExt[i];
+            szExtL = szExtU = szSupportedInputExt[i].c_str();
             szExtU.MakeUpper();
             szExtL.MakeLower();
 
@@ -1480,7 +1480,7 @@ namespace config
             szFilter += szBuff;
         }
 
-        szFilter += (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207008).c_str() : _T("All Files")) +
+        szFilter += (app::m_Config.HaveLangStrings() ? CString(app::m_Config.GetLangString(0x00207008).c_str()) : _T("All Files")) +
             _T(" (*.*)|*.*||");
 
         return szFilter;
