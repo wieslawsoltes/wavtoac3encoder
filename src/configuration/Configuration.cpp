@@ -291,7 +291,7 @@ namespace config
         }
         else
         {
-            szLangPath = util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + _L"\\lang");
+            szLangPath = util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang");
         }
 
         SearchFolderForLang(szLangPath, false, m_LangLst);
@@ -1181,7 +1181,7 @@ namespace config
             std::wstring szBuffer;
             auto& ce = cl.Get(i);
 
-            if (ce.szKey.Compare(_T("engine")) == 0)
+            if (ce.szKey == L"engine")
             {
                 preset.nCurrentEngine = util::StringHelper::ToInt(ce.szValue);
                 continue;
@@ -1195,31 +1195,31 @@ namespace config
                 continue;
             }
 
-            if (ce.szKey = L"mmx")
+            if (ce.szKey == L"mmx")
             {
                 preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey = L"sse") == 0)
+            if (ce.szKey == L"sse") == 0)
             {
                 preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey = L"sse2") == 0)
+            if (ce.szKey == L"sse2") == 0)
             {
                 preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey = L""sse3") == 0)
+            if (ce.szKey == L""sse3") == 0)
             {
                 preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey = L"mode") == 0)
+            if (ce.szKey == L"mode") == 0)
             {
                 preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.szValue);
                 continue;
