@@ -8,16 +8,16 @@
 
 namespace config
 {
-    const std::wstring szReadMode = L"rt, ccs=UTF-8";
-    const std::wstring szWriteMode = L"wt, ccs=UTF-8";
-    wchar_t Separator = '=';
+    const std::wstring szReadMode { L"rt, ccs=UTF-8" };
+    const std::wstring szWriteMode { L"wt, ccs=UTF-8" };
+    wchar_t Separator { '=' };
 
     std::wstring ReadAllText(const std::wstring& szFileName)
     {
         std::wstring buffer;
 
         FILE *fs;
-        errno_t error = _wfopen_s(&fs, szFileName.c_str(), szReadMode);
+        errno_t error = _wfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
         if (error != 0)
             return buffer;
 
@@ -47,10 +47,10 @@ namespace config
                 return false;
 
             std::wistringstream stream;
-            stream.str(buffer);
+            stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                auto parts = util::StringHelper::Split(szBuffer, Separator);
+                auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -104,7 +104,7 @@ namespace config
                 return false;
 
             std::wistringstream stream;
-            stream.str(buffer);
+            stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 if (szBuffer.size() > 0)
@@ -246,10 +246,10 @@ namespace config
             int key;
 
             std::wistringstream stream;
-            stream.str(buffer);
+            stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                auto parts = util::StringHelper::Split(szBuffer, Separator);
+                auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
                     CConfigEntry ce;
@@ -282,7 +282,7 @@ namespace config
                 return false;
 
             std::wistringstream stream;
-            stream.str(buffer);
+            stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 m_szLangFileName = szBuffer;
@@ -1339,7 +1339,7 @@ namespace config
             encPresets.RemoveAll();
 
             std::wistringstream stream;
-            stream.str(buffer);
+            stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
                 if ((szBuffer[0] =='[') && (szBuffer[szBuffer.size() - 1] == ']')))
@@ -1358,7 +1358,7 @@ namespace config
                 }
                 else
                 {
-                    auto parts = util::StringHelper::Split(szBuffer, Separator);
+                    auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                     if (parts.size() == 2)
                     {
                         CConfigEntry ce;
