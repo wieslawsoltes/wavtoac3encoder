@@ -1352,8 +1352,8 @@ namespace config
             if (error != 0)
                 return false;
 
-            CString szBuffer;
-            CString szTmpBuffer;
+            std::wstring szBuffer;
+            std::wstring szTmpBuffer;
 
             for (int i = 0; i < nSize; i++)
             {
@@ -1438,7 +1438,7 @@ namespace config
         return false;
     }
 
-    int CEncoderDefaults::GetSupportedInputFormat(CString &szExt)
+    int CEncoderDefaults::GetSupportedInputFormat(std::wstring &szExt)
     {
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
