@@ -82,11 +82,11 @@ namespace config
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
-                szBuffer = ce.szKey + L"=" + ce.szValue + '\n';
+                szBuffer = ce.szKey + L"=" + ce.szValue + L"\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
-            flose(fp);
+            fclose(fs);
             return true;
         }
         catch (...)
@@ -146,7 +146,7 @@ namespace config
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
-            flose(fp);
+            fclose(fs);
             return true;
         }
         catch (...)
@@ -263,8 +263,7 @@ namespace config
                 szBuffer = L"";
             }
 
-            flose(fp);
-
+            fclose(fs);
             return true;
         }
         catch (...)
@@ -306,10 +305,10 @@ namespace config
             if (error != 0)
                 return false;
 
-            std::wstring szBuffer = m_szLangFileName + '\n';
-            std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);;
+            std::wstring szBuffer = m_szLangFileName + L"\n";
+            std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-            flose(fp);
+            fclose(fs);
             return true;
         }
         catch (...)
@@ -1459,7 +1458,7 @@ namespace config
                 }
             }
 
-            flose(fp);
+            fclose(fs);
             return true;
         }
         catch (...)
