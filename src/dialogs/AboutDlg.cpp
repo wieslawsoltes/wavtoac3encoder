@@ -36,7 +36,7 @@ namespace app
     void CAboutDlg::SetBuildInfo()
     {
         CString szBuildInfo = _T("");
-        szBuildInfo.Format(_T("%s %s,"), m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00901004) : _T("Version"), ENCWAVTOAC3_VERSION);
+        szBuildInfo.Format(_T("%s %s,"), m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00901004).c_str() : _T("Version"), ENCWAVTOAC3_VERSION);
 #if defined(_WIN32) & !defined(_WIN64)
         szBuildInfo += _T(" x86, Win32");
 #else
@@ -62,9 +62,9 @@ namespace app
     {
         if (m_Config.HaveLangStrings())
         {
-            this->SetWindowText(m_Config.GetLangString(0x00901002));
-            this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00901001));
-            this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(m_Config.GetLangString(0x00901003));
+            this->SetWindowText(m_Config.GetLangString(0x00901002).c_str());
+            this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00901001).c_str());
+            this->GetDlgItem(IDC_STATIC_LICENSE)->SetWindowText(m_Config.GetLangString(0x00901003).c_str());
         }
     }
 }

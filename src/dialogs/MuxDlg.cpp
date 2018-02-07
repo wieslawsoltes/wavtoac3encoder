@@ -137,7 +137,7 @@ namespace app
         this->m_CmbChannelConfig.SetCurSel(0);
 
         CString szTmpText;
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01008) :
+        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01008).c_str() :
             _T("Specify channel configuration:\n")
             _T("1+1 = (Ch1,Ch2)\n")
             _T("1/0 = (C)\n")
@@ -149,17 +149,17 @@ namespace app
             _T("3/2 = (L,R,C,SL,SR)");
 
         this->m_CmbChannelConfig.SetTooltipText(szTmpText);
-        this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
+        this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009).c_str() : _T("Indicates use of the LFE channel."));
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
-        this->m_BtnChannelFL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
-        this->m_BtnChannelFR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
-        this->m_BtnChannelFC.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100C) : _T("Front Center Channel"));
-        this->m_BtnChannelLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
-        this->m_BtnChannelSL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100E) : _T("Surround Left Channel"));
-        this->m_BtnChannelSR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100F) : _T("Surround Right Channel"));
-        this->m_BtnChannelS.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01010) : _T("Surround Channel"));
+        this->m_BtnChannelFL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100A).c_str() : _T("Front Left Channel"));
+        this->m_BtnChannelFR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100B).c_str() : _T("Front Right Channel"));
+        this->m_BtnChannelFC.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100C).c_str() : _T("Front Center Channel"));
+        this->m_BtnChannelLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100D).c_str() : _T("Low Frequency Effect Channel"));
+        this->m_BtnChannelSL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100E).c_str() : _T("Surround Left Channel"));
+        this->m_BtnChannelSR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100F).c_str() : _T("Surround Right Channel"));
+        this->m_BtnChannelS.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01010).c_str() : _T("Surround Channel"));
 
         this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
     }
@@ -168,18 +168,18 @@ namespace app
     {
         if (m_Config.HaveLangStrings())
         {
-            this->SetWindowText(_T("WAV to AC3 Encoder - ") + m_Config.GetLangString(0x00C01001));
-            this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(m_Config.GetLangString(0x00C01002));
-            this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(m_Config.GetLangString(0x00C01003));
-            this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(m_Config.GetLangString(0x00C01004));
-            this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00C01005));
-            this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00C01006));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(m_Config.GetLangString(0x00C01007));
+            this->SetWindowText(_T("WAV to AC3 Encoder - ") + m_Config.GetLangString(0x00C01001).c_str());
+            this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(m_Config.GetLangString(0x00C01002).c_str());
+            this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(m_Config.GetLangString(0x00C01003).c_str());
+            this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(m_Config.GetLangString(0x00C01004).c_str());
+            this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00C01005).c_str());
+            this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00C01006).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(m_Config.GetLangString(0x00C01007).c_str());
         }
     }
 
@@ -603,7 +603,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011) :
+            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011).c_str() :
             _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 
@@ -627,7 +627,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011) :
+            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011).c_str() :
             _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 

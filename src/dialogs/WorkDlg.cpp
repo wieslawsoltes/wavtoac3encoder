@@ -209,20 +209,20 @@ namespace app
         if (pWorkerContext->m_ElapsedTimeTotal <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
                 (unsigned long)pWorkerContext->m_ElapsedTimeTotal);
         }
         else if (pWorkerContext->m_ElapsedTimeTotal <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeTotal % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006) : _T("Total elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
                 ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
                 ((((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
@@ -244,20 +244,20 @@ namespace app
         if (pWorkerContext->m_ElapsedTimeFile <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
                 (unsigned long)pWorkerContext->m_ElapsedTimeFile);
         }
         else if (pWorkerContext->m_ElapsedTimeFile <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeFile % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005) : _T("Elapsed time:"),
+                m_Config.HaveLangStrings() ? (LPCTSTR)m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
                 ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) / 60,
                 ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60,
                 ((((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
@@ -283,8 +283,8 @@ namespace app
         if (pWorkerContext->hThread == nullptr)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));
-            this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100B) : _T("Failed to create worker thread!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100A) : _T("Fatal Error"),
+            this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100B).c_str() : _T("Failed to create worker thread!"),
+                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00A0100A).c_str() : _T("Fatal Error"),
                 MB_OK | MB_ICONERROR);
         }
     }
@@ -293,8 +293,8 @@ namespace app
     {
         if (m_Config.HaveLangStrings())
         {
-            this->SetWindowText(m_Config.GetLangString(0x00A01001));
-            this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00A01002));
+            this->SetWindowText(m_Config.GetLangString(0x00A01001).c_str());
+            this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00A01002).c_str());
         }
     }
 }

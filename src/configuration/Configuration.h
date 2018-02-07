@@ -33,11 +33,11 @@
 #define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
 #define FILENAME_FILES _T("EncWAVtoAC3.files")
 
-#define DEFAULT_PRESET_NAME (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207001) : _T("Default"))
-#define DEFAULT_TEXT_AUTO (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207002) : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207003) : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207004) : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207005) : _T("<Same as first input file path + output.ac3>"))
+#define DEFAULT_PRESET_NAME (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207001).c_str() : _T("Default"))
+#define DEFAULT_TEXT_AUTO (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207002).c_str() : _T("<Auto>"))
+#define DEFAULT_TEXT_IGNORED (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207003).c_str() : _T("<Ignored>"))
+#define DEFAULT_TEXT_OUTPUT_PATH (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207004).c_str() : _T("<Same as input file path>"))
+#define DEFAULT_TEXT_OUTPUT_FILE (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207005).c_str() : _T("<Same as first input file path + output.ac3>"))
 
 namespace config
 {

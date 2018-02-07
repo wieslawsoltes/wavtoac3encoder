@@ -57,7 +57,7 @@ namespace app
         }
         else
         {
-            ::CreateDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
+            ::CreateDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
 
             m_Config.m_szPresetsFilePath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
             m_Config.m_szConfigFilePath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
