@@ -2,42 +2,35 @@
 
 #include "StdAfx.h"
 #include "MainApp.h"
+#include "utilities\StringHelper.h"
 #include "utilities\Utilities.h"
 #include "Configuration.h"
 
 namespace config
 {
-    CConfiguration::CConfiguration()
-    {
-    }
-
-    CConfiguration::~CConfiguration()
-    {
-    }
-
-    bool CConfiguration::LoadConfig(CString &szFileName, CConfigList &cl)
+    bool CConfiguration::LoadConfig(std::wstring &szFileName, CConfigList &cl)
     {
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer = _T("");
+            std::wstring szBuffer;
 
             while (fp.ReadString(szBuffer))
             {
-                int nPos = szBuffer.Find('=', 0);
-                if (nPos != -1)
+                auto parts = util::StringHelper::Split(szBuffer, '=');
+                if (parts.size() == 2)
                 {
                     CConfigEntry ce;
-                    ce.szKey = szBuffer.Mid(0, nPos);
-                    ce.szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
+                    ce.szKey = parts[0];
+                    ce.szValue = parts[1];
                     cl.Insert(ce);
                 }
-                szBuffer = _T("");
+                szBuffer = L"";
             }
 
             fp.Close();
@@ -49,24 +42,24 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveConfig(CString &szFileName, CConfigList &cl)
+    bool CConfiguration::SaveConfig(std::wstring &szFileName, CConfigList &cl)
     {
         int nSize = cl.Count();
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer;
+            std::wstring szBuffer;
 
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
-                szBuffer.Format(_T("%s=%s\n"), ce.szKey, ce.szValue);
-                fp.WriteString(szBuffer);
+                szBuffer = ce.szKey + L"=" + ce.szValue + '\n';
+                fp.WriteString(szBuffer.c_str());
             }
 
             fp.Close();
@@ -78,31 +71,30 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadFiles(CString &szFileName, util::CListT<CString>& fl)
+    bool CConfiguration::LoadFiles(std::wstring &szFileName, util::CListT<CString>& fl)
     {
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer = _T("");
+            std::wstring szBuffer;
 
             while (fp.ReadString(szBuffer))
             {
-                if (szBuffer.GetLength() > 0)
+                if (szBuffer.size() > 0)
                 {
-                    szBuffer.TrimLeft('"');
-                    szBuffer.TrimRight('"');
+                    util::StringHelper::Trim(szBuffer, '"');
                     if (CEncoderDefaults::IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
                     {
-                        CString szPath = szBuffer;
+                        std::wstring szPath = szBuffer;
                         fl.Insert(szPath);
                     }
                 }
-                szBuffer = _T("");
+                szBuffer = L"";
             }
 
             fp.Close();
@@ -120,21 +112,17 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer;
-            CString szTmpFileName;
+            std::wstring szBuffer;
 
             for (int i = 0; i < nItems; i++)
             {
-                CString &szPath = fl.Get(i);
-                szBuffer.Format(_T("%s%s%s\n"),
-                    nFormat == 0 ? _T("") : _T("\""),
-                    szPath,
-                    nFormat == 0 ? _T("") : _T("\""));
+                std::wstring &szPath = fl.Get(i);
+                szBuffer = (nFormat == 0 ? L"" : L"\"" + szPath + (nFormat == 0 ? L"" : L"\"");
                 fp.WriteString(szBuffer);
             }
 
@@ -159,10 +147,10 @@ namespace config
             ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
             ZeroMemory(cTempBuf, MAX_PATH * 2);
 
-            szPath.TrimRight(_T("\\"));
-            szPath.TrimRight(_T("/"));
+            util::StringHelper::TrimRight(szPath, '\\');
+            util::StringHelper::TrimRight(szPath, '/');
 
-            wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
+            wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath.c_str());
 
             hSearch = FindFirstFile(cTempBuf, &w32FileData);
             if (hSearch == INVALID_HANDLE_VALUE)
@@ -174,7 +162,7 @@ namespace config
                     !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
                 {
                     CString szTempBuf;
-                    szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
+                    szTempBuf.Format(_T("%s\\%s\0"), szPath.c_str(), w32FileData.cFileName);
 
                     CString szExt = ::PathFindExtension(szTempBuf);
                     szExt.MakeLower();
@@ -222,12 +210,12 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLang(CString &szFileName, CLangMap& lm)
+    bool CConfiguration::LoadLang(std::wstring &szFileName, CLangMap& lm)
     {
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
             if (error != 0)
                 return false;
 
@@ -235,24 +223,25 @@ namespace config
 
             lm.RemoveAll();
 
-            CString szBuffer = _T("");
-            CString szKey = _T("");
-            CString szValue = _T("");
+            std::wstring szBuffer = L"";
+            std::wstring szKey = L"";
+            std::wstring szValue = L"";
             int key;
 
             while (fp.ReadString(szBuffer))
             {
-                int nPos = szBuffer.Find('=', 0);
-                if (nPos != -1)
+                auto parts = util::StringHelper::Split(szBuffer, '=');
+                if (parts.size() == 2)
                 {
-                    szKey = szBuffer.Mid(0, nPos);
-                    szValue = szBuffer.Mid(nPos + 1, szBuffer.GetLength() - 1);
-                    szValue.Replace(_T("\\n"), _T("\n"));
-                    szValue.Replace(_T("\\t"), _T("\t"));
-                    _stscanf(szKey, _T("%x"), &key);
+                    CConfigEntry ce;
+                    szKey = parts[0];
+                    szValue = parts[1];
+                    std::replace(szValue.begin(), szValue.end(), '\\n', '\n');
+                    std::replace(szValue.begin(), szValue.end(), '\\t', '\t');
+                    key = util::StringHelper::ToIntFromHex(szKey);
                     lm.Set(key, szValue);
                 }
-                szBuffer = _T("");
+                szBuffer = L"";
             }
 
             fp.Close();
@@ -265,22 +254,21 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLangConfig(CString &szFileName)
+    bool CConfiguration::LoadLangConfig(std::wstring &szFileName)
     {
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszReadMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszReadMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer = _T("");
+            std::wstring szBuffer = L"";
 
             if (fp.ReadString(szBuffer) == TRUE)
             {
                 m_szLangFileName = szBuffer;
-
                 fp.Close();
                 return true;
             }
@@ -299,14 +287,13 @@ namespace config
         try
         {
             FILE *fs;
-            errno_t error = _tfopen_s(&fs, szFileName, pszWriteMode);
+            errno_t error = _tfopen_s(&fs, szFileName.c_str(), pszWriteMode.c_str());
             if (error != 0)
                 return false;
 
             CStdioFile fp(fs);
-            CString szBuffer;
 
-            szBuffer.Format(_T("%s\n"), m_szLangFileName);
+            std::wstring szBuffer = m_szLangFileName + '\n';
             fp.WriteString(szBuffer);
 
             fp.Close();
@@ -320,14 +307,14 @@ namespace config
 
     void CConfiguration::LoadLangStrings()
     {
-        CString szLangPath;
+        std::wstring szLangPath;
         if (m_bIsPortable == true)
         {
-            szLangPath = util::Utilities::GetExeFilePath() + _T("lang");
+            szLangPath = util::Utilities::GetExeFilePath() + L"lang";
         }
         else
         {
-            szLangPath = util::Utilities::GetSettingsFilePath(_T(""), CString(DIRECTORY_CONFIG) + _T("\\lang"));
+            szLangPath = util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + _L"\\lang");
         }
 
         SearchFolderForLang(szLangPath, false, m_LangLst);
@@ -338,9 +325,9 @@ namespace config
             for (int i = 0; i < m_LangLst.Count(); i++)
             {
                 auto& lang = m_LangLst.Get(i);
-                CString szNameLang = util::Utilities::GetFileName(lang.szFileName);
-                CString szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
-                if (szNameLang.Compare(szNameConfig) == 0)
+                std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
+                std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
+                if (szNameLang == szNameConfig)
                 {
                     m_nLangId = i;
                     m_bHaveLang = TRUE;
@@ -371,9 +358,9 @@ namespace config
         return m_bHaveLang;
     }
 
-    CString CConfiguration::GetLangString(int id)
+    std::wstring CConfiguration::GetLangString(int id)
     {
-        CString szValue = _T("");
+        std::wstring szValue = L"";
         if (m_Lang != nullptr)
         {
             m_Lang->TryGet(id, szValue);
@@ -381,81 +368,81 @@ namespace config
         return szValue;
     }
 
-    LPTSTR CEncoderDefaults::szCurrentPresetsVersion = _T("1.1.0.0");
+    std::wstring CEncoderDefaults::szCurrentPresetsVersion = L"1.1.0.0";
 
     int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
         0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
     };
 
     CChannelConfig CEncoderDefaults::ccAften[nNumChannelConfigAften] = {
-        { 0, 0, _T("1+1") },
-        { 1, 0, _T("1/0") },
-        { 2, 0, _T("2/0") },
-        { 3, 0, _T("3/0") },
-        { 4, 0, _T("2/1") },
-        { 5, 0, _T("3/1") },
-        { 6, 0, _T("2/2") },
-        { 7, 0, _T("3/2") },
-        { 0, 1, _T("1+1") },
-        { 1, 1, _T("1/0") },
-        { 2, 1, _T("2/0") },
-        { 3, 1, _T("3/0") },
-        { 4, 1, _T("2/1") },
-        { 5, 1, _T("3/1") },
-        { 6, 1, _T("2/2") },
-        { 7, 1, _T("3/2") }
+        { 0, 0, L"1+1" },
+        { 1, 0, L"1/0" },
+        { 2, 0, L"2/0" },
+        { 3, 0, L"3/0" },
+        { 4, 0, L"2/1" },
+        { 5, 0, L"3/1" },
+        { 6, 0, L"2/2" },
+        { 7, 0, L"3/2" },
+        { 0, 1, L"1+1" },
+        { 1, 1, L"1/0" },
+        { 2, 1, L"2/0" },
+        { 3, 1, L"3/0" },
+        { 4, 1, L"2/1" },
+        { 5, 1, L"3/1" },
+        { 6, 1, L"2/2" },
+        { 7, 1, L"3/2" }
     };
 
-    LPTSTR CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
-        (LPTSTR)(LPCTSTR)(DEFAULT_TEXT_IGNORED),
-        _T("u8"),
-        _T("s8"),
-        _T("s16_le"),
-        _T("s16_be"),
-        _T("s20_le"),
-        _T("s20_be"),
-        _T("s24_le"),
-        _T("s24_be"),
-        _T("s32_le"),
-        _T("s32_be"),
-        _T("float_le"),
-        _T("float_be"),
-        _T("double_le"),
-        _T("double_be")
+    std::wstring CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
+        std::wstring(DEFAULT_TEXT_IGNORED),
+        L"u8",
+        L"s8",
+        L"s16_le",
+        L"s16_be",
+        L"s20_le",
+        L"s20_be",
+        L"s24_le",
+        L"s24_be",
+        L"s32_le",
+        L"s32_be",
+        L"float_le",
+        L"float_be",
+        L"double_le",
+        L"double_be"
     };
 
-    CString CEncoderDefaults::pszGroups[nNumEncoderOptionsGroups] = {
-        _T("Encoding options"),
-        _T("Bitstream info metadata"),
-        _T("Dynamic range compression and dialog normalization"),
-        _T("Input options"),
-        _T("Input filters"),
-        _T("Alternate bit stream syntax")
+    std::wstring CEncoderDefaults::pszGroups[nNumEncoderOptionsGroups] = {
+        L"Encoding options",
+        L"Bitstream info metadata",
+        L"Dynamic range compression and dialog normalization",
+        L"Input options",
+        L"Input filters",
+        L"Alternate bit stream syntax"
     };
 
-    CString CEncoderDefaults::szCbrOption = _T("-b");
+    std::wstring CEncoderDefaults::szCbrOption = L"-b";
 
-    CString CEncoderDefaults::szVbrOption = _T("-q");
+    std::wstring CEncoderDefaults::szVbrOption = L"-q";
 
-    CString CEncoderDefaults::szThreadsOption = _T("-threads");
+    std::wstring CEncoderDefaults::szThreadsOption = L"-threads";
 
-    CString CEncoderDefaults::szSimdOption = _T("-nosimd");
+    std::wstring CEncoderDefaults::szSimdOption = L"-nosimd";
 
-    CString CEncoderDefaults::szRawSampleFormatOption = _T("-raw_fmt");
+    std::wstring CEncoderDefaults::szRawSampleFormatOption = L"-raw_fmt";
 
-    CString CEncoderDefaults::szRawSampleRateOption = _T("-raw_sr");
+    std::wstring CEncoderDefaults::szRawSampleRateOption = L"-raw_sr";
 
-    CString CEncoderDefaults::szRawChannelsOption = _T("-raw_ch");
+    std::wstring CEncoderDefaults::szRawChannelsOption = L"-raw_ch";
 
-    TCHAR CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt][8] = {
-        _T("wav"),
-        _T("pcm"),
-        _T("raw"),
-        _T("bin"),
-        _T("aiff"),
-        _T("aif"),
-        _T("aifc"),
-        _T("avs")
+    std::wstring CEncoderDefaults::szSupportedInputExt[nNumSupportedInputExt] = {
+        L"wav",
+        L"pcm",
+        L"raw",
+        L"bin",
+        L"aiff",
+        L"aif",
+        L"aifc",
+        L"avs"
     };
 
     int CEncoderDefaults::nSupportedInputFormats[nNumSupportedInputExt] = {
@@ -468,8 +455,8 @@ namespace config
         PCM_FORMAT_CAFF,
     };
 
-    TCHAR CEncoderDefaults::szSupportedOutputExt[nNumSupportedOutputExt][8] = {
-        _T("ac3")
+    std::wstring CEncoderDefaults::szSupportedOutputExt[nNumSupportedOutputExt] = {
+       L"ac3"
     };
 
     CEncoderOptions CEncoderDefaults::encOpt[CEncoderPreset::nNumEncoderOptions];

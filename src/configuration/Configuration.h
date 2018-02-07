@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <string>
 #include "version.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
@@ -37,71 +38,25 @@ namespace config
     class CConfigEntry
     {
     public:
-        CString szKey;
-        CString szValue;
-    public:
-        CConfigEntry()
-        {
-        }
-        CConfigEntry(const CConfigEntry &other)
-        {
-            Copy(other);
-        }
-        CConfigEntry& operator=(const CConfigEntry &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~CConfigEntry()
-        {
-        }
-    public:
-        void Copy(const CConfigEntry &other)
-        {
-            this->szKey = other.szKey;
-            this->szValue = other.szValue;
-        }
+        std::wstring szKey;
+        std::wstring szValue;
     };
 
     class CConfigList : public util::CListT<CConfigEntry>
     {
     };
 
-    class CLangMap : public util::CMapT<int, CString>
+    class CLangMap : public util::CMapT<int, std::wstring>
     {
     };
 
     class CLang
     {
     public:
-        CString szFileName;
-        CString szEnglishName;
-        CString szTargetName;
+        std::wstring szFileName;
+        std::wstring szEnglishName;
+        std::wstring szTargetName;
         CLangMap lm;
-    public:
-        CLang()
-        {
-        }
-        CLang(const CLang &other)
-        {
-            Copy(other);
-        }
-        CLang& operator=(const CLang &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~CLang()
-        {
-        }
-    public:
-        void Copy(const CLang &other)
-        {
-            this->szFileName = other.szFileName;
-            this->szEnglishName = other.szEnglishName;
-            this->szTargetName = other.szTargetName;
-            this->lm = other.lm;
-        }
     };
 
     class CLangList : public util::CListT<CLang>
@@ -111,40 +66,37 @@ namespace config
     class CConfiguration
     {
     public:
-        CConfiguration();
-        virtual ~CConfiguration();
-    public:
-        constexpr static LPTSTR pszReadMode = _T("rt, ccs=UTF-8");
-        constexpr static LPTSTR pszWriteMode = _T("wt, ccs=UTF-8");
+        constexpr static std::wstring pszReadMode = L"rt, ccs=UTF-8";
+        constexpr static std::wstring pszWriteMode = L"wt, ccs=UTF-8";
     public:
         CLangMap * m_Lang;
         CLangList m_LangLst;
-        CString m_szLangFileName = _T("");
+        std::wstring m_szLangFileName = L"";
         BOOL m_bHaveLang = FALSE;
         int m_nLangId = -1;
     public:
         bool m_bIsPortable = true;
-        CString m_szPresetsFilePath;
-        CString m_szConfigFilePath;
-        CString m_szEnginesFilePath;
-        CString m_szFilesListFilePath;
-        CString m_szLangFilePath;
+        std::wstring m_szPresetsFilePath;
+        std::wstring m_szConfigFilePath;
+        std::wstring m_szEnginesFilePath;
+        std::wstring m_szFilesListFilePath;
+        std::wstring m_szLangFilePath;
     public:
-        static bool LoadConfig(CString &szFileName, CConfigList &cl);
-        static bool SaveConfig(CString &szFileName, CConfigList &cl);
+        static bool LoadConfig(std::wstring &szFileName, CConfigList &cl);
+        static bool SaveConfig(std::wstring &szFileName, CConfigList &cl);
     public:
-        bool LoadFiles(CString &szFileName, util::CListT<CString>& fl);
-        bool SaveFiles(CString &szFileName, util::CListT<CString>& fl, int nFormat);
+        bool LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl);
+        bool SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat);
     public:
-        void SearchFolderForLang(CString szPath, const bool bRecurse, CLangList& m_LangLst);
-        bool LoadLang(CString &szFileName, CLangMap &lm);
+        void SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst);
+        bool LoadLang(std::wstring &szFileName, CLangMap &lm);
     public:
-        bool LoadLangConfig(CString &szFileName);
-        bool SaveLangConfig(CString &szFileName);
+        bool LoadLangConfig(std::wstring &szFileName);
+        bool SaveLangConfig(std::wstring &szFileName);
     public:
         void LoadLangStrings();
         BOOL HaveLangStrings();
-        CString GetLangString(int id);
+        std::wstring GetLangString(int id);
     };
 
     class CChannelConfig
@@ -152,79 +104,28 @@ namespace config
     public:
         int acmod;
         int lfe;
-        CString chconfig;
+        std::wstring chconfig;
     public:
-        CChannelConfig()
-        {
-        }
-        CChannelConfig(int acmod, int lfe, CString chconfig)
+        CChannelConfig(int acmod, int lfe, std::wstring chconfig)
         {
             this->acmod = acmod;
             this->lfe = lfe;
             this->chconfig = chconfig;
-        }
-        CChannelConfig(const CChannelConfig &other)
-        {
-            Copy(other);
-        }
-        CChannelConfig& operator=(const CChannelConfig &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~CChannelConfig()
-        {
-        }
-    public:
-        void Copy(const CChannelConfig &other)
-        {
-            this->acmod = other.acmod;
-            this->lfe = other.lfe;
-            this->chconfig = other.chconfig;
         }
     };
 
     class CEncoderOptions
     {
     public:
-        CString szName;
-        CString szOption;
-        CString szHelpText;
-        util::CListT<CString> listOptNames;
+        std::wstring szName;
+        std::wstring szOption;
+        std::wstring szHelpText;
+        util::CListT<std::wstring> listOptNames;
         util::CListT<int> listOptValues;
         int nDefaultValue;
         int nIgnoreValue;
-        CString szGroupName;
+        std::wstring szGroupName;
         bool bBeginGroup;
-    public:
-        CEncoderOptions()
-        {
-        }
-        CEncoderOptions(const CEncoderOptions &other)
-        {
-            Copy(other);
-        }
-        CEncoderOptions& operator=(const CEncoderOptions &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~CEncoderOptions()
-        {
-        }
-    public:
-        void Copy(const CEncoderOptions &other)
-        {
-            this->szName = other.szName;
-            this->szOption = other.szOption;
-            this->szHelpText = other.szHelpText;
-            this->listOptNames = other.listOptNames;
-            this->listOptValues = other.listOptValues;
-            this->nDefaultValue = other.nDefaultValue;
-            this->nIgnoreValue = other.nIgnoreValue;
-            this->szGroupName = other.szGroupName;
-            this->bBeginGroup = other.bBeginGroup;
-        }
     };
 
     class CEncoderPreset
@@ -233,7 +134,7 @@ namespace config
         const static int nNumEncoderOptions = 31;
         const static int nNumSIMDIntructions = 4;
     public:
-        CString szName;
+        std::wstring szName;
         AftenEncMode nMode;
         int nBitrate;
         int nQuality;
@@ -244,46 +145,6 @@ namespace config
         int nThreads;
         int nCurrentEngine;
         int nSetting[nNumEncoderOptions];
-    public:
-        CEncoderPreset()
-        {
-        }
-        CEncoderPreset(const CEncoderPreset &other)
-        {
-            Copy(other);
-        }
-        CEncoderPreset& operator=(const CEncoderPreset &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~CEncoderPreset()
-        {
-        }
-    public:
-        void Copy(const CEncoderPreset &other)
-        {
-            this->szName = other.szName;
-            this->nMode = other.nMode;
-            this->nBitrate = other.nBitrate;
-            this->nQuality = other.nQuality;
-            this->nRawSampleFormat = other.nRawSampleFormat;
-            this->nRawSampleRate = other.nRawSampleRate;
-            this->nRawChannels = other.nRawChannels;
-
-            for (int i = 0; i < nNumSIMDIntructions; i++)
-            {
-                this->nUsedSIMD[i] = other.nUsedSIMD[i];
-            }
-
-            this->nThreads = other.nThreads;
-            this->nCurrentEngine = other.nCurrentEngine;
-
-            for (int i = 0; i < nNumEncoderOptions; i++)
-            {
-                this->nSetting[i] = other.nSetting[i];
-            }
-        }
     };
 
     class CEncoderPresetList : public util::CListT<CEncoderPreset>
@@ -303,32 +164,32 @@ namespace config
         const static int nNumSupportedInputExt = 8;
         const static int nNumSupportedOutputExt = 1;
     public:
-        static LPTSTR szCurrentPresetsVersion;
+        static std::wstring szCurrentPresetsVersion;
         static int nValidCbrBitrates[nNumValidCbrBitrates];
         static CChannelConfig ccAften[nNumChannelConfigAften];
-        static LPTSTR szRawSampleFormats[nNumRawSampleFormats];
-        static CString pszGroups[nNumEncoderOptionsGroups];
-        static CString szCbrOption;
-        static CString szVbrOption;
-        static CString szThreadsOption;
-        static CString szSimdOption;
-        static CString szRawSampleFormatOption;
-        static CString szRawSampleRateOption;
-        static CString szRawChannelsOption;
-        static TCHAR szSupportedInputExt[nNumSupportedInputExt][8];
+        static std::wstring szRawSampleFormats[nNumRawSampleFormats];
+        static std::wstring pszGroups[nNumEncoderOptionsGroups];
+        static std::wstring szCbrOption;
+        static std::wstring szVbrOption;
+        static std::wstring szThreadsOption;
+        static std::wstring szSimdOption;
+        static std::wstring szRawSampleFormatOption;
+        static std::wstring szRawSampleRateOption;
+        static std::wstring szRawChannelsOption;
+        static std::wstring szSupportedInputExt[nNumSupportedInputExt];
         static int nSupportedInputFormats[nNumSupportedInputExt];
-        static TCHAR szSupportedOutputExt[nNumSupportedOutputExt][8];
+        static std::wstring szSupportedOutputExt[nNumSupportedOutputExt];
         static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
     public:
         static void InitEncoderOptions();
         static int FindValidBitratePos(const int nBitrate);
-        static int FindOptionIndex(CString szOption);
+        static int FindOptionIndex(std::wstring szOption);
         static void ResetEncoderOptionsLists();
         static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
-        static bool LoadEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-        static bool SaveEncoderPresets(CEncoderPresetList& encPresets, CString szFileName, CEncoderPreset& defaultPreset);
-        static bool IsSupportedInputExt(CString &szExt);
-        static int GetSupportedInputFormat(CString &szExt);
-        static CString GetSupportedInputFilesFilter();
+        static bool LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
+        static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
+        static bool IsSupportedInputExt(std::wstring &szExt);
+        static int GetSupportedInputFormat(std::wstring &szExt);
+        static std::wstring GetSupportedInputFilesFilter();
     };
 }
