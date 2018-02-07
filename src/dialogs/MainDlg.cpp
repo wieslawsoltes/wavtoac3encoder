@@ -6,7 +6,7 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
-#include "utilities\TimeCount.h"
+//#include "utilities\TimeCount.h"
 
 namespace app
 {
@@ -315,17 +315,18 @@ namespace app
         }
 
         CWorkDlg dlg;
-        util::CListT<CString> list;
+        util::CListT<std::wstring> list;
         util::CListT<char> listStatus;
         dlg.pWorkerContext->nTotalSize = 0;
         CString szSizeBuff;
-        CString szFileBuffer;
-        bool bAvisynthInput = false;
+        std::wstring szFileBuffer;
+        std::wstring bAvisynthInput = false;
 
         for (int i = 0; i < nItemsCount; i++)
         {
             szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
-            if (util::Utilities::GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
+            std::wstring szExt = util::Utilities::GetFileExtension(szFileBuffer);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
                 bAvisynthInput = true;
 
             list.Insert(szFileBuffer);
@@ -354,7 +355,7 @@ namespace app
         this->m_EdtOutPath.GetWindowText(dlg.pWorkerContext->szOutPath);
         dlg.pWorkerContext->bUseOutPath = false;
 
-        int nLen = dlg.pWorkerContext->szOutPath.GetLength();
+        int nLen = dlg.pWorkerContext->szOutPath.length();
         if (nLen < 3)
         {
             OutputDebugString(_T("Error: Invalid output path!"));
@@ -570,7 +571,7 @@ namespace app
         if (this->bMultipleMonoInput == true)
         {
             CFileDialog fd(FALSE,
-                config::CEncoderDefaults::szSupportedOutputExt[0],
+                config::CEncoderDefaults::szSupportedOutputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
                 m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701C).c_str() : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"),
@@ -712,8 +713,8 @@ namespace app
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
             preset.nSetting[nItem] = nVal;
-            CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-            this->m_LstSettings.SetItemText(nItem, 1, szName);
+            std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+            this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
 
@@ -758,7 +759,7 @@ namespace app
             this->api.CloseAftenAPI();
         }
 
-        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue.c_str();
         if (this->api.OpenAftenAPI() == false)
         {
             CString szLogMessage =
@@ -841,11 +842,11 @@ namespace app
             {
                 config::CConfigEntry ce = m_ConfigList.Get(i);
 
-                if (ce.szKey.Compare(_T("MainWindow")) == 0)
+                if (ce.szKey == L"MainWindow")
                 {
                     this->SetWindowRectStr(ce.szValue);
                 }
-                else if (ce.szKey.Compare(_T("ColumnSizeSettings")) == 0)
+                else if (ce.szKey == L"ColumnSizeSettings")
                 {
                     int nColumn[2] = { 0, 0 };
                     if (_stscanf(ce.szValue, _T("%d %d"),
@@ -1057,7 +1058,7 @@ namespace app
                 this->api.CloseAftenAPI();
             }
 
-            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue.c_str();
             this->api.OpenAftenAPI();
 
             return false;
@@ -1067,7 +1068,7 @@ namespace app
         for (int i = 0; i < nSize; i++)
         {
             auto& ce = this->m_EngineList.Get(i);
-            this->m_CmbEngines.InsertString(i, ce.szKey);
+            this->m_CmbEngines.InsertString(i, ce.szKey.c_str());
         }
 
         if (GetCurrentPreset().nCurrentEngine > nSize)
@@ -1143,17 +1144,15 @@ namespace app
 
     bool CMainDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<CString> fl;
+        util::CListT<std::wstring> fl;
         if (m_Config.LoadFiles(szFileName, fl))
         {
             this->m_LstFiles.DeleteAllItems();
-
             for (int i = 0; i < fl.Count(); i++)
             {
-                CString szPath = fl.Get(i);
+                std::wstring szPath = fl.Get(i);
                 this->AddItemToFileList(szPath);
             }
-
             return true;
         }
         return false;
@@ -1161,14 +1160,13 @@ namespace app
 
     bool CMainDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
     {
-        util::CListT<CString> fl;
+        util::CListT<std::wstring> fl;
         int nItems = this->m_LstFiles.GetItemCount();
         for (int i = 0; i < nItems; i++)
         {
-            CString szPath = this->m_LstFiles.GetItemText(i, 0);
+            std::wstring szPath = this->m_LstFiles.GetItemText(i, 0);
             fl.Insert(szPath);
         }
-
         return m_Config.SaveFiles(szFileName, fl, nFormat);
     }
 
@@ -1186,7 +1184,7 @@ namespace app
                 for (int i = 0; i < encPresets.Count(); i++)
                 {
                     auto& preset = encPresets.Get(i);
-                    this->m_CmbPresets.InsertString(i, preset.szName);
+                    this->m_CmbPresets.InsertString(i, preset.szName.c_str());
                 }
 
                 if ((this->nCurrentPreset >= encPresets.Count()) || (this->nCurrentPreset < 0))
@@ -1199,13 +1197,13 @@ namespace app
         }
 
         bool bConfigRet = this->LoadProgramConfig(m_Config.m_szConfigFilePath);
-        OutputDebugString((bConfigRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + m_Config.m_szConfigFilePath);
+        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + m_Config.m_szConfigFilePath).c_str());
 
         bool bEnginesRet = this->LoadProgramEngines(m_Config.m_szEnginesFilePath);
-        OutputDebugString((bEnginesRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + m_Config.m_szEnginesFilePath);
+        OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + m_Config.m_szEnginesFilePath).c_str());
 
         bool bFilesRet = this->LoadFilesList(m_Config.m_szFilesListFilePath);
-        OutputDebugString((bFilesRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + m_Config.m_szFilesListFilePath);
+        OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + m_Config.m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::SaveAllConfiguration()
@@ -1213,16 +1211,16 @@ namespace app
         bool bRet = false;
 
         bRet = config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, m_Config.m_szPresetsFilePath, this->defaultPreset);
-        OutputDebugString((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + m_Config.m_szPresetsFilePath);
+        OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + m_Config.m_szPresetsFilePath).c_str());
 
         bRet = this->SaveProgramConfig(m_Config.m_szConfigFilePath);
-        OutputDebugString((bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + m_Config.m_szConfigFilePath);
+        OutputDebugString(((bRet ? L"Saved program config: " : L"Error: Failed to save program config: ") + m_Config.m_szConfigFilePath).c_str());
 
         bRet = this->SaveProgramEngines(m_Config.m_szEnginesFilePath);
-        OutputDebugString((bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + m_Config.m_szEnginesFilePath);
+        OutputDebugString(((bRet ? L"Saved encoder engines: " : L"Error: Failed to save encoder engines: ") + m_Config.m_szEnginesFilePath).c_str());
 
         bRet = this->SaveFilesList(m_Config.m_szFilesListFilePath, 0);
-        OutputDebugString((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + m_Config.m_szFilesListFilePath);
+        OutputDebugString(((bRet ? L"Saved files list: " : L"Error: Failed to save files list: ") + m_Config.m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::UpdateBitrateText()
@@ -1280,7 +1278,7 @@ namespace app
         WIN32_FIND_DATA FindFileData;
         HANDLE hFind;
 
-        hFind = ::FindFirstFile(szPath, &FindFileData);
+        hFind = ::FindFirstFile(szPath.c_str(), &FindFileData);
         if (hFind == INVALID_HANDLE_VALUE)
             return;
 
@@ -1294,7 +1292,7 @@ namespace app
         SHFILEINFO sfi;
         LV_ITEM lvi;
 
-        SHGetFileInfo((LPCTSTR)szPath,
+        SHGetFileInfo((LPCTSTR)szPath.c_str(),
             0,
             &sfi,
             sizeof(sfi),
@@ -1308,9 +1306,10 @@ namespace app
 
         this->m_LstFiles.InsertItem(&lvi);
 
-        this->m_LstFiles.SetItemText(nItem, 0, szPath);
+        this->m_LstFiles.SetItemText(nItem, 0, szPath.c_str());
 
-        if (util::Utilities::GetFileExtension(szPath).MakeLower() == _T("avs"))
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
         {
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -1330,7 +1329,7 @@ namespace app
         {
             auto nSetting = preset.nSetting[i];
             auto szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
-            this->m_LstSettings.SetItemText(i, 1, szText);
+            this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
         if (preset.nMode == AFTEN_ENC_MODE_CBR)
@@ -1453,7 +1452,7 @@ namespace app
 
         for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
         {
-            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
+            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
@@ -1558,7 +1557,7 @@ namespace app
         UINT nItemCount = ID_OPTIONS_MENU_START;
         for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
+            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
             nItemCount++;
         }
 
@@ -1854,7 +1853,7 @@ namespace app
         this->m_ChkSimdSSE2.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206007).c_str() + szTmpText :
             _T("This option enables SSE2 optimizations (if supported by CPU).\n\n") + szTmpText);
 
-        this->m_ChkSimdSSE3.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206008.c_str() + szTmpText :
+        this->m_ChkSimdSSE3.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206008).c_str() + szTmpText :
             _T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
 
         szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206009).c_str() :
@@ -1932,19 +1931,16 @@ namespace app
 
             if (nGroupCounter >= 0 && nGroupCounter < config::CEncoderDefaults::nNumEncoderOptionsGroups)
             {
-                li.pszText = config::CEncoderDefaults::encOpt[i].szName.GetBuffer();
+                li.pszText = config::CEncoderDefaults::encOpt[i].szName.c_str();
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
                 ListView_InsertItem(listSettings, &li);
                 ListView_SetItemText(listSettings, i, 1,
-                    config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).GetBuffer());
+                    config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
 
-                this->m_LstSettings.listTooltips.AddTail(config::CEncoderDefaults::encOpt[i].szHelpText);
-
-                config::CEncoderDefaults::encOpt[i].szName.ReleaseBuffer();
-                config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).ReleaseBuffer();
+                this->m_LstSettings.listTooltips.AddTail(config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
             }
         }
 
@@ -1973,7 +1969,7 @@ namespace app
         defaultPreset.nUsedSIMD[3] = 1;
 
         this->nCurrentPreset = 0;
-        this->m_CmbPresets.InsertString(0, defaultPreset.szName);
+        this->m_CmbPresets.InsertString(0, defaultPreset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
         this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
@@ -2043,7 +2039,7 @@ namespace app
         this->m_CmbRawSampleFormat.ResetContent();
 
         for (int i = 0; i < config::CEncoderDefaults::nNumRawSampleFormats; i++)
-            this->m_CmbRawSampleFormat.InsertString(i, config::CEncoderDefaults::szRawSampleFormats[i]);
+            this->m_CmbRawSampleFormat.InsertString(i, config::CEncoderDefaults::szRawSampleFormats[i].c_str());
     }
 
     void CMainDlg::InitSettingsListGroups()
@@ -2272,8 +2268,8 @@ namespace app
 
     void CMainDlg::InitLangFilesList()
     {
-        SetListCtrlColumnText(this->m_LstFiles, 0, m_Config.GetLangString(0x00203001).c_str());
-        SetListCtrlColumnText(this->m_LstFiles, 1, m_Config.GetLangString(0x00203002).c_str());
+        SetListCtrlColumnText(this->m_LstFiles, 0, m_Config.GetLangString(0x00203001));
+        SetListCtrlColumnText(this->m_LstFiles, 1, m_Config.GetLangString(0x00203002));
     }
 
     void CMainDlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
@@ -2292,8 +2288,8 @@ namespace app
 
     void CMainDlg::InitLangSettingsList()
     {
-        SetListCtrlColumnText(this->m_LstSettings, 0, m_Config.GetLangString(0x00205001).c_str());
-        SetListCtrlColumnText(this->m_LstSettings, 1, m_Config.GetLangString(0x00205002).c_str());
+        SetListCtrlColumnText(this->m_LstSettings, 0, m_Config.GetLangString(0x00205001));
+        SetListCtrlColumnText(this->m_LstSettings, 1, m_Config.GetLangString(0x00205002));
     }
 
     void CMainDlg::InitLangMainMenu()
@@ -2603,9 +2599,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-
-                this->m_LstSettings.SetItemText(nItem, 1, szName);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
         break;
@@ -2629,8 +2624,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-                this->m_LstSettings.SetItemText(nItem, 1, szName);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
         break;
@@ -2674,7 +2669,10 @@ namespace app
         if (pos != nullptr)
         {
             int nItem = m_LstSettings.GetNextSelectedItem(pos);
-            this->MessageBox(config::CEncoderDefaults::encOpt[nItem].szHelpText, config::CEncoderDefaults::encOpt[nItem].szName, MB_ICONINFORMATION | MB_OK);
+            this->MessageBox(
+                config::CEncoderDefaults::encOpt[nItem].szHelpText.c_str(), 
+                config::CEncoderDefaults::encOpt[nItem].szName.c_str(), 
+                MB_ICONINFORMATION | MB_OK);
         }
 
         *pResult = 0;
@@ -2682,8 +2680,6 @@ namespace app
 
     bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
-        TCHAR *pszInPath = szFileName.GetBuffer();
-
         if (pInfoAVS == nullptr)
             return false;
 
@@ -2693,7 +2689,7 @@ namespace app
         char szInputFileAVS[MAX_PATH] = "";
 
     #ifdef _UNICODE
-        util::Utilities::ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
+        util::Utilities::ConvertUnicodeToAnsi(szFileName.c_str(), szInputFileAVS, szFileName.length());
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
     #else
         if (decoderAVS.OpenAvisynth(pszInPath) == false)
@@ -2720,9 +2716,9 @@ namespace app
         if (pos != nullptr)
         {
             int nItem = m_LstFiles.GetNextSelectedItem(pos);
-            CString szFileName = m_LstFiles.GetItemText(nItem, 0);
-
-            if (util::Utilities::GetFileExtension(szFileName).MakeLower() == _T("avs"))
+            std::wstring szFileName = m_LstFiles.GetItemText(nItem, 0);
+            std::wstring szExt = util::Utilities::GetFileExtension(szFileName);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
             {
                 AvsAudioInfo infoAVS;
                 memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -2813,7 +2809,7 @@ namespace app
 
             CString szFilter = config::CEncoderDefaults::GetSupportedInputFilesFilter();
             CFileDialog fd(TRUE,
-                config::CEncoderDefaults::szSupportedInputExt[0],
+                config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
                 szFilter,
@@ -2892,9 +2888,7 @@ namespace app
         {
             if (SHGetPathFromIDList(pidlBrowse, lpBuffer))
             {
-                CString szBuff;
-                szBuff.Format(_T("%s\0"), lpBuffer);
-                SearchFolderForFiles(szBuff, true);
+                SearchFolderForFiles(std::wstring(lpBuffer), true);
             }
 
             pMalloc->Free(pidlBrowse);
@@ -3055,12 +3049,12 @@ namespace app
                 preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]));
+                    config::CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]).c_str());
 
                 preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]));
+                    config::CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]).c_str());
 
                 if (bUpdateChconfig == true)
                 {
@@ -3081,7 +3075,7 @@ namespace app
                     preset.nSetting[nIndexChconfig] = config::CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]));
+                    config::CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]).c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {
@@ -3149,7 +3143,7 @@ namespace app
 
                 for (int i = 0; i < encPresets.Count(); i++)
                 {
-                    this->m_CmbPresets.AddString(encPresets.Get(i).szName);
+                    this->m_CmbPresets.AddString(encPresets.Get(i).szName.c_str());
                 }
 
                 util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
