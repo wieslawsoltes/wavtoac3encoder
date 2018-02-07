@@ -1201,25 +1201,25 @@ namespace config
                 continue;
             }
 
-            if (ce.szKey == L"sse") == 0)
+            if (ce.szKey == L"sse")
             {
                 preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey == L"sse2") == 0)
+            if (ce.szKey == L"sse2")
             {
                 preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey == L""sse3") == 0)
+            if (ce.szKey == L""sse3")
             {
                 preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.szValue);
                 continue;
             }
 
-            if (ce.szKey == L"mode") == 0)
+            if (ce.szKey == L"mode")
             {
                 preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.szValue);
                 continue;
