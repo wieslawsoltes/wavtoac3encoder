@@ -974,7 +974,7 @@ namespace app
         columnSizeFiles.szKey = _T("ColumnSizeFiles");
         int nFilesColWidth[2];
         for (int i = 0; i < 2; i++)
-            Files[i] = this->m_LstSettings.GetColumnWidth(i);
+            nFilesColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
         columnSizeFiles.szValue = 
             std::to_wstring(nFilesColWidth[0]) + L" " + 
             std::to_wstring(nFilesColWidth[1]);
@@ -1858,7 +1858,8 @@ namespace app
 
             if (nGroupCounter >= 0 && nGroupCounter < config::CEncoderDefaults::nNumEncoderOptionsGroups)
             {
-                li.pszText = config::CEncoderDefaults::encOpt[i].szName.c_str();
+                _tcscpy_s(li.pszText, li.cchTextMax, config::CEncoderDefaults::encOpt[i].szName.c_str());
+
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
