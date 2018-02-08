@@ -357,7 +357,7 @@ namespace worker
                     fclose(ifp[i]);
             }
 
-            OutputDebugString(_T("Failed to create output file: ") + CString(szOutPath));
+            OutputDebugString(_T("Failed to create output file: ") + CString(szOutPath.c_str()));
 
             pContext->bTerminate = true;
             pContext->Close();
