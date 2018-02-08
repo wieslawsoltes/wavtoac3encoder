@@ -182,7 +182,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_THREADS)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_AUTO;
             else
@@ -193,7 +192,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_SAMPLE_RATE)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_IGNORED;
             else
@@ -204,7 +202,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_CHANNELS)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_IGNORED;
             else
@@ -267,13 +264,9 @@ namespace app
             return;
 
         if (m_Config.m_bIsPortable == true)
-        {
             ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        }
         else
-        {
             ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
-        }
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
         if (nItemsCount <= 0)
@@ -282,7 +275,6 @@ namespace app
             MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207011).c_str() : _T("Add at least one file to the file list!"),
                 m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
-
             return;
         }
 
@@ -292,16 +284,13 @@ namespace app
             MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207012).c_str() : _T("Supported are minimum 1 and maximum 6 mono input files!"),
                 m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
-
             return;
         }
 
         bWorking = true;
 
         if (this->api.IsAftenOpen())
-        {
             this->api.CloseAftenAPI();
-        }
 
         if (this->api.OpenAftenAPI() == false)
         {
@@ -843,22 +832,29 @@ namespace app
                 }
                 else if (ce.szKey == L"ColumnSizeSettings")
                 {
-                    int nColumn[2] = { 0, 0 };
-                    if (_stscanf(ce.szValue, _T("%d %d"),
-                        &nColumn[0], &nColumn[1]) == 2)
+                    if (!ce.szValue.empty())
                     {
-                        this->m_LstSettings.SetColumnWidth(0, nColumn[0]);
-                        this->m_LstSettings.SetColumnWidth(1, nColumn[1]);
+                        auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                        if (widths.size() == 2)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                int nWidth = util::StringHelper::ToInt(widths[i]);
+                                this->m_LstSettings.SetColumnWidth(i, nWidth);
+                            }
+                        }
                     }
                 }
                 else if (ce.szKey == L"ColumnSizeFiles")
                 {
-                    int nColumn[2] = { 0, 0 };
-                    if (_stscanf(ce.szValue, _T("%d %d"),
-                        &nColumn[0], &nColumn[1]) == 2)
+                    auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                    if (widths.size() == 2)
                     {
-                        this->m_LstFiles.SetColumnWidth(0, nColumn[0]);
-                        this->m_LstFiles.SetColumnWidth(1, nColumn[1]);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            int nWidth = util::StringHelper::ToInt(widths[i]);
+                            this->m_LstFiles.SetColumnWidth(i, nWidth);
+                        }
                     }
                 }
                 else if (ce.szKey == L"OutputPath")
@@ -877,8 +873,7 @@ namespace app
                 }
                 else if (ce.szKey == L"SelectedPreset")
                 {
-                    int nPreset = 0;
-                    if (_stscanf(ce.szValue, _T("%d"), &nPreset) == 1)
+                    int nPreset = util::StringHelper::ToInt(ce.szValue);
                     {
                         if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
                             nPreset = 0;
@@ -982,17 +977,21 @@ namespace app
 
         config::CConfigEntry columnSizeSettings;
         columnSizeSettings.szKey = _T("ColumnSizeSettings");
-        columnSizeSettings.szValue.Format(_T("%d %d"),
-            this->m_LstSettings.GetColumnWidth(0),
-            this->m_LstSettings.GetColumnWidth(1));
-        m_ConfigList.Insert(columnSizeSettings);
+        int nSettingsColWidth[2];
+        for (int i = 0; i < 2; i++)
+            nSettingsColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
+        columnSizeSettings.szValue = 
+            std::to_wstring(nSettingsColWidth[0]) + L" " + 
+            std::to_wstring(nSettingsColWidth[1]);
 
         config::CConfigEntry columnSizeFiles;
         columnSizeFiles.szKey = _T("ColumnSizeFiles");
-        columnSizeFiles.szValue.Format(_T("%d %d"),
-            this->m_LstFiles.GetColumnWidth(0),
-            this->m_LstFiles.GetColumnWidth(1));
-        m_ConfigList.Insert(columnSizeFiles);
+        int nFilesColWidth[2];
+        for (int i = 0; i < 2; i++)
+            Files[i] = this->m_LstSettings.GetColumnWidth(i);
+        columnSizeFiles.szValue = 
+            std::to_wstring(Files[0]) + L" " + 
+            std::to_wstring(Files[1]);
 
         config::CConfigEntry outputPath;
         outputPath.szKey = _T("OutputPath");
@@ -1010,7 +1009,7 @@ namespace app
 
         config::CConfigEntry selectedPreset;
         selectedPreset.szKey = _T("SelectedPreset");
-        selectedPreset.szValue.Format(_T("%d"), this->m_CmbPresets.GetCurSel());
+        selectedPreset.szValue = std::to_wstring(this->m_CmbPresets.GetCurSel());
         m_ConfigList.Insert(selectedPreset);
 
         config::CConfigEntry multipleMonoInput;
@@ -1036,8 +1035,8 @@ namespace app
         if (this->m_EngineList.Count() == 0)
         {
             config::CConfigEntry ce;
-            ce.szKey = _T("Aften");
-            ce.szValue = _T("libaften.dll");
+            ce.szKey = L"Aften";
+            ce.szValue = L"libaften.dll";
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
@@ -1108,8 +1107,8 @@ namespace app
         else
         {
             config::CConfigEntry ce;
-            ce.szKey = _T("Aften");
-            ce.szValue = _T("libaften.dll");
+            ce.szKey = L"Aften";
+            ce.szValue = L"libaften.dll";
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
