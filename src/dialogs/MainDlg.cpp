@@ -359,7 +359,7 @@ namespace app
             return;
         }
 
-        std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(str.length()-4, 4);
+        std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(dlg.pWorkerContext->szOutPath.length() - 4, 4);
         if (this->bMultipleMonoInput == true)
         {
             if (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE)
