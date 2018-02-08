@@ -2814,9 +2814,9 @@ namespace app
         {
             if (SHGetPathFromIDList(pidlBrowse, lpBuffer))
             {
-                SearchFolderForFiles(std::wstring(lpBuffer), true);
+                std::wstring szPath = lpBuffer;
+                SearchFolderForFiles(szPath, true);
             }
-
             pMalloc->Free(pidlBrowse);
         }
 

@@ -484,7 +484,8 @@ namespace app
 
         CString szCurrentFileName;
         m_EdtCurrent->GetWindowText(szCurrentFileName);
-        std::wstring szFileName = util::Utilities::GetFileName(std::wstring(szCurrentFileName));
+        std::wstring szCurrentFileNameStr = szCurrentFileName;
+        std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
 
         CFileDialog fd(TRUE,
             config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
