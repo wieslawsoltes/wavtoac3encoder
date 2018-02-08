@@ -6,7 +6,22 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
+
+
+// TODO: Fix chrono compile errors.
 //#include "utilities\TimeCount.h"
+namespace util
+{
+    class CTimeCount
+    {
+    public:
+        static std::wstring Format(double ms) { return L"0.0"; }
+        void Start() { }
+        void Stop() { }
+        double ElapsedTime() { return 0.0f; }
+    };
+}
+
 
 namespace app
 {
@@ -439,18 +454,20 @@ namespace app
         {
             if (this->bMultipleMonoInput == true)
             {
+                // TODO: Convert countTime.ElapsedTime() from [ms] to [s].
                 szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207018).c_str() : _T("Encoded %d mono files in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
-                    countTime.Format(countTime.ElapsedTime(), 3),
+                    util::CTimeCount::Format(countTime.ElapsedTime()).c_str(),
                     countTime.ElapsedTime());
             }
             else
             {
+                // TODO: Convert countTime.ElapsedTime() from [ms] to [s].
                 szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207019).c_str() : _T("Encoded %d file%s in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
                     dlg.pWorkerContext->nCount == 1 ? _T("") :
                     (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701A).c_str() : _T("s")),
-                    countTime.Format(countTime.ElapsedTime(), 3),
+                    util::CTimeCount::Format(countTime.ElapsedTime()).c_str(),
                     countTime.ElapsedTime());
             }
         }
