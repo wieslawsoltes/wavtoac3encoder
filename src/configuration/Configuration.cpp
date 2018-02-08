@@ -369,7 +369,7 @@ namespace config
     };
 
     std::wstring CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
-        std::wstring(DEFAULT_TEXT_IGNORED),
+        DEFAULT_TEXT_IGNORED,
         L"u8",
         L"s8",
         L"s16_le",
