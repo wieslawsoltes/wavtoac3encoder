@@ -6,22 +6,7 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
-
-
-// TODO: Fix chrono compile errors.
-//#include "utilities\TimeCount.h"
-namespace util
-{
-    class CTimeCount
-    {
-    public:
-        static std::wstring Format(double ms) { return L"0.0"; }
-        void Start() { }
-        void Stop() { }
-        double ElapsedTime() { return 0.0f; }
-    };
-}
-
+#include "worker\TimeCount.h"
 
 namespace app
 {
@@ -431,12 +416,15 @@ namespace app
         dlg.pWorkerContext->bMultiMonoInput = this->bMultipleMonoInput;
         dlg.pWorkerContext->api = this->api;
 
-        util::CTimeCount countTime;
+        worker::CTimeCount countTime;
         CString szText;
 
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
+
+        std::wstring szElapsedFormatted = countTime.Formatted();
+        double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
         for (int i = listStatus.Count() - 1; i >= 0; i--)
         {
@@ -447,28 +435,26 @@ namespace app
 
         if (dlg.pWorkerContext->nCount <= 0)
         {
-            szText.Format(_T(""));
+            szText = _T("");
             OutputDebugString(_T("Error: Failed to encode all files."));
         }
         else
         {
             if (this->bMultipleMonoInput == true)
             {
-                // TODO: Convert countTime.ElapsedTime() from [ms] to [s].
                 szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207018).c_str() : _T("Encoded %d mono files in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
-                    util::CTimeCount::Format(countTime.ElapsedTime()).c_str(),
-                    countTime.ElapsedTime());
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds;
             }
             else
             {
-                // TODO: Convert countTime.ElapsedTime() from [ms] to [s].
                 szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207019).c_str() : _T("Encoded %d file%s in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
                     dlg.pWorkerContext->nCount == 1 ? _T("") :
                     (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701A).c_str() : _T("s")),
-                    util::CTimeCount::Format(countTime.ElapsedTime()).c_str(),
-                    countTime.ElapsedTime());
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds);
             }
         }
 

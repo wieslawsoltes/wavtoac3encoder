@@ -107,6 +107,9 @@
     <ClCompile Include="configuration\Configuration.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
+    <ClCompile Include="worker\TimeCount.cpp">
+      <Filter>Source Files\Worker</Filter>
+    </ClCompile>
     <ClCompile Include="worker\Worker.cpp">
       <Filter>Source Files\Worker</Filter>
     </ClCompile>
@@ -174,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="configuration\Configuration.h">
       <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="worker\TimeCount.h">
+      <Filter>Header Files\Worker</Filter>
     </ClInclude>
     <ClInclude Include="worker\Worker.h">
       <Filter>Header Files\Worker</Filter>
