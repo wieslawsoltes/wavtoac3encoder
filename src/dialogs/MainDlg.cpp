@@ -2269,9 +2269,8 @@ namespace app
             for (int i = 0; i < m_Config.m_LangLst.Count(); i++)
             {
                 auto& lang = m_Config.m_LangLst.Get(i);
-                CString szBuff;
-                szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
-                m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
+                std::wstring szBuff = lang.szEnglishName + L" (" + lang.szTargetName  + L")";
+                m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff.c_str());
 
                 if (m_Config.m_nLangId == i)
                     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
