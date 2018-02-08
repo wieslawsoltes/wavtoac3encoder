@@ -1962,8 +1962,7 @@ namespace app
 
     void CMainDlg::InitRawSamleFormatComboBox()
     {
-        CString szIgnored = DEFAULT_TEXT_IGNORED;
-        config::CEncoderDefaults::szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(szIgnored);
+        config::CEncoderDefaults::szRawSampleFormats[0] = DEFAULT_TEXT_IGNORED;
 
         this->m_CmbRawSampleFormat.ResetContent();
 

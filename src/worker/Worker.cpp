@@ -107,49 +107,49 @@ namespace worker
                 TCHAR *type, *chan, *order;
                 TCHAR fmt[64] = _T("");
 
-                type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02001).c_str() : _T("?");
-                chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02002).c_str() : _T("?-channel");
+                type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02001).c_str() : _T("?");
+                chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02002).c_str() : _T("?-channel");
                 order = _T("");
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
                     if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                        type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02003).c_str() : _T("Unsigned");
+                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02003).c_str() : _T("Unsigned");
                     else
-                        type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02004).c_str() : _T("Signed");
+                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02004).c_str() : _T("Signed");
                 }
                 else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02005).c_str() : _T("Floating-point");
+                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02005).c_str() : _T("Floating-point");
                 }
                 else
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02006).c_str() : _T("[unsupported type]");
+                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02006).c_str() : _T("[unsupported type]");
                 }
 
                 if (pf_info->ch_mask & 0x08)
                 {
                     switch (pf_info->channels - 1)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02007).c_str() : _T("1.1-channel"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02008).c_str() : _T("2.1-channel"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02009).c_str() : _T("3.1-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200A).c_str() : _T("4.1-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200B).c_str() : _T("5.1-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200C).c_str() : _T("multi-channel with LFE"); break;
+                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02007).c_str() : _T("1.1-channel"); break;
+                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02008).c_str() : _T("2.1-channel"); break;
+                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02009).c_str() : _T("3.1-channel"); break;
+                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200A).c_str() : _T("4.1-channel"); break;
+                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200B).c_str() : _T("5.1-channel"); break;
+                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200C).c_str() : _T("multi-channel with LFE"); break;
                     }
                 }
                 else
                 {
                     switch (pf_info->channels)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
-                    case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
+                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
+                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
+                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
+                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
+                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
+                    case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
+                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
                     }
                 }
 
@@ -166,15 +166,15 @@ namespace worker
                 else
                 {
                     _stprintf(fmt, _T("%s"),
-                        pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02014).c_str() : _T("unknown"));
+                        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02014).c_str() : _T("unknown"));
                 }
 
                 if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
                 {
                     switch (pf_info->order)
                     {
-                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02015).c_str() : _T("little-endian"); break;
-                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02016).c_str() : _T("big-endian"); break;
+                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02015).c_str() : _T("little-endian"); break;
+                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02016).c_str() : _T("big-endian"); break;
                     }
                 }
                 else
@@ -196,13 +196,13 @@ namespace worker
 
             switch (infoAVS.nAudioChannels)
             {
-            case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
-            case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
-            case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
-            case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
-            case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
-            case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
-            default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
+            case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
+            case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
+            case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
+            case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
+            case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
+            case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
+            default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
             }
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
@@ -216,9 +216,9 @@ namespace worker
             CString szOutputInfo = _T("");
             TCHAR *acmod_str[32] =
             {
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02018).c_str() : _T("dual mono (1+1)"),
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02019).c_str() : _T("mono (1/0)"),
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0201A).c_str() : _T("stereo (2/0)"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018).c_str() : _T("dual mono (1+1)"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02019).c_str() : _T("mono (1/0)"),
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201A).c_str() : _T("stereo (2/0)"),
                 _T("3/0"),
                 _T("2/1"),
                 _T("3/1"),
@@ -777,10 +777,10 @@ namespace worker
                     nTotalFiles);
                 pContext->SetTitleInfo(std::wstring(szTitle));
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + std::wstring(L"\t") + szInPath[0];
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
                 pContext->SetInputFileInfo(0, szBuff);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + std::wstring(L"\t") + szOutPath;
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
                 pContext->SetOutputFileInfo(szBuff);
 
                 szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
@@ -843,13 +843,13 @@ namespace worker
                 nTotalFiles);
             pContext->SetTitleInfo(std::wstring(szTitle));
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + std::wstring(L"\t") + szInPath[0];
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
             pContext->SetInputFileInfo(0, szBuff);
 
             for (int i = 1; i < nFileCounter; i++)
-                pContext->SetInputFileInfo(i, std::wstring(L"\t") + szInPath[i]);
+                pContext->SetInputFileInfo(i, L"\t" + szInPath[i]);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + std::wstring(L"\t") + szOutPath;
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
             pContext->SetOutputFileInfo(szBuff);
 
             szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
