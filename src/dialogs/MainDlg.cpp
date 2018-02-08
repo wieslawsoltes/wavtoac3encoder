@@ -1866,7 +1866,7 @@ namespace app
                 ListView_SetItemText(listSettings, i, 1,
                     config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
 
-                this->m_LstSettings.listTooltips.AddTail((LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
+                this->m_LstSettings.listTooltips.AddTail(CString(config::CEncoderDefaults::encOpt[i].szHelpText.c_str()));
             }
         }
 
