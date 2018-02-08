@@ -148,7 +148,7 @@ namespace config
             for (int i = 0; i < nItems; i++)
             {
                 std::wstring &szPath = fl.Get(i);
-                szBuffer = (nFormat == 0 ? L"" : L"\"") + szPath + (nFormat == 0 ? L"" : L"\"");
+                szBuffer = (nFormat == 0 ? L"" : L"\"") + szPath + (nFormat == 0 ? L"" : L"\"") + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
