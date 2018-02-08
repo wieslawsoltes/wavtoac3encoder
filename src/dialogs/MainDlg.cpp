@@ -359,7 +359,7 @@ namespace app
             return;
         }
 
-        std::string dlg.pWorkerContext->szOutPath = str.substr(str.length()-4, 4);
+        std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(str.length()-4, 4);
         if (this->bMultipleMonoInput == true)
         {
             if (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE)
@@ -396,11 +396,9 @@ namespace app
             }
             else
             {
-                std::wstring szTmpOutPath = dlg.pWorkerContext->szOutPath;
                 std::wstring szFile = util::Utilities::GetFileName(dlg.pWorkerContext->szOutPath);
-
-                szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
-                if (util::Utilities::MakeFullPath(szTmpOutPath) == false)
+                std::wstring szOutPath = dlg.pWorkerContext->szOutPath.substr(0, dlg.pWorkerContext->szOutPath.length() - szFile.length());
+                if (util::Utilities::MakeFullPath(szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
                     this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017).c_str() : _T("Failed to create output path!"),
@@ -764,25 +762,18 @@ namespace app
         {
             const char *szAftenVersionAnsi = this->api.LibAften_aften_get_version();
             int nVersionLen = strlen(szAftenVersionAnsi);
-    #ifdef _UNICODE
             TCHAR szAftenVersion[256] = _T("");
             ZeroMemory(szAftenVersion, 256 * sizeof(TCHAR));
             int nChars = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szAftenVersionAnsi, nVersionLen, szAftenVersion, 256);
             if (nChars == 0)
                 _stprintf(szAftenVersion, _T("?.??"));
-    #else
-            const char *szAftenVersion = szAftenVersionAnsi;
-    #endif
+
             std::wstring szLogMessage =
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207020) : _T("Loaded")) +
-                _T(" '") +
-                m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
-                _T("' ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F) : _T("library")) +
-                _T(", ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207021) : _T("version")) +
-                _T(" ") +
-                szAftenVersion;
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207020) : L"Loaded") +
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F) : L"library") + L", " +
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207021) : L"version") +
+                L" " + szAftenVersion;
             this->m_StatusBar.SetText(szLogMessage.c_str(), 0, 0);
         }
     }
