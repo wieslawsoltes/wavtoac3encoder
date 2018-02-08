@@ -445,7 +445,7 @@ namespace app
                 szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207018).c_str() : _T("Encoded %d mono files in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
                     szElapsedFormatted.c_str(),
-                    szElapsedSeconds;
+                    szElapsedSeconds);
             }
             else
             {
