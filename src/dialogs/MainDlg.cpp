@@ -1296,8 +1296,8 @@ namespace app
     {
         for (int i = 0; i < config::CEncoderPreset::nNumEncoderOptions; i++)
         {
-            auto nSetting = preset.nSetting[i];
-            auto szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
+            int nSetting = preset.nSetting[i];
+            std::wstring& szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
@@ -1859,22 +1859,22 @@ namespace app
 
             if (nGroupCounter >= 0 && nGroupCounter < config::CEncoderDefaults::nNumEncoderOptionsGroups)
             {
-                _tcscpy_s(li.pszText, li.cchTextMax, config::CEncoderDefaults::encOpt[i].szName.c_str());
-
+                LPWSTR pszText = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].szName.c_str();
+                li.pszText = pszText;
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
-                LPWSTR szSetting = CT2W(config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
+                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str();
                 ListView_InsertItem(listSettings, &li);
-                ListView_SetItemText(listSettings, i, 1, szSetting);
+                ListView_SetItemText(listSettings, i, 1, pszSetting);
 
-                this->m_LstSettings.listTooltips.AddTail(CString(config::CEncoderDefaults::encOpt[i].szHelpText.c_str()));
+                CString szTip = CString(config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
+                this->m_LstSettings.listTooltips.AddTail(szTip);
             }
         }
 
         this->m_LstSettings.bUseTooltipsList = true;
-
         this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
 
@@ -1983,7 +1983,12 @@ namespace app
 
         for (int i = 0; i < config::CEncoderDefaults::nNumEncoderOptionsGroups; i++)
         {
-            lg.pszHeader = (LPTSTR)(LPCTSTR)(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00208000 + i + 1).c_str() : config::CEncoderDefaults::pszGroups[i].c_str());
+            std::wstring szHeader = m_Config.HaveLangStrings() ?
+                m_Config.GetLangString(0x00208000 + i + 1) :
+                config::CEncoderDefaults::pszGroups[i];
+            LPWSTR pszHeader = (LPTSTR)(LPCTSTR)szHeader.c_str();
+
+            lg.pszHeader = pszHeader;
             lg.iGroupId = 101 + i;
             ListView_InsertGroup(listView, -1, &lg);
         }
@@ -2111,11 +2116,12 @@ namespace app
 
     void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, std::wstring& text)
     {
+        LPWSTR pszText = (LPTSTR)(LPCTSTR)text.c_str();
         LVCOLUMN lvCol;
         ::ZeroMemory((void *)&lvCol, sizeof(LVCOLUMN));
         lvCol.mask = LVCF_TEXT;
         listCtrl.GetColumn(nCol, &lvCol);
-        lvCol.pszText = (LPTSTR)(LPCTSTR)text.c_str();
+        lvCol.pszText = pszText;
         listCtrl.SetColumn(nCol, &lvCol);
     }
 
