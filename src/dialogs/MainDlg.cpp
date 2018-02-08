@@ -747,14 +747,14 @@ namespace app
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         if (this->api.OpenAftenAPI() == false)
         {
-            CString szLogMessage =
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701E).c_str() : _T("Failed to load")) +
-                _T(" '") +
+            std::wstring szLogMessage =
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701E) : L"Failed to load") +
+                L" '" +
                 m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
-                _T("' ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F).c_str() : _T("library")) +
-                _T("!");
-            this->m_StatusBar.SetText(szLogMessage, 0, 0);
+                L"' " +
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F): L"library") +
+                _L"!";
+            this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
 
             return;
         }
@@ -981,8 +981,8 @@ namespace app
         for (int i = 0; i < 2; i++)
             Files[i] = this->m_LstSettings.GetColumnWidth(i);
         columnSizeFiles.szValue = 
-            std::to_wstring(Files[0]) + L" " + 
-            std::to_wstring(Files[1]);
+            std::to_wstring(nFilesColWidth[0]) + L" " + 
+            std::to_wstring(nFilesColWidth[1]);
 
         config::CConfigEntry outputPath;
         outputPath.szKey = _T("OutputPath");
@@ -1257,21 +1257,17 @@ namespace app
 
     void CMainDlg::AddItemToFileList(std::wstring szPath)
     {
-        CString szSize = _T("");
-        ULARGE_INTEGER ulSize;
-        ULONGLONG nFileSize;
-        WIN32_FIND_DATA FindFileData;
-        HANDLE hFind;
+        ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
+        {
+            AvsAudioInfo infoAVS;
+            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
+            if (GetAvisynthFileInfo(szPath, &infoAVS) == false)
+                return;
 
-        hFind = ::FindFirstFile(szPath.c_str(), &FindFileData);
-        if (hFind == INVALID_HANDLE_VALUE)
-            return;
-
-        ulSize.HighPart = FindFileData.nFileSizeHigh;
-        ulSize.LowPart = FindFileData.nFileSizeLow;
-        nFileSize = ulSize.QuadPart;
-
-        ::FindClose(hFind);
+            nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+        }
 
         int nItem = this->m_LstFiles.GetItemCount();
         SHFILEINFO sfi;
@@ -1290,22 +1286,12 @@ namespace app
         lvi.lParam = nItem;
 
         this->m_LstFiles.InsertItem(&lvi);
-
         this->m_LstFiles.SetItemText(nItem, 0, szPath.c_str());
 
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
-        {
-            AvsAudioInfo infoAVS;
-            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
-            if (GetAvisynthFileInfo(szPath, &infoAVS) == false)
-                return;
+        CString szFileSize;
+        szFileSize.Format(_T("%I64d"), nFileSize);
 
-            nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-        }
-
-        szSize.Format(_T("%I64d"), nFileSize);
-        this->m_LstFiles.SetItemText(nItem, 1, szSize);
+        this->m_LstFiles.SetItemText(nItem, 1, szFileSize);
     }
 
     void CMainDlg::ApplyPresetToDlg(config::CEncoderPreset &preset)
@@ -1412,7 +1398,8 @@ namespace app
 
                 if (::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    this->SearchFolderForFiles(szFile, true);
+                    std::wstring szPath = szFile;
+                    this->SearchFolderForFiles(szPath, true);
                 }
                 else
                 {
@@ -1422,7 +1409,8 @@ namespace app
 
                     if (config::CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                     {
-                        this->AddItemToFileList(szFile);
+                        std::wstring szPath = szFile;
+                        this->AddItemToFileList(szPath);
                     }
                 }
             }
@@ -1452,60 +1440,19 @@ namespace app
     {
         try
         {
-            WIN32_FIND_DATA w32FileData;
-            HANDLE hSearch = nullptr;
-            BOOL fFinished = FALSE;
-            TCHAR cTempBuf[(MAX_PATH * 2) + 1];
-
-            ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
-            ZeroMemory(cTempBuf, MAX_PATH * 2);
-
-            util::StringHelper::TrimRight(szPath, '\\');
-            util::StringHelper::TrimRight(szPath, '/');
-
-            wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
-
-            hSearch = FindFirstFile(cTempBuf, &w32FileData);
-            if (hSearch == INVALID_HANDLE_VALUE)
-                return;
-
-            while (fFinished == FALSE)
+            std::vector<std::wstring> files;
+            bool bResult = util::Utilities::FindFiles(szPath, files, bRecurse);
+            if (bResult == true)
             {
-                if (w32FileData.cFileName[0] != '.' &&
-                    !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+                for (auto& file : files)
                 {
-                    CString szTempBuf;
-                    szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
-
-                    CString szExt = ::PathFindExtension(szTempBuf);
-                    szExt.MakeLower();
-                    szExt.Remove('.');
-
+                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
                     if (config::CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                     {
-                        this->AddItemToFileList(szTempBuf);
+                        this->AddItemToFileList(file);
                     }
                 }
-
-                if (w32FileData.cFileName[0] != '.' &&
-                    w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
-                    if (bRecurse == true)
-                        this->SearchFolderForFiles(cTempBuf, true);
-                }
-
-                if (FindNextFile(hSearch, &w32FileData) == FALSE)
-                {
-                    if (GetLastError() == ERROR_NO_MORE_FILES)
-                        fFinished = TRUE;
-                    else
-                        return;
-                }
             }
-
-            if (FindClose(hSearch) == FALSE)
-                return;
         }
         catch (...)
         {
@@ -2210,7 +2157,7 @@ namespace app
         this->InitTooltips();
 
         std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
-        if (szBuff.empty() || szBuff.Left(1).Compare(_T("<")) == 0)
+        if (szBuff.empty() || szBuff.substr(0, 1) == L"<")
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
         else
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile.c_str() : this->szOutputPath.c_str());
