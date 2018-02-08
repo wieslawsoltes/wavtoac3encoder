@@ -237,7 +237,7 @@ namespace worker
     BOOL CWorker::HandleError(LPTSTR pszMessage)
     {
         pContext->StopCurrentTimer();
-        std::wstring szBuff = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + L" " + L"00:00:00"";
+        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
 
@@ -327,7 +327,7 @@ namespace worker
                     OutputDebugString(_T("Failed to open input file: ") + CString(szInPath[i].c_str()));
                     pContext->StopCurrentTimer();
 
-                    std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + L" " + L"00:00:00";
+                    std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
                     pContext->SetCurrentTimerInfo(szBuff);
 
                     pContext->m_ElapsedTimeFile = 0L;
@@ -346,7 +346,7 @@ namespace worker
         ofp = _tfopen(szOutPath.c_str(), _T("wb"));
         if (!ofp)
         {
-            std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + L" " + L"00:00:00";
+            std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
             pContext->StopCurrentTimer();
             pContext->m_ElapsedTimeFile = 0L;
@@ -715,7 +715,7 @@ namespace worker
         pContext->api.LibAften_aften_encode_close(&s);
 
         pContext->StopCurrentTimer();
-        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + L" " + L"00:00:00";
+        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
 
@@ -736,7 +736,7 @@ namespace worker
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
 
-        szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006).c_str() : L"Total elapsed time:") + L" " + L"00:00:00";
+        szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006).c_str() : L"Total elapsed time:") + std::wstring(L" 00:00:00");
 
         pContext->SetTotalTimerInfo(szBuff);
         pContext->StartTotalTimer(250);
@@ -751,28 +751,24 @@ namespace worker
         {
             for (int i = 0; i < pContext->pFilesList->Count(); i++)
             {
-                szInPath[0] = _T("-");
-                szInPath[1] = _T("-");
-                szInPath[2] = _T("-");
-                szInPath[3] = _T("-");
-                szInPath[4] = _T("-");
-                szInPath[5] = _T("-");
-                szOutPath = _T("");
+                szInPath[0] = L"-";
+                szInPath[1] = L"-";
+                szInPath[2] = L"-";
+                szInPath[3] = L"-";
+                szInPath[4] = L"-";
+                szInPath[5] = L"-";
+                szOutPath = L"";
 
                 szInPath[0] = pContext->pFilesList->Get(i);
                 szOutPath = szInPath[0];
-                szOutPath.Truncate(szOutPath.GetLength() - util::Utilities::GetFileExtension(szOutPath).GetLength());
-                szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
+                
+                std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
+                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
                     std::wstring szFile = util::Utilities::GetFileName(szOutPath);
-
-                    if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
-                        (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))
-                        szOutPath = pContext->szOutPath + szFile;
-                    else
-                        szOutPath = pContext->szOutPath + '\\' + szFile;
+                    szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
                 }
 
                 CString szTitle;
@@ -787,7 +783,7 @@ namespace worker
                 szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
                 pContext->SetOutputFileInfo(szBuff);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + L" " + L"00:00:00";
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
                 pContext->SetCurrentTimerInfo(szBuff);
 
                 pContext->m_ElapsedTimeFile = 0L;
@@ -835,8 +831,9 @@ namespace worker
             }
 
             szOutPath = szInPath[0];
-            szOutPath.Truncate(szOutPath.GetLength() - util::Utilities::GetFileExtension(szOutPath).GetLength());
-            szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
+
+            std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
+            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
@@ -855,7 +852,7 @@ namespace worker
             szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004).c_str() : L"To:") + L"\t" + szOutPath;
             pContext->SetOutputFileInfo(szBuff);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + L" " + L"00:00:00";
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
 
             pContext->m_ElapsedTimeFile = 0L;
@@ -875,9 +872,7 @@ namespace worker
                     char result = false;
                     pContext->pStatusList->Set(result, i);
                 }
-
                 pContext->nCount = 0;
-
                 return(FALSE);
             }
             else
@@ -887,7 +882,6 @@ namespace worker
                     char result = true;
                     pContext->pStatusList->Set(result, i);
                 }
-
                 pContext->nCount = nFileCounter;
             }
         }
