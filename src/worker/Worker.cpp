@@ -185,7 +185,7 @@ namespace worker
                 szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
                     fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
 
-                pContext->SetInputTypeInfo(i, szInputInfo);
+                pContext->SetInputTypeInfo(i, std::wstring(szInputInfo));
             }
         }
         else
@@ -209,7 +209,7 @@ namespace worker
                 pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017).c_str() : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
                 infoAVS.nSamplesPerSecond, chan);
 
-            pContext->SetInputTypeInfo(0, szInputInfo);
+            pContext->SetInputTypeInfo(0, std::wstring(szInputInfo));
         }
 
         {
@@ -230,7 +230,7 @@ namespace worker
             if (s.lfe)
                 szOutputInfo += _T(" + LFE");
 
-            pContext->SetOutputTypeInfo(szOutputInfo);
+            pContext->SetOutputTypeInfo(std::wstring(szOutputInfo));
         }
     }
 
@@ -242,7 +242,7 @@ namespace worker
             pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
             _T("00:00:00"));
 
-        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->SetCurrentTimerInfo(std::wstring(szBuff));
         pContext->m_ElapsedTimeFile = 0L;
 
         if (fwav)
@@ -375,7 +375,7 @@ namespace worker
                 _T("00:00:00"));
 
             pContext->StopCurrentTimer();
-            pContext->SetCurrentTimerInfo(szBuff);
+            pContext->SetCurrentTimerInfo(std::wstring(szBuff));
             pContext->m_ElapsedTimeFile = 0L;
 
             for (int i = 0; i < nInputFiles; i++)
