@@ -1398,10 +1398,8 @@ namespace app
                 }
                 else
                 {
-                    CString szExt = ::PathFindExtension(szFile);
-                    szExt.MakeLower();
-                    szExt.Remove('.');
-
+                    std::wstring file = szFile;
+                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
                     if (config::CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                     {
                         std::wstring szPath = szFile;
@@ -1868,7 +1866,7 @@ namespace app
                 ListView_SetItemText(listSettings, i, 1,
                     config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
 
-                this->m_LstSettings.listTooltips.AddTail(config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
+                this->m_LstSettings.listTooltips.AddTail((LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
             }
         }
 
