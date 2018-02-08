@@ -749,14 +749,9 @@ namespace app
         {
             std::wstring szLogMessage =
                 (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701E) : L"Failed to load") +
-                L" '" +
-                m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
-                L"' " +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F): L"library") +
-                _L"!";
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F): L"library") + L"!";
             this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
-
-            return;
         }
         else
         {
