@@ -341,7 +341,10 @@ namespace app
         dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
         dlg.pWorkerContext->pFilesList = &list;
         dlg.pWorkerContext->pStatusList = &listStatus;
-        this->m_EdtOutPath.GetWindowText(dlg.pWorkerContext->szOutPath);
+
+        CString szOutPath;
+        this->m_EdtOutPath.GetWindowText(szOutPath);
+        dlg.pWorkerContext->szOutPath = szOutPath;
         dlg.pWorkerContext->bUseOutPath = false;
 
         int nLen = dlg.pWorkerContext->szOutPath.length();
@@ -356,12 +359,12 @@ namespace app
             return;
         }
 
-        CString szExt = dlg.pWorkerContext->szOutPath.Right(4);
+        std::string dlg.pWorkerContext->szOutPath = str.substr(str.length()-4, 4);
         if (this->bMultipleMonoInput == true)
         {
             if (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE)
             {
-                if ((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
+                if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
                     OutputDebugString(_T("Error: Invalid output file!"));
                     this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207016).c_str() : _T("Invalid output file!"),
@@ -506,12 +509,10 @@ namespace app
 
     void CMainDlg::OnBnClickedButtonPresetAdd()
     {
-        auto preset = GetCurrentPreset();
         static int nCount = 0;
-
-        preset.szName.Format(_T("%s (%d)"),
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701B) : _T("New preset"),
-            nCount++);
+        auto preset = GetCurrentPreset();
+        nCount++;
+        preset.szName = (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701B) : _T("New preset")) + L" (" + std::to_wstring(nCount) + L")";
         this->encPresets.Insert(preset);
 
         this->nCurrentPreset = this->encPresets.Count() - 1;
@@ -530,7 +531,6 @@ namespace app
 
             this->encPresets.Remove(nPreset);
             this->m_CmbPresets.DeleteString(nPreset);
-
             this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
             if (nPreset == (nCount - 1))
