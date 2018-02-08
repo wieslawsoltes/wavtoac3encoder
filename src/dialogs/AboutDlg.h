@@ -7,6 +7,7 @@
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
+#include "configuration\Configuration.h"
 
 namespace app
 {

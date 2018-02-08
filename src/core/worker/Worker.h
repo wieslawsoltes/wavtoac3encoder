@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <atlstr.h>
 #include <string>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"

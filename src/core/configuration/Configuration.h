@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <atlstr.h>
 #include <string>
 #include <wchar.h>
 #include <iostream>
@@ -7,13 +8,9 @@
 #include <cstdio>
 #include <utility>
 #include <vector>
-#include "version.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
 #include "worker\AftenAPI.h"
-
-#define ENCWAVTOAC3_VERSION _T(VER_FILE_VERSION_SHORT_STR)
-#define ENCWAVTOAC3_URL_HOME _T("https://github.com/wieslawsoltes/wavtoac3encoder/")
 
 #ifdef _M_X64
 #define FILENAME_ENGINES _T("EncWAVtoAC3-x64.engines")
@@ -33,11 +30,11 @@
 #define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
 #define FILENAME_FILES _T("EncWAVtoAC3.files")
 
-#define DEFAULT_PRESET_NAME (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207001).c_str() : _T("Default"))
-#define DEFAULT_TEXT_AUTO (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207002).c_str() : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207003).c_str() : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207004).c_str() : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (app::m_Config.HaveLangStrings() ? app::m_Config.GetLangString(0x00207005).c_str() : _T("<Same as first input file path + output.ac3>"))
+#define DEFAULT_PRESET_NAME (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207001).c_str() : _T("Default"))
+#define DEFAULT_TEXT_AUTO (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207002).c_str() : _T("<Auto>"))
+#define DEFAULT_TEXT_IGNORED (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207003).c_str() : _T("<Ignored>"))
+#define DEFAULT_TEXT_OUTPUT_PATH (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207004).c_str() : _T("<Same as input file path>"))
+#define DEFAULT_TEXT_OUTPUT_FILE (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207005).c_str() : _T("<Same as first input file path + output.ac3>"))
 
 namespace config
 {
@@ -192,6 +189,8 @@ namespace config
         static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
         static bool IsSupportedInputExt(std::wstring &szExt);
         static int GetSupportedInputFormat(std::wstring &szExt);
-        static CString GetSupportedInputFilesFilter();
+        static CAtlString GetSupportedInputFilesFilter();
     };
+
+   extern CConfiguration m_Config;
 }

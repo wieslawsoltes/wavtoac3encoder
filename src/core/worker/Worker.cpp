@@ -99,7 +99,7 @@ namespace worker
     {
         if (bAvisynthInput == false)
         {
-            CString szInputInfo = _T("");
+            CAtlString szInputInfo = _T("");
 
             for (int i = 0; i < nInputFiles; i++)
             {
@@ -184,7 +184,7 @@ namespace worker
         }
         else
         {
-            CString szInputInfo = _T("");
+            CAtlString szInputInfo = _T("");
             std::wstring chan = L"?-channel";
 
             switch (infoAVS.nAudioChannels)
@@ -206,7 +206,7 @@ namespace worker
         }
 
         {
-            CString szOutputInfo = _T("");
+        CAtlString szOutputInfo = _T("");
             std::wstring acmod_str[] =
             {
                 pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018) : L"dual mono (1+1)",
@@ -314,10 +314,10 @@ namespace worker
         {
             for (int i = 0; i < nInputFiles; i++)
             {
-                ifp[i] = _tfopen(szInPath[i].c_str(), _T("rb"));
-                if (!ifp[i])
+                errno_t error = _tfopen_s(&ifp[i], szInPath[i].c_str(), _T("rb"));
+                if (error != 0)
                 {
-                    OutputDebugString(_T("Failed to open input file: ") + CString(szInPath[i].c_str()));
+                    OutputDebugString(_T("Failed to open input file: ") + CAtlString(szInPath[i].c_str()));
                     pContext->StopCurrentTimer();
 
                     std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
@@ -336,8 +336,8 @@ namespace worker
             }
         }
 
-        ofp = _tfopen(szOutPath.c_str(), _T("wb"));
-        if (!ofp)
+        errno_t error = _tfopen_s(&ofp, szOutPath.c_str(), _T("wb"));
+        if (error != 0)
         {
             std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
@@ -350,7 +350,7 @@ namespace worker
                     fclose(ifp[i]);
             }
 
-            OutputDebugString(_T("Failed to create output file: ") + CString(szOutPath.c_str()));
+            OutputDebugString(_T("Failed to create output file: ") + CAtlString(szOutPath.c_str()));
 
             pContext->bTerminate = true;
             pContext->Close();
@@ -764,7 +764,7 @@ namespace worker
                     szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
                 }
 
-                CString szTitle;
+                CAtlString szTitle;
                 szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C).c_str() : _T("Encoding file %d of %d"),
                     nFileCounter + 1,
                     nTotalFiles);
@@ -832,7 +832,7 @@ namespace worker
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
 
-            CString szTitle;
+            CAtlString szTitle;
             szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D).c_str() : _T("Encoding %d mono files"),
                 nTotalFiles);
             std::wstring szTitleStr = szTitle;
