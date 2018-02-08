@@ -357,7 +357,7 @@ namespace worker
                     fclose(ifp[i]);
             }
 
-            OutputDebugString(_T("Failed to create output file: ") + CString(pszOutPath));
+            OutputDebugString(_T("Failed to create output file: ") + CString(szOutPath));
 
             pContext->bTerminate = true;
             pContext->Close();
@@ -777,10 +777,10 @@ namespace worker
                     nTotalFiles);
                 pContext->SetTitleInfo(std::wstring(szTitle));
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + std::wstring(L"\t") + szInPath[0];
                 pContext->SetInputFileInfo(0, szBuff);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + std::wstring(L"\t") + szOutPath;
                 pContext->SetOutputFileInfo(szBuff);
 
                 szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
@@ -841,18 +841,18 @@ namespace worker
             CString szTitle;
             szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D).c_str() : _T("Encoding %d mono files"),
                 nTotalFiles);
-            pContext->SetTitleInfo(szTitle);
+            pContext->SetTitleInfo(std::wstring(szTitle));
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : _T("From:") + L"\t" + szInPath[0];
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + std::wstring(L"\t") + szInPath[0];
             pContext->SetInputFileInfo(0, szBuff);
 
             for (int i = 1; i < nFileCounter; i++)
-                pContext->SetInputFileInfo(i, L"\t" + szInPath[i]);
+                pContext->SetInputFileInfo(i, std::wstring(L"\t") + szInPath[i]);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004).c_str() : L"To:") + L"\t" + szOutPath;
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + std::wstring(L"\t") + szOutPath;
             pContext->SetOutputFileInfo(szBuff);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
 
             pContext->m_ElapsedTimeFile = 0L;
