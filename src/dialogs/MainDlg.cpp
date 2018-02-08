@@ -1862,9 +1862,9 @@ namespace app
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
+                CString szSetting = CString(config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
                 ListView_InsertItem(listSettings, &li);
-                ListView_SetItemText(listSettings, i, 1,
-                    config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str());
+                ListView_SetItemText(listSettings, i, 1, szSetting);
 
                 this->m_LstSettings.listTooltips.AddTail(CString(config::CEncoderDefaults::encOpt[i].szHelpText.c_str()));
             }
