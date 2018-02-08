@@ -104,12 +104,12 @@ namespace worker
             for (int i = 0; i < nInputFiles; i++)
             {
                 PcmFile *pf_info = &pf.pcm_file[i];
-                TCHAR *type, *chan, *order;
-                TCHAR fmt[64] = _T("");
+                std::wstring type, chan, order;
+                std::wstring fmt = L"";
 
                 type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02001).c_str() : _T("?");
                 chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02002).c_str() : _T("?-channel");
-                order = _T("");
+                order = L"";
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
@@ -155,18 +155,12 @@ namespace worker
 
                 if (pf_info->pcm_format)
                 {
-#ifdef _UNICODE
-                    util::Utilities::ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
-                        fmt,
-                        strlen(pf_info->pcm_format->long_name));
-#else
-                    sprintf(fmt, _T("%s"), pf_info->pcm_format->long_name);
-#endif
+                    std::string szLongName = pf_info->pcm_format->long_name;
+                    fmt = util::StringHelper::Convert(szLongName);
                 }
                 else
                 {
-                    _stprintf(fmt, _T("%s"),
-                        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02014).c_str() : _T("unknown"));
+                    fmt = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02014) : L"unknown";
                 }
 
                 if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
@@ -183,16 +177,15 @@ namespace worker
                 }
 
                 szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
-                    fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
-
-                pContext->SetInputTypeInfo(i, std::wstring(szInputInfo));
+                    fmt.c_str(), type.c_str(), pf_info->bit_width, order.c_str(), pf_info->sample_rate, chan.c_str());
+                std::wstring szInputInfoStr = szInputInfo;
+                pContext->SetInputTypeInfo(i, szInputInfoStr);
             }
         }
         else
         {
             CString szInputInfo = _T("");
-            TCHAR *chan;
-            chan = _T("?-channel");
+            std::wstring chan = L"?-channel";
 
             switch (infoAVS.nAudioChannels)
             {
@@ -207,30 +200,30 @@ namespace worker
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
                 pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017).c_str() : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
-                infoAVS.nSamplesPerSecond, chan);
-
-            pContext->SetInputTypeInfo(0, std::wstring(szInputInfo));
+                infoAVS.nSamplesPerSecond, chan.c_str());
+            std::wstring szInputInfoStr = szInputInfo;
+            pContext->SetInputTypeInfo(0, szInputInfoStr);
         }
 
         {
             CString szOutputInfo = _T("");
-            TCHAR *acmod_str[32] =
+            std::wstring acmod_str[] =
             {
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018).c_str() : _T("dual mono (1+1)"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02019).c_str() : _T("mono (1/0)"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201A).c_str() : _T("stereo (2/0)"),
-                _T("3/0"),
-                _T("2/1"),
-                _T("3/1"),
-                _T("2/2"),
-                _T("3/2")
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018) : L"dual mono (1+1)",
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02019) : L"mono (1/0)",
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201A) : L"stereo (2/0)",
+                L"3/0",
+                L"2/1",
+                L"3/1",
+                L"2/2",
+                L"3/2"
             };
 
-            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod]);
+            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod].c_str());
             if (s.lfe)
                 szOutputInfo += _T(" + LFE");
-
-            pContext->SetOutputTypeInfo(std::wstring(szOutputInfo));
+            std::wstring szOutputInfoStr = szOutputInfo;
+            pContext->SetOutputTypeInfo(szOutputInfoStr);
         }
     }
 
@@ -775,7 +768,8 @@ namespace worker
                 szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C).c_str() : _T("Encoding file %d of %d"),
                     nFileCounter + 1,
                     nTotalFiles);
-                pContext->SetTitleInfo(std::wstring(szTitle));
+                std::wstring szTitleStr = szTitle;
+                pContext->SetTitleInfo(szTitleStr);
 
                 szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
                 pContext->SetInputFileInfo(0, szBuff);
@@ -841,7 +835,8 @@ namespace worker
             CString szTitle;
             szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D).c_str() : _T("Encoding %d mono files"),
                 nTotalFiles);
-            pContext->SetTitleInfo(std::wstring(szTitle));
+            std::wstring szTitleStr = szTitle;
+            pContext->SetTitleInfo(szTitleStr);
 
             szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
             pContext->SetInputFileInfo(0, szBuff);
