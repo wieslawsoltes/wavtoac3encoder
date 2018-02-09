@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <string>
+#include <vector>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -12,6 +14,7 @@
 #include "controls\MySliderCtrl.h"
 #include "controls\MyStatusBarCtrl.h"
 #include "controls\MySpinButtonCtrl.h"
+#include "utilities\StringHelper.h"
 #include "configuration\Configuration.h"
 #include "libaften\aften.h"
 #include "avs\src\Avs2Raw.h"
@@ -72,8 +75,8 @@ namespace app
         config::CEncoderPresetList encPresets;
         config::CEncoderPreset defaultPreset;
         int nCurrentPreset = 0;
-        CString szOutputPath;
-        CString szOutputFile;
+        std::wstring szOutputPath;
+        std::wstring szOutputFile;
         bool bMultipleMonoInput;
         bool bDisableAllWarnings;
         bool bSaveConfig;
@@ -132,24 +135,24 @@ namespace app
         void InitLangSettingsList();
         void InitLangMainMenu();
         void InitLangMenu();
-        bool LoadFilesList(CString &szFileName);
-        bool SaveFilesList(CString &szFileName, int nFormat);
-        bool LoadProgramConfig(CString szFileName);
-        bool SaveProgramConfig(CString szFileName);
+        bool LoadFilesList(std::wstring &szFileName);
+        bool SaveFilesList(std::wstring &szFileName, int nFormat);
+        bool LoadProgramConfig(std::wstring szFileName);
+        bool SaveProgramConfig(std::wstring szFileName);
         bool UpdateProgramEngines();
-        bool LoadProgramEngines(CString szFileName);
-        bool SaveProgramEngines(CString szFileName);
+        bool LoadProgramEngines(std::wstring szFileName);
+        bool SaveProgramEngines(std::wstring szFileName);
         void LoadAllConfiguration();
         void SaveAllConfiguration();
         config::CEncoderPreset& GetCurrentPreset();
         void HandleDropFiles(HDROP hDropInfo);
-        void SearchFolderForFiles(CString szFile, const bool bRecurse);
-        void AddItemToFileList(CString szPath);
+        void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
+        void AddItemToFileList(std::wstring szPath);
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
         void ApplyPresetToDlg(config::CEncoderPreset &preset);
         void ShowOptionPopup(bool bUseRect);
-        bool GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS);
+        bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS);
     protected:
         afx_msg void OnPaint();
         afx_msg HCURSOR OnQueryDragIcon();

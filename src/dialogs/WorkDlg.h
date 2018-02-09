@@ -1,11 +1,13 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxwin.h>
 #include <afxcmn.h>
 #include "controls\MyDialogEx.h"
 #include "controls\MyStatic.h"
 #include "controls\MyButton.h"
 #include "controls\MyProgressCtrl.h"
+#include "utilities\StringHelper.h"
 #include "configuration\Configuration.h"
 #include "worker\Worker.h"
 
@@ -66,33 +68,33 @@ namespace app
         {
         }
     public:
-        void SetTitleInfo(CString szInfo)
+        void SetTitleInfo(std::wstring szInfo)
         {
-            pWorkDlg->SetWindowText(szInfo);
+            pWorkDlg->SetWindowText(szInfo.c_str());
         }
-        void SetInputFileInfo(int nID, CString szInfo)
+        void SetInputFileInfo(int nID, std::wstring szInfo)
         {
-            pWorkDlg->GetDlgItem(pWorkDlg->nIDIn[nID])->SetWindowText(szInfo);
+            pWorkDlg->GetDlgItem(pWorkDlg->nIDIn[nID])->SetWindowText(szInfo.c_str());
         }
-        void SetInputTypeInfo(int nID, CString szInfo)
+        void SetInputTypeInfo(int nID, std::wstring szInfo)
         {
-            pWorkDlg->GetDlgItem(pWorkDlg->nIDInInfo[nID])->SetWindowText(szInfo);
+            pWorkDlg->GetDlgItem(pWorkDlg->nIDInInfo[nID])->SetWindowText(szInfo.c_str());
         }
-        void SetOutputFileInfo(CString szInfo)
+        void SetOutputFileInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcOut.SetWindowText(szInfo);
+            pWorkDlg->m_StcOut.SetWindowText(szInfo.c_str());
         }
-        void SetOutputTypeInfo(CString szInfo)
+        void SetOutputTypeInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcOutInfo.SetWindowText(szInfo);
+            pWorkDlg->m_StcOutInfo.SetWindowText(szInfo.c_str());
         }
-        void SetCurrentTimerInfo(CString szInfo)
+        void SetCurrentTimerInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcTimeCurrent.SetWindowText(szInfo);
+            pWorkDlg->m_StcTimeCurrent.SetWindowText(szInfo.c_str());
         }
-        void SetTotalTimerInfo(CString szInfo)
+        void SetTotalTimerInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcTimeTotal.SetWindowText(szInfo);
+            pWorkDlg->m_StcTimeTotal.SetWindowText(szInfo.c_str());
         }
     public:
         void SetCurrentProgressRange(int nMin, int nMax)

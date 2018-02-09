@@ -2,11 +2,11 @@
 #include "MainApp.h"
 #include "dialogs\MainDlg.h"
 #include "utilities\Utilities.h"
+#include "configuration\Configuration.h"
 
 namespace app
 {
     CEncWAVtoAC3App m_App;
-    config::CConfiguration m_Config;
 
     BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
         ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
@@ -45,42 +45,42 @@ namespace app
     {
         config::CEncoderDefaults::InitEncoderOptions();
 
-        m_Config.m_bIsPortable = PathFileExists(util::GetExeFilePath() + FILENAME_PORTABLE) == TRUE ? true : false;
+        config::m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
 
-        if (m_Config.m_bIsPortable == true)
+        if (config::m_Config.m_bIsPortable == true)
         {
-            m_Config.m_szPresetsFilePath = util::GetExeFilePath() + FILENAME_PRESETS;
-            m_Config.m_szConfigFilePath = util::GetExeFilePath() + FILENAME_CONFIG;
-            m_Config.m_szEnginesFilePath = util::GetExeFilePath() + FILENAME_ENGINES;
-            m_Config.m_szFilesListFilePath = util::GetExeFilePath() + FILENAME_FILES;
-            m_Config.m_szLangFilePath = util::GetExeFilePath() + FILENAME_LANG;
+            config::m_Config.m_szPresetsFilePath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
+            config::m_Config.m_szConfigFilePath = util::Utilities::GetExeFilePath() + FILENAME_CONFIG;
+            config::m_Config.m_szEnginesFilePath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
+            config::m_Config.m_szFilesListFilePath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
+            config::m_Config.m_szLangFilePath = util::Utilities::GetExeFilePath() + FILENAME_LANG;
         }
         else
         {
-            CreateDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG), nullptr);
+            ::CreateDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
 
-            m_Config.m_szPresetsFilePath = util::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
-            m_Config.m_szConfigFilePath = util::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
-            m_Config.m_szEnginesFilePath = util::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
-            m_Config.m_szFilesListFilePath = util::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
-            m_Config.m_szLangFilePath = util::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
+            config::m_Config.m_szPresetsFilePath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
+            config::m_Config.m_szConfigFilePath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
+            config::m_Config.m_szEnginesFilePath = util::Utilities::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
+            config::m_Config.m_szFilesListFilePath = util::Utilities::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
+            config::m_Config.m_szLangFilePath = util::Utilities::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
         }
 
-        if (m_Config.m_bIsPortable == true)
+        if (config::m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         }
         else
         {
-            ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
         }
 
-        m_Config.LoadLangConfig(m_Config.m_szLangFilePath);
-        m_Config.LoadLangStrings();
+        config::m_Config.LoadLangConfig(config::m_Config.m_szLangFilePath);
+        config::m_Config.LoadLangStrings();
     }
 
     void CEncWAVtoAC3App::SaveConfig()
     {
-        m_Config.SaveLangConfig(m_Config.m_szLangFilePath);
+        config::m_Config.SaveLangConfig(config::m_Config.m_szLangFilePath);
     }
 }

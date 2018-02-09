@@ -1,10 +1,13 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxcmn.h>
 #include <afxwin.h>
+#include "utilities\StringHelper.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
+#include "configuration\Configuration.h"
 
 namespace app
 {

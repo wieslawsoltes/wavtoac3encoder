@@ -99,82 +99,76 @@ namespace worker
     {
         if (bAvisynthInput == false)
         {
-            CString szInputInfo = _T("");
+            CAtlString szInputInfo = _T("");
 
             for (int i = 0; i < nInputFiles; i++)
             {
                 PcmFile *pf_info = &pf.pcm_file[i];
-                TCHAR *type, *chan, *order;
-                TCHAR fmt[64] = _T("");
+                std::wstring type, chan, order;
+                std::wstring fmt = L"";
 
-                type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02001) : _T("?");
-                chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02002) : _T("?-channel");
-                order = _T("");
+                type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02001).c_str() : _T("?");
+                chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02002).c_str() : _T("?-channel");
+                order = L"";
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
                     if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                        type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02003) : _T("Unsigned");
+                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02003).c_str() : _T("Unsigned");
                     else
-                        type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02004) : _T("Signed");
+                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02004).c_str() : _T("Signed");
                 }
                 else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02005) : _T("Floating-point");
+                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02005).c_str() : _T("Floating-point");
                 }
                 else
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02006) : _T("[unsupported type]");
+                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02006).c_str() : _T("[unsupported type]");
                 }
 
                 if (pf_info->ch_mask & 0x08)
                 {
                     switch (pf_info->channels - 1)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02007) : _T("1.1-channel"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02008) : _T("2.1-channel"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02009) : _T("3.1-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200A) : _T("4.1-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200B) : _T("5.1-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200C) : _T("multi-channel with LFE"); break;
+                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02007).c_str() : _T("1.1-channel"); break;
+                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02008).c_str() : _T("2.1-channel"); break;
+                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02009).c_str() : _T("3.1-channel"); break;
+                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200A).c_str() : _T("4.1-channel"); break;
+                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200B).c_str() : _T("5.1-channel"); break;
+                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200C).c_str() : _T("multi-channel with LFE"); break;
                     }
                 }
                 else
                 {
                     switch (pf_info->channels)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D) : _T("mono"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E) : _T("stereo"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F) : _T("3-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010) : _T("4-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011) : _T("5-channel"); break;
-                    case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012) : _T("6-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013) : _T("multi-channel"); break;
+                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
+                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
+                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
+                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
+                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
+                    case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
+                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
                     }
                 }
 
                 if (pf_info->pcm_format)
                 {
-#ifdef _UNICODE
-                    util::ConvertAnsiToUnicode(pf_info->pcm_format->long_name,
-                        fmt,
-                        strlen(pf_info->pcm_format->long_name));
-#else
-                    sprintf(fmt, _T("%s"), pf_info->pcm_format->long_name);
-#endif
+                    std::string szLongName = pf_info->pcm_format->long_name;
+                    fmt = util::StringHelper::Convert(szLongName);
                 }
                 else
                 {
-                    _stprintf(fmt, _T("%s"),
-                        pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02014) : _T("unknown"));
+                    fmt = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02014) : L"unknown";
                 }
 
                 if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
                 {
                     switch (pf_info->order)
                     {
-                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02015) : _T("little-endian"); break;
-                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02016) : _T("big-endian"); break;
+                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02015).c_str() : _T("little-endian"); break;
+                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02016).c_str() : _T("big-endian"); break;
                     }
                 }
                 else
@@ -183,65 +177,60 @@ namespace worker
                 }
 
                 szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
-                    fmt, type, pf_info->bit_width, order, pf_info->sample_rate, chan);
-
-                pContext->SetInputTypeInfo(i, szInputInfo);
+                    fmt.c_str(), type.c_str(), pf_info->bit_width, order.c_str(), pf_info->sample_rate, chan.c_str());
+                std::wstring szInputInfoStr = szInputInfo;
+                pContext->SetInputTypeInfo(i, szInputInfoStr);
             }
         }
         else
         {
-            CString szInputInfo = _T("");
-            TCHAR *chan;
-            chan = _T("?-channel");
+            CAtlString szInputInfo = _T("");
+            std::wstring chan = L"?-channel";
 
             switch (infoAVS.nAudioChannels)
             {
-            case 1: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200D) : _T("mono"); break;
-            case 2: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200E) : _T("stereo"); break;
-            case 3: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0200F) : _T("3-channel"); break;
-            case 4: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02010) : _T("4-channel"); break;
-            case 5: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02011) : _T("5-channel"); break;
-            case 6: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02012) : _T("6-channel"); break;
-            default: chan = pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02013) : _T("multi-channel"); break;
+            case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
+            case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
+            case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
+            case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
+            case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
+            case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
+            default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
             }
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017) : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
-                infoAVS.nSamplesPerSecond, chan);
-
-            pContext->SetInputTypeInfo(0, szInputInfo);
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017).c_str() : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
+                infoAVS.nSamplesPerSecond, chan.c_str());
+            std::wstring szInputInfoStr = szInputInfo;
+            pContext->SetInputTypeInfo(0, szInputInfoStr);
         }
 
         {
-            CString szOutputInfo = _T("");
-            TCHAR *acmod_str[32] =
+        CAtlString szOutputInfo = _T("");
+            std::wstring acmod_str[] =
             {
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02018) : _T("dual mono (1+1)"),
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A02019) : _T("mono (1/0)"),
-                pContext->pConfig->HaveLangStrings() ? (LPTSTR)(LPCTSTR)pContext->pConfig->GetLangString(0x00A0201A) : _T("stereo (2/0)"),
-                _T("3/0"),
-                _T("2/1"),
-                _T("3/1"),
-                _T("2/2"),
-                _T("3/2")
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018) : L"dual mono (1+1)",
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02019) : L"mono (1/0)",
+                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201A) : L"stereo (2/0)",
+                L"3/0",
+                L"2/1",
+                L"3/1",
+                L"2/2",
+                L"3/2"
             };
 
-            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod]);
+            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod].c_str());
             if (s.lfe)
                 szOutputInfo += _T(" + LFE");
-
-            pContext->SetOutputTypeInfo(szOutputInfo);
+            std::wstring szOutputInfoStr = szOutputInfo;
+            pContext->SetOutputTypeInfo(szOutputInfoStr);
         }
     }
 
     BOOL CWorker::HandleError(LPTSTR pszMessage)
     {
         pContext->StopCurrentTimer();
-        CString szBuff;
-        szBuff.Format(_T("%s %s"),
-            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-            _T("00:00:00"));
-
+        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
 
@@ -270,11 +259,6 @@ namespace worker
 
         pContext->api.LibAften_aften_encode_close(&s);
 
-        for (int i = 0; i < nInputFiles; i++)
-            szInPath[i].ReleaseBuffer();
-
-        szOutPath.ReleaseBuffer();
-
         pContext->bTerminate = true;
         pContext->Close();
 
@@ -292,8 +276,6 @@ namespace worker
         int done;
         int input_file_format;
         enum PcmSampleFormat read_format;
-        TCHAR *pszInPath[6] = { { nullptr } };
-        TCHAR *pszOutPath = nullptr;
 
         frame = nullptr;
         fwav = nullptr;
@@ -304,26 +286,19 @@ namespace worker
         ofp = nullptr;
 
         bAvisynthInput = false;
-        if (util::GetFileExtension(szInPath[0]).MakeLower() == _T("avs"))
+        std::wstring szExt = util::Utilities::GetFileExtension(szInPath[0]);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
             bAvisynthInput = true;
 
         pContext->nInTotalSize = 0;
 
-        for (int i = 0; i < nInputFiles; i++)
-            pszInPath[i] = szInPath[i].GetBuffer();
-
-        pszOutPath = szOutPath.GetBuffer();
         memset(ifp, 0, config::CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
         char szInputFileAVS[MAX_PATH] = "";
         if (bAvisynthInput == true)
         {
-#ifdef _UNICODE
-            util::ConvertUnicodeToAnsi(pszInPath[0], szInputFileAVS, lstrlen(pszInPath[0]));
+            util::Utilities::ConvertUnicodeToAnsi(szInPath[0].c_str(), szInputFileAVS, szInPath[0].length());
             if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
-#else
-            if (decoderAVS.OpenAvisynth(pszInPath[0]) == false)
-#endif
             {
                 OutputDebugString(_T("Failed to initialize Avisynth."));
                 return(FALSE);
@@ -339,19 +314,15 @@ namespace worker
         {
             for (int i = 0; i < nInputFiles; i++)
             {
-                ifp[i] = _tfopen(pszInPath[i], _T("rb"));
-                if (!ifp[i])
+                errno_t error = _tfopen_s(&ifp[i], szInPath[i].c_str(), _T("rb"));
+                if (error != 0)
                 {
+                    OutputDebugString(_T("Failed to open input file: ") + CAtlString(szInPath[i].c_str()));
                     pContext->StopCurrentTimer();
 
-                    CString szBuff;
-                    szBuff.Format(_T("%s %s"),
-                        pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-                        _T("00:00:00"));
-
-                    OutputDebugString(_T("Failed to open input file: ") + CString(pszInPath[i]));
-
+                    std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
                     pContext->SetCurrentTimerInfo(szBuff);
+
                     pContext->m_ElapsedTimeFile = 0L;
                     pContext->bTerminate = true;
                     pContext->Close();
@@ -360,21 +331,17 @@ namespace worker
                 }
                 else
                 {
-                    pContext->nInTotalSize += util::GetFileSizeInt64(ifp[i]);
+                    pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(ifp[i]);
                 }
             }
         }
 
-        ofp = _tfopen(pszOutPath, _T("wb"));
-        if (!ofp)
+        errno_t error = _tfopen_s(&ofp, szOutPath.c_str(), _T("wb"));
+        if (error != 0)
         {
-            CString szBuff;
-            szBuff.Format(_T("%s %s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-                _T("00:00:00"));
-
-            pContext->StopCurrentTimer();
+            std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
+            pContext->StopCurrentTimer();
             pContext->m_ElapsedTimeFile = 0L;
 
             for (int i = 0; i < nInputFiles; i++)
@@ -383,7 +350,7 @@ namespace worker
                     fclose(ifp[i]);
             }
 
-            OutputDebugString(_T("Failed to create output file: ") + CString(pszOutPath));
+            OutputDebugString(_T("Failed to create output file: ") + CAtlString(szOutPath.c_str()));
 
             pContext->bTerminate = true;
             pContext->Close();
@@ -405,7 +372,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::GetFileExtension(szInPath[0]));
+            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -741,30 +708,19 @@ namespace worker
         pContext->api.LibAften_aften_encode_close(&s);
 
         pContext->StopCurrentTimer();
-        CString szBuff;
-        szBuff.Format(_T("%s %s"),
-            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-            _T("00:00:00"));
+        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
-
-        for (int i = 0; i < nInputFiles; i++)
-            szInPath[i].ReleaseBuffer();
-
-        szOutPath.ReleaseBuffer();
 
         return(TRUE);
     }
 
     BOOL CWorker::Encode()
     {
-        CString szCommandLine = _T("");
-        CString szBuff = _T("");
-#ifdef _UNICODE
+        std::wstring szBuff = L"";
         const unsigned int nAnsiBuffSize = 8192;
         char szAnsiBuff[nAnsiBuffSize] = "";
         int nChars = 0;
-#endif
 
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
@@ -772,9 +728,9 @@ namespace worker
         pContext->SetTotalProgress(0);
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
-        szBuff.Format(_T("%s %s"),
-            pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006) : _T("Total elapsed time:"),
-            _T("00:00:00"));
+
+        szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006).c_str() : L"Total elapsed time:") + std::wstring(L" 00:00:00");
+
         pContext->SetTotalTimerInfo(szBuff);
         pContext->StartTotalTimer(250);
 
@@ -788,50 +744,42 @@ namespace worker
         {
             for (int i = 0; i < pContext->pFilesList->Count(); i++)
             {
-                szInPath[0] = _T("-");
-                szInPath[1] = _T("-");
-                szInPath[2] = _T("-");
-                szInPath[3] = _T("-");
-                szInPath[4] = _T("-");
-                szInPath[5] = _T("-");
-                szOutPath = _T("");
+                szInPath[0] = L"-";
+                szInPath[1] = L"-";
+                szInPath[2] = L"-";
+                szInPath[3] = L"-";
+                szInPath[4] = L"-";
+                szInPath[5] = L"-";
+                szOutPath = L"";
 
                 szInPath[0] = pContext->pFilesList->Get(i);
                 szOutPath = szInPath[0];
-                szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
-                szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
+                
+                std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
+                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
-                    CString szFile = util::GetFileName(szOutPath);
-
-                    if ((pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '\\') ||
-                        (pContext->szOutPath[pContext->szOutPath.GetLength() - 1] == '/'))
-                        szOutPath = pContext->szOutPath + szFile;
-                    else
-                        szOutPath = pContext->szOutPath + '\\' + szFile;
+                    std::wstring szFile = util::Utilities::GetFileName(szOutPath);
+                    szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
                 }
 
-                CString szTitle;
-                szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C) : _T("Encoding file %d of %d"),
+                CAtlString szTitle;
+                szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C).c_str() : _T("Encoding file %d of %d"),
                     nFileCounter + 1,
                     nTotalFiles);
-                pContext->SetTitleInfo(szTitle);
+                std::wstring szTitleStr = szTitle;
+                pContext->SetTitleInfo(szTitleStr);
 
-                szBuff.Format(_T("%s\t%s"),
-                    pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : _T("From:"),
-                    szInPath[0]);
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
                 pContext->SetInputFileInfo(0, szBuff);
 
-                szBuff.Format(_T("%s\t%s"),
-                    pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : _T("To:"),
-                    szOutPath);
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
                 pContext->SetOutputFileInfo(szBuff);
 
-                szBuff.Format(_T("%s %s"),
-                    pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-                    _T("00:00:00"));
+                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
                 pContext->SetCurrentTimerInfo(szBuff);
+
                 pContext->m_ElapsedTimeFile = 0L;
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
@@ -877,34 +825,31 @@ namespace worker
             }
 
             szOutPath = szInPath[0];
-            szOutPath.Truncate(szOutPath.GetLength() - util::GetFileExtension(szOutPath).GetLength());
-            szOutPath.Append(config::CEncoderDefaults::szSupportedOutputExt[0]);
+
+            std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
+            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
 
-            CString szTitle;
-            szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D) : _T("Encoding %d mono files"),
+            CAtlString szTitle;
+            szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D).c_str() : _T("Encoding %d mono files"),
                 nTotalFiles);
-            pContext->SetTitleInfo(szTitle);
+            std::wstring szTitleStr = szTitle;
+            pContext->SetTitleInfo(szTitleStr);
 
-            szBuff.Format(_T("%s\t%s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : _T("From:"),
-                szInPath[0]);
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
             pContext->SetInputFileInfo(0, szBuff);
 
             for (int i = 1; i < nFileCounter; i++)
-                pContext->SetInputFileInfo(i, _T("\t") + szInPath[i]);
+                pContext->SetInputFileInfo(i, L"\t" + szInPath[i]);
 
-            szBuff.Format(_T("%s\t%s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : _T("To:"),
-                szOutPath);
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
             pContext->SetOutputFileInfo(szBuff);
 
-            szBuff.Format(_T("%s %s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : _T("Elapsed time:"),
-                _T("00:00:00"));
+            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
+
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
@@ -922,9 +867,7 @@ namespace worker
                     char result = false;
                     pContext->pStatusList->Set(result, i);
                 }
-
                 pContext->nCount = 0;
-
                 return(FALSE);
             }
             else
@@ -934,7 +877,6 @@ namespace worker
                     char result = true;
                     pContext->pStatusList->Set(result, i);
                 }
-
                 pContext->nCount = nFileCounter;
             }
         }

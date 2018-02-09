@@ -6,7 +6,7 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
-#include "utilities\TimeCount.h"
+#include "worker\TimeCount.h"
 
 namespace app
 {
@@ -66,7 +66,6 @@ namespace app
         ON_WM_PAINT()
         ON_WM_QUERYDRAGICON()
         ON_WM_WINDOWPOSCHANGING()
-        //}}AFX_MSG_MAP
         ON_WM_CLOSE()
         ON_WM_DESTROY()
         ON_WM_DROPFILES()
@@ -183,7 +182,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_THREADS)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_AUTO;
             else
@@ -194,7 +192,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_SAMPLE_RATE)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_IGNORED;
             else
@@ -205,7 +202,6 @@ namespace app
         if (pScrollBar->GetDlgCtrlID() == IDC_SPIN_RAW_CHANNELS)
         {
             CString szBuff;
-
             if (nPos == 0)
                 szBuff = DEFAULT_TEXT_IGNORED;
             else
@@ -267,48 +263,40 @@ namespace app
         if (bWorking == true)
             return;
 
-        if (m_Config.m_bIsPortable == true)
-        {
-            ::SetCurrentDirectory(util::GetExeFilePath());
-        }
+        if (config::m_Config.m_bIsPortable == true)
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         else
-        {
-            ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
-        }
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
         if (nItemsCount <= 0)
         {
             OutputDebugString(_T("Error: Add at least one file to the file list!"));
-            MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207011) : _T("Add at least one file to the file list!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207011).c_str() : _T("Add at least one file to the file list!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
-
             return;
         }
 
         if ((this->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
             OutputDebugString(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
-            MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207012) : _T("Supported are minimum 1 and maximum 6 mono input files!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207012).c_str() : _T("Supported are minimum 1 and maximum 6 mono input files!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
-
             return;
         }
 
         bWorking = true;
 
         if (this->api.IsAftenOpen())
-        {
             this->api.CloseAftenAPI();
-        }
 
         if (this->api.OpenAftenAPI() == false)
         {
             OutputDebugString(_T("Error: Failed to load libaften.dll dynamic library!"));
-            MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207013) : _T("Failed to load libaften.dll dynamic library!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207013).c_str() : _T("Failed to load libaften.dll dynamic library!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
 
             bWorking = false;
@@ -316,17 +304,18 @@ namespace app
         }
 
         CWorkDlg dlg;
-        util::CListT<CString> list;
+        util::CListT<std::wstring> list;
         util::CListT<char> listStatus;
         dlg.pWorkerContext->nTotalSize = 0;
         CString szSizeBuff;
-        CString szFileBuffer;
+        std::wstring szFileBuffer;
         bool bAvisynthInput = false;
 
         for (int i = 0; i < nItemsCount; i++)
         {
             szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
-            if (util::GetFileExtension(szFileBuffer).MakeLower() == _T("avs"))
+            std::wstring szExt = util::Utilities::GetFileExtension(szFileBuffer);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
                 bAvisynthInput = true;
 
             list.Insert(szFileBuffer);
@@ -341,8 +330,8 @@ namespace app
         if ((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
         {
             OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
-            MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207014) : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207014).c_str() : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
 
             bWorking = false;
@@ -352,31 +341,34 @@ namespace app
         dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
         dlg.pWorkerContext->pFilesList = &list;
         dlg.pWorkerContext->pStatusList = &listStatus;
-        this->m_EdtOutPath.GetWindowText(dlg.pWorkerContext->szOutPath);
+
+        CString szOutPath;
+        this->m_EdtOutPath.GetWindowText(szOutPath);
+        dlg.pWorkerContext->szOutPath = szOutPath;
         dlg.pWorkerContext->bUseOutPath = false;
 
-        int nLen = dlg.pWorkerContext->szOutPath.GetLength();
+        int nLen = dlg.pWorkerContext->szOutPath.length();
         if (nLen < 3)
         {
             OutputDebugString(_T("Error: Invalid output path!"));
-            this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207015) : _T("Invalid output path!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207015).c_str() : _T("Invalid output path!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_OK | MB_ICONERROR);
 
             bWorking = false;
             return;
         }
 
-        CString szExt = dlg.pWorkerContext->szOutPath.Right(4);
+        std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(dlg.pWorkerContext->szOutPath.length() - 4, 4);
         if (this->bMultipleMonoInput == true)
         {
-            if (dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
+            if (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE)
             {
-                if ((nLen < 4) || (szExt.CompareNoCase(_T(".ac3")) != 0))
+                if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
                     OutputDebugString(_T("Error: Invalid output file!"));
-                    this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207016) : _T("Invalid output file!"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207016).c_str() : _T("Invalid output file!"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -385,17 +377,17 @@ namespace app
             }
         }
 
-        if ((dlg.pWorkerContext->szOutPath.Compare(_T("")) != 0) &&
-            ((dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0 && this->bMultipleMonoInput == false) ||
-            (dlg.pWorkerContext->szOutPath.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0 && this->bMultipleMonoInput == true)))
+        if ((!dlg.pWorkerContext->szOutPath.empty()) &&
+            ((dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_PATH && this->bMultipleMonoInput == false) ||
+            (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE && this->bMultipleMonoInput == true)))
         {
             if (this->bMultipleMonoInput == false)
             {
-                if (util::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
+                if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207017).c_str() : _T("Failed to create output path!"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -404,15 +396,13 @@ namespace app
             }
             else
             {
-                CString szTmpOutPath = dlg.pWorkerContext->szOutPath;
-                CString szFile = util::GetFileName(dlg.pWorkerContext->szOutPath);
-
-                szTmpOutPath.Truncate(szTmpOutPath.GetLength() - szFile.GetLength());
-                if (util::MakeFullPath(szTmpOutPath) == false)
+                std::wstring szFile = util::Utilities::GetFileName(dlg.pWorkerContext->szOutPath);
+                std::wstring szOutPath = dlg.pWorkerContext->szOutPath.substr(0, dlg.pWorkerContext->szOutPath.length() - szFile.length());
+                if (util::Utilities::MakeFullPath(szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207017) : _T("Failed to create output path!"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207017).c_str() : _T("Failed to create output path!"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -426,12 +416,15 @@ namespace app
         dlg.pWorkerContext->bMultiMonoInput = this->bMultipleMonoInput;
         dlg.pWorkerContext->api = this->api;
 
-        util::CTimeCount countTime;
+        worker::CTimeCount countTime;
         CString szText;
 
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
+
+        std::wstring szElapsedFormatted = countTime.Formatted();
+        double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
         for (int i = listStatus.Count() - 1; i >= 0; i--)
         {
@@ -442,26 +435,26 @@ namespace app
 
         if (dlg.pWorkerContext->nCount <= 0)
         {
-            szText.Format(_T(""));
+            szText = _T("");
             OutputDebugString(_T("Error: Failed to encode all files."));
         }
         else
         {
             if (this->bMultipleMonoInput == true)
             {
-                szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207018) : _T("Encoded %d mono files in %s (%0.3lf sec)"),
+                szText.Format(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207018).c_str() : _T("Encoded %d mono files in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
-                    countTime.Format(countTime.ElapsedTime(), 3),
-                    countTime.ElapsedTime());
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds);
             }
             else
             {
-                szText.Format(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207019) : _T("Encoded %d file%s in %s (%0.3lf sec)"),
+                szText.Format(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207019).c_str() : _T("Encoded %d file%s in %s (%0.3lf sec)"),
                     dlg.pWorkerContext->nCount,
                     dlg.pWorkerContext->nCount == 1 ? _T("") :
-                    (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701A) : _T("s")),
-                    countTime.Format(countTime.ElapsedTime(), 3),
-                    countTime.ElapsedTime());
+                    (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701A).c_str() : _T("s")),
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds);
             }
         }
 
@@ -517,19 +510,17 @@ namespace app
 
     void CMainDlg::OnBnClickedButtonPresetAdd()
     {
-        auto preset = GetCurrentPreset();
         static int nCount = 0;
-
-        preset.szName.Format(_T("%s (%d)"),
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701B) : _T("New preset"),
-            nCount++);
+        auto preset = GetCurrentPreset();
+        nCount++;
+        preset.szName = (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701B) : _T("New preset")) + L" (" + std::to_wstring(nCount) + L")";
         this->encPresets.Insert(preset);
 
         this->nCurrentPreset = this->encPresets.Count() - 1;
-        this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName);
+        this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
     }
 
     void CMainDlg::OnBnClickedButtonPresetDel()
@@ -541,7 +532,6 @@ namespace app
 
             this->encPresets.Remove(nPreset);
             this->m_CmbPresets.DeleteString(nPreset);
-
             this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
             if (nPreset == (nCount - 1))
@@ -560,7 +550,7 @@ namespace app
                 this->nCurrentPreset = nPreset;
             }
 
-            util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+            util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
             this->OnCbnSelchangeComboPresets();
         }
@@ -571,17 +561,16 @@ namespace app
         if (this->bMultipleMonoInput == true)
         {
             CFileDialog fd(FALSE,
-                config::CEncoderDefaults::szSupportedOutputExt[0],
+                config::CEncoderDefaults::szSupportedOutputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701C) : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701C).c_str() : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"),
                 this);
 
             if (fd.DoModal() == IDOK)
             {
-                CString szFileName;
-                szFileName = fd.GetPathName();
-                this->m_EdtOutPath.SetWindowText(szFileName);
+                std::wstring szFileName = fd.GetPathName();
+                this->m_EdtOutPath.SetWindowText(szFileName.c_str());
                 this->szOutputFile = szFileName;
             }
         }
@@ -613,7 +602,7 @@ namespace app
     #define BIF_NEWDIALOGSTYLE 0x0040
     #endif
 
-            auto szTitle = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701D) : _T("Select default output path:");
+            auto szTitle = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701D).c_str() : _T("Select default output path:");
 
             bi.hwndOwner = this->GetSafeHwnd();
             bi.pidlRoot = pidlDesktop;
@@ -665,21 +654,19 @@ namespace app
         this->bMultipleMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
 
         if (this->bMultipleMonoInput == true)
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020200B) : _T("Output file:"));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200B).c_str() : _T("Output file:"));
         else
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020200C) : _T("Output path:"));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
 
-        CString szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
+        std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
 
-        if (szBuff.Compare(_T("")) == 0 ||
-            szBuff.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0 ||
-            szBuff.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
+        if (szBuff.empty() || szBuff == DEFAULT_TEXT_OUTPUT_PATH || szBuff == DEFAULT_TEXT_OUTPUT_FILE)
         {
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
         }
         else
         {
-            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath);
+            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile.c_str() : this->szOutputPath.c_str());
         }
     }
 
@@ -714,8 +701,8 @@ namespace app
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
             preset.nSetting[nItem] = nVal;
-            CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-            this->m_LstSettings.SetItemText(nItem, 1, szName);
+            std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+            this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
 
@@ -746,13 +733,13 @@ namespace app
         auto& preset = GetCurrentPreset();
         preset.nCurrentEngine = nSel;
 
-        if (m_Config.m_bIsPortable == true)
+        if (config::m_Config.m_bIsPortable == true)
         {
-            ::SetCurrentDirectory(util::GetExeFilePath());
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         }
         else
         {
-            ::SetCurrentDirectory(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
         }
 
         if (this->api.IsAftenOpen())
@@ -763,44 +750,29 @@ namespace app
         this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
         if (this->api.OpenAftenAPI() == false)
         {
-            CString szLogMessage =
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701E) : _T("Failed to load")) +
-                _T(" '") +
-                m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
-                _T("' ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F) : _T("library")) +
-                _T("!");
-            this->m_StatusBar.SetText(szLogMessage, 0, 0);
-
-            return;
+            std::wstring szLogMessage =
+                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701E) : L"Failed to load") +
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701F): L"library") + L"!";
+            this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
         }
         else
         {
             const char *szAftenVersionAnsi = this->api.LibAften_aften_get_version();
             int nVersionLen = strlen(szAftenVersionAnsi);
-    #ifdef _UNICODE
             TCHAR szAftenVersion[256] = _T("");
             ZeroMemory(szAftenVersion, 256 * sizeof(TCHAR));
-            int nChars = MultiByteToWideChar(CP_ACP,
-                MB_PRECOMPOSED,
-                szAftenVersionAnsi, nVersionLen,
-                szAftenVersion, 256);
+            int nChars = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szAftenVersionAnsi, nVersionLen, szAftenVersion, 256);
             if (nChars == 0)
                 _stprintf(szAftenVersion, _T("?.??"));
-    #else
-            const char *szAftenVersion = szAftenVersionAnsi;
-    #endif
-            CString szLogMessage =
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207020) : _T("Loaded")) +
-                _T(" '") +
-                m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey +
-                _T("' ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020701F) : _T("library")) +
-                _T(", ") +
-                (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207021) : _T("version")) +
-                _T(" ") +
-                szAftenVersion;
-            this->m_StatusBar.SetText(szLogMessage, 0, 0);
+
+            std::wstring szLogMessage =
+                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207020) : L"Loaded") +
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701F) : L"library") + L", " +
+                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207021) : L"version") +
+                L" " + szAftenVersion;
+            this->m_StatusBar.SetText(szLogMessage.c_str(), 0, 0);
         }
     }
 
@@ -833,7 +805,7 @@ namespace app
         return(0);
     }
 
-    bool CMainDlg::LoadProgramConfig(CString szFileName)
+    bool CMainDlg::LoadProgramConfig(std::wstring szFileName)
     {
         config::CConfigList m_ConfigList;
         if (config::CConfiguration::LoadConfig(szFileName, m_ConfigList) == true)
@@ -843,48 +815,54 @@ namespace app
             {
                 config::CConfigEntry ce = m_ConfigList.Get(i);
 
-                if (ce.szKey.Compare(_T("MainWindow")) == 0)
+                if (ce.szKey == L"MainWindow")
                 {
-                    this->SetWindowRectStr(ce.szValue);
+                    this->SetWindowRectStr(ce.szValue.c_str());
                 }
-                else if (ce.szKey.Compare(_T("ColumnSizeSettings")) == 0)
+                else if (ce.szKey == L"ColumnSizeSettings")
                 {
-                    int nColumn[2] = { 0, 0 };
-                    if (_stscanf(ce.szValue, _T("%d %d"),
-                        &nColumn[0], &nColumn[1]) == 2)
+                    if (!ce.szValue.empty())
                     {
-                        this->m_LstSettings.SetColumnWidth(0, nColumn[0]);
-                        this->m_LstSettings.SetColumnWidth(1, nColumn[1]);
+                        auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                        if (widths.size() == 2)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                int nWidth = util::StringHelper::ToInt(widths[i]);
+                                this->m_LstSettings.SetColumnWidth(i, nWidth);
+                            }
+                        }
                     }
                 }
-                else if (ce.szKey.Compare(_T("ColumnSizeFiles")) == 0)
+                else if (ce.szKey == L"ColumnSizeFiles")
                 {
-                    int nColumn[2] = { 0, 0 };
-                    if (_stscanf(ce.szValue, _T("%d %d"),
-                        &nColumn[0], &nColumn[1]) == 2)
+                    auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                    if (widths.size() == 2)
                     {
-                        this->m_LstFiles.SetColumnWidth(0, nColumn[0]);
-                        this->m_LstFiles.SetColumnWidth(1, nColumn[1]);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            int nWidth = util::StringHelper::ToInt(widths[i]);
+                            this->m_LstFiles.SetColumnWidth(i, nWidth);
+                        }
                     }
                 }
-                else if (ce.szKey.Compare(_T("OutputPath")) == 0)
+                else if (ce.szKey == L"OutputPath")
                 {
-                    if (ce.szValue.Compare(_T("")) != 0 && ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) != 0)
+                    if (!ce.szValue.empty() && ce.szValue != DEFAULT_TEXT_OUTPUT_PATH)
                     {
                         this->szOutputPath = ce.szValue;
                     }
                 }
-                else if (ce.szKey.Compare(_T("OutputFile")) == 0)
+                else if (ce.szKey == L"OutputFile")
                 {
-                    if (ce.szValue.Compare(_T("")) != 0 && ce.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) != 0)
+                    if (!ce.szValue.empty() && ce.szValue != DEFAULT_TEXT_OUTPUT_FILE)
                     {
                         this->szOutputFile = ce.szValue;
                     }
                 }
-                else if (ce.szKey.Compare(_T("SelectedPreset")) == 0)
+                else if (ce.szKey == L"SelectedPreset")
                 {
-                    int nPreset = 0;
-                    if (_stscanf(ce.szValue, _T("%d"), &nPreset) == 1)
+                    int nPreset = util::StringHelper::ToInt(ce.szValue);
                     {
                         if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
                             nPreset = 0;
@@ -897,35 +875,35 @@ namespace app
                         }
                     }
                 }
-                else if (ce.szKey.Compare(_T("MultipleMonoInput")) == 0)
+                else if (ce.szKey == L"MultipleMonoInput")
                 {
-                    if (ce.szValue.Compare(_T("true")) == 0)
+                    if (ce.szValue == L"true")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                         this->bMultipleMonoInput = true;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020200B) : _T("Output file:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200B).c_str() : _T("Output file:"));
                     }
-                    else if (ce.szValue.Compare(_T("false")) == 0)
+                    else if (ce.szValue == L"false")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                         this->bMultipleMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020200C) : _T("Output path:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
                     }
                     else
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                         this->bMultipleMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020200C) : _T("Output path:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
                     }
                 }
-                else if (ce.szKey.Compare(_T("DisableAllWarnings")) == 0)
+                else if (ce.szKey == L"DisableAllWarnings")
                 {
-                    if (ce.szValue.Compare(_T("true")) == 0)
+                    if (ce.szValue == L"true")
                     {
                         this->bDisableAllWarnings = true;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_CHECKED);
                     }
-                    else if (ce.szValue.Compare(_T("false")) == 0)
+                    else if (ce.szValue == L"false")
                     {
                         this->bDisableAllWarnings = false;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
@@ -936,14 +914,14 @@ namespace app
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
                     }
                 }
-                else if (ce.szKey.Compare(_T("SaveConfig")) == 0)
+                else if (ce.szKey == L"SaveConfig")
                 {
-                    if (ce.szValue.Compare(_T("true")) == 0)
+                    if (ce.szValue == L"true")
                     {
                         this->bSaveConfig = true;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
                     }
-                    else if (ce.szValue.Compare(_T("false")) == 0)
+                    else if (ce.szValue == L"false")
                     {
                         this->bSaveConfig = false;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
@@ -957,17 +935,17 @@ namespace app
             }
             if (this->bMultipleMonoInput == true)
             {
-                if (this->szOutputFile.Compare(_T("")) == 0)
+                if (this->szOutputFile.empty())
                     this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
                 else
-                    this->m_EdtOutPath.SetWindowText(this->szOutputFile);
+                    this->m_EdtOutPath.SetWindowText(this->szOutputFile.c_str());
             }
             else
             {
-                if (this->szOutputPath.Compare(_T("")) == 0)
+                if (this->szOutputPath.empty())
                     this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
                 else
-                    this->m_EdtOutPath.SetWindowText(this->szOutputPath);
+                    this->m_EdtOutPath.SetWindowText(this->szOutputPath.c_str());
             }
 
             return true;
@@ -975,7 +953,7 @@ namespace app
         return false;
     }
 
-    bool CMainDlg::SaveProgramConfig(CString szFileName)
+    bool CMainDlg::SaveProgramConfig(std::wstring szFileName)
     {
         config::CConfigList m_ConfigList;
 
@@ -988,35 +966,39 @@ namespace app
 
         config::CConfigEntry columnSizeSettings;
         columnSizeSettings.szKey = _T("ColumnSizeSettings");
-        columnSizeSettings.szValue.Format(_T("%d %d"),
-            this->m_LstSettings.GetColumnWidth(0),
-            this->m_LstSettings.GetColumnWidth(1));
-        m_ConfigList.Insert(columnSizeSettings);
+        int nSettingsColWidth[2];
+        for (int i = 0; i < 2; i++)
+            nSettingsColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
+        columnSizeSettings.szValue = 
+            std::to_wstring(nSettingsColWidth[0]) + L" " + 
+            std::to_wstring(nSettingsColWidth[1]);
 
         config::CConfigEntry columnSizeFiles;
         columnSizeFiles.szKey = _T("ColumnSizeFiles");
-        columnSizeFiles.szValue.Format(_T("%d %d"),
-            this->m_LstFiles.GetColumnWidth(0),
-            this->m_LstFiles.GetColumnWidth(1));
-        m_ConfigList.Insert(columnSizeFiles);
+        int nFilesColWidth[2];
+        for (int i = 0; i < 2; i++)
+            nFilesColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
+        columnSizeFiles.szValue = 
+            std::to_wstring(nFilesColWidth[0]) + L" " + 
+            std::to_wstring(nFilesColWidth[1]);
 
         config::CConfigEntry outputPath;
         outputPath.szKey = _T("OutputPath");
         outputPath.szValue = this->szOutputPath;
-        if (outputPath.szValue.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0)
+        if (outputPath.szValue == DEFAULT_TEXT_OUTPUT_PATH)
             outputPath.szValue = _T("");
         m_ConfigList.Insert(outputPath);
 
         config::CConfigEntry outputFile;
         outputFile.szKey = _T("OutputFile");
         outputFile.szValue = this->szOutputFile;
-        if (outputFile.szValue.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
+        if (outputFile.szValue == DEFAULT_TEXT_OUTPUT_FILE)
             outputFile.szValue = _T("");
         m_ConfigList.Insert(outputFile);
 
         config::CConfigEntry selectedPreset;
         selectedPreset.szKey = _T("SelectedPreset");
-        selectedPreset.szValue.Format(_T("%d"), this->m_CmbPresets.GetCurSel());
+        selectedPreset.szValue = std::to_wstring(this->m_CmbPresets.GetCurSel());
         m_ConfigList.Insert(selectedPreset);
 
         config::CConfigEntry multipleMonoInput;
@@ -1042,8 +1024,8 @@ namespace app
         if (this->m_EngineList.Count() == 0)
         {
             config::CConfigEntry ce;
-            ce.szKey = _T("Aften");
-            ce.szValue = _T("libaften.dll");
+            ce.szKey = L"Aften";
+            ce.szValue = L"libaften.dll";
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
@@ -1051,7 +1033,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nCurrentEngine = 0;
 
-            this->m_CmbEngines.InsertString(0, ce.szKey);
+            this->m_CmbEngines.InsertString(0, ce.szKey.c_str());
             this->m_CmbEngines.SetCurSel(0);
 
             if (this->api.IsAftenOpen())
@@ -1069,7 +1051,7 @@ namespace app
         for (int i = 0; i < nSize; i++)
         {
             auto& ce = this->m_EngineList.Get(i);
-            this->m_CmbEngines.InsertString(i, ce.szKey);
+            this->m_CmbEngines.InsertString(i, ce.szKey.c_str());
         }
 
         if (GetCurrentPreset().nCurrentEngine > nSize)
@@ -1102,7 +1084,7 @@ namespace app
         return true;
     }
 
-    bool CMainDlg::LoadProgramEngines(CString szFileName)
+    bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
     {
         this->m_EngineList.RemoveAll();
         this->m_CmbEngines.ResetContent();
@@ -1114,8 +1096,8 @@ namespace app
         else
         {
             config::CConfigEntry ce;
-            ce.szKey = _T("Aften");
-            ce.szValue = _T("libaften.dll");
+            ce.szKey = L"Aften";
+            ce.szValue = L"libaften.dll";
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
@@ -1123,7 +1105,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nCurrentEngine = 0;
 
-            this->m_CmbEngines.InsertString(0, ce.szKey);
+            this->m_CmbEngines.InsertString(0, ce.szKey.c_str());
             this->m_CmbEngines.SetCurSel(0);
 
             if (this->api.IsAftenOpen())
@@ -1138,46 +1120,43 @@ namespace app
         return false;
     }
 
-    bool CMainDlg::SaveProgramEngines(CString szFileName)
+    bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
     {
         return config::CConfiguration::SaveConfig(szFileName, this->m_EngineList);
     }
 
-    bool CMainDlg::LoadFilesList(CString &szFileName)
+    bool CMainDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<CString> fl;
-        if (m_Config.LoadFiles(szFileName, fl))
+        util::CListT<std::wstring> fl;
+        if (config::m_Config.LoadFiles(szFileName, fl))
         {
             this->m_LstFiles.DeleteAllItems();
-
             for (int i = 0; i < fl.Count(); i++)
             {
-                CString szPath = fl.Get(i);
+                std::wstring szPath = fl.Get(i);
                 this->AddItemToFileList(szPath);
             }
-
             return true;
         }
         return false;
     }
 
-    bool CMainDlg::SaveFilesList(CString &szFileName, int nFormat)
+    bool CMainDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
     {
-        util::CListT<CString> fl;
+        util::CListT<std::wstring> fl;
         int nItems = this->m_LstFiles.GetItemCount();
         for (int i = 0; i < nItems; i++)
         {
-            CString szPath = this->m_LstFiles.GetItemText(i, 0);
+            std::wstring szPath = this->m_LstFiles.GetItemText(i, 0);
             fl.Insert(szPath);
         }
-
-        return m_Config.SaveFiles(szFileName, fl, nFormat);
+        return config::m_Config.SaveFiles(szFileName, fl, nFormat);
     }
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, m_Config.m_szPresetsFilePath, this->defaultPreset);
-        OutputDebugString((bPresetsRet ? _T("Loaded encoder presets: ") : _T("Failed to load encoder presets: ")) + m_Config.m_szPresetsFilePath);
+        bool bPresetsRet = config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
         if (bPresetsRet == true)
         {
@@ -1188,7 +1167,7 @@ namespace app
                 for (int i = 0; i < encPresets.Count(); i++)
                 {
                     auto& preset = encPresets.Get(i);
-                    this->m_CmbPresets.InsertString(i, preset.szName);
+                    this->m_CmbPresets.InsertString(i, preset.szName.c_str());
                 }
 
                 if ((this->nCurrentPreset >= encPresets.Count()) || (this->nCurrentPreset < 0))
@@ -1200,31 +1179,31 @@ namespace app
             }
         }
 
-        bool bConfigRet = this->LoadProgramConfig(m_Config.m_szConfigFilePath);
-        OutputDebugString((bConfigRet ? _T("Loaded program config: ") : _T("Failed to load program config: ")) + m_Config.m_szConfigFilePath);
+        bool bConfigRet = this->LoadProgramConfig(config::m_Config.m_szConfigFilePath);
+        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + config::m_Config.m_szConfigFilePath).c_str());
 
-        bool bEnginesRet = this->LoadProgramEngines(m_Config.m_szEnginesFilePath);
-        OutputDebugString((bEnginesRet ? _T("Loaded encoder engines: ") : _T("Failed to load encoder engines: ")) + m_Config.m_szEnginesFilePath);
+        bool bEnginesRet = this->LoadProgramEngines(config::m_Config.m_szEnginesFilePath);
+        OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + config::m_Config.m_szEnginesFilePath).c_str());
 
-        bool bFilesRet = this->LoadFilesList(m_Config.m_szFilesListFilePath);
-        OutputDebugString((bFilesRet ? _T("Loaded files list: ") : _T("Failed to load files list: ")) + m_Config.m_szFilesListFilePath);
+        bool bFilesRet = this->LoadFilesList(config::m_Config.m_szFilesListFilePath);
+        OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + config::m_Config.m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::SaveAllConfiguration()
     {
         bool bRet = false;
 
-        bRet = config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, m_Config.m_szPresetsFilePath, this->defaultPreset);
-        OutputDebugString((bRet ? _T("Saved encoder presets: ") : _T("Error: Failed to save encoder presets: ")) + m_Config.m_szPresetsFilePath);
+        bRet = config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
-        bRet = this->SaveProgramConfig(m_Config.m_szConfigFilePath);
-        OutputDebugString((bRet ? _T("Saved program config: ") : _T("Error: Failed to save program config: ")) + m_Config.m_szConfigFilePath);
+        bRet = this->SaveProgramConfig(config::m_Config.m_szConfigFilePath);
+        OutputDebugString(((bRet ? L"Saved program config: " : L"Error: Failed to save program config: ") + config::m_Config.m_szConfigFilePath).c_str());
 
-        bRet = this->SaveProgramEngines(m_Config.m_szEnginesFilePath);
-        OutputDebugString((bRet ? _T("Saved encoder engines: ") : _T("Error: Failed to save encoder engines: ")) + m_Config.m_szEnginesFilePath);
+        bRet = this->SaveProgramEngines(config::m_Config.m_szEnginesFilePath);
+        OutputDebugString(((bRet ? L"Saved encoder engines: " : L"Error: Failed to save encoder engines: ") + config::m_Config.m_szEnginesFilePath).c_str());
 
-        bRet = this->SaveFilesList(m_Config.m_szFilesListFilePath, 0);
-        OutputDebugString((bRet ? _T("Saved files list: ") : _T("Error: Failed to save files list: ")) + m_Config.m_szFilesListFilePath);
+        bRet = this->SaveFilesList(config::m_Config.m_szFilesListFilePath, 0);
+        OutputDebugString(((bRet ? L"Saved files list: " : L"Error: Failed to save files list: ") + config::m_Config.m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::UpdateBitrateText()
@@ -1234,8 +1213,8 @@ namespace app
 
         if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
         {
-            if (m_Config.HaveLangStrings())
-                m_StcQualityBitrate.SetWindowText(m_Config.GetLangString(0x00202002));
+            if (config::m_Config.HaveLangStrings())
+                m_StcQualityBitrate.SetWindowText(config::m_Config.GetLangString(0x00202002).c_str());
             else
                 m_StcQualityBitrate.SetWindowText(_T("Quality:"));
 
@@ -1248,8 +1227,8 @@ namespace app
         {
             if ((nCurPos >= 0) && (nCurPos < config::CEncoderDefaults::nNumValidCbrBitrates))
             {
-                if (m_Config.HaveLangStrings())
-                    m_StcQualityBitrate.SetWindowText(m_Config.GetLangString(0x00202003));
+                if (config::m_Config.HaveLangStrings())
+                    m_StcQualityBitrate.SetWindowText(config::m_Config.GetLangString(0x00202003).c_str());
                 else
                     m_StcQualityBitrate.SetWindowText(_T("Bitrate:"));
 
@@ -1274,29 +1253,25 @@ namespace app
             return defaultPreset;
     }
 
-    void CMainDlg::AddItemToFileList(CString szPath)
+    void CMainDlg::AddItemToFileList(std::wstring szPath)
     {
-        CString szSize = _T("");
-        ULARGE_INTEGER ulSize;
-        ULONGLONG nFileSize;
-        WIN32_FIND_DATA FindFileData;
-        HANDLE hFind;
+        ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
+        {
+            AvsAudioInfo infoAVS;
+            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
+            if (GetAvisynthFileInfo(szPath, &infoAVS) == false)
+                return;
 
-        hFind = ::FindFirstFile(szPath, &FindFileData);
-        if (hFind == INVALID_HANDLE_VALUE)
-            return;
-
-        ulSize.HighPart = FindFileData.nFileSizeHigh;
-        ulSize.LowPart = FindFileData.nFileSizeLow;
-        nFileSize = ulSize.QuadPart;
-
-        ::FindClose(hFind);
+            nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+        }
 
         int nItem = this->m_LstFiles.GetItemCount();
         SHFILEINFO sfi;
         LV_ITEM lvi;
 
-        SHGetFileInfo((LPCTSTR)szPath,
+        SHGetFileInfo((LPCTSTR)szPath.c_str(),
             0,
             &sfi,
             sizeof(sfi),
@@ -1309,30 +1284,21 @@ namespace app
         lvi.lParam = nItem;
 
         this->m_LstFiles.InsertItem(&lvi);
+        this->m_LstFiles.SetItemText(nItem, 0, szPath.c_str());
 
-        this->m_LstFiles.SetItemText(nItem, 0, szPath);
+        CString szFileSize;
+        szFileSize.Format(_T("%I64d"), nFileSize);
 
-        if (util::GetFileExtension(szPath).MakeLower() == _T("avs"))
-        {
-            AvsAudioInfo infoAVS;
-            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
-            if (GetAvisynthFileInfo(szPath, &infoAVS) == false)
-                return;
-
-            nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-        }
-
-        szSize.Format(_T("%I64d"), nFileSize);
-        this->m_LstFiles.SetItemText(nItem, 1, szSize);
+        this->m_LstFiles.SetItemText(nItem, 1, szFileSize);
     }
 
     void CMainDlg::ApplyPresetToDlg(config::CEncoderPreset &preset)
     {
         for (int i = 0; i < config::CEncoderPreset::nNumEncoderOptions; i++)
         {
-            auto nSetting = preset.nSetting[i];
-            auto szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
-            this->m_LstSettings.SetItemText(i, 1, szText);
+            int nSetting = preset.nSetting[i];
+            std::wstring& szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
+            this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
         if (preset.nMode == AFTEN_ENC_MODE_CBR)
@@ -1430,17 +1396,17 @@ namespace app
 
                 if (::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    this->SearchFolderForFiles(szFile, true);
+                    std::wstring szPath = szFile;
+                    this->SearchFolderForFiles(szPath, true);
                 }
                 else
                 {
-                    CString szExt = ::PathFindExtension(szFile);
-                    szExt.MakeLower();
-                    szExt.Remove('.');
-
+                    std::wstring file = szFile;
+                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
                     if (config::CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                     {
-                        this->AddItemToFileList(szFile);
+                        std::wstring szPath = szFile;
+                        this->AddItemToFileList(szPath);
                     }
                 }
             }
@@ -1455,10 +1421,10 @@ namespace app
 
         for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
         {
-            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
+            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
         }
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
         if (this->encPresets.Count() <= 0)
             this->m_CmbValue.SetCurSel(config::CEncoderDefaults::encOpt[nItem].nDefaultValue);
@@ -1466,69 +1432,28 @@ namespace app
             this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
     }
 
-    void CMainDlg::SearchFolderForFiles(CString szPath, const bool bRecurse)
+    void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
     {
         try
         {
-            WIN32_FIND_DATA w32FileData;
-            HANDLE hSearch = nullptr;
-            BOOL fFinished = FALSE;
-            TCHAR cTempBuf[(MAX_PATH * 2) + 1];
-
-            ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
-            ZeroMemory(cTempBuf, MAX_PATH * 2);
-
-            szPath.TrimRight(_T("\\"));
-            szPath.TrimRight(_T("/"));
-
-            wsprintf(cTempBuf, _T("%s\\*.*\0"), szPath);
-
-            hSearch = FindFirstFile(cTempBuf, &w32FileData);
-            if (hSearch == INVALID_HANDLE_VALUE)
-                return;
-
-            while (fFinished == FALSE)
+            std::vector<std::wstring> files;
+            bool bResult = util::Utilities::FindFiles(szPath, files, bRecurse);
+            if (bResult == true)
             {
-                if (w32FileData.cFileName[0] != '.' &&
-                    !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+                for (auto& file : files)
                 {
-                    CString szTempBuf;
-                    szTempBuf.Format(_T("%s\\%s\0"), szPath, w32FileData.cFileName);
-
-                    CString szExt = ::PathFindExtension(szTempBuf);
-                    szExt.MakeLower();
-                    szExt.Remove('.');
-
+                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
                     if (config::CEncoderDefaults::IsSupportedInputExt(szExt) == true)
                     {
-                        this->AddItemToFileList(szTempBuf);
+                        this->AddItemToFileList(file);
                     }
                 }
-
-                if (w32FileData.cFileName[0] != '.' &&
-                    w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    wsprintf(cTempBuf, _T("%s\\%s\0"), szPath, w32FileData.cFileName);
-                    if (bRecurse == true)
-                        this->SearchFolderForFiles(cTempBuf, true);
-                }
-
-                if (FindNextFile(hSearch, &w32FileData) == FALSE)
-                {
-                    if (GetLastError() == ERROR_NO_MORE_FILES)
-                        fFinished = TRUE;
-                    else
-                        return;
-                }
             }
-
-            if (FindClose(hSearch) == FALSE)
-                return;
         }
         catch (...)
         {
-            MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020702A) : _T("Error while searching for files!"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020702A).c_str() : _T("Error while searching for files!"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_OK | MB_ICONERROR);
         }
     }
@@ -1560,7 +1485,7 @@ namespace app
         UINT nItemCount = ID_OPTIONS_MENU_START;
         for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i));
+            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
             nItemCount++;
         }
 
@@ -1805,7 +1730,7 @@ namespace app
     void CMainDlg::InitTitle()
     {
         CString szDialogTitle = _T("");
-        szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), ENCWAVTOAC3_VERSION);
+        szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), _T(VER_FILE_VERSION_SHORT_STR));
         this->SetWindowText(szDialogTitle);
     }
 
@@ -1813,7 +1738,7 @@ namespace app
     {
         CString szTmpText;
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206001) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206001).c_str() :
             _T("CBR bitrate in kbps:\n\n")
             _T("CBR mode is selected by default. This option allows for\n")
             _T("setting the fixed bitrate. The default bitrate depends\n")
@@ -1831,35 +1756,35 @@ namespace app
 
         this->m_SldBitrate.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206002) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206002).c_str() :
             _T("Enable VBR mode. If unchecked the CBR mode is used instead.");
 
         this->m_ChkVbr.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206003) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206003).c_str() :
             _T("Set currently used encoder preset. You can load/save presets from/to file\n")
             _T("from File menu. All presets are automatically loaded/saved from/to text file.");
 
         this->m_CmbPresets.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206004) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206004).c_str() :
             _T("Aften will auto-detect available SIMD instruction sets\n")
             _T("for your CPU, so you shouldn't need to disable sets\n")
             _T("explicitly - unless for speed or debugging reasons.");
 
-        this->m_ChkSimdMMX.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206005) + szTmpText :
+        this->m_ChkSimdMMX.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206005).c_str() + szTmpText :
             _T("This option enables MMX optimizations (if supported by CPU).\n\n") + szTmpText);
 
-        this->m_ChkSimdSSE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206006) + szTmpText :
+        this->m_ChkSimdSSE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206006).c_str() + szTmpText :
             _T("This option enables SSE optimizations (if supported by CPU).\n\n") + szTmpText);
 
-        this->m_ChkSimdSSE2.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206007) + szTmpText :
+        this->m_ChkSimdSSE2.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206007).c_str() + szTmpText :
             _T("This option enables SSE2 optimizations (if supported by CPU).\n\n") + szTmpText);
 
-        this->m_ChkSimdSSE3.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206008) + szTmpText :
+        this->m_ChkSimdSSE3.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206008).c_str() + szTmpText :
             _T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206009) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206009).c_str() :
             _T("Raw audio input sample format specifies the sample format\n")
             _T("when using raw audio input. Using this option forces Aften to\n")
             _T("treat the input as raw audio. The choices for the\n")
@@ -1869,19 +1794,19 @@ namespace app
 
         this->m_CmbRawSampleFormat.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600A) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600A).c_str() :
             _T("Raw audio input sample rate option forces Aften to\n")
             _T("treat the input as raw audio (default: 48000).");
 
         this->m_EdtRawSamplerate.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600B) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600B).c_str() :
             _T("Raw audio input channels forces Aften to treat the input as\n")
             _T("raw audio (default: 2).");
 
         this->m_EdtRawChannels.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600C) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600C).c_str() :
             _T("Aften can use multiple threads to speed up encoding.\n")
             _T("By default, Aften uses one thread for each logical CPU\n")
             _T("your system has, but you can override this value. A\n")
@@ -1890,27 +1815,27 @@ namespace app
 
         this->m_EdtThreads.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600D) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600D).c_str() :
             _T("Set currently used Aften library. By selecting optimized Aften\n")
             _T("library you can speedup the encoding process.");
 
         this->m_CmbEngines.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600E) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600E).c_str() :
             _T("Set default output path for encoded files. By default files\n")
             _T("are encoded to the same directory as input files. When using\n")
             _T("multiple mono input than here is set the output file path.");
 
         this->m_EdtOutPath.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020600F) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600F).c_str() :
             _T("Enable multiple mono input mode. By adding multiple mono input\n")
             _T("files to the files list (minimum 2, maximum 6) in correct channel\n")
             _T("order the mono input files will be encoded into single ac3 file.");
 
         this->m_ChkMultipleMonoInput.SetTooltipText(szTmpText);
 
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00206010) :
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206010).c_str() :
             _T("Edit currently available Aften engines.");
 
         this->m_BtnEngines.SetTooltipText(szTmpText);
@@ -1934,24 +1859,22 @@ namespace app
 
             if (nGroupCounter >= 0 && nGroupCounter < config::CEncoderDefaults::nNumEncoderOptionsGroups)
             {
-                li.pszText = config::CEncoderDefaults::encOpt[i].szName.GetBuffer();
+                LPWSTR pszText = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].szName.c_str();
+                li.pszText = pszText;
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
+                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str();
                 ListView_InsertItem(listSettings, &li);
-                ListView_SetItemText(listSettings, i, 1,
-                    config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).GetBuffer());
+                ListView_SetItemText(listSettings, i, 1, pszSetting);
 
-                this->m_LstSettings.listTooltips.AddTail(config::CEncoderDefaults::encOpt[i].szHelpText);
-
-                config::CEncoderDefaults::encOpt[i].szName.ReleaseBuffer();
-                config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).ReleaseBuffer();
+                CString szTip = CString(config::CEncoderDefaults::encOpt[i].szHelpText.c_str());
+                this->m_LstSettings.listTooltips.AddTail(szTip);
             }
         }
 
         this->m_LstSettings.bUseTooltipsList = true;
-
         this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
 
@@ -1975,7 +1898,7 @@ namespace app
         defaultPreset.nUsedSIMD[3] = 1;
 
         this->nCurrentPreset = 0;
-        this->m_CmbPresets.InsertString(0, defaultPreset.szName);
+        this->m_CmbPresets.InsertString(0, defaultPreset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
         this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
@@ -2039,13 +1962,12 @@ namespace app
 
     void CMainDlg::InitRawSamleFormatComboBox()
     {
-        CString szIgnored = DEFAULT_TEXT_IGNORED;
-        config::CEncoderDefaults::szRawSampleFormats[0] = (LPTSTR)(LPCTSTR)(szIgnored);
+        config::CEncoderDefaults::szRawSampleFormats[0] = DEFAULT_TEXT_IGNORED;
 
         this->m_CmbRawSampleFormat.ResetContent();
 
         for (int i = 0; i < config::CEncoderDefaults::nNumRawSampleFormats; i++)
-            this->m_CmbRawSampleFormat.InsertString(i, config::CEncoderDefaults::szRawSampleFormats[i]);
+            this->m_CmbRawSampleFormat.InsertString(i, config::CEncoderDefaults::szRawSampleFormats[i].c_str());
     }
 
     void CMainDlg::InitSettingsListGroups()
@@ -2060,7 +1982,12 @@ namespace app
 
         for (int i = 0; i < config::CEncoderDefaults::nNumEncoderOptionsGroups; i++)
         {
-            lg.pszHeader = (LPTSTR)(LPCTSTR)(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00208000 + i + 1) : config::CEncoderDefaults::pszGroups[i]);
+            std::wstring szHeader = config::m_Config.HaveLangStrings() ?
+                config::m_Config.GetLangString(0x00208000 + i + 1) :
+                config::CEncoderDefaults::pszGroups[i];
+            LPWSTR pszHeader = (LPTSTR)(LPCTSTR)szHeader.c_str();
+
+            lg.pszHeader = pszHeader;
             lg.iGroupId = 101 + i;
             ListView_InsertGroup(listView, -1, &lg);
         }
@@ -2169,10 +2096,10 @@ namespace app
             OutputDebugString(_T("Failed to load configuration."));
         }
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
 
         COMBOBOXINFO cbi;
         ZeroMemory(&cbi, sizeof(COMBOBOXINFO));
@@ -2186,13 +2113,14 @@ namespace app
         return TRUE;
     }
 
-    void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, CString& text)
+    void SetListCtrlColumnText(CListCtrl& listCtrl, int nCol, std::wstring& text)
     {
+        LPWSTR pszText = (LPTSTR)(LPCTSTR)text.c_str();
         LVCOLUMN lvCol;
         ::ZeroMemory((void *)&lvCol, sizeof(LVCOLUMN));
         lvCol.mask = LVCF_TEXT;
         listCtrl.GetColumn(nCol, &lvCol);
-        lvCol.pszText = (LPTSTR)(LPCTSTR)text;
+        lvCol.pszText = pszText;
         listCtrl.SetColumn(nCol, &lvCol);
     }
 
@@ -2202,7 +2130,7 @@ namespace app
 
         this->InitSettingsListGroups();
 
-        if (m_Config.HaveLangStrings())
+        if (config::m_Config.HaveLangStrings())
         {
             if (initLangMenu == true)
                 this->InitLangMenu();
@@ -2223,107 +2151,107 @@ namespace app
             this->ApplyPresetToDlg(preset);
         }
 
-        if (m_Config.HaveLangStrings())
+        if (config::m_Config.HaveLangStrings())
         {
             this->InitLangMainMenu();
         }
 
         this->InitTooltips();
 
-        CString szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
-        if (szBuff.Compare(_T("")) == 0 || szBuff.Left(1).Compare(_T("<")) == 0)
+        std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
+        if (szBuff.empty() || szBuff.substr(0, 1) == L"<")
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
         else
-            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath);
+            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile.c_str() : this->szOutputPath.c_str());
     }
 
     void CMainDlg::InitLangButtons()
     {
-        m_BtnEncode.SetWindowTextW(m_Config.GetLangString(0x00201001));
-        m_BtnResetCurrent.SetWindowTextW(m_Config.GetLangString(0x00201002));
-        m_BtnRemove.SetWindowTextW(m_Config.GetLangString(0x00201003));
-        m_BtnAddNew.SetWindowTextW(m_Config.GetLangString(0x00201004));
-        m_BtnAddFiles.SetWindowTextW(m_Config.GetLangString(0x00201005));
-        m_BtnBrowse.SetWindowTextW(m_Config.GetLangString(0x00201006));
-        m_BtnMuxWizard.SetWindowTextW(m_Config.GetLangString(0x00201007));
-        m_BtnEngines.SetWindowTextW(m_Config.GetLangString(0x00201008));
+        m_BtnEncode.SetWindowTextW(config::m_Config.GetLangString(0x00201001).c_str());
+        m_BtnResetCurrent.SetWindowTextW(config::m_Config.GetLangString(0x00201002).c_str());
+        m_BtnRemove.SetWindowTextW(config::m_Config.GetLangString(0x00201003).c_str());
+        m_BtnAddNew.SetWindowTextW(config::m_Config.GetLangString(0x00201004).c_str());
+        m_BtnAddFiles.SetWindowTextW(config::m_Config.GetLangString(0x00201005).c_str());
+        m_BtnBrowse.SetWindowTextW(config::m_Config.GetLangString(0x00201006).c_str());
+        m_BtnMuxWizard.SetWindowTextW(config::m_Config.GetLangString(0x00201007).c_str());
+        m_BtnEngines.SetWindowTextW(config::m_Config.GetLangString(0x00201008).c_str());
     }
 
     void CMainDlg::InitLangStaticText()
     {
-        this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(m_Config.GetLangString(0x00202001));
+        this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(config::m_Config.GetLangString(0x00202001).c_str());
 
         if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
-            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(m_Config.GetLangString(0x00202002));
+            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetLangString(0x00202002).c_str());
         else
-            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(m_Config.GetLangString(0x00202003));
+            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetLangString(0x00202003).c_str());
 
-        this->GetDlgItem(IDC_STATIC_OPTION_VALUE)->SetWindowTextW(m_Config.GetLangString(0x00202004));
-        this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->SetWindowTextW(m_Config.GetLangString(0x00202005));
-        this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->SetWindowTextW(m_Config.GetLangString(0x00202006));
-        this->GetDlgItem(IDC_STATIC_CHANNELS)->SetWindowTextW(m_Config.GetLangString(0x00202007));
-        this->GetDlgItem(IDC_STATIC_ENGINE)->SetWindowTextW(m_Config.GetLangString(0x00202008));
-        this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(m_Config.GetLangString(0x00202009));
-        this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(m_Config.GetLangString(0x0020200A));
+        this->GetDlgItem(IDC_STATIC_OPTION_VALUE)->SetWindowTextW(config::m_Config.GetLangString(0x00202004).c_str());
+        this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->SetWindowTextW(config::m_Config.GetLangString(0x00202005).c_str());
+        this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->SetWindowTextW(config::m_Config.GetLangString(0x00202006).c_str());
+        this->GetDlgItem(IDC_STATIC_CHANNELS)->SetWindowTextW(config::m_Config.GetLangString(0x00202007).c_str());
+        this->GetDlgItem(IDC_STATIC_ENGINE)->SetWindowTextW(config::m_Config.GetLangString(0x00202008).c_str());
+        this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(config::m_Config.GetLangString(0x00202009).c_str());
+        this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(config::m_Config.GetLangString(0x0020200A).c_str());
 
         if (this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED)
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.GetLangString(0x0020200B));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetLangString(0x0020200B).c_str());
         else
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(m_Config.GetLangString(0x0020200C));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetLangString(0x0020200C).c_str());
     }
 
     void CMainDlg::InitLangFilesList()
     {
-        SetListCtrlColumnText(this->m_LstFiles, 0, m_Config.GetLangString(0x00203001));
-        SetListCtrlColumnText(this->m_LstFiles, 1, m_Config.GetLangString(0x00203002));
+        SetListCtrlColumnText(this->m_LstFiles, 0, config::m_Config.GetLangString(0x00203001));
+        SetListCtrlColumnText(this->m_LstFiles, 1, config::m_Config.GetLangString(0x00203002));
     }
 
     void CMainDlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
     {
-        m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, m_Config.GetLangString(0x00204001));
-        m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, m_Config.GetLangString(0x00204002));
-        m_hMenu.ModifyMenuW(ID_LIST_ADDDIRECTORY, 0, ID_LIST_ADDDIRECTORY, m_Config.GetLangString(0x00204003));
-        m_hMenu.ModifyMenuW(ID_LIST_MUXWIZARD, 0, ID_LIST_MUXWIZARD, m_Config.GetLangString(0x00204004));
-        m_hMenu.ModifyMenuW(ID_LIST_LOADLIST, 0, ID_LIST_LOADLIST, m_Config.GetLangString(0x00204005));
-        m_hMenu.ModifyMenuW(ID_LIST_SAVELIST, 0, ID_LIST_SAVELIST, m_Config.GetLangString(0x00204006));
-        m_hMenu.ModifyMenuW(ID_LIST_MOVEUP, 0, ID_LIST_MOVEUP, m_Config.GetLangString(0x00204007));
-        m_hMenu.ModifyMenuW(ID_LIST_MOVEDOWN, 0, ID_LIST_MOVEDOWN, m_Config.GetLangString(0x00204008));
-        m_hMenu.ModifyMenuW(ID_LIST_DELFILES, 0, ID_LIST_DELFILES, m_Config.GetLangString(0x00204009));
-        m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, m_Config.GetLangString(0x0020400A));
+        m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetLangString(0x00204001).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, config::m_Config.GetLangString(0x00204002).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_ADDDIRECTORY, 0, ID_LIST_ADDDIRECTORY, config::m_Config.GetLangString(0x00204003).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MUXWIZARD, 0, ID_LIST_MUXWIZARD, config::m_Config.GetLangString(0x00204004).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_LOADLIST, 0, ID_LIST_LOADLIST, config::m_Config.GetLangString(0x00204005).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_SAVELIST, 0, ID_LIST_SAVELIST, config::m_Config.GetLangString(0x00204006).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MOVEUP, 0, ID_LIST_MOVEUP, config::m_Config.GetLangString(0x00204007).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MOVEDOWN, 0, ID_LIST_MOVEDOWN, config::m_Config.GetLangString(0x00204008).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_DELFILES, 0, ID_LIST_DELFILES, config::m_Config.GetLangString(0x00204009).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, config::m_Config.GetLangString(0x0020400A).c_str());
     }
 
     void CMainDlg::InitLangSettingsList()
     {
-        SetListCtrlColumnText(this->m_LstSettings, 0, m_Config.GetLangString(0x00205001));
-        SetListCtrlColumnText(this->m_LstSettings, 1, m_Config.GetLangString(0x00205002));
+        SetListCtrlColumnText(this->m_LstSettings, 0, config::m_Config.GetLangString(0x00205001));
+        SetListCtrlColumnText(this->m_LstSettings, 1, config::m_Config.GetLangString(0x00205002));
     }
 
     void CMainDlg::InitLangMainMenu()
     {
         CMenu *m_hMenu = this->GetMenu();
 
-        m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, m_Config.GetLangString(0x00101001));
-        m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, m_Config.GetLangString(0x00101002));
-        m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, m_Config.GetLangString(0x00101003));
-        m_hMenu->ModifyMenuW(ID_FILE_MUXWIZARD, 0, ID_FILE_MUXWIZARD, m_Config.GetLangString(0x00101004));
-        m_hMenu->ModifyMenuW(ID_FILE_LOADFILESLIST, 0, ID_FILE_LOADFILESLIST, m_Config.GetLangString(0x00101005));
-        m_hMenu->ModifyMenuW(ID_FILE_SAVEFILESLIST, 0, ID_FILE_SAVEFILESLIST, m_Config.GetLangString(0x00101006));
-        m_hMenu->ModifyMenuW(ID_FILE_LOADPRESETS, 0, ID_FILE_LOADPRESETS, m_Config.GetLangString(0x00101007));
-        m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, m_Config.GetLangString(0x00101008));
-        m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, m_Config.GetLangString(0x00101009));
+        m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetLangString(0x00101001).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, config::m_Config.GetLangString(0x00101002).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, config::m_Config.GetLangString(0x00101003).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_MUXWIZARD, 0, ID_FILE_MUXWIZARD, config::m_Config.GetLangString(0x00101004).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_LOADFILESLIST, 0, ID_FILE_LOADFILESLIST, config::m_Config.GetLangString(0x00101005).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_SAVEFILESLIST, 0, ID_FILE_SAVEFILESLIST, config::m_Config.GetLangString(0x00101006).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_LOADPRESETS, 0, ID_FILE_LOADPRESETS, config::m_Config.GetLangString(0x00101007).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, config::m_Config.GetLangString(0x00101008).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, config::m_Config.GetLangString(0x00101009).c_str());
 
-        m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, m_Config.GetLangString(0x00102001));
-        m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, m_Config.GetLangString(0x00102002));
-        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, m_Config.GetLangString(0x00102003));
-        m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, m_Config.GetLangString(0x00102004));
-        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, m_Config.GetLangString(0x00102005));
+        m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, config::m_Config.GetLangString(0x00102001).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, config::m_Config.GetLangString(0x00102002).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, config::m_Config.GetLangString(0x00102003).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, config::m_Config.GetLangString(0x00102004).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, config::m_Config.GetLangString(0x00102005).c_str());
 
-        m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, m_Config.GetLangString(0x00103001));
-        m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, m_Config.GetLangString(0x00103002));
+        m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, config::m_Config.GetLangString(0x00103001).c_str());
+        m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, config::m_Config.GetLangString(0x00103002).c_str());
 
-        m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, m_Config.GetLangString(0x00104001));
-        m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, m_Config.GetLangString(0x00104002));
-        m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, m_Config.GetLangString(0x00104003));
+        m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, config::m_Config.GetLangString(0x00104001).c_str());
+        m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, config::m_Config.GetLangString(0x00104002).c_str());
+        m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, config::m_Config.GetLangString(0x00104003).c_str());
 
         m_hMenu->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
             this->bDisableAllWarnings ? MF_CHECKED : MF_UNCHECKED);
@@ -2336,21 +2264,20 @@ namespace app
 
     void CMainDlg::InitLangMenu()
     {
-        if (m_Config.m_LangLst.Count() > 0)
+        if (config::m_Config.m_LangLst.Count() > 0)
         {
             CMenu *m_hMenu = this->GetMenu();
             CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
             m_hLangMenu->DeleteMenu(ID_LANGUAGE_DEFAULT, 0);
 
-            for (int i = 0; i < m_Config.m_LangLst.Count(); i++)
+            for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
             {
-                auto& lang = m_Config.m_LangLst.Get(i);
-                CString szBuff;
-                szBuff.Format(_T("%s (%s)"), lang.szEnglishName, lang.szTargetName);
-                m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff);
+                auto& lang = config::m_Config.m_LangLst.Get(i);
+                std::wstring szBuff = lang.szEnglishName + L" (" + lang.szTargetName  + L")";
+                m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff.c_str());
 
-                if (m_Config.m_nLangId == i)
+                if (config::m_Config.m_nLangId == i)
                     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
                 else
                     m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
@@ -2605,9 +2532,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-
-                this->m_LstSettings.SetItemText(nItem, 1, szName);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
         break;
@@ -2631,8 +2557,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                CString szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
-                this->m_LstSettings.SetItemText(nItem, 1, szName);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
         break;
@@ -2655,7 +2581,7 @@ namespace app
         CMenu *m_hSubMenu = m_hMenu.GetSubMenu(0);
         ::SetForegroundWindow(this->GetSafeHwnd());
 
-        if (m_Config.HaveLangStrings())
+        if (config::m_Config.HaveLangStrings())
             InitLangFilesListContextMenu(m_hMenu);
 
         m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, nullptr);
@@ -2676,16 +2602,17 @@ namespace app
         if (pos != nullptr)
         {
             int nItem = m_LstSettings.GetNextSelectedItem(pos);
-            this->MessageBox(config::CEncoderDefaults::encOpt[nItem].szHelpText, config::CEncoderDefaults::encOpt[nItem].szName, MB_ICONINFORMATION | MB_OK);
+            this->MessageBox(
+                config::CEncoderDefaults::encOpt[nItem].szHelpText.c_str(), 
+                config::CEncoderDefaults::encOpt[nItem].szName.c_str(), 
+                MB_ICONINFORMATION | MB_OK);
         }
 
         *pResult = 0;
     }
 
-    bool CMainDlg::GetAvisynthFileInfo(CString szFileName, AvsAudioInfo *pInfoAVS)
+    bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
-        TCHAR *pszInPath = szFileName.GetBuffer();
-
         if (pInfoAVS == nullptr)
             return false;
 
@@ -2694,16 +2621,12 @@ namespace app
         CAvs2Raw decoderAVS;
         char szInputFileAVS[MAX_PATH] = "";
 
-    #ifdef _UNICODE
-        util::ConvertUnicodeToAnsi(pszInPath, szInputFileAVS, lstrlen(pszInPath));
+        util::Utilities::ConvertUnicodeToAnsi(szFileName.c_str(), szInputFileAVS, szFileName.length());
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
-    #else
-        if (decoderAVS.OpenAvisynth(pszInPath) == false)
-    #endif
         {
             OutputDebugString(_T("Error: Failed to initialize Avisynth!"));
-            this->MessageBox(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207022) : _T("Failed to initialize Avisynth"),
-                m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207010) : _T("Error"),
+            this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207022).c_str() : _T("Failed to initialize Avisynth"),
+                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
                 MB_ICONERROR | MB_OK);
 
             return false;
@@ -2722,19 +2645,18 @@ namespace app
         if (pos != nullptr)
         {
             int nItem = m_LstFiles.GetNextSelectedItem(pos);
-            CString szFileName = m_LstFiles.GetItemText(nItem, 0);
-
-            if (util::GetFileExtension(szFileName).MakeLower() == _T("avs"))
+            std::wstring szFileName = m_LstFiles.GetItemText(nItem, 0);
+            std::wstring szExt = util::Utilities::GetFileExtension(szFileName);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
             {
                 AvsAudioInfo infoAVS;
                 memset(&infoAVS, 0, sizeof(AvsAudioInfo));
                 if (GetAvisynthFileInfo(szFileName, &infoAVS))
                 {
-                    CString szInfo;
-                    TCHAR *pszInPath = szFileName.GetBuffer();
+                    std::wstring szInfo;
 
                     szInfo +=
-                        (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207023) : _T("Sample format")) +
+                        (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207023) : _T("Sample format")) +
                         _T("\t: ");
 
                     switch (infoAVS.nSampleType)
@@ -2756,7 +2678,7 @@ namespace app
                         break;
                     default:
                         szInfo +=
-                            (m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207024) : _T("unknown")) +
+                            (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207024) : _T("unknown")) +
                             _T("\n");
                         break;
                     }
@@ -2764,29 +2686,27 @@ namespace app
                     CString szBuff;
 
                     szBuff.Format(_T("%s\t: %d\n"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207025) : _T("Sample rate"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207025) : _T("Sample rate"),
                         infoAVS.nSamplesPerSecond);
                     szInfo += szBuff;
 
                     szBuff.Format(_T("%s\t: %d\n"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207026) : _T("Channels"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207026) : _T("Channels"),
                         infoAVS.nAudioChannels);
                     szInfo += szBuff;
 
                     szBuff.Format(_T("%s\t: %I64d\n"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207027) : _T("Audio samples"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207027) : _T("Audio samples"),
                         infoAVS.nAudioSamples);
                     szInfo += szBuff;
 
                     szBuff.Format(_T("%s\t: %I64d"),
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207028) : _T("Decoded size"),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207028) : _T("Decoded size"),
                         infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
                     szInfo += szBuff;
 
-                    szFileName.ReleaseBuffer();
-
-                    this->MessageBox(szInfo,
-                        m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207029) : _T("AVS File Properties"),
+                    this->MessageBox(szInfo.c_str(),
+                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207029).c_str() : _T("AVS File Properties"),
                         MB_ICONINFORMATION | MB_OK);
                 }
             }
@@ -2805,8 +2725,8 @@ namespace app
             if (pFiles == nullptr)
             {
                 MessageBox(
-                    m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00207009) : _T("Failed to allocate memory for filenames buffer!"),
-                    m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700A) : _T("Fatal Error"),
+                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207009).c_str() : _T("Failed to allocate memory for filenames buffer!"),
+                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700A).c_str() : _T("Fatal Error"),
                     MB_OK | MB_ICONERROR);
                 return;
             }
@@ -2815,7 +2735,7 @@ namespace app
 
             CString szFilter = config::CEncoderDefaults::GetSupportedInputFilesFilter();
             CFileDialog fd(TRUE,
-                config::CEncoderDefaults::szSupportedInputExt[0],
+                config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
                 szFilter,
@@ -2829,7 +2749,8 @@ namespace app
                 POSITION pos = fd.GetStartPosition();
                 while (pos != nullptr)
                 {
-                    this->AddItemToFileList(fd.GetNextPathName(pos));
+                    std::wstring szFileName = fd.GetNextPathName(pos);
+                    this->AddItemToFileList(szFileName);
                 }
             }
         }
@@ -2877,7 +2798,7 @@ namespace app
     #define BIF_NEWDIALOGSTYLE 0x0040
     #endif
 
-        auto szTitle = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700B) : _T("Add directory with supported input files:");
+        auto szTitle = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700B).c_str() : _T("Add directory with supported input files:");
 
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
@@ -2893,11 +2814,9 @@ namespace app
         {
             if (SHGetPathFromIDList(pidlBrowse, lpBuffer))
             {
-                CString szBuff;
-                szBuff.Format(_T("%s\0"), lpBuffer);
-                SearchFolderForFiles(szBuff, true);
+                std::wstring szPath = lpBuffer;
+                SearchFolderForFiles(szPath, true);
             }
-
             pMalloc->Free(pidlBrowse);
         }
 
@@ -2955,10 +2874,10 @@ namespace app
             if (this->bDisableAllWarnings == false)
             {
                 nRet = this->MessageBox(
-                    m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700C) :
+                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700C).c_str() :
                     _T("Remove all files from list and add files selected in MUX Wizard?\n\n")
                     _T("Note: The channel configuration for current preset will be adjusted."),
-                    m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700D) : _T("MUX Wizard"),
+                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700D).c_str() : _T("MUX Wizard"),
                     MB_YESNO | MB_ICONQUESTION);
             }
 
@@ -3056,12 +2975,12 @@ namespace app
                 preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]));
+                    config::CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]).c_str());
 
                 preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]));
+                    config::CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]).c_str());
 
                 if (bUpdateChconfig == true)
                 {
@@ -3082,7 +3001,7 @@ namespace app
                     preset.nSetting[nIndexChconfig] = config::CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]));
+                    config::CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]).c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {
@@ -3099,12 +3018,12 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700E) : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700E).c_str() : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             LoadFilesList(szFileName);
         }
     }
@@ -3115,12 +3034,12 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700E) : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700E).c_str() : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
 
             int nFormat = 0;
             if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
@@ -3138,22 +3057,22 @@ namespace app
             _T("presets"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700F) : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700F).c_str() : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             if (config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
             {
                 this->m_CmbPresets.ResetContent();
 
                 for (int i = 0; i < encPresets.Count(); i++)
                 {
-                    this->m_CmbPresets.AddString(encPresets.Get(i).szName);
+                    this->m_CmbPresets.AddString(encPresets.Get(i).szName.c_str());
                 }
 
-                util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+                util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
 
                 this->nCurrentPreset = 0;
                 this->m_CmbPresets.SetCurSel(0);
@@ -3169,12 +3088,12 @@ namespace app
             _T("presets"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x0020700F) : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700F).c_str() : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
         }
     }
@@ -3224,17 +3143,17 @@ namespace app
 
     void CMainDlg::OnLanguageChangeDefault()
     {
-        m_Config.m_nLangId = -1;
-        m_Config.m_bHaveLang = FALSE;
-        m_Config.m_Lang = nullptr;
-        m_Config.m_szLangFileName = _T("");
+        config::m_Config.m_nLangId = -1;
+        config::m_Config.m_bHaveLang = FALSE;
+        config::m_Config.m_Lang = nullptr;
+        config::m_Config.m_szLangFileName = _T("");
 
         CMenu *m_hMenu = this->GetMenu();
         CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 
-        for (int i = 0; i < m_Config.m_LangLst.Count(); i++)
+        for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
         {
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
         }
@@ -3245,23 +3164,23 @@ namespace app
     void CMainDlg::OnLanguageChange(UINT nID)
     {
         int nLangId = nID - ID_LANGUAGE_MENU_START;
-        if (nLangId >= 0 && nLangId < m_Config.m_LangLst.Count())
+        if (nLangId >= 0 && nLangId < config::m_Config.m_LangLst.Count())
         {
-            auto& lang = m_Config.m_LangLst.Get(nLangId);
-            m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
-            m_Config.m_bHaveLang = TRUE;
-            m_Config.m_Lang = &lang.lm;
-            m_Config.m_szLangFileName = lang.szFileName;
+            auto& lang = config::m_Config.m_LangLst.Get(nLangId);
+            config::m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
+            config::m_Config.m_bHaveLang = TRUE;
+            config::m_Config.m_Lang = &lang.lm;
+            config::m_Config.m_szLangFileName = lang.szFileName;
         }
         CMenu *m_hMenu = this->GetMenu();
         CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-        for (int i = 0; i < m_Config.m_LangLst.Count(); i++)
+        for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
         {
-            auto& lang = m_Config.m_LangLst.Get(i);
-            if (m_Config.m_nLangId == i)
+            auto& lang = config::m_Config.m_LangLst.Get(i);
+            if (config::m_Config.m_nLangId == i)
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
             else
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
@@ -3272,7 +3191,7 @@ namespace app
 
     void CMainDlg::OnHelpWebsite()
     {
-        util::LaunchAndWait(ENCWAVTOAC3_URL_HOME, _T(""), FALSE);
+        util::Utilities::LaunchAndWait(_T("https://github.com/wieslawsoltes/wavtoac3encoder/"), _T(""), FALSE);
     }
 
     void CMainDlg::OnHelpAbout()

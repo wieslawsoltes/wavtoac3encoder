@@ -7,16 +7,16 @@ namespace app
 {
     const int nNumChannelConfig = 8;
 
-    const CString szChannelConfig[nNumChannelConfig] =
+    const std::wstring szChannelConfig[nNumChannelConfig] =
     {
-        _T("1+1 = (Ch1,Ch2)"),
-        _T("1/0 = (C)"),
-        _T("2/0 = (L,R)"),
-        _T("3/0 = (L,R,C)"),
-        _T("2/1 = (L,R,S)"),
-        _T("3/1 = (L,R,C,S)"),
-        _T("2/2 = (L,R,SL,SR)"),
-        _T("3/2 = (L,R,C,SL,SR)")
+        L"1+1 = (Ch1,Ch2)",
+        L"1/0 = (C)",
+        L"2/0 = (L,R)",
+        L"3/0 = (L,R,C)",
+        L"2/1 = (L,R,S)",
+        L"3/1 = (L,R,C,S)",
+        L"2/2 = (L,R,SL,SR)",
+        L"3/2 = (L,R,C,SL,SR)"
     };
 
     const int nNumInputFiles[nNumChannelConfig] =
@@ -37,17 +37,17 @@ namespace app
         {  1, 1, 1, 0, 1, 1 }  // 3/2
     };
 
-    const CString szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const std::wstring szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
     {
         // FL FR FC S  SL SR
-        {  _T("Ch1"), _T("Ch2"), _T("-"), _T("-"), _T("-"),   _T("-")  }, // 1+1
-        {  _T("-"),   _T("-"),   _T("C"), _T("-"), _T("-"),   _T("-")  }, // 1/0
-        {  _T("L"),   _T("R"),   _T("-"), _T("-"), _T("-"),   _T("-")  }, // 2/0
-        {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("-"),   _T("-")  }, // 3/0
-        {  _T("L"),   _T("R"),   _T("-"), _T("S"), _T("-"),   _T("-")  }, // 2/1
-        {  _T("L"),   _T("R"),   _T("C"), _T("S"), _T("-"),   _T("-")  }, // 3/1
-        {  _T("L"),   _T("R"),   _T("-"), _T("-"), _T("SL"),  _T("SR") }, // 2/2
-        {  _T("L"),   _T("R"),   _T("C"), _T("-"), _T("SL"),  _T("SR") }  // 3/2
+        {  L"Ch1", L"Ch2", L"-", L"-", L"-",   L"-"  }, // 1+1
+        {  L"-",   L"-",   L"C", L"-", L"-",   L"-"  }, // 1/0
+        {  L"L",   L"R",   L"-", L"-", L"-",   L"-"  }, // 2/0
+        {  L"L",   L"R",   L"C", L"-", L"-",   L"-"  }, // 3/0
+        {  L"L",   L"R",   L"-", L"S", L"-",   L"-"  }, // 2/1
+        {  L"L",   L"R",   L"C", L"S", L"-",   L"-"  }, // 3/1
+        {  L"L",   L"R",   L"-", L"-", L"SL",  L"SR" }, // 2/2
+        {  L"L",   L"R",   L"C", L"-", L"SL",  L"SR" }  // 3/2
     };
 
     IMPLEMENT_DYNAMIC(CMuxDlg, CDialog)
@@ -132,12 +132,12 @@ namespace app
     void CMuxDlg::InitCtrls()
     {
         for (int i = 0; i < nNumChannelConfig; i++)
-            this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i]);
+            this->m_CmbChannelConfig.InsertString(i, szChannelConfig[i].c_str());
 
         this->m_CmbChannelConfig.SetCurSel(0);
 
-        CString szTmpText;
-        szTmpText = m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01008) :
+        std::wstring szTmpText;
+        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01008) :
             _T("Specify channel configuration:\n")
             _T("1+1 = (Ch1,Ch2)\n")
             _T("1/0 = (C)\n")
@@ -148,38 +148,38 @@ namespace app
             _T("2/2 = (L,R,SL,SR)\n")
             _T("3/2 = (L,R,C,SL,SR)");
 
-        this->m_CmbChannelConfig.SetTooltipText(szTmpText);
-        this->m_ChkChannelConfigLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01009) : _T("Indicates use of the LFE channel."));
+        this->m_CmbChannelConfig.SetTooltipText(szTmpText.c_str());
+        this->m_ChkChannelConfigLFE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01009).c_str() : _T("Indicates use of the LFE channel."));
 
-        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
+        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
-        this->m_BtnChannelFL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100A) : _T("Front Left Channel"));
-        this->m_BtnChannelFR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100B) : _T("Front Right Channel"));
-        this->m_BtnChannelFC.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100C) : _T("Front Center Channel"));
-        this->m_BtnChannelLFE.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100D) : _T("Low Frequency Effect Channel"));
-        this->m_BtnChannelSL.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100E) : _T("Surround Left Channel"));
-        this->m_BtnChannelSR.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C0100F) : _T("Surround Right Channel"));
-        this->m_BtnChannelS.SetTooltipText(m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01010) : _T("Surround Channel"));
+        this->m_BtnChannelFL.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100A).c_str() : _T("Front Left Channel"));
+        this->m_BtnChannelFR.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100B).c_str() : _T("Front Right Channel"));
+        this->m_BtnChannelFC.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100C).c_str() : _T("Front Center Channel"));
+        this->m_BtnChannelLFE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100D).c_str() : _T("Low Frequency Effect Channel"));
+        this->m_BtnChannelSL.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100E).c_str() : _T("Surround Left Channel"));
+        this->m_BtnChannelSR.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100F).c_str() : _T("Surround Right Channel"));
+        this->m_BtnChannelS.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01010).c_str() : _T("Surround Channel"));
 
         this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
     }
 
     void CMuxDlg::InitLang()
     {
-        if (m_Config.HaveLangStrings())
+        if (config::m_Config.HaveLangStrings())
         {
-            this->SetWindowText(_T("WAV to AC3 Encoder - ") + m_Config.GetLangString(0x00C01001));
-            this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(m_Config.GetLangString(0x00C01002));
-            this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(m_Config.GetLangString(0x00C01003));
-            this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(m_Config.GetLangString(0x00C01004));
-            this->GetDlgItem(IDOK)->SetWindowText(m_Config.GetLangString(0x00C01005));
-            this->GetDlgItem(IDCANCEL)->SetWindowText(m_Config.GetLangString(0x00C01006));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(m_Config.GetLangString(0x00C01007));
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(m_Config.GetLangString(0x00C01007));
+            this->SetWindowText((L"WAV to AC3 Encoder - " + config::m_Config.GetLangString(0x00C01001)).c_str());
+            this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(config::m_Config.GetLangString(0x00C01002).c_str());
+            this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(config::m_Config.GetLangString(0x00C01003).c_str());
+            this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(config::m_Config.GetLangString(0x00C01004).c_str());
+            this->GetDlgItem(IDOK)->SetWindowText(config::m_Config.GetLangString(0x00C01005).c_str());
+            this->GetDlgItem(IDCANCEL)->SetWindowText(config::m_Config.GetLangString(0x00C01006).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
+            this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
         }
     }
 
@@ -277,12 +277,12 @@ namespace app
 
     void CMuxDlg::SetFilePaths()
     {
-        this->m_EdtChannelFL.SetWindowText(szInputFiles[0]);
-        this->m_EdtChannelFR.SetWindowText(szInputFiles[1]);
-        this->m_EdtChannelFC.SetWindowText(szInputFiles[2]);
-        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3]);
-        this->m_EdtChannelSL.SetWindowText(szInputFiles[4]);
-        this->m_EdtChannelSR.SetWindowText(szInputFiles[5]);
+        this->m_EdtChannelFL.SetWindowText(szInputFiles[0].c_str());
+        this->m_EdtChannelFR.SetWindowText(szInputFiles[1].c_str());
+        this->m_EdtChannelFC.SetWindowText(szInputFiles[2].c_str());
+        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3].c_str());
+        this->m_EdtChannelSL.SetWindowText(szInputFiles[4].c_str());
+        this->m_EdtChannelSR.SetWindowText(szInputFiles[5].c_str());
     }
 
     void CMuxDlg::SetControlsState()
@@ -295,57 +295,57 @@ namespace app
         this->m_BtnChannelSR.EnableWindow(nChannelConfigStates[this->nChannelConfig][5] == 1 ? TRUE : FALSE);
         this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
 
-        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
-        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
-        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2]);
-        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3]);
-        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4]);
-        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5]);
+        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
+        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
+        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
+        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3].c_str());
+        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4].c_str());
+        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
         this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
 
-        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0]);
+        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
         this->m_StcLabelFL.SetBold(nChannelConfigStates[this->nChannelConfig][0] == 1 ? true : false);
-        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1]);
+        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
         this->m_StcLabelFR.SetBold(nChannelConfigStates[this->nChannelConfig][1] == 1 ? true : false);
-        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2]);
+        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
         this->m_StcLabelFC.SetBold(nChannelConfigStates[this->nChannelConfig][2] == 1 ? true : false);
-        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4]);
+        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4].c_str());
         this->m_StcLabelSL.SetBold(nChannelConfigStates[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4] ? true : false);
-        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5]);
+        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
         this->m_StcLabelSR.SetBold(nChannelConfigStates[this->nChannelConfig][5] == 1 ? true : false);
         this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
         this->m_StcLabelLFE.SetBold(this->bLFE);
 
         this->m_ChkChannelConfigLFE.SetCheck(this->bLFE ? BST_CHECKED : BST_UNCHECKED);
 
-        this->m_BtnChannelFL.SetBold((szInputFiles[0].GetLength() > 0) ? true : false);
-        this->m_BtnChannelFR.SetBold((szInputFiles[1].GetLength() > 0) ? true : false);
-        this->m_BtnChannelFC.SetBold((szInputFiles[2].GetLength() > 0) ? true : false);
+        this->m_BtnChannelFL.SetBold((szInputFiles[0].length() > 0) ? true : false);
+        this->m_BtnChannelFR.SetBold((szInputFiles[1].length() > 0) ? true : false);
+        this->m_BtnChannelFC.SetBold((szInputFiles[2].length() > 0) ? true : false);
 
-        this->m_BtnChannelLFE.SetBold((szInputFiles[3].GetLength() > 0) ? true : false);
+        this->m_BtnChannelLFE.SetBold((szInputFiles[3].length() > 0) ? true : false);
 
         if (nChannelConfigStates[nChannelConfig][3] == 1)
         {
-            this->m_BtnChannelS.SetBold((szInputFiles[4].GetLength() > 0) ? true : false);
+            this->m_BtnChannelS.SetBold((szInputFiles[4].length() > 0) ? true : false);
             this->m_BtnChannelSL.SetBold(false);
             this->m_BtnChannelSL.SetWindowText(_T("-"));
             this->m_BtnChannelSL.EnableWindow(FALSE);
         }
         else
         {
-            this->m_BtnChannelSL.SetBold((szInputFiles[4].GetLength() > 0) ? true : false);
+            this->m_BtnChannelSL.SetBold((szInputFiles[4].length() > 0) ? true : false);
             this->m_BtnChannelS.SetBold(false);
             this->m_BtnChannelS.SetWindowText(_T("-"));
             this->m_BtnChannelS.EnableWindow(FALSE);
         }
 
-        this->m_BtnChannelSR.SetBold((szInputFiles[5].GetLength() > 0) ? true : false);
+        this->m_BtnChannelSR.SetBold((szInputFiles[5].length() > 0) ? true : false);
     }
 
-    bool CMuxDlg::LoadFilesList(CString &szFileName)
+    bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<CString> fl;
-        if (m_Config.LoadFiles(szFileName, fl) == false)
+        util::CListT<std::wstring> fl;
+        if (config::m_Config.LoadFiles(szFileName, fl) == false)
             return false;
 
         for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
@@ -359,9 +359,8 @@ namespace app
             if (i >= config::CEncoderDefaults::nNumMaxInputFiles)
                 return true;
 
-            CString szPath = fl.Get(i);
-            szPath.TrimLeft('"');
-            szPath.TrimRight('"');
+            std::wstring szPath = fl.Get(i);
+            util::StringHelper::Trim(szPath, '"');
             szTmpInputFiles[i] = szPath;
         }
 
@@ -377,17 +376,15 @@ namespace app
         }
     }
 
-    bool CMuxDlg::SaveFilesList(CString &szFileName, int nFormat)
+    bool CMuxDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
     {
         try
         {
-            util::CListT<CString> fl;
-            CString szBuffer;
+            util::CListT<std::wstring> fl;
+            std::wstring szBuffer;
 
 #define AddFile(index) \
-        szBuffer.Format(_T("%s%s%s\n"), \
-            nFormat == 0 ? _T("") : _T("\""), \
-            szInputFiles[index], nFormat == 0 ? _T("") : _T("\"")); \
+        szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
         fl.Insert(szBuffer);
 
             switch (this->nChannelConfig)
@@ -472,7 +469,7 @@ namespace app
                 break;
             };
 
-            return m_Config.SaveFiles(szFileName, fl, nFormat);
+            return config::m_Config.SaveFiles(szFileName, fl, nFormat);
         }
         catch (...)
         {
@@ -486,21 +483,21 @@ namespace app
             return;
 
         CString szCurrentFileName;
-
         m_EdtCurrent->GetWindowText(szCurrentFileName);
-        szCurrentFileName = util::GetFileName(szCurrentFileName);
+        std::wstring szCurrentFileNameStr = szCurrentFileName;
+        std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
 
         CFileDialog fd(TRUE,
-            config::CEncoderDefaults::szSupportedInputExt[0],
-            szCurrentFileName,
+            config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
+            szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
             config::CEncoderDefaults::GetSupportedInputFilesFilter(),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
-            m_EdtCurrent->SetWindowText(szFileName);
+            std::wstring szFileName = fd.GetPathName();
+            m_EdtCurrent->SetWindowText(szFileName.c_str());
             this->szInputFiles[nID] = szFileName;
             m_BtnCurrent->SetBold(true);
         }
@@ -603,13 +600,13 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011) :
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01011).c_str() :
             _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
 
             int nFormat = 0;
             if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
@@ -627,13 +624,13 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            m_Config.HaveLangStrings() ? m_Config.GetLangString(0x00C01011) :
+            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01011).c_str() :
             _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
             this);
 
         if (fd.DoModal() == IDOK)
         {
-            CString szFileName = fd.GetPathName();
+            std::wstring szFileName = fd.GetPathName();
             this->LoadFilesList(szFileName);
             this->SetFilePaths();
             this->SetControlsState();

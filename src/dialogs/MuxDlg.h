@@ -1,7 +1,9 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxwin.h>
 #include "configuration\Configuration.h"
+#include "utilities\StringHelper.h"
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
@@ -32,14 +34,14 @@ namespace app
         void RemapFilesToChannels();
         void SetFilePaths();
         void SetControlsState();
-        bool LoadFilesList(CString &szFileName);
-        bool SaveFilesList(CString &szFileName, int nFormat);
+        bool LoadFilesList(std::wstring &szFileName);
+        bool SaveFilesList(std::wstring &szFileName, int nFormat);
         void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
     public:
         int nChannelConfig;
         bool bLFE;
-        CString szInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
-        CString szTmpInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
+        std::wstring szInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
+        std::wstring szTmpInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
     public:
         controls::CMyButton m_BtnChannelFL;
         controls::CMyButton m_BtnChannelFR;

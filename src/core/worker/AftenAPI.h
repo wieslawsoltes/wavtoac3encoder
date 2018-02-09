@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <string>
 #pragma warning(disable:4005)
 #include "common.h"
 #pragma warning(default:4005)
@@ -33,7 +34,7 @@ public:
         CloseAftenAPI();
     }
 public:
-    CString szLibPath;
+    std::wstring szLibPath;
     HMODULE hLibAften;
 public:
     lpLibAften_aften_get_version LibAften_aften_get_version;
@@ -48,7 +49,7 @@ public:
 public:
     bool OpenAftenAPI()
     {
-        hLibAften = LoadLibrary(szLibPath);
+        hLibAften = LoadLibrary(szLibPath.c_str());
         if (hLibAften == nullptr)
             return false;
 

@@ -5,7 +5,6 @@
 #endif
 
 #include "res\resource.h"
-#include "configuration\Configuration.h"
 
 namespace app
 {
@@ -23,5 +22,4 @@ namespace app
     };
 
     extern CEncWAVtoAC3App m_App;
-    extern config::CConfiguration m_Config;
 }

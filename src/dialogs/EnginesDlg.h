@@ -1,10 +1,12 @@
 ﻿#pragma once
 
+#include <string>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
 #include "controls\MyEdit.h"
 #include "controls\MyListCtrl.h"
+#include "utilities\StringHelper.h"
 #include "configuration\Configuration.h"
 
 namespace app
@@ -21,7 +23,7 @@ namespace app
         DECLARE_MESSAGE_MAP()
     public:
         config::CConfigList m_EngineList;
-        CString szCurrentFileName;
+        std::wstring szCurrentFileName;
     public:
         volatile bool bUpdateList;
     public:
@@ -31,8 +33,8 @@ namespace app
         int nCurrSel;
     public:
         bool InsertProgramEngines();
-        bool LoadProgramEngines(CString szFileName);
-        bool SaveProgramEngines(CString szFileName);
+        bool LoadProgramEngines(std::wstring szFileName);
+        bool SaveProgramEngines(std::wstring szFileName);
     protected:
         void InitLang();
     public:
