@@ -68,54 +68,92 @@ var buildSolutionAction = new Action<string,string,string> ((solution, configura
         settings.SetVerbosity(Verbosity.Minimal); });
 });
 
+var copyConfigAction = new Action<string> ((output) => 
+{
+    var outputDir = artifactsDir.Combine(output);
+    var langDir = outputDir.Combine("lang");
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.portable"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.config"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.files"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.lang"), outputDir);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
+    CleanDirectory(langDir);
+    CopyFiles("./config/lang/*.txt", langDir);
+});
+
+var copyEnginesX86Action = new Action<string> ((output) => 
+{
+    var outputDir = artifactsDir.Combine(output);
+    var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
+    var aftenDll = "libaften.dll";
+    var aftenDlls = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
+    var enginesFile = File("./config/EncWAVtoAC3-x86.engines");
+    CopyFileToDirectory(enginesFile, outputDir);
+    foreach (var dir in aftenDlls)
+    {
+        CleanDirectory(outputDir.Combine(dir));
+        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+    }
+});
+
+var copyEnginesX64Action = new Action<string> ((output) => 
+{
+    var outputDir = artifactsDir.Combine(output);
+    var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
+    var aftenDll = "libaften.dll";
+    var aftenDlls = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
+    var enginesFile = File("./config/EncWAVtoAC3-x64.engines");
+    CopyFileToDirectory(enginesFile, outputDir);
+    foreach (var dir in aftenDlls)
+    {
+        CleanDirectory(outputDir.Combine(dir));
+        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+    }
+});
+
+var packageConfigAction = new Action(() => 
+{
+    var output = "EncWAVtoAC3-" + version + suffix + "-Config";
+    var outputDir = artifactsDir.Combine(output);
+    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    CleanDirectory(outputDir);
+    copyConfigAction(output);
+    Zip(outputDir, outputZip);
+});
+
+var packageEnginesX86Action = new Action(() => 
+{
+    var output = "EncWAVtoAC3-" + version + suffix + "-Engines-x86";
+    var outputDir = artifactsDir.Combine(output);
+    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    CleanDirectory(outputDir);
+    copyEnginesX86Action(output);
+    Zip(outputDir, outputZip);
+});
+
+var packageEnginesX64Action = new Action(() => 
+{
+    var output = "EncWAVtoAC3-" + version + suffix + "-Engines-x64";
+    var outputDir = artifactsDir.Combine(output);
+    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    CleanDirectory(outputDir);
+    copyEnginesX64Action(output);
+    Zip(outputDir, outputZip);
+});
+
 var packageBinariesAction = new Action<string,string> ((configuration, platform) => 
 {
     var path = "./src/bin/" + configuration + "/" + platform + "/";
     var output = "EncWAVtoAC3-" + version + suffix + "-" + platform + (configuration == "Release" ? "" : ("-(" + configuration + ")"));
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
-    var langDir = outputDir.Combine("lang");
-
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
     CopyFileToDirectory(File(path + "EncWAVtoAC3.exe"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.portable"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.config"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.files"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.lang"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
-
-    CleanDirectory(langDir);
-    CopyFiles("./config/lang/*.txt", langDir);
-
-    var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
-    var aftenDll = "libaften.dll";
-    var aftenDllsWin32 = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
-    var aftenDllsX64 = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
-    var enginesFileWin32 = File("./config/EncWAVtoAC3-x86.engines");
-    var enginesFileX64 = File("./config/EncWAVtoAC3-x64.engines");
-
-    if (platform == "Win32")
-    {
-        CopyFileToDirectory(enginesFileWin32, outputDir);
-        foreach (var dir in aftenDllsWin32)
-        {
-            CleanDirectory(outputDir.Combine(dir));
-            CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
-        }
-    }
-
-    if (platform == "x64")
-    {
-        CopyFileToDirectory(enginesFileX64, outputDir);
-        foreach (var dir in aftenDllsX64)
-        {
-            CleanDirectory(outputDir.Combine(dir));
-            CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
-        }
-    }
-
+    copyConfigAction(output);
+    if (platform == "Win32") copyEnginesX86Action(output);
+    if (platform == "x64") copyEnginesX64Action(output);
     Zip(outputDir, outputZip);
 });
 
@@ -164,13 +202,37 @@ Task("Package-Installers")
     configurations.ForEach(configuration => platforms.ForEach(platform => packageInstallersAction(configuration, platform)));
 });
 
+Task("Package-Config")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    packageConfigAction();
+});
+
+Task("Package-Engines-X86")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    packageEnginesX86Action();
+});
+
+Task("Package-Engines-X64")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    packageEnginesX64Action();
+});
+
 ///////////////////////////////////////////////////////////////////////////////
 // TARGETS
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Package")
   .IsDependentOn("Package-Binaries")
-  .IsDependentOn("Package-Installers");
+  .IsDependentOn("Package-Installers")
+  .IsDependentOn("Package-Config")
+  .IsDependentOn("Package-Engines-X86")
+  .IsDependentOn("Package-Engines-X64");
 
 Task("Default")
   .IsDependentOn("Build");
