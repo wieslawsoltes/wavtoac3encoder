@@ -13,10 +13,10 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 
 | Platforn              | Type        | Version       | Download                                                                                                                               |
 |-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Installer   | 7.0           | [EncWAVtoAC3-7.0-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-Win32.exe)          |
-| Windows 64-bit        | Installer   | 7.0           | [EncWAVtoAC3-7.0-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-x64.exe)              |
-| Windows 32-bit        | Portable    | 7.0           | [EncWAVtoAC3-7.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-Win32.zip)          |
-| Windows 64-bit        | Portable    | 7.0           | [EncWAVtoAC3-7.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.0/EncWAVtoAC3-7.0-x64.zip)              |
+| Windows 32-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.exe)          |
+| Windows 64-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.exe)              |
+| Windows 32-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.zip)          |
+| Windows 64-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.zip)              |
 
 ## Support WAV to AC3 Encoder
 
@@ -89,7 +89,7 @@ Download latest version of the aften for windows from [here](https://github.com/
 
 ```
 WAV to AC3 Encoder
-Copyright (C) 2007-2017 Wiesław Šoltés <wieslaw.soltes@gmail.com>
+Copyright (C) 2007-2018 Wiesław Šoltés <wieslaw.soltes@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
