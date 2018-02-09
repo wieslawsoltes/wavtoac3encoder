@@ -1,12 +1,12 @@
 ﻿//
 // Description: WAV to AC3 Encoder Translation File
-// Version: 7.0
+// Version: 7.1
 // Charset: UTF-8
 // Translator: A. Haack
 //
 
 //
-// Translation Language Name: in Deutsch
+// Translation Language Name: in English
 //
 
 0x00000001=German
