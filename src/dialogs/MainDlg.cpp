@@ -183,7 +183,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = DEFAULT_TEXT_AUTO;
+                szBuff = config::m_Config.GetDefaultTextAuto().c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -193,7 +193,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = DEFAULT_TEXT_IGNORED;
+                szBuff = config::m_Config.GetDefaultTextIgnored().c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -203,7 +203,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = DEFAULT_TEXT_IGNORED;
+                szBuff = config::m_Config.GetDefaultTextIgnored().c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -272,8 +272,8 @@ namespace app
         if (nItemsCount <= 0)
         {
             OutputDebugString(_T("Error: Add at least one file to the file list!"));
-            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207011).c_str() : _T("Add at least one file to the file list!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            MessageBox(config::m_Config.GetString(0x00207011).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
             return;
         }
@@ -281,8 +281,8 @@ namespace app
         if ((this->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
             OutputDebugString(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
-            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207012).c_str() : _T("Supported are minimum 1 and maximum 6 mono input files!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            MessageBox(config::m_Config.GetString(0x00207012).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
             return;
         }
@@ -295,8 +295,8 @@ namespace app
         if (this->api.OpenAftenAPI() == false)
         {
             OutputDebugString(_T("Error: Failed to load libaften.dll dynamic library!"));
-            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207013).c_str() : _T("Failed to load libaften.dll dynamic library!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            MessageBox(config::m_Config.GetString(0x00207013).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
 
             bWorking = false;
@@ -330,8 +330,8 @@ namespace app
         if ((this->bMultipleMonoInput == true) && (bAvisynthInput == true))
         {
             OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
-            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207014).c_str() : _T("Disable 'Multiple mono input' mode in order to use Avisynth scripts!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            MessageBox(config::m_Config.GetString(0x00207014).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
 
             bWorking = false;
@@ -351,8 +351,8 @@ namespace app
         if (nLen < 3)
         {
             OutputDebugString(_T("Error: Invalid output path!"));
-            this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207015).c_str() : _T("Invalid output path!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            this->MessageBox(config::m_Config.GetString(0x00207015).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_OK | MB_ICONERROR);
 
             bWorking = false;
@@ -362,13 +362,13 @@ namespace app
         std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(dlg.pWorkerContext->szOutPath.length() - 4, 4);
         if (this->bMultipleMonoInput == true)
         {
-            if (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE)
+            if (dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputFile().c_str())
             {
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
                     OutputDebugString(_T("Error: Invalid output file!"));
-                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207016).c_str() : _T("Invalid output file!"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+                    this->MessageBox(config::m_Config.GetString(0x00207016).c_str(),
+                        config::m_Config.GetString(0x00207010).c_str(),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -378,16 +378,16 @@ namespace app
         }
 
         if ((!dlg.pWorkerContext->szOutPath.empty()) &&
-            ((dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_PATH && this->bMultipleMonoInput == false) ||
-            (dlg.pWorkerContext->szOutPath != DEFAULT_TEXT_OUTPUT_FILE && this->bMultipleMonoInput == true)))
+            ((dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputPath().c_str() && this->bMultipleMonoInput == false) ||
+            (dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputFile().c_str() && this->bMultipleMonoInput == true)))
         {
             if (this->bMultipleMonoInput == false)
             {
                 if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207017).c_str() : _T("Failed to create output path!"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+                    this->MessageBox(config::m_Config.GetString(0x00207017).c_str(),
+                        config::m_Config.GetString(0x00207010).c_str(),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -401,8 +401,8 @@ namespace app
                 if (util::Utilities::MakeFullPath(szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207017).c_str() : _T("Failed to create output path!"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+                    this->MessageBox(config::m_Config.GetString(0x00207017).c_str(),
+                        config::m_Config.GetString(0x00207010).c_str(),
                         MB_OK | MB_ICONERROR);
 
                     bWorking = false;
@@ -442,17 +442,17 @@ namespace app
         {
             if (this->bMultipleMonoInput == true)
             {
-                szText.Format(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207018).c_str() : _T("Encoded %d mono files in %s (%0.3lf sec)"),
+                szText.Format(config::m_Config.GetString(0x00207018).c_str(),
                     dlg.pWorkerContext->nCount,
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
             }
             else
             {
-                szText.Format(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207019).c_str() : _T("Encoded %d file%s in %s (%0.3lf sec)"),
+                szText.Format(config::m_Config.GetString(0x00207019).c_str(),
                     dlg.pWorkerContext->nCount,
                     dlg.pWorkerContext->nCount == 1 ? _T("") :
-                    (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701A).c_str() : _T("s")),
+                    config::m_Config.GetString(0x0020701A).c_str(),
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
             }
@@ -513,7 +513,7 @@ namespace app
         static int nCount = 0;
         auto preset = GetCurrentPreset();
         nCount++;
-        preset.szName = (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701B) : _T("New preset")) + L" (" + std::to_wstring(nCount) + L")";
+        preset.szName = config::m_Config.GetString(0x0020701B) + L" (" + std::to_wstring(nCount) + L")";
         this->encPresets.Insert(preset);
 
         this->nCurrentPreset = this->encPresets.Count() - 1;
@@ -564,7 +564,7 @@ namespace app
                 config::CEncoderDefaults::szSupportedOutputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701C).c_str() : _T("AC3 Files (*.ac3)|*.ac3|All Files (*.*)|*.*||"),
+                config::m_Config.GetString(0x0020701C).c_str(),
                 this);
 
             if (fd.DoModal() == IDOK)
@@ -602,7 +602,7 @@ namespace app
     #define BIF_NEWDIALOGSTYLE 0x0040
     #endif
 
-            auto szTitle = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701D).c_str() : _T("Select default output path:");
+            auto szTitle = config::m_Config.GetString(0x0020701D).c_str();
 
             bi.hwndOwner = this->GetSafeHwnd();
             bi.pidlRoot = pidlDesktop;
@@ -654,15 +654,16 @@ namespace app
         this->bMultipleMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
 
         if (this->bMultipleMonoInput == true)
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200B).c_str() : _T("Output file:"));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200B).c_str());
         else
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200C).c_str());
 
         std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
 
-        if (szBuff.empty() || szBuff == DEFAULT_TEXT_OUTPUT_PATH || szBuff == DEFAULT_TEXT_OUTPUT_FILE)
+        if (szBuff.empty() || szBuff == config::m_Config.GetDefaultTextOutputPath().c_str() || szBuff == config::m_Config.GetDefaultTextOutputFile().c_str())
         {
-            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
+            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? 
+                config::m_Config.GetDefaultTextOutputFile().c_str() : config::m_Config.GetDefaultTextOutputPath().c_str());
         }
         else
         {
@@ -751,9 +752,9 @@ namespace app
         if (this->api.OpenAftenAPI() == false)
         {
             std::wstring szLogMessage =
-                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701E) : L"Failed to load") +
+                config::m_Config.GetString(0x0020701E) +
                 L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
-                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701F): L"library") + L"!";
+                config::m_Config.GetString(0x0020701F) + L"!";
             this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
         }
         else
@@ -767,10 +768,10 @@ namespace app
                 _stprintf(szAftenVersion, _T("?.??"));
 
             std::wstring szLogMessage =
-                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207020) : L"Loaded") +
+                config::m_Config.GetString(0x00207020) +
                 L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
-                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020701F) : L"library") + L", " +
-                (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207021) : L"version") +
+                config::m_Config.GetString(0x0020701F) + L", " +
+                config::m_Config.GetString(0x00207021) +
                 L" " + szAftenVersion;
             this->m_StatusBar.SetText(szLogMessage.c_str(), 0, 0);
         }
@@ -848,14 +849,14 @@ namespace app
                 }
                 else if (ce.szKey == L"OutputPath")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != DEFAULT_TEXT_OUTPUT_PATH)
+                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetDefaultTextOutputPath().c_str())
                     {
                         this->szOutputPath = ce.szValue;
                     }
                 }
                 else if (ce.szKey == L"OutputFile")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != DEFAULT_TEXT_OUTPUT_FILE)
+                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetDefaultTextOutputFile().c_str())
                     {
                         this->szOutputFile = ce.szValue;
                     }
@@ -881,19 +882,19 @@ namespace app
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                         this->bMultipleMonoInput = true;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200B).c_str() : _T("Output file:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200B).c_str());
                     }
                     else if (ce.szValue == L"false")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                         this->bMultipleMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200C).c_str());
                     }
                     else
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                         this->bMultipleMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020200C).c_str() : _T("Output path:"));
+                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200C).c_str());
                     }
                 }
                 else if (ce.szKey == L"DisableAllWarnings")
@@ -936,14 +937,14 @@ namespace app
             if (this->bMultipleMonoInput == true)
             {
                 if (this->szOutputFile.empty())
-                    this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
+                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
                 else
                     this->m_EdtOutPath.SetWindowText(this->szOutputFile.c_str());
             }
             else
             {
                 if (this->szOutputPath.empty())
-                    this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
+                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
                 else
                     this->m_EdtOutPath.SetWindowText(this->szOutputPath.c_str());
             }
@@ -985,14 +986,14 @@ namespace app
         config::CConfigEntry outputPath;
         outputPath.szKey = _T("OutputPath");
         outputPath.szValue = this->szOutputPath;
-        if (outputPath.szValue == DEFAULT_TEXT_OUTPUT_PATH)
+        if (outputPath.szValue == config::m_Config.GetDefaultTextOutputPath().c_str())
             outputPath.szValue = _T("");
         m_ConfigList.Insert(outputPath);
 
         config::CConfigEntry outputFile;
         outputFile.szKey = _T("OutputFile");
         outputFile.szValue = this->szOutputFile;
-        if (outputFile.szValue == DEFAULT_TEXT_OUTPUT_FILE)
+        if (outputFile.szValue == config::m_Config.GetDefaultTextOutputFile().c_str())
             outputFile.szValue = _T("");
         m_ConfigList.Insert(outputFile);
 
@@ -1213,11 +1214,7 @@ namespace app
 
         if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
         {
-            if (config::m_Config.HaveLangStrings())
-                m_StcQualityBitrate.SetWindowText(config::m_Config.GetLangString(0x00202002).c_str());
-            else
-                m_StcQualityBitrate.SetWindowText(_T("Quality:"));
-
+            m_StcQualityBitrate.SetWindowText(config::m_Config.GetString(0x00202002).c_str());
             szBuff.Format(_T("%d"), nCurPos);
 
             auto& preset = GetCurrentPreset();
@@ -1227,13 +1224,9 @@ namespace app
         {
             if ((nCurPos >= 0) && (nCurPos < config::CEncoderDefaults::nNumValidCbrBitrates))
             {
-                if (config::m_Config.HaveLangStrings())
-                    m_StcQualityBitrate.SetWindowText(config::m_Config.GetLangString(0x00202003).c_str());
-                else
-                    m_StcQualityBitrate.SetWindowText(_T("Bitrate:"));
-
+                m_StcQualityBitrate.SetWindowText(config::m_Config.GetString(0x00202003).c_str());
                 if (nCurPos == 0)
-                    szBuff.Format(DEFAULT_TEXT_AUTO);
+                    szBuff = config::m_Config.GetDefaultTextAuto().c_str();
                 else
                     szBuff.Format(_T("%d kbps"), config::CEncoderDefaults::nValidCbrBitrates[nCurPos]);
 
@@ -1325,7 +1318,7 @@ namespace app
 
         if (preset.nThreads == 0)
         {
-            this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
         }
         else
         {
@@ -1339,7 +1332,7 @@ namespace app
 
         if (preset.nRawSampleRate == 0)
         {
-            this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
         }
         else
         {
@@ -1350,7 +1343,7 @@ namespace app
 
         if (preset.nRawChannels == 0)
         {
-            this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
         }
         else
         {
@@ -1452,8 +1445,8 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020702A).c_str() : _T("Error while searching for files!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            MessageBox(config::m_Config.GetString(0x0020702A).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_OK | MB_ICONERROR);
         }
     }
@@ -1548,7 +1541,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(DEFAULT_TEXT_IGNORED) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnRawSampleRate.SetPos(nPos);
@@ -1560,7 +1553,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnRawSampleRate.SetPos(0);
-                this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
+                this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
             }
             else
             {
@@ -1582,7 +1575,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(DEFAULT_TEXT_IGNORED) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnRawChannels.SetPos(nPos);
@@ -1594,7 +1587,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnRawChannels.SetPos(0);
-                this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
+                this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
             }
             else
             {
@@ -1616,7 +1609,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(DEFAULT_TEXT_AUTO) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextAuto().c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnThreads.SetPos(nPos);
@@ -1628,7 +1621,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnThreads.SetPos(0);
-                this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
+                this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
             }
             else
             {
@@ -1655,7 +1648,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtOutPath.GetWindowText(szBuff);
-        if (szBuff.Compare(DEFAULT_TEXT_OUTPUT_PATH) == 0 || szBuff.Compare(DEFAULT_TEXT_OUTPUT_FILE) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextOutputPath().c_str()) == 0 || szBuff.Compare(config::m_Config.GetDefaultTextOutputFile().c_str()) == 0)
             this->m_EdtOutPath.SetWindowText(_T(""));
     }
 
@@ -1663,7 +1656,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtRawSamplerate.GetWindowText(szBuff);
-        if (szBuff.Compare(DEFAULT_TEXT_IGNORED) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
             this->m_EdtRawSamplerate.SetWindowText(_T(""));
     }
 
@@ -1671,7 +1664,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtRawChannels.GetWindowText(szBuff);
-        if (szBuff.Compare(DEFAULT_TEXT_IGNORED) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
             this->m_EdtRawChannels.SetWindowText(_T(""));
     }
 
@@ -1679,7 +1672,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtThreads.GetWindowText(szBuff);
-        if (szBuff.Compare(DEFAULT_TEXT_AUTO) == 0)
+        if (szBuff.Compare(config::m_Config.GetDefaultTextAuto().c_str()) == 0)
             this->m_EdtThreads.SetWindowText(_T(""));
     }
 
@@ -1690,9 +1683,9 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
         {
             if (this->bMultipleMonoInput == true)
-                this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
+                this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
             else
-                this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
+                this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
         }
         else
         {
@@ -1708,7 +1701,7 @@ namespace app
         CString szBuff;
         this->m_EdtRawSamplerate.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
     }
 
     void CMainDlg::OnEnKillfocusEditRawChannels()
@@ -1716,7 +1709,7 @@ namespace app
         CString szBuff;
         this->m_EdtRawChannels.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
     }
 
     void CMainDlg::OnEnKillfocusEditThreads()
@@ -1724,7 +1717,7 @@ namespace app
         CString szBuff;
         this->m_EdtThreads.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
     }
 
     void CMainDlg::InitTitle()
@@ -1736,109 +1729,24 @@ namespace app
 
     void CMainDlg::InitTooltips()
     {
-        CString szTmpText;
+        this->m_SldBitrate.SetTooltipText(config::m_Config.GetString(0x00206001).c_str());
+        this->m_ChkVbr.SetTooltipText(config::m_Config.GetString(0x00206002).c_str());
+        this->m_CmbPresets.SetTooltipText(config::m_Config.GetString(0x00206003).c_str());
 
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206001).c_str() :
-            _T("CBR bitrate in kbps:\n\n")
-            _T("CBR mode is selected by default. This option allows for\n")
-            _T("setting the fixed bitrate. The default bitrate depends\n")
-            _T("on the number of channels (not including LFE).\n")
-            _T("1 = 96 kbps\n")
-            _T("2 = 192 kbps\n")
-            _T("3 = 256 kbps\n")
-            _T("4 = 384 kbps\n")
-            _T("5 = 448 kbps\n")
-            _T("\nVBR quality:\n\n")
-            _T("A value 0 to 1023 which corresponds to SNR offset, where\n")
-            _T("q=240 equates to an SNR offset of 0. 240 is the default\n")
-            _T("value. This scale will most likely be replaced in the\n")
-            _T("future with a better quality measurement.");
+        CString szTmpText = config::m_Config.GetString(0x00206004).c_str();
+        this->m_ChkSimdMMX.SetTooltipText(config::m_Config.GetString(0x00206005).c_str() + szTmpText);
+        this->m_ChkSimdSSE.SetTooltipText(config::m_Config.GetString(0x00206006).c_str() + szTmpText);
+        this->m_ChkSimdSSE2.SetTooltipText(config::m_Config.GetString(0x00206007).c_str() + szTmpText);
 
-        this->m_SldBitrate.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206002).c_str() :
-            _T("Enable VBR mode. If unchecked the CBR mode is used instead.");
-
-        this->m_ChkVbr.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206003).c_str() :
-            _T("Set currently used encoder preset. You can load/save presets from/to file\n")
-            _T("from File menu. All presets are automatically loaded/saved from/to text file.");
-
-        this->m_CmbPresets.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206004).c_str() :
-            _T("Aften will auto-detect available SIMD instruction sets\n")
-            _T("for your CPU, so you shouldn't need to disable sets\n")
-            _T("explicitly - unless for speed or debugging reasons.");
-
-        this->m_ChkSimdMMX.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206005).c_str() + szTmpText :
-            _T("This option enables MMX optimizations (if supported by CPU).\n\n") + szTmpText);
-
-        this->m_ChkSimdSSE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206006).c_str() + szTmpText :
-            _T("This option enables SSE optimizations (if supported by CPU).\n\n") + szTmpText);
-
-        this->m_ChkSimdSSE2.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206007).c_str() + szTmpText :
-            _T("This option enables SSE2 optimizations (if supported by CPU).\n\n") + szTmpText);
-
-        this->m_ChkSimdSSE3.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206008).c_str() + szTmpText :
-            _T("This option enables SSE3 optimizations (if supported by CPU).\n\n") + szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206009).c_str() :
-            _T("Raw audio input sample format specifies the sample format\n")
-            _T("when using raw audio input. Using this option forces Aften to\n")
-            _T("treat the input as raw audio. The choices for the\n")
-            _T("pre-defined sample formats are (default: s16_le):\n")
-            _T("u8, s16_le, s16_be, s20_le, s20_be, s24_le, s24_be,\n")
-            _T("s32_le, s32_be, float_le, float_be, double_le, double_be");
-
-        this->m_CmbRawSampleFormat.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600A).c_str() :
-            _T("Raw audio input sample rate option forces Aften to\n")
-            _T("treat the input as raw audio (default: 48000).");
-
-        this->m_EdtRawSamplerate.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600B).c_str() :
-            _T("Raw audio input channels forces Aften to treat the input as\n")
-            _T("raw audio (default: 2).");
-
-        this->m_EdtRawChannels.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600C).c_str() :
-            _T("Aften can use multiple threads to speed up encoding.\n")
-            _T("By default, Aften uses one thread for each logical CPU\n")
-            _T("your system has, but you can override this value. A\n")
-            _T("value of 0 is the default and indicates that Aften\n")
-            _T("should try to detect the number of CPUs.");
-
-        this->m_EdtThreads.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600D).c_str() :
-            _T("Set currently used Aften library. By selecting optimized Aften\n")
-            _T("library you can speedup the encoding process.");
-
-        this->m_CmbEngines.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600E).c_str() :
-            _T("Set default output path for encoded files. By default files\n")
-            _T("are encoded to the same directory as input files. When using\n")
-            _T("multiple mono input than here is set the output file path.");
-
-        this->m_EdtOutPath.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020600F).c_str() :
-            _T("Enable multiple mono input mode. By adding multiple mono input\n")
-            _T("files to the files list (minimum 2, maximum 6) in correct channel\n")
-            _T("order the mono input files will be encoded into single ac3 file.");
-
-        this->m_ChkMultipleMonoInput.SetTooltipText(szTmpText);
-
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00206010).c_str() :
-            _T("Edit currently available Aften engines.");
-
-        this->m_BtnEngines.SetTooltipText(szTmpText);
+        this->m_ChkSimdSSE3.SetTooltipText(config::m_Config.GetString(0x00206008).c_str() + szTmpText);
+        this->m_CmbRawSampleFormat.SetTooltipText(config::m_Config.GetString(0x00206009).c_str());
+        this->m_EdtRawSamplerate.SetTooltipText(config::m_Config.GetString(0x0020600A).c_str());
+        this->m_EdtRawChannels.SetTooltipText(config::m_Config.GetString(0x0020600B).c_str());
+        this->m_EdtThreads.SetTooltipText(config::m_Config.GetString(0x0020600C).c_str());
+        this->m_CmbEngines.SetTooltipText(config::m_Config.GetString(0x0020600D).c_str());
+        this->m_EdtOutPath.SetTooltipText(config::m_Config.GetString(0x0020600E).c_str());
+        this->m_ChkMultipleMonoInput.SetTooltipText(config::m_Config.GetString(0x0020600F).c_str());
+        this->m_BtnEngines.SetTooltipText(config::m_Config.GetString(0x00206010).c_str());
     }
 
     void CMainDlg::InitSettingsList()
@@ -1883,7 +1791,7 @@ namespace app
         for (int i = 0; i < config::CEncoderPreset::nNumEncoderOptions; i++)
             defaultPreset.nSetting[i] = config::CEncoderDefaults::encOpt[i].nDefaultValue;
 
-        defaultPreset.szName = DEFAULT_PRESET_NAME;
+        defaultPreset.szName = config::m_Config.GetDefaultPresetName();
         defaultPreset.nMode = AFTEN_ENC_MODE_CBR;
         defaultPreset.nBitrate = 0;
         defaultPreset.nQuality = 240;
@@ -1905,7 +1813,7 @@ namespace app
 
         if (defaultPreset.nRawSampleRate == 0)
         {
-            this->m_EdtRawSamplerate.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
         }
         else
         {
@@ -1916,7 +1824,7 @@ namespace app
 
         if (defaultPreset.nRawChannels == 0)
         {
-            this->m_EdtRawChannels.SetWindowText(DEFAULT_TEXT_IGNORED);
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
         }
         else
         {
@@ -1932,7 +1840,7 @@ namespace app
 
         if (defaultPreset.nThreads == 0)
         {
-            this->m_EdtThreads.SetWindowText(DEFAULT_TEXT_AUTO);
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
         }
         else
         {
@@ -1962,7 +1870,7 @@ namespace app
 
     void CMainDlg::InitRawSamleFormatComboBox()
     {
-        config::CEncoderDefaults::szRawSampleFormats[0] = DEFAULT_TEXT_IGNORED;
+        config::CEncoderDefaults::szRawSampleFormats[0] = config::m_Config.GetDefaultTextIgnored().c_str();
 
         this->m_CmbRawSampleFormat.ResetContent();
 
@@ -1982,11 +1890,8 @@ namespace app
 
         for (int i = 0; i < config::CEncoderDefaults::nNumEncoderOptionsGroups; i++)
         {
-            std::wstring szHeader = config::m_Config.HaveLangStrings() ?
-                config::m_Config.GetLangString(0x00208000 + i + 1) :
-                config::CEncoderDefaults::pszGroups[i];
+            std::wstring szHeader = config::m_Config.GetString(0x00208000 + i + 1);
             LPWSTR pszHeader = (LPTSTR)(LPCTSTR)szHeader.c_str();
-
             lg.pszHeader = pszHeader;
             lg.iGroupId = 101 + i;
             ListView_InsertGroup(listView, -1, &lg);
@@ -2066,9 +1971,9 @@ namespace app
             this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
         if (this->bMultipleMonoInput == true)
-            this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_FILE);
+            this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
         else
-            this->m_EdtOutPath.SetWindowText(DEFAULT_TEXT_OUTPUT_PATH);
+            this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
     }
 
     BOOL CMainDlg::OnInitDialog()
@@ -2130,16 +2035,13 @@ namespace app
 
         this->InitSettingsListGroups();
 
-        if (config::m_Config.HaveLangStrings())
-        {
-            if (initLangMenu == true)
-                this->InitLangMenu();
+        if (initLangMenu == true)
+            this->InitLangMenu();
 
-            this->InitLangButtons();
-            this->InitLangStaticText();
-            this->InitLangFilesList();
-            this->InitLangSettingsList();
-        }
+        this->InitLangButtons();
+        this->InitLangStaticText();
+        this->InitLangFilesList();
+        this->InitLangSettingsList();
 
         config::CEncoderDefaults::InitEncoderOptions();
 
@@ -2151,107 +2053,104 @@ namespace app
             this->ApplyPresetToDlg(preset);
         }
 
-        if (config::m_Config.HaveLangStrings())
-        {
-            this->InitLangMainMenu();
-        }
+        this->InitLangMainMenu();
 
         this->InitTooltips();
 
         std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
         if (szBuff.empty() || szBuff.substr(0, 1) == L"<")
-            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? DEFAULT_TEXT_OUTPUT_FILE : DEFAULT_TEXT_OUTPUT_PATH);
+            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? config::m_Config.GetDefaultTextOutputFile().c_str() : config::m_Config.GetDefaultTextOutputPath().c_str());
         else
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile.c_str() : this->szOutputPath.c_str());
     }
 
     void CMainDlg::InitLangButtons()
     {
-        m_BtnEncode.SetWindowTextW(config::m_Config.GetLangString(0x00201001).c_str());
-        m_BtnResetCurrent.SetWindowTextW(config::m_Config.GetLangString(0x00201002).c_str());
-        m_BtnRemove.SetWindowTextW(config::m_Config.GetLangString(0x00201003).c_str());
-        m_BtnAddNew.SetWindowTextW(config::m_Config.GetLangString(0x00201004).c_str());
-        m_BtnAddFiles.SetWindowTextW(config::m_Config.GetLangString(0x00201005).c_str());
-        m_BtnBrowse.SetWindowTextW(config::m_Config.GetLangString(0x00201006).c_str());
-        m_BtnMuxWizard.SetWindowTextW(config::m_Config.GetLangString(0x00201007).c_str());
-        m_BtnEngines.SetWindowTextW(config::m_Config.GetLangString(0x00201008).c_str());
+        m_BtnEncode.SetWindowTextW(config::m_Config.GetString(0x00201001).c_str());
+        m_BtnResetCurrent.SetWindowTextW(config::m_Config.GetString(0x00201002).c_str());
+        m_BtnRemove.SetWindowTextW(config::m_Config.GetString(0x00201003).c_str());
+        m_BtnAddNew.SetWindowTextW(config::m_Config.GetString(0x00201004).c_str());
+        m_BtnAddFiles.SetWindowTextW(config::m_Config.GetString(0x00201005).c_str());
+        m_BtnBrowse.SetWindowTextW(config::m_Config.GetString(0x00201006).c_str());
+        m_BtnMuxWizard.SetWindowTextW(config::m_Config.GetString(0x00201007).c_str());
+        m_BtnEngines.SetWindowTextW(config::m_Config.GetString(0x00201008).c_str());
     }
 
     void CMainDlg::InitLangStaticText()
     {
-        this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(config::m_Config.GetLangString(0x00202001).c_str());
+        this->GetDlgItem(IDC_STATIC_PRESET)->SetWindowTextW(config::m_Config.GetString(0x00202001).c_str());
 
         if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
-            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetLangString(0x00202002).c_str());
+            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetString(0x00202002).c_str());
         else
-            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetLangString(0x00202003).c_str());
+            this->GetDlgItem(IDC_STATIC_QUALITY)->SetWindowTextW(config::m_Config.GetString(0x00202003).c_str());
 
-        this->GetDlgItem(IDC_STATIC_OPTION_VALUE)->SetWindowTextW(config::m_Config.GetLangString(0x00202004).c_str());
-        this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->SetWindowTextW(config::m_Config.GetLangString(0x00202005).c_str());
-        this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->SetWindowTextW(config::m_Config.GetLangString(0x00202006).c_str());
-        this->GetDlgItem(IDC_STATIC_CHANNELS)->SetWindowTextW(config::m_Config.GetLangString(0x00202007).c_str());
-        this->GetDlgItem(IDC_STATIC_ENGINE)->SetWindowTextW(config::m_Config.GetLangString(0x00202008).c_str());
-        this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(config::m_Config.GetLangString(0x00202009).c_str());
-        this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(config::m_Config.GetLangString(0x0020200A).c_str());
+        this->GetDlgItem(IDC_STATIC_OPTION_VALUE)->SetWindowTextW(config::m_Config.GetString(0x00202004).c_str());
+        this->GetDlgItem(IDC_STATIC_SAMPLE_FORMAT)->SetWindowTextW(config::m_Config.GetString(0x00202005).c_str());
+        this->GetDlgItem(IDC_STATIC_SAMPLE_RATE)->SetWindowTextW(config::m_Config.GetString(0x00202006).c_str());
+        this->GetDlgItem(IDC_STATIC_CHANNELS)->SetWindowTextW(config::m_Config.GetString(0x00202007).c_str());
+        this->GetDlgItem(IDC_STATIC_ENGINE)->SetWindowTextW(config::m_Config.GetString(0x00202008).c_str());
+        this->GetDlgItem(IDC_STATIC_THREADS)->SetWindowTextW(config::m_Config.GetString(0x00202009).c_str());
+        this->GetDlgItem(IDC_CHECK_MULTIPLE_MONO_INPUT)->SetWindowTextW(config::m_Config.GetString(0x0020200A).c_str());
 
         if (this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED)
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetLangString(0x0020200B).c_str());
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200B).c_str());
         else
-            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetLangString(0x0020200C).c_str());
+            this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200C).c_str());
     }
 
     void CMainDlg::InitLangFilesList()
     {
-        SetListCtrlColumnText(this->m_LstFiles, 0, config::m_Config.GetLangString(0x00203001));
-        SetListCtrlColumnText(this->m_LstFiles, 1, config::m_Config.GetLangString(0x00203002));
+        SetListCtrlColumnText(this->m_LstFiles, 0, config::m_Config.GetString(0x00203001));
+        SetListCtrlColumnText(this->m_LstFiles, 1, config::m_Config.GetString(0x00203002));
     }
 
     void CMainDlg::InitLangFilesListContextMenu(CMenu &m_hMenu)
     {
-        m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetLangString(0x00204001).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, config::m_Config.GetLangString(0x00204002).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_ADDDIRECTORY, 0, ID_LIST_ADDDIRECTORY, config::m_Config.GetLangString(0x00204003).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_MUXWIZARD, 0, ID_LIST_MUXWIZARD, config::m_Config.GetLangString(0x00204004).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_LOADLIST, 0, ID_LIST_LOADLIST, config::m_Config.GetLangString(0x00204005).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_SAVELIST, 0, ID_LIST_SAVELIST, config::m_Config.GetLangString(0x00204006).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_MOVEUP, 0, ID_LIST_MOVEUP, config::m_Config.GetLangString(0x00204007).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_MOVEDOWN, 0, ID_LIST_MOVEDOWN, config::m_Config.GetLangString(0x00204008).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_DELFILES, 0, ID_LIST_DELFILES, config::m_Config.GetLangString(0x00204009).c_str());
-        m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, config::m_Config.GetLangString(0x0020400A).c_str());
+        m_hMenu.ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetString(0x00204001).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_ADDFILES, 0, ID_LIST_ADDFILES, config::m_Config.GetString(0x00204002).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_ADDDIRECTORY, 0, ID_LIST_ADDDIRECTORY, config::m_Config.GetString(0x00204003).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MUXWIZARD, 0, ID_LIST_MUXWIZARD, config::m_Config.GetString(0x00204004).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_LOADLIST, 0, ID_LIST_LOADLIST, config::m_Config.GetString(0x00204005).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_SAVELIST, 0, ID_LIST_SAVELIST, config::m_Config.GetString(0x00204006).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MOVEUP, 0, ID_LIST_MOVEUP, config::m_Config.GetString(0x00204007).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_MOVEDOWN, 0, ID_LIST_MOVEDOWN, config::m_Config.GetString(0x00204008).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_DELFILES, 0, ID_LIST_DELFILES, config::m_Config.GetString(0x00204009).c_str());
+        m_hMenu.ModifyMenuW(ID_LIST_CLEARLIST, 0, ID_LIST_CLEARLIST, config::m_Config.GetString(0x0020400A).c_str());
     }
 
     void CMainDlg::InitLangSettingsList()
     {
-        SetListCtrlColumnText(this->m_LstSettings, 0, config::m_Config.GetLangString(0x00205001));
-        SetListCtrlColumnText(this->m_LstSettings, 1, config::m_Config.GetLangString(0x00205002));
+        SetListCtrlColumnText(this->m_LstSettings, 0, config::m_Config.GetString(0x00205001));
+        SetListCtrlColumnText(this->m_LstSettings, 1, config::m_Config.GetString(0x00205002));
     }
 
     void CMainDlg::InitLangMainMenu()
     {
         CMenu *m_hMenu = this->GetMenu();
 
-        m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetLangString(0x00101001).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, config::m_Config.GetLangString(0x00101002).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, config::m_Config.GetLangString(0x00101003).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_MUXWIZARD, 0, ID_FILE_MUXWIZARD, config::m_Config.GetLangString(0x00101004).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_LOADFILESLIST, 0, ID_FILE_LOADFILESLIST, config::m_Config.GetLangString(0x00101005).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_SAVEFILESLIST, 0, ID_FILE_SAVEFILESLIST, config::m_Config.GetLangString(0x00101006).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_LOADPRESETS, 0, ID_FILE_LOADPRESETS, config::m_Config.GetLangString(0x00101007).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, config::m_Config.GetLangString(0x00101008).c_str());
-        m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, config::m_Config.GetLangString(0x00101009).c_str());
+        m_hMenu->ModifyMenuW(0, MF_STRING | MF_BYPOSITION, 0, config::m_Config.GetString(0x00101001).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_ADDFILES, 0, ID_FILE_ADDFILES, config::m_Config.GetString(0x00101002).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_ADDDIRECTORY, 0, ID_FILE_ADDDIRECTORY, config::m_Config.GetString(0x00101003).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_MUXWIZARD, 0, ID_FILE_MUXWIZARD, config::m_Config.GetString(0x00101004).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_LOADFILESLIST, 0, ID_FILE_LOADFILESLIST, config::m_Config.GetString(0x00101005).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_SAVEFILESLIST, 0, ID_FILE_SAVEFILESLIST, config::m_Config.GetString(0x00101006).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_LOADPRESETS, 0, ID_FILE_LOADPRESETS, config::m_Config.GetString(0x00101007).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_SAVEPRESETS, 0, ID_FILE_SAVEPRESETS, config::m_Config.GetString(0x00101008).c_str());
+        m_hMenu->ModifyMenuW(ID_FILE_EXIT, 0, ID_FILE_EXIT, config::m_Config.GetString(0x00101009).c_str());
 
-        m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, config::m_Config.GetLangString(0x00102001).c_str());
-        m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, config::m_Config.GetLangString(0x00102002).c_str());
-        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, config::m_Config.GetLangString(0x00102003).c_str());
-        m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, config::m_Config.GetLangString(0x00102004).c_str());
-        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, config::m_Config.GetLangString(0x00102005).c_str());
+        m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, config::m_Config.GetString(0x00102001).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, config::m_Config.GetString(0x00102002).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, config::m_Config.GetString(0x00102003).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, config::m_Config.GetString(0x00102004).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, config::m_Config.GetString(0x00102005).c_str());
 
-        m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, config::m_Config.GetLangString(0x00103001).c_str());
-        m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, config::m_Config.GetLangString(0x00103002).c_str());
+        m_hMenu->ModifyMenuW(2, MF_STRING | MF_BYPOSITION, 2, config::m_Config.GetString(0x00103001).c_str());
+        m_hMenu->ModifyMenuW(ID_LANGUAGE_DEFAULT, 0, ID_LANGUAGE_DEFAULT, config::m_Config.GetString(0x00103002).c_str());
 
-        m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, config::m_Config.GetLangString(0x00104001).c_str());
-        m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, config::m_Config.GetLangString(0x00104002).c_str());
-        m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, config::m_Config.GetLangString(0x00104003).c_str());
+        m_hMenu->ModifyMenuW(3, MF_STRING | MF_BYPOSITION, 3, config::m_Config.GetString(0x00104001).c_str());
+        m_hMenu->ModifyMenuW(ID_HELP_WEBSITE, 0, ID_HELP_WEBSITE, config::m_Config.GetString(0x00104002).c_str());
+        m_hMenu->ModifyMenuW(ID_HELP_ABOUT, 0, ID_HELP_ABOUT, config::m_Config.GetString(0x00104003).c_str());
 
         m_hMenu->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
             this->bDisableAllWarnings ? MF_CHECKED : MF_UNCHECKED);
@@ -2581,8 +2480,7 @@ namespace app
         CMenu *m_hSubMenu = m_hMenu.GetSubMenu(0);
         ::SetForegroundWindow(this->GetSafeHwnd());
 
-        if (config::m_Config.HaveLangStrings())
-            InitLangFilesListContextMenu(m_hMenu);
+        InitLangFilesListContextMenu(m_hMenu);
 
         m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, nullptr);
 
@@ -2625,8 +2523,8 @@ namespace app
         if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
         {
             OutputDebugString(_T("Error: Failed to initialize Avisynth!"));
-            this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207022).c_str() : _T("Failed to initialize Avisynth"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207010).c_str() : _T("Error"),
+            this->MessageBox(config::m_Config.GetString(0x00207022).c_str(),
+                config::m_Config.GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
 
             return false;
@@ -2655,9 +2553,7 @@ namespace app
                 {
                     std::wstring szInfo;
 
-                    szInfo +=
-                        (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207023) : _T("Sample format")) +
-                        _T("\t: ");
+                    szInfo += config::m_Config.GetString(0x00207023) + _T("\t: ");
 
                     switch (infoAVS.nSampleType)
                     {
@@ -2677,36 +2573,26 @@ namespace app
                         szInfo += _T("SAMPLE_FLOAT\n");
                         break;
                     default:
-                        szInfo +=
-                            (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207024) : _T("unknown")) +
-                            _T("\n");
+                        szInfo += config::m_Config.GetString(0x00207024) + _T("\n");
                         break;
                     }
 
                     CString szBuff;
 
-                    szBuff.Format(_T("%s\t: %d\n"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207025) : _T("Sample rate"),
-                        infoAVS.nSamplesPerSecond);
+                    szBuff.Format(_T("%s\t: %d\n"), config::m_Config.GetString(0x00207025), infoAVS.nSamplesPerSecond);
                     szInfo += szBuff;
 
-                    szBuff.Format(_T("%s\t: %d\n"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207026) : _T("Channels"),
-                        infoAVS.nAudioChannels);
+                    szBuff.Format(_T("%s\t: %d\n"), config::m_Config.GetString(0x00207026), infoAVS.nAudioChannels);
                     szInfo += szBuff;
 
-                    szBuff.Format(_T("%s\t: %I64d\n"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207027) : _T("Audio samples"),
-                        infoAVS.nAudioSamples);
+                    szBuff.Format(_T("%s\t: %I64d\n"), config::m_Config.GetString(0x00207027), infoAVS.nAudioSamples);
                     szInfo += szBuff;
 
-                    szBuff.Format(_T("%s\t: %I64d"),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207028) : _T("Decoded size"),
-                        infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
+                    szBuff.Format(_T("%s\t: %I64d"), config::m_Config.GetString(0x00207028), infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
                     szInfo += szBuff;
 
                     this->MessageBox(szInfo.c_str(),
-                        config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207029).c_str() : _T("AVS File Properties"),
+                        config::m_Config.GetString(0x00207029).c_str(),
                         MB_ICONINFORMATION | MB_OK);
                 }
             }
@@ -2725,8 +2611,8 @@ namespace app
             if (pFiles == nullptr)
             {
                 MessageBox(
-                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207009).c_str() : _T("Failed to allocate memory for filenames buffer!"),
-                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700A).c_str() : _T("Fatal Error"),
+                    config::m_Config.GetString(0x00207009).c_str(),
+                    config::m_Config.GetString(0x0020700A).c_str(),
                     MB_OK | MB_ICONERROR);
                 return;
             }
@@ -2798,7 +2684,7 @@ namespace app
     #define BIF_NEWDIALOGSTYLE 0x0040
     #endif
 
-        auto szTitle = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700B).c_str() : _T("Add directory with supported input files:");
+        auto szTitle = config::m_Config.GetString(0x0020700B).c_str();
 
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
@@ -2874,10 +2760,8 @@ namespace app
             if (this->bDisableAllWarnings == false)
             {
                 nRet = this->MessageBox(
-                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700C).c_str() :
-                    _T("Remove all files from list and add files selected in MUX Wizard?\n\n")
-                    _T("Note: The channel configuration for current preset will be adjusted."),
-                    config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700D).c_str() : _T("MUX Wizard"),
+                    config::m_Config.GetString(0x0020700C).c_str(),
+                    config::m_Config.GetString(0x0020700D).c_str(),
                     MB_YESNO | MB_ICONQUESTION);
             }
 
@@ -3018,7 +2902,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700E).c_str() : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            config::m_Config.GetString(0x0020700E).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -3034,7 +2918,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700E).c_str() : _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            config::m_Config.GetString(0x0020700E).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -3057,7 +2941,7 @@ namespace app
             _T("presets"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700F).c_str() : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
+            config::m_Config.GetString(0x0020700F).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -3088,7 +2972,7 @@ namespace app
             _T("presets"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0020700F).c_str() : _T("Preconfigured Presets (*.presets)|*.presets|All Files (*.*)|*.*||"),
+            config::m_Config.GetString(0x0020700F).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)

@@ -76,7 +76,15 @@ namespace app
         }
 
         config::m_Config.LoadLangConfig(config::m_Config.m_szLangFilePath);
-        config::m_Config.LoadLangStrings();
+
+        if (config::m_Config.m_bIsPortable == true)
+        {
+            config::m_Config.LoadLangStrings(util::Utilities::GetExeFilePath() + L"lang");
+        }
+        else
+        {
+            config::m_Config.LoadLangStrings(util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
+        }
     }
 
     void CEncWAVtoAC3App::SaveConfig()
