@@ -93,6 +93,9 @@
     <ClInclude Include="..\avs\src\Avs2Raw.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
+    <ClInclude Include="configuration\Strings.h">
+      <Filter>Header Files\Configuration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
