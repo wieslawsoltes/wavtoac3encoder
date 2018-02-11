@@ -190,8 +190,8 @@ namespace config
         catch (...)
         {
             MessageBox(nullptr,
-                HaveLangStrings() ? GetLangString(0x0020702A).c_str() : _T("Error while searching for files!"),
-                HaveLangStrings() ? GetLangString(0x00207010).c_str() : _T("Error"),
+                GetString(0x0020702A).c_str(),
+                GetString(0x00207010).c_str(),
                 MB_OK | MB_ICONERROR);
         }
     }
@@ -283,18 +283,8 @@ namespace config
         }
     }
 
-    void CConfiguration::LoadLangStrings()
+    void CConfiguration::LoadLangStrings(std::wstring szLangPath)
     {
-        std::wstring szLangPath;
-        if (m_bIsPortable == true)
-        {
-            szLangPath = util::Utilities::GetExeFilePath() + L"lang";
-        }
-        else
-        {
-            szLangPath = util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang");
-        }
-
         SearchFolderForLang(szLangPath, false, m_LangLst);
 
         if (m_LangLst.Count() > 0)
@@ -331,19 +321,18 @@ namespace config
         }
     }
 
-    BOOL CConfiguration::HaveLangStrings()
+    std::wstring CConfiguration::GetString(const int nKey)
     {
-        return m_bHaveLang;
-    }
-
-    std::wstring CConfiguration::GetLangString(int id)
-    {
-        std::wstring szValue = L"";
         if (m_Lang != nullptr)
         {
-            m_Lang->TryGet(id, szValue);
+            if (m_Lang->m_Map.count(nKey) == 1)
+                return (*m_Lang).m_Map[nKey];
         }
-        return szValue;
+
+        if (m_Strings.count(nKey) == 1)
+            return m_Strings.at(nKey);
+
+        return L"??";
     }
 
     int CEncoderDefaults::nValidCbrBitrates[nNumValidCbrBitrates] {
@@ -370,7 +359,7 @@ namespace config
     };
 
     std::wstring CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
-        DEFAULT_TEXT_IGNORED,
+        config::m_Config.GetDefaultTextIgnored().c_str(),
         L"u8",
         L"s8",
         L"s16_le",
@@ -461,116 +450,80 @@ namespace config
 
         ResetEncoderOptionsLists();
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00301001) : _T("Fast bit allocation"),
+        SetEncoderOption(config::m_Config.GetString(0x00301001),
             _T("-fba"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00301002) :
-            _T("Fast bit allocation is a less-accurate search method\n")
-            _T("for CBR bit allocation. It only narrows down the SNR\n")
-            _T("value to within 16 of the optimal value. The result\n")
-            _T("is lower overall quality, but faster encoding. This\n")
-            _T("may not give the same results each time when using\n")
-            _T("parallel encoding."),
+            config::m_Config.GetString(0x00301002),
             0,
             -1,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208001) : _T("Encoding options"),
+            config::m_Config.GetString(0x00208001),
             true);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00301003) : _T("More accurate encoding (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00301004) : _T("Faster encoding"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00301003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00301004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00302001) : _T("Exponent strategy search size"),
+        SetEncoderOption(config::m_Config.GetString(0x00302001),
             _T("-exps"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00302002) :
-            _T("The encoder determines the best combination of\n")
-            _T("exponent strategies for a frame by searching through\n")
-            _T("a list of pre-defined exponent strategies. This option\n")
-            _T("controls the size of the list to be searched. The\n")
-            _T("value can range from 1 (lower quality but faster) to\n")
-            _T("32 (higher quality but slower). The default value is 8."),
+            config::m_Config.GetString(0x00302002),
             7,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00302003) : _T("1 (lower quality but faster)"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00302003), 1);
 
         for (int i = 2; i <= 7; i++)
         {
             AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00302004) : _T("8 (default)"), 8);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00302004), 8);
 
         for (int i = 9; i <= 31; i++)
         {
             AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00302005) : _T("32 (higher quality but slower)"), 32);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00302005), 32);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00303001) : _T("Start-of-stream padding"),
+        SetEncoderOption(config::m_Config.GetString(0x00303001),
             _T("-pad"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00303002) :
-            _T("The AC-3 format uses an overlap/add cycle for encoding\n")
-            _T("each block. By default, Aften pads the delay buffer\n")
-            _T("with a block of silence to avoid inaccurate encoding\n")
-            _T("of the first frame of audio. If this behavior is not\n")
-            _T("wanted, it can be disabled. The pad value can be a\n")
-            _T("1 (default) to use padding or 0 to not use padding."),
+            config::m_Config.GetString(0x00303002),
             1,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00303003) : _T("No padding"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00303004) : _T("256 samples of padding (default)"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00303003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00303004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304001) : _T("Bandwidth"),
+        SetEncoderOption(config::m_Config.GetString(0x00304001),
             _T("-w"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304002) :
-            _T("The bandwidth setting corresponds to the high-frequency\n")
-            _T("cutoff. Specifically, it sets the highest frequency bin\n")
-            _T("which is encoded. The AC-3 format uses a 512-point MDCT\n")
-            _T("which gives 256 frequency levels from 0 to 1/2 of the\n")
-            _T("samplerate. The formula to give the number of coded\n")
-            _T("frequency bins from bandwidth setting is:\n")
-            _T("(w * 3) + 73, which gives a range of 73 to 253\n")
-            _T("There are 2 special values, -1 and -2.\n")
-            _T("When -1 is used, Aften automatically selects what\n")
-            _T("it thinks is an appropriate bandwidth. This is the\n")
-            _T("default setting.\n")
-            _T("When -2 is used, a bandwidth is chosen for each frame\n")
-            _T("based on CBR frame size and a target quality of 240.\n")
-            _T("Variable bandwidth cannot be used with VBR mode."),
+            config::m_Config.GetString(0x00304002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304003) : _T("Fixed adaptive bandwidth (default)"), -1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304004) : _T("Variable adaptive bandwidth"), -2);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304005) : _T("0 (28% of full bandwidth)"), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00304003), -1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00304004), -2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00304005), 0);
 
         for (int i = 1; i <= 59; i++)
         {
             AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00304006) : _T("60 (99% of full bandwidth)"), 60);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00304006), 60);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00305001) : _T("Minimum bandwidth"),
+        SetEncoderOption(config::m_Config.GetString(0x00305001),
             _T("-wmin"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00305002) :
-            _T("For variable bandwidth mode (-2), this option sets the\n")
-            _T("minimum value for the bandwidth code. This allows the\n")
-            _T("user to avoid a harsh cutoff frequency by sacrificing\n")
-            _T("general audio quality. The default value is 0."),
+            config::m_Config.GetString(0x00305002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00305003) : _T("0 (default)"), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00305003), 0);
 
         for (int i = 1; i <= 59; i++)
         {
@@ -579,13 +532,9 @@ namespace config
 
         AddEncoderOptionValue(_T("60"), 60);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00306001) : _T("Maximum bandwidth"),
+        SetEncoderOption(config::m_Config.GetString(0x00306001),
             _T("-wmax"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00306002) :
-            _T("For variable bandwidth mode (-2), this option sets the\n")
-            _T("maximum value for the bandwidth code. This can be used\n")
-            _T("to speed up encoding by using a lower value than 60,\n")
-            _T("which is the default."),
+            config::m_Config.GetString(0x00306002),
             60,
             -1,
             _T(""),
@@ -598,119 +547,72 @@ namespace config
             AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00306003) : _T("60 (default)"), 60);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00306003), 60);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00307001) : _T("Stereo rematrixing"),
+        SetEncoderOption(config::m_Config.GetString(0x00307001),
             _T("-m"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00307002) :
-            _T("Using stereo rematrixing can increase quality by\n")
-            _T("removing redundant information between the left and\n")
-            _T("right channels. This technique is common in audio\n")
-            _T("encoding, and is sometimes called mid/side encoding.\n")
-            _T("When this setting is turned on, Aften adaptively turns\n")
-            _T("rematrixing on or off for each of 4 frequency bands for\n")
-            _T("each block. When this setting is turned off,\n")
-            _T("rematrixing is not used for any blocks. The default\n")
-            _T("value is 1."),
+            config::m_Config.GetString(0x00307002),
             1,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00307003) : _T("Independent L+R channels"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00307004) : _T("Mid/side rematrixing (default)"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00307003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00307004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00308001) : _T("Block switching"),
+        SetEncoderOption(config::m_Config.GetString(0x00308001),
             _T("-s"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00308002) :
-            _T("The AC-3 format allows for 2 different types of MDCT\n")
-            _T("transformations to translate from time-domain to\n")
-            _T("frequency-domain. The default is a 512-point transform,\n")
-            _T("which gives better frequency resolution. There is also\n")
-            _T("a 256-point transform, which gives better time\n")
-            _T("resolution. The specification gives a suggested method\n")
-            _T("for determining when to use the 256-point transform.\n")
-            _T("When block switching is turned on, Aften uses the spec\n")
-            _T("method for selecting the 256-point MDCT. When it is\n")
-            _T("turned off, only the 512-point MDCT is used, which is\n")
-            _T("faster. Block switching is turned off by default."),
+            config::m_Config.GetString(0x00308002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00308003) : _T("Use only 512-point MDCT (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00308004) : _T("Selectively use 256-point MDCT"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00308003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00308004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00401001) : _T("Center mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00401001),
             _T("-cmix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00401002) :
-            _T("When three front channels are in use, this code\n")
-            _T("indicates the nominal down mix level of the center\n")
-            _T("channel with respect to the left and right channels.\n")
-            _T("0 = -3.0 dB (default)\n")
-            _T("1 = -4.5 dB\n")
-            _T("2 = -6.0 dB"),
+            config::m_Config.GetString(0x00401002),
             0,
             -1,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208002) : _T("Bitstream info metadata"),
+            config::m_Config.GetString(0x00208002),
             true);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00401003) : _T("-3.0 dB (default)"), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00401003), 0);
         AddEncoderOptionValue(_T("-4.5 dB"), 1);
         AddEncoderOptionValue(_T("-6.0 dB"), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00402001) : _T("Surround mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00402001),
             _T("-smix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00402002) :
-            _T("If surround channels are in use, this code indicates\n")
-            _T("the nominal down mix level of the surround channels.\n")
-            _T("0 = -3 dB (default)\n")
-            _T("1 = -6 dB\n")
-            _T("2 = 0"),
+            config::m_Config.GetString(0x00402002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00402003) : _T("-3 dB (default)"), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00402003), 0);
         AddEncoderOptionValue(_T("-6 dB"), 1);
         AddEncoderOptionValue(_T("0"), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00403001) : _T("Dolby Surround mode"),
+        SetEncoderOption(config::m_Config.GetString(0x00403001) ,
             _T("-dsur"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00403002) :
-            _T("When operating in the two channel mode, this code\n")
-            _T("indicates whether or not the program has been encoded in\n")
-            _T("Dolby Surround. This information is not used by the\n")
-            _T("AC-3 decoder, but may be used by other portions of the\n")
-            _T("audio reproduction equipment.\n")
-            _T("0 = not indicated (default)\n")
-            _T("1 = not Dolby surround encoded\n")
-            _T("2 = Dolby surround encoded"),
+            config::m_Config.GetString(0x00403002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00403003) : _T("Not indicated (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00403004) : _T("Not Dolby surround encoded"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00403005) : _T("Dolby surround encoded"), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00403003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00403004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00403005), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00501001) : _T("Dialog normalization"),
+        SetEncoderOption(config::m_Config.GetString(0x00501001),
             _T("-dnorm"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00501002) :
-            _T("The dialog normalization value sets the average dialog\n")
-            _T("level. The value is typically constant for a particular\n")
-            _T("audio program. The decoder has a target output dialog\n")
-            _T("level of -31dB, so if the dialog level is specified as\n")
-            _T("being -31dB already (default), the output volume is not\n")
-            _T("altered. Otherwise, the overall output volume is\n")
-            _T("decreased so that the dialog level is adjusted down to\n")
-            _T("-31dB."),
+            config::m_Config.GetString(0x00501002),
             31,
             -1,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208003) : _T("Dynamic range compression and dialog normalization"),
+            config::m_Config.GetString(0x00208003),
             true);
 
         for (int i = 0; i <= 30; i++)
@@ -718,54 +620,29 @@ namespace config
             AddEncoderOptionValue(std::to_wstring(i), i);
         }
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00501003) : _T("31 (default)"), 31);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00501003), 31);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502001) : _T("Dynamic Range Compression profile"),
+        SetEncoderOption(config::m_Config.GetString(0x00502001),
             _T("-dynrng"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502002) :
-            _T("Dynamic Range Compression allows for the final output\n")
-            _T("dynamic range to be limited without sacrificing quality.\n")
-            _T("The full dynamic range audio is still encoded, but a\n")
-            _T("code is given for each block which tells the decoder to\n")
-            _T("adjust the output volume for that block. The encoder\n")
-            _T("must analyze the input audio to determine the best way\n")
-            _T("to compress the dynamic range based on the loudness and\n")
-            _T("type of input (film, music, speech).\n")
-            _T("0 = Film Light\n")
-            _T("1 = Film Standard\n")
-            _T("2 = Music Light\n")
-            _T("3 = Music Standard\n")
-            _T("4 = Speech\n")
-            _T("5 = None (default)"),
+            config::m_Config.GetString(0x00502002),
             5,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502003) : _T("Film Light"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502004) : _T("Film Standard"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502005) : _T("Music Light"), 2);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502006) : _T("Music Standard"), 3);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502007) : _T("Speech"), 4);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00502008) : _T("None (default)"), 5);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502005), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502006), 3);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502007), 4);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00502008), 5);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00601001) : _T("Audio coding mode (overrides wav header)"),
+        SetEncoderOption(config::m_Config.GetString(0x00601001),
             _T("-acmod"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00601002) :
-            _T("The acmod and lfe options allow the user to explicitly select the\n")
-            _T("desired channel layout. This only controls the interpretation\n")
-            _T("of the input, so no downmixing or upmixing is done.\n")
-            _T("0 = 1+1 (Ch1,Ch2)\n")
-            _T("1 = 1/0 (C)\n")
-            _T("2 = 2/0 (L,R)\n")
-            _T("3 = 3/0 (L,R,C)\n")
-            _T("4 = 2/1 (L,R,S)\n")
-            _T("5 = 3/1 (L,R,C,S)\n")
-            _T("6 = 2/2 (L,R,SL,SR)\n")
-            _T("7 = 3/2 (L,R,C,SL,SR)"),
+            config::m_Config.GetString(0x00601002),
             8,
             8,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208004) : _T("Input options"),
+            config::m_Config.GetString(0x00208004),
             true);
 
         AddEncoderOptionValue(_T("1+1 (Ch1,Ch2)"), 0);
@@ -776,40 +653,23 @@ namespace config
         AddEncoderOptionValue(_T("3/1 (L,R,C,S)"), 5);
         AddEncoderOptionValue(_T("2/2 (L,R,SL,SR)"), 6);
         AddEncoderOptionValue(_T("3/2 (L,R,C,SL,SR)"), 7);
-        AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
+        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00602001) : _T("Specify use of LFE channel (overrides wav header)"),
+        SetEncoderOption(config::m_Config.GetString(0x00602001),
             _T("-lfe"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00602002) :
-            _T("The acmod and lfe options allow the user to explicitly select the\n")
-            _T("desired channel layout. This only controls the interpretation\n")
-            _T("of the input, so no downmixing or upmixing is done.\n")
-            _T("0 = LFE channel is not present\n")
-            _T("1 = LFE channel is present"),
+            config::m_Config.GetString(0x00602002),
             2,
             2,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00602003) : _T("LFE channel is not present"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00602004) : _T("LFE channel is present"), 1);
-        AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00602003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00602004), 1);
+        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00603001) : _T("Specify channel configuration (overrides wav header)"),
+        SetEncoderOption(config::m_Config.GetString(0x00603001),
             _T("-chconfig"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00603002) :
-            _T("The chconfig option allow the user to explicitly select the\n")
-            _T("desired channel layout. This only controls the interpretation\n")
-            _T("of the input, so no downmixing or upmixing is done.\n")
-            _T("1+1 = (Ch1,Ch2)\n")
-            _T("1/0 = (C)\n")
-            _T("2/0 = (L,R)\n")
-            _T("3/0 = (L,R,C)\n")
-            _T("2/1 = (L,R,S)\n")
-            _T("3/1 = (L,R,C,S)\n")
-            _T("2/2 = (L,R,SL,SR)\n")
-            _T("3/2 = (L,R,C,SL,SR)\n")
-            _T("Adding +LFE indicates use of the LFE channel"),
+            config::m_Config.GetString(0x00603002),
             16,
             16,
             _T(""),
@@ -831,146 +691,91 @@ namespace config
         AddEncoderOptionValue(_T("3/1+LFE = (L,R,C,S) + LFE"), 13);
         AddEncoderOptionValue(_T("2/2+LFE = (L,R,SL,SR) + LFE"), 14);
         AddEncoderOptionValue(_T("3/2+LFE = (L,R,C,SL,SR) + LFE"), 15);
-        AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
+        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00604001) : _T("Channel mapping order of input audio"),
+        SetEncoderOption(config::m_Config.GetString(0x00604001),
             _T("-chmap"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00604002) :
-            _T("Some programs create WAVE files which use a channel\n")
-            _T("mapping other than the standard WAVE mapping. This\n")
-            _T("option allows the user to specify if the input file\n")
-            _T("uses WAVE, AC-3, or MPEG channel mapping. The MPEG\n")
-            _T("channel mapping is used by DTS and by MPEG-2/4 formats\n")
-            _T("such as MP2 and AAC.\n")
-            _T("0 = WAVE mapping (default)\n")
-            _T("1 = AC-3 mapping\n")
-            _T("2 = MPEG mapping"),
+            config::m_Config.GetString(0x00604002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00604003) : _T("WAV mapping (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00604004) : _T("AC-3 mapping"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00604005) : _T("MPEG mapping"), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00604003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00604004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00604005), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00605001) : _T("Read input WAVE audio data until the end-of-file"),
+        SetEncoderOption(config::m_Config.GetString(0x00605001),
             _T("-readtoeof"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00605002) :
-            _T("This overrides the data size in the WAVE header, and\n")
-            _T("can be useful for streaming input or files larger than\n")
-            _T("4 GB.\n")
-            _T("0 = use data size in header (default)\n")
-            _T("1 = read data until end-of-file"),
+            config::m_Config.GetString(0x00605002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00605003) : _T("Use data size in header (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00605004) : _T("Read data until end-of-file"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00605003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00605004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00701001) : _T("Specify use of the bandwidth low-pass filter"),
+        SetEncoderOption(config::m_Config.GetString(0x00701001),
             _T("-bwfilter"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00701002) :
-            _T("The bandwidth low-pass filter pre-filters the input\n")
-            _T("audio before converting to frequency-domain. This\n")
-            _T("smooths the cutoff frequency transition for slightly\n")
-            _T("better quality.\n")
-            _T("0 = do not apply filter (default)\n")
-            _T("1 = apply filter"),
+            config::m_Config.GetString(0x00701002),
             0,
             -1,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208005) : _T("Input filters"),
+            config::m_Config.GetString(0x00208005),
             true);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00701003) : _T("Do not apply filter (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00701004) : _T("Apply filter"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00701003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00701004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00702001) : _T("Specify use of the DC high-pass filter"),
+        SetEncoderOption(config::m_Config.GetString(0x00702001),
             _T("-dcfilter"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00702002) :
-            _T("The DC high-pass filter is listed as optional by the\n")
-            _T("AC-3 specification. The implementation, as suggested,\n")
-            _T("is a single pole filter at 3 Hz.\n")
-            _T("0 = do not apply filter (default)\n")
-            _T("1 = apply filter"),
+            config::m_Config.GetString(0x00702002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00702003) : _T("Do not apply filter (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00702004) : _T("Apply filter"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00702003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00702004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00703001) : _T("Specify use of the LFE low-pass filter"),
+        SetEncoderOption(config::m_Config.GetString(0x00703001),
             _T("-lfefilter"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00703002) :
-            _T("The LFE low-pass filter is recommended by the AC-3\n")
-            _T("specification. The cutoff is 120 Hz. The specification\n")
-            _T("recommends an 8th order elliptic filter, but instead,\n")
-            _T("Aften uses a Butterworth 2nd order cascaded direct\n")
-            _T("form II filter.\n")
-            _T("0 = do not apply filter (default)\n")
-            _T("1 = apply filter"),
+            config::m_Config.GetString(0x00703002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00703003) : _T("Do not apply filter (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00703004) : _T("Apply filter"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00703003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00703004), 1);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00801001) : _T("Specify use of extended bitstream info 1"),
+        SetEncoderOption(config::m_Config.GetString(0x00801001),
             _T("-xbsi1"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00801002) :
-            _T("Extended bitstream info 1 contains the dmixmod,\n")
-            _T("ltrtcmix, ltrtsmix, lorocmix, and lorosmix fields. If\n")
-            _T("this option is turned on, all these values are written\n")
-            _T("to the output stream.\n")
-            _T("0 = do not write xbsi1\n")
-            _T("1 = write xbsi1"),
+            config::m_Config.GetString(0x00801002),
             2,
             2,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00208006) : _T("Alternate bit stream syntax"),
+            config::m_Config.GetString(0x00208006),
             true);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00801003) : _T("Do not write xbsi1"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00801004) : _T("Write xbsi1"), 1);
-        AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00801003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00801004), 1);
+        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00802001) : _T("Preferred stereo downmix mode"),
+        SetEncoderOption(config::m_Config.GetString(0x00802001),
             _T("-dmixmod"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00802002) :
-            _T("This code indicates the type of stereo downmix preferred\n")
-            _T("by the mastering engineer, and can be optionally used,\n")
-            _T("overridden, or ignored by the decoder.\n")
-            _T("0 = not indicated (default)\n")
-            _T("1 = Lt/Rt downmix preferred\n")
-            _T("2 = Lo/Ro downmix preferred"),
+            config::m_Config.GetString(0x00802002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00802003) : _T("Not indicated (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00802004) : _T("Lt/Rt downmix preferred"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00802005) : _T("Lo/Ro downmix preferred"), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00802003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00802004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00802005), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00803001) : _T("Lt/Rt center mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00803001),
             _T("-ltrtcmix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00803002) :
-            _T("This code indicates the nominal down mix level of the\n")
-            _T("center channel with respect to the left and right\n")
-            _T("channels in an Lt/Rt downmix.\n")
-            _T("0 = +3.0 dB\n")
-            _T("1 = +1.5 dB\n")
-            _T("2 =  0.0 dB\n")
-            _T("3 = -1.5 dB\n")
-            _T("4 = -3.0 dB (default)\n")
-            _T("5 = -4.5 dB\n")
-            _T("6 = -6.0 dB\n")
-            _T("7 = -inf dB"),
+            config::m_Config.GetString(0x00803002),
             4,
             -1,
             _T(""),
@@ -980,25 +785,14 @@ namespace config
         AddEncoderOptionValue(_T("+1.5 dB"), 1);
         AddEncoderOptionValue(_T("0.0 dB"), 2);
         AddEncoderOptionValue(_T("-1.5 dB"), 3);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00803003) : _T("-3.0 dB (default)"), 4);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00803003), 4);
         AddEncoderOptionValue(_T("-4.5 dB"), 5);
         AddEncoderOptionValue(_T("-6.0 dB"), 6);
         AddEncoderOptionValue(_T("-inf dB"), 7);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00804001) : _T("Lt/Rt surround mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00804001),
             _T("-ltrtsmix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00804002) :
-            _T("This code indicates the nominal down mix level of the\n")
-            _T("surround channels with respect to the left and right\n")
-            _T("channels in an Lt/Rt downmix.\n")
-            _T("0 = +3.0 dB\n")
-            _T("1 = +1.5 dB\n")
-            _T("2 =  0.0 dB\n")
-            _T("3 = -1.5 dB\n")
-            _T("4 = -3.0 dB (default)\n")
-            _T("5 = -4.5 dB\n")
-            _T("6 = -6.0 dB\n")
-            _T("7 = -inf dB"),
+            config::m_Config.GetString(0x00804002),
             4,
             -1,
             _T(""),
@@ -1008,25 +802,14 @@ namespace config
         AddEncoderOptionValue(_T("+1.5 dB"), 1);
         AddEncoderOptionValue(_T("0.0 dB"), 2);
         AddEncoderOptionValue(_T("-1.5 dB"), 3);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00804003) : _T("-3.0 dB (default)"), 4);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00804003), 4);
         AddEncoderOptionValue(_T("-4.5 dB"), 5);
         AddEncoderOptionValue(_T("-6.0 dB"), 6);
         AddEncoderOptionValue(_T("-inf dB"), 7);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00805001) : _T("Lo/Ro center mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00805001),
             _T("-lorocmix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00805002) :
-            _T("This code indicates the nominal down mix level of the\n")
-            _T("center channel with respect to the left and right\n")
-            _T("channels in an Lo/Ro downmix.\n")
-            _T("0 = +3.0 dB\n")
-            _T("1 = +1.5 dB\n")
-            _T("2 =  0.0 dB\n")
-            _T("3 = -1.5 dB\n")
-            _T("4 = -3.0 dB (default)\n")
-            _T("5 = -4.5 dB\n")
-            _T("6 = -6.0 dB\n")
-            _T("7 = -inf dB"),
+            config::m_Config.GetString(0x00805002),
             4,
             -1,
             _T(""),
@@ -1036,25 +819,14 @@ namespace config
         AddEncoderOptionValue(_T("+1.5 dB"), 1);
         AddEncoderOptionValue(_T("0.0 dB"), 2);
         AddEncoderOptionValue(_T("-1.5 dB"), 3);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00805003) : _T("-3.0 dB (default)"), 4);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00805003), 4);
         AddEncoderOptionValue(_T("-4.5 dB"), 5);
         AddEncoderOptionValue(_T("-6.0 dB"), 6);
         AddEncoderOptionValue(_T("-inf dB"), 7);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00806001) : _T("Lo/Ro surround mix level"),
+        SetEncoderOption(config::m_Config.GetString(0x00806001),
             _T("-lorosmix"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00806002) :
-            _T("This code indicates the nominal down mix level of the\n")
-            _T("surround channels with respect to the left and right\n")
-            _T("channels in an Lo/Ro downmix.\n")
-            _T("0 = +3.0 dB\n")
-            _T("1 = +1.5 dB\n")
-            _T("2 =  0.0 dB\n")
-            _T("3 = -1.5 dB\n")
-            _T("4 = -3.0 dB (default)\n")
-            _T("5 = -4.5 dB\n")
-            _T("6 = -6.0 dB\n")
-            _T("7 = -inf dB"),
+            config::m_Config.GetString(0x00806002),
             4,
             -1,
             _T(""),
@@ -1064,79 +836,57 @@ namespace config
         AddEncoderOptionValue(_T("+1.5 dB"), 1);
         AddEncoderOptionValue(_T("0.0 dB"), 2);
         AddEncoderOptionValue(_T("-1.5 dB"), 3);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00806003) : _T("-3.0 dB (default)"), 4);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00806003), 4);
         AddEncoderOptionValue(_T("-4.5 dB"), 5);
         AddEncoderOptionValue(_T("-6.0 dB"), 6);
         AddEncoderOptionValue(_T("-inf dB"), 7);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00807001) : _T("Specify use of extended bitstream info 2"),
+        SetEncoderOption(config::m_Config.GetString(0x00807001),
             _T("-xbsi2"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00807002) :
-            _T("Extended bitstream info 2 contains the dsurexmod,\n")
-            _T("dheadphon, and adconvtyp fields. If this option is\n")
-            _T("turned on, all these values are written to the output\n")
-            _T("stream. These options are not used by the AC-3 decoder,\n")
-            _T("but may be used by other portions of the audio\n")
-            _T("reproduction equipment.\n")
-            _T("0 = do not write xbsi2\n")
-            _T("1 = write xbsi2"),
+            config::m_Config.GetString(0x00807002),
             2,
             2,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00807003) : _T("Do not write xbsi2"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00807004) : _T("Write xbsi2"), 1);
-        AddEncoderOptionValue(DEFAULT_TEXT_IGNORED, 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00807003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00807004), 1);
+        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00808001) : _T("Dolby Surround EX mode"),
+        SetEncoderOption(config::m_Config.GetString(0x00808001),
             _T("-dsurexmod"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00808002) :
-            _T("This code indicates whether or not the program has been\n")
-            _T("encoded in Dolby Surround EX.\n")
-            _T("0 = not indicated (default)\n")
-            _T("1 = Not Dolby Surround EX encoded\n")
-            _T("2 = Dolby Surround EX encoded"),
+            config::m_Config.GetString(0x00808002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00808003) : _T("Not indicated (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00808004) : _T("Not Dolby Surround EX encoded"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00808005) : _T("Dolby Surround EX encoded"), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00808003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00808004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00808005), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00809001) : _T("Dolby Headphone mode"),
+        SetEncoderOption(config::m_Config.GetString(0x00809001),
             _T("-dheadphon"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00809002) :
-            _T("This code indicates whether or not the program has been\n")
-            _T("Dolby Headphone-encoded.\n")
-            _T("0 = not indicated (default)\n")
-            _T("1 = Not Dolby Headphone encoded\n")
-            _T("2 = Dolby Headphone encoded"),
+            config::m_Config.GetString(0x00809002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00809003) : _T("Not indicated (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00809004) : _T("Not Dolby Headphone encoded"), 1);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00809005) : _T("Dolby Headphone encoded"), 2);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00809003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00809004), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x00809005), 2);
 
-        SetEncoderOption(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0080A001) : _T("A/D converter type"),
+        SetEncoderOption(config::m_Config.GetString(0x0080A001),
             _T("-adconvtyp"),
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0080A002) :
-            _T("This code indicates the type of A/D converter technology\n")
-            _T("used to capture the PCM audio.\n")
-            _T("0 = Standard (default)\n")
-            _T("1 = HDCD"),
+            config::m_Config.GetString(0x0080A002),
             0,
             -1,
             _T(""),
             false);
 
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0080A003) : _T("Standard (default)"), 0);
-        AddEncoderOptionValue(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x0080A004) : _T("HDCD"), 1);
+        AddEncoderOptionValue(config::m_Config.GetString(0x0080A003), 0);
+        AddEncoderOptionValue(config::m_Config.GetString(0x0080A004), 1);
     }
 
     int CEncoderDefaults::FindValidBitratePos(const int nBitrate)
@@ -1464,26 +1214,18 @@ namespace config
             szFilter += szBuff;
         }
 
-        szFilter = (config::m_Config.HaveLangStrings() ? CAtlString(config::m_Config.GetLangString(0x00207006).c_str()) : _T("Supported Files")) +
-            _T(" (") + szFilter + _T(")|") + szFilter + _T("|");
+        szFilter = CAtlString(config::m_Config.GetString(0x00207006).c_str()) + _T(" (") + szFilter + _T(")|") + szFilter + _T("|");
 
         for (int i = 0; i < nNumSupportedInputExt; i++)
         {
             szExtL = szExtU = szSupportedInputExt[i].c_str();
             szExtU.MakeUpper();
             szExtL.MakeLower();
-
-            szBuff.Format(_T("%s %s (*.%s)|*.%s|"),
-                szExtU,
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207007).c_str() : _T("Files"),
-                szExtL, szExtL);
-
+            szBuff.Format(_T("%s %s (*.%s)|*.%s|"), szExtU, config::m_Config.GetString(0x00207007).c_str(), szExtL, szExtL);
             szFilter += szBuff;
         }
 
-        szFilter += (config::m_Config.HaveLangStrings() ? CAtlString(config::m_Config.GetLangString(0x00207008).c_str()) : _T("All Files")) +
-            _T(" (*.*)|*.*||");
-
+        szFilter += CAtlString(config::m_Config.GetString(0x00207008).c_str()) + _T(" (*.*)|*.*||");
         return szFilter;
     }
 }

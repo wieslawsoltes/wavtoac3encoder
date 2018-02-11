@@ -8,33 +8,10 @@
 #include <cstdio>
 #include <utility>
 #include <vector>
+#include "Strings.h"
 #include "utilities\ListT.h"
 #include "utilities\MapT.h"
 #include "worker\AftenAPI.h"
-
-#ifdef _M_X64
-#define FILENAME_ENGINES _T("EncWAVtoAC3-x64.engines")
-#else
-#define FILENAME_ENGINES _T("EncWAVtoAC3-x86.engines")
-#endif
-
-#ifdef _M_X64
-#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x64")
-#else
-#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x86")
-#endif
-
-#define FILENAME_LANG _T("EncWAVtoAC3.lang")
-#define FILENAME_PORTABLE _T("EncWAVtoAC3.portable")
-#define FILENAME_CONFIG _T("EncWAVtoAC3.config")
-#define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
-#define FILENAME_FILES _T("EncWAVtoAC3.files")
-
-#define DEFAULT_PRESET_NAME (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207001).c_str() : _T("Default"))
-#define DEFAULT_TEXT_AUTO (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207002).c_str() : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207003).c_str() : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207004).c_str() : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207005).c_str() : _T("<Same as first input file path + output.ac3>"))
 
 namespace config
 {
@@ -94,9 +71,30 @@ namespace config
         bool LoadLangConfig(std::wstring &szFileName);
         bool SaveLangConfig(std::wstring &szFileName);
     public:
-        void LoadLangStrings();
-        BOOL HaveLangStrings();
-        std::wstring GetLangString(int id);
+        void LoadLangStrings(std::wstring szLangPath);
+    public:
+        std::wstring CConfiguration::GetString(const int nKey);
+    public:
+        std::wstring GetDefaultPresetName()
+        {
+            return this->GetString(0x00207001);
+        }
+        std::wstring GetDefaultTextAuto()
+        {
+            return this->GetString(0x00207002);
+        }
+        std::wstring GetDefaultTextIgnored()
+        {
+            return this->GetString(0x00207003);
+        }
+        std::wstring GetDefaultTextOutputPath()
+        {
+            return this->GetString(0x00207004);
+        }
+        std::wstring GetDefaultTextOutputFile()
+        {
+            return this->GetString(0x00207005);
+        }
     };
 
     class CChannelConfig
@@ -153,8 +151,6 @@ namespace config
 
     class CEncoderDefaults
     {
-    private:
-        CEncoderDefaults() { }
     public:
         const static int nNumMaxInputFiles = 6;
         const static int nNumValidCbrBitrates = 20;
@@ -192,5 +188,5 @@ namespace config
         static CAtlString GetSupportedInputFilesFilter();
     };
 
-   extern CConfiguration m_Config;
+    extern CConfiguration m_Config;
 }
