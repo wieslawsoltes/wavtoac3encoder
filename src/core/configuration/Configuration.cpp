@@ -162,7 +162,7 @@ namespace config
         }
     }
 
-    void CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst)
+    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst)
     {
         try
         {
@@ -186,13 +186,12 @@ namespace config
                     }
                 }
             }
+
+            return true;
         }
         catch (...)
         {
-            MessageBox(nullptr,
-                GetString(0x0020702A).c_str(),
-                GetString(0x00207010).c_str(),
-                MB_OK | MB_ICONERROR);
+            return false;
         }
     }
 

@@ -65,7 +65,7 @@ namespace config
         bool LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl);
         bool SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat);
     public:
-        void SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst);
+        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst);
         bool LoadLang(std::wstring &szFileName, CLangMap &lm);
     public:
         bool LoadLangConfig(std::wstring &szFileName);
