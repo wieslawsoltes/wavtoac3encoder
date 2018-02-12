@@ -27,7 +27,7 @@ namespace app
 
     DWORD WINAPI EncWorkThread(LPVOID pParam)
     {
-        CWorker m_Worker((CWorkerContext *)pParam);
+        worker::CWorker m_Worker((worker::CWorkerContext *)pParam);
         return m_Worker.Encode();
     }
 
@@ -279,7 +279,7 @@ namespace app
 
     void CWorkDlg::CreateWorker()
     {
-        pWorkerContext->hThread = ::CreateThread(nullptr, 0, worker::EncWorkThread, pWorkerContext, 0, &pWorkerContext->dwThreadId);
+        pWorkerContext->hThread = ::CreateThread(nullptr, 0, EncWorkThread, pWorkerContext, 0, &pWorkerContext->dwThreadId);
         if (pWorkerContext->hThread == nullptr)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));
