@@ -51,50 +51,53 @@ namespace worker
             opt.raw_input = 1;
         }
 
-        int nSetting;
-
-        #define SET_AFTEN_SETTING(set, type) \
+        #define SetSetting(set, type) \
+            nSetting++; \
             if(config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
                 (set) = (type) config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]];
 
-        nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
-            nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
-            nSetting++; SET_AFTEN_SETTING(s.acmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.lfe, int)
-            nSetting++;
+        int nSetting = -1;
+
+        SetSetting(s.params.bitalloc_fast, int)
+        SetSetting(s.params.expstr_search, int)
+        SetSetting(opt.pad_start, int)
+        SetSetting(s.params.bwcode, int)
+        SetSetting(s.params.min_bwcode, int)
+        SetSetting(s.params.max_bwcode, int)
+        SetSetting(s.params.use_rematrixing, int)
+        SetSetting(s.params.use_block_switching, int)
+        SetSetting(s.meta.cmixlev, int)
+        SetSetting(s.meta.surmixlev, int)
+        SetSetting(s.meta.dsurmod, int)
+        SetSetting(s.meta.dialnorm, int)
+        SetSetting(s.params.dynrng_profile, DynRngProfile)
+        SetSetting(s.acmod, int)
+        SetSetting(s.lfe, int)
+
+        nSetting++;
         if (config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
         {
             s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].acmod;
             s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].lfe;
         }
-        nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
-            nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
 
-        #undef SET_AFTEN_SETTING
+        SetSetting(opt.chmap, int)
+        SetSetting(opt.read_to_eof, int)
+        SetSetting(s.params.use_bw_filter, int)
+        SetSetting(s.params.use_dc_filter, int)
+        SetSetting(s.params.use_lfe_filter, int)
+        SetSetting(s.meta.xbsi1e, int)
+        SetSetting(s.meta.dmixmod, int)
+        SetSetting(s.meta.ltrtcmixlev, int)
+        SetSetting(s.meta.ltrtsmixlev, int)
+        SetSetting(s.meta.lorocmixlev, int)
+        SetSetting(s.meta.lorosmixlev, int)
+        SetSetting(s.meta.xbsi2e, int)
+        SetSetting(s.meta.dsurexmod, int)
+        SetSetting(s.meta.dheadphonmod, int)
+        SetSetting(s.meta.adconvtyp, int)
+
+        #undef SetSetting
     }
 
     void CWorker::UpdateProgress()
@@ -884,11 +887,5 @@ namespace worker
         pContext->Close();
 
         return(TRUE);
-    }
-
-    DWORD WINAPI EncWorkThread(LPVOID pParam)
-    {
-        CWorker m_Worker((CWorkerContext *)pParam);
-        return m_Worker.Encode();
     }
 }

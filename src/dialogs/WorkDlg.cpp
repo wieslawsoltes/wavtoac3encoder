@@ -25,6 +25,12 @@ namespace app
         IDC_STATIC_IN_INFO_05
     };
 
+    DWORD WINAPI EncWorkThread(LPVOID pParam)
+    {
+        CWorker m_Worker((CWorkerContext *)pParam);
+        return m_Worker.Encode();
+    }
+
     IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
     CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CWorkDlg::IDD, pParent)
@@ -273,13 +279,7 @@ namespace app
 
     void CWorkDlg::CreateWorker()
     {
-        pWorkerContext->hThread = ::CreateThread(nullptr,
-            0,
-            worker::EncWorkThread,
-            pWorkerContext,
-            0,
-            &pWorkerContext->dwThreadId);
-
+        pWorkerContext->hThread = ::CreateThread(nullptr, 0, worker::EncWorkThread, pWorkerContext, 0, &pWorkerContext->dwThreadId);
         if (pWorkerContext->hThread == nullptr)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));

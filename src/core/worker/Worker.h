@@ -66,12 +66,6 @@ namespace worker
     class CWorker
     {
     public:
-        CWorker(CWorkerContext* pContext)
-        {
-            this->pContext = pContext;
-        }
-        virtual ~CWorker() { }
-    public:
         CWorkerContext * pContext;
     private:
         __int64 nTotalSizeCounter;
@@ -92,12 +86,13 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
+        CWorker(CWorkerContext* pContext) : pContext(pContext) { }
+        virtual ~CWorker() { }
+    public:
         void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
         BOOL HandleError(LPTSTR pszMessage);
         BOOL Run();
         BOOL Encode();
     };
-
-    DWORD WINAPI EncWorkThread(LPVOID pParam);
 }
