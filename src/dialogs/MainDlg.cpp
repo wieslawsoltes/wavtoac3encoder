@@ -305,23 +305,20 @@ namespace app
 
         CWorkDlg dlg;
         std::vector<std::wstring> list;
-        std::vector<char> listStatus;
+        std::vector<bool> listStatus;
         dlg.pWorkerContext->nTotalSize = 0;
         CString szSizeBuff;
-        std::wstring szFileBuffer;
         bool bAvisynthInput = false;
 
         for (int i = 0; i < nItemsCount; i++)
         {
-            szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
+            std::wstring szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
             std::wstring szExt = util::Utilities::GetFileExtension(szFileBuffer);
             if (util::StringHelper::TowLower(szExt) == L"avs")
                 bAvisynthInput = true;
 
             list.emplace_back(szFileBuffer);
-
-            char status = false;
-            listStatus.emplace_back(status);
+            listStatus.emplace_back(false);
 
             szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
             dlg.pWorkerContext->nTotalSize += _ttoi64(szSizeBuff);
@@ -426,10 +423,9 @@ namespace app
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
-        for (int i = listStatus.Count() - 1; i >= 0; i--)
+        for (int i = (int)listStatus.size() - 1; i >= 0; i--)
         {
-            auto status = listStatus.Get(i);
-            if (status == (char)true)
+            if (listStatus[i]  == true)
                 this->m_LstFiles.DeleteItem(i);
         }
 

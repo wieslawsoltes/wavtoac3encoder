@@ -24,7 +24,7 @@ namespace app
         2, 1, 2, 3, 3, 4, 4, 5
     };
 
-    const int nChannelConfigStates[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const int nChannelConfigStates[nNumChannelConfig][config::CDefaults::nNumMaxInputFiles] =
     {
         // FL FR FC S  SL SR
         {  1, 1, 0, 0, 0, 0 }, // 1+1
@@ -37,7 +37,7 @@ namespace app
         {  1, 1, 1, 0, 1, 1 }  // 3/2
     };
 
-    const std::wstring szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const std::wstring szChannelConfigNames[nNumChannelConfig][config::CDefaults::nNumMaxInputFiles] =
     {
         // FL FR FC S  SL SR
         {  L"Ch1", L"Ch2", L"-", L"-", L"-",   L"-"  }, // 1+1
@@ -54,7 +54,7 @@ namespace app
     CMuxDlg::CMuxDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CMuxDlg::IDD, pParent)
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < config::CDefaults::nNumMaxInputFiles; i++)
         {
             this->szInputFiles[i] = _T("");
             this->szTmpInputFiles[i] = _T("");
@@ -173,7 +173,7 @@ namespace app
 
     void CMuxDlg::RemapFilesToChannels()
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < config::CDefaults::nNumMaxInputFiles; i++)
             this->szInputFiles[i] = _T("");
 
         switch (this->nChannelConfig)
@@ -332,22 +332,22 @@ namespace app
 
     bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<std::wstring> fl;
+        std::vector<std::wstring> fl;
         if (config::m_Config.LoadFiles(szFileName, fl) == false)
             return false;
 
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < config::CDefaults::nNumMaxInputFiles; i++)
         {
             szTmpInputFiles[i] = _T("");
         }
 
         int i = 0;
-        for (; i < fl.Count(); i++)
+        for (; i < (int)fl.size(); i++)
         {
-            if (i >= config::CEncoderDefaults::nNumMaxInputFiles)
+            if (i >= config::CDefaults::nNumMaxInputFiles)
                 return true;
 
-            std::wstring szPath = fl.Get(i);
+            std::wstring szPath = fl[i];
             util::StringHelper::Trim(szPath, '"');
             szTmpInputFiles[i] = szPath;
         }
@@ -368,12 +368,12 @@ namespace app
     {
         try
         {
-            util::CListT<std::wstring> fl;
+            std::vector<std::wstring> fl;
             std::wstring szBuffer;
 
-#define AddFile(index) \
-        szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
-        fl.Insert(szBuffer);
+            #define AddFile(index) \
+                    szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
+                    fl.emplace_back(szBuffer);
 
             switch (this->nChannelConfig)
             {
@@ -457,6 +457,8 @@ namespace app
                 break;
             };
 
+            #undef AddFile
+
             return config::m_Config.SaveFiles(szFileName, fl, nFormat);
         }
         catch (...)
@@ -476,10 +478,10 @@ namespace app
         std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
 
         CFileDialog fd(TRUE,
-            config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
+            config::CDefaults::szSupportedInputExt[0].c_str(),
             szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::CEncoderDefaults::GetSupportedInputFilesFilter(),
+            config::CDefaults::GetSupportedInputFilesFilter(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -636,7 +638,7 @@ namespace app
 
     void CMuxDlg::OnBnClickedCancel()
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < config::CDefaults::nNumMaxInputFiles; i++)
         {
             this->szInputFiles[i] = _T("");
             this->szTmpInputFiles[i] = _T("");

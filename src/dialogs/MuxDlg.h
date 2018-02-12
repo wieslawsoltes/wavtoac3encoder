@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <vector>
 #include <afxwin.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
@@ -40,8 +41,8 @@ namespace app
     public:
         int nChannelConfig;
         bool bLFE;
-        std::wstring szInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
-        std::wstring szTmpInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
+        std::wstring szInputFiles[config::CDefaults::nNumMaxInputFiles];
+        std::wstring szTmpInputFiles[config::CDefaults::nNumMaxInputFiles];
     public:
         controls::CMyButton m_BtnChannelFL;
         controls::CMyButton m_BtnChannelFR;

@@ -817,7 +817,7 @@ namespace config
 
     bool CDefaults::SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
     {
-        const int nSize = (const int)presets.Count();
+        const int nSize = (const int)presets.size();
         try
         {
             FILE *fs;

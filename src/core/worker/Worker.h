@@ -2,9 +2,9 @@
 
 #include <atlstr.h>
 #include <string>
+#include <vector>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
-#include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "avs\src\Avs2Raw.h"
 
@@ -17,10 +17,10 @@ namespace worker
     public:
         AftenAPI api;
     public:
-        util::CListT<std::wstring> *pFilesList;
-        util::CListT<char> *pStatusList;
+        std::vector<std::wstring> *pFilesList;
+        std::vector<bool> *pStatusList;
     public:
-        config::CEncoderPreset * pPreset;
+        config::CPreset * pPreset;
     public:
         bool bUseOutPath;
         std::wstring szOutPath;

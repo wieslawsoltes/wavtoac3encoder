@@ -737,14 +737,14 @@ namespace worker
         pContext->StartTotalTimer(250);
 
         int nFileCounter = 0;
-        int nTotalFiles = pContext->pFilesList->Count();
+        int nTotalFiles = (int)pContext->pFilesList->size();
         int posStatus = 0;
 
         nTotalSizeCounter = 0;
 
         if (pContext->bMultiMonoInput == false)
         {
-            for (int i = 0; i < pContext->pFilesList->Count(); i++)
+            for (int i = 0; i < (int)pContext->pFilesList->size(); i++)
             {
                 szInPath[0] = L"-";
                 szInPath[1] = L"-";
@@ -754,7 +754,7 @@ namespace worker
                 szInPath[5] = L"-";
                 szOutPath = L"";
 
-                szInPath[0] = pContext->pFilesList->Get(i);
+                szInPath[0] = (*pContext->pFilesList)[i];
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
@@ -794,14 +794,12 @@ namespace worker
 
                 if (Run() == FALSE)
                 {
-                    char result = false;
-                    pContext->pStatusList->Set(result, posStatus);
+                    (*pContext->pStatusList)[posStatus] = false;
                     return(FALSE);
                 }
                 else
                 {
-                    char result = true;
-                    pContext->pStatusList->Set(result, posStatus);
+                    (*pContext->pStatusList)[posStatus] = true;
                 }
 
                 posStatus++;
@@ -819,11 +817,11 @@ namespace worker
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            nFileCounter = pContext->pFilesList->Count();
+            nFileCounter = (int)pContext->pFilesList->Count();
 
             for (int i = 0; i < nFileCounter; i++)
             {
-                szInPath[i] = pContext->pFilesList->Get(i);
+                szInPath[i] = (*pContext->pFilesList)[i];
             }
 
             szOutPath = szInPath[0];
@@ -864,20 +862,18 @@ namespace worker
 
             if (Run() == FALSE)
             {
-                for (int i = 0; i < pContext->pStatusList->Count(); i++)
+                for (int i = 0; i < (int)pContext->pStatusList->size(); i++)
                 {
-                    char result = false;
-                    pContext->pStatusList->Set(result, i);
+                    (*pContext->pStatusList)[i] = false;
                 }
                 pContext->nCount = 0;
                 return(FALSE);
             }
             else
             {
-                for (int i = 0; i < pContext->pStatusList->Count(); i++)
+                for (int i = 0; i < (int)pContext->pStatusList->size(); i++)
                 {
-                    char result = true;
-                    pContext->pStatusList->Set(result, i);
+                    (*pContext->pStatusList)[i] = true;
                 }
                 pContext->nCount = nFileCounter;
             }
