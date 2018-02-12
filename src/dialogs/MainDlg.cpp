@@ -2997,7 +2997,7 @@ namespace app
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 
-        for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
+        for (int i = 0; i < (int)config::m_Config.m_LangLst.size(); i++)
         {
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
         }
@@ -3008,12 +3008,12 @@ namespace app
     void CMainDlg::OnLanguageChange(UINT nID)
     {
         int nLangId = nID - ID_LANGUAGE_MENU_START;
-        if (nLangId >= 0 && nLangId < config::m_Config.m_LangLst.size())
+        if (nLangId >= 0 && nLangId < (int)config::m_Config.m_LangLst.size())
         {
-            auto& lang = config::m_Config.m_LangLst.Get(nLangId);
+            auto& lang = config::m_Config.m_LangLst[nLangId];
             config::m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
             config::m_Config.m_bHaveLang = TRUE;
-            config::m_Config.pStrings = &lang.lm;
+            config::m_Config.pStrings = &lang.m_Strings;
             config::m_Config.m_szLangFileName = lang.szFileName;
         }
         CMenu *m_hMenu = this->GetMenu();
@@ -3021,7 +3021,7 @@ namespace app
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-        for (int i = 0; i < config::m_Config.m_LangLst.size(); i++)
+        for (int i = 0; i < (int)config::m_Config.m_LangLst.size(); i++)
         {
             auto& lang = config::m_Config.m_LangLst[i];
             if (config::m_Config.m_nLangId == i)
