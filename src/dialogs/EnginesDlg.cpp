@@ -117,7 +117,7 @@ namespace app
 
     void CEnginesDlg::OnBnClickedButtonEnginesAdd()
     {
-        int nSize = this->m_EngineList.Count();
+        int nSize = (int)this->m_EngineList.size();
 
         CString szKey;
         CString szValue;
@@ -126,7 +126,7 @@ namespace app
 
         std::wstring first = szKey;
         std::wstring second = szValue;
-        this->m_EngineList.Insert(std::make_pair(first, second));
+        this->m_EngineList.emplace_back(std::make_pair(first, second));
 
         this->m_LstEngines.InsertItem(nSize, first.c_str());
         this->m_LstEngines.SetItemText(nSize, 1, second.c_str());
@@ -148,7 +148,7 @@ namespace app
         {
             int nIndex = list[i];
             this->m_LstEngines.DeleteItem(nIndex);
-            this->m_EngineList.Remove(nIndex);
+            this->m_EngineList.erase(this->m_EngineList.begin() + nIndex);
         }
     }
 

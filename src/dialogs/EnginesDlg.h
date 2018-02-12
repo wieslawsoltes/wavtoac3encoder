@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <vector>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
