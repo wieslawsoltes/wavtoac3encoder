@@ -2235,7 +2235,7 @@ namespace app
         POSITION pos;
         CString szPath[2] = { _T(""), _T("") };
         CString szSize[2] = { _T(""), _T("") };
-        std::vector<ItemToMove> listSel;
+        std::vector<std::pair<int, int>> items;
 
         pos = this->m_LstFiles.GetFirstSelectedItemPosition();
         while (pos != nullptr)
@@ -2243,10 +2243,7 @@ namespace app
             int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
             if ((nItem < this->m_LstFiles.GetItemCount() - 1) && (this->m_LstFiles.GetItemCount() >= 2))
             {
-                ItemToMove item;
-                item.nItem0 = nItem;
-                item.nItem1 = nItem + 1;
-                listSel.emplace_back(item);
+                items.emplace_back(std::make_pair(nItem, nItem + 1));
             }
             else
             {
@@ -2254,22 +2251,21 @@ namespace app
             }
         }
 
-
-        for (int i = (int)listSel.size() - 1; i >= 0; i--)
+        for (int i = (int)items.size() - 1; i >= 0; i--)
         {
-            auto& item = listSel[i];
+            auto& item = items[i];
 
-            szPath[0] = this->m_LstFiles.GetItemText(item.nItem0, 0);
-            szSize[0] = this->m_LstFiles.GetItemText(item.nItem0, 1);
-            szPath[1] = this->m_LstFiles.GetItemText(item.nItem1, 0);
-            szSize[1] = this->m_LstFiles.GetItemText(item.nItem1, 1);
+            szPath[0] = this->m_LstFiles.GetItemText(item.first, 0);
+            szSize[0] = this->m_LstFiles.GetItemText(item.first, 1);
+            szPath[1] = this->m_LstFiles.GetItemText(item.second, 0);
+            szSize[1] = this->m_LstFiles.GetItemText(item.second, 1);
 
-            this->m_LstFiles.SetItemText(item.nItem0, 0, szPath[1]);
-            this->m_LstFiles.SetItemText(item.nItem0, 1, szSize[1]);
-            this->m_LstFiles.SetItemText(item.nItem1, 0, szPath[0]);
-            this->m_LstFiles.SetItemText(item.nItem1, 1, szSize[0]);
-            this->m_LstFiles.SetItemState(item.nItem1, LVIS_SELECTED, LVIS_SELECTED);
-            this->m_LstFiles.SetItemState(item.nItem0, 0, LVIS_SELECTED);
+            this->m_LstFiles.SetItemText(item.first, 0, szPath[1]);
+            this->m_LstFiles.SetItemText(item.first, 1, szSize[1]);
+            this->m_LstFiles.SetItemText(item.second, 0, szPath[0]);
+            this->m_LstFiles.SetItemText(item.second, 1, szSize[0]);
+            this->m_LstFiles.SetItemState(item.second, LVIS_SELECTED, LVIS_SELECTED);
+            this->m_LstFiles.SetItemState(item.first, 0, LVIS_SELECTED);
         }
 
         listSel.clear();
