@@ -54,8 +54,8 @@ namespace worker
         int nSetting;
 
         #define SET_AFTEN_SETTING(set, type) \
-            if(config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-                (set) = (type) config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting]);
+            if(config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
+                (set) = (type) config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting]);
 
         nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
             nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
@@ -73,10 +73,10 @@ namespace worker
             nSetting++; SET_AFTEN_SETTING(s.acmod, int)
             nSetting++; SET_AFTEN_SETTING(s.lfe, int)
             nSetting++;
-        if (config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
+        if (config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
         {
-            s.acmod = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].acmod;
-            s.lfe = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].lfe;
+            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].acmod;
+            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].lfe;
         }
         nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
             nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
@@ -294,7 +294,7 @@ namespace worker
 
         pContext->nInTotalSize = 0;
 
-        memset(ifp, 0, config::CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
+        memset(ifp, 0, config::CDefaults::nNumMaxInputFiles * sizeof(FILE *));
 
         char szInputFileAVS[MAX_PATH] = "";
         if (bAvisynthInput == true)
@@ -374,7 +374,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = config::CDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -758,7 +758,7 @@ namespace worker
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
+                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CDefaults::szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
@@ -827,7 +827,7 @@ namespace worker
             szOutPath = szInPath[0];
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
+            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CDefaults::szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;

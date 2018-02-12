@@ -84,7 +84,7 @@ namespace worker
         PcmContext pf;
         uint8_t *frame;
         FLOAT *fwav;
-        FILE *ifp[config::CEncoderDefaults::nNumMaxInputFiles];
+        FILE *ifp[config::CDefaults::nNumMaxInputFiles];
         FILE *ofp;
     private:
         bool bAvisynthInput;
