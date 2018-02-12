@@ -428,13 +428,13 @@ namespace config
     void CEncoderDefaults::InitEncoderOptions()
     {
         #define GetString(key) config::m_Config.GetString(key)
-        #define SetOption(name, option, tooltip, defval, ignval, group, begin) \
+        #define SetOption(name, option, tip, dval, ival, group, begin) \
             nCurOpt++; \
             encOpt[nCurOpt].szName = name; \
             encOpt[nCurOpt].szOption = option; \
-            encOpt[nCurOpt].szHelpText = tooltip; \
-            encOpt[nCurOpt].nDefaultValue = defval; \
-            encOpt[nCurOpt].nIgnoreValue = ignval; \
+            encOpt[nCurOpt].szHelpText = tip; \
+            encOpt[nCurOpt].nDefaultValue = dval; \
+            encOpt[nCurOpt].nIgnoreValue = inval; \
             encOpt[nCurOpt].szGroupName = group; \
             encOpt[nCurOpt].bBeginGroup = begin;
         #define AddValue(name, value) \
