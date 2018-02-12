@@ -128,8 +128,8 @@ namespace app
         std::wstring second = szValue;
         this->m_EngineList.Insert(std::make_pair(first, second));
 
-        this->m_LstEngines.InsertItem(nSize, ce.first.c_str());
-        this->m_LstEngines.SetItemText(nSize, 1, ce.second.c_str());
+        this->m_LstEngines.InsertItem(nSize, first.c_str());
+        this->m_LstEngines.SetItemText(nSize, 1, second.c_str());
     }
 
     void CEnginesDlg::OnBnClickedButtonEnginesRemove()

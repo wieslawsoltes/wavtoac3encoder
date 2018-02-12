@@ -969,7 +969,7 @@ namespace app
         std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
         m_ConfigList.Insert(std::make_pair(std::wstring(L"ColumnSizeFiles"), columnSizeFiles));
 
-        std::wstring outputPath = (this->szOutputPath == config::m_Config.GetString(0x00207004).c_str()) ?  ? L"" : this->szOutputPath;
+        std::wstring outputPath = (this->szOutputPath == config::m_Config.GetString(0x00207004).c_str()) ? L"" : this->szOutputPath;
         m_ConfigList.Insert(std::make_pair(std::wstring( L"OutputPath"), outputPath));
 
         std::wstring outputFile = (this->szOutputFile == config::m_Config.GetString(0x00207005).c_str()) ? L"" : this->szOutputFile;
@@ -994,7 +994,7 @@ namespace app
     {
         if (this->m_EngineList.Count() == 0)
         {
-            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"))
+            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"));
             this->m_EngineList.Insert(ce);
 
             auto& preset = GetCurrentPreset();
@@ -1062,7 +1062,7 @@ namespace app
         }
         else
         {
-            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"))
+            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"));
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
@@ -2127,16 +2127,16 @@ namespace app
 
     void CMainDlg::InitLangMenu()
     {
-        if (config::m_Config.m_LangLst.Count() > 0)
+        if (config::m_Config.m_LangLst.size() > 0)
         {
             CMenu *m_hMenu = this->GetMenu();
             CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
             m_hLangMenu->DeleteMenu(ID_LANGUAGE_DEFAULT, 0);
 
-            for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
+            for (int i = 0; i < (int)config::m_Config.m_LangLst.size(); i++)
             {
-                auto& lang = config::m_Config.m_LangLst.Get(i);
+                auto& lang = config::m_Config.m_LangLst[i];
                 std::wstring szBuff = lang.szEnglishName + L" (" + lang.szTargetName  + L")";
                 m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff.c_str());
 
@@ -3008,7 +3008,7 @@ namespace app
     void CMainDlg::OnLanguageChange(UINT nID)
     {
         int nLangId = nID - ID_LANGUAGE_MENU_START;
-        if (nLangId >= 0 && nLangId < config::m_Config.m_LangLst.Count())
+        if (nLangId >= 0 && nLangId < config::m_Config.m_LangLst.size())
         {
             auto& lang = config::m_Config.m_LangLst.Get(nLangId);
             config::m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
@@ -3021,9 +3021,9 @@ namespace app
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-        for (int i = 0; i < config::m_Config.m_LangLst.Count(); i++)
+        for (int i = 0; i < config::m_Config.m_LangLst.size(); i++)
         {
-            auto& lang = config::m_Config.m_LangLst.Get(i);
+            auto& lang = config::m_Config.m_LangLst[i];
             if (config::m_Config.m_nLangId == i)
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
             else
