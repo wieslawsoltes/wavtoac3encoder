@@ -5,7 +5,7 @@
 
 namespace app
 {
-    int CWorkDlg::nIDIn[config::CEncoderDefaults::nNumMaxInputFiles]
+    int CWorkDlg::nIDIn[config::CDefaults::nNumMaxInputFiles]
     {
         IDC_STATIC_IN_00,
         IDC_STATIC_IN_01,
@@ -15,7 +15,7 @@ namespace app
         IDC_STATIC_IN_05
     };
 
-    int CWorkDlg::nIDInInfo[config::CEncoderDefaults::nNumMaxInputFiles]
+    int CWorkDlg::nIDInInfo[config::CDefaults::nNumMaxInputFiles]
     {
         IDC_STATIC_IN_INFO_00,
         IDC_STATIC_IN_INFO_01,
@@ -131,20 +131,20 @@ namespace app
     {
         if (pWorkerContext->bMultiMonoInput == false)
         {
-            for (int i = 1; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+            for (int i = 1; i < config::CDefaults::nNumMaxInputFiles; i++)
             {
                 this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
                 this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
             }
 
-            CRect rcIn[config::CEncoderDefaults::nNumMaxInputFiles], rcInInfo[config::CEncoderDefaults::nNumMaxInputFiles];
+            CRect rcIn[config::CDefaults::nNumMaxInputFiles], rcInInfo[config::CDefaults::nNumMaxInputFiles];
             CRect rcOut, rcOutInfo;
             CRect rcElapsed[2];
             CRect rcProgress[2];
             CRect rcGroup, rcBtnCancel;
             CRect rcDlg;
 
-            for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+            for (int i = 0; i < config::CDefaults::nNumMaxInputFiles; i++)
             {
                 this->GetDlgItem(this->nIDIn[i])->GetWindowRect(rcIn[i]);
                 this->GetDlgItem(this->nIDInInfo[i])->GetWindowRect(rcInInfo[i]);

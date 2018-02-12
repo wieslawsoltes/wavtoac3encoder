@@ -43,7 +43,7 @@ namespace app
 
     void CEncWAVtoAC3App::LoadConfig()
     {
-        config::CEncoderDefaults::InitEncoderOptions();
+        config::CDefaults::InitEncoderOptions();
 
         config::m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
 
