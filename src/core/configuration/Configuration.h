@@ -158,9 +158,9 @@ namespace config
         static void InitEncoderOptions();
         static int FindValidBitratePos(const int nBitrate);
         static int FindOptionIndex(std::wstring szOption);
-        static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
-        static bool LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
-        static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
+        static void ParsePreset(CEncoderPreset &preset, CConfigList &cl);
+        static bool LoadPresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
+        static bool SavePresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
         static bool IsSupportedInputExt(std::wstring &szExt);
         static int GetSupportedInputFormat(std::wstring &szExt);
         static CAtlString GetSupportedInputFilesFilter();

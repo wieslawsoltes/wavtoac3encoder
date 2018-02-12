@@ -514,9 +514,9 @@ namespace app
         auto preset = GetCurrentPreset();
         nCount++;
         preset.szName = config::m_Config.GetString(0x0020701B) + L" (" + std::to_wstring(nCount) + L")";
-        this->encPresets.Insert(preset);
+        this->presets.Insert(preset);
 
-        this->nCurrentPreset = this->encPresets.Count() - 1;
+        this->nCurrentPreset = this->presets.Count() - 1;
         this->m_CmbPresets.InsertString(this->nCurrentPreset, preset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
@@ -525,12 +525,12 @@ namespace app
 
     void CMainDlg::OnBnClickedButtonPresetDel()
     {
-        if (this->encPresets.Count() >= 2)
+        if (this->presets.Count() >= 2)
         {
             int nCount = this->m_CmbPresets.GetCount();
             int nPreset = this->m_CmbPresets.GetCurSel();
 
-            this->encPresets.Remove(nPreset);
+            this->presets.Remove(nPreset);
             this->m_CmbPresets.DeleteString(nPreset);
             this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
@@ -639,7 +639,7 @@ namespace app
             this->nCurrentPreset = nPreset;
 
             auto preset = defaultPreset;
-            this->encPresets.Set(preset, nPreset);
+            this->presets.Set(preset, nPreset);
 
             this->ApplyPresetToDlg(GetCurrentPreset());
         }
@@ -1152,22 +1152,22 @@ namespace app
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        bool bPresetsRet = config::CEncoderDefaults::LoadPresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
         OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
         if (bPresetsRet == true)
         {
-            if (encPresets.Count() > 0)
+            if (presets.Count() > 0)
             {
                 this->m_CmbPresets.ResetContent();
 
-                for (int i = 0; i < encPresets.Count(); i++)
+                for (int i = 0; i < presets.Count(); i++)
                 {
-                    auto& preset = encPresets.Get(i);
+                    auto& preset = presets.Get(i);
                     this->m_CmbPresets.InsertString(i, preset.szName.c_str());
                 }
 
-                if ((this->nCurrentPreset >= encPresets.Count()) || (this->nCurrentPreset < 0))
+                if ((this->nCurrentPreset >= presets.Count()) || (this->nCurrentPreset < 0))
                     this->nCurrentPreset = 0;
 
                 this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
@@ -1190,7 +1190,7 @@ namespace app
     {
         bool bRet = false;
 
-        bRet = config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        bRet = config::CEncoderDefaults::SavePresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
         OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
         bRet = this->SaveProgramConfig(config::m_Config.m_szConfigFilePath);
@@ -1236,8 +1236,8 @@ namespace app
 
     config::CEncoderPreset& CMainDlg::GetCurrentPreset()
     {
-        if (this->encPresets.Count() > 0)
-            return this->encPresets.Get(this->nCurrentPreset);
+        if (this->presets.Count() > 0)
+            return this->presets.Get(this->nCurrentPreset);
         else
             return defaultPreset;
     }
@@ -1415,7 +1415,7 @@ namespace app
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
-        if (this->encPresets.Count() <= 0)
+        if (this->presets.Count() <= 0)
             this->m_CmbValue.SetCurSel(config::CEncoderDefaults::encOpt[nItem].nDefaultValue);
         else
             this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
@@ -1861,7 +1861,7 @@ namespace app
         }
 
         auto preset = defaultPreset;
-        encPresets.Insert(preset);
+        presets.Insert(preset);
     }
 
     void CMainDlg::InitRawSamleFormatComboBox()
@@ -2939,13 +2939,13 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            if (config::CEncoderDefaults::LoadEncoderPresets(this->encPresets, szFileName, this->defaultPreset) == true)
+            if (config::CEncoderDefaults::LoadPresets(this->presets, szFileName, this->defaultPreset) == true)
             {
                 this->m_CmbPresets.ResetContent();
 
-                for (int i = 0; i < encPresets.Count(); i++)
+                for (int i = 0; i < presets.Count(); i++)
                 {
-                    this->m_CmbPresets.AddString(encPresets.Get(i).szName.c_str());
+                    this->m_CmbPresets.AddString(presets.Get(i).szName.c_str());
                 }
 
                 util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
@@ -2970,7 +2970,7 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            config::CEncoderDefaults::SaveEncoderPresets(this->encPresets, szFileName, this->defaultPreset);
+            config::CEncoderDefaults::SavePresets(this->presets, szFileName, this->defaultPreset);
         }
     }
 

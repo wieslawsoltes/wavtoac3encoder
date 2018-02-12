@@ -675,7 +675,7 @@ namespace config
         return 0;
     }
 
-    void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl)
+    void CEncoderDefaults::ParsePreset(CEncoderPreset &preset, CConfigList &cl)
     {
         for (int i = 0; i < cl.Count(); i++)
         {
@@ -779,7 +779,7 @@ namespace config
         }
     }
 
-    bool CEncoderDefaults::LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
+    bool CEncoderDefaults::LoadPresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
     {
         try
         {
@@ -790,7 +790,7 @@ namespace config
             CEncoderPreset temp;
             CConfigList cl;
             bool bHavePreset = false;
-            encPresets.RemoveAll();
+            presets.RemoveAll();
 
             std::wistringstream stream;
             stream.str(data);
@@ -800,9 +800,9 @@ namespace config
                 {
                     if (bHavePreset == true)
                     {
-                        ParseEncoderPreset(temp, cl);
+                        ParsePreset(temp, cl);
                         auto preset = temp;
-                        encPresets.Insert(preset);
+                        presets.Insert(preset);
                         cl.RemoveAll();
                     }
 
@@ -827,9 +827,9 @@ namespace config
 
             if (bHavePreset == true)
             {
-                ParseEncoderPreset(temp, cl);
+                ParsePreset(temp, cl);
                 auto preset = temp;
-                encPresets.Insert(preset);
+                presets.Insert(preset);
                 cl.RemoveAll();
             }
 
@@ -841,9 +841,9 @@ namespace config
         }
     }
 
-    bool CEncoderDefaults::SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
+    bool CEncoderDefaults::SavePresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset)
     {
-        const int nSize = (const int)encPresets.Count();
+        const int nSize = (const int)presets.Count();
         try
         {
             FILE *fs;
@@ -856,7 +856,7 @@ namespace config
 
             for (int i = 0; i < nSize; i++)
             {
-                auto& preset = encPresets.Get(i);
+                auto& preset = presets.Get(i);
 
                 szBuffer = L"[" + preset.szName + L"]\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);

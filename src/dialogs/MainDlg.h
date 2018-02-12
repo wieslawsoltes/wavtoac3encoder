@@ -72,7 +72,7 @@ namespace app
         bool nSortOrder[2];
         bool bSettingsValueVisible;
         config::CConfigList m_EngineList;
-        config::CEncoderPresetList encPresets;
+        config::CEncoderPresetList presets;
         config::CEncoderPreset defaultPreset;
         int nCurrentPreset = 0;
         std::wstring szOutputPath;
