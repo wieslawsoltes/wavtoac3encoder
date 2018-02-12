@@ -134,19 +134,19 @@ namespace app
 
     void CEnginesDlg::OnBnClickedButtonEnginesRemove()
     {
-        util::CListT<int> list;
+        std::vector<int> list;
         POSITION pos;
 
         pos = this->m_LstEngines.GetFirstSelectedItemPosition();
         while (pos != nullptr)
         {
             int nItem = this->m_LstEngines.GetNextSelectedItem(pos);
-            list.Insert(nItem);
+            list.emplace_back(nItem);
         }
 
-        for (int i = list.Count() - 1; i >= 0; i--)
+        for (int i = (int)list.size() - 1; i >= 0; i--)
         {
-            int nIndex = list.Get(i);
+            int nIndex = list[i];
             this->m_LstEngines.DeleteItem(nIndex);
             this->m_EngineList.Remove(nIndex);
         }
@@ -154,14 +154,13 @@ namespace app
 
     bool CEnginesDlg::InsertProgramEngines()
     {
-        int nSize = this->m_EngineList.Count();
-
+        int nSize = (int)this->m_EngineList.size();
         if (nSize == 0)
             return false;
 
         for (int i = 0; i < nSize; i++)
         {
-            auto& ce = this->m_EngineList.Get(i);
+            auto& ce = this->m_EngineList[i];
             this->m_LstEngines.InsertItem(i, ce.first.c_str());
             this->m_LstEngines.SetItemText(i, 1, ce.second.c_str());
         }
@@ -173,7 +172,7 @@ namespace app
 
     bool CEnginesDlg::LoadProgramEngines(std::wstring szFileName)
     {
-        this->m_EngineList.RemoveAll();
+        this->m_EngineList.clear();
         this->m_LstEngines.DeleteAllItems();
 
         if (config::CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
@@ -199,7 +198,7 @@ namespace app
             if (pos != nullptr)
             {
                 int nItem = m_LstEngines.GetNextSelectedItem(pos);
-                auto& ce = this->m_EngineList.Get(nItem);
+                auto& ce = this->m_EngineList[nItem];
                 this->m_EdtEngineName.SetWindowText(ce.first.c_str());
                 this->m_EdtEnginePath.SetWindowText(ce.second.c_str());
             }
@@ -225,7 +224,7 @@ namespace app
             CString szText;
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEngineName.GetWindowText(szText);
-            auto& ce = this->m_EngineList.Get(nIndex);
+            auto& ce = this->m_EngineList[nIndex];
             ce.first = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 0, szText);
@@ -240,7 +239,7 @@ namespace app
             CString szText;
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEnginePath.GetWindowText(szText);
-            auto& ce = this->m_EngineList.Get(nIndex);
+            auto& ce = this->m_EngineList[nIndex];
             ce.second = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 1, szText);

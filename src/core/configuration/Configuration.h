@@ -8,16 +8,13 @@
 #include <cstdio>
 #include <utility>
 #include <vector>
-#include "Strings.h"
-#include "utilities\ListT.h"
-#include "utilities\MapT.h"
 #include "worker\AftenAPI.h"
 
 namespace config
 {
-    class CConfigList : public util::CListT<std::pair<std::wstring, std::wstring>> { };
+    typedef std::pair<std::wstring, std::wstring> Entry;
 
-    class CLang
+    class CLanguage
     {
     public:
         std::wstring szFileName;
@@ -30,9 +27,8 @@ namespace config
     {
     public:
         std::map<int, std::wstring> * pStrings;
-        std::vector<CLang> m_LangLst;
+        std::vector<CLanguage> m_LangLst;
         std::wstring m_szLangFileName = L"";
-        BOOL m_bHaveLang = FALSE;
         int m_nLangId = -1;
     public:
         bool m_bIsPortable = true;
@@ -42,13 +38,13 @@ namespace config
         std::wstring m_szFilesListFilePath;
         std::wstring m_szLangFilePath;
     public:
-        static bool LoadConfig(std::wstring &szFileName, CConfigList &cl);
-        static bool SaveConfig(std::wstring &szFileName, CConfigList &cl);
+        static bool LoadConfig(std::wstring &szFileName, std::vector<Entry> &cl);
+        static bool SaveConfig(std::wstring &szFileName, std::vector<Entry> &cl);
     public:
-        bool LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl);
-        bool SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat);
+        bool LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& fl);
+        bool SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& fl, int nFormat);
     public:
-        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLang>& m_LangLst);
+        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_LangLst);
         bool LoadLang(std::wstring &szFileName, std::map<int, std::wstring> &m_Strings);
     public:
         bool LoadLangConfig(std::wstring &szFileName);
@@ -74,21 +70,21 @@ namespace config
         }
     };
 
-    class CEncoderOption
+    class COption
     {
     public:
         std::wstring szName;
         std::wstring szOption;
         std::wstring szHelpText;
-        util::CListT<std::wstring> m_Names;
-        util::CListT<int> m_Values;
+        std::vector<std::wstring> m_Names;
+        std::vector<int> m_Values;
         int nDefaultValue;
         int nIgnoreValue;
         std::wstring szGroupName;
         bool bBeginGroup;
     };
 
-    class CEncoderPreset
+    class CPreset
     {
     public:
         const static int nNumEncoderOptions = 31;
@@ -107,11 +103,7 @@ namespace config
         int nSetting[nNumEncoderOptions];
     };
 
-    class CEncoderPresetList : public util::CListT<CEncoderPreset>
-    {
-    };
-
-    class CEncoderDefaults
+    class CDefaults
     {
     public:
         const static int nNumMaxInputFiles = 6;
@@ -136,14 +128,14 @@ namespace config
         static std::wstring szSupportedInputExt[nNumSupportedInputExt];
         static int nSupportedInputFormats[nNumSupportedInputExt];
         static std::wstring szSupportedOutputExt[nNumSupportedOutputExt];
-        static CEncoderOption encOpt[CEncoderPreset::nNumEncoderOptions];
+        static COption encOpt[CPreset::nNumEncoderOptions];
     public:
         static void InitEncoderOptions();
         static int FindValidBitratePos(const int nBitrate);
         static int FindOptionIndex(std::wstring szOption);
-        static void ParsePreset(CEncoderPreset &preset, CConfigList &cl);
-        static bool LoadPresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
-        static bool SavePresets(CEncoderPresetList& presets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
+        static void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
+        static bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        static bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
         static bool IsSupportedInputExt(std::wstring &szExt);
         static int GetSupportedInputFormat(std::wstring &szExt);
         static CAtlString GetSupportedInputFilesFilter();
