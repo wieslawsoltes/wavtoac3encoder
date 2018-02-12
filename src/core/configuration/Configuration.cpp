@@ -438,17 +438,15 @@ namespace config
             encOpt[nCurOpt].szGroupName = group; \
             encOpt[nCurOpt].bBeginGroup = begin;
         #define AddValue(name, value) \
-            szName = name; \
-            encOpt[nCurOpt].m_Names.Insert(szName); \
-            nValue = value; \
-            encOpt[nCurOpt].m_Values.Insert(nValue);
+            encOpt[nCurOpt].m_Names.Insert(name); \
+            encOpt[nCurOpt].m_Values.Insert(value);
         #define AddValueRange(start, end) \
-            for (int i = start; i <= end; i++) \
-                AddValue(std::to_wstring(i), i);
+            for (int i = start; i <= end; i++) { \
+                encOpt[nCurOpt].m_Names.Insert(std::to_wstring(i)); \
+                encOpt[nCurOpt].m_Values.Insert(i); \
+            }
 
         int nCurOpt = -1;
-        std::wstring szName = L"";
-        int nValue = -1;
 
         for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         {
