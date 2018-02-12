@@ -20,7 +20,6 @@ namespace config
     std::wstring ReadAllText(const std::wstring& szFileName)
     {
         std::wstring buffer;
-
         FILE *fs;
         errno_t error = _wfopen_s(&fs, szFileName.c_str(), szReadMode.c_str());
         if (error != 0)
@@ -39,7 +38,6 @@ namespace config
         }
 
         fclose(fs);
-
         return buffer;
     }
 
@@ -61,7 +59,6 @@ namespace config
                     cl.emplace_back(std::make_pair(parts[0], parts[1]));
                 }
             }
-
             return true;
         }
         catch (...)
@@ -72,7 +69,6 @@ namespace config
 
     bool CConfiguration::SaveConfig(std::wstring &szFileName, std::vector<Entry> &cl)
     {
-        int nSize = (int)cl.size();
         try
         {
             FILE *fs;
@@ -81,6 +77,7 @@ namespace config
                 return false;
 
             std::wstring szBuffer;
+            int nSize = (int)cl.size();
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl[i];
@@ -131,7 +128,6 @@ namespace config
 
     bool CConfiguration::SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& fl, int nFormat)
     {
-        int nItems = (int)fl.size();
         try
         {
             FILE *fs;
@@ -140,7 +136,7 @@ namespace config
                 return false;
 
             std::wstring szBuffer;
-
+            int nItems = (int)fl.size();
             for (int i = 0; i < nItems; i++)
             {
                 std::wstring &szPath = fl[i];
@@ -174,23 +170,13 @@ namespace config
                         if (this->LoadLang(file, lang.m_Strings) == true)
                         {
                             lang.szFileName = file;
-
-                            if (lang.m_Strings.count(0x00000001) == 1)
-                                lang.szEnglishName = lang.m_Strings[0x00000001];
-                            else
-                                lang.szEnglishName = L"??";
-
-                            if (lang.m_Strings.count(0x00000002) == 1)
-                                lang.szTargetName = lang.m_Strings[0x00000002];
-                            else
-                                lang.szTargetName = L"??";
-
+                            lang.szEnglishName = (lang.m_Strings.count(0x00000001) == 1) ? lang.m_Strings[0x00000001] : L"??";
+                            lang.szTargetName = (lang.m_Strings.count(0x00000002) == 1) ? lang.m_Strings[0x00000002] : L"??";
                             m_LangLst.emplace_back(std::move(lang));
                         }
                     }
                 }
             }
-
             return true;
         }
         catch (...)
@@ -224,7 +210,6 @@ namespace config
                 }
                 szBuffer = L"";
             }
-
             return true;
         }
         catch (...)
@@ -248,7 +233,6 @@ namespace config
                 m_szLangFileName = szBuffer;
                 return true;
             }
-
             return false;
         }
         catch (...)
