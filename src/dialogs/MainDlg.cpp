@@ -635,7 +635,7 @@ namespace app
             this->nCurrentPreset = nPreset;
 
             auto preset = defaultPreset;
-            this->presets.Set(preset, nPreset);
+            this->presets[nPreset] = preset;
 
             this->ApplyPresetToDlg(GetCurrentPreset());
         }
@@ -2267,8 +2267,6 @@ namespace app
             this->m_LstFiles.SetItemState(item.second, LVIS_SELECTED, LVIS_SELECTED);
             this->m_LstFiles.SetItemState(item.first, 0, LVIS_SELECTED);
         }
-
-        listSel.clear();
     }
 
     void CMainDlg::OnListDelFiles()
