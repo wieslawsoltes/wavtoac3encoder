@@ -15,20 +15,7 @@
 
 namespace config
 {
-    class CConfigEntry
-    {
-    public:
-        std::wstring szKey;
-        std::wstring szValue;
-    };
-
-    class CConfigList : public util::CListT<CConfigEntry>
-    {
-    };
-
-    class CLangMap : public util::CMapT<int, std::wstring>
-    {
-    };
+    class CConfigList : public util::CListT<std::pair<std::wstring, std::wstring>> { };
 
     class CLang
     {
@@ -36,18 +23,14 @@ namespace config
         std::wstring szFileName;
         std::wstring szEnglishName;
         std::wstring szTargetName;
-        CLangMap lm;
-    };
-
-    class CLangList : public util::CListT<CLang>
-    {
+        std::map<int, std::wstring> m_Strings;
     };
 
     class CConfiguration
     {
     public:
-        CLangMap * m_Lang;
-        CLangList m_LangLst;
+        std::map<int, std::wstring> * pStrings;
+        std::vector<CLang> m_LangLst;
         std::wstring m_szLangFileName = L"";
         BOOL m_bHaveLang = FALSE;
         int m_nLangId = -1;
@@ -65,8 +48,8 @@ namespace config
         bool LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl);
         bool SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat);
     public:
-        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst);
-        bool LoadLang(std::wstring &szFileName, CLangMap &lm);
+        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLang>& m_LangLst);
+        bool LoadLang(std::wstring &szFileName, std::map<int, std::wstring> &m_Strings);
     public:
         bool LoadLangConfig(std::wstring &szFileName);
         bool SaveLangConfig(std::wstring &szFileName);

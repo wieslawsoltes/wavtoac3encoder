@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "MainApp.h"
 #include "EnginesDlg.h"
 #include "utilities\Utilities.h"
@@ -124,13 +124,12 @@ namespace app
         this->m_EdtEngineName.GetWindowText(szKey);
         this->m_EdtEnginePath.GetWindowText(szValue);
 
-        config::CConfigEntry ce;
-        ce.szKey = szKey;
-        ce.szValue = szValue;
-        this->m_EngineList.Insert(ce);
+        std::wstring first = szKey;
+        std::wstring second = szValue;
+        this->m_EngineList.Insert(std::make_pair(first, second));
 
-        this->m_LstEngines.InsertItem(nSize, ce.szKey.c_str());
-        this->m_LstEngines.SetItemText(nSize, 1, ce.szValue.c_str());
+        this->m_LstEngines.InsertItem(nSize, ce.first.c_str());
+        this->m_LstEngines.SetItemText(nSize, 1, ce.second.c_str());
     }
 
     void CEnginesDlg::OnBnClickedButtonEnginesRemove()
@@ -163,8 +162,8 @@ namespace app
         for (int i = 0; i < nSize; i++)
         {
             auto& ce = this->m_EngineList.Get(i);
-            this->m_LstEngines.InsertItem(i, ce.szKey.c_str());
-            this->m_LstEngines.SetItemText(i, 1, ce.szValue.c_str());
+            this->m_LstEngines.InsertItem(i, ce.first.c_str());
+            this->m_LstEngines.SetItemText(i, 1, ce.second.c_str());
         }
 
         this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
@@ -201,8 +200,8 @@ namespace app
             {
                 int nItem = m_LstEngines.GetNextSelectedItem(pos);
                 auto& ce = this->m_EngineList.Get(nItem);
-                this->m_EdtEngineName.SetWindowText(ce.szKey.c_str());
-                this->m_EdtEnginePath.SetWindowText(ce.szValue.c_str());
+                this->m_EdtEngineName.SetWindowText(ce.first.c_str());
+                this->m_EdtEnginePath.SetWindowText(ce.second.c_str());
             }
             else
             {
@@ -227,7 +226,7 @@ namespace app
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEngineName.GetWindowText(szText);
             auto& ce = this->m_EngineList.Get(nIndex);
-            ce.szKey = szText;
+            ce.first = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 0, szText);
         }
@@ -242,7 +241,7 @@ namespace app
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEnginePath.GetWindowText(szText);
             auto& ce = this->m_EngineList.Get(nIndex);
-            ce.szValue = szText;
+            ce.second = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 1, szText);
         }

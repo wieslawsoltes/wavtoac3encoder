@@ -744,12 +744,12 @@ namespace app
             this->api.CloseAftenAPI();
         }
 
-        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+        this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).second;
         if (this->api.OpenAftenAPI() == false)
         {
             std::wstring szLogMessage =
                 config::m_Config.GetString(0x0020701E) +
-                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).first + L"' " +
                 config::m_Config.GetString(0x0020701F) + L"!";
             this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
         }
@@ -765,7 +765,7 @@ namespace app
 
             std::wstring szLogMessage =
                 config::m_Config.GetString(0x00207020) +
-                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szKey + L"' " +
+                L" '" + m_EngineList.Get(GetCurrentPreset().nCurrentEngine).first + L"' " +
                 config::m_Config.GetString(0x0020701F) + L", " +
                 config::m_Config.GetString(0x00207021) +
                 L" " + szAftenVersion;
@@ -810,17 +810,17 @@ namespace app
             int nSize = m_ConfigList.Count();
             for (int i = 0; i < nSize; i++)
             {
-                config::CConfigEntry ce = m_ConfigList.Get(i);
+                auto ce = m_ConfigList.Get(i);
 
-                if (ce.szKey == L"MainWindow")
+                if (ce.first == L"MainWindow")
                 {
-                    this->SetWindowRectStr(ce.szValue.c_str());
+                    this->SetWindowRectStr(ce.second.c_str());
                 }
-                else if (ce.szKey == L"ColumnSizeSettings")
+                else if (ce.first == L"ColumnSizeSettings")
                 {
-                    if (!ce.szValue.empty())
+                    if (!ce.second.empty())
                     {
-                        auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                        auto widths = util::StringHelper::Split(ce.second.c_str(), ' ');
                         if (widths.size() == 2)
                         {
                             for (int i = 0; i < 2; i++)
@@ -831,9 +831,9 @@ namespace app
                         }
                     }
                 }
-                else if (ce.szKey == L"ColumnSizeFiles")
+                else if (ce.first == L"ColumnSizeFiles")
                 {
-                    auto widths = util::StringHelper::Split(ce.szValue.c_str(), ' ');
+                    auto widths = util::StringHelper::Split(ce.second.c_str(), ' ');
                     if (widths.size() == 2)
                     {
                         for (int i = 0; i < 2; i++)
@@ -843,23 +843,23 @@ namespace app
                         }
                     }
                 }
-                else if (ce.szKey == L"OutputPath")
+                else if (ce.first == L"OutputPath")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetString(0x00207004).c_str())
+                    if (!ce.second.empty() && ce.second != config::m_Config.GetString(0x00207004).c_str())
                     {
-                        this->szOutputPath = ce.szValue;
+                        this->szOutputPath = ce.second;
                     }
                 }
-                else if (ce.szKey == L"OutputFile")
+                else if (ce.first == L"OutputFile")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetString(0x00207005).c_str())
+                    if (!ce.second.empty() && ce.second != config::m_Config.GetString(0x00207005).c_str())
                     {
-                        this->szOutputFile = ce.szValue;
+                        this->szOutputFile = ce.second;
                     }
                 }
-                else if (ce.szKey == L"SelectedPreset")
+                else if (ce.first == L"SelectedPreset")
                 {
-                    int nPreset = util::StringHelper::ToInt(ce.szValue);
+                    int nPreset = util::StringHelper::ToInt(ce.second);
                     {
                         if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
                             nPreset = 0;
@@ -872,15 +872,15 @@ namespace app
                         }
                     }
                 }
-                else if (ce.szKey == L"MultipleMonoInput")
+                else if (ce.first == L"MultipleMonoInput")
                 {
-                    if (ce.szValue == L"true")
+                    if (ce.second == L"true")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                         this->bMultipleMonoInput = true;
                         this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200B).c_str());
                     }
-                    else if (ce.szValue == L"false")
+                    else if (ce.second == L"false")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
                         this->bMultipleMonoInput = false;
@@ -893,14 +893,14 @@ namespace app
                         this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(config::m_Config.GetString(0x0020200C).c_str());
                     }
                 }
-                else if (ce.szKey == L"DisableAllWarnings")
+                else if (ce.first == L"DisableAllWarnings")
                 {
-                    if (ce.szValue == L"true")
+                    if (ce.second == L"true")
                     {
                         this->bDisableAllWarnings = true;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_CHECKED);
                     }
-                    else if (ce.szValue == L"false")
+                    else if (ce.second == L"false")
                     {
                         this->bDisableAllWarnings = false;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
@@ -911,14 +911,14 @@ namespace app
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
                     }
                 }
-                else if (ce.szKey == L"SaveConfig")
+                else if (ce.first == L"SaveConfig")
                 {
-                    if (ce.szValue == L"true")
+                    if (ce.second == L"true")
                     {
                         this->bSaveConfig = true;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
                     }
-                    else if (ce.szValue == L"false")
+                    else if (ce.second == L"false")
                     {
                         this->bSaveConfig = false;
                         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
@@ -954,64 +954,38 @@ namespace app
     {
         config::CConfigList m_ConfigList;
 
-        m_ConfigList.RemoveAll();
+        std::wstring mainWindow = this->GetWindowRectStr();
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"MainWindow"), mainWindow));
 
-        config::CConfigEntry mainWindow;
-        mainWindow.szKey = _T("MainWindow");
-        mainWindow.szValue = this->GetWindowRectStr();
-        m_ConfigList.Insert(mainWindow);
-
-        config::CConfigEntry columnSizeSettings;
-        columnSizeSettings.szKey = _T("ColumnSizeSettings");
         int nSettingsColWidth[2];
         for (int i = 0; i < 2; i++)
             nSettingsColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
-        columnSizeSettings.szValue = 
-            std::to_wstring(nSettingsColWidth[0]) + L" " + 
-            std::to_wstring(nSettingsColWidth[1]);
+        std::wstring columnSizeSettings = std::to_wstring(nSettingsColWidth[0]) + L" " +  std::to_wstring(nSettingsColWidth[1]);
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"ColumnSizeSettings"), columnSizeSettings));
 
-        config::CConfigEntry columnSizeFiles;
-        columnSizeFiles.szKey = _T("ColumnSizeFiles");
         int nFilesColWidth[2];
         for (int i = 0; i < 2; i++)
             nFilesColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
-        columnSizeFiles.szValue = 
-            std::to_wstring(nFilesColWidth[0]) + L" " + 
-            std::to_wstring(nFilesColWidth[1]);
+        std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"ColumnSizeFiles"), columnSizeFiles));
 
-        config::CConfigEntry outputPath;
-        outputPath.szKey = _T("OutputPath");
-        outputPath.szValue = this->szOutputPath;
-        if (outputPath.szValue == config::m_Config.GetString(0x00207004).c_str())
-            outputPath.szValue = _T("");
-        m_ConfigList.Insert(outputPath);
+        std::wstring outputPath = (this->szOutputPath == config::m_Config.GetString(0x00207004).c_str()) ?  ? L"" : this->szOutputPath;
+        m_ConfigList.Insert(std::make_pair(std::wstring( L"OutputPath"), outputPath));
 
-        config::CConfigEntry outputFile;
-        outputFile.szKey = _T("OutputFile");
-        outputFile.szValue = this->szOutputFile;
-        if (outputFile.szValue == config::m_Config.GetString(0x00207005).c_str())
-            outputFile.szValue = _T("");
-        m_ConfigList.Insert(outputFile);
+        std::wstring outputFile = (this->szOutputFile == config::m_Config.GetString(0x00207005).c_str()) ? L"" : this->szOutputFile;
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"OutputFile"), outputFile));
 
-        config::CConfigEntry selectedPreset;
-        selectedPreset.szKey = _T("SelectedPreset");
-        selectedPreset.szValue = std::to_wstring(this->m_CmbPresets.GetCurSel());
-        m_ConfigList.Insert(selectedPreset);
+        std::wstring selectedPreset = std::to_wstring(this->m_CmbPresets.GetCurSel());
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"SelectedPreset"), selectedPreset));
 
-        config::CConfigEntry multipleMonoInput;
-        multipleMonoInput.szKey = _T("MultipleMonoInput");
-        multipleMonoInput.szValue = (this->bMultipleMonoInput == true) ? _T("true") : _T("false");
-        m_ConfigList.Insert(multipleMonoInput);
+        std::wstring multipleMonoInput = (this->bMultipleMonoInput == true) ? L"true" : L"false";
+        m_ConfigList.Insert(std::make_pair(std::wstring( L"MultipleMonoInput"), multipleMonoInput));
 
-        config::CConfigEntry disableAllWarnings;
-        disableAllWarnings.szKey = _T("DisableAllWarnings");
-        disableAllWarnings.szValue = (this->bDisableAllWarnings == true) ? _T("true") : _T("false");
-        m_ConfigList.Insert(disableAllWarnings);
+        std::wstring disableAllWarnings = (this->bDisableAllWarnings == true) ? L"true" : L"false";
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"DisableAllWarnings"), disableAllWarnings));
 
-        config::CConfigEntry saveConfig;
-        saveConfig.szKey = _T("SaveConfig");
-        saveConfig.szValue = (this->bSaveConfig == true) ? _T("true") : _T("false");
-        m_ConfigList.Insert(saveConfig);
+        std::wstring saveConfig = (this->bSaveConfig == true) ? L"true" : L"false";
+        m_ConfigList.Insert(std::make_pair(std::wstring(L"SaveConfig"), saveConfig));
 
         return config::CConfiguration::SaveConfig(szFileName, m_ConfigList);
     }
@@ -1020,17 +994,13 @@ namespace app
     {
         if (this->m_EngineList.Count() == 0)
         {
-            config::CConfigEntry ce;
-            ce.szKey = L"Aften";
-            ce.szValue = L"libaften.dll";
-
-            this->m_EngineList.RemoveAll();
+            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"))
             this->m_EngineList.Insert(ce);
 
             auto& preset = GetCurrentPreset();
             preset.nCurrentEngine = 0;
 
-            this->m_CmbEngines.InsertString(0, ce.szKey.c_str());
+            this->m_CmbEngines.InsertString(0, ce.first.c_str());
             this->m_CmbEngines.SetCurSel(0);
 
             if (this->api.IsAftenOpen())
@@ -1038,7 +1008,7 @@ namespace app
                 this->api.CloseAftenAPI();
             }
 
-            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).second;
             this->api.OpenAftenAPI();
 
             return false;
@@ -1048,7 +1018,7 @@ namespace app
         for (int i = 0; i < nSize; i++)
         {
             auto& ce = this->m_EngineList.Get(i);
-            this->m_CmbEngines.InsertString(i, ce.szKey.c_str());
+            this->m_CmbEngines.InsertString(i, ce.first.c_str());
         }
 
         if (GetCurrentPreset().nCurrentEngine > nSize)
@@ -1064,7 +1034,7 @@ namespace app
                 this->api.CloseAftenAPI();
             }
 
-            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).second;
             if (this->api.OpenAftenAPI() == false)
             {
                 this->m_CmbEngines.SetCurSel(0);
@@ -1092,9 +1062,7 @@ namespace app
         }
         else
         {
-            config::CConfigEntry ce;
-            ce.szKey = L"Aften";
-            ce.szValue = L"libaften.dll";
+            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"))
 
             this->m_EngineList.RemoveAll();
             this->m_EngineList.Insert(ce);
@@ -1102,7 +1070,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nCurrentEngine = 0;
 
-            this->m_CmbEngines.InsertString(0, ce.szKey.c_str());
+            this->m_CmbEngines.InsertString(0, ce.first.c_str());
             this->m_CmbEngines.SetCurSel(0);
 
             if (this->api.IsAftenOpen())
@@ -1110,7 +1078,7 @@ namespace app
                 this->api.CloseAftenAPI();
             }
 
-            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).szValue;
+            this->api.szLibPath = m_EngineList.Get(GetCurrentPreset().nCurrentEngine).second;
             this->api.OpenAftenAPI();
         }
 
@@ -3021,7 +2989,7 @@ namespace app
     {
         config::m_Config.m_nLangId = -1;
         config::m_Config.m_bHaveLang = FALSE;
-        config::m_Config.m_Lang = nullptr;
+        config::m_Config.pStrings = nullptr;
         config::m_Config.m_szLangFileName = _T("");
 
         CMenu *m_hMenu = this->GetMenu();
@@ -3045,7 +3013,7 @@ namespace app
             auto& lang = config::m_Config.m_LangLst.Get(nLangId);
             config::m_Config.m_nLangId = nID - ID_LANGUAGE_MENU_START;
             config::m_Config.m_bHaveLang = TRUE;
-            config::m_Config.m_Lang = &lang.lm;
+            config::m_Config.pStrings = &lang.lm;
             config::m_Config.m_szLangFileName = lang.szFileName;
         }
         CMenu *m_hMenu = this->GetMenu();

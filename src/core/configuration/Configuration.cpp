@@ -60,10 +60,7 @@ namespace config
                 auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
-                    CConfigEntry ce;
-                    ce.szKey = parts[0];
-                    ce.szValue = parts[1];
-                    cl.Insert(ce);
+                    cl.Insert(std::make_pair(parts[0], parts[1]));
                 }
             }
 
@@ -89,7 +86,7 @@ namespace config
             for (int i = 0; i < nSize; i++)
             {
                 auto& ce = cl.Get(i);
-                szBuffer = ce.szKey + szSeparator + ce.szValue + szNewChar;
+                szBuffer = ce.first + szSeparator + ce.second + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
@@ -162,7 +159,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst)
+    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLang>& m_LangLst)
     {
         try
         {
@@ -176,12 +173,21 @@ namespace config
                     if (util::StringHelper::TowLower(ext) == L"txt")
                     {
                         CLang lang;
-                        if (this->LoadLang(file, lang.lm) == true)
+                        if (this->LoadLang(file, lang.m_Strings) == true)
                         {
                             lang.szFileName = file;
-                            lang.szEnglishName = lang.lm.Get(0x00000001);
-                            lang.szTargetName = lang.lm.Get(0x00000002);
-                            m_LangLst.Insert(std::move(lang));
+
+                            if (lang.m_Strings.count(0x00000001) == 1)
+                                lang.szEnglishName = lang.m_Strings[0x00000001];
+                            else
+                                lang.szEnglishName = L"??";
+
+                            if (lang.m_Strings.count(0x00000002) == 1)
+                                lang.szTargetName = lang.m_Strings[0x00000002];
+                            else
+                                lang.szTargetName = L"??";
+
+                            m_LangLst.emplace_back(std::move(lang));
                         }
                     }
                 }
@@ -195,7 +201,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLang(std::wstring &szFileName, CLangMap& lm)
+    bool CConfiguration::LoadLang(std::wstring &szFileName, std::map<int, std::wstring>& m_Strings)
     {
         try
         {
@@ -203,13 +209,9 @@ namespace config
             if (data.empty())
                 return false;
 
-            lm.RemoveAll();
+            m_Strings.clear();
 
             std::wstring szBuffer = L"";
-            std::wstring szKey = L"";
-            std::wstring szValue = L"";
-            int key;
-
             std::wistringstream stream;
             stream.str(data);
 
@@ -218,13 +220,9 @@ namespace config
                 auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
-                    CConfigEntry ce;
-                    szKey = parts[0];
-                    szValue = parts[1];
-                    util::StringHelper::Replace(szValue, szNewCharVar, szNewChar);
-                    util::StringHelper::Replace(szValue, szTabCharVar, szTabChar);
-                    key = util::StringHelper::ToIntFromHex(szKey);
-                    lm.Set(key, szValue);
+                    util::StringHelper::Replace(parts[1], szNewCharVar, szNewChar);
+                    util::StringHelper::Replace(parts[1], szTabCharVar, szTabChar);
+                    m_Strings[util::StringHelper::ToIntFromHex(parts[0])] = parts[1];
                 }
                 szBuffer = L"";
             }
@@ -286,19 +284,19 @@ namespace config
     {
         SearchFolderForLang(szLangPath, false, m_LangLst);
 
-        if (m_LangLst.Count() > 0)
+        if (m_LangLst.size() > 0)
         {
             bool haveLang = false;
-            for (int i = 0; i < m_LangLst.Count(); i++)
+            for (int i = 0; i < m_LangLst.size(); i++)
             {
-                auto& lang = m_LangLst.Get(i);
+                auto& lang = m_LangLst[i];
                 std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
                 std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
                 if (szNameLang == szNameConfig)
                 {
                     m_nLangId = i;
                     m_bHaveLang = TRUE;
-                    m_Lang = &lang.lm;
+                    pStrings = &lang.m_Strings;
                     haveLang = true;
                     break;
                 }
@@ -306,10 +304,10 @@ namespace config
 
             if (haveLang == false)
             {
-                auto& lang = m_LangLst.Get(0);
+                auto& lang = m_LangLst[0];
                 m_nLangId = 0;
                 m_bHaveLang = TRUE;
-                m_Lang = &lang.lm;
+                pStrings = &lang.m_Strings;
                 m_szLangFileName = lang.szFileName;
             }
         }
@@ -322,10 +320,10 @@ namespace config
 
     std::wstring CConfiguration::GetString(const int nKey)
     {
-        if (m_Lang != nullptr)
+        if (pStrings != nullptr)
         {
-            if (m_Lang->m_Map.count(nKey) == 1)
-                return (*m_Lang).m_Map[nKey];
+            if (pStrings->m_Map.count(nKey) == 1)
+                return (*pStrings).m_Map[nKey];
         }
 
         if (m_Strings.count(nKey) == 1)
@@ -682,87 +680,87 @@ namespace config
             std::wstring szBuffer;
             auto& ce = cl.Get(i);
 
-            if (ce.szKey == L"engine")
+            if (ce.first == L"engine")
             {
-                preset.nCurrentEngine = util::StringHelper::ToInt(ce.szValue);
+                preset.nCurrentEngine = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szThreadsOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nThreads = util::StringHelper::ToInt(ce.szValue);
+                preset.nThreads = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            if (ce.szKey == L"mmx")
+            if (ce.first == L"mmx")
             {
-                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.szValue);
+                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            if (ce.szKey == L"sse")
+            if (ce.first == L"sse")
             {
-                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.szValue);
+                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            if (ce.szKey == L"sse2")
+            if (ce.first == L"sse2")
             {
-                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.szValue);
+                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            if (ce.szKey == L"sse3")
+            if (ce.first == L"sse3")
             {
-                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.szValue);
+                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            if (ce.szKey == L"mode")
+            if (ce.first == L"mode")
             {
-                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.szValue);
+                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szCbrOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nBitrate = util::StringHelper::ToInt(ce.szValue);
+                preset.nBitrate = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szVbrOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nQuality = util::StringHelper::ToInt(ce.szValue);
+                preset.nQuality = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szRawSampleFormatOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nRawSampleFormat = util::StringHelper::ToInt(ce.szValue);
+                preset.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szRawSampleRateOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nRawSampleRate = util::StringHelper::ToInt(ce.szValue);
+                preset.nRawSampleRate = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             szBuffer = szRawChannelsOption;
             util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.szKey == szBuffer)
+            if (ce.first == szBuffer)
             {
-                preset.nRawChannels = util::StringHelper::ToInt(ce.szValue);
+                preset.nRawChannels = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
@@ -770,9 +768,9 @@ namespace config
             {
                 szBuffer = encOpt[i].szOption;
                 util::StringHelper::TrimLeft(szBuffer, '-');
-                if (ce.szKey == szBuffer)
+                if (ce.first == szBuffer)
                 {
-                    preset.nSetting[i] = util::StringHelper::ToInt(ce.szValue);
+                    preset.nSetting[i] = util::StringHelper::ToInt(ce.second);
                     break;
                 }
             }
@@ -817,10 +815,7 @@ namespace config
                     auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                     if (parts.size() == 2)
                     {
-                        CConfigEntry ce;
-                        ce.szKey = parts[0];
-                        ce.szValue = parts[1];
-                        cl.Insert(ce);
+                        cl.Insert(std::make_pair(parts[0], parts[1]));
                     }
                 }
             }
