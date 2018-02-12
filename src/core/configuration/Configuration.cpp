@@ -287,7 +287,7 @@ namespace config
         if (m_LangLst.size() > 0)
         {
             bool haveLang = false;
-            for (int i = 0; i < m_LangLst.size(); i++)
+            for (int i = 0; i < (int)m_LangLst.size(); i++)
             {
                 auto& lang = m_LangLst[i];
                 std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
@@ -322,8 +322,8 @@ namespace config
     {
         if (pStrings != nullptr)
         {
-            if (pStrings->m_Map.count(nKey) == 1)
-                return (*pStrings).m_Map[nKey];
+            if (pStrings->count(nKey) == 1)
+                return (*pStrings)[nKey];
         }
 
         if (m_Strings.count(nKey) == 1)
