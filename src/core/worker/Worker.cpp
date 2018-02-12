@@ -817,7 +817,7 @@ namespace worker
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            nFileCounter = (int)pContext->pFilesList->Count();
+            nFileCounter = (int)pContext->pFilesList->size();
 
             for (int i = 0; i < nFileCounter; i++)
             {
