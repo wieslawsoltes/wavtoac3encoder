@@ -1,13 +1,14 @@
 ﻿#pragma once
 
-#include <atlstr.h>
+#include <utility>
 #include <string>
+#include <vector>
+#include <map>
 #include <wchar.h>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include <utility>
-#include <vector>
+#include <atlstr.h>
 #include "worker\AftenAPI.h"
 
 namespace config
