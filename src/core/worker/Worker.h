@@ -92,7 +92,7 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
-        void InitContext(const config::CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
         BOOL HandleError(LPTSTR pszMessage);
         BOOL Run();

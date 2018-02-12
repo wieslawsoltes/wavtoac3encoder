@@ -3,7 +3,7 @@
 
 namespace worker
 {
-    void CWorker::InitContext(const config::CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
+    void CWorker::InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
     {
         api.LibAften_aften_set_defaults(&s);
 
