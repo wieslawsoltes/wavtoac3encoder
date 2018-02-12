@@ -434,7 +434,7 @@ namespace config
             encOpt[nCurOpt].szOption = option; \
             encOpt[nCurOpt].szHelpText = tip; \
             encOpt[nCurOpt].nDefaultValue = dval; \
-            encOpt[nCurOpt].nIgnoreValue = inval; \
+            encOpt[nCurOpt].nIgnoreValue = ival; \
             encOpt[nCurOpt].szGroupName = group; \
             encOpt[nCurOpt].bBeginGroup = begin;
         #define AddValue(name, value) \
