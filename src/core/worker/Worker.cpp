@@ -53,9 +53,9 @@ namespace worker
 
         int nSetting;
 
-#define SET_AFTEN_SETTING(set, type) \
-    if(config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-        (set) = (type) config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
+        #define SET_AFTEN_SETTING(set, type) \
+            if(config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
+                (set) = (type) config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting]);
 
         nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
             nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
@@ -75,8 +75,8 @@ namespace worker
             nSetting++;
         if (config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
         {
-            s.acmod = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
-            s.lfe = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
+            s.acmod = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].acmod;
+            s.lfe = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].lfe;
         }
         nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
             nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
@@ -93,6 +93,8 @@ namespace worker
             nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
             nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
             nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
+
+        #undef SET_AFTEN_SETTING
     }
 
     void CWorker::UpdateProgress()

@@ -183,7 +183,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = config::m_Config.GetDefaultTextAuto().c_str();
+                szBuff = config::m_Config.GetString(0x00207002).c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -193,7 +193,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = config::m_Config.GetDefaultTextIgnored().c_str();
+                szBuff = config::m_Config.GetString(0x00207003).c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -203,7 +203,7 @@ namespace app
         {
             CString szBuff;
             if (nPos == 0)
-                szBuff = config::m_Config.GetDefaultTextIgnored().c_str();
+                szBuff = config::m_Config.GetString(0x00207003).c_str();
             else
                 szBuff.Format(_T("%d"), nPos);
 
@@ -362,7 +362,7 @@ namespace app
         std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(dlg.pWorkerContext->szOutPath.length() - 4, 4);
         if (this->bMultipleMonoInput == true)
         {
-            if (dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputFile().c_str())
+            if (dlg.pWorkerContext->szOutPath != config::m_Config.GetString(0x00207005).c_str())
             {
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
@@ -378,8 +378,8 @@ namespace app
         }
 
         if ((!dlg.pWorkerContext->szOutPath.empty()) &&
-            ((dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputPath().c_str() && this->bMultipleMonoInput == false) ||
-            (dlg.pWorkerContext->szOutPath != config::m_Config.GetDefaultTextOutputFile().c_str() && this->bMultipleMonoInput == true)))
+            ((dlg.pWorkerContext->szOutPath != config::m_Config.GetString(0x00207004).c_str() && this->bMultipleMonoInput == false) ||
+            (dlg.pWorkerContext->szOutPath != config::m_Config.GetString(0x00207005).c_str() && this->bMultipleMonoInput == true)))
         {
             if (this->bMultipleMonoInput == false)
             {
@@ -598,10 +598,6 @@ namespace app
                 return;
             }
 
-    #ifndef BIF_NEWDIALOGSTYLE
-    #define BIF_NEWDIALOGSTYLE 0x0040
-    #endif
-
             auto szTitle = config::m_Config.GetString(0x0020701D).c_str();
 
             bi.hwndOwner = this->GetSafeHwnd();
@@ -660,10 +656,10 @@ namespace app
 
         std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
 
-        if (szBuff.empty() || szBuff == config::m_Config.GetDefaultTextOutputPath().c_str() || szBuff == config::m_Config.GetDefaultTextOutputFile().c_str())
+        if (szBuff.empty() || szBuff == config::m_Config.GetString(0x00207004).c_str() || szBuff == config::m_Config.GetString(0x00207005).c_str())
         {
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? 
-                config::m_Config.GetDefaultTextOutputFile().c_str() : config::m_Config.GetDefaultTextOutputPath().c_str());
+                config::m_Config.GetString(0x00207005).c_str() : config::m_Config.GetString(0x00207004).c_str());
         }
         else
         {
@@ -702,7 +698,7 @@ namespace app
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
             preset.nSetting[nItem] = nVal;
-            std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+            std::wstring szName = config::CEncoderDefaults::encOpt[nItem].m_Names.Get(nVal);
             this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
@@ -849,14 +845,14 @@ namespace app
                 }
                 else if (ce.szKey == L"OutputPath")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetDefaultTextOutputPath().c_str())
+                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetString(0x00207004).c_str())
                     {
                         this->szOutputPath = ce.szValue;
                     }
                 }
                 else if (ce.szKey == L"OutputFile")
                 {
-                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetDefaultTextOutputFile().c_str())
+                    if (!ce.szValue.empty() && ce.szValue != config::m_Config.GetString(0x00207005).c_str())
                     {
                         this->szOutputFile = ce.szValue;
                     }
@@ -937,14 +933,14 @@ namespace app
             if (this->bMultipleMonoInput == true)
             {
                 if (this->szOutputFile.empty())
-                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
+                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207005).c_str());
                 else
                     this->m_EdtOutPath.SetWindowText(this->szOutputFile.c_str());
             }
             else
             {
                 if (this->szOutputPath.empty())
-                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
+                    this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207004).c_str());
                 else
                     this->m_EdtOutPath.SetWindowText(this->szOutputPath.c_str());
             }
@@ -986,14 +982,14 @@ namespace app
         config::CConfigEntry outputPath;
         outputPath.szKey = _T("OutputPath");
         outputPath.szValue = this->szOutputPath;
-        if (outputPath.szValue == config::m_Config.GetDefaultTextOutputPath().c_str())
+        if (outputPath.szValue == config::m_Config.GetString(0x00207004).c_str())
             outputPath.szValue = _T("");
         m_ConfigList.Insert(outputPath);
 
         config::CConfigEntry outputFile;
         outputFile.szKey = _T("OutputFile");
         outputFile.szValue = this->szOutputFile;
-        if (outputFile.szValue == config::m_Config.GetDefaultTextOutputFile().c_str())
+        if (outputFile.szValue == config::m_Config.GetString(0x00207005).c_str())
             outputFile.szValue = _T("");
         m_ConfigList.Insert(outputFile);
 
@@ -1226,7 +1222,7 @@ namespace app
             {
                 m_StcQualityBitrate.SetWindowText(config::m_Config.GetString(0x00202003).c_str());
                 if (nCurPos == 0)
-                    szBuff = config::m_Config.GetDefaultTextAuto().c_str();
+                    szBuff = config::m_Config.GetString(0x00207002).c_str();
                 else
                     szBuff.Format(_T("%d kbps"), config::CEncoderDefaults::nValidCbrBitrates[nCurPos]);
 
@@ -1290,7 +1286,7 @@ namespace app
         for (int i = 0; i < config::CEncoderPreset::nNumEncoderOptions; i++)
         {
             int nSetting = preset.nSetting[i];
-            std::wstring& szText = config::CEncoderDefaults::encOpt[i].listOptNames.Get(nSetting);
+            std::wstring& szText = config::CEncoderDefaults::encOpt[i].m_Names.Get(nSetting);
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
@@ -1318,7 +1314,7 @@ namespace app
 
         if (preset.nThreads == 0)
         {
-            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetString(0x00207002).c_str());
         }
         else
         {
@@ -1332,7 +1328,7 @@ namespace app
 
         if (preset.nRawSampleRate == 0)
         {
-            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
@@ -1343,7 +1339,7 @@ namespace app
 
         if (preset.nRawChannels == 0)
         {
-            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
@@ -1412,9 +1408,9 @@ namespace app
     {
         this->m_CmbValue.ResetContent();
 
-        for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
+        for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].m_Names.Count(); i++)
         {
-            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
+            this->m_CmbValue.AddString(config::CEncoderDefaults::encOpt[nItem].m_Names.Get(i).c_str());
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
@@ -1476,9 +1472,9 @@ namespace app
         menu->CreatePopupMenu();
 
         UINT nItemCount = ID_OPTIONS_MENU_START;
-        for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].listOptNames.Count(); i++)
+        for (int i = 0; i < config::CEncoderDefaults::encOpt[nItem].m_Names.Count(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(i).c_str());
+            menu->AppendMenu(MF_STRING, nItemCount, config::CEncoderDefaults::encOpt[nItem].m_Names.Get(i).c_str());
             nItemCount++;
         }
 
@@ -1541,7 +1537,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207003).c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnRawSampleRate.SetPos(nPos);
@@ -1553,7 +1549,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnRawSampleRate.SetPos(0);
-                this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+                this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
             }
             else
             {
@@ -1575,7 +1571,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207003).c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnRawChannels.SetPos(nPos);
@@ -1587,7 +1583,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnRawChannels.SetPos(0);
-                this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+                this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
             }
             else
             {
@@ -1609,7 +1605,7 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
             return;
 
-        if (szBuff.Compare(config::m_Config.GetDefaultTextAuto().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207002).c_str()) == 0)
         {
             nPos = 0;
             this->m_SpnThreads.SetPos(nPos);
@@ -1621,7 +1617,7 @@ namespace app
             {
                 nPos = 0;
                 this->m_SpnThreads.SetPos(0);
-                this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
+                this->m_EdtThreads.SetWindowText(config::m_Config.GetString(0x00207002).c_str());
             }
             else
             {
@@ -1648,7 +1644,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtOutPath.GetWindowText(szBuff);
-        if (szBuff.Compare(config::m_Config.GetDefaultTextOutputPath().c_str()) == 0 || szBuff.Compare(config::m_Config.GetDefaultTextOutputFile().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207004).c_str()) == 0 || szBuff.Compare(config::m_Config.GetString(0x00207005).c_str()) == 0)
             this->m_EdtOutPath.SetWindowText(_T(""));
     }
 
@@ -1656,7 +1652,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtRawSamplerate.GetWindowText(szBuff);
-        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207003).c_str()) == 0)
             this->m_EdtRawSamplerate.SetWindowText(_T(""));
     }
 
@@ -1664,7 +1660,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtRawChannels.GetWindowText(szBuff);
-        if (szBuff.Compare(config::m_Config.GetDefaultTextIgnored().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207003).c_str()) == 0)
             this->m_EdtRawChannels.SetWindowText(_T(""));
     }
 
@@ -1672,7 +1668,7 @@ namespace app
     {
         CString szBuff;
         this->m_EdtThreads.GetWindowText(szBuff);
-        if (szBuff.Compare(config::m_Config.GetDefaultTextAuto().c_str()) == 0)
+        if (szBuff.Compare(config::m_Config.GetString(0x00207002).c_str()) == 0)
             this->m_EdtThreads.SetWindowText(_T(""));
     }
 
@@ -1683,9 +1679,9 @@ namespace app
         if (szBuff.Compare(_T("")) == 0)
         {
             if (this->bMultipleMonoInput == true)
-                this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
+                this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207005).c_str());
             else
-                this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
+                this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207004).c_str());
         }
         else
         {
@@ -1701,7 +1697,7 @@ namespace app
         CString szBuff;
         this->m_EdtRawSamplerate.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
     }
 
     void CMainDlg::OnEnKillfocusEditRawChannels()
@@ -1709,7 +1705,7 @@ namespace app
         CString szBuff;
         this->m_EdtRawChannels.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
     }
 
     void CMainDlg::OnEnKillfocusEditThreads()
@@ -1717,7 +1713,7 @@ namespace app
         CString szBuff;
         this->m_EdtThreads.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
-            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetString(0x00207002).c_str());
     }
 
     void CMainDlg::InitTitle()
@@ -1773,7 +1769,7 @@ namespace app
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
-                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].listOptNames.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str();
+                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::CEncoderDefaults::encOpt[i].m_Names.Get(config::CEncoderDefaults::encOpt[i].nDefaultValue).c_str();
                 ListView_InsertItem(listSettings, &li);
                 ListView_SetItemText(listSettings, i, 1, pszSetting);
 
@@ -1791,7 +1787,7 @@ namespace app
         for (int i = 0; i < config::CEncoderPreset::nNumEncoderOptions; i++)
             defaultPreset.nSetting[i] = config::CEncoderDefaults::encOpt[i].nDefaultValue;
 
-        defaultPreset.szName = config::m_Config.GetDefaultPresetName();
+        defaultPreset.szName = config::m_Config.GetString(0x00207001);
         defaultPreset.nMode = AFTEN_ENC_MODE_CBR;
         defaultPreset.nBitrate = 0;
         defaultPreset.nQuality = 240;
@@ -1813,7 +1809,7 @@ namespace app
 
         if (defaultPreset.nRawSampleRate == 0)
         {
-            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
@@ -1824,7 +1820,7 @@ namespace app
 
         if (defaultPreset.nRawChannels == 0)
         {
-            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetDefaultTextIgnored().c_str());
+            this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
@@ -1840,7 +1836,7 @@ namespace app
 
         if (defaultPreset.nThreads == 0)
         {
-            this->m_EdtThreads.SetWindowText(config::m_Config.GetDefaultTextAuto().c_str());
+            this->m_EdtThreads.SetWindowText(config::m_Config.GetString(0x00207002).c_str());
         }
         else
         {
@@ -1870,7 +1866,7 @@ namespace app
 
     void CMainDlg::InitRawSamleFormatComboBox()
     {
-        config::CEncoderDefaults::szRawSampleFormats[0] = config::m_Config.GetDefaultTextIgnored().c_str();
+        config::CEncoderDefaults::szRawSampleFormats[0] = config::m_Config.GetString(0x00207003).c_str();
 
         this->m_CmbRawSampleFormat.ResetContent();
 
@@ -1971,9 +1967,9 @@ namespace app
             this->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
         if (this->bMultipleMonoInput == true)
-            this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputFile().c_str());
+            this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207005).c_str());
         else
-            this->m_EdtOutPath.SetWindowText(config::m_Config.GetDefaultTextOutputPath().c_str());
+            this->m_EdtOutPath.SetWindowText(config::m_Config.GetString(0x00207004).c_str());
     }
 
     BOOL CMainDlg::OnInitDialog()
@@ -2059,7 +2055,7 @@ namespace app
 
         std::wstring szBuff = this->bMultipleMonoInput == true ? this->szOutputFile : this->szOutputPath;
         if (szBuff.empty() || szBuff.substr(0, 1) == L"<")
-            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? config::m_Config.GetDefaultTextOutputFile().c_str() : config::m_Config.GetDefaultTextOutputPath().c_str());
+            this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? config::m_Config.GetString(0x00207005).c_str() : config::m_Config.GetString(0x00207004).c_str());
         else
             this->m_EdtOutPath.SetWindowText(this->bMultipleMonoInput == true ? this->szOutputFile.c_str() : this->szOutputPath.c_str());
     }
@@ -2431,7 +2427,7 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].m_Names.Get(nVal);
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2456,7 +2452,7 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nSetting[nItem] = nVal;
 
-                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].listOptNames.Get(nVal);
+                std::wstring szName = config::CEncoderDefaults::encOpt[nItem].m_Names.Get(nVal);
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2680,10 +2676,6 @@ namespace app
             return;
         }
 
-    #ifndef BIF_NEWDIALOGSTYLE
-    #define BIF_NEWDIALOGSTYLE 0x0040
-    #endif
-
         auto szTitle = config::m_Config.GetString(0x0020700B).c_str();
 
         bi.hwndOwner = this->GetSafeHwnd();
@@ -2733,8 +2725,8 @@ namespace app
 
         if (config::CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue != preset.nSetting[nIndexChconfig])
         {
-            dlg.nChannelConfig = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].acmod;
-            dlg.bLFE = (config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nIndexChconfig].listOptValues.Get(preset.nSetting[nIndexChconfig])].lfe == 1) ? true : false;
+            dlg.nChannelConfig = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nIndexChconfig].m_Values.Get(preset.nSetting[nIndexChconfig])].acmod;
+            dlg.bLFE = (config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nIndexChconfig].m_Values.Get(preset.nSetting[nIndexChconfig])].lfe == 1) ? true : false;
             bUpdateChconfig = true;
         }
         else
@@ -2745,8 +2737,8 @@ namespace app
             }
             else
             {
-                int nDefault = config::CEncoderDefaults::encOpt[nIndexAcmod].listOptValues.Count() - 2;
-                dlg.nChannelConfig = config::CEncoderDefaults::encOpt[nIndexAcmod].listOptValues.Get(nDefault);
+                int nDefault = config::CEncoderDefaults::encOpt[nIndexAcmod].m_Values.Count() - 2;
+                dlg.nChannelConfig = config::CEncoderDefaults::encOpt[nIndexAcmod].m_Values.Get(nDefault);
             }
 
             dlg.bLFE = (preset.nSetting[nIndexLfe] == 1) ? true : false;
@@ -2859,12 +2851,12 @@ namespace app
                 preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::CEncoderDefaults::encOpt[nIndexAcmod].listOptNames.Get(preset.nSetting[nIndexAcmod]).c_str());
+                    config::CEncoderDefaults::encOpt[nIndexAcmod].m_Names.Get(preset.nSetting[nIndexAcmod]).c_str());
 
                 preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? config::CEncoderDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::CEncoderDefaults::encOpt[nIndexLfe].listOptNames.Get(preset.nSetting[nIndexLfe]).c_str());
+                    config::CEncoderDefaults::encOpt[nIndexLfe].m_Names.Get(preset.nSetting[nIndexLfe]).c_str());
 
                 if (bUpdateChconfig == true)
                 {
@@ -2885,7 +2877,7 @@ namespace app
                     preset.nSetting[nIndexChconfig] = config::CEncoderDefaults::encOpt[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::CEncoderDefaults::encOpt[nIndexChconfig].listOptNames.Get(preset.nSetting[nIndexChconfig]).c_str());
+                    config::CEncoderDefaults::encOpt[nIndexChconfig].m_Names.Get(preset.nSetting[nIndexChconfig]).c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {

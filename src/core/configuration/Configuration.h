@@ -74,27 +74,6 @@ namespace config
         void LoadLangStrings(std::wstring szLangPath);
     public:
         std::wstring CConfiguration::GetString(const int nKey);
-    public:
-        std::wstring GetDefaultPresetName()
-        {
-            return this->GetString(0x00207001);
-        }
-        std::wstring GetDefaultTextAuto()
-        {
-            return this->GetString(0x00207002);
-        }
-        std::wstring GetDefaultTextIgnored()
-        {
-            return this->GetString(0x00207003);
-        }
-        std::wstring GetDefaultTextOutputPath()
-        {
-            return this->GetString(0x00207004);
-        }
-        std::wstring GetDefaultTextOutputFile()
-        {
-            return this->GetString(0x00207005);
-        }
     };
 
     class CChannelConfig
@@ -112,14 +91,14 @@ namespace config
         }
     };
 
-    class CEncoderOptions
+    class CEncoderOption
     {
     public:
         std::wstring szName;
         std::wstring szOption;
         std::wstring szHelpText;
-        util::CListT<std::wstring> listOptNames;
-        util::CListT<int> listOptValues;
+        util::CListT<std::wstring> m_Names;
+        util::CListT<int> m_Values;
         int nDefaultValue;
         int nIgnoreValue;
         std::wstring szGroupName;
@@ -174,12 +153,11 @@ namespace config
         static std::wstring szSupportedInputExt[nNumSupportedInputExt];
         static int nSupportedInputFormats[nNumSupportedInputExt];
         static std::wstring szSupportedOutputExt[nNumSupportedOutputExt];
-        static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
+        static CEncoderOption encOpt[CEncoderPreset::nNumEncoderOptions];
     public:
         static void InitEncoderOptions();
         static int FindValidBitratePos(const int nBitrate);
         static int FindOptionIndex(std::wstring szOption);
-        static void ResetEncoderOptionsLists();
         static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
         static bool LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
         static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);

@@ -149,7 +149,7 @@ namespace config
             for (int i = 0; i < nItems; i++)
             {
                 std::wstring &szPath = fl.Get(i);
-                szBuffer = (nFormat == 0 ? L"" : L"\"" + szPath + (nFormat == 0 ? L"" : L"\"") + szNewChar;
+                szBuffer = (nFormat == 0 ? L"" : L"\"") + szPath + (nFormat == 0 ? L"" : L"\"") + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
 
@@ -358,7 +358,7 @@ namespace config
     };
 
     std::wstring CEncoderDefaults::szRawSampleFormats[nNumRawSampleFormats] = {
-        config::m_Config.GetDefaultTextIgnored().c_str(),
+        config::m_Config.GetString(0x00207003),
         L"u8",
         L"s8",
         L"s16_le",
@@ -423,469 +423,234 @@ namespace config
        L"ac3"
     };
 
-    CEncoderOptions CEncoderDefaults::encOpt[CEncoderPreset::nNumEncoderOptions];
+    CEncoderOption CEncoderDefaults::encOpt[CEncoderPreset::nNumEncoderOptions];
 
     void CEncoderDefaults::InitEncoderOptions()
     {
-    #define SetEncoderOption(name, option, tooltip, defval, ignval, group, begin) \
-        nCurOpt++; \
-        encOpt[nCurOpt].szName = name; \
-        encOpt[nCurOpt].szOption = option; \
-        encOpt[nCurOpt].szHelpText = tooltip; \
-        encOpt[nCurOpt].nDefaultValue = defval; \
-        encOpt[nCurOpt].nIgnoreValue = ignval; \
-        encOpt[nCurOpt].szGroupName = group; \
-        encOpt[nCurOpt].bBeginGroup = begin;
-
-    #define AddEncoderOptionValue(name, value) \
-        szName = name; \
-        encOpt[nCurOpt].listOptNames.Insert(szName); \
-        nValue = value; \
-        encOpt[nCurOpt].listOptValues.Insert(nValue);
+        #define GetString(key) config::m_Config.GetString(key)
+        #define SetOption(name, option, tooltip, defval, ignval, group, begin) \
+            nCurOpt++; \
+            encOpt[nCurOpt].szName = name; \
+            encOpt[nCurOpt].szOption = option; \
+            encOpt[nCurOpt].szHelpText = tooltip; \
+            encOpt[nCurOpt].nDefaultValue = defval; \
+            encOpt[nCurOpt].nIgnoreValue = ignval; \
+            encOpt[nCurOpt].szGroupName = group; \
+            encOpt[nCurOpt].bBeginGroup = begin;
+        #define AddValue(name, value) \
+            szName = name; \
+            encOpt[nCurOpt].m_Names.Insert(szName); \
+            nValue = value; \
+            encOpt[nCurOpt].m_Values.Insert(nValue);
+        #define AddValueRange(start, end) \
+            for (int i = start; i <= end; i++) \
+                AddValue(std::to_wstring(i), i);
 
         int nCurOpt = -1;
         std::wstring szName = L"";
         int nValue = -1;
 
-        ResetEncoderOptionsLists();
-
-        SetEncoderOption(config::m_Config.GetString(0x00301001),
-            L"-fba",
-            config::m_Config.GetString(0x00301002),
-            0,
-            -1,
-            config::m_Config.GetString(0x00208001),
-            true);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00301003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00301004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00302001),
-            L"-exps",
-            config::m_Config.GetString(0x00302002),
-            7,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00302003), 1);
-
-        for (int i = 2; i <= 7; i++)
+        for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
         {
-            AddEncoderOptionValue(std::to_wstring(i), i);
+            encOpt[i].m_Names.RemoveAll();
+            encOpt[i].m_Values.RemoveAll();
         }
 
-        AddEncoderOptionValue(config::m_Config.GetString(0x00302004), 8);
-
-        for (int i = 9; i <= 31; i++)
-        {
-            AddEncoderOptionValue(std::to_wstring(i), i);
-        }
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00302005), 32);
-
-        SetEncoderOption(config::m_Config.GetString(0x00303001),
-            L"-pad",
-            config::m_Config.GetString(0x00303002),
-            1,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00303003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00303004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00304001),
-            L"-w",
-            config::m_Config.GetString(0x00304002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00304003), -1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00304004), -2);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00304005), 0);
-
-        for (int i = 1; i <= 59; i++)
-        {
-            AddEncoderOptionValue(std::to_wstring(i), i);
-        }
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00304006), 60);
-
-        SetEncoderOption(config::m_Config.GetString(0x00305001),
-            L"-wmin",
-            config::m_Config.GetString(0x00305002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00305003), 0);
-
-        for (int i = 1; i <= 59; i++)
-        {
-            AddEncoderOptionValue(std::to_wstring(i), i);
-        }
-
-        AddEncoderOptionValue(L"60", 60);
-
-        SetEncoderOption(config::m_Config.GetString(0x00306001),
-            L"-wmax",
-            config::m_Config.GetString(0x00306002),
-            60,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"0", 0);
-
-        for (int i = 1; i <= 59; i++)
-        {
-            AddEncoderOptionValue(std::to_wstring(i), i);
-        }
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00306003), 60);
-
-        SetEncoderOption(config::m_Config.GetString(0x00307001),
-            L"-m",
-            config::m_Config.GetString(0x00307002),
-            1,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00307003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00307004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00308001),
-            L"-s",
-            config::m_Config.GetString(0x00308002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00308003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00308004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00401001),
-            L"-cmix",
-            config::m_Config.GetString(0x00401002),
-            0,
-            -1,
-            config::m_Config.GetString(0x00208002),
-            true);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00401003), 0);
-        AddEncoderOptionValue(L"-4.5 dB", 1);
-        AddEncoderOptionValue(L"-6.0 dB", 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00402001),
-            L"-smix",
-            config::m_Config.GetString(0x00402002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00402003), 0);
-        AddEncoderOptionValue(L"-6 dB", 1);
-        AddEncoderOptionValue(L"0", 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00403001) ,
-            L"-dsur",
-            config::m_Config.GetString(0x00403002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00403003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00403004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00403005), 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00501001),
-            L"-dnorm",
-            config::m_Config.GetString(0x00501002),
-            31,
-            -1,
-            config::m_Config.GetString(0x00208003),
-            true);
-
-        for (int i = 0; i <= 30; i++)
-        {
-            AddEncoderOptionValue(std::to_wstring(i), i);
-        }
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00501003), 31);
-
-        SetEncoderOption(config::m_Config.GetString(0x00502001),
-            L"-dynrng",
-            config::m_Config.GetString(0x00502002),
-            5,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502005), 2);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502006), 3);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502007), 4);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00502008), 5);
-
-        SetEncoderOption(config::m_Config.GetString(0x00601001),
-            L"-acmod",
-            config::m_Config.GetString(0x00601002),
-            8,
-            8,
-            config::m_Config.GetString(0x00208004),
-            true);
-
-        AddEncoderOptionValue(L"1+1 (Ch1,Ch2)", 0);
-        AddEncoderOptionValue(L"1/0 (C)", 1);
-        AddEncoderOptionValue(L"2/0 (L,R)", 2);
-        AddEncoderOptionValue(L"3/0 (L,R,C)", 3);
-        AddEncoderOptionValue(L"2/1 (L,R,S)", 4);
-        AddEncoderOptionValue(L"3/1 (L,R,C,S)", 5);
-        AddEncoderOptionValue(L"2/2 (L,R,SL,SR)", 6);
-        AddEncoderOptionValue(L"3/2 (L,R,C,SL,SR)", 7);
-        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
-
-        SetEncoderOption(config::m_Config.GetString(0x00602001),
-            L"-lfe",
-            config::m_Config.GetString(0x00602002),
-            2,
-            2,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00602003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00602004), 1);
-        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
-
-        SetEncoderOption(config::m_Config.GetString(0x00603001),
-            L"-chconfig",
-            config::m_Config.GetString(0x00603002),
-            16,
-            16,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"1+1 = (Ch1,Ch2)", 0);
-        AddEncoderOptionValue(L"1/0 = (C)", 1);
-        AddEncoderOptionValue(L"2/0 = (L,R)", 2);
-        AddEncoderOptionValue(L"3/0 = (L,R,C)", 3);
-        AddEncoderOptionValue(L"2/1 = (L,R,S)", 4);
-        AddEncoderOptionValue(L"3/1 = (L,R,C,S)", 5);
-        AddEncoderOptionValue(L"2/2 = (L,R,SL,SR)", 6);
-        AddEncoderOptionValue(L"3/2 = (L,R,C,SL,SR)", 7);
-        AddEncoderOptionValue(L"1+1+LFE = (Ch1,Ch2) + LFE", 8);
-        AddEncoderOptionValue(L"1/0+LFE = (C) + LFE", 9);
-        AddEncoderOptionValue(L"2/0+LFE = (L,R) + LFE", 10);
-        AddEncoderOptionValue(L"3/0+LFE = (L,R,C) + LFE", 11);
-        AddEncoderOptionValue(L"2/1+LFE = (L,R,S) + LFE", 12);
-        AddEncoderOptionValue(L"3/1+LFE = (L,R,C,S) + LFE", 13);
-        AddEncoderOptionValue(L"2/2+LFE = (L,R,SL,SR) + LFE", 14);
-        AddEncoderOptionValue(L"3/2+LFE = (L,R,C,SL,SR) + LFE", 15);
-        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
-
-        SetEncoderOption(config::m_Config.GetString(0x00604001),
-            L"-chmap",
-            config::m_Config.GetString(0x00604002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00604003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00604004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00604005), 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00605001),
-            L"-readtoeof",
-            config::m_Config.GetString(0x00605002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00605003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00605004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00701001),
-            L"-bwfilter",
-            config::m_Config.GetString(0x00701002),
-            0,
-            -1,
-            config::m_Config.GetString(0x00208005),
-            true);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00701003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00701004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00702001),
-            L"-dcfilter",
-            config::m_Config.GetString(0x00702002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00702003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00702004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00703001),
-            L"-lfefilter",
-            config::m_Config.GetString(0x00703002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00703003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00703004), 1);
-
-        SetEncoderOption(config::m_Config.GetString(0x00801001),
-            L"-xbsi1",
-            config::m_Config.GetString(0x00801002),
-            2,
-            2,
-            config::m_Config.GetString(0x00208006),
-            true);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00801003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00801004), 1);
-        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
-
-        SetEncoderOption(config::m_Config.GetString(0x00802001),
-            L"-dmixmod",
-            config::m_Config.GetString(0x00802002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00802003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00802004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00802005), 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00803001),
-            L"-ltrtcmix",
-            config::m_Config.GetString(0x00803002),
-            4,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"+3.0 dB", 0);
-        AddEncoderOptionValue(L"+1.5 dB", 1);
-        AddEncoderOptionValue(L"0.0 dB", 2);
-        AddEncoderOptionValue(L"-1.5 dB", 3);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00803003), 4);
-        AddEncoderOptionValue(L"-4.5 dB", 5);
-        AddEncoderOptionValue(L"-6.0 dB", 6);
-        AddEncoderOptionValue(L"-inf dB", 7);
-
-        SetEncoderOption(config::m_Config.GetString(0x00804001),
-            L"-ltrtsmix",
-            config::m_Config.GetString(0x00804002),
-            4,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"+3.0 dB", 0);
-        AddEncoderOptionValue(L"+1.5 dB", 1);
-        AddEncoderOptionValue(L"0.0 dB", 2);
-        AddEncoderOptionValue(L"-1.5 dB", 3);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00804003), 4);
-        AddEncoderOptionValue(L"-4.5 dB", 5);
-        AddEncoderOptionValue(L"-6.0 dB", 6);
-        AddEncoderOptionValue(L"-inf dB", 7);
-
-        SetEncoderOption(config::m_Config.GetString(0x00805001),
-            L"-lorocmix",
-            config::m_Config.GetString(0x00805002),
-            4,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"+3.0 dB", 0);
-        AddEncoderOptionValue(L"+1.5 dB", 1);
-        AddEncoderOptionValue(L"0.0 dB", 2);
-        AddEncoderOptionValue(L"-1.5 dB", 3);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00805003), 4);
-        AddEncoderOptionValue(L"-4.5 dB", 5);
-        AddEncoderOptionValue(L"-6.0 dB", 6);
-        AddEncoderOptionValue(L"-inf dB", 7);
-
-        SetEncoderOption(config::m_Config.GetString(0x00806001),
-            L"-lorosmix",
-            config::m_Config.GetString(0x00806002),
-            4,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(L"+3.0 dB", 0);
-        AddEncoderOptionValue(L"+1.5 dB", 1);
-        AddEncoderOptionValue(L"0.0 dB", 2);
-        AddEncoderOptionValue(L"-1.5 dB", 3);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00806003), 4);
-        AddEncoderOptionValue(L"-4.5 dB", 5);
-        AddEncoderOptionValue(L"-6.0 dB", 6);
-        AddEncoderOptionValue(L"-inf dB", 7);
-
-        SetEncoderOption(config::m_Config.GetString(0x00807001),
-            L"-xbsi2",
-            config::m_Config.GetString(0x00807002),
-            2,
-            2,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00807003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00807004), 1);
-        AddEncoderOptionValue(config::m_Config.GetDefaultTextIgnored().c_str(), 0);
-
-        SetEncoderOption(config::m_Config.GetString(0x00808001),
-            L"-dsurexmod",
-            config::m_Config.GetString(0x00808002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00808003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00808004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00808005), 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x00809001),
-            L"-dheadphon",
-            config::m_Config.GetString(0x00809002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x00809003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00809004), 1);
-        AddEncoderOptionValue(config::m_Config.GetString(0x00809005), 2);
-
-        SetEncoderOption(config::m_Config.GetString(0x0080A001),
-            L"-adconvtyp",
-            config::m_Config.GetString(0x0080A002),
-            0,
-            -1,
-            L"",
-            false);
-
-        AddEncoderOptionValue(config::m_Config.GetString(0x0080A003), 0);
-        AddEncoderOptionValue(config::m_Config.GetString(0x0080A004), 1);
+        SetOption(GetString(0x00301001), L"-fba", GetString(0x00301002), 0, -1, GetString(0x00208001), true)
+        AddValue(GetString(0x00301003), 0)
+        AddValue(GetString(0x00301004), 1)
+
+        SetOption(GetString(0x00302001), L"-exps", GetString(0x00302002), 7, -1, L"", false)
+        AddValue(GetString(0x00302003), 1)
+        AddValueRange(2, 7)
+        AddValue(GetString(0x00302004), 8)
+        AddValueRange(9, 31)
+        AddValue(GetString(0x00302005), 32)
+
+        SetOption(GetString(0x00303001), L"-pad", GetString(0x00303002), 1, -1, L"", false)
+        AddValue(GetString(0x00303003), 0)
+        AddValue(GetString(0x00303004), 1)
+
+        SetOption(GetString(0x00304001), L"-w", GetString(0x00304002), 0, -1, L"", false)
+        AddValue(GetString(0x00304003), -1)
+        AddValue(GetString(0x00304004), -2)
+        AddValue(GetString(0x00304005), 0)
+        AddValueRange(1, 59)
+        AddValue(GetString(0x00304006), 60)
+
+        SetOption(GetString(0x00305001), L"-wmin", GetString(0x00305002), 0, -1, L"", false)
+        AddValue(GetString(0x00305003), 0)
+        AddValueRange(1, 59)
+        AddValue(L"60", 60)
+
+        SetOption(GetString(0x00306001), L"-wmax", GetString(0x00306002), 60, -1, L"", false)
+        AddValue(L"0", 0)
+        AddValueRange(1, 56)
+        AddValue(GetString(0x00306003), 60)
+
+        SetOption(GetString(0x00307001), L"-m", GetString(0x00307002), 1, -1, L"", false)
+        AddValue(GetString(0x00307003), 0)
+        AddValue(GetString(0x00307004), 1)
+
+        SetOption(GetString(0x00308001), L"-s", GetString(0x00308002), 0, -1, L"", false)
+        AddValue(GetString(0x00308003), 0)
+        AddValue(GetString(0x00308004), 1)
+
+        SetOption(GetString(0x00401001), L"-cmix", GetString(0x00401002), 0, -1, GetString(0x00208002), true)
+        AddValue(GetString(0x00401003), 0)
+        AddValue(L"-4.5 dB", 1)
+        AddValue(L"-6.0 dB", 2)
+
+        SetOption(GetString(0x00402001), L"-smix", GetString(0x00402002), 0, -1, L"", false)
+        AddValue(GetString(0x00402003), 0)
+        AddValue(L"-6 dB", 1)
+        AddValue(L"0", 2)
+
+        SetOption(GetString(0x00403001) , L"-dsur", GetString(0x00403002), 0, -1, L"", false)
+        AddValue(GetString(0x00403003), 0)
+        AddValue(GetString(0x00403004), 1)
+        AddValue(GetString(0x00403005), 2)
+
+        SetOption(GetString(0x00501001), L"-dnorm", GetString(0x00501002), 31, -1, GetString(0x00208003), true)
+        AddValueRange(0, 30)
+        AddValue(GetString(0x00501003), 31)
+
+        SetOption(GetString(0x00502001), L"-dynrng", GetString(0x00502002), 5, -1, L"", false)
+        AddValue(GetString(0x00502003), 0)
+        AddValue(GetString(0x00502004), 1)
+        AddValue(GetString(0x00502005), 2)
+        AddValue(GetString(0x00502006), 3)
+        AddValue(GetString(0x00502007), 4)
+        AddValue(GetString(0x00502008), 5)
+
+        SetOption(GetString(0x00601001), L"-acmod", GetString(0x00601002), 8, 8, GetString(0x00208004), true)
+        AddValue(L"1+1 (Ch1,Ch2)", 0)
+        AddValue(L"1/0 (C)", 1)
+        AddValue(L"2/0 (L,R)", 2)
+        AddValue(L"3/0 (L,R,C)", 3)
+        AddValue(L"2/1 (L,R,S)", 4)
+        AddValue(L"3/1 (L,R,C,S)", 5)
+        AddValue(L"2/2 (L,R,SL,SR)", 6)
+        AddValue(L"3/2 (L,R,C,SL,SR)", 7)
+        AddValue(GetString(0x00207003), 0)
+
+        SetOption(GetString(0x00602001), L"-lfe", GetString(0x00602002), 2, 2, L"", false)
+        AddValue(GetString(0x00602003), 0)
+        AddValue(GetString(0x00602004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        SetOption(GetString(0x00603001), L"-chconfig", GetString(0x00603002), 16, 16, L"", false)
+        AddValue(L"1+1 = (Ch1,Ch2)", 0)
+        AddValue(L"1/0 = (C)", 1)
+        AddValue(L"2/0 = (L,R)", 2)
+        AddValue(L"3/0 = (L,R,C)", 3)
+        AddValue(L"2/1 = (L,R,S)", 4)
+        AddValue(L"3/1 = (L,R,C,S)", 5)
+        AddValue(L"2/2 = (L,R,SL,SR)", 6)
+        AddValue(L"3/2 = (L,R,C,SL,SR)", 7)
+        AddValue(L"1+1+LFE = (Ch1,Ch2) + LFE", 8)
+        AddValue(L"1/0+LFE = (C) + LFE", 9)
+        AddValue(L"2/0+LFE = (L,R) + LFE", 10)
+        AddValue(L"3/0+LFE = (L,R,C) + LFE", 11)
+        AddValue(L"2/1+LFE = (L,R,S) + LFE", 12)
+        AddValue(L"3/1+LFE = (L,R,C,S) + LFE", 13)
+        AddValue(L"2/2+LFE = (L,R,SL,SR) + LFE", 14)
+        AddValue(L"3/2+LFE = (L,R,C,SL,SR) + LFE", 15)
+        AddValue(GetString(0x00207003), 0)
+
+        SetOption(GetString(0x00604001), L"-chmap", GetString(0x00604002), 0, -1, L"", false)
+        AddValue(GetString(0x00604003), 0)
+        AddValue(GetString(0x00604004), 1)
+        AddValue(GetString(0x00604005), 2)
+
+        SetOption(GetString(0x00605001), L"-readtoeof", GetString(0x00605002), 0, -1, L"", false)
+        AddValue(GetString(0x00605003), 0)
+        AddValue(GetString(0x00605004), 1)
+
+        SetOption(GetString(0x00701001), L"-bwfilter", GetString(0x00701002), 0, -1, GetString(0x00208005), true)
+        AddValue(GetString(0x00701003), 0)
+        AddValue(GetString(0x00701004), 1)
+
+        SetOption(GetString(0x00702001), L"-dcfilter", GetString(0x00702002), 0, -1, L"", false)
+        AddValue(GetString(0x00702003), 0)
+        AddValue(GetString(0x00702004), 1)
+
+        SetOption(GetString(0x00703001), L"-lfefilter", GetString(0x00703002), 0, -1, L"", false)
+        AddValue(GetString(0x00703003), 0)
+        AddValue(GetString(0x00703004), 1)
+
+        SetOption(GetString(0x00801001), L"-xbsi1", GetString(0x00801002), 2, 2, GetString(0x00208006), true)
+        AddValue(GetString(0x00801003), 0)
+        AddValue(GetString(0x00801004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        SetOption(GetString(0x00802001), L"-dmixmod", GetString(0x00802002), 0, -1, L"", false)
+        AddValue(GetString(0x00802003), 0)
+        AddValue(GetString(0x00802004), 1)
+        AddValue(GetString(0x00802005), 2)
+
+        SetOption(GetString(0x00803001), L"-ltrtcmix", GetString(0x00803002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00803003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        SetOption(GetString(0x00804001), L"-ltrtsmix", GetString(0x00804002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00804003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        SetOption(GetString(0x00805001), L"-lorocmix", GetString(0x00805002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00805003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        SetOption(GetString(0x00806001), L"-lorosmix", GetString(0x00806002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00806003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        SetOption(GetString(0x00807001), L"-xbsi2", GetString(0x00807002), 2, 2, L"", false)
+        AddValue(GetString(0x00807003), 0)
+        AddValue(GetString(0x00807004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        SetOption(GetString(0x00808001), L"-dsurexmod", GetString(0x00808002), 0, -1, L"", false)
+        AddValue(GetString(0x00808003), 0)
+        AddValue(GetString(0x00808004), 1)
+        AddValue(GetString(0x00808005), 2)
+
+        SetOption(GetString(0x00809001), L"-dheadphon", GetString(0x00809002), 0, -1, L"", false)
+        AddValue(GetString(0x00809003), 0)
+        AddValue(GetString(0x00809004), 1)
+        AddValue(GetString(0x00809005), 2)
+
+        SetOption(GetString(0x0080A001), L"-adconvtyp", GetString(0x0080A002), 0, -1, L"", false)
+        AddValue(GetString(0x0080A003), 0)
+        AddValue(GetString(0x0080A004), 1)
+
+        #undef GetString
+        #undef SetOption
+        #undef AddValue
     }
 
     int CEncoderDefaults::FindValidBitratePos(const int nBitrate)
@@ -910,18 +675,6 @@ namespace config
             }
         }
         return 0;
-    }
-
-    void CEncoderDefaults::ResetEncoderOptionsLists()
-    {
-        for (int i = 0; i < CEncoderPreset::nNumEncoderOptions; i++)
-        {
-            if (encOpt[i].listOptNames.Count() > 0)
-                encOpt[i].listOptNames.RemoveAll();
-
-            if (encOpt[i].listOptValues.Count() > 0)
-                encOpt[i].listOptValues.RemoveAll();
-        }
     }
 
     void CEncoderDefaults::ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl)
