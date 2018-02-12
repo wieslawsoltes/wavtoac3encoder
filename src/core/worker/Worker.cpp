@@ -55,7 +55,7 @@ namespace worker
 
         #define SET_AFTEN_SETTING(set, type) \
             if(config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-                (set) = (type) config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting]);
+                (set) = (type) config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]];
 
         nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
             nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
@@ -75,8 +75,8 @@ namespace worker
             nSetting++;
         if (config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
         {
-            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].acmod;
-            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values.Get(preset->nSetting[nSetting])].lfe;
+            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].acmod;
+            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].lfe;
         }
         nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
             nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
