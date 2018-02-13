@@ -91,7 +91,7 @@ namespace config
         int nRawSampleFormat;
         int nRawSampleRate;
         int nRawChannels;
-    }
+    };
 
     class CPreset
     {
