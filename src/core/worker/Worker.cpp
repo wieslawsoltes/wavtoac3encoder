@@ -53,7 +53,7 @@ namespace worker
 
         #define SetSetting(set, type) \
             nOption++; \
-            nOptionValue = preset->nOptions[nOption]; \
+            nOptionValue = preset->nOptions[nOption].second; \
             if(config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != nOptionValue) \
                 (set) = (type) config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[nOptionValue].second;
 
@@ -77,7 +77,7 @@ namespace worker
         SetSetting(s.lfe, int)
 
         nOption++;
-        nOptionValue = preset->nOptions[nOption];
+        nOptionValue = preset->nOptions[nOption].second;
         if (config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != nOptionValue)
         {
             s.acmod = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[nOptionValue].second].acmod;
