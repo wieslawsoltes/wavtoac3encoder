@@ -55,7 +55,7 @@ namespace worker
             nOption++; \
             { \
                 auto& option = config::m_Config.m_EncoderOptions.m_Options[nOption]; \
-                int nOptionValue = preset->nOptions[nOption]; \
+                int nOptionValue = preset->nOptions.at(nOption); \
                 if(option.nIgnoreValue != nOptionValue) \
                 { \
                     int nValue = option.m_Values[nOptionValue].second; \
@@ -84,7 +84,7 @@ namespace worker
         nOption++;
         {
             auto& option = config::m_Config.m_EncoderOptions.m_Options[nOption];
-            int nOptionValue = preset->nOptions[nOption];
+            int nOptionValue = preset->nOptions.at(nOption);
             if (option.nIgnoreValue != nOptionValue)
             {
                 int nValue = option.m_Values[nOptionValue].second;
