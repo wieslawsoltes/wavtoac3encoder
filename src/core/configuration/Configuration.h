@@ -87,7 +87,7 @@ namespace config
         std::vector<std::wstring> szSupportedOutputExt;
         std::vector<COption> m_Options;
     public:
-        void InitEncoderOptions();
+        void Init();
         int FindValidBitratePos(const int nBitrate);
         int FindOptionIndex(std::wstring szOption);
         void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
