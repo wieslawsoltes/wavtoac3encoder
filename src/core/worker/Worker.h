@@ -1,8 +1,10 @@
 ﻿#pragma once
 
 #include <atlstr.h>
+#include <utility>
 #include <string>
 #include <vector>
+#include <map>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
 #include "utilities\Utilities.h"
