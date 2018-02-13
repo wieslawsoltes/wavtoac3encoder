@@ -41,8 +41,8 @@ namespace app
     public:
         int nChannelConfig;
         bool bLFE;
-        std::wstring szInputFiles[config::CDefaults::nNumMaxInputFiles];
-        std::wstring szTmpInputFiles[config::CDefaults::nNumMaxInputFiles];
+        std::wstring szInputFiles[6];
+        std::wstring szTmpInputFiles[6];
     public:
         controls::CMyButton m_BtnChannelFL;
         controls::CMyButton m_BtnChannelFR;

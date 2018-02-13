@@ -496,8 +496,8 @@ namespace app
         {
             auto& preset = GetCurrentPreset();
             preset.nMode = AFTEN_ENC_MODE_CBR;
-            this->m_SldBitrate.SetRange(0, config::CDefaults::nNumValidCbrBitrates - 1, TRUE);
-            int nNewPos = config::CDefaults::FindValidBitratePos(GetCurrentPreset().nBitrate);
+            this->m_SldBitrate.SetRange(0, (int)config::m_Config.m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
+            int nNewPos = config::m_Config.m_EncoderOptions.FindValidBitratePos(GetCurrentPreset().nBitrate);
             this->m_SldBitrate.SetPos(nNewPos);
         }
 
@@ -557,7 +557,7 @@ namespace app
         if (this->bMultipleMonoInput == true)
         {
             CFileDialog fd(FALSE,
-                config::CDefaults::szSupportedOutputExt[0].c_str(),
+                config::m_Config.m_EncoderOptions.szSupportedOutputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER,
                 config::m_Config.GetString(0x0020701C).c_str(),
@@ -694,7 +694,7 @@ namespace app
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
             preset.nOptions[nItem] = nVal;
-            std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
+            std::wstring szName = config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
             this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
@@ -1116,7 +1116,7 @@ namespace app
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = config::CDefaults::LoadPresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        bool bPresetsRet = config::m_Config.m_EncoderOptions.LoadPresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
         OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
         if (bPresetsRet == true)
@@ -1154,7 +1154,7 @@ namespace app
     {
         bool bRet = false;
 
-        bRet = config::CDefaults::SavePresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
+        bRet = config::m_Config.m_EncoderOptions.SavePresets(this->presets, config::m_Config.m_szPresetsFilePath, this->defaultPreset);
         OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + config::m_Config.m_szPresetsFilePath).c_str());
 
         bRet = this->SaveProgramConfig(config::m_Config.m_szConfigFilePath);
@@ -1182,16 +1182,16 @@ namespace app
         }
         else
         {
-            if ((nCurPos >= 0) && (nCurPos < config::CDefaults::nNumValidCbrBitrates))
+            if ((nCurPos >= 0) && (nCurPos < (int)config::m_Config.m_EncoderOptions.nValidCbrBitrates.size()))
             {
                 m_StcQualityBitrate.SetWindowText(config::m_Config.GetString(0x00202003).c_str());
                 if (nCurPos == 0)
                     szBuff = config::m_Config.GetString(0x00207002).c_str();
                 else
-                    szBuff.Format(_T("%d kbps"), config::CDefaults::nValidCbrBitrates[nCurPos]);
+                    szBuff.Format(_T("%d kbps"), config::m_Config.m_EncoderOptions.nValidCbrBitrates[nCurPos]);
 
                 auto& preset = GetCurrentPreset();
-                preset.nBitrate = config::CDefaults::nValidCbrBitrates[nCurPos];
+                preset.nBitrate = config::m_Config.m_EncoderOptions.nValidCbrBitrates[nCurPos];
             }
         }
 
@@ -1250,15 +1250,15 @@ namespace app
         for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
         {
             int nOption = preset.nOptions[i];
-            std::wstring& szText = config::CDefaults::encOpt[i].m_Names[nOption];
+            std::wstring& szText = config::m_Config.m_EncoderOptions.m_Options[i].m_Values[nOption].first;
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
         if (preset.nMode == AFTEN_ENC_MODE_CBR)
         {
             this->m_SldBitrate.SetTic(1);
-            this->m_SldBitrate.SetRange(0, config::CDefaults::nNumValidCbrBitrates - 1, TRUE);
-            int nPos = config::CDefaults::FindValidBitratePos(preset.nBitrate);
+            this->m_SldBitrate.SetRange(0, (int)config::m_Config.m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
+            int nPos = config::m_Config.m_EncoderOptions.FindValidBitratePos(preset.nBitrate);
             this->m_SldBitrate.SetPos(nPos);
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
@@ -1356,7 +1356,7 @@ namespace app
                 {
                     std::wstring file = szFile;
                     std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
-                    if (config::CDefaults::IsSupportedInputExt(szExt) == true)
+                    if (config::m_Config.m_EncoderOptions.IsSupportedInputExt(szExt) == true)
                     {
                         std::wstring szPath = szFile;
                         this->AddItemToFileList(szPath);
@@ -1372,15 +1372,15 @@ namespace app
     {
         this->m_CmbValue.ResetContent();
 
-        for (int i = 0; i < (int)config::CDefaults::encOpt[nItem].m_Names.size(); i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values.size(); i++)
         {
-            this->m_CmbValue.AddString(config::CDefaults::encOpt[nItem].m_Names[i].c_str());
+            this->m_CmbValue.AddString(config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values[i].first.c_str());
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
         if (this->presets.size() <= 0)
-            this->m_CmbValue.SetCurSel(config::CDefaults::encOpt[nItem].nDefaultValue);
+            this->m_CmbValue.SetCurSel(config::m_Config.m_EncoderOptions.m_Options[nItem].nDefaultValue);
         else
             this->m_CmbValue.SetCurSel(GetCurrentPreset().nOptions[nItem]);
     }
@@ -1396,7 +1396,7 @@ namespace app
                 for (auto& file : files)
                 {
                     std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
-                    if (config::CDefaults::IsSupportedInputExt(szExt) == true)
+                    if (config::m_Config.m_EncoderOptions.IsSupportedInputExt(szExt) == true)
                     {
                         this->AddItemToFileList(file);
                     }
@@ -1436,9 +1436,9 @@ namespace app
         menu->CreatePopupMenu();
 
         UINT nItemCount = ID_OPTIONS_MENU_START;
-        for (int i = 0; i < (int)config::CDefaults::encOpt[nItem].m_Names.size(); i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values.size(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, config::CDefaults::encOpt[nItem].m_Names[i].c_str());
+            menu->AppendMenu(MF_STRING, nItemCount, config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values[i].first.c_str());
             nItemCount++;
         }
 
@@ -1720,24 +1720,24 @@ namespace app
 
         ListView_DeleteAllItems(listSettings);
 
-        for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options.size(); i++)
         {
-            if (config::CDefaults::encOpt[i].bBeginGroup == true)
+            if (config::m_Config.m_EncoderOptions.m_Options[i].bBeginGroup == true)
                 nGroupCounter++;
 
-            if (nGroupCounter >= 0 && nGroupCounter < config::CDefaults::nNumEncoderOptionsGroups)
+            if (nGroupCounter >= 0 && nGroupCounter < (int)config::m_Config.m_EncoderOptions.m_Options.size())
             {
-                LPWSTR pszText = (LPTSTR)(LPCTSTR)config::CDefaults::encOpt[i].szName.c_str();
+                LPWSTR pszText = (LPTSTR)(LPCTSTR)config::m_Config.m_EncoderOptions.m_Options[i].szName.c_str();
                 li.pszText = pszText;
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
-                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::CDefaults::encOpt[i].m_Names[config::CDefaults::encOpt[i].nDefaultValue].c_str();
+                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)config::m_Config.m_EncoderOptions.m_Options[i].m_Values[config::m_Config.m_EncoderOptions.m_Options[i].nDefaultValue].first.c_str();
                 ListView_InsertItem(listSettings, &li);
                 ListView_SetItemText(listSettings, i, 1, pszSetting);
 
-                CString szTip = CString(config::CDefaults::encOpt[i].szHelpText.c_str());
+                CString szTip = CString(config::m_Config.m_EncoderOptions.m_Options[i].szHelpText.c_str());
                 this->m_LstSettings.listTooltips.AddTail(szTip);
             }
         }
@@ -1749,7 +1749,7 @@ namespace app
     void CMainDlg::InitDefaultPreset()
     {
         for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
-            defaultPreset.nOptions[i] = config::CDefaults::encOpt[i].nDefaultValue;
+            defaultPreset.nOptions[i] = config::m_Config.m_EncoderOptions.m_Options[i].nDefaultValue;
 
         defaultPreset.szName = config::m_Config.GetString(0x00207001);
         defaultPreset.nMode = AFTEN_ENC_MODE_CBR;
@@ -1812,8 +1812,8 @@ namespace app
         if (defaultPreset.nMode == AFTEN_ENC_MODE_CBR)
         {
             this->m_SldBitrate.SetTic(1);
-            this->m_SldBitrate.SetRange(0, config::CDefaults::nNumValidCbrBitrates - 1, TRUE);
-            this->m_SldBitrate.SetPos(config::CDefaults::FindValidBitratePos(defaultPreset.nBitrate));
+            this->m_SldBitrate.SetRange(0, (int)config::m_Config.m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
+            this->m_SldBitrate.SetPos(config::m_Config.m_EncoderOptions.FindValidBitratePos(defaultPreset.nBitrate));
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
         else if (defaultPreset.nMode == AFTEN_ENC_MODE_VBR)
@@ -1830,12 +1830,12 @@ namespace app
 
     void CMainDlg::InitRawSamleFormatComboBox()
     {
-        config::CDefaults::szRawSampleFormats[0] = config::m_Config.GetString(0x00207003).c_str();
+        config::m_Config.m_EncoderOptions.szRawSampleFormats[0] = config::m_Config.GetString(0x00207003).c_str();
 
         this->m_CmbRawSampleFormat.ResetContent();
 
-        for (int i = 0; i < config::CDefaults::nNumRawSampleFormats; i++)
-            this->m_CmbRawSampleFormat.InsertString(i, config::CDefaults::szRawSampleFormats[i].c_str());
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.szRawSampleFormats.size(); i++)
+            this->m_CmbRawSampleFormat.InsertString(i, config::m_Config.m_EncoderOptions.szRawSampleFormats[i].c_str());
     }
 
     void CMainDlg::InitSettingsListGroups()
@@ -1848,7 +1848,7 @@ namespace app
 
         ListView_RemoveAllGroups(listView);
 
-        for (int i = 0; i < config::CDefaults::nNumEncoderOptionsGroups; i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.szGroups.size(); i++)
         {
             std::wstring szHeader = config::m_Config.GetString(0x00208000 + i + 1);
             LPWSTR pszHeader = (LPTSTR)(LPCTSTR)szHeader.c_str();
@@ -2003,7 +2003,7 @@ namespace app
         this->InitLangFilesList();
         this->InitLangSettingsList();
 
-        config::CDefaults::InitEncoderOptions();
+        config::m_Config.m_EncoderOptions.Init();
 
         this->InitSettingsList();
 
@@ -2383,7 +2383,7 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
-                std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
+                std::wstring szName = config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2408,7 +2408,7 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
-                std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
+                std::wstring szName = config::m_Config.m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2453,8 +2453,8 @@ namespace app
         {
             int nItem = m_LstSettings.GetNextSelectedItem(pos);
             this->MessageBox(
-                config::CDefaults::encOpt[nItem].szHelpText.c_str(), 
-                config::CDefaults::encOpt[nItem].szName.c_str(), 
+                config::m_Config.m_EncoderOptions.m_Options[nItem].szHelpText.c_str(), 
+                config::m_Config.m_EncoderOptions.m_Options[nItem].szName.c_str(), 
                 MB_ICONINFORMATION | MB_OK);
         }
 
@@ -2571,9 +2571,9 @@ namespace app
 
             ZeroMemory(pFiles, dwMaxSize);
 
-            CString szFilter = config::CDefaults::GetSupportedInputFilesFilter();
+            CString szFilter = config::m_Config.m_EncoderOptions.GetSupportedInputFilesFilter();
             CFileDialog fd(TRUE,
-                config::CDefaults::szSupportedInputExt[0].c_str(),
+                config::m_Config.m_EncoderOptions.szSupportedInputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
                 szFilter,
@@ -2664,37 +2664,37 @@ namespace app
         CMuxDlg dlg;
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
-        if (nItemsCount > config::CDefaults::nNumMaxInputFiles)
-            nItemsCount = config::CDefaults::nNumMaxInputFiles;
+        if (nItemsCount > 6)
+            nItemsCount = 6;
 
         for (int i = 0; i < nItemsCount; i++)
         {
             dlg.szTmpInputFiles[i] = this->m_LstFiles.GetItemText(i, 0);
         }
 
-        int nIndexAcmod = config::CDefaults::FindOptionIndex(_T("acmod"));
-        int nIndexLfe = config::CDefaults::FindOptionIndex(_T("lfe"));
-        int nIndexChconfig = config::CDefaults::FindOptionIndex(_T("chconfig"));
+        int nIndexAcmod = config::m_Config.m_EncoderOptions.FindOptionIndex(_T("acmod"));
+        int nIndexLfe = config::m_Config.m_EncoderOptions.FindOptionIndex(_T("lfe"));
+        int nIndexChconfig = config::m_Config.m_EncoderOptions.FindOptionIndex(_T("chconfig"));
         bool bUpdateChconfig = false;
 
         auto& preset = GetCurrentPreset();
 
-        if (config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue != preset.nOptions[nIndexChconfig])
+        if (config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue != preset.nOptions[nIndexChconfig])
         {
-            dlg.nChannelConfig = config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]]].acmod;
-            dlg.bLFE = (config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]]].lfe == 1) ? true : false;
+            dlg.nChannelConfig = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].second].acmod;
+            dlg.bLFE = (config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].second].lfe == 1) ? true : false;
             bUpdateChconfig = true;
         }
         else
         {
-            if (config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue != preset.nOptions[nIndexAcmod])
+            if (config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].nIgnoreValue != preset.nOptions[nIndexAcmod])
             {
                 dlg.nChannelConfig = preset.nOptions[nIndexAcmod];
             }
             else
             {
-                int nDefault = (int)(config::CDefaults::encOpt[nIndexAcmod].m_Values.size() - 2);
-                dlg.nChannelConfig = config::CDefaults::encOpt[nIndexAcmod].m_Values[nDefault];
+                int nDefault = (int)(config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].m_Values.size() - 2);
+                dlg.nChannelConfig = config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].m_Values[nDefault].second;
             }
 
             dlg.bLFE = (preset.nOptions[nIndexLfe] == 1) ? true : false;
@@ -2804,24 +2804,24 @@ namespace app
                     break;
                 };
 
-                preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
+                preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::CDefaults::encOpt[nIndexAcmod].m_Names[preset.nOptions[nIndexAcmod]].c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].m_Values[preset.nOptions[nIndexAcmod]].first.c_str());
 
-                preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
+                preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? config::m_Config.m_EncoderOptions.m_Options[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::CDefaults::encOpt[nIndexLfe].m_Names[preset.nOptions[nIndexLfe]].c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexLfe].m_Values[preset.nOptions[nIndexLfe]].first.c_str());
 
                 if (bUpdateChconfig == true)
                 {
                     int acmod = dlg.nChannelConfig;
                     int lfe = (dlg.bLFE == true) ? 1 : 0;
 
-                    for (int i = 0; i < config::CDefaults::nNumChannelConfigAften; i++)
+                    for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.ccAften.size(); i++)
                     {
-                        if ((config::CDefaults::ccAften[i].acmod == acmod) && (config::CDefaults::ccAften[i].lfe == lfe))
+                        if ((config::m_Config.m_EncoderOptions.ccAften[i].acmod == acmod) && (config::m_Config.m_EncoderOptions.ccAften[i].lfe == lfe))
                         {
                             preset.nOptions[nIndexChconfig] = i;
                             break;
@@ -2830,10 +2830,10 @@ namespace app
                 }
                 else
                 {
-                    preset.nOptions[nIndexChconfig] = config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue;
+                    preset.nOptions[nIndexChconfig] = config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::CDefaults::encOpt[nIndexChconfig].m_Names[preset.nOptions[nIndexChconfig]].c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].first.c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {
@@ -2895,7 +2895,7 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            if (config::CDefaults::LoadPresets(this->presets, szFileName, this->defaultPreset) == true)
+            if (config::m_Config.m_EncoderOptions.LoadPresets(this->presets, szFileName, this->defaultPreset) == true)
             {
                 this->m_CmbPresets.ResetContent();
 
@@ -2926,7 +2926,7 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            config::CDefaults::SavePresets(this->presets, szFileName, this->defaultPreset);
+            config::m_Config.m_EncoderOptions.SavePresets(this->presets, szFileName, this->defaultPreset);
         }
     }
 

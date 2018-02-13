@@ -35,8 +35,8 @@ namespace app
     protected:
         DECLARE_MESSAGE_MAP()
     public:
-        static int nIDIn[config::CDefaults::nNumMaxInputFiles];
-        static int nIDInInfo[config::CDefaults::nNumMaxInputFiles];
+        static int nIDIn[6];
+        static int nIDInInfo[6];
     public:
         worker::CWorkerContext * pWorkerContext;
     public:

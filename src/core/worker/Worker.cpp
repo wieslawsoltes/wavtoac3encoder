@@ -53,8 +53,8 @@ namespace worker
 
         #define SetSetting(set, type) \
             nOption++; \
-            if(config::CDefaults::encOpt[nOption].nIgnoreValue != preset->nOptions[nOption]) \
-                (set) = (type) config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]];
+            if(config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != preset->nOptions[nOption]) \
+                (set) = (type) config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[preset->nOptions[nOption]].second;
 
         int nOption = -1;
 
@@ -75,10 +75,10 @@ namespace worker
         SetSetting(s.lfe, int)
 
         nOption++;
-        if (config::CDefaults::encOpt[nOption].nIgnoreValue != preset->nOptions[nOption])
+        if (config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != preset->nOptions[nOption])
         {
-            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]]].acmod;
-            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]]].lfe;
+            s.acmod = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[preset->nOptions[nOption]].second].acmod;
+            s.lfe = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[preset->nOptions[nOption]].second].lfe;
         }
 
         SetSetting(opt.chmap, int)
@@ -297,7 +297,7 @@ namespace worker
 
         pContext->nInTotalSize = 0;
 
-        memset(ifp, 0, config::CDefaults::nNumMaxInputFiles * sizeof(FILE *));
+        memset(ifp, 0, 6 * sizeof(FILE *));
 
         char szInputFileAVS[MAX_PATH] = "";
         if (bAvisynthInput == true)
@@ -377,7 +377,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::CDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = config::m_Config.m_EncoderOptions.GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -761,7 +761,7 @@ namespace worker
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CDefaults::szSupportedOutputExt[0];
+                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::m_Config.m_EncoderOptions.szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
@@ -830,7 +830,7 @@ namespace worker
             szOutPath = szInPath[0];
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CDefaults::szSupportedOutputExt[0];
+            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::m_Config.m_EncoderOptions.szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
