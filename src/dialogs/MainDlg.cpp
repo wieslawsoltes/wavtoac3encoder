@@ -18,6 +18,7 @@ namespace app
 
         this->nSortOrder[0] = true;
         this->nSortOrder[1] = true;
+        this->bVisible = false;
     }
 
     void CMainDlg::DoDataExchange(CDataExchange* pDX)
@@ -299,7 +300,7 @@ namespace app
 
         CWorkDlg dlg;
         dlg.pConfig = this->pConfig;
-        dlg.pWorkerContext = new CWorkDlgWorkerContext(this);
+        dlg.pWorkerContext = new CWorkDlgWorkerContext(&dlg);
         dlg.pWorkerContext->nTotalSize = 0;
 
         CString szSizeBuff;
@@ -416,9 +417,9 @@ namespace app
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
-        for (int i = (int)listStatus.size() - 1; i >= 0; i--)
+        for (int i = (int)dlg.pWorkerContext->m_Status.size() - 1; i >= 0; i--)
         {
-            if (listStatus[i]  == true)
+            if (dlg.pWorkerContext->m_Status[i]  == true)
                 this->m_LstFiles.DeleteItem(i);
         }
 

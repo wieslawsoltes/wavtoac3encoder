@@ -38,9 +38,9 @@ namespace app
         HICON m_hIcon;
         HACCEL m_hAccelTable;
     public:
-        bool bVisible;
         int nSortColumn;
         bool nSortOrder[2];
+        bool bVisible;
     public:
         config::CConfiguration * pConfig;
         AftenAPI api;

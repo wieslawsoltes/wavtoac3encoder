@@ -71,7 +71,6 @@ namespace app
         this->m_Config.szOutputPath = L"";
         this->m_Config.szOutputFile = L"";
         this->m_Config.bMultipleMonoInput = false;
-        this->m_Config.bVisible = false;
         this->m_Config.bDisableAllWarnings = false;
         this->m_Config.bSaveConfig = true;
     }
