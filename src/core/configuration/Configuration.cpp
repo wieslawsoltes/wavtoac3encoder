@@ -645,12 +645,12 @@ namespace config
         };
 
         m_EncoderOptions.szGroups = {
-            L"Encoding options",
-            L"Bitstream info metadata",
-            L"Dynamic range compression and dialog normalization",
-            L"Input options",
-            L"Input filters",
-            L"Alternate bit stream syntax"
+            this->GetString(0x00208001),
+            this->GetString(0x00208002),
+            this->GetString(0x00208003),
+            this->GetString(0x00208004),
+            this->GetString(0x00208005),
+            this->GetString(0x00208006)
         };
 
         m_EncoderOptions.szCbrOption = L"-b";
