@@ -128,7 +128,7 @@ namespace config
 
         #define GetString(key) config::m_Config.GetString(key)
         #define AddOption(name, option, tip, dval, ival, group, begin) \
-            m_Options.emplace_back(COption()) \
+            m_Options.emplace_back(COption()); \
             nCurOpt++; \
             m_Options[nCurOpt].szName = name; \
             m_Options[nCurOpt].szOption = option; \
