@@ -43,9 +43,12 @@ namespace app
         int nSortColumn;
         bool nSortOrder[2];
         bool bSettingsValueVisible;
-        std::vector<config::Entry> m_EngineList;
-        std::vector<config::CPreset> presets;
-        config::CPreset defaultPreset;
+    public:
+        config::CConfiguration * pConfig;
+    public:
+        std::vector<config::Entry> m_Engines;
+        std::vector<config::CPreset> m_Presets;
+        config::CPreset m_DefaultPreset;
         int nCurrentPreset = 0;
         std::wstring szOutputPath;
         std::wstring szOutputFile;

@@ -127,6 +127,4 @@ namespace config
         std::wstring CConfiguration::GetString(const int nKey);
     public:
     };
-
-    extern CConfiguration m_Config;
 }

@@ -5,6 +5,7 @@
 #endif
 
 #include "res\resource.h"
+#include "configuration\Configuration.h"
 
 #ifdef _M_X64
 #define FILENAME_ENGINES _T("EncWAVtoAC3-x64.engines")
@@ -34,6 +35,8 @@ namespace app
     public:
         virtual BOOL InitInstance();
         DECLARE_MESSAGE_MAP()
+    public:
+        config::CConfiguration m_Config;
     public:
         void LoadConfig();
         void SaveConfig();

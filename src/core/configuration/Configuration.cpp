@@ -934,6 +934,4 @@ namespace config
 
         return L"??";
     }
-
-    CConfiguration m_Config;
 }

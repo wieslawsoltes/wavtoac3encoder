@@ -23,7 +23,8 @@ namespace app
         virtual void DoDataExchange(CDataExchange* pDX);
         DECLARE_MESSAGE_MAP()
     public:
-        std::vector<config::Entry> m_EngineList;
+        config::CConfiguration * pConfig;
+        std::vector<config::Entry> m_Engines;
         std::wstring szCurrentFileName;
     public:
         volatile bool bUpdateList;

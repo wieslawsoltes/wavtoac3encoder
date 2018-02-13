@@ -39,6 +39,7 @@ namespace app
         bool SaveFilesList(std::wstring &szFileName, int nFormat);
         void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
     public:
+        config::CConfiguration * pConfig;
         int nChannelConfig;
         bool bLFE;
         std::wstring szInputFiles[6];

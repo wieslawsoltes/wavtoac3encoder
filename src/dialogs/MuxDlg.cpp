@@ -137,38 +137,38 @@ namespace app
         this->m_CmbChannelConfig.SetCurSel(0);
 
         std::wstring szTmpText;
-        szTmpText = config::m_Config.GetString(0x00C01008);
+        szTmpText = this->pConfig->GetString(0x00C01008);
 
         this->m_CmbChannelConfig.SetTooltipText(szTmpText.c_str());
-        this->m_ChkChannelConfigLFE.SetTooltipText(config::m_Config.GetString(0x00C01009).c_str());
+        this->m_ChkChannelConfigLFE.SetTooltipText(this->pConfig->GetString(0x00C01009).c_str());
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
-        this->m_BtnChannelFL.SetTooltipText(config::m_Config.GetString(0x00C0100A).c_str());
-        this->m_BtnChannelFR.SetTooltipText(config::m_Config.GetString(0x00C0100B).c_str());
-        this->m_BtnChannelFC.SetTooltipText(config::m_Config.GetString(0x00C0100C).c_str());
-        this->m_BtnChannelLFE.SetTooltipText(config::m_Config.GetString(0x00C0100D).c_str());
-        this->m_BtnChannelSL.SetTooltipText(config::m_Config.GetString(0x00C0100E).c_str());
-        this->m_BtnChannelSR.SetTooltipText(config::m_Config.GetString(0x00C0100F).c_str());
-        this->m_BtnChannelS.SetTooltipText(config::m_Config.GetString(0x00C01010).c_str());
+        this->m_BtnChannelFL.SetTooltipText(this->pConfig->GetString(0x00C0100A).c_str());
+        this->m_BtnChannelFR.SetTooltipText(this->pConfig->GetString(0x00C0100B).c_str());
+        this->m_BtnChannelFC.SetTooltipText(this->pConfig->GetString(0x00C0100C).c_str());
+        this->m_BtnChannelLFE.SetTooltipText(this->pConfig->GetString(0x00C0100D).c_str());
+        this->m_BtnChannelSL.SetTooltipText(this->pConfig->GetString(0x00C0100E).c_str());
+        this->m_BtnChannelSR.SetTooltipText(this->pConfig->GetString(0x00C0100F).c_str());
+        this->m_BtnChannelS.SetTooltipText(this->pConfig->GetString(0x00C01010).c_str());
 
         this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
     }
 
     void CMuxDlg::InitLang()
     {
-        this->SetWindowText((L"WAV to AC3 Encoder - " + config::m_Config.GetString(0x00C01001)).c_str());
-        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(config::m_Config.GetString(0x00C01002).c_str());
-        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(config::m_Config.GetString(0x00C01003).c_str());
-        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(config::m_Config.GetString(0x00C01004).c_str());
-        this->GetDlgItem(IDOK)->SetWindowText(config::m_Config.GetString(0x00C01005).c_str());
-        this->GetDlgItem(IDCANCEL)->SetWindowText(config::m_Config.GetString(0x00C01006).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(config::m_Config.GetString(0x00C01007).c_str());
+        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00C01001)).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(this->pConfig->GetString(0x00C01002).c_str());
+        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(this->pConfig->GetString(0x00C01003).c_str());
+        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(this->pConfig->GetString(0x00C01004).c_str());
+        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00C01005).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00C01006).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
     }
 
     void CMuxDlg::RemapFilesToChannels()
@@ -333,7 +333,7 @@ namespace app
     bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
     {
         std::vector<std::wstring> fl;
-        if (config::m_Config.LoadFiles(szFileName, fl) == false)
+        if (this->pConfig->LoadFiles(szFileName, fl) == false)
             return false;
 
         for (int i = 0; i < 6; i++)
@@ -459,7 +459,7 @@ namespace app
 
             #undef AddFile
 
-            return config::m_Config.SaveFiles(szFileName, fl, nFormat);
+            return this->pConfig->SaveFiles(szFileName, fl, nFormat);
         }
         catch (...)
         {
@@ -478,10 +478,10 @@ namespace app
         std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
 
         CFileDialog fd(TRUE,
-            config::m_Config.m_EncoderOptions.szSupportedInputExt[0].c_str(),
+            this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
             szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.m_EncoderOptions.GetSupportedInputFilesFilter(),
+            this->pConfig->m_EncoderOptions.GetSupportedInputFilesFilter(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -590,7 +590,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.GetString(0x00C01011).c_str(),
+            this->pConfig->GetString(0x00C01011).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -613,7 +613,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.GetString(0x00C01011).c_str(),
+            this->pConfig->GetString(0x00C01011).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)

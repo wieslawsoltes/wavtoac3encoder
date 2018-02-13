@@ -38,6 +38,7 @@ namespace app
         static int nIDIn[6];
         static int nIDInInfo[6];
     public:
+        config::CConfiguration * pConfig;
         worker::CWorkerContext * pWorkerContext;
     public:
         controls::CMyStatic m_StcOut;
