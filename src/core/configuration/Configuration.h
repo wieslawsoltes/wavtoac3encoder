@@ -93,10 +93,10 @@ namespace config
     public:
         std::map<int, std::wstring> * pStrings;
         std::vector<CLanguage> m_LangLst;
-        std::wstring m_szLangFileName = L"";
-        int m_nLangId = -1;
+        std::wstring m_szLangFileName;
+        int m_nLangId;
     public:
-        bool m_bIsPortable = true;
+        bool m_bIsPortable;
         std::wstring m_szPresetsFilePath;
         std::wstring m_szConfigFilePath;
         std::wstring m_szEnginesFilePath;

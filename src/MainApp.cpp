@@ -67,6 +67,9 @@ namespace app
 
     void CEncWAVtoAC3App::LoadDefaults()
     {
+        this->m_Config.m_szLangFileName = L"";
+        this->m_Config.m_nLangId = -1;
+        this->m_Config.m_bIsPortable = true;
         this->m_Config.nCurrentPreset = 0;
         this->m_Config.szOutputPath = L"";
         this->m_Config.szOutputFile = L"";
