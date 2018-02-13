@@ -801,7 +801,7 @@ namespace app
     bool CMainDlg::LoadProgramConfig(std::wstring szFileName)
     {
         std::vector<config::Entry> cl;
-        if (config::CConfiguration::LoadConfig(szFileName, cl) == true)
+        if (config::m_Config.LoadConfig(szFileName, cl) == true)
         {
             int nSize = (int)cl.size();
             for (int i = 0; i < nSize; i++)
@@ -983,7 +983,7 @@ namespace app
         std::wstring saveConfig = (this->bSaveConfig == true) ? L"true" : L"false";
         cl.emplace_back(std::make_pair(std::wstring(L"SaveConfig"), saveConfig));
 
-        return config::CConfiguration::SaveConfig(szFileName, cl);
+        return config::m_Config.SaveConfig(szFileName, cl);
     }
 
     bool CMainDlg::UpdateProgramEngines()
@@ -1052,7 +1052,7 @@ namespace app
         this->m_EngineList.clear();
         this->m_CmbEngines.ResetContent();
 
-        if (config::CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
+        if (config::m_Config.LoadConfig(szFileName, this->m_EngineList) == true)
         {
             return this->UpdateProgramEngines();
         }
@@ -1083,7 +1083,7 @@ namespace app
 
     bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return config::CConfiguration::SaveConfig(szFileName, this->m_EngineList);
+        return config::m_Config.SaveConfig(szFileName, this->m_EngineList);
     }
 
     bool CMainDlg::LoadFilesList(std::wstring &szFileName)
@@ -1753,7 +1753,7 @@ namespace app
 
     void CMainDlg::InitDefaultPreset()
     {
-        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options.m_Options.size(); i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options.size(); i++)
             defaultPreset.nOptions[i] = config::m_Config.m_EncoderOptions.m_Options[i].nDefaultValue;
 
         defaultPreset.szName = config::m_Config.GetString(0x00207001);

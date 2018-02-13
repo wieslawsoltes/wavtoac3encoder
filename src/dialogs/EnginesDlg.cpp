@@ -175,7 +175,7 @@ namespace app
         this->m_EngineList.clear();
         this->m_LstEngines.DeleteAllItems();
 
-        if (config::CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
+        if (config::m_Config.LoadConfig(szFileName, this->m_EngineList) == true)
         {
             return InsertProgramEngines();
         }
@@ -185,7 +185,7 @@ namespace app
 
     bool CEnginesDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return config::CConfiguration::SaveConfig(szFileName, this->m_EngineList);
+        return config::m_Config.SaveConfig(szFileName, this->m_EngineList);
     }
 
     void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
