@@ -22,24 +22,58 @@ namespace app
 
     BOOL CEncWAVtoAC3App::InitInstance()
     {
-        LoadConfig();
+        try
+        {
+            LoadDefaults();
+            LoadConfig();
+        }
+        catch (...)
+        {
+            MessageBox(nullptr, _T("Load config exception."), _T("Error"), MB_OK | MB_ICONERROR);
+        }
 
-        INITCOMMONCONTROLSEX InitCtrls;
-        InitCtrls.dwSize = sizeof(InitCtrls);
-        InitCtrls.dwICC = ICC_WIN95_CLASSES;
-        InitCommonControlsEx(&InitCtrls);
+        try
+        {
+            INITCOMMONCONTROLSEX InitCtrls;
+            InitCtrls.dwSize = sizeof(InitCtrls);
+            InitCtrls.dwICC = ICC_WIN95_CLASSES;
+            InitCommonControlsEx(&InitCtrls);
+    
+            CWinAppEx::InitInstance();
+            AfxEnableControlContainer();
+            InitShellManager();
 
-        CWinAppEx::InitInstance();
-        AfxEnableControlContainer();
-        InitShellManager();
+            CMainDlg dlg;
+            m_pMainWnd = &dlg;
+            dlg.pConfig = &this->m_Config;
+            dlg.DoModal();
+        }
+        catch (...)
+        {
+            MessageBox(nullptr, _T("Main dialog exception."), _T("Error"), MB_OK | MB_ICONERROR);
+        }
 
-        CMainDlg dlg;
-        m_pMainWnd = &dlg;
-        dlg.pConfig = &this->m_Config;
-        dlg.DoModal();
+        try
+        {
+            SaveConfig();
+        }
+        catch (...)
+        {
+            MessageBox(nullptr, _T("Save config exception."), _T("Error"), MB_OK | MB_ICONERROR);
+        }
 
-        SaveConfig();
         return FALSE;
+    }
+
+    void CEncWAVtoAC3App::LoadDefaults()
+    {
+        this->m_Config.nCurrentPreset = 0;
+        this->m_Config.szOutputPath = L"";
+        this->m_Config.szOutputFile = L"";
+        this->m_Config.bMultipleMonoInput = false;
+        this->m_Config.bVisible = false;
+        this->m_Config.bDisableAllWarnings = false;
+        this->m_Config.bSaveConfig = true;
     }
 
     void CEncWAVtoAC3App::LoadConfig()

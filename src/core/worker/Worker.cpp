@@ -244,7 +244,7 @@ namespace worker
         }
     }
 
-    BOOL CWorker::HandleError(LPTSTR pszMessage)
+    bool CWorker::HandleError(LPTSTR pszMessage)
     {
         pContext->StopCurrentTimer();
         std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
@@ -279,10 +279,10 @@ namespace worker
         pContext->bTerminate = true;
         pContext->Close();
 
-        return(FALSE);
+        return false;
     }
 
-    BOOL CWorker::Run()
+    bool CWorker::Run()
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
         int nr, fs;
@@ -318,7 +318,7 @@ namespace worker
             if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
             {
                 OutputDebugString(_T("Failed to initialize Avisynth."));
-                return(FALSE);
+                return false;
             }
             else
             {
@@ -344,7 +344,7 @@ namespace worker
                     pContext->bTerminate = true;
                     pContext->Close();
 
-                    return(FALSE);
+                    return false;
                 }
                 else
                 {
@@ -372,7 +372,7 @@ namespace worker
             pContext->bTerminate = true;
             pContext->Close();
 
-            return(FALSE);
+            return false;
         }
 
 #ifdef CONFIG_DOUBLE
@@ -729,10 +729,10 @@ namespace worker
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
 
-        return(TRUE);
+        return true;
     }
 
-    BOOL CWorker::Encode()
+    bool CWorker::Encode()
     {
         std::wstring szBuff = L"";
         const unsigned int nAnsiBuffSize = 8192;
@@ -752,14 +752,14 @@ namespace worker
         pContext->StartTotalTimer(250);
 
         int nFileCounter = 0;
-        int nTotalFiles = (int)pContext->pFilesList->size();
+        int nTotalFiles = (int)pContext->m_Files.size();
         int posStatus = 0;
 
         nTotalSizeCounter = 0;
 
         if (pContext->bMultiMonoInput == false)
         {
-            for (int i = 0; i < (int)pContext->pFilesList->size(); i++)
+            for (int i = 0; i < (int)pContext->m_Files.size(); i++)
             {
                 szInPath[0] = L"-";
                 szInPath[1] = L"-";
@@ -769,7 +769,7 @@ namespace worker
                 szInPath[5] = L"-";
                 szOutPath = L"";
 
-                szInPath[0] = (*pContext->pFilesList)[i];
+                szInPath[0] = pContext->m_Files[i];
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
@@ -807,16 +807,13 @@ namespace worker
 
                 nInputFiles = 1;
 
-                if (Run() == FALSE)
+                if (Run() == false)
                 {
-                    (*pContext->pStatusList)[posStatus] = false;
-                    return(FALSE);
-                }
-                else
-                {
-                    (*pContext->pStatusList)[posStatus] = true;
+                    pContext->m_Status[posStatus] = false;
+                    return false;
                 }
 
+                pContext->m_Status[posStatus] = true;
                 posStatus++;
                 nFileCounter++;
                 pContext->nCount = nFileCounter;
@@ -832,11 +829,11 @@ namespace worker
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            nFileCounter = (int)pContext->pFilesList->size();
+            nFileCounter = (int)pContext->m_Files.size();
 
             for (int i = 0; i < nFileCounter; i++)
             {
-                szInPath[i] = (*pContext->pFilesList)[i];
+                szInPath[i] = pContext->m_Files[i];
             }
 
             szOutPath = szInPath[0];
@@ -875,20 +872,20 @@ namespace worker
 
             nInputFiles = nFileCounter;
 
-            if (Run() == FALSE)
+            if (Run() == false)
             {
-                for (int i = 0; i < (int)pContext->pStatusList->size(); i++)
+                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
-                    (*pContext->pStatusList)[i] = false;
+                    pContext->m_Status[i] = false;
                 }
                 pContext->nCount = 0;
-                return(FALSE);
+                return false;
             }
             else
             {
-                for (int i = 0; i < (int)pContext->pStatusList->size(); i++)
+                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
-                    (*pContext->pStatusList)[i] = true;
+                    pContext->m_Status[i] = true;
                 }
                 pContext->nCount = nFileCounter;
             }
@@ -898,6 +895,6 @@ namespace worker
         pContext->bTerminate = true;
         pContext->Close();
 
-        return(TRUE);
+        return true;
     }
 }

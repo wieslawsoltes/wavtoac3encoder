@@ -39,22 +39,11 @@ namespace app
         HACCEL m_hAccelTable;
     public:
         bool bVisible;
-        AftenAPI api;
         int nSortColumn;
         bool nSortOrder[2];
-        bool bSettingsValueVisible;
     public:
         config::CConfiguration * pConfig;
-    public:
-        std::vector<config::Entry> m_Engines;
-        std::vector<config::CPreset> m_Presets;
-        config::CPreset m_DefaultPreset;
-        int nCurrentPreset = 0;
-        std::wstring szOutputPath;
-        std::wstring szOutputFile;
-        bool bMultipleMonoInput;
-        bool bDisableAllWarnings;
-        bool bSaveConfig;
+        AftenAPI api;
     public:
         controls::CMyStatusBarCtrl m_StatusBar;
         controls::CMySliderCtrl m_SldBitrate;

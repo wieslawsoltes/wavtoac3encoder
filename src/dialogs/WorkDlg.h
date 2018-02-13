@@ -64,6 +64,13 @@ namespace app
             : worker::CWorkerContext()
         {
             this->pWorkDlg = pDlg;
+            this->bTerminate = false;
+            this->bCanUpdateWindow = true;
+            this->hThread = nullptr;
+            this->dwThreadId = 0;
+            this->nCount = 0;
+            this->m_ElapsedTimeFile = 0;
+            this->m_ElapsedTimeTotal = 0;
         }
         virtual ~CWorkDlgWorkerContext()
         {

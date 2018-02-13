@@ -35,21 +35,10 @@ namespace app
     CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CWorkDlg::IDD, pParent)
     {
-        pWorkerContext = new CWorkDlgWorkerContext(this);
-        pWorkerContext->pConfig = this->pConfig;
-        pWorkerContext->bTerminate = false;
-        pWorkerContext->bCanUpdateWindow = true;
-        pWorkerContext->hThread = nullptr;
-        pWorkerContext->dwThreadId = 0;
-        pWorkerContext->nCount = 0;
-        pWorkerContext->m_ElapsedTimeFile = 0;
-        pWorkerContext->m_ElapsedTimeTotal = 0;
     }
 
     CWorkDlg::~CWorkDlg()
     {
-        if (pWorkerContext != nullptr)
-            delete pWorkerContext;
     }
 
     void CWorkDlg::DoDataExchange(CDataExchange* pDX)

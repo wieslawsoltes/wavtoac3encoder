@@ -18,12 +18,9 @@ namespace worker
         config::CConfiguration * pConfig;
     public:
         AftenAPI api;
-    public:
-        std::vector<std::wstring> *pFilesList;
-        std::vector<bool> *pStatusList;
-    public:
+        std::vector<std::wstring> m_Files;
+        std::vector<bool> m_Status;
         config::CPreset * pPreset;
-    public:
         bool bUseOutPath;
         std::wstring szOutPath;
         bool bMultiMonoInput;
@@ -31,7 +28,6 @@ namespace worker
     public:
         __int64 nInTotalSize;
         __int64 nOutTotalSize;
-    public:
         volatile bool bTerminate;
         volatile bool bCanUpdateWindow;
         HANDLE hThread;
@@ -93,8 +89,8 @@ namespace worker
     public:
         void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
-        BOOL HandleError(LPTSTR pszMessage);
-        BOOL Run();
-        BOOL Encode();
+        bool HandleError(LPTSTR pszMessage);
+        bool Run();
+        bool Encode();
     };
 }

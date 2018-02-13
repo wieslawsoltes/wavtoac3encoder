@@ -103,6 +103,16 @@ namespace config
         std::wstring m_szFilesListFilePath;
         std::wstring m_szLangFilePath;
     public:
+        std::vector<config::Entry> m_Engines;
+        std::vector<config::CPreset> m_Presets;
+        config::CPreset m_DefaultPreset;
+        int nCurrentPreset;
+        std::wstring szOutputPath;
+        std::wstring szOutputFile;
+        bool bMultipleMonoInput;
+        bool bDisableAllWarnings;
+        bool bSaveConfig;
+    public:
         CEncoderOptions m_EncoderOptions;
     public:
         bool LoadConfig(std::wstring &szFileName, std::vector<Entry> &cl);
