@@ -1321,13 +1321,13 @@ namespace app
 
             this->m_LstSettings.SetItemState(nItem, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(nItem);
-            this->m_CmbValue.SetCurSel(preset.nOptions[nItem]);
+            this->m_CmbValue.SetCurSel((int)preset.nOptions[nItem]);
         }
         else
         {
             this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(0);
-            this->m_CmbValue.SetCurSel(preset.nOptions[0]);
+            this->m_CmbValue.SetCurSel((int)preset.nOptions[0]);
         }
     }
 
@@ -1383,7 +1383,7 @@ namespace app
         if (this->presets.size() <= 0)
             this->m_CmbValue.SetCurSel(config::m_Config.m_EncoderOptions.m_Options[nItem].nDefaultValue);
         else
-            this->m_CmbValue.SetCurSel(GetCurrentPreset().nOptions[nItem]);
+            this->m_CmbValue.SetCurSel((int)GetCurrentPreset().nOptions[nItem]);
     }
 
     void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
@@ -2682,8 +2682,8 @@ namespace app
 
         if (config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue != preset.nOptions[nIndexChconfig])
         {
-            dlg.nChannelConfig = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].second].acmod;
-            dlg.bLFE = (config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].second].lfe == 1) ? true : false;
+            dlg.nChannelConfig = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[(int)preset.nOptions[nIndexChconfig]].second].acmod;
+            dlg.bLFE = (config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[(int)preset.nOptions[nIndexChconfig]].second].lfe == 1) ? true : false;
             bUpdateChconfig = true;
         }
         else
@@ -2808,12 +2808,12 @@ namespace app
                 preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].m_Values[preset.nOptions[nIndexAcmod]].first.c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexAcmod].m_Values[(int)preset.nOptions[nIndexAcmod]].first.c_str());
 
                 preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? config::m_Config.m_EncoderOptions.m_Options[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::m_Config.m_EncoderOptions.m_Options[nIndexLfe].m_Values[preset.nOptions[nIndexLfe]].first.c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexLfe].m_Values[(int)preset.nOptions[nIndexLfe]].first.c_str());
 
                 if (bUpdateChconfig == true)
                 {
@@ -2834,7 +2834,7 @@ namespace app
                     preset.nOptions[nIndexChconfig] = config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]].first.c_str());
+                    config::m_Config.m_EncoderOptions.m_Options[nIndexChconfig].m_Values[(int)preset.nOptions[nIndexChconfig]].first.c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {
