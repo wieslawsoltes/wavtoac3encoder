@@ -627,7 +627,7 @@ namespace config
 
     int CEncoderOptions::GetSupportedInputFormat(std::wstring &szExt)
     {
-        for (int i = 0; i < int)szSupportedInputExt.size(); i++)
+        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
         {
             if (util::StringHelper::CompareNoCase(szExt, szSupportedInputExt[i]))
                 return nSupportedInputFormats[i];
@@ -642,17 +642,17 @@ namespace config
         CAtlString szExtU = L"";
         CAtlString szBuff = L"";
 
-        for (int i = 0; i < nNumSupportedInputExt; i++)
+        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
         {
             szExtL = szSupportedInputExt[i].c_str();
             szBuff = L"*." + szExtL.MakeLower();
-            szBuff += (i < nNumSupportedInputExt - 1) ? L";" : L"";
+            szBuff += (i < (int)szSupportedInputExt.size() - 1) ? L";" : L"";
             szFilter += szBuff;
         }
 
         szFilter = CAtlString(config::m_Config.GetString(0x00207006).c_str()) + L" (" + szFilter + L")|" + szFilter + L"|";
 
-        for (int i = 0; i < nNumSupportedInputExt; i++)
+        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
         {
             szExtL = szExtU = szSupportedInputExt[i].c_str();
             szExtU.MakeUpper();
