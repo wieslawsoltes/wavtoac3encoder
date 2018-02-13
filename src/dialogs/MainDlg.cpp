@@ -693,7 +693,7 @@ namespace app
             int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
-            preset.nSetting[nItem] = nVal;
+            preset.nOptions[nItem] = nVal;
             std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
             this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
@@ -772,7 +772,7 @@ namespace app
     void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
     {
         auto& preset = GetCurrentPreset();
-        preset.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
+        preset.m_RawInput.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
     }
 
     LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)
@@ -1249,8 +1249,8 @@ namespace app
     {
         for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
         {
-            int nSetting = preset.nSetting[i];
-            std::wstring& szText = config::CDefaults::encOpt[i].m_Names[nSetting];
+            int nOption = preset.nOptions[i];
+            std::wstring& szText = config::CDefaults::encOpt[i].m_Names[nOption];
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
@@ -1288,27 +1288,27 @@ namespace app
         }
 
         this->m_CmbEngines.SetCurSel(preset.nCurrentEngine);
-        this->m_CmbRawSampleFormat.SetCurSel(preset.nRawSampleFormat);
+        this->m_CmbRawSampleFormat.SetCurSel(preset.m_RawInput.nRawSampleFormat);
 
-        if (preset.nRawSampleRate == 0)
+        if (preset.m_RawInput.nRawSampleRate == 0)
         {
             this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
             CString szBuff;
-            szBuff.Format(_T("%d"), preset.nRawSampleRate);
+            szBuff.Format(_T("%d"), preset.m_RawInput.nRawSampleRate);
             this->m_EdtRawSamplerate.SetWindowText(szBuff);
         }
 
-        if (preset.nRawChannels == 0)
+        if (preset.m_RawInput.nRawChannels == 0)
         {
             this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
             CString szBuff;
-            szBuff.Format(_T("%d"), preset.nRawChannels);
+            szBuff.Format(_T("%d"), preset.m_RawInput.nRawChannels);
             this->m_EdtRawChannels.SetWindowText(szBuff);
         }
         this->UpdateBitrateText();
@@ -1320,13 +1320,13 @@ namespace app
 
             this->m_LstSettings.SetItemState(nItem, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(nItem);
-            this->m_CmbValue.SetCurSel(preset.nSetting[nItem]);
+            this->m_CmbValue.SetCurSel(preset.nOptions[nItem]);
         }
         else
         {
             this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(0);
-            this->m_CmbValue.SetCurSel(preset.nSetting[0]);
+            this->m_CmbValue.SetCurSel(preset.nOptions[0]);
         }
     }
 
@@ -1382,7 +1382,7 @@ namespace app
         if (this->presets.size() <= 0)
             this->m_CmbValue.SetCurSel(config::CDefaults::encOpt[nItem].nDefaultValue);
         else
-            this->m_CmbValue.SetCurSel(GetCurrentPreset().nSetting[nItem]);
+            this->m_CmbValue.SetCurSel(GetCurrentPreset().nOptions[nItem]);
     }
 
     void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
@@ -1522,7 +1522,7 @@ namespace app
         }
 
         auto& preset = GetCurrentPreset();
-        preset.nRawSampleRate = nPos;
+        preset.m_RawInput.nRawSampleRate = nPos;
     }
 
     void CMainDlg::OnEnChangeEditRawChannels()
@@ -1556,7 +1556,7 @@ namespace app
         }
 
         auto& preset = GetCurrentPreset();
-        preset.nRawChannels = nPos;
+        preset.m_RawInput.nRawChannels = nPos;
     }
 
     void CMainDlg::OnEnChangeEditThreads()
@@ -1749,15 +1749,15 @@ namespace app
     void CMainDlg::InitDefaultPreset()
     {
         for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
-            defaultPreset.nSetting[i] = config::CDefaults::encOpt[i].nDefaultValue;
+            defaultPreset.nOptions[i] = config::CDefaults::encOpt[i].nDefaultValue;
 
         defaultPreset.szName = config::m_Config.GetString(0x00207001);
         defaultPreset.nMode = AFTEN_ENC_MODE_CBR;
         defaultPreset.nBitrate = 0;
         defaultPreset.nQuality = 240;
-        defaultPreset.nRawChannels = 0;
-        defaultPreset.nRawSampleFormat = 0;
-        defaultPreset.nRawSampleRate = 0;
+        defaultPreset.m_RawInput.nRawChannels = 0;
+        defaultPreset.m_RawInput.nRawSampleFormat = 0;
+        defaultPreset.m_RawInput.nRawSampleRate = 0;
         defaultPreset.nCurrentEngine = 0;
         defaultPreset.nThreads = 0;
         defaultPreset.nUsedSIMD[0] = 1;
@@ -1769,27 +1769,27 @@ namespace app
         this->m_CmbPresets.InsertString(0, defaultPreset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->nCurrentPreset);
 
-        this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.nRawSampleFormat);
+        this->m_CmbRawSampleFormat.SetCurSel(defaultPreset.m_RawInput.nRawSampleFormat);
 
-        if (defaultPreset.nRawSampleRate == 0)
+        if (defaultPreset.m_RawInput.nRawSampleRate == 0)
         {
             this->m_EdtRawSamplerate.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
             CString szBuff;
-            szBuff.Format(_T("%d"), defaultPreset.nRawSampleRate);
+            szBuff.Format(_T("%d"), defaultPreset.m_RawInput.nRawSampleRate);
             this->m_EdtRawSamplerate.SetWindowText(szBuff);
         }
 
-        if (defaultPreset.nRawChannels == 0)
+        if (defaultPreset.m_RawInput.nRawChannels == 0)
         {
             this->m_EdtRawChannels.SetWindowText(config::m_Config.GetString(0x00207003).c_str());
         }
         else
         {
             CString szBuff;
-            szBuff.Format(_T("%d"), defaultPreset.nRawChannels);
+            szBuff.Format(_T("%d"), defaultPreset.m_RawInput.nRawChannels);
             this->m_EdtRawChannels.SetWindowText(szBuff);
         }
 
@@ -2381,7 +2381,7 @@ namespace app
                 }
 
                 auto& preset = GetCurrentPreset();
-                preset.nSetting[nItem] = nVal;
+                preset.nOptions[nItem] = nVal;
 
                 std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
@@ -2406,7 +2406,7 @@ namespace app
                 }
 
                 auto& preset = GetCurrentPreset();
-                preset.nSetting[nItem] = nVal;
+                preset.nOptions[nItem] = nVal;
 
                 std::wstring szName = config::CDefaults::encOpt[nItem].m_Names[nVal];
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
@@ -2679,17 +2679,17 @@ namespace app
 
         auto& preset = GetCurrentPreset();
 
-        if (config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue != preset.nSetting[nIndexChconfig])
+        if (config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue != preset.nOptions[nIndexChconfig])
         {
-            dlg.nChannelConfig = config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nSetting[nIndexChconfig]]].acmod;
-            dlg.bLFE = (config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nSetting[nIndexChconfig]]].lfe == 1) ? true : false;
+            dlg.nChannelConfig = config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]]].acmod;
+            dlg.bLFE = (config::CDefaults::ccAften[config::CDefaults::encOpt[nIndexChconfig].m_Values[preset.nOptions[nIndexChconfig]]].lfe == 1) ? true : false;
             bUpdateChconfig = true;
         }
         else
         {
-            if (config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue != preset.nSetting[nIndexAcmod])
+            if (config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue != preset.nOptions[nIndexAcmod])
             {
-                dlg.nChannelConfig = preset.nSetting[nIndexAcmod];
+                dlg.nChannelConfig = preset.nOptions[nIndexAcmod];
             }
             else
             {
@@ -2697,7 +2697,7 @@ namespace app
                 dlg.nChannelConfig = config::CDefaults::encOpt[nIndexAcmod].m_Values[nDefault];
             }
 
-            dlg.bLFE = (preset.nSetting[nIndexLfe] == 1) ? true : false;
+            dlg.bLFE = (preset.nOptions[nIndexLfe] == 1) ? true : false;
             bUpdateChconfig = false;
         }
 
@@ -2804,15 +2804,15 @@ namespace app
                     break;
                 };
 
-                preset.nSetting[nIndexAcmod] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
+                preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
 
                 this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    config::CDefaults::encOpt[nIndexAcmod].m_Names[preset.nSetting[nIndexAcmod]].c_str());
+                    config::CDefaults::encOpt[nIndexAcmod].m_Names[preset.nOptions[nIndexAcmod]].c_str());
 
-                preset.nSetting[nIndexLfe] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
+                preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? config::CDefaults::encOpt[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
 
                 this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    config::CDefaults::encOpt[nIndexLfe].m_Names[preset.nSetting[nIndexLfe]].c_str());
+                    config::CDefaults::encOpt[nIndexLfe].m_Names[preset.nOptions[nIndexLfe]].c_str());
 
                 if (bUpdateChconfig == true)
                 {
@@ -2823,17 +2823,17 @@ namespace app
                     {
                         if ((config::CDefaults::ccAften[i].acmod == acmod) && (config::CDefaults::ccAften[i].lfe == lfe))
                         {
-                            preset.nSetting[nIndexChconfig] = i;
+                            preset.nOptions[nIndexChconfig] = i;
                             break;
                         }
                     }
                 }
                 else
                 {
-                    preset.nSetting[nIndexChconfig] = config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue;
+                    preset.nOptions[nIndexChconfig] = config::CDefaults::encOpt[nIndexChconfig].nIgnoreValue;
                 }
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    config::CDefaults::encOpt[nIndexChconfig].m_Names[preset.nSetting[nIndexChconfig]].c_str());
+                    config::CDefaults::encOpt[nIndexChconfig].m_Names[preset.nOptions[nIndexChconfig]].c_str());
 
                 if (this->bMultipleMonoInput == false)
                 {

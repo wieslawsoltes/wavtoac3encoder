@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <utility>
 #include <string>
@@ -85,6 +85,14 @@ namespace config
         bool bBeginGroup;
     };
 
+    class CRawInput
+    {
+    public:
+        int nRawSampleFormat;
+        int nRawSampleRate;
+        int nRawChannels;
+    }
+
     class CPreset
     {
     public:
@@ -95,13 +103,11 @@ namespace config
         AftenEncMode nMode;
         int nBitrate;
         int nQuality;
-        int nRawSampleFormat;
-        int nRawSampleRate;
-        int nRawChannels;
+        CRawInput m_RawInput;
         int nUsedSIMD[nNumSIMDIntructions];
         int nThreads;
         int nCurrentEngine;
-        int nSetting[nNumEncoderOptions];
+        int nOptions[nNumEncoderOptions];
     };
 
     class CDefaults

@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "Worker.h"
 
 namespace worker
@@ -16,9 +16,9 @@ namespace worker
         s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
         s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
 
-        if (preset->nRawSampleFormat != 0)
+        if (preset->m_RawInput.nRawSampleFormat != 0)
         {
-            switch (preset->nRawSampleFormat)
+            switch (preset->m_RawInput.nRawSampleFormat)
             {
             case 1: opt.raw_fmt = PCM_SAMPLE_FMT_U8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
             case 2: opt.raw_fmt = PCM_SAMPLE_FMT_S8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
@@ -39,24 +39,24 @@ namespace worker
             opt.raw_input = 1;
         }
 
-        if (preset->nRawSampleRate != 0)
+        if (preset->m_RawInput.nRawSampleRate != 0)
         {
-            opt.raw_sr = preset->nRawSampleRate;
+            opt.raw_sr = preset->m_RawInput.nRawSampleRate;
             opt.raw_input = 1;
         }
 
-        if (preset->nRawChannels != 0)
+        if (preset->m_RawInput.nRawChannels != 0)
         {
-            opt.raw_ch = preset->nRawChannels;
+            opt.raw_ch = preset->m_RawInput.nRawChannels;
             opt.raw_input = 1;
         }
 
         #define SetSetting(set, type) \
-            nSetting++; \
-            if(config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-                (set) = (type) config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]];
+            nOption++; \
+            if(config::CDefaults::encOpt[nOption].nIgnoreValue != preset->nOptions[nOption]) \
+                (set) = (type) config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]];
 
-        int nSetting = -1;
+        int nOption = -1;
 
         SetSetting(s.params.bitalloc_fast, int)
         SetSetting(s.params.expstr_search, int)
@@ -74,11 +74,11 @@ namespace worker
         SetSetting(s.acmod, int)
         SetSetting(s.lfe, int)
 
-        nSetting++;
-        if (config::CDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
+        nOption++;
+        if (config::CDefaults::encOpt[nOption].nIgnoreValue != preset->nOptions[nOption])
         {
-            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].acmod;
-            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nSetting].m_Values[preset->nSetting[nSetting]]].lfe;
+            s.acmod = config::CDefaults::ccAften[config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]]].acmod;
+            s.lfe = config::CDefaults::ccAften[config::CDefaults::encOpt[nOption].m_Values[preset->nOptions[nOption]]].lfe;
         }
 
         SetSetting(opt.chmap, int)

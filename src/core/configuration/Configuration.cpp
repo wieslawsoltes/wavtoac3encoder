@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "StdAfx.h"
 #include "utilities\StringHelper.h"
@@ -723,7 +723,7 @@ namespace config
             util::StringHelper::TrimLeft(szBuffer, '-');
             if (ce.first == szBuffer)
             {
-                preset.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
@@ -731,7 +731,7 @@ namespace config
             util::StringHelper::TrimLeft(szBuffer, '-');
             if (ce.first == szBuffer)
             {
-                preset.nRawSampleRate = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawSampleRate = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
@@ -739,7 +739,7 @@ namespace config
             util::StringHelper::TrimLeft(szBuffer, '-');
             if (ce.first == szBuffer)
             {
-                preset.nRawChannels = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawChannels = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
@@ -749,7 +749,7 @@ namespace config
                 util::StringHelper::TrimLeft(szBuffer, '-');
                 if (ce.first == szBuffer)
                 {
-                    preset.nSetting[i] = util::StringHelper::ToInt(ce.second);
+                    preset.nOptions[i] = util::StringHelper::ToInt(ce.second);
                     break;
                 }
             }
@@ -870,24 +870,24 @@ namespace config
 
                 szTmpBuffer = szRawSampleFormatOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawSampleFormat) + szNewChar;
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawSampleRateOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawSampleRate) + szNewChar;
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleRate) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szTmpBuffer = szRawChannelsOption;
                 util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nRawChannels) + szNewChar;
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 for (int j = 0; j < CPreset::nNumEncoderOptions; j++)
                 {
                     szTmpBuffer = encOpt[j].szOption;
                     util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nSetting[j]) + szNewChar;
+                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nOptions[j]) + szNewChar;
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
                 }
             }
