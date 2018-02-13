@@ -54,7 +54,7 @@ namespace worker
         #define SetSetting(set, type) \
             nOption++; \
             { \
-                auto& option = config::m_Config.m_EncoderOptions.m_Options[nOption]; \
+                auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption]; \
                 int nOptionValue = preset->nOptions.at(nOption); \
                 if(option.nIgnoreValue != nOptionValue) \
                 { \
@@ -83,13 +83,13 @@ namespace worker
 
         nOption++;
         {
-            auto& option = config::m_Config.m_EncoderOptions.m_Options[nOption];
+            auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption];
             int nOptionValue = preset->nOptions.at(nOption);
             if (option.nIgnoreValue != nOptionValue)
             {
                 int nValue = option.m_Values[nOptionValue].second;
-                s.acmod = config::m_Config.m_EncoderOptions.ccAften[nValue].acmod;
-                s.lfe = config::m_Config.m_EncoderOptions.ccAften[nValue].lfe;
+                s.acmod = pContext->pConfig->m_EncoderOptions.ccAften[nValue].acmod;
+                s.lfe = pContext->pConfig->m_EncoderOptions.ccAften[nValue].lfe;
             }
         }
 
@@ -389,7 +389,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::m_Config.m_EncoderOptions.GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = pContext->pConfig->m_EncoderOptions.GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -773,7 +773,7 @@ namespace worker
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::m_Config.m_EncoderOptions.szSupportedOutputExt[0];
+                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
@@ -842,7 +842,7 @@ namespace worker
             szOutPath = szInPath[0];
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::m_Config.m_EncoderOptions.szSupportedOutputExt[0];
+            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
