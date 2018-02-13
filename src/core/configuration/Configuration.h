@@ -65,7 +65,7 @@ namespace config
         std::vector<int> nUsedSIMD;
         int nThreads;
         int nCurrentEngine;
-        std::vector<int> nOptions;
+        std::map<int, int> nOptions;
     };
 
     class CEncoderOptions
