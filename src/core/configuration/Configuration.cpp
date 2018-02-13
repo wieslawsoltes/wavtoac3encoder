@@ -141,7 +141,7 @@ namespace config
             m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(name, value));
         #define AddValueRange(start, end) \
             for (int i = start; i <= end; i++) { \
-                m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)) \
+                m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)); \
             }
 
         int nCurOpt = -1;
