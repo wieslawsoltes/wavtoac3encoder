@@ -460,7 +460,7 @@ namespace config
 
         SetOption(GetString(0x00306001), L"-wmax", GetString(0x00306002), 60, -1, L"", false)
         AddValue(L"0", 0)
-        AddValueRange(1, 56)
+        AddValueRange(1, 59)
         AddValue(GetString(0x00306003), 60)
 
         SetOption(GetString(0x00307001), L"-m", GetString(0x00307002), 1, -1, L"", false)

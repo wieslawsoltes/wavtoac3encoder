@@ -961,7 +961,7 @@ namespace app
 
         int nFilesColWidth[2];
         for (int i = 0; i < 2; i++)
-            nFilesColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
+            nFilesColWidth[i] = this->m_LstFiles.GetColumnWidth(i);
         std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
         cl.emplace_back(std::make_pair(std::wstring(L"ColumnSizeFiles"), columnSizeFiles));
 
