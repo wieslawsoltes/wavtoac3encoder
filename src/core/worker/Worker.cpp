@@ -53,10 +53,12 @@ namespace worker
 
         #define SetSetting(set, type) \
             nOption++; \
-            if(config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != preset->nOptions[nOption]) \
-                (set) = (type) config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[(int)preset->nOptions[nOption]].second;
+            nOptionValue = preset->nOptions[nOption]; \
+            if(config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != nOptionValue) \
+                (set) = (type) config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[nOptionValue].second;
 
         int nOption = -1;
+        int nOptionValue;
 
         SetSetting(s.params.bitalloc_fast, int)
         SetSetting(s.params.expstr_search, int)
@@ -75,10 +77,11 @@ namespace worker
         SetSetting(s.lfe, int)
 
         nOption++;
-        if (config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != preset->nOptions[nOption])
+        nOptionValue = preset->nOptions[nOption];
+        if (config::m_Config.m_EncoderOptions.m_Options[nOption].nIgnoreValue != nOptionValue)
         {
-            s.acmod = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[(int)preset->nOptions[nOption]].second].acmod;
-            s.lfe = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[(int)preset->nOptions[nOption]].second].lfe;
+            s.acmod = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[nOptionValue].second].acmod;
+            s.lfe = config::m_Config.m_EncoderOptions.ccAften[config::m_Config.m_EncoderOptions.m_Options[nOption].m_Values[nOptionValue].second].lfe;
         }
 
         SetSetting(opt.chmap, int)
