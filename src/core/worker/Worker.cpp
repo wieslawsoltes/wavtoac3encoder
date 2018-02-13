@@ -389,7 +389,7 @@ namespace worker
         }
         else
         {
-            input_file_format = pContext->pConfig->m_EncoderOptions.GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)

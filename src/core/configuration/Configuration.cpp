@@ -41,287 +41,7 @@ namespace config
         return buffer;
     }
 
-    int CEncoderOptions::FindValidBitratePos(const int nBitrate)
-    {
-        for (int i = 0; i < (int)nValidCbrBitrates.size(); i++)
-        {
-            if (nValidCbrBitrates[i] == nBitrate)
-                return i;
-        }
-        return 0;
-    }
-
-    int CEncoderOptions::FindOptionIndex(std::wstring szOption)
-    {
-        for (int i = 0; i < (int)m_Options.size(); i++)
-        {
-            std::wstring szBuffer = m_Options[i].szOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (szOption == szBuffer)
-                return i;
-        }
-        return 0;
-    }
-
-    void CEncoderOptions::ParsePreset(CPreset &preset, std::vector<Entry> &cl)
-    {
-        for (int i = 0; i < (int)cl.size(); i++)
-        {
-            std::wstring szBuffer;
-            auto& ce = cl[i];
-
-            if (ce.first == L"engine")
-            {
-                preset.nCurrentEngine = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szThreadsOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.nThreads = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == L"mmx")
-            {
-                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == L"sse")
-            {
-                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == L"sse2")
-            {
-                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == L"sse3")
-            {
-                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == L"mode")
-            {
-                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szCbrOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.nBitrate = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szVbrOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.nQuality = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szRawSampleFormatOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.m_RawInput.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szRawSampleRateOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.m_RawInput.nRawSampleRate = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            szBuffer = szRawChannelsOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
-            {
-                preset.m_RawInput.nRawChannels = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            for (int i = 0; i < (int)m_Options.size(); i++)
-            {
-                szBuffer = m_Options[i].szOption;
-                util::StringHelper::TrimLeft(szBuffer, '-');
-                if (ce.first == szBuffer)
-                {
-                    preset.nOptions[i] = util::StringHelper::ToInt(ce.second);
-                    break;
-                }
-            }
-        }
-    }
-
-    bool CEncoderOptions::LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
-    {
-        try
-        {
-            std::wstring data = ReadAllText(szFileName);
-            if (data.empty())
-                return false;
-
-            CPreset temp;
-            std::vector<Entry> cl;
-            bool bHavePreset = false;
-            presets.clear();
-
-            std::wistringstream stream;
-            stream.str(data);
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
-            {
-                if ((szBuffer[0] == '[') && (szBuffer[szBuffer.size() - 1] == ']'))
-                {
-                    if (bHavePreset == true)
-                    {
-                        ParsePreset(temp, cl);
-                        auto preset = temp;
-                        presets.emplace_back(preset);
-                        cl.clear();
-                    }
-
-                    temp = defaultPreset;
-                    util::StringHelper::TrimLeft(szBuffer, '[');
-                    util::StringHelper::TrimRight(szBuffer, ']');
-                    temp.szName = szBuffer;
-                    bHavePreset = true;
-                }
-                else
-                {
-                    auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
-                    if (parts.size() == 2)
-                    {
-                        cl.emplace_back(std::make_pair(parts[0], parts[1]));
-                    }
-                }
-            }
-
-            if (bHavePreset == true)
-            {
-                ParsePreset(temp, cl);
-                auto preset = temp;
-                presets.emplace_back(preset);
-                cl.clear();
-            }
-
-            return true;
-        }
-        catch (...)
-        {
-            return false;
-        }
-    }
-
-    bool CEncoderOptions::SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
-    {
-        try
-        {
-            FILE *fs;
-            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
-            if (error != 0)
-                return false;
-
-            std::wstring szBuffer;
-            std::wstring szTmpBuffer;
-
-            for (int i = 0; i < (const int)presets.size(); i++)
-            {
-                auto& preset = presets[i];
-
-                szBuffer = L"[" + preset.szName + L"]\n";
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"engine" + szSeparator + std::to_wstring(preset.nCurrentEngine) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szThreadsOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"mmx" + szSeparator + std::to_wstring(preset.nUsedSIMD[0]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse" + szSeparator + std::to_wstring(preset.nUsedSIMD[1]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse2" + szSeparator + std::to_wstring(preset.nUsedSIMD[2]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse3" + szSeparator + std::to_wstring(preset.nUsedSIMD[3]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szCbrOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szVbrOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szRawSampleFormatOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szRawSampleRateOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleRate) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szTmpBuffer = szRawChannelsOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                for (int j = 0; j < (int)m_Options.size(); j++)
-                {
-                    szTmpBuffer = m_Options[j].szOption;
-                    util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nOptions[j]) + szNewChar;
-                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-                }
-            }
-
-            fclose(fs);
-            return true;
-        }
-        catch (...)
-        {
-            return false;
-        }
-    }
-
-    bool CEncoderOptions::IsSupportedInputExt(std::wstring &szExt)
-    {
-        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
-        {
-            if (util::StringHelper::CompareNoCase(szExt, szSupportedInputExt[i]))
-                return true;
-        }
-        return false;
-    }
-
-    int CEncoderOptions::GetSupportedInputFormat(std::wstring &szExt)
+    int CConfiguration::GetSupportedInputFormat(std::wstring &szExt)
     {
         for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
         {
@@ -599,6 +319,286 @@ namespace config
             return m_Strings.at(nKey);
 
         return L"??";
+    }
+
+    int CConfiguration::FindValidBitratePos(const int nBitrate)
+    {
+        for (int i = 0; i < (int)m_EncoderOptions.nValidCbrBitrates.size(); i++)
+        {
+            if (m_EncoderOptions.nValidCbrBitrates[i] == nBitrate)
+                return i;
+        }
+        return 0;
+    }
+
+    int CConfiguration::FindOptionIndex(std::wstring szOption)
+    {
+        for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
+        {
+            std::wstring szBuffer = m_EncoderOptions.m_Options[i].szOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (szOption == szBuffer)
+                return i;
+        }
+        return 0;
+    }
+
+    void CConfiguration::ParsePreset(CPreset &preset, std::vector<Entry> &cl)
+    {
+        for (int i = 0; i < (int)cl.size(); i++)
+        {
+            std::wstring szBuffer;
+            auto& ce = cl[i];
+
+            if (ce.first == L"engine")
+            {
+                preset.nCurrentEngine = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szThreadsOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.nThreads = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            if (ce.first == L"mmx")
+            {
+                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            if (ce.first == L"sse")
+            {
+                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            if (ce.first == L"sse2")
+            {
+                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            if (ce.first == L"sse3")
+            {
+                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            if (ce.first == L"mode")
+            {
+                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szCbrOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.nBitrate = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szVbrOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.nQuality = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szRawSampleFormatOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.m_RawInput.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szRawSampleRateOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.m_RawInput.nRawSampleRate = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            szBuffer = szRawChannelsOption;
+            util::StringHelper::TrimLeft(szBuffer, '-');
+            if (ce.first == szBuffer)
+            {
+                preset.m_RawInput.nRawChannels = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+
+            for (int i = 0; i < (int)m_Options.size(); i++)
+            {
+                szBuffer = m_Options[i].szOption;
+                util::StringHelper::TrimLeft(szBuffer, '-');
+                if (ce.first == szBuffer)
+                {
+                    preset.nOptions[i] = util::StringHelper::ToInt(ce.second);
+                    break;
+                }
+            }
+        }
+    }
+
+    bool CConfiguration::LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
+    {
+        try
+        {
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
+                return false;
+
+            CPreset temp;
+            std::vector<Entry> cl;
+            bool bHavePreset = false;
+            presets.clear();
+
+            std::wistringstream stream;
+            stream.str(data);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            {
+                if ((szBuffer[0] == '[') && (szBuffer[szBuffer.size() - 1] == ']'))
+                {
+                    if (bHavePreset == true)
+                    {
+                        ParsePreset(temp, cl);
+                        auto preset = temp;
+                        presets.emplace_back(preset);
+                        cl.clear();
+                    }
+
+                    temp = defaultPreset;
+                    util::StringHelper::TrimLeft(szBuffer, '[');
+                    util::StringHelper::TrimRight(szBuffer, ']');
+                    temp.szName = szBuffer;
+                    bHavePreset = true;
+                }
+                else
+                {
+                    auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                    if (parts.size() == 2)
+                    {
+                        cl.emplace_back(std::make_pair(parts[0], parts[1]));
+                    }
+                }
+            }
+
+            if (bHavePreset == true)
+            {
+                ParsePreset(temp, cl);
+                auto preset = temp;
+                presets.emplace_back(preset);
+                cl.clear();
+            }
+
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+
+    bool CConfiguration::SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
+    {
+        try
+        {
+            FILE *fs;
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            if (error != 0)
+                return false;
+
+            std::wstring szBuffer;
+            std::wstring szTmpBuffer;
+
+            for (int i = 0; i < (const int)presets.size(); i++)
+            {
+                auto& preset = presets[i];
+
+                szBuffer = L"[" + preset.szName + L"]\n";
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"engine" + szSeparator + std::to_wstring(preset.nCurrentEngine) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szThreadsOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"mmx" + szSeparator + std::to_wstring(preset.nUsedSIMD[0]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse" + szSeparator + std::to_wstring(preset.nUsedSIMD[1]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse2" + szSeparator + std::to_wstring(preset.nUsedSIMD[2]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse3" + szSeparator + std::to_wstring(preset.nUsedSIMD[3]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szCbrOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szVbrOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szRawSampleFormatOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szRawSampleRateOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleRate) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szTmpBuffer = szRawChannelsOption;
+                util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                for (int j = 0; j < (int)m_Options.size(); j++)
+                {
+                    szTmpBuffer = m_Options[j].szOption;
+                    util::StringHelper::TrimLeft(szTmpBuffer, '-');
+                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nOptions[j]) + szNewChar;
+                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                }
+            }
+
+            fclose(fs);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+
+    bool CConfiguration::IsSupportedInputExt(std::wstring &szExt)
+    {
+        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
+        {
+            if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
+                return true;
+        }
+        return false;
     }
 
     void CConfiguration::SetEncoderOptions()

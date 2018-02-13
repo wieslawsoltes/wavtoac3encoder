@@ -498,7 +498,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nMode = AFTEN_ENC_MODE_CBR;
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            int nNewPos = this->pConfig->m_EncoderOptions.FindValidBitratePos(GetCurrentPreset().nBitrate);
+            int nNewPos = this->pConfig->FindValidBitratePos(GetCurrentPreset().nBitrate);
             this->m_SldBitrate.SetPos(nNewPos);
         }
 
@@ -1118,7 +1118,7 @@ namespace app
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = this->pConfig->m_EncoderOptions.LoadPresets(this->m_Presets, this->pConfig->m_szPresetsFilePath, this->m_DefaultPreset);
+        bool bPresetsRet = this->pConfig->LoadPresets(this->m_Presets, this->pConfig->m_szPresetsFilePath, this->m_DefaultPreset);
         OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
 
         if (bPresetsRet == true)
@@ -1156,7 +1156,7 @@ namespace app
     {
         bool bRet = false;
 
-        bRet = this->pConfig->m_EncoderOptions.SavePresets(this->m_Presets, this->pConfig->m_szPresetsFilePath, this->m_DefaultPreset);
+        bRet = this->pConfig->SavePresets(this->m_Presets, this->pConfig->m_szPresetsFilePath, this->m_DefaultPreset);
         OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
 
         bRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
@@ -1261,7 +1261,7 @@ namespace app
         {
             this->m_SldBitrate.SetTic(1);
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            int nPos = this->pConfig->m_EncoderOptions.FindValidBitratePos(preset.nBitrate);
+            int nPos = this->pConfig->FindValidBitratePos(preset.nBitrate);
             this->m_SldBitrate.SetPos(nPos);
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
@@ -1363,7 +1363,7 @@ namespace app
                 {
                     std::wstring file = szFile;
                     std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
-                    if (this->pConfig->m_EncoderOptions.IsSupportedInputExt(szExt) == true)
+                    if (this->pConfig->IsSupportedInputExt(szExt) == true)
                     {
                         std::wstring szPath = szFile;
                         this->AddItemToFileList(szPath);
@@ -1403,7 +1403,7 @@ namespace app
                 for (auto& file : files)
                 {
                     std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
-                    if (this->pConfig->m_EncoderOptions.IsSupportedInputExt(szExt) == true)
+                    if (this->pConfig->IsSupportedInputExt(szExt) == true)
                     {
                         this->AddItemToFileList(file);
                     }
@@ -1820,7 +1820,7 @@ namespace app
         {
             this->m_SldBitrate.SetTic(1);
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            this->m_SldBitrate.SetPos(this->pConfig->m_EncoderOptions.FindValidBitratePos(m_DefaultPreset.nBitrate));
+            this->m_SldBitrate.SetPos(this->pConfig->FindValidBitratePos(m_DefaultPreset.nBitrate));
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
         else if (m_DefaultPreset.nMode == AFTEN_ENC_MODE_VBR)
@@ -2680,9 +2680,9 @@ namespace app
             dlg.szTmpInputFiles[i] = this->m_LstFiles.GetItemText(i, 0);
         }
 
-        int nIndexAcmod = this->pConfig->m_EncoderOptions.FindOptionIndex(_T("acmod"));
-        int nIndexLfe = this->pConfig->m_EncoderOptions.FindOptionIndex(_T("lfe"));
-        int nIndexChconfig = this->pConfig->m_EncoderOptions.FindOptionIndex(_T("chconfig"));
+        int nIndexAcmod = this->pConfig->FindOptionIndex(_T("acmod"));
+        int nIndexLfe = this->pConfig->FindOptionIndex(_T("lfe"));
+        int nIndexChconfig = this->pConfig->FindOptionIndex(_T("chconfig"));
         bool bUpdateChconfig = false;
 
         auto& preset = GetCurrentPreset();
@@ -2910,7 +2910,7 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            if (this->pConfig->m_EncoderOptions.LoadPresets(this->m_Presets, szFileName, this->m_DefaultPreset) == true)
+            if (this->pConfig->LoadPresets(this->m_Presets, szFileName, this->m_DefaultPreset) == true)
             {
                 this->m_CmbPresets.ResetContent();
 
@@ -2941,7 +2941,7 @@ namespace app
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            this->pConfig->m_EncoderOptions.SavePresets(this->m_Presets, szFileName, this->m_DefaultPreset);
+            this->pConfig->SavePresets(this->m_Presets, szFileName, this->m_DefaultPreset);
         }
     }
 

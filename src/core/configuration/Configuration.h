@@ -86,14 +86,6 @@ namespace config
         std::vector<int> nSupportedInputFormats;
         std::vector<std::wstring> szSupportedOutputExt;
         std::vector<COption> m_Options;
-    public:
-        int FindValidBitratePos(const int nBitrate);
-        int FindOptionIndex(std::wstring szOption);
-        void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
-        bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
-        bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
-        bool IsSupportedInputExt(std::wstring &szExt);
-        int GetSupportedInputFormat(std::wstring &szExt);
     };
 
     class CConfiguration
@@ -123,6 +115,14 @@ namespace config
         bool SaveLangConfig(std::wstring &szFileName);
         void LoadLangStrings(std::wstring szLangPath);
         std::wstring CConfiguration::GetString(const int nKey);
+    public:
+        int FindValidBitratePos(const int nBitrate);
+        int FindOptionIndex(std::wstring szOption);
+        void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
+        bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        bool IsSupportedInputExt(std::wstring &szExt);
+        int GetSupportedInputFormat(std::wstring &szExt);
     public:
         void SetEncoderOptions();
         CAtlString GetSupportedInputFilesFilter();
