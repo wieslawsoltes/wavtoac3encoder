@@ -458,7 +458,7 @@ namespace config
                 continue;
             }
 
-            for (int i = 0; i < CPreset::nNumEncoderOptions; i++)
+            for (int i = 0; i < (int)m_Options.size(); i++)
             {
                 szBuffer = m_Options[i].szOption;
                 util::StringHelper::TrimLeft(szBuffer, '-');
@@ -597,7 +597,7 @@ namespace config
                 szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                for (int j = 0; j < CPreset::nNumEncoderOptions; j++)
+                for (int j = 0; j < (int)m_Options.size(); j++)
                 {
                     szTmpBuffer = m_Options[j].szOption;
                     util::StringHelper::TrimLeft(szTmpBuffer, '-');

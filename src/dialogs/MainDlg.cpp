@@ -1247,7 +1247,8 @@ namespace app
 
     void CMainDlg::ApplyPresetToDlg(config::CPreset &preset)
     {
-        for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
+        
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options.m_Options.size(); i++)
         {
             int nOption = preset.nOptions[i];
             std::wstring& szText = config::m_Config.m_EncoderOptions.m_Options[i].m_Values[nOption].first;
@@ -1748,7 +1749,7 @@ namespace app
 
     void CMainDlg::InitDefaultPreset()
     {
-        for (int i = 0; i < config::CPreset::nNumEncoderOptions; i++)
+        for (int i = 0; i < (int)config::m_Config.m_EncoderOptions.m_Options.m_Options.size(); i++)
             defaultPreset.nOptions[i] = config::m_Config.m_EncoderOptions.m_Options[i].nDefaultValue;
 
         defaultPreset.szName = config::m_Config.GetString(0x00207001);
