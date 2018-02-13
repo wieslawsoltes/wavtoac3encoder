@@ -87,7 +87,6 @@ namespace config
         std::vector<std::wstring> szSupportedOutputExt;
         std::vector<COption> m_Options;
     public:
-        void Init();
         int FindValidBitratePos(const int nBitrate);
         int FindOptionIndex(std::wstring szOption);
         void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
@@ -95,7 +94,6 @@ namespace config
         bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
         bool IsSupportedInputExt(std::wstring &szExt);
         int GetSupportedInputFormat(std::wstring &szExt);
-        CAtlString GetSupportedInputFilesFilter();
     };
 
     class CConfiguration
@@ -126,5 +124,7 @@ namespace config
         void LoadLangStrings(std::wstring szLangPath);
         std::wstring CConfiguration::GetString(const int nKey);
     public:
+        void SetEncoderOptions();
+        CAtlString GetSupportedInputFilesFilter();
     };
 }

@@ -44,7 +44,7 @@ namespace app
 
     void CEncWAVtoAC3App::LoadConfig()
     {
-        this->m_Config.m_EncoderOptions.Init();
+        this->m_Config.SetEncoderOptions();
 
         this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
 

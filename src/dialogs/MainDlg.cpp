@@ -2010,7 +2010,7 @@ namespace app
         this->InitLangFilesList();
         this->InitLangSettingsList();
 
-        this->pConfig->m_EncoderOptions.Init();
+        this->pConfig->SetEncoderOptions();
 
         this->InitSettingsList();
 
@@ -2578,7 +2578,7 @@ namespace app
 
             ZeroMemory(pFiles, dwMaxSize);
 
-            CString szFilter = this->pConfig->m_EncoderOptions.GetSupportedInputFilesFilter();
+            CString szFilter = this->pConfig->GetSupportedInputFilesFilter();
             CFileDialog fd(TRUE,
                 this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
                 _T(""),

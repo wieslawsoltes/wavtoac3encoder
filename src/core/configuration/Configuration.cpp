@@ -41,310 +41,6 @@ namespace config
         return buffer;
     }
 
-    void CEncoderOptions::Init()
-    {
-        nValidCbrBitrates = {
-            0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
-        };
-
-        ccAften = {
-            { 0, 0, L"1+1" },
-            { 1, 0, L"1/0" },
-            { 2, 0, L"2/0" },
-            { 3, 0, L"3/0" },
-            { 4, 0, L"2/1" },
-            { 5, 0, L"3/1" },
-            { 6, 0, L"2/2" },
-            { 7, 0, L"3/2" },
-            { 0, 1, L"1+1" },
-            { 1, 1, L"1/0" },
-            { 2, 1, L"2/0" },
-            { 3, 1, L"3/0" },
-            { 4, 1, L"2/1" },
-            { 5, 1, L"3/1" },
-            { 6, 1, L"2/2" },
-            { 7, 1, L"3/2" }
-        };
-
-        szRawSampleFormats = {
-            config::m_Config.GetString(0x00207003),
-            L"u8",
-            L"s8",
-            L"s16_le",
-            L"s16_be",
-            L"s20_le",
-            L"s20_be",
-            L"s24_le",
-            L"s24_be",
-            L"s32_le",
-            L"s32_be",
-            L"float_le",
-            L"float_be",
-            L"double_le",
-            L"double_be"
-        };
-
-        szGroups = {
-            L"Encoding options",
-            L"Bitstream info metadata",
-            L"Dynamic range compression and dialog normalization",
-            L"Input options",
-            L"Input filters",
-            L"Alternate bit stream syntax"
-        };
-
-        szCbrOption = L"-b";
-        szVbrOption = L"-q";
-        szThreadsOption = L"-threads";
-        szSimdOption = L"-nosimd";
-        szRawSampleFormatOption = L"-raw_fmt";
-        szRawSampleRateOption = L"-raw_sr";
-        szRawChannelsOption = L"-raw_ch";
-
-        szSupportedInputExt = {
-            L"wav",
-            L"pcm",
-            L"raw",
-            L"bin",
-            L"aiff",
-            L"aif",
-            L"aifc",
-            L"avs"
-        };
-
-        nSupportedInputFormats = {
-            PCM_FORMAT_WAVE,
-            PCM_FORMAT_RAW,
-            PCM_FORMAT_RAW,
-            PCM_FORMAT_RAW,
-            PCM_FORMAT_AIFF,
-            PCM_FORMAT_AIFF,
-            PCM_FORMAT_CAFF,
-        };
-
-        szSupportedOutputExt = {
-           L"ac3"
-        };
-
-        #define GetString(key) config::m_Config.GetString(key)
-        #define AddOption(name, option, tip, dval, ival, group, begin) \
-            m_Options.emplace_back(COption()); \
-            nCurOpt++; \
-            m_Options[nCurOpt].szName = name; \
-            m_Options[nCurOpt].szOption = option; \
-            m_Options[nCurOpt].szHelpText = tip; \
-            m_Options[nCurOpt].nDefaultValue = dval; \
-            m_Options[nCurOpt].nIgnoreValue = ival; \
-            m_Options[nCurOpt].szGroupName = group; \
-            m_Options[nCurOpt].bBeginGroup = begin;
-        #define AddValue(name, value) \
-            m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(name, value));
-        #define AddValueRange(start, end) \
-            for (int i = start; i <= end; i++) { \
-                m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)); \
-            }
-
-        int nCurOpt = -1;
-
-        m_Options.clear();
-
-        AddOption(GetString(0x00301001), L"-fba", GetString(0x00301002), 0, -1, GetString(0x00208001), true)
-        AddValue(GetString(0x00301003), 0)
-        AddValue(GetString(0x00301004), 1)
-
-        AddOption(GetString(0x00302001), L"-exps", GetString(0x00302002), 7, -1, L"", false)
-        AddValue(GetString(0x00302003), 1)
-        AddValueRange(2, 7)
-        AddValue(GetString(0x00302004), 8)
-        AddValueRange(9, 31)
-        AddValue(GetString(0x00302005), 32)
-
-        AddOption(GetString(0x00303001), L"-pad", GetString(0x00303002), 1, -1, L"", false)
-        AddValue(GetString(0x00303003), 0)
-        AddValue(GetString(0x00303004), 1)
-
-        AddOption(GetString(0x00304001), L"-w", GetString(0x00304002), 0, -1, L"", false)
-        AddValue(GetString(0x00304003), -1)
-        AddValue(GetString(0x00304004), -2)
-        AddValue(GetString(0x00304005), 0)
-        AddValueRange(1, 59)
-        AddValue(GetString(0x00304006), 60)
-
-        AddOption(GetString(0x00305001), L"-wmin", GetString(0x00305002), 0, -1, L"", false)
-        AddValue(GetString(0x00305003), 0)
-        AddValueRange(1, 59)
-        AddValue(L"60", 60)
-
-        AddOption(GetString(0x00306001), L"-wmax", GetString(0x00306002), 60, -1, L"", false)
-        AddValue(L"0", 0)
-        AddValueRange(1, 59)
-        AddValue(GetString(0x00306003), 60)
-
-        AddOption(GetString(0x00307001), L"-m", GetString(0x00307002), 1, -1, L"", false)
-        AddValue(GetString(0x00307003), 0)
-        AddValue(GetString(0x00307004), 1)
-
-        AddOption(GetString(0x00308001), L"-s", GetString(0x00308002), 0, -1, L"", false)
-        AddValue(GetString(0x00308003), 0)
-        AddValue(GetString(0x00308004), 1)
-
-        AddOption(GetString(0x00401001), L"-cmix", GetString(0x00401002), 0, -1, GetString(0x00208002), true)
-        AddValue(GetString(0x00401003), 0)
-        AddValue(L"-4.5 dB", 1)
-        AddValue(L"-6.0 dB", 2)
-
-        AddOption(GetString(0x00402001), L"-smix", GetString(0x00402002), 0, -1, L"", false)
-        AddValue(GetString(0x00402003), 0)
-        AddValue(L"-6 dB", 1)
-        AddValue(L"0", 2)
-
-        AddOption(GetString(0x00403001) , L"-dsur", GetString(0x00403002), 0, -1, L"", false)
-        AddValue(GetString(0x00403003), 0)
-        AddValue(GetString(0x00403004), 1)
-        AddValue(GetString(0x00403005), 2)
-
-        AddOption(GetString(0x00501001), L"-dnorm", GetString(0x00501002), 31, -1, GetString(0x00208003), true)
-        AddValueRange(0, 30)
-        AddValue(GetString(0x00501003), 31)
-
-        AddOption(GetString(0x00502001), L"-dynrng", GetString(0x00502002), 5, -1, L"", false)
-        AddValue(GetString(0x00502003), 0)
-        AddValue(GetString(0x00502004), 1)
-        AddValue(GetString(0x00502005), 2)
-        AddValue(GetString(0x00502006), 3)
-        AddValue(GetString(0x00502007), 4)
-        AddValue(GetString(0x00502008), 5)
-
-        AddOption(GetString(0x00601001), L"-acmod", GetString(0x00601002), 8, 8, GetString(0x00208004), true)
-        AddValue(L"1+1 (Ch1,Ch2)", 0)
-        AddValue(L"1/0 (C)", 1)
-        AddValue(L"2/0 (L,R)", 2)
-        AddValue(L"3/0 (L,R,C)", 3)
-        AddValue(L"2/1 (L,R,S)", 4)
-        AddValue(L"3/1 (L,R,C,S)", 5)
-        AddValue(L"2/2 (L,R,SL,SR)", 6)
-        AddValue(L"3/2 (L,R,C,SL,SR)", 7)
-        AddValue(GetString(0x00207003), 0)
-
-        AddOption(GetString(0x00602001), L"-lfe", GetString(0x00602002), 2, 2, L"", false)
-        AddValue(GetString(0x00602003), 0)
-        AddValue(GetString(0x00602004), 1)
-        AddValue(GetString(0x00207003), 0)
-
-        AddOption(GetString(0x00603001), L"-chconfig", GetString(0x00603002), 16, 16, L"", false)
-        AddValue(L"1+1 = (Ch1,Ch2)", 0)
-        AddValue(L"1/0 = (C)", 1)
-        AddValue(L"2/0 = (L,R)", 2)
-        AddValue(L"3/0 = (L,R,C)", 3)
-        AddValue(L"2/1 = (L,R,S)", 4)
-        AddValue(L"3/1 = (L,R,C,S)", 5)
-        AddValue(L"2/2 = (L,R,SL,SR)", 6)
-        AddValue(L"3/2 = (L,R,C,SL,SR)", 7)
-        AddValue(L"1+1+LFE = (Ch1,Ch2) + LFE", 8)
-        AddValue(L"1/0+LFE = (C) + LFE", 9)
-        AddValue(L"2/0+LFE = (L,R) + LFE", 10)
-        AddValue(L"3/0+LFE = (L,R,C) + LFE", 11)
-        AddValue(L"2/1+LFE = (L,R,S) + LFE", 12)
-        AddValue(L"3/1+LFE = (L,R,C,S) + LFE", 13)
-        AddValue(L"2/2+LFE = (L,R,SL,SR) + LFE", 14)
-        AddValue(L"3/2+LFE = (L,R,C,SL,SR) + LFE", 15)
-        AddValue(GetString(0x00207003), 0)
-
-        AddOption(GetString(0x00604001), L"-chmap", GetString(0x00604002), 0, -1, L"", false)
-        AddValue(GetString(0x00604003), 0)
-        AddValue(GetString(0x00604004), 1)
-        AddValue(GetString(0x00604005), 2)
-
-        AddOption(GetString(0x00605001), L"-readtoeof", GetString(0x00605002), 0, -1, L"", false)
-        AddValue(GetString(0x00605003), 0)
-        AddValue(GetString(0x00605004), 1)
-
-        AddOption(GetString(0x00701001), L"-bwfilter", GetString(0x00701002), 0, -1, GetString(0x00208005), true)
-        AddValue(GetString(0x00701003), 0)
-        AddValue(GetString(0x00701004), 1)
-
-        AddOption(GetString(0x00702001), L"-dcfilter", GetString(0x00702002), 0, -1, L"", false)
-        AddValue(GetString(0x00702003), 0)
-        AddValue(GetString(0x00702004), 1)
-
-        AddOption(GetString(0x00703001), L"-lfefilter", GetString(0x00703002), 0, -1, L"", false)
-        AddValue(GetString(0x00703003), 0)
-        AddValue(GetString(0x00703004), 1)
-
-        AddOption(GetString(0x00801001), L"-xbsi1", GetString(0x00801002), 2, 2, GetString(0x00208006), true)
-        AddValue(GetString(0x00801003), 0)
-        AddValue(GetString(0x00801004), 1)
-        AddValue(GetString(0x00207003), 0)
-
-        AddOption(GetString(0x00802001), L"-dmixmod", GetString(0x00802002), 0, -1, L"", false)
-        AddValue(GetString(0x00802003), 0)
-        AddValue(GetString(0x00802004), 1)
-        AddValue(GetString(0x00802005), 2)
-
-        AddOption(GetString(0x00803001), L"-ltrtcmix", GetString(0x00803002), 4, -1, L"", false)
-        AddValue(L"+3.0 dB", 0)
-        AddValue(L"+1.5 dB", 1)
-        AddValue(L"0.0 dB", 2)
-        AddValue(L"-1.5 dB", 3)
-        AddValue(GetString(0x00803003), 4)
-        AddValue(L"-4.5 dB", 5)
-        AddValue(L"-6.0 dB", 6)
-        AddValue(L"-inf dB", 7)
-
-        AddOption(GetString(0x00804001), L"-ltrtsmix", GetString(0x00804002), 4, -1, L"", false)
-        AddValue(L"+3.0 dB", 0)
-        AddValue(L"+1.5 dB", 1)
-        AddValue(L"0.0 dB", 2)
-        AddValue(L"-1.5 dB", 3)
-        AddValue(GetString(0x00804003), 4)
-        AddValue(L"-4.5 dB", 5)
-        AddValue(L"-6.0 dB", 6)
-        AddValue(L"-inf dB", 7)
-
-        AddOption(GetString(0x00805001), L"-lorocmix", GetString(0x00805002), 4, -1, L"", false)
-        AddValue(L"+3.0 dB", 0)
-        AddValue(L"+1.5 dB", 1)
-        AddValue(L"0.0 dB", 2)
-        AddValue(L"-1.5 dB", 3)
-        AddValue(GetString(0x00805003), 4)
-        AddValue(L"-4.5 dB", 5)
-        AddValue(L"-6.0 dB", 6)
-        AddValue(L"-inf dB", 7)
-
-        AddOption(GetString(0x00806001), L"-lorosmix", GetString(0x00806002), 4, -1, L"", false)
-        AddValue(L"+3.0 dB", 0)
-        AddValue(L"+1.5 dB", 1)
-        AddValue(L"0.0 dB", 2)
-        AddValue(L"-1.5 dB", 3)
-        AddValue(GetString(0x00806003), 4)
-        AddValue(L"-4.5 dB", 5)
-        AddValue(L"-6.0 dB", 6)
-        AddValue(L"-inf dB", 7)
-
-        AddOption(GetString(0x00807001), L"-xbsi2", GetString(0x00807002), 2, 2, L"", false)
-        AddValue(GetString(0x00807003), 0)
-        AddValue(GetString(0x00807004), 1)
-        AddValue(GetString(0x00207003), 0)
-
-        AddOption(GetString(0x00808001), L"-dsurexmod", GetString(0x00808002), 0, -1, L"", false)
-        AddValue(GetString(0x00808003), 0)
-        AddValue(GetString(0x00808004), 1)
-        AddValue(GetString(0x00808005), 2)
-
-        AddOption(GetString(0x00809001), L"-dheadphon", GetString(0x00809002), 0, -1, L"", false)
-        AddValue(GetString(0x00809003), 0)
-        AddValue(GetString(0x00809004), 1)
-        AddValue(GetString(0x00809005), 2)
-
-        AddOption(GetString(0x0080A001), L"-adconvtyp", GetString(0x0080A002), 0, -1, L"", false)
-        AddValue(GetString(0x0080A003), 0)
-        AddValue(GetString(0x0080A004), 1)
-
-        #undef GetString
-        #undef AddOption
-        #undef AddValue
-    }
-
     int CEncoderOptions::FindValidBitratePos(const int nBitrate)
     {
         for (int i = 0; i < (int)nValidCbrBitrates.size(); i++)
@@ -635,36 +331,6 @@ namespace config
         return PCM_FORMAT_UNKNOWN;
     }
 
-    CAtlString CEncoderOptions::GetSupportedInputFilesFilter()
-    {
-        CAtlString szFilter = L"";
-        CAtlString szExtL = L"";
-        CAtlString szExtU = L"";
-        CAtlString szBuff = L"";
-
-        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
-        {
-            szExtL = szSupportedInputExt[i].c_str();
-            szBuff = L"*." + szExtL.MakeLower();
-            szBuff += (i < (int)szSupportedInputExt.size() - 1) ? L";" : L"";
-            szFilter += szBuff;
-        }
-
-        szFilter = CAtlString(config::m_Config.GetString(0x00207006).c_str()) + L" (" + szFilter + L")|" + szFilter + L"|";
-
-        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
-        {
-            szExtL = szExtU = szSupportedInputExt[i].c_str();
-            szExtU.MakeUpper();
-            szExtL.MakeLower();
-            szBuff.Format(L"%s %s (*.%s)|*.%s|", szExtU, config::m_Config.GetString(0x00207007).c_str(), szExtL, szExtL);
-            szFilter += szBuff;
-        }
-
-        szFilter += CAtlString(config::m_Config.GetString(0x00207008).c_str()) + L" (*.*)|*.*||";
-        return szFilter;
-    }
-
     bool CConfiguration::LoadConfig(std::wstring &szFileName, std::vector<Entry> &cl)
     {
         try
@@ -933,5 +599,337 @@ namespace config
             return m_Strings.at(nKey);
 
         return L"??";
+    }
+
+    void CConfiguration::SetEncoderOptions()
+    {
+        nValidCbrBitrates = {
+            0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
+        };
+
+        ccAften = {
+            { 0, 0, L"1+1" },
+            { 1, 0, L"1/0" },
+            { 2, 0, L"2/0" },
+            { 3, 0, L"3/0" },
+            { 4, 0, L"2/1" },
+            { 5, 0, L"3/1" },
+            { 6, 0, L"2/2" },
+            { 7, 0, L"3/2" },
+            { 0, 1, L"1+1" },
+            { 1, 1, L"1/0" },
+            { 2, 1, L"2/0" },
+            { 3, 1, L"3/0" },
+            { 4, 1, L"2/1" },
+            { 5, 1, L"3/1" },
+            { 6, 1, L"2/2" },
+            { 7, 1, L"3/2" }
+        };
+
+        szRawSampleFormats = {
+            this->GetString(0x00207003),
+            L"u8",
+            L"s8",
+            L"s16_le",
+            L"s16_be",
+            L"s20_le",
+            L"s20_be",
+            L"s24_le",
+            L"s24_be",
+            L"s32_le",
+            L"s32_be",
+            L"float_le",
+            L"float_be",
+            L"double_le",
+            L"double_be"
+        };
+
+        szGroups = {
+            L"Encoding options",
+            L"Bitstream info metadata",
+            L"Dynamic range compression and dialog normalization",
+            L"Input options",
+            L"Input filters",
+            L"Alternate bit stream syntax"
+        };
+
+        szCbrOption = L"-b";
+        szVbrOption = L"-q";
+        szThreadsOption = L"-threads";
+        szSimdOption = L"-nosimd";
+        szRawSampleFormatOption = L"-raw_fmt";
+        szRawSampleRateOption = L"-raw_sr";
+        szRawChannelsOption = L"-raw_ch";
+
+        szSupportedInputExt = {
+            L"wav",
+            L"pcm",
+            L"raw",
+            L"bin",
+            L"aiff",
+            L"aif",
+            L"aifc",
+            L"avs"
+        };
+
+        nSupportedInputFormats = {
+            PCM_FORMAT_WAVE,
+            PCM_FORMAT_RAW,
+            PCM_FORMAT_RAW,
+            PCM_FORMAT_RAW,
+            PCM_FORMAT_AIFF,
+            PCM_FORMAT_AIFF,
+            PCM_FORMAT_CAFF,
+        };
+
+        szSupportedOutputExt = {
+           L"ac3"
+        };
+
+        #define AddOption(name, option, tip, dval, ival, group, begin) \
+            m_Options.emplace_back(COption()); \
+            nCurOpt++; \
+            m_Options[nCurOpt].szName = name; \
+            m_Options[nCurOpt].szOption = option; \
+            m_Options[nCurOpt].szHelpText = tip; \
+            m_Options[nCurOpt].nDefaultValue = dval; \
+            m_Options[nCurOpt].nIgnoreValue = ival; \
+            m_Options[nCurOpt].szGroupName = group; \
+            m_Options[nCurOpt].bBeginGroup = begin;
+        #define AddValue(name, value) \
+            m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(name, value));
+        #define AddValueRange(start, end) \
+            for (int i = start; i <= end; i++) { \
+                m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)); \
+            }
+
+        int nCurOpt = -1;
+
+        m_Options.clear();
+
+        AddOption(GetString(0x00301001), L"-fba", GetString(0x00301002), 0, -1, GetString(0x00208001), true)
+        AddValue(GetString(0x00301003), 0)
+        AddValue(GetString(0x00301004), 1)
+
+        AddOption(GetString(0x00302001), L"-exps", GetString(0x00302002), 7, -1, L"", false)
+        AddValue(GetString(0x00302003), 1)
+        AddValueRange(2, 7)
+        AddValue(GetString(0x00302004), 8)
+        AddValueRange(9, 31)
+        AddValue(GetString(0x00302005), 32)
+
+        AddOption(GetString(0x00303001), L"-pad", GetString(0x00303002), 1, -1, L"", false)
+        AddValue(GetString(0x00303003), 0)
+        AddValue(GetString(0x00303004), 1)
+
+        AddOption(GetString(0x00304001), L"-w", GetString(0x00304002), 0, -1, L"", false)
+        AddValue(GetString(0x00304003), -1)
+        AddValue(GetString(0x00304004), -2)
+        AddValue(GetString(0x00304005), 0)
+        AddValueRange(1, 59)
+        AddValue(GetString(0x00304006), 60)
+
+        AddOption(GetString(0x00305001), L"-wmin", GetString(0x00305002), 0, -1, L"", false)
+        AddValue(GetString(0x00305003), 0)
+        AddValueRange(1, 59)
+        AddValue(L"60", 60)
+
+        AddOption(GetString(0x00306001), L"-wmax", GetString(0x00306002), 60, -1, L"", false)
+        AddValue(L"0", 0)
+        AddValueRange(1, 59)
+        AddValue(GetString(0x00306003), 60)
+
+        AddOption(GetString(0x00307001), L"-m", GetString(0x00307002), 1, -1, L"", false)
+        AddValue(GetString(0x00307003), 0)
+        AddValue(GetString(0x00307004), 1)
+
+        AddOption(GetString(0x00308001), L"-s", GetString(0x00308002), 0, -1, L"", false)
+        AddValue(GetString(0x00308003), 0)
+        AddValue(GetString(0x00308004), 1)
+
+        AddOption(GetString(0x00401001), L"-cmix", GetString(0x00401002), 0, -1, GetString(0x00208002), true)
+        AddValue(GetString(0x00401003), 0)
+        AddValue(L"-4.5 dB", 1)
+        AddValue(L"-6.0 dB", 2)
+
+        AddOption(GetString(0x00402001), L"-smix", GetString(0x00402002), 0, -1, L"", false)
+        AddValue(GetString(0x00402003), 0)
+        AddValue(L"-6 dB", 1)
+        AddValue(L"0", 2)
+
+        AddOption(GetString(0x00403001) , L"-dsur", GetString(0x00403002), 0, -1, L"", false)
+        AddValue(GetString(0x00403003), 0)
+        AddValue(GetString(0x00403004), 1)
+        AddValue(GetString(0x00403005), 2)
+
+        AddOption(GetString(0x00501001), L"-dnorm", GetString(0x00501002), 31, -1, GetString(0x00208003), true)
+        AddValueRange(0, 30)
+        AddValue(GetString(0x00501003), 31)
+
+        AddOption(GetString(0x00502001), L"-dynrng", GetString(0x00502002), 5, -1, L"", false)
+        AddValue(GetString(0x00502003), 0)
+        AddValue(GetString(0x00502004), 1)
+        AddValue(GetString(0x00502005), 2)
+        AddValue(GetString(0x00502006), 3)
+        AddValue(GetString(0x00502007), 4)
+        AddValue(GetString(0x00502008), 5)
+
+        AddOption(GetString(0x00601001), L"-acmod", GetString(0x00601002), 8, 8, GetString(0x00208004), true)
+        AddValue(L"1+1 (Ch1,Ch2)", 0)
+        AddValue(L"1/0 (C)", 1)
+        AddValue(L"2/0 (L,R)", 2)
+        AddValue(L"3/0 (L,R,C)", 3)
+        AddValue(L"2/1 (L,R,S)", 4)
+        AddValue(L"3/1 (L,R,C,S)", 5)
+        AddValue(L"2/2 (L,R,SL,SR)", 6)
+        AddValue(L"3/2 (L,R,C,SL,SR)", 7)
+        AddValue(GetString(0x00207003), 0)
+
+        AddOption(GetString(0x00602001), L"-lfe", GetString(0x00602002), 2, 2, L"", false)
+        AddValue(GetString(0x00602003), 0)
+        AddValue(GetString(0x00602004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        AddOption(GetString(0x00603001), L"-chconfig", GetString(0x00603002), 16, 16, L"", false)
+        AddValue(L"1+1 = (Ch1,Ch2)", 0)
+        AddValue(L"1/0 = (C)", 1)
+        AddValue(L"2/0 = (L,R)", 2)
+        AddValue(L"3/0 = (L,R,C)", 3)
+        AddValue(L"2/1 = (L,R,S)", 4)
+        AddValue(L"3/1 = (L,R,C,S)", 5)
+        AddValue(L"2/2 = (L,R,SL,SR)", 6)
+        AddValue(L"3/2 = (L,R,C,SL,SR)", 7)
+        AddValue(L"1+1+LFE = (Ch1,Ch2) + LFE", 8)
+        AddValue(L"1/0+LFE = (C) + LFE", 9)
+        AddValue(L"2/0+LFE = (L,R) + LFE", 10)
+        AddValue(L"3/0+LFE = (L,R,C) + LFE", 11)
+        AddValue(L"2/1+LFE = (L,R,S) + LFE", 12)
+        AddValue(L"3/1+LFE = (L,R,C,S) + LFE", 13)
+        AddValue(L"2/2+LFE = (L,R,SL,SR) + LFE", 14)
+        AddValue(L"3/2+LFE = (L,R,C,SL,SR) + LFE", 15)
+        AddValue(GetString(0x00207003), 0)
+
+        AddOption(GetString(0x00604001), L"-chmap", GetString(0x00604002), 0, -1, L"", false)
+        AddValue(GetString(0x00604003), 0)
+        AddValue(GetString(0x00604004), 1)
+        AddValue(GetString(0x00604005), 2)
+
+        AddOption(GetString(0x00605001), L"-readtoeof", GetString(0x00605002), 0, -1, L"", false)
+        AddValue(GetString(0x00605003), 0)
+        AddValue(GetString(0x00605004), 1)
+
+        AddOption(GetString(0x00701001), L"-bwfilter", GetString(0x00701002), 0, -1, GetString(0x00208005), true)
+        AddValue(GetString(0x00701003), 0)
+        AddValue(GetString(0x00701004), 1)
+
+        AddOption(GetString(0x00702001), L"-dcfilter", GetString(0x00702002), 0, -1, L"", false)
+        AddValue(GetString(0x00702003), 0)
+        AddValue(GetString(0x00702004), 1)
+
+        AddOption(GetString(0x00703001), L"-lfefilter", GetString(0x00703002), 0, -1, L"", false)
+        AddValue(GetString(0x00703003), 0)
+        AddValue(GetString(0x00703004), 1)
+
+        AddOption(GetString(0x00801001), L"-xbsi1", GetString(0x00801002), 2, 2, GetString(0x00208006), true)
+        AddValue(GetString(0x00801003), 0)
+        AddValue(GetString(0x00801004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        AddOption(GetString(0x00802001), L"-dmixmod", GetString(0x00802002), 0, -1, L"", false)
+        AddValue(GetString(0x00802003), 0)
+        AddValue(GetString(0x00802004), 1)
+        AddValue(GetString(0x00802005), 2)
+
+        AddOption(GetString(0x00803001), L"-ltrtcmix", GetString(0x00803002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00803003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        AddOption(GetString(0x00804001), L"-ltrtsmix", GetString(0x00804002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00804003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        AddOption(GetString(0x00805001), L"-lorocmix", GetString(0x00805002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00805003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        AddOption(GetString(0x00806001), L"-lorosmix", GetString(0x00806002), 4, -1, L"", false)
+        AddValue(L"+3.0 dB", 0)
+        AddValue(L"+1.5 dB", 1)
+        AddValue(L"0.0 dB", 2)
+        AddValue(L"-1.5 dB", 3)
+        AddValue(GetString(0x00806003), 4)
+        AddValue(L"-4.5 dB", 5)
+        AddValue(L"-6.0 dB", 6)
+        AddValue(L"-inf dB", 7)
+
+        AddOption(GetString(0x00807001), L"-xbsi2", GetString(0x00807002), 2, 2, L"", false)
+        AddValue(GetString(0x00807003), 0)
+        AddValue(GetString(0x00807004), 1)
+        AddValue(GetString(0x00207003), 0)
+
+        AddOption(GetString(0x00808001), L"-dsurexmod", GetString(0x00808002), 0, -1, L"", false)
+        AddValue(GetString(0x00808003), 0)
+        AddValue(GetString(0x00808004), 1)
+        AddValue(GetString(0x00808005), 2)
+
+        AddOption(GetString(0x00809001), L"-dheadphon", GetString(0x00809002), 0, -1, L"", false)
+        AddValue(GetString(0x00809003), 0)
+        AddValue(GetString(0x00809004), 1)
+        AddValue(GetString(0x00809005), 2)
+
+        AddOption(GetString(0x0080A001), L"-adconvtyp", GetString(0x0080A002), 0, -1, L"", false)
+        AddValue(GetString(0x0080A003), 0)
+        AddValue(GetString(0x0080A004), 1)
+
+        #undef AddOption
+        #undef AddValue
+    }
+
+    CAtlString CConfiguration::GetSupportedInputFilesFilter()
+    {
+        CAtlString szFilter = L"";
+        CAtlString szExtL = L"";
+        CAtlString szExtU = L"";
+        CAtlString szBuff = L"";
+
+        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
+        {
+            szExtL = szSupportedInputExt[i].c_str();
+            szBuff = L"*." + szExtL.MakeLower();
+            szBuff += (i < (int)szSupportedInputExt.size() - 1) ? L";" : L"";
+            szFilter += szBuff;
+        }
+
+        szFilter = CAtlString(this->GetString(0x00207006).c_str()) + L" (" + szFilter + L")|" + szFilter + L"|";
+
+        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
+        {
+            szExtL = szExtU = szSupportedInputExt[i].c_str();
+            szExtU.MakeUpper();
+            szExtL.MakeLower();
+            szBuff.Format(L"%s %s (*.%s)|*.%s|", szExtU, this->GetString(0x00207007).c_str(), szExtL, szExtL);
+            szFilter += szBuff;
+        }
+
+        szFilter += CAtlString(this->GetString(0x00207008).c_str()) + L" (*.*)|*.*||";
+        return szFilter;
     }
 }
