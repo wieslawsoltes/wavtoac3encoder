@@ -424,7 +424,6 @@ namespace worker
             pf.sample_rate = infoAVS.nSamplesPerSecond;
             pf.channels = infoAVS.nAudioChannels;
             pf.ch_mask = 0xFFFFFFFF;
-
         }
 
         if (s.acmod >= 0)
