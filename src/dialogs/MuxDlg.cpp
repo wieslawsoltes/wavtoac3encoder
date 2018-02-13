@@ -481,7 +481,7 @@ namespace app
             this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
             szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            this->pConfig->m_EncoderOptions.GetSupportedInputFilesFilter(),
+            this->pConfig->GetSupportedInputFilesFilter(),
             this);
 
         if (fd.DoModal() == IDOK)
