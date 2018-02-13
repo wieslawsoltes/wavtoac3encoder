@@ -603,11 +603,11 @@ namespace config
 
     void CConfiguration::SetEncoderOptions()
     {
-        nValidCbrBitrates = {
+        m_EncoderOptions.nValidCbrBitrates = {
             0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
         };
 
-        ccAften = {
+        m_EncoderOptions.ccAften = {
             { 0, 0, L"1+1" },
             { 1, 0, L"1/0" },
             { 2, 0, L"2/0" },
@@ -626,7 +626,7 @@ namespace config
             { 7, 1, L"3/2" }
         };
 
-        szRawSampleFormats = {
+        m_EncoderOptions.szRawSampleFormats = {
             this->GetString(0x00207003),
             L"u8",
             L"s8",
@@ -644,7 +644,7 @@ namespace config
             L"double_be"
         };
 
-        szGroups = {
+        m_EncoderOptions.szGroups = {
             L"Encoding options",
             L"Bitstream info metadata",
             L"Dynamic range compression and dialog normalization",
@@ -653,15 +653,15 @@ namespace config
             L"Alternate bit stream syntax"
         };
 
-        szCbrOption = L"-b";
-        szVbrOption = L"-q";
-        szThreadsOption = L"-threads";
-        szSimdOption = L"-nosimd";
-        szRawSampleFormatOption = L"-raw_fmt";
-        szRawSampleRateOption = L"-raw_sr";
-        szRawChannelsOption = L"-raw_ch";
+        m_EncoderOptions.szCbrOption = L"-b";
+        m_EncoderOptions.szVbrOption = L"-q";
+        m_EncoderOptions.szThreadsOption = L"-threads";
+        m_EncoderOptions.szSimdOption = L"-nosimd";
+        m_EncoderOptions.szRawSampleFormatOption = L"-raw_fmt";
+        m_EncoderOptions.szRawSampleRateOption = L"-raw_sr";
+        m_EncoderOptions.szRawChannelsOption = L"-raw_ch";
 
-        szSupportedInputExt = {
+        m_EncoderOptions.szSupportedInputExt = {
             L"wav",
             L"pcm",
             L"raw",
@@ -672,7 +672,7 @@ namespace config
             L"avs"
         };
 
-        nSupportedInputFormats = {
+        m_EncoderOptions.nSupportedInputFormats = {
             PCM_FORMAT_WAVE,
             PCM_FORMAT_RAW,
             PCM_FORMAT_RAW,
@@ -682,30 +682,30 @@ namespace config
             PCM_FORMAT_CAFF,
         };
 
-        szSupportedOutputExt = {
+        m_EncoderOptions.szSupportedOutputExt = {
            L"ac3"
         };
 
         #define AddOption(name, option, tip, dval, ival, group, begin) \
-            m_Options.emplace_back(COption()); \
+            m_EncoderOptions.m_Options.emplace_back(COption()); \
             nCurOpt++; \
-            m_Options[nCurOpt].szName = name; \
-            m_Options[nCurOpt].szOption = option; \
-            m_Options[nCurOpt].szHelpText = tip; \
-            m_Options[nCurOpt].nDefaultValue = dval; \
-            m_Options[nCurOpt].nIgnoreValue = ival; \
-            m_Options[nCurOpt].szGroupName = group; \
-            m_Options[nCurOpt].bBeginGroup = begin;
+            m_EncoderOptions.m_Options[nCurOpt].szName = name; \
+            m_EncoderOptions.m_Options[nCurOpt].szOption = option; \
+            m_EncoderOptions.m_Options[nCurOpt].szHelpText = tip; \
+            m_EncoderOptions.m_Options[nCurOpt].nDefaultValue = dval; \
+            m_EncoderOptions.m_Options[nCurOpt].nIgnoreValue = ival; \
+            m_EncoderOptions.m_Options[nCurOpt].szGroupName = group; \
+            m_EncoderOptions.m_Options[nCurOpt].bBeginGroup = begin;
         #define AddValue(name, value) \
-            m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(name, value));
+            m_EncoderOptions.m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(name, value));
         #define AddValueRange(start, end) \
             for (int i = start; i <= end; i++) { \
-                m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)); \
+                m_EncoderOptions.m_Options[nCurOpt].m_Values.emplace_back(std::make_pair(std::to_wstring(i), i)); \
             }
 
         int nCurOpt = -1;
 
-        m_Options.clear();
+        m_EncoderOptions.m_Options.clear();
 
         AddOption(GetString(0x00301001), L"-fba", GetString(0x00301002), 0, -1, GetString(0x00208001), true)
         AddValue(GetString(0x00301003), 0)
@@ -910,19 +910,19 @@ namespace config
         CAtlString szExtU = L"";
         CAtlString szBuff = L"";
 
-        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
+        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
         {
-            szExtL = szSupportedInputExt[i].c_str();
+            szExtL = m_EncoderOptions.szSupportedInputExt[i].c_str();
             szBuff = L"*." + szExtL.MakeLower();
-            szBuff += (i < (int)szSupportedInputExt.size() - 1) ? L";" : L"";
+            szBuff += (i < (int)m_EncoderOptions.szSupportedInputExt.size() - 1) ? L";" : L"";
             szFilter += szBuff;
         }
 
         szFilter = CAtlString(this->GetString(0x00207006).c_str()) + L" (" + szFilter + L")|" + szFilter + L"|";
 
-        for (int i = 0; i < (int)szSupportedInputExt.size(); i++)
+        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
         {
-            szExtL = szExtU = szSupportedInputExt[i].c_str();
+            szExtL = szExtU = m_EncoderOptions.szSupportedInputExt[i].c_str();
             szExtU.MakeUpper();
             szExtL.MakeLower();
             szBuff.Format(L"%s %s (*.%s)|*.%s|", szExtU, this->GetString(0x00207007).c_str(), szExtL, szExtL);
