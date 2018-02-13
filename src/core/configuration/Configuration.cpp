@@ -733,7 +733,7 @@ namespace config
                 if (szBuffer.size() > 0)
                 {
                     util::StringHelper::Trim(szBuffer, '"');
-                    if (CDefaults::IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
+                    if (m_EncoderOptions.IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
                     {
                         std::wstring szPath = szBuffer;
                         fl.emplace_back(szPath);
