@@ -1964,11 +1964,19 @@ namespace app
 
         m_hAccelTable = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR_MAIN_MENU));
 
-        this->InitTitle();
-        this->InitDialogControls();
-        this->InitLang(true);
-        this->InitDefaultPreset();
-        this->UpdateBitrateText();
+        try
+        {
+            this->InitTitle();
+            this->InitDialogControls();
+            this->InitLang(true);
+            this->InitDefaultPreset();
+            this->UpdateBitrateText();
+        }
+        catch (...)
+        {
+            OutputDebugString(_T("Failed to init dialog."));
+        }
+
         this->DragAcceptFiles(TRUE);
 
         try

@@ -29,7 +29,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Load config exception."), _T("Error"), MB_OK | MB_ICONERROR);
+            MessageBox(nullptr, _T("Failed to load config."), _T("Error"), MB_OK | MB_ICONERROR);
         }
 
         try
@@ -45,7 +45,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Init application exception."), _T("Error"), MB_OK | MB_ICONERROR);
+            MessageBox(nullptr, _T("Failed to init application."), _T("Error"), MB_OK | MB_ICONERROR);
         }
 
         try
@@ -66,7 +66,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Save config exception."), _T("Error"), MB_OK | MB_ICONERROR);
+            MessageBox(nullptr, _T("Failed to save config."), _T("Error"), MB_OK | MB_ICONERROR);
         }
 
         return FALSE;
