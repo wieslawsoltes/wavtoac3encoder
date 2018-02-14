@@ -61,7 +61,7 @@ namespace config
         int nBitrate;
         int nQuality;
         CRawInput m_RawInput;
-        std::map<int> nUsedSIMD;
+        std::map<int, int> nUsedSIMD;
         int nThreads;
         int nCurrentEngine;
         std::map<int, int> nOptions;
