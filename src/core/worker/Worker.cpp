@@ -765,7 +765,7 @@ namespace worker
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
                 szOutPath = 
-                    szOutPath.substr(0, szOutPath.length() - szExt.length()) + 
+                    szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
                     L"." + 
                     pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
@@ -834,7 +834,7 @@ namespace worker
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
             szOutPath = 
-                szOutPath.substr(0, szOutPath.length() - szExt.length()) + 
+                szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
                 L"." + 
                 pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
