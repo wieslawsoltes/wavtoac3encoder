@@ -68,7 +68,7 @@ namespace app
     void CWorkDlg::OnClose()
     {
         pWorkerContext->StopCurrentTimer();
-        pWorkerContext->StartTotalTimer();
+        pWorkerContext->StopTotalTimer();
 
         if (pWorkerContext->bTerminate == false)
         {
