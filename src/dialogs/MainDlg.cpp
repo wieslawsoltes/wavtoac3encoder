@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "MainApp.h"
 #include "MainDlg.h"
 #include "WorkDlg.h"
@@ -1966,11 +1966,11 @@ namespace app
 
         try
         {
-            this->InitTitle();
-            this->InitDialogControls();
-            this->InitLang(true);
-            this->InitDefaultPreset();
-            this->UpdateBitrateText();
+            //this->InitTitle();
+            //this->InitDialogControls();
+            //this->InitLang(true);
+            //this->InitDefaultPreset();
+            //this->UpdateBitrateText();
         }
         catch (...)
         {
@@ -1981,7 +1981,7 @@ namespace app
 
         try
         {
-            this->LoadAllConfiguration();
+            //this->LoadAllConfiguration();
         }
         catch (...)
         {
