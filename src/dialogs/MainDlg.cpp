@@ -1981,7 +1981,7 @@ namespace app
 
         try
         {
-            //this->LoadAllConfiguration();
+            this->LoadAllConfiguration();
         }
         catch (...)
         {
