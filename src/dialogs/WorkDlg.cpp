@@ -67,6 +67,10 @@ namespace app
 
     void CWorkDlg::OnClose()
     {
+
+        this->KillTimer(WM_FILE_TIMER);
+        this->KillTimer(WM_TOTAL_TIMER);
+
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
@@ -75,9 +79,6 @@ namespace app
                 m_Thread.join();
             }
         }
-
-        pWorkerContext->StopCurrentTimer();
-        pWorkerContext->StopTotalTimer();
 
         CMyDialogEx::OnClose();
     }

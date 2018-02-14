@@ -70,73 +70,126 @@ namespace app
         virtual ~CWorkDlgWorkerContext()
         {
         }
+    private:
+        bool IsValid()
+        {
+            return (pWorkDlg != nullptr) && (::IsWindow(pWorkDlg->GetSafeHwnd()) == TRUE);
+        }
     public:
         void SetTitleInfo(std::wstring szInfo)
         {
-            pWorkDlg->SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->SetWindowText(szInfo.c_str());
+            }
         }
         void SetInputFileInfo(int nID, std::wstring szInfo)
         {
-            pWorkDlg->GetDlgItem(pWorkDlg->nIDIn[nID])->SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->GetDlgItem(pWorkDlg->nIDIn[nID])->SetWindowText(szInfo.c_str());
+            }
         }
         void SetInputTypeInfo(int nID, std::wstring szInfo)
         {
-            pWorkDlg->GetDlgItem(pWorkDlg->nIDInInfo[nID])->SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->GetDlgItem(pWorkDlg->nIDInInfo[nID])->SetWindowText(szInfo.c_str());
+            }
         }
         void SetOutputFileInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcOut.SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->m_StcOut.SetWindowText(szInfo.c_str());
+            }
         }
         void SetOutputTypeInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcOutInfo.SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->m_StcOutInfo.SetWindowText(szInfo.c_str());
+            }
         }
         void SetCurrentTimerInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcTimeCurrent.SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->m_StcTimeCurrent.SetWindowText(szInfo.c_str());
+            }
         }
         void SetTotalTimerInfo(std::wstring szInfo)
         {
-            pWorkDlg->m_StcTimeTotal.SetWindowText(szInfo.c_str());
+            if (IsValid())
+            {
+                pWorkDlg->m_StcTimeTotal.SetWindowText(szInfo.c_str());
+            }
         }
     public:
         void SetCurrentProgressRange(int nMin, int nMax)
         {
-            pWorkDlg->m_PrgCurrent.SetRange(nMin, nMax);
+            if (IsValid())
+            {
+                pWorkDlg->m_PrgCurrent.SetRange(nMin, nMax);
+            }
         }
         void SetTotalProgressRange(int nMin, int nMax)
         {
-            pWorkDlg->m_PrgTotal.SetRange32(nMin, nMax);
+            if (IsValid())
+            {
+                pWorkDlg->m_PrgTotal.SetRange32(nMin, nMax);
+            }
         }
         void SetCurrentProgress(int nPos)
         {
-            pWorkDlg->m_PrgCurrent.SetPos(nPos);
+            if (IsValid())
+            {
+                pWorkDlg->m_PrgCurrent.SetPos(nPos);
+            }
         }
         void SetTotalProgress(int nPos)
         {
-            pWorkDlg->m_PrgTotal.SetPos(nPos);
+            if (IsValid())
+            {
+                pWorkDlg->m_PrgTotal.SetPos(nPos);
+            }
         }
     public:
         void StartCurrentTimer(int nResolution)
         {
-            pWorkDlg->SetTimer(WM_FILE_TIMER, nResolution, nullptr);
+            if (IsValid())
+            {
+                pWorkDlg->SetTimer(WM_FILE_TIMER, nResolution, nullptr);
+            }
         }
         void StopCurrentTimer()
         {
-            pWorkDlg->KillTimer(WM_FILE_TIMER);
+            if (IsValid())
+            {
+                pWorkDlg->KillTimer(WM_FILE_TIMER);
+            }
         }
         void StartTotalTimer(int nResolution)
         {
-            pWorkDlg->SetTimer(WM_TOTAL_TIMER, nResolution, nullptr);
+            if (IsValid())
+            {
+                pWorkDlg->SetTimer(WM_TOTAL_TIMER, nResolution, nullptr);
+            }
         }
         void StopTotalTimer()
         {
-            pWorkDlg->KillTimer(WM_TOTAL_TIMER);
+            if (IsValid())
+            {
+                pWorkDlg->KillTimer(WM_TOTAL_TIMER);
+            }
         }
     public:
         void Close()
         {
-            ::PostMessage(pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+            if (IsValid())
+            {
+                ::PostMessage(pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
+            }
         }
     };
 }
