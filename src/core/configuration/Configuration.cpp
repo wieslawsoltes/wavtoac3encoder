@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "StdAfx.h"
 #include "utilities\StringHelper.h"
@@ -164,7 +164,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_LangLst)
+    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_Languages)
     {
         try
         {
@@ -183,7 +183,7 @@ namespace config
                             lang.szFileName = file;
                             lang.szEnglishName = (lang.m_Strings.count(0x00000001) == 1) ? lang.m_Strings[0x00000001] : L"??";
                             lang.szTargetName = (lang.m_Strings.count(0x00000002) == 1) ? lang.m_Strings[0x00000002] : L"??";
-                            m_LangLst.emplace_back(std::move(lang));
+                            m_Languages.emplace_back(std::move(lang));
                         }
                     }
                 }
@@ -275,14 +275,14 @@ namespace config
 
     void CConfiguration::LoadLangStrings(std::wstring szLangPath)
     {
-        SearchFolderForLang(szLangPath, false, m_LangLst);
+        SearchFolderForLang(szLangPath, false, m_Languages);
 
-        if (m_LangLst.size() > 0)
+        if (m_Languages.size() > 0)
         {
             bool haveLang = false;
-            for (int i = 0; i < (int)m_LangLst.size(); i++)
+            for (int i = 0; i < (int)m_Languages.size(); i++)
             {
-                auto& lang = m_LangLst[i];
+                auto& lang = m_Languages[i];
                 std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
                 std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
                 if (szNameLang == szNameConfig)
@@ -296,7 +296,7 @@ namespace config
 
             if (haveLang == false)
             {
-                auto& lang = m_LangLst[0];
+                auto& lang = m_Languages[0];
                 m_nLangId = 0;
                 pStrings = &lang.m_Strings;
                 m_szLangFileName = lang.szFileName;

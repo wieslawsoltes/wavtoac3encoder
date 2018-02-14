@@ -42,7 +42,14 @@ namespace app
             CWinAppEx::InitInstance();
             AfxEnableControlContainer();
             InitShellManager();
+        }
+        catch (...)
+        {
+            MessageBox(nullptr, _T("Init application exception."), _T("Error"), MB_OK | MB_ICONERROR);
+        }
 
+        try
+        {
             CMainDlg dlg;
             m_pMainWnd = &dlg;
             dlg.pConfig = &this->m_Config;

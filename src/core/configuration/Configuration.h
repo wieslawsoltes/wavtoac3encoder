@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <utility>
 #include <string>
@@ -91,7 +91,7 @@ namespace config
     {
     public:
         std::map<int, std::wstring> * pStrings;
-        std::vector<CLanguage> m_LangLst;
+        std::vector<CLanguage> m_Languages;
         std::wstring m_szLangFileName;
         int m_nLangId;
     public:
@@ -118,7 +118,7 @@ namespace config
         bool SaveConfig(std::wstring &szFileName, std::vector<Entry> &cl);
         bool LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& fl);
         bool SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& fl, int nFormat);
-        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_LangLst);
+        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_Languages);
         bool LoadLang(std::wstring &szFileName, std::map<int, std::wstring> &m_Strings);
         bool LoadLangConfig(std::wstring &szFileName);
         bool SaveLangConfig(std::wstring &szFileName);

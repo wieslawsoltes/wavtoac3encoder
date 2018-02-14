@@ -2142,16 +2142,16 @@ namespace app
 
     void CMainDlg::InitLangMenu()
     {
-        if (this->pConfig->m_LangLst.size() > 0)
+        if (this->pConfig->m_Languages.size() > 0)
         {
             CMenu *m_hMenu = this->GetMenu();
             CMenu *m_hLangMenu = m_hMenu->GetSubMenu(2);
 
             m_hLangMenu->DeleteMenu(ID_LANGUAGE_DEFAULT, 0);
 
-            for (int i = 0; i < (int)this->pConfig->m_LangLst.size(); i++)
+            for (int i = 0; i < (int)this->pConfig->m_Languages.size(); i++)
             {
-                auto& lang = this->pConfig->m_LangLst[i];
+                auto& lang = this->pConfig->m_Languages[i];
                 std::wstring szBuff = lang.szEnglishName + L" (" + lang.szTargetName  + L")";
                 m_hLangMenu->AppendMenu(MF_STRING, ID_LANGUAGE_MENU_START + i, szBuff.c_str());
 
@@ -3016,7 +3016,7 @@ namespace app
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_CHECKED);
 
-        for (int i = 0; i < (int)this->pConfig->m_LangLst.size(); i++)
+        for (int i = 0; i < (int)this->pConfig->m_Languages.size(); i++)
         {
             m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_UNCHECKED);
         }
@@ -3027,9 +3027,9 @@ namespace app
     void CMainDlg::OnLanguageChange(UINT nID)
     {
         int nLangId = nID - ID_LANGUAGE_MENU_START;
-        if (nLangId >= 0 && nLangId < (int)this->pConfig->m_LangLst.size())
+        if (nLangId >= 0 && nLangId < (int)this->pConfig->m_Languages.size())
         {
-            auto& lang = this->pConfig->m_LangLst[nLangId];
+            auto& lang = this->pConfig->m_Languages[nLangId];
             this->pConfig->m_nLangId = nID - ID_LANGUAGE_MENU_START;
             this->pConfig->pStrings = &lang.m_Strings;
             this->pConfig->m_szLangFileName = lang.szFileName;
@@ -3039,9 +3039,9 @@ namespace app
 
         m_hLangMenu->CheckMenuItem(ID_LANGUAGE_DEFAULT, MF_UNCHECKED);
 
-        for (int i = 0; i < (int)this->pConfig->m_LangLst.size(); i++)
+        for (int i = 0; i < (int)this->pConfig->m_Languages.size(); i++)
         {
-            auto& lang = this->pConfig->m_LangLst[i];
+            auto& lang = this->pConfig->m_Languages[i];
             if (this->pConfig->m_nLangId == i)
                 m_hLangMenu->CheckMenuItem(ID_LANGUAGE_MENU_START + i, MF_CHECKED);
             else
