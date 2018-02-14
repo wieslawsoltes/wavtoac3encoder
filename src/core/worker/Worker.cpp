@@ -88,8 +88,9 @@ namespace worker
             if (option.nIgnoreValue != nOptionValue)
             {
                 int nValue = option.m_Values[nOptionValue].second;
-                s.acmod = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue].acmod;
-                s.lfe = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue].lfe;
+                auto& channelConfig = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
+                s.acmod = channelConfig.acmod;
+                s.lfe = channelConfig.lfe;
             }
         }
 
