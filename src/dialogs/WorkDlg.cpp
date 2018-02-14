@@ -25,12 +25,6 @@ namespace app
         IDC_STATIC_IN_INFO_05
     };
 
-    DWORD WINAPI EncWorkThread(LPVOID pParam)
-    {
-        worker::CWorker m_Worker((worker::CWorkerContext *)pParam);
-        return m_Worker.Encode();
-    }
-
     IMPLEMENT_DYNAMIC(CWorkDlg, CDialog)
     CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CWorkDlg::IDD, pParent)
@@ -79,23 +73,21 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-            return;
         }
         else
+        {
             this->EndDialog(IDOK);
-
-        CMyDialogEx::OnClose();
+            CMyDialogEx::OnClose();
+        }
     }
 
     void CWorkDlg::OnDestroy()
     {
         CMyDialogEx::OnDestroy();
 
-        if (pWorkerContext->hThread != nullptr)
+        if (pWorkerContext->bTerminate == true)
         {
-            ::TerminateThread(pWorkerContext->hThread, 0);
-            ::CloseHandle(pWorkerContext->hThread);
-            pWorkerContext->hThread = nullptr;
+            m_Thread.join();
         }
     }
 
@@ -117,9 +109,13 @@ namespace app
     void CWorkDlg::OnBnClickedCancel()
     {
         if (pWorkerContext->bTerminate == false)
+        {
             pWorkerContext->bTerminate = true;
+        }
         else
+        {
             this->EndDialog(IDOK);
+        }
     }
 
     void CWorkDlg::InitCtrls()
@@ -268,8 +264,15 @@ namespace app
 
     void CWorkDlg::CreateWorker()
     {
-        pWorkerContext->hThread = ::CreateThread(nullptr, 0, EncWorkThread, pWorkerContext, 0, &pWorkerContext->dwThreadId);
-        if (pWorkerContext->hThread == nullptr)
+        try
+        {
+            m_Thread = std::thread([&pWorkerContext]()  
+            {
+                worker::CWorker m_Worker(pWorkerContext);
+                m_Worker.Encode();
+            });
+        }
+        catch (...)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(),

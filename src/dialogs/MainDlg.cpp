@@ -300,7 +300,13 @@ namespace app
 
         CWorkDlg dlg;
         dlg.pConfig = this->pConfig;
-        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg)
+        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
+
+        dlg.pWorkerContext->bTerminate = false;
+        dlg.pWorkerContext->bCanUpdateWindow = true;
+        dlg.pWorkerContext->nCount = 0;
+        dlg.pWorkerContext->m_ElapsedTimeFile = 0;
+        dlg.pWorkerContext->m_ElapsedTimeTotal = 0;
 
         CString szSizeBuff;
         bool bAvisynthInput = false;
@@ -1424,7 +1430,7 @@ namespace app
                 return;
         }
 
-        auto pMenu = std::make_unique<CMenu>;
+        auto pMenu = std::make_unique<CMenu>();
         pMenu->CreatePopupMenu();
 
         UINT nItemCount = ID_OPTIONS_MENU_START;

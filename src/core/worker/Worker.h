@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <string>
+#include <memory>
 #include <vector>
 #include <map>
 #include <atlstr.h>
@@ -16,7 +17,6 @@ namespace worker
     {
     public:
         config::CConfiguration * pConfig;
-    public:
         AftenAPI api;
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
@@ -25,13 +25,10 @@ namespace worker
         std::wstring szOutPath;
         bool bMultiMonoInput;
         int nThreads;
-    public:
         __int64 nInTotalSize;
         __int64 nOutTotalSize;
         volatile bool bTerminate;
         volatile bool bCanUpdateWindow;
-        HANDLE hThread;
-        DWORD dwThreadId;
         __int64 nTotalSize;
         double m_ElapsedTimeFile;
         double m_ElapsedTimeTotal;
@@ -64,13 +61,12 @@ namespace worker
     class CWorker
     {
     public:
-        CWorkerContext * pContext;
+        std::unique_ptr<worker::CWorkerContext> pContext;
     private:
         __int64 nTotalSizeCounter;
         int nInputFiles;
         std::wstring szInPath[6];
         std::wstring szOutPath;
-    private:
         AftenOpt opt;
         AftenContext s;
         PcmContext pf;
@@ -78,7 +74,6 @@ namespace worker
         FLOAT *fwav;
         FILE *ifp[6];
         FILE *ofp;
-    private:
         bool bAvisynthInput;
         AvsAudioInfo infoAVS;
         CAvs2Raw decoderAVS;
