@@ -17,7 +17,7 @@ namespace config
     const std::wstring szTabCharVar = L"\\t";
     const std::wstring szTabChar = L"\t";
 
-    std::wstring TrimOption(const std::wstring szOption)
+    std::wstring TrimOption(const std::wstring& szOption)
     {
         return szOption.substr(1, szOption.size() - 1);
     }
