@@ -72,7 +72,7 @@ namespace config
     {
     public:
         std::vector<int> nValidCbrBitrates;
-        std::vector<CChannelConfig> ccAften;
+        std::vector<CChannelConfig> m_ChannelConfig;
         std::vector<std::wstring> szRawSampleFormats;
         std::vector<std::wstring> szGroups;
         std::wstring szCbrOption;

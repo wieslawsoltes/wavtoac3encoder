@@ -692,7 +692,8 @@ namespace app
             int nVal = this->m_CmbValue.GetCurSel();
             auto& preset = GetCurrentPreset();
             preset.nOptions[nItem] = nVal;
-            std::wstring szName = this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+            std::wstring szName = option.m_Values[nVal].first;
             this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
@@ -1249,7 +1250,8 @@ namespace app
         for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options.size(); i++)
         {
             int nOption = preset.nOptions[i];
-            std::wstring& szText = this->pConfig->m_EncoderOptions.m_Options[i].m_Values[nOption].first;
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
+            std::wstring& szText = option.m_Values[nOption].first;
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
         }
 
@@ -1377,15 +1379,21 @@ namespace app
 
         for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values.size(); i++)
         {
-            this->m_CmbValue.AddString(this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values[i].first.c_str());
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+            this->m_CmbValue.AddString(option.m_Values[i].first.c_str());
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
         if (this->pConfig->m_Presets.size() <= 0)
-            this->m_CmbValue.SetCurSel(this->pConfig->m_EncoderOptions.m_Options[nItem].nDefaultValue);
+        {
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+            this->m_CmbValue.SetCurSel(option.nDefaultValue);
+        }
         else
+        {
             this->m_CmbValue.SetCurSel(GetCurrentPreset().nOptions[nItem]);
+        }
     }
 
     void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
@@ -1439,9 +1447,11 @@ namespace app
         menu->CreatePopupMenu();
 
         UINT nItemCount = ID_OPTIONS_MENU_START;
-        for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values.size(); i++)
+        auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+
+        for (int i = 0; i < (int)option.m_Values.size(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values[i].first.c_str());
+            menu->AppendMenu(MF_STRING, nItemCount, option.m_Values[i].first.c_str());
             nItemCount++;
         }
 
@@ -1723,24 +1733,26 @@ namespace app
 
         ListView_DeleteAllItems(listSettings);
 
-        for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options.size(); i++)
+        int nOptionsSize = (int)this->pConfig->m_EncoderOptions.m_Options.size();
+        for (int i = 0; i < nOptionsSize; i++)
         {
-            if (this->pConfig->m_EncoderOptions.m_Options[i].bBeginGroup == true)
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
+            if (option.bBeginGroup == true)
                 nGroupCounter++;
 
-            if (nGroupCounter >= 0 && nGroupCounter < (int)this->pConfig->m_EncoderOptions.m_Options.size())
+            if (nGroupCounter >= 0 && nGroupCounter < nOptionsSize)
             {
-                LPWSTR pszText = (LPTSTR)(LPCTSTR)this->pConfig->m_EncoderOptions.m_Options[i].szName.c_str();
+                LPWSTR pszText = (LPTSTR)(LPCTSTR)option.szName.c_str();
                 li.pszText = pszText;
                 li.iItem = i;
                 li.iSubItem = 0;
                 li.iGroupId = 101 + nGroupCounter;
 
-                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)this->pConfig->m_EncoderOptions.m_Options[i].m_Values[this->pConfig->m_EncoderOptions.m_Options[i].nDefaultValue].first.c_str();
+                LPWSTR pszSetting = (LPTSTR)(LPCTSTR)option.m_Values[option.nDefaultValue].first.c_str();
                 ListView_InsertItem(listSettings, &li);
                 ListView_SetItemText(listSettings, i, 1, pszSetting);
 
-                CString szTip = CString(this->pConfig->m_EncoderOptions.m_Options[i].szHelpText.c_str());
+                CString szTip = CString(option.szHelpText.c_str());
                 this->m_LstSettings.listTooltips.AddTail(szTip);
             }
         }
@@ -1751,8 +1763,12 @@ namespace app
 
     void CMainDlg::InitDefaultPreset()
     {
-        for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options.size(); i++)
-            pConfig->m_DefaultPreset.nOptions[i] = this->pConfig->m_EncoderOptions.m_Options[i].nDefaultValue;
+        int nOptionsSize = (int)this->pConfig->m_EncoderOptions.m_Options.size();
+        for (int i = 0; i < nOptionsSize; i++)
+        {
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
+            pConfig->m_DefaultPreset.nOptions[i] = option.nDefaultValue;
+        }
 
         pConfig->m_DefaultPreset.szName = this->pConfig->GetString(0x00207001);
         pConfig->m_DefaultPreset.nMode = AFTEN_ENC_MODE_CBR;
@@ -2386,7 +2402,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
-                std::wstring szName = this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
+                auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+                std::wstring szName = option.m_Values[nVal].first;
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2411,7 +2428,8 @@ namespace app
                 auto& preset = GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
-                std::wstring szName = this->pConfig->m_EncoderOptions.m_Options[nItem].m_Values[nVal].first;
+                auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+                std::wstring szName = option.m_Values[nVal].first;
                 this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
             }
         }
@@ -2455,10 +2473,8 @@ namespace app
         if (pos != nullptr)
         {
             int nItem = m_LstSettings.GetNextSelectedItem(pos);
-            this->MessageBox(
-                this->pConfig->m_EncoderOptions.m_Options[nItem].szHelpText.c_str(), 
-                this->pConfig->m_EncoderOptions.m_Options[nItem].szName.c_str(), 
-                MB_ICONINFORMATION | MB_OK);
+            auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
+            this->MessageBox(option.szHelpText.c_str(), option.szName.c_str(), MB_ICONINFORMATION | MB_OK);
         }
 
         *pResult = 0;
@@ -2683,24 +2699,28 @@ namespace app
 
         auto& preset = GetCurrentPreset();
         int nOptionValue = preset.nOptions[nIndexChconfig];
+        auto& optionChconfig = this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig];
 
-        if (this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue != nOptionValue)
+        if (optionChconfig.nIgnoreValue != nOptionValue)
         {
-            dlg.nChannelConfig = this->pConfig->m_EncoderOptions.ccAften[this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig].m_Values[nOptionValue].second].acmod;
-            dlg.bLFE = (this->pConfig->m_EncoderOptions.ccAften[this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig].m_Values[nOptionValue].second].lfe == 1) ? true : false;
+            int nValue = optionChconfig.m_Values[nOptionValue].second;
+            auto& channelConfig = this->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
+            dlg.nChannelConfig = channelConfig.acmod;
+            dlg.bLFE = (channelConfig.lfe == 1) ? true : false;
             bUpdateChconfig = true;
         }
         else
         {
             int nOptionValueAcmod = preset.nOptions[nIndexAcmod];
-            if (this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod].nIgnoreValue != nOptionValueAcmod)
+            auto& optionAcmod = this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod];
+            if (optionAcmod.nIgnoreValue != nOptionValueAcmod)
             {
                 dlg.nChannelConfig = nOptionValueAcmod;
             }
             else
             {
-                int nDefault = (int)(this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod].m_Values.size() - 2);
-                dlg.nChannelConfig = this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod].m_Values[nDefault].second;
+                int nDefault = (int)(optionAcmod.m_Values.size() - 2);
+                dlg.nChannelConfig = optionAcmod.m_Values[nDefault].second;
             }
 
             int nOptionValueLFE = preset.nOptions[nIndexLfe];
@@ -2811,26 +2831,27 @@ namespace app
                     break;
                 };
 
-                preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod].nIgnoreValue : dlg.nChannelConfig;
-
+                auto& optionAcmod = this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod];
+                preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? optionAcmod.nIgnoreValue : dlg.nChannelConfig;
                 int nOptionValueAcmod = preset.nOptions[nIndexAcmod];
-                this->m_LstSettings.SetItemText(nIndexAcmod, 1,
-                    this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod].m_Values[nOptionValueAcmod].first.c_str());
+                this->m_LstSettings.SetItemText(nIndexAcmod, 1, optionAcmod.m_Values[nOptionValueAcmod].first.c_str());
 
-                preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? this->pConfig->m_EncoderOptions.m_Options[nIndexLfe].nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
-
+                auto& optionLfe = this->pConfig->m_EncoderOptions.m_Options[nIndexLfe];
+                preset.nOptions[nIndexLfe] = (bUpdateChconfig == true) ? optionLfe.nIgnoreValue : ((dlg.bLFE == true) ? 1 : 0);
                 int nOptionValueLFE = preset.nOptions[nIndexLfe];
-                this->m_LstSettings.SetItemText(nIndexLfe, 1,
-                    this->pConfig->m_EncoderOptions.m_Options[nIndexLfe].m_Values[nOptionValueLFE].first.c_str());
+                this->m_LstSettings.SetItemText(nIndexLfe, 1, optionLfe.m_Values[nOptionValueLFE].first.c_str());
+
+                auto& optionChconfig = this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig];
 
                 if (bUpdateChconfig == true)
                 {
                     int acmod = dlg.nChannelConfig;
                     int lfe = (dlg.bLFE == true) ? 1 : 0;
 
-                    for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.ccAften.size(); i++)
+                    for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_ChannelConfig.size(); i++)
                     {
-                        if ((this->pConfig->m_EncoderOptions.ccAften[i].acmod == acmod) && (this->pConfig->m_EncoderOptions.ccAften[i].lfe == lfe))
+                        auto& channelConfig = this->pConfig->m_EncoderOptions.m_ChannelConfig[i];
+                        if ((channelConfig.acmod == acmod) && (channelConfig.lfe == lfe))
                         {
                             preset.nOptions[nIndexChconfig] = i;
                             break;
@@ -2839,12 +2860,11 @@ namespace app
                 }
                 else
                 {
-                    preset.nOptions[nIndexChconfig] = this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig].nIgnoreValue;
+                    preset.nOptions[nIndexChconfig] = optionChconfig.nIgnoreValue;
                 }
 
                 int nOptionValue = preset.nOptions[nIndexChconfig];
-                this->m_LstSettings.SetItemText(nIndexChconfig, 1,
-                    this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig].m_Values[nOptionValue].first.c_str());
+                this->m_LstSettings.SetItemText(nIndexChconfig, 1, optionChconfig.m_Values[nOptionValue].first.c_str());
 
                 if (this->pConfig->bMultipleMonoInput == false)
                 {

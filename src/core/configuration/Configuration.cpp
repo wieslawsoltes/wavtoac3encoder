@@ -607,7 +607,7 @@ namespace config
             0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384, 448, 512, 576, 640
         };
 
-        m_EncoderOptions.ccAften = {
+        m_EncoderOptions.m_ChannelConfig = {
             { 0, 0, L"1+1" },
             { 1, 0, L"1/0" },
             { 2, 0, L"2/0" },

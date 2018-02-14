@@ -88,8 +88,8 @@ namespace worker
             if (option.nIgnoreValue != nOptionValue)
             {
                 int nValue = option.m_Values[nOptionValue].second;
-                s.acmod = pContext->pConfig->m_EncoderOptions.ccAften[nValue].acmod;
-                s.lfe = pContext->pConfig->m_EncoderOptions.ccAften[nValue].lfe;
+                s.acmod = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue].acmod;
+                s.lfe = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue].lfe;
             }
         }
 
@@ -772,7 +772,10 @@ namespace worker
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                szOutPath = 
+                    szOutPath.substr(0, szOutPath.length() - szExt.length()) + 
+                    L"." + 
+                    pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
@@ -838,7 +841,10 @@ namespace worker
             szOutPath = szInPath[0];
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+            szOutPath = 
+                szOutPath.substr(0, szOutPath.length() - szExt.length()) + 
+                L"." + 
+                pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
