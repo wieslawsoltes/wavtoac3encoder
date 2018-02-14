@@ -1139,14 +1139,14 @@ namespace app
             }
         }
 
-        bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
-        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
+        //bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
+        //OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
-        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
-        OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+        //bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
+        //OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
 
-        bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
-        OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
+        //bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
+        //OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::SaveAllConfiguration()
