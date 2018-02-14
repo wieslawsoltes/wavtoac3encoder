@@ -16,7 +16,8 @@ var target = Argument("target", "Default");
 // SETTINGS
 ///////////////////////////////////////////////////////////////////////////////
 
-var platforms = new [] { "Win32", "x64" }.ToList();
+var platforms = new [] { "Win32" }.ToList();
+//var platforms = new [] { "Win32", "x64" }.ToList();
 var configurations = new [] { "Release" }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var versionHeaderPath = (FilePath)File("./src/version.h");
@@ -229,11 +230,14 @@ Task("Package-Engines-X64")
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Package")
-  .IsDependentOn("Package-Binaries")
-  .IsDependentOn("Package-Installers")
-  .IsDependentOn("Package-Config")
-  .IsDependentOn("Package-Engines-X86")
-  .IsDependentOn("Package-Engines-X64");
+  .IsDependentOn("Package-Binaries");
+
+//Task("Package")
+//  .IsDependentOn("Package-Binaries")
+//  .IsDependentOn("Package-Installers")
+//  .IsDependentOn("Package-Config")
+//  .IsDependentOn("Package-Engines-X86")
+//  .IsDependentOn("Package-Engines-X64");
 
 Task("Default")
   .IsDependentOn("Build");
