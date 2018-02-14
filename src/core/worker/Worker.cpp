@@ -729,9 +729,6 @@ namespace worker
     bool CWorker::Encode()
     {
         std::wstring szBuff = L"";
-        const unsigned int nAnsiBuffSize = 8192;
-        char szAnsiBuff[nAnsiBuffSize] = "";
-        int nChars = 0;
 
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);

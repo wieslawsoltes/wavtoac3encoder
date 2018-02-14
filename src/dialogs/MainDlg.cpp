@@ -267,18 +267,14 @@ namespace app
         if (nItemsCount <= 0)
         {
             OutputDebugString(_T("Error: Add at least one file to the file list!"));
-            MessageBox(this->pConfig->GetString(0x00207011).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_ICONERROR | MB_OK);
+            MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
 
         if ((this->pConfig->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
             OutputDebugString(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
-            MessageBox(this->pConfig->GetString(0x00207012).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_ICONERROR | MB_OK);
+            MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
 
@@ -290,18 +286,15 @@ namespace app
         if (this->api.OpenAftenAPI() == false)
         {
             OutputDebugString(_T("Error: Failed to load libaften.dll dynamic library!"));
-            MessageBox(this->pConfig->GetString(0x00207013).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_ICONERROR | MB_OK);
-
+            MessageBox(this->pConfig->GetString(0x00207013).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             bWorking = false;
             return;
         }
 
         CWorkDlg dlg;
         dlg.pConfig = this->pConfig;
-        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
 
+        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
         dlg.pWorkerContext->bTerminate = false;
         dlg.pWorkerContext->bCanUpdateWindow = true;
         dlg.pWorkerContext->nCount = 0;

@@ -113,15 +113,6 @@ namespace app
 
     void CWorkDlg::OnBnClickedCancel()
     {
-        if (pWorkerContext->bTerminate == false)
-        {
-            pWorkerContext->bTerminate = true;
-            if (m_Thread.joinable() == true)
-            {
-                m_Thread.join();
-            }
-        }
-
         this->EndDialog(IDOK);
     }
 
@@ -282,9 +273,7 @@ namespace app
         catch (...)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));
-            this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(),
-                this->pConfig->GetString(0x00A0100A).c_str(),
-                MB_OK | MB_ICONERROR);
+            this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
     }
 
