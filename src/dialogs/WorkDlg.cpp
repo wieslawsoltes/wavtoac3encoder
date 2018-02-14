@@ -67,7 +67,6 @@ namespace app
 
     void CWorkDlg::OnClose()
     {
-
         this->KillTimer(WM_FILE_TIMER);
         this->KillTimer(WM_TOTAL_TIMER);
 
