@@ -17,7 +17,7 @@ var target = Argument("target", "Default");
 ///////////////////////////////////////////////////////////////////////////////
 
 var platforms = new [] { "Win32", "x64" }.ToList();
-var configurations = new [] { "Release" }.ToList();
+var configurations = new [] { "Debug", "Release" }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var versionHeaderPath = (FilePath)File("./src/version.h");
 var installerScript = MakeAbsolute((FilePath)File("./setup/setup.iss"));
@@ -151,6 +151,7 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     CopyFileToDirectory(File("README.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
     CopyFileToDirectory(File(path + "EncWAVtoAC3.exe"), outputDir);
+    if (configuration == "Debug") CopyFiles(path + "*.pdb", outputDir);
     copyConfigAction(output);
     if (platform == "Win32") copyEnginesX86Action(output);
     if (platform == "x64") copyEnginesX64Action(output);
