@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <utility>
 #include <string>
@@ -61,7 +61,7 @@ namespace config
         int nBitrate;
         int nQuality;
         CRawInput m_RawInput;
-        std::vector<int> nUsedSIMD;
+        std::map<int> nUsedSIMD;
         int nThreads;
         int nCurrentEngine;
         std::map<int, int> nOptions;
