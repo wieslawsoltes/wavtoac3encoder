@@ -398,6 +398,10 @@ namespace app
         dlg.DoModal();
         countTime.Stop();
 
+        dlg.pWorkerContext->bTerminate = true;
+        if (dlg.m_Thread.joinable() == true)
+            dlgm_Thread.join();
+
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
