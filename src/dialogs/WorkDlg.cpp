@@ -67,17 +67,17 @@ namespace app
 
     void CWorkDlg::OnClose()
     {
-        pWorkerContext->StopCurrentTimer();
-        pWorkerContext->StopTotalTimer();
-
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-            //if (m_Thread.joinable() == true)
-            //{
-            //    m_Thread.join();
-            //}
+            if (m_Thread.joinable() == true)
+            {
+                m_Thread.join();
+            }
         }
+
+        pWorkerContext->StopCurrentTimer();
+        pWorkerContext->StopTotalTimer();
 
         CMyDialogEx::OnClose();
     }
@@ -89,10 +89,10 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-            //if (m_Thread.joinable() == true)
-            //{
-            //    m_Thread.join();
-            //}
+            if (m_Thread.joinable() == true)
+            {
+                m_Thread.join();
+            }
         }
     }
 
