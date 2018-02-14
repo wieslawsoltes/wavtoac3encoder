@@ -73,10 +73,11 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-            if (m_Thread.joinable() == true)
-            {
-                m_Thread.join();
-            }
+        }
+
+        if (m_Thread.joinable() == true)
+        {
+            m_Thread.join();
         }
 
         CMyDialogEx::OnClose();
@@ -89,10 +90,11 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-            if (m_Thread.joinable() == true)
-            {
-                m_Thread.join();
-            }
+        }
+
+        if (m_Thread.joinable() == true)
+        {
+            m_Thread.join();
         }
     }
 
