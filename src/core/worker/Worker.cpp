@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "Worker.h"
 
 namespace worker
@@ -11,10 +11,10 @@ namespace worker
         s.params.bitrate = preset->nBitrate;
         s.params.quality = preset->nQuality;
         s.system.n_threads = preset->nThreads;
-        s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
-        s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
-        s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
-        s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
+        s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD.at(0);
+        s.system.wanted_simd_instructions.sse = preset->nUsedSIMD.at(1);
+        s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD.at(2);
+        s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD.at(3);
 
         if (preset->m_RawInput.nRawSampleFormat != 0)
         {
