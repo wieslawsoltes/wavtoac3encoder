@@ -61,7 +61,7 @@ namespace worker
     class CWorker
     {
     public:
-        std::unique_ptr<worker::CWorkerContext> pContext;
+        std::unique_ptr<CWorkerContext>& pContext;
     private:
         __int64 nTotalSizeCounter;
         int nInputFiles;
@@ -79,7 +79,7 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
-        CWorker(std::unique_ptr<worker::CWorkerContext>pContext) : pContext(pContext) { }
+        CWorker(std::unique_ptr<CWorkerContext>& pContext) : pContext(pContext) { }
         virtual ~CWorker() { }
     public:
         void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
