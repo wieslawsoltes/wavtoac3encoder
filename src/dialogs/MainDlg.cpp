@@ -300,12 +300,12 @@ namespace app
 
         CWorkDlg dlg;
         dlg.pConfig = this->pConfig;
-        dlg.pWorkerContext = new CWorkDlgWorkerContext(&dlg);
-        dlg.pWorkerContext->nTotalSize = 0;
+        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg)
 
         CString szSizeBuff;
         bool bAvisynthInput = false;
 
+        dlg.pWorkerContext->nTotalSize = 0;
         for (int i = 0; i < nItemsCount; i++)
         {
             std::wstring szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
@@ -323,10 +323,7 @@ namespace app
         if ((this->pConfig->bMultipleMonoInput == true) && (bAvisynthInput == true))
         {
             OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
-            MessageBox(this->pConfig->GetString(0x00207014).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_ICONERROR | MB_OK);
-
+            MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             bWorking = false;
             return;
         }
@@ -342,10 +339,7 @@ namespace app
         if (nLen < 3)
         {
             OutputDebugString(_T("Error: Invalid output path!"));
-            this->MessageBox(this->pConfig->GetString(0x00207015).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_OK | MB_ICONERROR);
-
+            this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
             bWorking = false;
             return;
         }
@@ -358,10 +352,7 @@ namespace app
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
                     OutputDebugString(_T("Error: Invalid output file!"));
-                    this->MessageBox(this->pConfig->GetString(0x00207016).c_str(),
-                        this->pConfig->GetString(0x00207010).c_str(),
-                        MB_OK | MB_ICONERROR);
-
+                    this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
                 }
@@ -377,10 +368,7 @@ namespace app
                 if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(),
-                        this->pConfig->GetString(0x00207010).c_str(),
-                        MB_OK | MB_ICONERROR);
-
+                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
                 }
@@ -392,10 +380,7 @@ namespace app
                 if (util::Utilities::MakeFullPath(szOutPath) == false)
                 {
                     OutputDebugString(_T("Error: Failed to create output path!"));
-                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(),
-                        this->pConfig->GetString(0x00207010).c_str(),
-                        MB_OK | MB_ICONERROR);
-
+                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
                 }
@@ -447,9 +432,6 @@ namespace app
                     szElapsedSeconds);
             }
         }
-
-        if (dlg.pWorkerContext != nullptr)
-            delete dlg.pWorkerContext;
 
         this->m_StatusBar.SetText(szText, 0, 0);
         bWorking = false;
@@ -1442,31 +1424,28 @@ namespace app
                 return;
         }
 
-        CMenu *menu = new CMenu;
-        menu->CreatePopupMenu();
+        auto pMenu = std::make_unique<CMenu>;
+        pMenu->CreatePopupMenu();
 
         UINT nItemCount = ID_OPTIONS_MENU_START;
         auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
 
         for (int i = 0; i < (int)option.m_Values.size(); i++)
         {
-            menu->AppendMenu(MF_STRING, nItemCount, option.m_Values[i].first.c_str());
+            pMenu->AppendMenu(MF_STRING, nItemCount, option.m_Values[i].first.c_str());
             nItemCount++;
         }
 
         int nCurSel = this->m_CmbValue.GetCurSel();
-        menu->CheckMenuItem(ID_OPTIONS_MENU_START + nCurSel, MF_CHECKED);
+        pMenu->CheckMenuItem(ID_OPTIONS_MENU_START + nCurSel, MF_CHECKED);
 
         ::SetForegroundWindow(this->GetSafeHwnd());
-        int nRet = (int)menu->TrackPopupMenu(TPM_RETURNCMD, point.x, point.y, this, nullptr);
+        int nRet = (int)pMenu->TrackPopupMenu(TPM_RETURNCMD, point.x, point.y, this, nullptr);
         if (nRet >= ID_OPTIONS_MENU_START)
         {
             this->m_CmbValue.SetCurSel(nRet - ID_OPTIONS_MENU_START);
             this->OnCbnSelchangeComboSetting();
         }
-
-        if (menu)
-            delete menu;
     }
 
     typedef struct TDRAGANDDROP

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <memory>
 #include <afxwin.h>
 #include <afxcmn.h>
 #include "controls\MyDialogEx.h"
@@ -39,7 +40,7 @@ namespace app
         static int nIDInInfo[6];
     public:
         config::CConfiguration * pConfig;
-        worker::CWorkerContext * pWorkerContext;
+        std::unique_ptr<worker::CWorkerContext> pWorkerContext;
     public:
         controls::CMyStatic m_StcOut;
         controls::CMyStatic m_StcOutInfo;
@@ -60,10 +61,9 @@ namespace app
     private:
         CWorkDlg * pWorkDlg;
     public:
-        CWorkDlgWorkerContext(CWorkDlg* pDlg)
-            : worker::CWorkerContext()
+        CWorkDlgWorkerContext(config::CConfiguration * pConfig, CWorkDlg* pDlg)
+            : worker::CWorkerContext(pConfig), pWorkDlg(pDlg)
         {
-            this->pWorkDlg = pDlg;
             this->bTerminate = false;
             this->bCanUpdateWindow = true;
             this->hThread = nullptr;

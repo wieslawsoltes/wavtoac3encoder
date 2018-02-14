@@ -37,7 +37,7 @@ namespace worker
         double m_ElapsedTimeTotal;
         int nCount;
     public:
-        CWorkerContext() { }
+        CWorkerContext(config::CConfiguration * pConfig) : pConfig(pConfig) { }
         virtual ~CWorkerContext() { }
     public:
         virtual void SetTitleInfo(std::wstring szInfo) = 0;

@@ -408,12 +408,6 @@ namespace worker
                 pcm_set_source_params(&pf, opt.raw_ch, opt.raw_fmt, opt.raw_order, opt.raw_sr);
             }
         }
-        else
-        {
-            if (opt.raw_input)
-            {
-            }
-        }
 
         if (bAvisynthInput == true)
         {
