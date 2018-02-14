@@ -476,12 +476,13 @@ namespace app
         m_EdtCurrent->GetWindowText(szCurrentFileName);
         std::wstring szCurrentFileNameStr = szCurrentFileName;
         std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
+        std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
 
         CFileDialog fd(TRUE,
             this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
             szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            this->pConfig->GetSupportedInputFilesFilter(),
+            szFilter.c_str(),
             this);
 
         if (fd.DoModal() == IDOK)

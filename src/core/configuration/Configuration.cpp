@@ -43,7 +43,8 @@ namespace config
 
     int CConfiguration::GetSupportedInputFormat(std::wstring &szExt)
     {
-        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
+        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
+        for (int i = 0; i < nInputExtSize; i++)
         {
             if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
                 return m_EncoderOptions.nSupportedInputFormats[i];
@@ -593,7 +594,8 @@ namespace config
 
     bool CConfiguration::IsSupportedInputExt(std::wstring &szExt)
     {
-        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
+        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
+        for (int i = 0; i < nInputExtSize; i++)
         {
             if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
                 return true;
@@ -903,33 +905,29 @@ namespace config
         #undef AddValue
     }
 
-    CAtlString CConfiguration::GetSupportedInputFilesFilter()
+    std::wstring CConfiguration::GetSupportedInputFilesFilter()
     {
-        CAtlString szFilter = L"";
-        CAtlString szExtL = L"";
-        CAtlString szExtU = L"";
-        CAtlString szBuff = L"";
+        std::wstring szFilter = L"";
+        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
 
-        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
+        for (int i = 0; i < (int)nInputExtSize; i++)
         {
-            szExtL = m_EncoderOptions.szSupportedInputExt[i].c_str();
-            szBuff = L"*." + szExtL.MakeLower();
-            szBuff += (i < (int)m_EncoderOptions.szSupportedInputExt.size() - 1) ? L";" : L"";
-            szFilter += szBuff;
+            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
+            szFilter += L"*." + util::StringHelper::TowLower(szExt) + ((i < (int)nInputExtSize - 1) ? L";" : L"");
         }
 
-        szFilter = CAtlString(this->GetString(0x00207006).c_str()) + L" (" + szFilter + L")|" + szFilter + L"|";
+        szFilter = this->GetString(0x00207006) + L" (" + szFilter + L")|" + szFilter + L"|";
 
-        for (int i = 0; i < (int)m_EncoderOptions.szSupportedInputExt.size(); i++)
+        for (int i = 0; i < (int)nInputExtSize; i++)
         {
-            szExtL = szExtU = m_EncoderOptions.szSupportedInputExt[i].c_str();
-            szExtU.MakeUpper();
-            szExtL.MakeLower();
-            szBuff.Format(L"%s %s (*.%s)|*.%s|", szExtU, this->GetString(0x00207007).c_str(), szExtL, szExtL);
-            szFilter += szBuff;
+            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
+            std::wstring szExtL = util::StringHelper::TowLower(szExt);
+            std::wstring szExtU = util::StringHelper::ToUpper(szExt);
+            szFilter += szExtU + L" " + this->GetString(0x00207007) + L" (*." + szExtL + L")|*." + szExtL + L"|";
         }
 
-        szFilter += CAtlString(this->GetString(0x00207008).c_str()) + L" (*.*)|*.*||";
+        szFilter += this->GetString(0x00207008) + L" (*.*)|*.*||";
+
         return szFilter;
     }
 }

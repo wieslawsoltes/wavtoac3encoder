@@ -2590,12 +2590,13 @@ namespace app
 
             ZeroMemory(pFiles, dwMaxSize);
 
-            CString szFilter = this->pConfig->GetSupportedInputFilesFilter();
+            std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
+
             CFileDialog fd(TRUE,
                 this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
                 _T(""),
                 OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING | OFN_EXPLORER | OFN_ALLOWMULTISELECT,
-                szFilter,
+                szFilter.c_str(),
                 this);
 
             fd.m_ofn.lpstrFile = pFiles;

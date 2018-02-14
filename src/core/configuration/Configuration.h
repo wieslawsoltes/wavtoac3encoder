@@ -8,7 +8,6 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include <atlstr.h>
 #include "worker\AftenAPI.h"
 
 namespace config
@@ -135,6 +134,6 @@ namespace config
         int GetSupportedInputFormat(std::wstring &szExt);
     public:
         void SetEncoderOptions();
-        CAtlString GetSupportedInputFilesFilter();
+        std::wstring GetSupportedInputFilesFilter();
     };
 }
