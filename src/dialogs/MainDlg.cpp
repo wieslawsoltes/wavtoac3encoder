@@ -397,7 +397,7 @@ namespace app
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
-/*
+
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
@@ -433,7 +433,7 @@ namespace app
         }
 
         this->m_StatusBar.SetText(szText, 0, 0);
-*/
+
         bWorking = false;
     }
 
