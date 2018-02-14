@@ -1118,6 +1118,7 @@ namespace app
         bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
         OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
 
+/*
         if (bPresetsRet == true)
         {
             if (pConfig->m_Presets.size() > 0)
@@ -1138,7 +1139,7 @@ namespace app
                 this->OnCbnSelchangeComboPresets();
             }
         }
-
+*/
         //bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
         //OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
