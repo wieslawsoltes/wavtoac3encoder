@@ -67,8 +67,8 @@ namespace app
 
     void CWorkDlg::OnClose()
     {
-        KillTimer(WM_FILE_TIMER);
-        KillTimer(WM_TOTAL_TIMER);
+        pWorkerContext->StopCurrentTimer();
+        pWorkerContext->StartTotalTimer();
 
         if (pWorkerContext->bTerminate == false)
         {
@@ -266,8 +266,16 @@ namespace app
         {
             m_Thread = std::thread([this]()  
             {
-                worker::CWorker m_Worker(this->pWorkerContext);
-                m_Worker.Encode();
+                try
+                {
+                    worker::CWorker m_Worker(this->pWorkerContext);
+                    m_Worker.Encode();
+                }
+                catch (...)
+                {
+                    this->pWorkerContext->bTerminate = true;
+                    this->pWorkerContext->Close();
+                }
             });
         }
         catch (...)
