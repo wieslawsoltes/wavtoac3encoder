@@ -19,7 +19,7 @@ namespace config
 
     std::wstring TrimOption(const std::wstring szOption)
     {
-        return szOption.substr(1, szOption.size() - 1));
+        return szOption.substr(1, szOption.size() - 1);
     }
 
     std::wstring ReadAllText(const std::wstring& szFileName)
