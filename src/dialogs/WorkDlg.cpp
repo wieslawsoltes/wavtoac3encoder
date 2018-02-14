@@ -89,7 +89,7 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-             m_Thread.join();
+            m_Thread.join();
         }
     }
 
@@ -113,7 +113,7 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-             m_Thread.join();
+            m_Thread.join();
         }
 
         this->EndDialog(IDOK);
