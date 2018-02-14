@@ -17,6 +17,11 @@ namespace config
     const std::wstring szTabCharVar = L"\\t";
     const std::wstring szTabChar = L"\t";
 
+    std::wstring TrimOption(const std::wstring szOption)
+    {
+        return szOption.substr(1, szOption.size() - 1));
+    }
+
     std::wstring ReadAllText(const std::wstring& szFileName)
     {
         std::wstring buffer;
@@ -336,9 +341,7 @@ namespace config
     {
         for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
         {
-            std::wstring szBuffer = m_EncoderOptions.m_Options[i].szOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (szOption == szBuffer)
+            if (szOption == TrimOption(m_EncoderOptions.m_Options[i].szOption))
                 return i;
         }
         return 0;
@@ -348,7 +351,6 @@ namespace config
     {
         for (int i = 0; i < (int)cl.size(); i++)
         {
-            std::wstring szBuffer;
             auto& ce = cl[i];
 
             if (ce.first == L"engine")
@@ -357,9 +359,7 @@ namespace config
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szThreadsOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szThreadsOption))
             {
                 preset.nThreads = util::StringHelper::ToInt(ce.second);
                 continue;
@@ -395,41 +395,31 @@ namespace config
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szCbrOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szCbrOption))
             {
                 preset.nBitrate = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szVbrOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szVbrOption))
             {
                 preset.nQuality = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szRawSampleFormatOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szRawSampleFormatOption))
             {
                 preset.m_RawInput.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szRawSampleRateOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szRawSampleRateOption))
             {
                 preset.m_RawInput.nRawSampleRate = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
-            szBuffer = m_EncoderOptions.szRawChannelsOption;
-            util::StringHelper::TrimLeft(szBuffer, '-');
-            if (ce.first == szBuffer)
+            if (ce.first == TrimOption(m_EncoderOptions.szRawChannelsOption))
             {
                 preset.m_RawInput.nRawChannels = util::StringHelper::ToInt(ce.second);
                 continue;
@@ -437,9 +427,7 @@ namespace config
 
             for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
             {
-                szBuffer = m_EncoderOptions.m_Options[i].szOption;
-                util::StringHelper::TrimLeft(szBuffer, '-');
-                if (ce.first == szBuffer)
+                if (ce.first == TrimOption(m_EncoderOptions.m_Options[i].szOption))
                 {
                     preset.nOptions[i] = util::StringHelper::ToInt(ce.second);
                     break;
@@ -465,28 +453,30 @@ namespace config
             stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
             {
-                if ((szBuffer[0] == '[') && (szBuffer[szBuffer.size() - 1] == ']'))
+                int nBufferSize = (int)szBuffer.size();
+                if (nBufferSize >= 2)
                 {
-                    if (bHavePreset == true)
+                    if ((szBuffer[0] == '[') && (szBuffer[nBufferSize - 1] == ']'))
                     {
-                        ParsePreset(temp, cl);
-                        auto preset = temp;
-                        presets.emplace_back(preset);
-                        cl.clear();
+                        if (bHavePreset == true)
+                        {
+                            ParsePreset(temp, cl);
+                            auto preset = temp;
+                            presets.emplace_back(preset);
+                            cl.clear();
+                        }
+    
+                        temp = defaultPreset;
+                        temp.szName = szBuffer.substr(1, szBuffer.size() - 2);
+                        bHavePreset = true;
                     }
-
-                    temp = defaultPreset;
-                    util::StringHelper::TrimLeft(szBuffer, '[');
-                    util::StringHelper::TrimRight(szBuffer, ']');
-                    temp.szName = szBuffer;
-                    bHavePreset = true;
-                }
-                else
-                {
-                    auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
-                    if (parts.size() == 2)
+                    else
                     {
-                        cl.emplace_back(std::make_pair(parts[0], parts[1]));
+                        auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                        if (parts.size() == 2)
+                        {
+                            cl.emplace_back(std::make_pair(parts[0], parts[1]));
+                        }
                     }
                 }
             }
@@ -517,7 +507,6 @@ namespace config
                 return false;
 
             std::wstring szBuffer;
-            std::wstring szTmpBuffer;
 
             for (int i = 0; i < (const int)presets.size(); i++)
             {
@@ -529,9 +518,7 @@ namespace config
                 szBuffer = L"engine" + szSeparator + std::to_wstring(preset.nCurrentEngine) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szThreadsOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szThreadsOption) + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer = L"mmx" + szSeparator + std::to_wstring(preset.nUsedSIMD[0]) + szNewChar;
@@ -549,36 +536,24 @@ namespace config
                 szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szCbrOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szCbrOption) + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szVbrOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szVbrOption) + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szRawSampleFormatOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szRawSampleFormatOption) + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szRawSampleRateOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleRate) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szRawSampleRateOption) + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleRate) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szTmpBuffer = m_EncoderOptions.szRawChannelsOption;
-                util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                szBuffer = szTmpBuffer + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
+                szBuffer = TrimOption(m_EncoderOptions.szRawChannelsOption) + szSeparator + std::to_wstring(preset.m_RawInput.nRawChannels) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 for (int j = 0; j < (int)m_EncoderOptions.m_Options.size(); j++)
                 {
-                    szTmpBuffer = m_EncoderOptions.m_Options[j].szOption;
-                    util::StringHelper::TrimLeft(szTmpBuffer, '-');
-                    szBuffer = szTmpBuffer + szSeparator+ std::to_wstring(preset.nOptions[j]) + szNewChar;
+                    szBuffer = TrimOption(m_EncoderOptions.m_Options[j].szOption) + szSeparator+ std::to_wstring(preset.nOptions[j]) + szNewChar;
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
                 }
             }
