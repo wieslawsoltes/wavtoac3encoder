@@ -2010,6 +2010,8 @@ namespace app
 
     void CMainDlg::InitLang(bool initLangMenu)
     {
+        this->pConfig->SetEncoderOptions();
+
         this->InitRawSamleFormatComboBox();
 
         this->InitSettingsListGroups();
@@ -2021,8 +2023,6 @@ namespace app
         this->InitLangStaticText();
         this->InitLangFilesList();
         this->InitLangSettingsList();
-
-        this->pConfig->SetEncoderOptions();
 
         this->InitSettingsList();
 
