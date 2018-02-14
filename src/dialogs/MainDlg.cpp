@@ -1118,36 +1118,34 @@ namespace app
         bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
         OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
 
-/*
         if (bPresetsRet == true)
         {
-            if (pConfig->m_Presets.size() > 0)
+            int nPresetsSize = (int)pConfig->m_Presets.size();
+            if (nPresetsSize > 0)
             {
                 this->m_CmbPresets.ResetContent();
-
-                for (int i = 0; i < (int)pConfig->m_Presets.size(); i++)
+                for (int i = 0; i < nPresetsSize; i++)
                 {
                     auto& preset = pConfig->m_Presets[i];
                     this->m_CmbPresets.InsertString(i, preset.szName.c_str());
                 }
 
-                if ((this->pConfig->nCurrentPreset >= (int)pConfig->m_Presets.size()) || (this->pConfig->nCurrentPreset < 0))
+                if ((this->pConfig->nCurrentPreset >= nPresetsSize) || (this->pConfig->nCurrentPreset < 0))
                     this->pConfig->nCurrentPreset = 0;
 
                 this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
-
                 this->OnCbnSelchangeComboPresets();
             }
         }
-*/
-        //bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
-        //OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
-        //bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
-        //OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+        bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
+        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
-        //bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
-        //OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
+        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
+        OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+
+        bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
+        OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
     }
 
     void CMainDlg::SaveAllConfiguration()
@@ -1967,11 +1965,11 @@ namespace app
 
         try
         {
-            //this->InitTitle();
-            //this->InitDialogControls();
-            //this->InitLang(true);
-            //this->InitDefaultPreset();
-            //this->UpdateBitrateText();
+            this->InitTitle();
+            this->InitDialogControls();
+            this->InitLang(true);
+            this->InitDefaultPreset();
+            this->UpdateBitrateText();
         }
         catch (...)
         {
