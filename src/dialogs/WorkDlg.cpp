@@ -266,9 +266,9 @@ namespace app
     {
         try
         {
-            m_Thread = std::thread([&pWorkerContext]()  
+            m_Thread = std::thread([this]()  
             {
-                worker::CWorker m_Worker(pWorkerContext);
+                worker::CWorker m_Worker(this->pWorkerContext);
                 m_Worker.Encode();
             });
         }
