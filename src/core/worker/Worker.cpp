@@ -7,7 +7,7 @@ namespace worker
     {
         api.LibAften_aften_set_defaults(&s);
 
-        if (engine != engine)
+        if (engine != nullptr)
         {
             s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
             s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
