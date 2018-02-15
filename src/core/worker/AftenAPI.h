@@ -26,15 +26,12 @@ typedef FloatType(*lpLibAften_aften_get_float_type)(void);
 class AftenAPI
 {
 public:
-    AftenAPI()
-    {
-    }
+    AftenAPI() { }
     virtual ~AftenAPI()
     {
         CloseAftenAPI();
     }
-public:
-    std::wstring szLibPath;
+private:
     HMODULE hLibAften;
 public:
     lpLibAften_aften_get_version LibAften_aften_get_version;
@@ -47,7 +44,7 @@ public:
     lpLibAften_aften_remap_mpeg_to_a52 LibAften_aften_remap_mpeg_to_a52;
     lpLibAften_aften_get_float_type LibAften_aften_get_float_type;
 public:
-    bool OpenAftenAPI()
+    bool OpenAftenAPI(const std::wstring szLibPath)
     {
         hLibAften = LoadLibrary(szLibPath.c_str());
         if (hLibAften == nullptr)

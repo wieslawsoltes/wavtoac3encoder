@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "MainApp.h"
 #include "EnginesDlg.h"
 #include "utilities\Utilities.h"
@@ -44,8 +44,8 @@ namespace app
         CMyDialogEx::OnInitDialog();
 
         this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-        this->m_LstEngines.InsertColumn(0, config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00B0100C).c_str() : _T("Name"), 0, 150);
-        this->m_LstEngines.InsertColumn(1, config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00B0100D).c_str() : _T("Path"), 0, 440);
+        this->m_LstEngines.InsertColumn(0, this->pConfig->GetString(0x00B0100C).c_str(), 0, 150);
+        this->m_LstEngines.InsertColumn(1, this->pConfig->GetString(0x00B0100D).c_str(), 0, 440);
 
         this->InsertProgramEngines();
 
@@ -73,7 +73,7 @@ namespace app
             _T("dll"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00B0100E).c_str() : _T("DLL Files (*.dll)|*.dll|All Files (*.*)|*.*||"),
+            this->pConfig->GetString(0x00B0100E).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -89,7 +89,7 @@ namespace app
             _T("engines"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00B0100F).c_str() : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+            this->pConfig->GetString(0x00B0100F).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -105,7 +105,7 @@ namespace app
             _T("engines"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00B0100F).c_str() : _T("Aften Engines (*.engines)|*.engines|All Files (*.*)|*.*||"),
+            this->pConfig->GetString(0x00B0100F).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -117,54 +117,52 @@ namespace app
 
     void CEnginesDlg::OnBnClickedButtonEnginesAdd()
     {
-        int nSize = this->m_EngineList.Count();
+        int nSize = (int)this->m_Engines.size();
 
         CString szKey;
         CString szValue;
         this->m_EdtEngineName.GetWindowText(szKey);
         this->m_EdtEnginePath.GetWindowText(szValue);
 
-        config::CConfigEntry ce;
-        ce.szKey = szKey;
-        ce.szValue = szValue;
-        this->m_EngineList.Insert(ce);
+        std::wstring szName = szKey;
+        std::wstring szPath = szValue;
+        this->m_Engines.emplace_back(config::CEngine(szName, szPath));
 
-        this->m_LstEngines.InsertItem(nSize, ce.szKey.c_str());
-        this->m_LstEngines.SetItemText(nSize, 1, ce.szValue.c_str());
+        this->m_LstEngines.InsertItem(nSize, szName.c_str());
+        this->m_LstEngines.SetItemText(nSize, 1, szPath.c_str());
     }
 
     void CEnginesDlg::OnBnClickedButtonEnginesRemove()
     {
-        util::CListT<int> list;
+        std::vector<int> list;
         POSITION pos;
 
         pos = this->m_LstEngines.GetFirstSelectedItemPosition();
         while (pos != nullptr)
         {
             int nItem = this->m_LstEngines.GetNextSelectedItem(pos);
-            list.Insert(nItem);
+            list.emplace_back(nItem);
         }
 
-        for (int i = list.Count() - 1; i >= 0; i--)
+        for (int i = (int)list.size() - 1; i >= 0; i--)
         {
-            int nIndex = list.Get(i);
+            int nIndex = list[i];
             this->m_LstEngines.DeleteItem(nIndex);
-            this->m_EngineList.Remove(nIndex);
+            this->m_Engines.erase(this->m_Engines.begin() + nIndex);
         }
     }
 
     bool CEnginesDlg::InsertProgramEngines()
     {
-        int nSize = this->m_EngineList.Count();
-
+        int nSize = (int)this->m_Engines.size();
         if (nSize == 0)
             return false;
 
         for (int i = 0; i < nSize; i++)
         {
-            auto& ce = this->m_EngineList.Get(i);
-            this->m_LstEngines.InsertItem(i, ce.szKey.c_str());
-            this->m_LstEngines.SetItemText(i, 1, ce.szValue.c_str());
+            auto& ce = this->m_Engines[i];
+            this->m_LstEngines.InsertItem(i, ce.szName.c_str());
+            this->m_LstEngines.SetItemText(i, 1, ce.szPath.c_str());
         }
 
         this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
@@ -174,20 +172,19 @@ namespace app
 
     bool CEnginesDlg::LoadProgramEngines(std::wstring szFileName)
     {
-        this->m_EngineList.RemoveAll();
-        this->m_LstEngines.DeleteAllItems();
-
-        if (config::CConfiguration::LoadConfig(szFileName, this->m_EngineList) == true)
+        std::vector<config::CEngine> engines;
+        if (this->pConfig->LoadEngines(engines, szFileName) == true)
         {
+            this->m_Engines = engines;
+            this->m_LstEngines.DeleteAllItems();
             return InsertProgramEngines();
         }
-
         return false;
     }
 
     bool CEnginesDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return config::CConfiguration::SaveConfig(szFileName, this->m_EngineList);
+        return this->pConfig->SaveEngines(this->m_Engines, szFileName);
     }
 
     void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
@@ -200,9 +197,9 @@ namespace app
             if (pos != nullptr)
             {
                 int nItem = m_LstEngines.GetNextSelectedItem(pos);
-                auto& ce = this->m_EngineList.Get(nItem);
-                this->m_EdtEngineName.SetWindowText(ce.szKey.c_str());
-                this->m_EdtEnginePath.SetWindowText(ce.szValue.c_str());
+                auto& engine = this->m_Engines[nItem];
+                this->m_EdtEngineName.SetWindowText(engine.szName.c_str());
+                this->m_EdtEnginePath.SetWindowText(engine.szPath.c_str());
             }
             else
             {
@@ -226,8 +223,8 @@ namespace app
             CString szText;
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEngineName.GetWindowText(szText);
-            auto& ce = this->m_EngineList.Get(nIndex);
-            ce.szKey = szText;
+            auto& engine = this->m_Engines[nIndex];
+            engine.szName = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 0, szText);
         }
@@ -241,8 +238,8 @@ namespace app
             CString szText;
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEnginePath.GetWindowText(szText);
-            auto& ce = this->m_EngineList.Get(nIndex);
-            ce.szValue = szText;
+            auto& engine = this->m_Engines[nIndex];
+            engine.szPath = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 1, szText);
         }
@@ -265,19 +262,16 @@ namespace app
 
     void CEnginesDlg::InitLang()
     {
-        if (config::m_Config.HaveLangStrings())
-        {
-            this->SetWindowText((L"WAV to AC3 Encoder - " + config::m_Config.GetLangString(0x00B01001)).c_str());
-            this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(config::m_Config.GetLangString(0x00B01002).c_str());
-            this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(config::m_Config.GetLangString(0x00B01003).c_str());
-            this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(config::m_Config.GetLangString(0x00B01004).c_str());
-            this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(config::m_Config.GetLangString(0x00B01005).c_str());
-            this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(config::m_Config.GetLangString(0x00B01006).c_str());
-            this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(config::m_Config.GetLangString(0x00B01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(config::m_Config.GetLangString(0x00B01008).c_str());
-            this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(config::m_Config.GetLangString(0x00B01009).c_str());
-            this->GetDlgItem(IDOK)->SetWindowText(config::m_Config.GetLangString(0x00B0100A).c_str());
-            this->GetDlgItem(IDCANCEL)->SetWindowText(config::m_Config.GetLangString(0x00B0100B).c_str());
-        }
+        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00B01001)).c_str());
+        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(this->pConfig->GetString(0x00B01002).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(this->pConfig->GetString(0x00B01003).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(this->pConfig->GetString(0x00B01004).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(this->pConfig->GetString(0x00B01005).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(this->pConfig->GetString(0x00B01006).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(this->pConfig->GetString(0x00B01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(this->pConfig->GetString(0x00B01008).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(this->pConfig->GetString(0x00B01009).c_str());
+        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00B0100A).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00B0100B).c_str());
     }
 }

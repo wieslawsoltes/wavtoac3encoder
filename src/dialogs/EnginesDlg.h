@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <vector>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -22,7 +23,8 @@ namespace app
         virtual void DoDataExchange(CDataExchange* pDX);
         DECLARE_MESSAGE_MAP()
     public:
-        config::CConfigList m_EngineList;
+        config::CConfiguration * pConfig;
+        std::vector<config::CEngine> m_Engines;
         std::wstring szCurrentFileName;
     public:
         volatile bool bUpdateList;

@@ -24,7 +24,7 @@ namespace app
         2, 1, 2, 3, 3, 4, 4, 5
     };
 
-    const int nChannelConfigStates[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const int nChannelConfigStates[nNumChannelConfig][6] =
     {
         // FL FR FC S  SL SR
         {  1, 1, 0, 0, 0, 0 }, // 1+1
@@ -37,7 +37,7 @@ namespace app
         {  1, 1, 1, 0, 1, 1 }  // 3/2
     };
 
-    const std::wstring szChannelConfigNames[nNumChannelConfig][config::CEncoderDefaults::nNumMaxInputFiles] =
+    const std::wstring szChannelConfigNames[nNumChannelConfig][6] =
     {
         // FL FR FC S  SL SR
         {  L"Ch1", L"Ch2", L"-", L"-", L"-",   L"-"  }, // 1+1
@@ -54,7 +54,7 @@ namespace app
     CMuxDlg::CMuxDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CMuxDlg::IDD, pParent)
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < 6; i++)
         {
             this->szInputFiles[i] = _T("");
             this->szTmpInputFiles[i] = _T("");
@@ -137,55 +137,43 @@ namespace app
         this->m_CmbChannelConfig.SetCurSel(0);
 
         std::wstring szTmpText;
-        szTmpText = config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01008) :
-            _T("Specify channel configuration:\n")
-            _T("1+1 = (Ch1,Ch2)\n")
-            _T("1/0 = (C)\n")
-            _T("2/0 = (L,R)\n")
-            _T("3/0 = (L,R,C)\n")
-            _T("2/1 = (L,R,S)\n")
-            _T("3/1 = (L,R,C,S)\n")
-            _T("2/2 = (L,R,SL,SR)\n")
-            _T("3/2 = (L,R,C,SL,SR)");
+        szTmpText = this->pConfig->GetString(0x00C01008);
 
         this->m_CmbChannelConfig.SetTooltipText(szTmpText.c_str());
-        this->m_ChkChannelConfigLFE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01009).c_str() : _T("Indicates use of the LFE channel."));
+        this->m_ChkChannelConfigLFE.SetTooltipText(this->pConfig->GetString(0x00C01009).c_str());
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
-        this->m_BtnChannelFL.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100A).c_str() : _T("Front Left Channel"));
-        this->m_BtnChannelFR.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100B).c_str() : _T("Front Right Channel"));
-        this->m_BtnChannelFC.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100C).c_str() : _T("Front Center Channel"));
-        this->m_BtnChannelLFE.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100D).c_str() : _T("Low Frequency Effect Channel"));
-        this->m_BtnChannelSL.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100E).c_str() : _T("Surround Left Channel"));
-        this->m_BtnChannelSR.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C0100F).c_str() : _T("Surround Right Channel"));
-        this->m_BtnChannelS.SetTooltipText(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01010).c_str() : _T("Surround Channel"));
+        this->m_BtnChannelFL.SetTooltipText(this->pConfig->GetString(0x00C0100A).c_str());
+        this->m_BtnChannelFR.SetTooltipText(this->pConfig->GetString(0x00C0100B).c_str());
+        this->m_BtnChannelFC.SetTooltipText(this->pConfig->GetString(0x00C0100C).c_str());
+        this->m_BtnChannelLFE.SetTooltipText(this->pConfig->GetString(0x00C0100D).c_str());
+        this->m_BtnChannelSL.SetTooltipText(this->pConfig->GetString(0x00C0100E).c_str());
+        this->m_BtnChannelSR.SetTooltipText(this->pConfig->GetString(0x00C0100F).c_str());
+        this->m_BtnChannelS.SetTooltipText(this->pConfig->GetString(0x00C01010).c_str());
 
         this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
     }
 
     void CMuxDlg::InitLang()
     {
-        if (config::m_Config.HaveLangStrings())
-        {
-            this->SetWindowText((L"WAV to AC3 Encoder - " + config::m_Config.GetLangString(0x00C01001)).c_str());
-            this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(config::m_Config.GetLangString(0x00C01002).c_str());
-            this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(config::m_Config.GetLangString(0x00C01003).c_str());
-            this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(config::m_Config.GetLangString(0x00C01004).c_str());
-            this->GetDlgItem(IDOK)->SetWindowText(config::m_Config.GetLangString(0x00C01005).c_str());
-            this->GetDlgItem(IDCANCEL)->SetWindowText(config::m_Config.GetLangString(0x00C01006).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-            this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(config::m_Config.GetLangString(0x00C01007).c_str());
-        }
+        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00C01001)).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(this->pConfig->GetString(0x00C01002).c_str());
+        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(this->pConfig->GetString(0x00C01003).c_str());
+        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(this->pConfig->GetString(0x00C01004).c_str());
+        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00C01005).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00C01006).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
     }
 
     void CMuxDlg::RemapFilesToChannels()
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < 6; i++)
             this->szInputFiles[i] = _T("");
 
         switch (this->nChannelConfig)
@@ -344,22 +332,22 @@ namespace app
 
     bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
     {
-        util::CListT<std::wstring> fl;
-        if (config::m_Config.LoadFiles(szFileName, fl) == false)
+        std::vector<std::wstring> fl;
+        if (this->pConfig->LoadFiles(szFileName, fl) == false)
             return false;
 
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < 6; i++)
         {
             szTmpInputFiles[i] = _T("");
         }
 
         int i = 0;
-        for (; i < fl.Count(); i++)
+        for (; i < (int)fl.size(); i++)
         {
-            if (i >= config::CEncoderDefaults::nNumMaxInputFiles)
+            if (i >= 6)
                 return true;
 
-            std::wstring szPath = fl.Get(i);
+            std::wstring szPath = fl[i];
             util::StringHelper::Trim(szPath, '"');
             szTmpInputFiles[i] = szPath;
         }
@@ -380,12 +368,12 @@ namespace app
     {
         try
         {
-            util::CListT<std::wstring> fl;
+            std::vector<std::wstring> fl;
             std::wstring szBuffer;
 
-#define AddFile(index) \
-        szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
-        fl.Insert(szBuffer);
+            #define AddFile(index) \
+                    szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
+                    fl.emplace_back(szBuffer);
 
             switch (this->nChannelConfig)
             {
@@ -469,7 +457,9 @@ namespace app
                 break;
             };
 
-            return config::m_Config.SaveFiles(szFileName, fl, nFormat);
+            #undef AddFile
+
+            return this->pConfig->SaveFiles(szFileName, fl, nFormat);
         }
         catch (...)
         {
@@ -486,12 +476,13 @@ namespace app
         m_EdtCurrent->GetWindowText(szCurrentFileName);
         std::wstring szCurrentFileNameStr = szCurrentFileName;
         std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
+        std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
 
         CFileDialog fd(TRUE,
-            config::CEncoderDefaults::szSupportedInputExt[0].c_str(),
+            this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
             szFileName.c_str(),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::CEncoderDefaults::GetSupportedInputFilesFilter(),
+            szFilter.c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -600,8 +591,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01011).c_str() :
-            _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            this->pConfig->GetString(0x00C01011).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -624,8 +614,7 @@ namespace app
             _T("files"),
             _T(""),
             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00C01011).c_str() :
-            _T("Supported Files (*.files;*.mux)|*.files;*.mux|Files List (*.files)|*.files|MUX Files (*.mux)|*.mux|All Files (*.*)|*.*||"),
+            this->pConfig->GetString(0x00C01011).c_str(),
             this);
 
         if (fd.DoModal() == IDOK)
@@ -650,7 +639,7 @@ namespace app
 
     void CMuxDlg::OnBnClickedCancel()
     {
-        for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+        for (int i = 0; i < 6; i++)
         {
             this->szInputFiles[i] = _T("");
             this->szTmpInputFiles[i] = _T("");

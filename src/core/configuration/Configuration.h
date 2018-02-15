@@ -1,102 +1,48 @@
-﻿#pragma once
+#pragma once
 
-#include <atlstr.h>
+#include <utility>
 #include <string>
+#include <vector>
+#include <map>
 #include <wchar.h>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include <utility>
-#include <vector>
-#include "utilities\ListT.h"
-#include "utilities\MapT.h"
 #include "worker\AftenAPI.h"
-
-#ifdef _M_X64
-#define FILENAME_ENGINES _T("EncWAVtoAC3-x64.engines")
-#else
-#define FILENAME_ENGINES _T("EncWAVtoAC3-x86.engines")
-#endif
-
-#ifdef _M_X64
-#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x64")
-#else
-#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x86")
-#endif
-
-#define FILENAME_LANG _T("EncWAVtoAC3.lang")
-#define FILENAME_PORTABLE _T("EncWAVtoAC3.portable")
-#define FILENAME_CONFIG _T("EncWAVtoAC3.config")
-#define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
-#define FILENAME_FILES _T("EncWAVtoAC3.files")
-
-#define DEFAULT_PRESET_NAME (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207001).c_str() : _T("Default"))
-#define DEFAULT_TEXT_AUTO (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207002).c_str() : _T("<Auto>"))
-#define DEFAULT_TEXT_IGNORED (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207003).c_str() : _T("<Ignored>"))
-#define DEFAULT_TEXT_OUTPUT_PATH (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207004).c_str() : _T("<Same as input file path>"))
-#define DEFAULT_TEXT_OUTPUT_FILE (config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00207005).c_str() : _T("<Same as first input file path + output.ac3>"))
 
 namespace config
 {
-    class CConfigEntry
-    {
-    public:
-        std::wstring szKey;
-        std::wstring szValue;
-    };
+    typedef std::pair<std::wstring, std::wstring> Entry;
+    typedef std::pair<std::wstring, int> Value;
 
-    class CConfigList : public util::CListT<CConfigEntry>
-    {
-    };
-
-    class CLangMap : public util::CMapT<int, std::wstring>
-    {
-    };
-
-    class CLang
+    class CLanguage
     {
     public:
         std::wstring szFileName;
         std::wstring szEnglishName;
         std::wstring szTargetName;
-        CLangMap lm;
+        std::map<int, std::wstring> m_Strings;
     };
 
-    class CLangList : public util::CListT<CLang>
-    {
-    };
-
-    class CConfiguration
+    class CEngine
     {
     public:
-        CLangMap * m_Lang;
-        CLangList m_LangLst;
-        std::wstring m_szLangFileName = L"";
-        BOOL m_bHaveLang = FALSE;
-        int m_nLangId = -1;
+        std::wstring szName;
+        std::wstring szPath;
+        int nThreads;
+        std::map<int, int> nUsedSIMD;
     public:
-        bool m_bIsPortable = true;
-        std::wstring m_szPresetsFilePath;
-        std::wstring m_szConfigFilePath;
-        std::wstring m_szEnginesFilePath;
-        std::wstring m_szFilesListFilePath;
-        std::wstring m_szLangFilePath;
-    public:
-        static bool LoadConfig(std::wstring &szFileName, CConfigList &cl);
-        static bool SaveConfig(std::wstring &szFileName, CConfigList &cl);
-    public:
-        bool LoadFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl);
-        bool SaveFiles(std::wstring &szFileName, util::CListT<std::wstring>& fl, int nFormat);
-    public:
-        void SearchFolderForLang(std::wstring szPath, const bool bRecurse, CLangList& m_LangLst);
-        bool LoadLang(std::wstring &szFileName, CLangMap &lm);
-    public:
-        bool LoadLangConfig(std::wstring &szFileName);
-        bool SaveLangConfig(std::wstring &szFileName);
-    public:
-        void LoadLangStrings();
-        BOOL HaveLangStrings();
-        std::wstring GetLangString(int id);
+        CEngine() { }
+        CEngine(std::wstring name, std::wstring path) : szName(name), szPath(path)
+        {
+            this->nThreads = 0;
+            this->nUsedSIMD = {
+                { 0, 1 },
+                { 1, 1 },
+                { 2, 1 },
+                { 3, 1 }
+            };
+        }
     };
 
     class CChannelConfig
@@ -105,92 +51,114 @@ namespace config
         int acmod;
         int lfe;
         std::wstring chconfig;
-    public:
-        CChannelConfig(int acmod, int lfe, std::wstring chconfig)
-        {
-            this->acmod = acmod;
-            this->lfe = lfe;
-            this->chconfig = chconfig;
-        }
     };
 
-    class CEncoderOptions
+    class COption
     {
     public:
         std::wstring szName;
         std::wstring szOption;
         std::wstring szHelpText;
-        util::CListT<std::wstring> listOptNames;
-        util::CListT<int> listOptValues;
+        std::vector<Value> m_Values;
         int nDefaultValue;
         int nIgnoreValue;
         std::wstring szGroupName;
         bool bBeginGroup;
     };
 
-    class CEncoderPreset
+    class CRawInput
     {
     public:
-        const static int nNumEncoderOptions = 31;
-        const static int nNumSIMDIntructions = 4;
+        static const int nDefaultRawChannels = 0;
+        static const int nDefaultRawSampleFormat = 0;
+        static const int nDefaultRawSampleRate = 0;
+    public:
+        int nRawSampleFormat;
+        int nRawSampleRate;
+        int nRawChannels;
+    };
+
+    class CPreset
+    {
+    public:
+        static const AftenEncMode nDefaultMode = AFTEN_ENC_MODE_CBR;
+        static const int nDefaultBitrate = 0;
+        static const int nDefaultQuality = 240;
     public:
         std::wstring szName;
         AftenEncMode nMode;
         int nBitrate;
         int nQuality;
-        int nRawSampleFormat;
-        int nRawSampleRate;
-        int nRawChannels;
-        int nUsedSIMD[nNumSIMDIntructions];
-        int nThreads;
+        CRawInput m_RawInput;
+        std::map<int, int> nOptions;
+    };
+
+    class CEncoderOptions
+    {
+    public:
+        std::vector<int> nValidCbrBitrates;
+        std::vector<CChannelConfig> m_ChannelConfig;
+        std::vector<std::wstring> szRawSampleFormats;
+        std::vector<std::wstring> szGroups;
+        std::wstring szCbrOption;
+        std::wstring szVbrOption;
+        std::wstring szThreadsOption;
+        std::wstring szSimdOption;
+        std::wstring szRawSampleFormatOption;
+        std::wstring szRawSampleRateOption;
+        std::wstring szRawChannelsOption;
+        std::vector<std::wstring> szSupportedInputExt;
+        std::vector<int> nSupportedInputFormats;
+        std::vector<std::wstring> szSupportedOutputExt;
+        std::vector<COption> m_Options;
+    };
+
+    class CConfiguration
+    {
+    public:
+        std::map<int, std::wstring> * pStrings;
+        std::vector<CLanguage> m_Languages;
+        std::wstring m_szLangFileName;
+        int m_nLangId;
+        bool m_bIsPortable;
+        std::wstring m_szPresetsFilePath;
+        std::wstring m_szConfigFilePath;
+        std::wstring m_szEnginesFilePath;
+        std::wstring m_szFilesListFilePath;
+        std::wstring m_szLangFilePath;
+        std::vector<CEngine> m_Engines;
         int nCurrentEngine;
-        int nSetting[nNumEncoderOptions];
-    };
-
-    class CEncoderPresetList : public util::CListT<CEncoderPreset>
-    {
-    };
-
-    class CEncoderDefaults
-    {
-    private:
-        CEncoderDefaults() { }
+        std::vector<config::CPreset> m_Presets;
+        config::CPreset m_DefaultPreset;
+        int nCurrentPreset;
+        std::wstring szOutputPath;
+        std::wstring szOutputFile;
+        bool bMultipleMonoInput;
+        bool bDisableAllWarnings;
+        bool bSaveConfig;
+        CEncoderOptions m_EncoderOptions;
     public:
-        const static int nNumMaxInputFiles = 6;
-        const static int nNumValidCbrBitrates = 20;
-        const static int nNumChannelConfigAften = 16;
-        const static int nNumRawSampleFormats = 15;
-        const static int nNumEncoderOptionsGroups = 6;
-        const static int nNumSupportedInputExt = 8;
-        const static int nNumSupportedOutputExt = 1;
-    public:
-        static int nValidCbrBitrates[nNumValidCbrBitrates];
-        static CChannelConfig ccAften[nNumChannelConfigAften];
-        static std::wstring szRawSampleFormats[nNumRawSampleFormats];
-        static std::wstring pszGroups[nNumEncoderOptionsGroups];
-        static std::wstring szCbrOption;
-        static std::wstring szVbrOption;
-        static std::wstring szThreadsOption;
-        static std::wstring szSimdOption;
-        static std::wstring szRawSampleFormatOption;
-        static std::wstring szRawSampleRateOption;
-        static std::wstring szRawChannelsOption;
-        static std::wstring szSupportedInputExt[nNumSupportedInputExt];
-        static int nSupportedInputFormats[nNumSupportedInputExt];
-        static std::wstring szSupportedOutputExt[nNumSupportedOutputExt];
-        static CEncoderOptions encOpt[CEncoderPreset::nNumEncoderOptions];
-    public:
-        static void InitEncoderOptions();
-        static int FindValidBitratePos(const int nBitrate);
-        static int FindOptionIndex(std::wstring szOption);
-        static void ResetEncoderOptionsLists();
-        static void ParseEncoderPreset(CEncoderPreset &preset, CConfigList &cl);
-        static bool LoadEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
-        static bool SaveEncoderPresets(CEncoderPresetList& encPresets, std::wstring& szFileName, CEncoderPreset& defaultPreset);
-        static bool IsSupportedInputExt(std::wstring &szExt);
-        static int GetSupportedInputFormat(std::wstring &szExt);
-        static CAtlString GetSupportedInputFilesFilter();
+        bool LoadEntries(std::wstring &szFileName, std::vector<Entry> &entries);
+        bool SaveEntries(std::wstring &szFileName, std::vector<Entry> &entries);
+        bool LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& files);
+        bool SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& files, int nFormat);
+        bool FindLanguages(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& languages);
+        bool LoadStrings(std::wstring &szFileName, std::map<int, std::wstring> &strings);
+        bool LoadLanguagePath(std::wstring &szFileName);
+        bool SaveLanguagePath(std::wstring &szFileName);
+        void LoadLLanguages(std::wstring szLangPath);
+        std::wstring CConfiguration::GetString(const int nKey);
+        void ParseEngineEntries(CEngine &engine, std::vector<Entry> &entries);
+        bool LoadEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
+        bool SaveEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
+        void ParsePresetEntries(CPreset &preset, std::vector<Entry> &entries);
+        bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        int FindValidBitrateIndex(const int nBitrate);
+        int FindOptionIndex(std::wstring szOption);
+        bool IsSupportedInputExt(std::wstring &szExt);
+        int GetSupportedInputFormat(std::wstring &szExt);
+        void SetEncoderOptions();
+        std::wstring GetSupportedInputFilesFilter();
     };
-
-   extern CConfiguration m_Config;
 }

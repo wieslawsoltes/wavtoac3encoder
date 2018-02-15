@@ -5,6 +5,20 @@
 #endif
 
 #include "res\resource.h"
+#include "configuration\Configuration.h"
+
+#ifdef _M_X64
+#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x64")
+#else
+#define DIRECTORY_CONFIG _T("EncWAVtoAC3-x86")
+#endif
+
+#define FILENAME_ENGINES _T("EncWAVtoAC3.engines")
+#define FILENAME_LANG _T("EncWAVtoAC3.lang")
+#define FILENAME_PORTABLE _T("EncWAVtoAC3.portable")
+#define FILENAME_CONFIG _T("EncWAVtoAC3.config")
+#define FILENAME_PRESETS _T("EncWAVtoAC3.presets")
+#define FILENAME_FILES _T("EncWAVtoAC3.files")
 
 namespace app
 {
@@ -17,6 +31,9 @@ namespace app
         virtual BOOL InitInstance();
         DECLARE_MESSAGE_MAP()
     public:
+        config::CConfiguration m_Config;
+    public:
+        void LoadDefaults();
         void LoadConfig();
         void SaveConfig();
     };

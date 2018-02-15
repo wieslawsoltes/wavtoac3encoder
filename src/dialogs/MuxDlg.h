@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <string>
+#include <vector>
 #include <afxwin.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
@@ -38,10 +39,11 @@ namespace app
         bool SaveFilesList(std::wstring &szFileName, int nFormat);
         void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
     public:
+        config::CConfiguration * pConfig;
         int nChannelConfig;
         bool bLFE;
-        std::wstring szInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
-        std::wstring szTmpInputFiles[config::CEncoderDefaults::nNumMaxInputFiles];
+        std::wstring szInputFiles[6];
+        std::wstring szTmpInputFiles[6];
     public:
         controls::CMyButton m_BtnChannelFL;
         controls::CMyButton m_BtnChannelFR;

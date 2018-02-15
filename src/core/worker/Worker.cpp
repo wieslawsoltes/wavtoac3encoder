@@ -3,22 +3,45 @@
 
 namespace worker
 {
-    void CWorker::InitContext(const config::CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
+    bool CWorker::InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s)
     {
+        if (api.OpenAftenAPI(engine->szPath) == false)
+        {
+            std::wstring szLogMessage =
+                pContext->pConfig->GetString(0x0020701E) +
+                L" '" + engine->szName + L"' " +
+                pContext->pConfig->GetString(0x0020701F) + L"!" + L"\n";
+            OutputDebugString(szLogMessage.c_str());
+            return false;
+        }
+        else
+        {
+            const char *szAftenVersionAnsi = api.LibAften_aften_get_version();
+            std::wstring szVersion = util::StringHelper::Convert(szAftenVersionAnsi);
+            std::wstring szLogMessage =
+                pContext->pConfig->GetString(0x00207020) +
+                L" '" + engine->szName + L"' " +
+                pContext->pConfig->GetString(0x0020701F) + L", " +
+                pContext->pConfig->GetString(0x00207021) +
+                L" " + szVersion + L"\n";
+            OutputDebugString(szLogMessage.c_str());
+        }
+
         api.LibAften_aften_set_defaults(&s);
+
+        s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
+        s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
+        s.system.wanted_simd_instructions.sse2 = engine->nUsedSIMD.at(2);
+        s.system.wanted_simd_instructions.sse3 = engine->nUsedSIMD.at(3);
+        s.system.n_threads = engine->nThreads;
 
         s.params.encoding_mode = preset->nMode;
         s.params.bitrate = preset->nBitrate;
         s.params.quality = preset->nQuality;
-        s.system.n_threads = preset->nThreads;
-        s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD[0];
-        s.system.wanted_simd_instructions.sse = preset->nUsedSIMD[1];
-        s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD[2];
-        s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD[3];
 
-        if (preset->nRawSampleFormat != 0)
+        if (preset->m_RawInput.nRawSampleFormat != 0)
         {
-            switch (preset->nRawSampleFormat)
+            switch (preset->m_RawInput.nRawSampleFormat)
             {
             case 1: opt.raw_fmt = PCM_SAMPLE_FMT_U8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
             case 2: opt.raw_fmt = PCM_SAMPLE_FMT_S8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
@@ -35,64 +58,83 @@ namespace worker
             case 13: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_LE; break;
             case 14: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_BE; break;
             };
-
             opt.raw_input = 1;
         }
 
-        if (preset->nRawSampleRate != 0)
+        if (preset->m_RawInput.nRawSampleRate != 0)
         {
-            opt.raw_sr = preset->nRawSampleRate;
+            opt.raw_sr = preset->m_RawInput.nRawSampleRate;
             opt.raw_input = 1;
         }
 
-        if (preset->nRawChannels != 0)
+        if (preset->m_RawInput.nRawChannels != 0)
         {
-            opt.raw_ch = preset->nRawChannels;
+            opt.raw_ch = preset->m_RawInput.nRawChannels;
             opt.raw_input = 1;
         }
 
-        int nSetting;
+        #define SetSetting(set, type) \
+            nOption++; \
+            { \
+                auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption]; \
+                int nOptionValue = preset->nOptions.at(nOption); \
+                if(option.nIgnoreValue != nOptionValue) \
+                { \
+                    int nValue = option.m_Values[nOptionValue].second; \
+                    (set) = (type) nValue; \
+                } \
+            }
 
-#define SET_AFTEN_SETTING(set, type) \
-    if(config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting]) \
-        (set) = (type) config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting]);
+        int nOption = -1;
 
-        nSetting = 0; SET_AFTEN_SETTING(s.params.bitalloc_fast, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.expstr_search, int)
-            nSetting++; SET_AFTEN_SETTING(opt.pad_start, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.min_bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.max_bwcode, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_rematrixing, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_block_switching, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.cmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.surmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dsurmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dialnorm, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.dynrng_profile, DynRngProfile)
-            nSetting++; SET_AFTEN_SETTING(s.acmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.lfe, int)
-            nSetting++;
-        if (config::CEncoderDefaults::encOpt[nSetting].nIgnoreValue != preset->nSetting[nSetting])
+        SetSetting(s.params.bitalloc_fast, int)
+        SetSetting(s.params.expstr_search, int)
+        SetSetting(opt.pad_start, int)
+        SetSetting(s.params.bwcode, int)
+        SetSetting(s.params.min_bwcode, int)
+        SetSetting(s.params.max_bwcode, int)
+        SetSetting(s.params.use_rematrixing, int)
+        SetSetting(s.params.use_block_switching, int)
+        SetSetting(s.meta.cmixlev, int)
+        SetSetting(s.meta.surmixlev, int)
+        SetSetting(s.meta.dsurmod, int)
+        SetSetting(s.meta.dialnorm, int)
+        SetSetting(s.params.dynrng_profile, DynRngProfile)
+        SetSetting(s.acmod, int)
+        SetSetting(s.lfe, int)
+
+        nOption++;
         {
-            s.acmod = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].acmod;
-            s.lfe = config::CEncoderDefaults::ccAften[config::CEncoderDefaults::encOpt[nSetting].listOptValues.Get(preset->nSetting[nSetting])].lfe;
+            auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption];
+            int nOptionValue = preset->nOptions.at(nOption);
+            if (option.nIgnoreValue != nOptionValue)
+            {
+                int nValue = option.m_Values[nOptionValue].second;
+                auto& channelConfig = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
+                s.acmod = channelConfig.acmod;
+                s.lfe = channelConfig.lfe;
+            }
         }
-        nSetting++; SET_AFTEN_SETTING(opt.chmap, int)
-            nSetting++; SET_AFTEN_SETTING(opt.read_to_eof, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_bw_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_dc_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.params.use_lfe_filter, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.xbsi1e, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dmixmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.ltrtcmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.ltrtsmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.lorocmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.lorosmixlev, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.xbsi2e, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dsurexmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.dheadphonmod, int)
-            nSetting++; SET_AFTEN_SETTING(s.meta.adconvtyp, int)
+
+        SetSetting(opt.chmap, int)
+        SetSetting(opt.read_to_eof, int)
+        SetSetting(s.params.use_bw_filter, int)
+        SetSetting(s.params.use_dc_filter, int)
+        SetSetting(s.params.use_lfe_filter, int)
+        SetSetting(s.meta.xbsi1e, int)
+        SetSetting(s.meta.dmixmod, int)
+        SetSetting(s.meta.ltrtcmixlev, int)
+        SetSetting(s.meta.ltrtsmixlev, int)
+        SetSetting(s.meta.lorocmixlev, int)
+        SetSetting(s.meta.lorosmixlev, int)
+        SetSetting(s.meta.xbsi2e, int)
+        SetSetting(s.meta.dsurexmod, int)
+        SetSetting(s.meta.dheadphonmod, int)
+        SetSetting(s.meta.adconvtyp, int)
+
+        #undef SetSetting
+
+        return true;
     }
 
     void CWorker::UpdateProgress()
@@ -107,49 +149,49 @@ namespace worker
                 std::wstring type, chan, order;
                 std::wstring fmt = L"";
 
-                type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02001).c_str() : _T("?");
-                chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02002).c_str() : _T("?-channel");
+                type = pContext->pConfig->GetString(0x00A02001).c_str();
+                chan = pContext->pConfig->GetString(0x00A02002).c_str();
                 order = L"";
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
                     if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02003).c_str() : _T("Unsigned");
+                        type = pContext->pConfig->GetString(0x00A02003).c_str();
                     else
-                        type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02004).c_str() : _T("Signed");
+                        type = pContext->pConfig->GetString(0x00A02004).c_str();
                 }
                 else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02005).c_str() : _T("Floating-point");
+                    type = pContext->pConfig->GetString(0x00A02005).c_str();
                 }
                 else
                 {
-                    type = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02006).c_str() : _T("[unsupported type]");
+                    type = pContext->pConfig->GetString(0x00A02006).c_str();
                 }
 
                 if (pf_info->ch_mask & 0x08)
                 {
                     switch (pf_info->channels - 1)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02007).c_str() : _T("1.1-channel"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02008).c_str() : _T("2.1-channel"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02009).c_str() : _T("3.1-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200A).c_str() : _T("4.1-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200B).c_str() : _T("5.1-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200C).c_str() : _T("multi-channel with LFE"); break;
+                    case 1: chan = pContext->pConfig->GetString(0x00A02007).c_str(); break;
+                    case 2: chan = pContext->pConfig->GetString(0x00A02008).c_str(); break;
+                    case 3: chan = pContext->pConfig->GetString(0x00A02009).c_str(); break;
+                    case 4: chan = pContext->pConfig->GetString(0x00A0200A).c_str(); break;
+                    case 5: chan = pContext->pConfig->GetString(0x00A0200B).c_str(); break;
+                    default: chan = pContext->pConfig->GetString(0x00A0200C).c_str(); break;
                     }
                 }
                 else
                 {
                     switch (pf_info->channels)
                     {
-                    case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
-                    case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
-                    case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
-                    case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
-                    case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
-                    case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
-                    default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
+                    case 1: chan = pContext->pConfig->GetString(0x00A0200D).c_str(); break;
+                    case 2: chan = pContext->pConfig->GetString(0x00A0200E).c_str(); break;
+                    case 3: chan = pContext->pConfig->GetString(0x00A0200F).c_str(); break;
+                    case 4: chan = pContext->pConfig->GetString(0x00A02010).c_str(); break;
+                    case 5: chan = pContext->pConfig->GetString(0x00A02011).c_str(); break;
+                    case 6: chan = pContext->pConfig->GetString(0x00A02012).c_str(); break;
+                    default: chan = pContext->pConfig->GetString(0x00A02013).c_str(); break;
                     }
                 }
 
@@ -160,15 +202,15 @@ namespace worker
                 }
                 else
                 {
-                    fmt = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02014) : L"unknown";
+                    fmt = pContext->pConfig->GetString(0x00A02014);
                 }
 
                 if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
                 {
                     switch (pf_info->order)
                     {
-                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02015).c_str() : _T("little-endian"); break;
-                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02016).c_str() : _T("big-endian"); break;
+                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->GetString(0x00A02015).c_str(); break;
+                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->GetString(0x00A02016).c_str(); break;
                     }
                 }
                 else
@@ -189,17 +231,17 @@ namespace worker
 
             switch (infoAVS.nAudioChannels)
             {
-            case 1: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200D).c_str() : _T("mono"); break;
-            case 2: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200E).c_str() : _T("stereo"); break;
-            case 3: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0200F).c_str() : _T("3-channel"); break;
-            case 4: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02010).c_str() : _T("4-channel"); break;
-            case 5: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02011).c_str() : _T("5-channel"); break;
-            case 6: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02012).c_str() : _T("6-channel"); break;
-            default: chan = pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02013).c_str() : _T("multi-channel"); break;
+            case 1: chan = pContext->pConfig->GetString(0x00A0200D).c_str(); break;
+            case 2: chan = pContext->pConfig->GetString(0x00A0200E).c_str(); break;
+            case 3: chan = pContext->pConfig->GetString(0x00A0200F).c_str(); break;
+            case 4: chan = pContext->pConfig->GetString(0x00A02010).c_str(); break;
+            case 5: chan = pContext->pConfig->GetString(0x00A02011).c_str(); break;
+            case 6: chan = pContext->pConfig->GetString(0x00A02012).c_str(); break;
+            default: chan = pContext->pConfig->GetString(0x00A02013).c_str(); break;
             }
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02017).c_str() : _T("Avisynth: Raw PCM Floating-point 32-bit little-endian"),
+                pContext->pConfig->GetString(0x00A02017).c_str(),
                 infoAVS.nSamplesPerSecond, chan.c_str());
             std::wstring szInputInfoStr = szInputInfo;
             pContext->SetInputTypeInfo(0, szInputInfoStr);
@@ -209,9 +251,9 @@ namespace worker
         CAtlString szOutputInfo = _T("");
             std::wstring acmod_str[] =
             {
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02018) : L"dual mono (1+1)",
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A02019) : L"mono (1/0)",
-                pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0201A) : L"stereo (2/0)",
+                pContext->pConfig->GetString(0x00A02018),
+                pContext->pConfig->GetString(0x00A02019),
+                pContext->pConfig->GetString(0x00A0201A),
                 L"3/0",
                 L"2/1",
                 L"3/1",
@@ -227,12 +269,9 @@ namespace worker
         }
     }
 
-    BOOL CWorker::HandleError(LPTSTR pszMessage)
+    bool CWorker::HandleError(std::wstring szMessage)
     {
-        pContext->StopCurrentTimer();
-        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
-        pContext->SetCurrentTimerInfo(szBuff);
-        pContext->m_ElapsedTimeFile = 0L;
+        OutputDebugString((szMessage + L"\n").c_str());
 
         if (fwav)
             free(fwav);
@@ -259,13 +298,17 @@ namespace worker
 
         pContext->api.LibAften_aften_encode_close(&s);
 
-        pContext->bTerminate = true;
-        pContext->Close();
+        pContext->api.CloseAftenAPI();
 
-        return(FALSE);
+        pContext->StopCurrentTimer();
+        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
+        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->m_ElapsedTimeFile = 0L;
+
+        return false;
     }
 
-    BOOL CWorker::Run()
+    bool CWorker::Run()
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
         int nr, fs;
@@ -292,16 +335,15 @@ namespace worker
 
         pContext->nInTotalSize = 0;
 
-        memset(ifp, 0, config::CEncoderDefaults::nNumMaxInputFiles * sizeof(FILE *));
+        memset(ifp, 0, 6 * sizeof(FILE *));
 
-        char szInputFileAVS[MAX_PATH] = "";
         if (bAvisynthInput == true)
         {
-            util::Utilities::ConvertUnicodeToAnsi(szInPath[0].c_str(), szInputFileAVS, szInPath[0].length());
-            if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
+            std::string szInputFileAVS = util::StringHelper::Convert(szInPath[0]);
+            if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
                 OutputDebugString(_T("Failed to initialize Avisynth."));
-                return(FALSE);
+                return false;
             }
             else
             {
@@ -320,14 +362,12 @@ namespace worker
                     OutputDebugString(_T("Failed to open input file: ") + CAtlString(szInPath[i].c_str()));
                     pContext->StopCurrentTimer();
 
-                    std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
+                    std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
                     pContext->SetCurrentTimerInfo(szBuff);
 
                     pContext->m_ElapsedTimeFile = 0L;
-                    pContext->bTerminate = true;
-                    pContext->Close();
 
-                    return(FALSE);
+                    return false;
                 }
                 else
                 {
@@ -339,7 +379,7 @@ namespace worker
         errno_t error = _tfopen_s(&ofp, szOutPath.c_str(), _T("wb"));
         if (error != 0)
         {
-            std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
+            std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
             pContext->StopCurrentTimer();
             pContext->m_ElapsedTimeFile = 0L;
@@ -352,10 +392,7 @@ namespace worker
 
             OutputDebugString(_T("Failed to create output file: ") + CAtlString(szOutPath.c_str()));
 
-            pContext->bTerminate = true;
-            pContext->Close();
-
-            return(FALSE);
+            return false;
         }
 
 #ifdef CONFIG_DOUBLE
@@ -372,7 +409,7 @@ namespace worker
         }
         else
         {
-            input_file_format = config::CEncoderDefaults::GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
         }
 
         if (bAvisynthInput == false)
@@ -390,12 +427,6 @@ namespace worker
                 pcm_set_source_params(&pf, opt.raw_ch, opt.raw_fmt, opt.raw_order, opt.raw_sr);
             }
         }
-        else
-        {
-            if (opt.raw_input)
-            {
-            }
-        }
 
         if (bAvisynthInput == true)
         {
@@ -407,7 +438,6 @@ namespace worker
             pf.sample_rate = infoAVS.nSamplesPerSecond;
             pf.channels = infoAVS.nAudioChannels;
             pf.ch_mask = 0xFFFFFFFF;
-
         }
 
         if (s.acmod >= 0)
@@ -558,7 +588,6 @@ namespace worker
                     if (fs > 0)
                         fwrite(frame, 1, fs, ofp);
                 }
-
                 return HandleError(_T("User has terminated encoding."));
             }
 
@@ -708,19 +737,16 @@ namespace worker
         pContext->api.LibAften_aften_encode_close(&s);
 
         pContext->StopCurrentTimer();
-        std::wstring szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005).c_str() : L"Elapsed time:") + std::wstring(L" 00:00:00");
+        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
         pContext->m_ElapsedTimeFile = 0L;
 
-        return(TRUE);
+        return true;
     }
 
-    BOOL CWorker::Encode()
+    bool CWorker::Encode()
     {
         std::wstring szBuff = L"";
-        const unsigned int nAnsiBuffSize = 8192;
-        char szAnsiBuff[nAnsiBuffSize] = "";
-        int nChars = 0;
 
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
@@ -729,20 +755,19 @@ namespace worker
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
 
-        szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01006).c_str() : L"Total elapsed time:") + std::wstring(L" 00:00:00");
+        szBuff = pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00");
 
         pContext->SetTotalTimerInfo(szBuff);
         pContext->StartTotalTimer(250);
 
         int nFileCounter = 0;
-        int nTotalFiles = pContext->pFilesList->Count();
-        int posStatus = 0;
+        int nTotalFiles = (int)pContext->m_Files.size();
 
         nTotalSizeCounter = 0;
 
         if (pContext->bMultiMonoInput == false)
         {
-            for (int i = 0; i < pContext->pFilesList->Count(); i++)
+            for (int i = 0; i < (int)pContext->m_Files.size(); i++)
             {
                 szInPath[0] = L"-";
                 szInPath[1] = L"-";
@@ -752,11 +777,14 @@ namespace worker
                 szInPath[5] = L"-";
                 szOutPath = L"";
 
-                szInPath[0] = pContext->pFilesList->Get(i);
+                szInPath[0] = pContext->m_Files[i];
                 szOutPath = szInPath[0];
                 
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
+                szOutPath = 
+                    szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
+                    L"." + 
+                    pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
@@ -765,19 +793,17 @@ namespace worker
                 }
 
                 CAtlString szTitle;
-                szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100C).c_str() : _T("Encoding file %d of %d"),
-                    nFileCounter + 1,
-                    nTotalFiles);
+                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(), nFileCounter + 1, nTotalFiles);
                 std::wstring szTitleStr = szTitle;
                 pContext->SetTitleInfo(szTitleStr);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
+                szBuff = pContext->pConfig->GetString(0x00A01003) + L"\t" + szInPath[0];
                 pContext->SetInputFileInfo(0, szBuff);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
+                szBuff = pContext->pConfig->GetString(0x00A01004) + L"\t" + szOutPath;
                 pContext->SetOutputFileInfo(szBuff);
 
-                szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
+                szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
                 pContext->SetCurrentTimerInfo(szBuff);
 
                 pContext->m_ElapsedTimeFile = 0L;
@@ -786,25 +812,24 @@ namespace worker
 
                 ZeroMemory(&s, sizeof(AftenContext));
                 ZeroMemory(&opt, sizeof(AftenOpt));
-                InitContext(pContext->pPreset, pContext->api, opt, s);
+                if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                    return false;
 
                 nInputFiles = 1;
 
-                if (Run() == FALSE)
+                if (Run() == false)
                 {
-                    char result = false;
-                    pContext->pStatusList->Set(result, posStatus);
-                    return(FALSE);
-                }
-                else
-                {
-                    char result = true;
-                    pContext->pStatusList->Set(result, posStatus);
+                    pContext->m_Status[i] = false;
+                    pContext->api.CloseAftenAPI();
+                    return false;
                 }
 
-                posStatus++;
+                pContext->m_Status[i] = true;
                 nFileCounter++;
                 pContext->nCount = nFileCounter;
+
+                if (pContext->bTerminate == true)
+                    break;
             }
         }
         else
@@ -817,37 +842,40 @@ namespace worker
             szInPath[5] = _T("-");
             szOutPath = _T("");
 
-            nFileCounter = pContext->pFilesList->Count();
+            nFileCounter = (int)pContext->m_Files.size();
 
             for (int i = 0; i < nFileCounter; i++)
             {
-                szInPath[i] = pContext->pFilesList->Get(i);
+                szInPath[i] = pContext->m_Files[i];
             }
 
             szOutPath = szInPath[0];
 
             std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = szOutPath.substr(0, szOutPath.length() - szExt.length()) + L"." + config::CEncoderDefaults::szSupportedOutputExt[0];
+            szOutPath = 
+                szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
+                L"." + 
+                pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
                 szOutPath = pContext->szOutPath;
 
             CAtlString szTitle;
-            szTitle.Format(pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A0100D).c_str() : _T("Encoding %d mono files"),
+            szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(),
                 nTotalFiles);
             std::wstring szTitleStr = szTitle;
             pContext->SetTitleInfo(szTitleStr);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01003) : L"From:") + L"\t" + szInPath[0];
+            szBuff = pContext->pConfig->GetString(0x00A01003) + L"\t" + szInPath[0];
             pContext->SetInputFileInfo(0, szBuff);
 
             for (int i = 1; i < nFileCounter; i++)
                 pContext->SetInputFileInfo(i, L"\t" + szInPath[i]);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01004) : L"To:") + L"\t" + szOutPath;
+            szBuff = pContext->pConfig->GetString(0x00A01004) + L"\t" + szOutPath;
             pContext->SetOutputFileInfo(szBuff);
 
-            szBuff = (pContext->pConfig->HaveLangStrings() ? pContext->pConfig->GetLangString(0x00A01005) : L"Elapsed time:") + std::wstring(L" 00:00:00");
+            szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
             pContext->SetCurrentTimerInfo(szBuff);
 
             pContext->m_ElapsedTimeFile = 0L;
@@ -856,41 +884,34 @@ namespace worker
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            InitContext(pContext->pPreset, pContext->api, opt, s);
+            if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                return false;
 
             nInputFiles = nFileCounter;
 
-            if (Run() == FALSE)
+            if (Run() == false)
             {
-                for (int i = 0; i < pContext->pStatusList->Count(); i++)
+                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
-                    char result = false;
-                    pContext->pStatusList->Set(result, i);
+                    pContext->m_Status[i] = false;
                 }
                 pContext->nCount = 0;
-                return(FALSE);
+                pContext->api.CloseAftenAPI();
+                return false;
             }
             else
             {
-                for (int i = 0; i < pContext->pStatusList->Count(); i++)
+                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
-                    char result = true;
-                    pContext->pStatusList->Set(result, i);
+                    pContext->m_Status[i] = true;
                 }
                 pContext->nCount = nFileCounter;
             }
         }
 
         pContext->StopTotalTimer();
-        pContext->bTerminate = true;
-        pContext->Close();
+        pContext->api.CloseAftenAPI();
 
-        return(TRUE);
-    }
-
-    DWORD WINAPI EncWorkThread(LPVOID pParam)
-    {
-        CWorker m_Worker((CWorkerContext *)pParam);
-        return m_Worker.Encode();
+        return true;
     }
 }

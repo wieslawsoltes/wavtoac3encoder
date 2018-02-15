@@ -11,12 +11,20 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 
 ## Download WAV to AC3 Encoder
 
-| Platforn              | Type        | Version       | Download                                                                                                                               |
-|-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.exe)          |
-| Windows 64-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.exe)              |
-| Windows 32-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.zip)          |
-| Windows 64-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.zip)              |
+| Platforn              | Type        | Version       | Download                                                                                                                                     |
+|-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| Windows 32-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-Win32.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.exe)                |
+| Windows 64-bit        | Installer   | 7.1           | [EncWAVtoAC3-7.1-x64.exe](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.exe)                    |
+| Windows 32-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Win32.zip)                |
+| Windows 64-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-x64.zip)                    |
+
+### Components
+
+| Platforn              | Type        | Version       | Download                                                                                                                                     |
+|-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| Windows 32-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-Engines-x86.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Engines-x86.zip)    |
+| Windows 64-bit        | Portable    | 7.1           | [EncWAVtoAC3-7.1-Engines-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Engines-x64.zip)    |
+| All                   | Config      | 7.1           | [EncWAVtoAC3-7.1-Config.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/7.1/EncWAVtoAC3-7.1-Config.zip)              |
 
 ## Support WAV to AC3 Encoder
 

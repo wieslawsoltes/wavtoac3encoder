@@ -5,7 +5,7 @@
 
 namespace app
 {
-    int CWorkDlg::nIDIn[config::CEncoderDefaults::nNumMaxInputFiles]
+    int CWorkDlg::nIDIn[6]
     {
         IDC_STATIC_IN_00,
         IDC_STATIC_IN_01,
@@ -15,7 +15,7 @@ namespace app
         IDC_STATIC_IN_05
     };
 
-    int CWorkDlg::nIDInInfo[config::CEncoderDefaults::nNumMaxInputFiles]
+    int CWorkDlg::nIDInInfo[6]
     {
         IDC_STATIC_IN_INFO_00,
         IDC_STATIC_IN_INFO_01,
@@ -29,21 +29,10 @@ namespace app
     CWorkDlg::CWorkDlg(CWnd* pParent /*=nullptr*/)
         : CMyDialogEx(CWorkDlg::IDD, pParent)
     {
-        pWorkerContext = new CWorkDlgWorkerContext(this);
-        pWorkerContext->pConfig = &config::m_Config;
-        pWorkerContext->bTerminate = false;
-        pWorkerContext->bCanUpdateWindow = true;
-        pWorkerContext->hThread = nullptr;
-        pWorkerContext->dwThreadId = 0;
-        pWorkerContext->nCount = 0;
-        pWorkerContext->m_ElapsedTimeFile = 0;
-        pWorkerContext->m_ElapsedTimeTotal = 0;
     }
 
     CWorkDlg::~CWorkDlg()
     {
-        if (pWorkerContext != nullptr)
-            delete pWorkerContext;
     }
 
     void CWorkDlg::DoDataExchange(CDataExchange* pDX)
@@ -78,16 +67,13 @@ namespace app
 
     void CWorkDlg::OnClose()
     {
-        KillTimer(WM_FILE_TIMER);
-        KillTimer(WM_TOTAL_TIMER);
+        this->KillTimer(WM_FILE_TIMER);
+        this->KillTimer(WM_TOTAL_TIMER);
 
-        if (pWorkerContext->bTerminate == false)
+        if (this->pWorkerContext->bTerminate == false)
         {
-            pWorkerContext->bTerminate = true;
-            return;
+            this->pWorkerContext->bTerminate = true;
         }
-        else
-            this->EndDialog(IDOK);
 
         CMyDialogEx::OnClose();
     }
@@ -96,11 +82,9 @@ namespace app
     {
         CMyDialogEx::OnDestroy();
 
-        if (pWorkerContext->hThread != nullptr)
+        if (this->pWorkerContext->bTerminate == false)
         {
-            ::TerminateThread(pWorkerContext->hThread, 0);
-            ::CloseHandle(pWorkerContext->hThread);
-            pWorkerContext->hThread = nullptr;
+            this->pWorkerContext->bTerminate = true;
         }
     }
 
@@ -121,30 +105,32 @@ namespace app
 
     void CWorkDlg::OnBnClickedCancel()
     {
-        if (pWorkerContext->bTerminate == false)
-            pWorkerContext->bTerminate = true;
-        else
-            this->EndDialog(IDOK);
+        if (this->pWorkerContext->bTerminate == false)
+        {
+            this->pWorkerContext->bTerminate = true;
+        }
+
+        this->EndDialog(IDOK);
     }
 
     void CWorkDlg::InitCtrls()
     {
-        if (pWorkerContext->bMultiMonoInput == false)
+        if (this->pWorkerContext->bMultiMonoInput == false)
         {
-            for (int i = 1; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+            for (int i = 1; i < 6; i++)
             {
                 this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
                 this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
             }
 
-            CRect rcIn[config::CEncoderDefaults::nNumMaxInputFiles], rcInInfo[config::CEncoderDefaults::nNumMaxInputFiles];
+            CRect rcIn[6], rcInInfo[6];
             CRect rcOut, rcOutInfo;
             CRect rcElapsed[2];
             CRect rcProgress[2];
             CRect rcGroup, rcBtnCancel;
             CRect rcDlg;
 
-            for (int i = 0; i < config::CEncoderDefaults::nNumMaxInputFiles; i++)
+            for (int i = 0; i < 6; i++)
             {
                 this->GetDlgItem(this->nIDIn[i])->GetWindowRect(rcIn[i]);
                 this->GetDlgItem(this->nIDInInfo[i])->GetWindowRect(rcInInfo[i]);
@@ -204,97 +190,100 @@ namespace app
     void CWorkDlg::UpdateTotalTimer()
     {
         TCHAR strTime[32] = _T("");
-        pWorkerContext->m_ElapsedTimeTotal += 0.25;
+        this->pWorkerContext->m_ElapsedTimeTotal += 0.25;
 
-        if (pWorkerContext->m_ElapsedTimeTotal <= 59)
+        if (this->pWorkerContext->m_ElapsedTimeTotal <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
-                (unsigned long)pWorkerContext->m_ElapsedTimeTotal);
+                this->pConfig->GetString(0x00A01006).c_str(),
+                (unsigned long)this->pWorkerContext->m_ElapsedTimeTotal);
         }
-        else if (pWorkerContext->m_ElapsedTimeTotal <= 3599)
+        else if (this->pWorkerContext->m_ElapsedTimeTotal <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal % 60));
+                this->pConfig->GetString(0x00A01006).c_str(),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01006).c_str() : _T("Total elapsed time:"),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
-                ((((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
+                this->pConfig->GetString(0x00A01006).c_str(),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
+                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
         }
 
-        if (pWorkerContext->bCanUpdateWindow == true)
+        if (this->pWorkerContext->bCanUpdateWindow == true)
         {
-            pWorkerContext->bCanUpdateWindow = false;
+            this->pWorkerContext->bCanUpdateWindow = false;
             m_StcTimeTotal.SetWindowText(strTime);
-            pWorkerContext->bCanUpdateWindow = true;
+            this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
 
     void CWorkDlg::UpdateFileTimer()
     {
         TCHAR strTime[32] = _T("");
-        pWorkerContext->m_ElapsedTimeFile += 0.25;
+        this->pWorkerContext->m_ElapsedTimeFile += 0.25;
 
-        if (pWorkerContext->m_ElapsedTimeFile <= 59)
+        if (this->pWorkerContext->m_ElapsedTimeFile <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
-                (unsigned long)pWorkerContext->m_ElapsedTimeFile);
+                this->pConfig->GetString(0x00A01005).c_str(),
+                (unsigned long)this->pWorkerContext->m_ElapsedTimeFile);
         }
-        else if (pWorkerContext->m_ElapsedTimeFile <= 3599)
+        else if (this->pWorkerContext->m_ElapsedTimeFile <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile % 60));
+                this->pConfig->GetString(0x00A01005).c_str(),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A01005).c_str() : _T("Elapsed time:"),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) / 60,
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60,
-                ((((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
+                this->pConfig->GetString(0x00A01005).c_str(),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) / 60,
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60,
+                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
         }
 
-        if (pWorkerContext->bCanUpdateWindow == true)
+        if (this->pWorkerContext->bCanUpdateWindow == true)
         {
-            pWorkerContext->bCanUpdateWindow = false;
+            this->pWorkerContext->bCanUpdateWindow = false;
             m_StcTimeCurrent.SetWindowText(strTime);
-            pWorkerContext->bCanUpdateWindow = true;
+            this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
 
     void CWorkDlg::CreateWorker()
     {
-        pWorkerContext->hThread = ::CreateThread(nullptr,
-            0,
-            worker::EncWorkThread,
-            pWorkerContext,
-            0,
-            &pWorkerContext->dwThreadId);
-
-        if (pWorkerContext->hThread == nullptr)
+        try
+        {
+            this->m_Thread = std::thread([this]()
+            {
+                try
+                {
+                    worker::CWorker m_Worker(this->pWorkerContext);
+                    m_Worker.Encode();
+                }
+                catch (...) {}
+                this->pWorkerContext->bTerminate = true;
+                this->pWorkerContext->Close();
+            });
+            this->m_Thread.detach();
+        }
+        catch (...)
         {
             OutputDebugString(_T("Error: Failed to create worker thread!"));
-            this->MessageBox(config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A0100B).c_str() : _T("Failed to create worker thread!"),
-                config::m_Config.HaveLangStrings() ? config::m_Config.GetLangString(0x00A0100A).c_str() : _T("Fatal Error"),
-                MB_OK | MB_ICONERROR);
+            this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
     }
 
     void CWorkDlg::InitLang()
     {
-        if (config::m_Config.HaveLangStrings())
-        {
-            this->SetWindowText(config::m_Config.GetLangString(0x00A01001).c_str());
-            this->GetDlgItem(IDCANCEL)->SetWindowText(config::m_Config.GetLangString(0x00A01002).c_str());
-        }
+        this->SetWindowText(this->pConfig->GetString(0x00A01001).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00A01002).c_str());
     }
 }

@@ -1,10 +1,13 @@
-﻿#pragma once
+#pragma once
 
-#include <atlstr.h>
+#include <utility>
 #include <string>
+#include <memory>
+#include <vector>
+#include <map>
+#include <atlstr.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
-#include "utilities\ListT.h"
 #include "utilities\Utilities.h"
 #include "avs\src\Avs2Raw.h"
 
@@ -14,32 +17,25 @@ namespace worker
     {
     public:
         config::CConfiguration * pConfig;
-    public:
         AftenAPI api;
-    public:
-        util::CListT<std::wstring> *pFilesList;
-        util::CListT<char> *pStatusList;
-    public:
-        config::CEncoderPreset * pPreset;
-    public:
+        std::vector<std::wstring> m_Files;
+        std::vector<bool> m_Status;
+        config::CPreset * pPreset;
+        config::CEngine * pEngine;
         bool bUseOutPath;
         std::wstring szOutPath;
         bool bMultiMonoInput;
         int nThreads;
-    public:
         __int64 nInTotalSize;
         __int64 nOutTotalSize;
-    public:
         volatile bool bTerminate;
         volatile bool bCanUpdateWindow;
-        HANDLE hThread;
-        DWORD dwThreadId;
         __int64 nTotalSize;
         double m_ElapsedTimeFile;
         double m_ElapsedTimeTotal;
         int nCount;
     public:
-        CWorkerContext() { }
+        CWorkerContext(config::CConfiguration * pConfig) : pConfig(pConfig) { }
         virtual ~CWorkerContext() { }
     public:
         virtual void SetTitleInfo(std::wstring szInfo) = 0;
@@ -66,38 +62,31 @@ namespace worker
     class CWorker
     {
     public:
-        CWorker(CWorkerContext* pContext)
-        {
-            this->pContext = pContext;
-        }
-        virtual ~CWorker() { }
-    public:
-        CWorkerContext * pContext;
+        std::unique_ptr<worker::CWorkerContext>& pContext;
     private:
         __int64 nTotalSizeCounter;
         int nInputFiles;
         std::wstring szInPath[6];
         std::wstring szOutPath;
-    private:
         AftenOpt opt;
         AftenContext s;
         PcmContext pf;
         uint8_t *frame;
         FLOAT *fwav;
-        FILE *ifp[config::CEncoderDefaults::nNumMaxInputFiles];
+        FILE *ifp[6];
         FILE *ofp;
-    private:
         bool bAvisynthInput;
         AvsAudioInfo infoAVS;
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
-        void InitContext(const config::CEncoderPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        CWorker(std::unique_ptr<worker::CWorkerContext>& pContext) : pContext(pContext) { }
+        virtual ~CWorker() { }
+    public:
+        bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
-        BOOL HandleError(LPTSTR pszMessage);
-        BOOL Run();
-        BOOL Encode();
+        bool HandleError(std::wstring szMessage);
+        bool Run();
+        bool Encode();
     };
-
-    DWORD WINAPI EncWorkThread(LPVOID pParam);
 }

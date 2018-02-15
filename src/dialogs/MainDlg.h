@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -27,35 +28,6 @@
 
 namespace app
 {
-    class ItemToMove
-    {
-    public:
-        int nItem0;
-        int nItem1;
-    public:
-        ItemToMove()
-        {
-        }
-        ItemToMove(const ItemToMove &other)
-        {
-            Copy(other);
-        }
-        ItemToMove& operator=(const ItemToMove &other)
-        {
-            Copy(other);
-            return *this;
-        }
-        virtual ~ItemToMove()
-        {
-        }
-    public:
-        void Copy(const ItemToMove &other)
-        {
-            this->nItem0 = other.nItem0;
-            this->nItem1 = other.nItem1;
-        }
-    };
-
     class CMainDlg : public controls::CMyDialogEx
     {
         DECLARE_DYNAMIC(CMainDlg)
@@ -66,20 +38,11 @@ namespace app
         HICON m_hIcon;
         HACCEL m_hAccelTable;
     public:
-        bool bVisible;
-        AftenAPI api;
         int nSortColumn;
         bool nSortOrder[2];
-        bool bSettingsValueVisible;
-        config::CConfigList m_EngineList;
-        config::CEncoderPresetList encPresets;
-        config::CEncoderPreset defaultPreset;
-        int nCurrentPreset = 0;
-        std::wstring szOutputPath;
-        std::wstring szOutputFile;
-        bool bMultipleMonoInput;
-        bool bDisableAllWarnings;
-        bool bSaveConfig;
+        bool bVisible;
+    public:
+        config::CConfiguration * pConfig;
     public:
         controls::CMyStatusBarCtrl m_StatusBar;
         controls::CMySliderCtrl m_SldBitrate;
@@ -139,18 +102,19 @@ namespace app
         bool SaveFilesList(std::wstring &szFileName, int nFormat);
         bool LoadProgramConfig(std::wstring szFileName);
         bool SaveProgramConfig(std::wstring szFileName);
-        bool UpdateProgramEngines();
+        void UpdateProgramEngines();
+        void ApplyEngineToDlg(config::CEngine &engine);
         bool LoadProgramEngines(std::wstring szFileName);
         bool SaveProgramEngines(std::wstring szFileName);
         void LoadAllConfiguration();
         void SaveAllConfiguration();
-        config::CEncoderPreset& GetCurrentPreset();
+        config::CPreset& GetCurrentPreset();
         void HandleDropFiles(HDROP hDropInfo);
         void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
         void AddItemToFileList(std::wstring szPath);
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
-        void ApplyPresetToDlg(config::CEncoderPreset &preset);
+        void ApplyPresetToDlg(config::CPreset &preset);
         void ShowOptionPopup(bool bUseRect);
         bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS);
     protected:

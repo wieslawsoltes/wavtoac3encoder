@@ -1,132 +1,60 @@
 ﻿[Default]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
-mode=0
-b=0
-q=240
-raw_fmt=0
-raw_sr=0
-raw_ch=0
-fba=0
-exps=7
-pad=1
-w=0
-wmin=0
-wmax=60
-m=1
-s=0
-cmix=0
-smix=0
-dsur=0
-dnorm=31
-dynrng=5
-acmod=8
-lfe=2
-chconfig=16
-chmap=0
-readtoeof=0
-bwfilter=0
-dcfilter=0
-lfefilter=0
-xbsi1=2
-dmixmod=0
-ltrtcmix=4
-ltrtsmix=4
-lorocmix=4
-lorosmix=4
-xbsi2=2
-dsurexmod=0
-dheadphon=0
-adconvtyp=0
+[CBR 32 kbit/s]
+b=32
+[CBR 40 kbit/s]
+b=40
+[CBR 48 kbit/s]
+b=48
+[CBR 56 kbit/s]
+b=56
+[CBR 64 kbit/s]
+b=64
+[CBR 80 kbit/s]
+b=80
+[CBR 96 kbit/s]
+b=96
+[CBR 112 kbit/s]
+b=112
+[CBR 128 kbit/s]
+b=128
+[CBR 160 kbit/s]
+b=160
+[CBR 192 kbit/s]
+b=192
+[CBR 224 kbit/s]
+b=224
+[CBR 256 kbit/s]
+b=256
+[CBR 320 kbit/s]
+b=320
+[CBR 384 kbit/s]
+b=384
+[CBR 448 kbit/s]
+b=448
+[CBR 512 kbit/s]
+b=512
+[CBR 576 kbit/s]
+b=576
+[CBR 640 kbit/s]
+b=640
+[VBR Quality 0 (min)]
+mode=1
+q=0
+[VBR Quality 240 (default)]
+mode=1
+[VBR Quality 1023 (max)]
+mode=1
+q=1023
 [Avisynth 3/2+LFE]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
-mode=0
-b=0
-q=240
-raw_fmt=0
-raw_sr=0
-raw_ch=0
-fba=0
-exps=7
-pad=1
-w=0
-wmin=0
-wmax=60
-m=1
-s=0
-cmix=0
-smix=0
-dsur=0
-dnorm=31
-dynrng=5
 acmod=7
 lfe=1
 chconfig=15
-chmap=0
 readtoeof=1
-bwfilter=0
-dcfilter=0
-lfefilter=0
-xbsi1=2
-dmixmod=0
-ltrtcmix=4
-ltrtsmix=4
-lorocmix=4
-lorosmix=4
-xbsi2=2
-dsurexmod=0
-dheadphon=0
-adconvtyp=0
 [RAW (3/2+LFE, 48000, Float LE)]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
-mode=0
-b=0
-q=240
 raw_fmt=11
 raw_sr=48000
 raw_ch=6
-fba=0
-exps=7
-pad=1
-w=0
-wmin=0
-wmax=60
-m=1
-s=0
-cmix=0
-smix=0
-dsur=0
-dnorm=31
-dynrng=5
 acmod=7
 lfe=1
 chconfig=15
-chmap=0
 readtoeof=1
-bwfilter=0
-dcfilter=0
-lfefilter=0
-xbsi1=2
-dmixmod=0
-ltrtcmix=4
-ltrtsmix=4
-lorocmix=4
-lorosmix=4
-xbsi2=2
-dsurexmod=0
-dheadphon=0
-adconvtyp=0

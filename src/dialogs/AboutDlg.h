@@ -22,6 +22,8 @@ namespace app
     protected:
         virtual void DoDataExchange(CDataExchange* pDX);
         virtual BOOL OnInitDialog();
+    public:
+        config::CConfiguration * pConfig;
     protected:
         void SetBuildInfo();
         void InitLang();
