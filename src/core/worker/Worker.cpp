@@ -39,7 +39,6 @@ namespace worker
             case 13: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_LE; break;
             case 14: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_BE; break;
             };
-
             opt.raw_input = 1;
         }
 
