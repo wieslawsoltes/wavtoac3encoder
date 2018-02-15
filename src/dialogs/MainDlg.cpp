@@ -846,31 +846,27 @@ namespace app
                 else if (ce.first == L"SelectedEngine")
                 {
                     int nEngine = util::StringHelper::ToInt(ce.second);
-                    {
-                        if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
-                            nEngine = 0;
+                    if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
+                        nEngine = 0;
 
-                        if (this->pConfig->nCurrentEngine != nEngine)
-                        {
-                            this->pConfig->nCurrentEngine = nEngine;
-                            this->m_CmbEngines.SetCurSel(nEngine);
-                            this->OnCbnSelchangeComboEngines();
-                        }
+                    if (this->pConfig->nCurrentEngine != nEngine)
+                    {
+                        this->pConfig->nCurrentEngine = nEngine;
+                        this->m_CmbEngines.SetCurSel(nEngine);
+                        this->OnCbnSelchangeComboEngines();
                     }
                 }
                 else if (ce.first == L"SelectedPreset")
                 {
                     int nPreset = util::StringHelper::ToInt(ce.second);
-                    {
-                        if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
-                            nPreset = 0;
+                    if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
+                        nPreset = 0;
 
-                        if (this->pConfig->nCurrentPreset != nPreset)
-                        {
-                            this->pConfig->nCurrentPreset = nPreset;
-                            this->m_CmbPresets.SetCurSel(nPreset);
-                            this->OnCbnSelchangeComboPresets();
-                        }
+                    if (this->pConfig->nCurrentPreset != nPreset)
+                    {
+                        this->pConfig->nCurrentPreset = nPreset;
+                        this->m_CmbPresets.SetCurSel(nPreset);
+                        this->OnCbnSelchangeComboPresets();
                     }
                 }
                 else if (ce.first == L"MultipleMonoInput")
@@ -1113,11 +1109,11 @@ namespace app
             }
         }
 
-        bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
-        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
-
         bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
         OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+
+        bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
+        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
         bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
         OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
@@ -1130,11 +1126,11 @@ namespace app
         bRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
         OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
 
-        bRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
-        OutputDebugString(((bRet ? L"Saved program config: " : L"Error: Failed to save program config: ") + this->pConfig->m_szConfigFilePath).c_str());
-
         bRet = this->SaveProgramEngines(this->pConfig->m_szEnginesFilePath);
         OutputDebugString(((bRet ? L"Saved encoder engines: " : L"Error: Failed to save encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+
+        bRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
+        OutputDebugString(((bRet ? L"Saved program config: " : L"Error: Failed to save program config: ") + this->pConfig->m_szConfigFilePath).c_str());
 
         bRet = this->SaveFilesList(this->pConfig->m_szFilesListFilePath, 0);
         OutputDebugString(((bRet ? L"Saved files list: " : L"Error: Failed to save files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
