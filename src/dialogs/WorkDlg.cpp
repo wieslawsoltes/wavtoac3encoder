@@ -274,6 +274,7 @@ namespace app
                     this->pWorkerContext->Close();
                 }
             });
+            m_Thread.detach();
         }
         catch (...)
         {
