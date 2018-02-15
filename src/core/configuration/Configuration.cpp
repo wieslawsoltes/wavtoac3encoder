@@ -8,9 +8,9 @@
 
 namespace config
 {
-    const std::wstring szReadMode { L"rt, ccs=UTF-8" };
-    const std::wstring szWriteMode { L"wt, ccs=UTF-8" };
-    wchar_t Separator { '=' };
+    const std::wstring szReadMode{ L"rt, ccs=UTF-8" };
+    const std::wstring szWriteMode{ L"wt, ccs=UTF-8" };
+    wchar_t Separator{ '=' };
     const std::wstring szSeparator = L"=";
     const std::wstring szNewCharVar = L"\\n";
     const std::wstring szNewChar = L"\n";
@@ -46,18 +46,7 @@ namespace config
         return buffer;
     }
 
-    int CConfiguration::GetSupportedInputFormat(std::wstring &szExt)
-    {
-        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
-        for (int i = 0; i < nInputExtSize; i++)
-        {
-            if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
-                return m_EncoderOptions.nSupportedInputFormats[i];
-        }
-        return PCM_FORMAT_UNKNOWN;
-    }
-
-    bool CConfiguration::LoadConfig(std::wstring &szFileName, std::vector<Entry> &cl)
+    bool CConfiguration::LoadEntries(std::wstring &szFileName, std::vector<Entry> &entries)
     {
         try
         {
@@ -67,12 +56,12 @@ namespace config
 
             std::wistringstream stream;
             stream.str(data);
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
                 auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
-                    cl.emplace_back(std::make_pair(parts[0], parts[1]));
+                    entries.emplace_back(std::make_pair(parts[0], parts[1]));
                 }
             }
             return true;
@@ -83,7 +72,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveConfig(std::wstring &szFileName, std::vector<Entry> &cl)
+    bool CConfiguration::SaveEntries(std::wstring &szFileName, std::vector<Entry> &entries)
     {
         try
         {
@@ -93,10 +82,10 @@ namespace config
                 return false;
 
             std::wstring szBuffer;
-            int nSize = (int)cl.size();
+            int nSize = (int)entries.size();
             for (int i = 0; i < nSize; i++)
             {
-                auto& ce = cl[i];
+                auto& ce = entries[i];
                 szBuffer = ce.first + szSeparator + ce.second + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
@@ -110,7 +99,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& fl)
+    bool CConfiguration::LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& files)
     {
         try
         {
@@ -120,7 +109,7 @@ namespace config
 
             std::wistringstream stream;
             stream.str(data);
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
                 if (szBuffer.size() > 0)
                 {
@@ -128,7 +117,7 @@ namespace config
                     if (IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
                     {
                         std::wstring szPath = szBuffer;
-                        fl.emplace_back(szPath);
+                        files.emplace_back(szPath);
                     }
                 }
                 szBuffer = L"";
@@ -142,7 +131,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& fl, int nFormat)
+    bool CConfiguration::SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& files, int nFormat)
     {
         try
         {
@@ -152,10 +141,10 @@ namespace config
                 return false;
 
             std::wstring szBuffer;
-            int nItems = (int)fl.size();
+            int nItems = (int)files.size();
             for (int i = 0; i < nItems; i++)
             {
-                std::wstring &szPath = fl[i];
+                std::wstring &szPath = files[i];
                 szBuffer = (nFormat == 0 ? L"" : L"\"") + szPath + (nFormat == 0 ? L"" : L"\"") + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
             }
@@ -169,7 +158,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_Languages)
+    bool CConfiguration::FindLanguages(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& languages)
     {
         try
         {
@@ -183,12 +172,12 @@ namespace config
                     if (util::StringHelper::TowLower(ext) == L"txt")
                     {
                         CLanguage lang;
-                        if (this->LoadLang(file, lang.m_Strings) == true)
+                        if (this->LoadStrings(file, lang.m_Strings) == true)
                         {
                             lang.szFileName = file;
                             lang.szEnglishName = (lang.m_Strings.count(0x00000001) == 1) ? lang.m_Strings[0x00000001] : L"??";
                             lang.szTargetName = (lang.m_Strings.count(0x00000002) == 1) ? lang.m_Strings[0x00000002] : L"??";
-                            m_Languages.emplace_back(std::move(lang));
+                            languages.emplace_back(std::move(lang));
                         }
                     }
                 }
@@ -201,7 +190,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLang(std::wstring &szFileName, std::map<int, std::wstring>& m_Strings)
+    bool CConfiguration::LoadStrings(std::wstring &szFileName, std::map<int, std::wstring>& strings)
     {
         try
         {
@@ -209,20 +198,20 @@ namespace config
             if (data.empty())
                 return false;
 
-            m_Strings.clear();
+            strings.clear();
 
             std::wstring szBuffer = L"";
             std::wistringstream stream;
             stream.str(data);
 
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
                 auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
                     util::StringHelper::Replace(parts[1], szNewCharVar, szNewChar);
                     util::StringHelper::Replace(parts[1], szTabCharVar, szTabChar);
-                    m_Strings[util::StringHelper::ToIntFromHex(parts[0])] = parts[1];
+                    strings[util::StringHelper::ToIntFromHex(parts[0])] = parts[1];
                 }
                 szBuffer = L"";
             }
@@ -234,7 +223,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLangConfig(std::wstring &szFileName)
+    bool CConfiguration::LoadLanguagePath(std::wstring &szFileName)
     {
         try
         {
@@ -244,7 +233,7 @@ namespace config
 
             std::wistringstream stream;
             stream.str(data);
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
                 m_szLangFileName = szBuffer;
                 return true;
@@ -257,7 +246,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveLangConfig(std::wstring &szFileName)
+    bool CConfiguration::SaveLanguagePath(std::wstring &szFileName)
     {
         try
         {
@@ -278,9 +267,9 @@ namespace config
         }
     }
 
-    void CConfiguration::LoadLangStrings(std::wstring szLangPath)
+    void CConfiguration::LoadLLanguages(std::wstring szLangPath)
     {
-        SearchFolderForLang(szLangPath, false, m_Languages);
+        FindLanguages(szLangPath, false, m_Languages);
 
         if (m_Languages.size() > 0)
         {
@@ -327,31 +316,11 @@ namespace config
         return L"??";
     }
 
-    int CConfiguration::FindValidBitratePos(const int nBitrate)
+    void CConfiguration::ParseEngineEntries(CEngine &engine, std::vector<Entry> &entries)
     {
-        for (int i = 0; i < (int)m_EncoderOptions.nValidCbrBitrates.size(); i++)
+        for (int i = 0; i < (int)entries.size(); i++)
         {
-            if (m_EncoderOptions.nValidCbrBitrates[i] == nBitrate)
-                return i;
-        }
-        return 0;
-    }
-
-    int CConfiguration::FindOptionIndex(std::wstring szOption)
-    {
-        for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
-        {
-            if (szOption == TrimOption(m_EncoderOptions.m_Options[i].szOption))
-                return i;
-        }
-        return 0;
-    }
-
-    void CConfiguration::ParseEngine(CEngine &engine, std::vector<Entry> &cl)
-    {
-        for (int i = 0; i < (int)cl.size(); i++)
-        {
-            auto& ce = cl[i];
+            auto& ce = entries[i];
 
             if (ce.first == L"path")
             {
@@ -416,7 +385,7 @@ namespace config
                     {
                         if (bHaveEngine == true)
                         {
-                            ParseEngine(temp, cl);
+                            ParseEngineEntries(temp, cl);
                             auto engine = temp;
                             engines.emplace_back(engine);
                             cl.clear();
@@ -438,7 +407,7 @@ namespace config
 
             if (bHaveEngine == true)
             {
-                ParseEngine(temp, cl);
+                ParseEngineEntries(temp, cl);
                 auto engine = temp;
                 engines.emplace_back(engine);
                 cl.clear();
@@ -498,11 +467,11 @@ namespace config
         }
     }
 
-    void CConfiguration::ParsePreset(CPreset &preset, std::vector<Entry> &cl)
+    void CConfiguration::ParsePresetEntries(CPreset &preset, std::vector<Entry> &entries)
     {
-        for (int i = 0; i < (int)cl.size(); i++)
+        for (int i = 0; i < (int)entries.size(); i++)
         {
-            auto& ce = cl[i];
+            auto& ce = entries[i];
 
             if (ce.first == L"mode")
             {
@@ -575,7 +544,7 @@ namespace config
                     {
                         if (bHavePreset == true)
                         {
-                            ParsePreset(temp, cl);
+                            ParsePresetEntries(temp, cl);
                             auto preset = temp;
                             presets.emplace_back(preset);
                             cl.clear();
@@ -597,7 +566,7 @@ namespace config
 
             if (bHavePreset == true)
             {
-                ParsePreset(temp, cl);
+                ParsePresetEntries(temp, cl);
                 auto preset = temp;
                 presets.emplace_back(preset);
                 cl.clear();
@@ -666,7 +635,7 @@ namespace config
                 {
                     auto& option = m_EncoderOptions.m_Options[j];
                     int nOptionValue = preset.nOptions[j];
-                    if(nOptionValue != option.nDefaultValue)
+                    if (nOptionValue != option.nDefaultValue)
                     {
                         szBuffer = TrimOption(option.szOption) + szSeparator + std::to_wstring(nOptionValue) + szNewChar;
                         std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
@@ -683,6 +652,26 @@ namespace config
         }
     }
 
+    int CConfiguration::FindValidBitrateIndex(const int nBitrate)
+    {
+        for (int i = 0; i < (int)m_EncoderOptions.nValidCbrBitrates.size(); i++)
+        {
+            if (m_EncoderOptions.nValidCbrBitrates[i] == nBitrate)
+                return i;
+        }
+        return 0;
+    }
+
+    int CConfiguration::FindOptionIndex(std::wstring szOption)
+    {
+        for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
+        {
+            if (szOption == TrimOption(m_EncoderOptions.m_Options[i].szOption))
+                return i;
+        }
+        return 0;
+    }
+
     bool CConfiguration::IsSupportedInputExt(std::wstring &szExt)
     {
         int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
@@ -692,6 +681,43 @@ namespace config
                 return true;
         }
         return false;
+    }
+
+    int CConfiguration::GetSupportedInputFormat(std::wstring &szExt)
+    {
+        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
+        for (int i = 0; i < nInputExtSize; i++)
+        {
+            if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
+                return m_EncoderOptions.nSupportedInputFormats[i];
+        }
+        return PCM_FORMAT_UNKNOWN;
+    }
+
+    std::wstring CConfiguration::GetSupportedInputFilesFilter()
+    {
+        std::wstring szFilter = L"";
+        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
+
+        for (int i = 0; i < (int)nInputExtSize; i++)
+        {
+            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
+            szFilter += L"*." + util::StringHelper::TowLower(szExt) + ((i < (int)nInputExtSize - 1) ? L";" : L"");
+        }
+
+        szFilter = this->GetString(0x00207006) + L" (" + szFilter + L")|" + szFilter + L"|";
+
+        for (int i = 0; i < (int)nInputExtSize; i++)
+        {
+            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
+            std::wstring szExtL = util::StringHelper::TowLower(szExt);
+            std::wstring szExtU = util::StringHelper::ToUpper(szExt);
+            szFilter += szExtU + L" " + this->GetString(0x00207007) + L" (*." + szExtL + L")|*." + szExtL + L"|";
+        }
+
+        szFilter += this->GetString(0x00207008) + L" (*.*)|*.*||";
+
+        return szFilter;
     }
 
     void CConfiguration::SetEncoderOptions()
@@ -776,7 +802,7 @@ namespace config
         };
 
         m_EncoderOptions.szSupportedOutputExt = {
-           L"ac3"
+            L"ac3"
         };
 
         #define AddOption(name, option, tip, dval, ival, group, begin) \
@@ -850,7 +876,7 @@ namespace config
         AddValue(L"-6 dB", 1)
         AddValue(L"0", 2)
 
-        AddOption(GetString(0x00403001) , L"-dsur", GetString(0x00403002), 0, -1, L"", false)
+        AddOption(GetString(0x00403001), L"-dsur", GetString(0x00403002), 0, -1, L"", false)
         AddValue(GetString(0x00403003), 0)
         AddValue(GetString(0x00403004), 1)
         AddValue(GetString(0x00403005), 2)
@@ -994,31 +1020,5 @@ namespace config
 
         #undef AddOption
         #undef AddValue
-    }
-
-    std::wstring CConfiguration::GetSupportedInputFilesFilter()
-    {
-        std::wstring szFilter = L"";
-        int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
-
-        for (int i = 0; i < (int)nInputExtSize; i++)
-        {
-            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
-            szFilter += L"*." + util::StringHelper::TowLower(szExt) + ((i < (int)nInputExtSize - 1) ? L";" : L"");
-        }
-
-        szFilter = this->GetString(0x00207006) + L" (" + szFilter + L")|" + szFilter + L"|";
-
-        for (int i = 0; i < (int)nInputExtSize; i++)
-        {
-            std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
-            std::wstring szExtL = util::StringHelper::TowLower(szExt);
-            std::wstring szExtU = util::StringHelper::ToUpper(szExt);
-            szFilter += szExtU + L" " + this->GetString(0x00207007) + L" (*." + szExtL + L")|*." + szExtL + L"|";
-        }
-
-        szFilter += this->GetString(0x00207008) + L" (*.*)|*.*||";
-
-        return szFilter;
     }
 }

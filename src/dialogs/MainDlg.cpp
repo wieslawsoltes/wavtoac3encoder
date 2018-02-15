@@ -495,7 +495,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nMode = AFTEN_ENC_MODE_CBR;
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            int nNewPos = this->pConfig->FindValidBitratePos(GetCurrentPreset().nBitrate);
+            int nNewPos = this->pConfig->FindValidBitrateIndex(GetCurrentPreset().nBitrate);
             this->m_SldBitrate.SetPos(nNewPos);
         }
 
@@ -791,7 +791,7 @@ namespace app
     bool CMainDlg::LoadProgramConfig(std::wstring szFileName)
     {
         std::vector<config::Entry> cl;
-        if (this->pConfig->LoadConfig(szFileName, cl) == true)
+        if (this->pConfig->LoadEntries(szFileName, cl) == true)
         {
             int nSize = (int)cl.size();
             for (int i = 0; i < nSize; i++)
@@ -974,7 +974,7 @@ namespace app
         cl.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
         cl.emplace_back(std::make_pair(L"SaveConfig", (this->pConfig->bSaveConfig == true) ? L"true" : L"false"));
 
-        return this->pConfig->SaveConfig(szFileName, cl);
+        return this->pConfig->SaveEntries(szFileName, cl);
     }
 
     bool CMainDlg::UpdateProgramEngines()
@@ -1228,7 +1228,7 @@ namespace app
         {
             this->m_SldBitrate.SetTic(1);
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            int nPos = this->pConfig->FindValidBitratePos(preset.nBitrate);
+            int nPos = this->pConfig->FindValidBitrateIndex(preset.nBitrate);
             this->m_SldBitrate.SetPos(nPos);
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
@@ -1764,7 +1764,7 @@ namespace app
         {
             this->m_SldBitrate.SetTic(1);
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            this->m_SldBitrate.SetPos(this->pConfig->FindValidBitratePos(pConfig->m_DefaultPreset.nBitrate));
+            this->m_SldBitrate.SetPos(this->pConfig->FindValidBitrateIndex(pConfig->m_DefaultPreset.nBitrate));
             this->m_ChkVbr.SetCheck(BST_UNCHECKED);
         }
         else if (pConfig->m_DefaultPreset.nMode == AFTEN_ENC_MODE_VBR)

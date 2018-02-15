@@ -120,14 +120,12 @@ namespace config
         std::vector<CLanguage> m_Languages;
         std::wstring m_szLangFileName;
         int m_nLangId;
-    public:
         bool m_bIsPortable;
         std::wstring m_szPresetsFilePath;
         std::wstring m_szConfigFilePath;
         std::wstring m_szEnginesFilePath;
         std::wstring m_szFilesListFilePath;
         std::wstring m_szLangFilePath;
-    public:
         std::vector<CEngine> m_Engines;
         int nCurrentEngine;
         std::vector<config::CPreset> m_Presets;
@@ -138,31 +136,28 @@ namespace config
         bool bMultipleMonoInput;
         bool bDisableAllWarnings;
         bool bSaveConfig;
-    public:
         CEncoderOptions m_EncoderOptions;
     public:
-        bool LoadConfig(std::wstring &szFileName, std::vector<Entry> &cl);
-        bool SaveConfig(std::wstring &szFileName, std::vector<Entry> &cl);
-        bool LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& fl);
-        bool SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& fl, int nFormat);
-        bool SearchFolderForLang(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& m_Languages);
-        bool LoadLang(std::wstring &szFileName, std::map<int, std::wstring> &m_Strings);
-        bool LoadLangConfig(std::wstring &szFileName);
-        bool SaveLangConfig(std::wstring &szFileName);
-        void LoadLangStrings(std::wstring szLangPath);
+        bool LoadEntries(std::wstring &szFileName, std::vector<Entry> &entries);
+        bool SaveEntries(std::wstring &szFileName, std::vector<Entry> &entries);
+        bool LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& files);
+        bool SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& files, int nFormat);
+        bool FindLanguages(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& languages);
+        bool LoadStrings(std::wstring &szFileName, std::map<int, std::wstring> &strings);
+        bool LoadLanguagePath(std::wstring &szFileName);
+        bool SaveLanguagePath(std::wstring &szFileName);
+        void LoadLLanguages(std::wstring szLangPath);
         std::wstring CConfiguration::GetString(const int nKey);
-    public:
-        int FindValidBitratePos(const int nBitrate);
-        int FindOptionIndex(std::wstring szOption);
-        void ParseEngine(CEngine &engine, std::vector<Entry> &cl);
+        void ParseEngineEntries(CEngine &engine, std::vector<Entry> &entries);
         bool LoadEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
         bool SaveEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
-        void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
+        void ParsePresetEntries(CPreset &preset, std::vector<Entry> &entries);
         bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
         bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
+        int FindValidBitrateIndex(const int nBitrate);
+        int FindOptionIndex(std::wstring szOption);
         bool IsSupportedInputExt(std::wstring &szExt);
         int GetSupportedInputFormat(std::wstring &szExt);
-    public:
         void SetEncoderOptions();
         std::wstring GetSupportedInputFilesFilter();
     };
