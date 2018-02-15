@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "MainApp.h"
 #include "MainDlg.h"
 #include "WorkDlg.h"
@@ -398,7 +398,7 @@ namespace app
         dlg.DoModal();
         countTime.Stop();
 
-        dlg.pWorkerContext->Wait();
+        dlg.pWorkerContext->Wait(1000);
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;

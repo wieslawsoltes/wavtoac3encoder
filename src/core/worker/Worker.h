@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <utility>
 #include <string>
@@ -53,7 +53,7 @@ namespace worker
     {
     public:
         std::thread m_Thread;
-        std::mutex m_Mutex;
+        std::timed_mutex m_Mutex;
     public:
         config::CConfiguration * pConfig;
         AftenAPI api;
@@ -112,10 +112,12 @@ namespace worker
             });
             this->m_Thread.detach();
         }
-        virtual void Wait()
+        virtual void Wait(int ms = 0)
         {
-            auto timeount = std::chrono::duration<int, std::milli>(1000);
-            std::unique_lock<std::mutex> lk(this->m_Mutex, timeount);
+            if (ms == 0)
+                std::unique_lock<std::mutex> lk(this->m_Mutex);
+            else
+                std::unique_lock<std::timed_mutex> lk(this->m_Mutex, std::chrono::milliseconds(ms));
         }
     };
 }
