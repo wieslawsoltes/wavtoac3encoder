@@ -1,4 +1,4 @@
-﻿#include "StdAfx.h"
+#include "StdAfx.h"
 #include "MainApp.h"
 #include "WorkDlg.h"
 #include "utilities\Utilities.h"
@@ -115,7 +115,20 @@ namespace app
 
     void CWorkDlg::OnBnClickedCancel()
     {
-        this->EndDialog(IDOK);
+        if (pWorkerContext->bTerminate == false)
+        {
+            pWorkerContext->bTerminate = true;
+        }
+        else
+        {
+            this->EndDialog(IDOK);
+        }
+
+        if (m_Thread.joinable() == true)
+        {
+            m_Thread.join();
+            this->EndDialog(IDOK);
+        }
     }
 
     void CWorkDlg::InitCtrls()
