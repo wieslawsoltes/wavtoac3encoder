@@ -3,18 +3,22 @@
 
 namespace worker
 {
-    void CWorker::InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
+    void CWorker::InitContext(const config::CEngine *engine, const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
     {
         api.LibAften_aften_set_defaults(&s);
+
+        if (engine != engine)
+        {
+            s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
+            s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
+            s.system.wanted_simd_instructions.sse2 = engine->nUsedSIMD.at(2);
+            s.system.wanted_simd_instructions.sse3 = engine->nUsedSIMD.at(3);
+            s.system.n_threads = engine->nThreads;
+        }
 
         s.params.encoding_mode = preset->nMode;
         s.params.bitrate = preset->nBitrate;
         s.params.quality = preset->nQuality;
-        s.system.n_threads = preset->nThreads;
-        s.system.wanted_simd_instructions.mmx = preset->nUsedSIMD.at(0);
-        s.system.wanted_simd_instructions.sse = preset->nUsedSIMD.at(1);
-        s.system.wanted_simd_instructions.sse2 = preset->nUsedSIMD.at(2);
-        s.system.wanted_simd_instructions.sse3 = preset->nUsedSIMD.at(3);
 
         if (preset->m_RawInput.nRawSampleFormat != 0)
         {
@@ -788,7 +792,7 @@ namespace worker
 
                 ZeroMemory(&s, sizeof(AftenContext));
                 ZeroMemory(&opt, sizeof(AftenOpt));
-                InitContext(pContext->pPreset, pContext->api, opt, s);
+                InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s);
 
                 nInputFiles = 1;
 
@@ -859,7 +863,7 @@ namespace worker
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            InitContext(pContext->pPreset, pContext->api, opt, s);
+            InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s);
 
             nInputFiles = nFileCounter;
 

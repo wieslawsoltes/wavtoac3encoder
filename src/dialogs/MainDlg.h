@@ -104,6 +104,7 @@ namespace app
         bool LoadProgramConfig(std::wstring szFileName);
         bool SaveProgramConfig(std::wstring szFileName);
         bool UpdateProgramEngines();
+        void ApplyEngineToDlg(config::CEngine &engine);
         bool LoadProgramEngines(std::wstring szFileName);
         bool SaveProgramEngines(std::wstring szFileName);
         void LoadAllConfiguration();

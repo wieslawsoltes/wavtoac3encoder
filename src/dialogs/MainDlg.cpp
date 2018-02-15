@@ -329,6 +329,11 @@ namespace app
 
         dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
 
+        if (this->pConfig->nCurrentEngine >= 0)
+            dlg.pWorkerContext->pEngine = &pConfig->m_Engines[this->pConfig->nCurrentEngine];
+        else
+            dlg.pWorkerContext->pEngine = nullptr;
+
         CString szOutPath;
         this->m_EdtOutPath.GetWindowText(szOutPath);
         dlg.pWorkerContext->szOutPath = szOutPath;
@@ -441,26 +446,38 @@ namespace app
 
     void CMainDlg::OnBnClickedCheckSimdMmx()
     {
-        auto& preset = GetCurrentPreset();
-        preset.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
+        if (this->pConfig->nCurrentEngine >= 0)
+        {
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            engine.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
+        }
     }
 
     void CMainDlg::OnBnClickedCheckSimdSse()
     {
-        auto& preset = GetCurrentPreset();
-        preset.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
+        if (this->pConfig->nCurrentEngine >= 0)
+        {
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            engine.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
+        }
     }
 
     void CMainDlg::OnBnClickedCheckSimdSse2()
     {
-        auto& preset = GetCurrentPreset();
-        preset.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
+        if (this->pConfig->nCurrentEngine >= 0)
+        {
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            engine.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
+        }
     }
 
     void CMainDlg::OnBnClickedCheckSimdSse3()
     {
-        auto& preset = GetCurrentPreset();
-        preset.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
+        if (this->pConfig->nCurrentEngine >= 0)
+        {
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            engine.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
+        }
     }
 
     void CMainDlg::OnBnClickedCheckVbr()
@@ -696,39 +713,29 @@ namespace app
     void CMainDlg::OnCbnSelchangeComboEngines()
     {
         if (this->api.IsAftenOpen())
-        {
             this->api.CloseAftenAPI();
-        }
 
         int nSel = this->m_CmbEngines.GetCurSel();
         if (nSel == CB_ERR)
-        {
             return;
-        }
 
-        auto& preset = GetCurrentPreset();
-        preset.nCurrentEngine = nSel;
+        this->pConfig->nCurrentEngine = nSel;
 
         if (this->pConfig->m_bIsPortable == true)
-        {
             ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        }
         else
-        {
             ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
-        }
 
-        if (this->api.IsAftenOpen())
-        {
-            this->api.CloseAftenAPI();
-        }
+        auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
 
-        this->api.szLibPath = pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].second;
+        this->ApplyEngineToDlg(engine);
+
+        this->api.szLibPath = engine.szPath;
         if (this->api.OpenAftenAPI() == false)
         {
             std::wstring szLogMessage =
                 this->pConfig->GetString(0x0020701E) +
-                L" '" + pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].first + L"' " +
+                L" '" + pengine.szname + L"' " +
                 this->pConfig->GetString(0x0020701F) + L"!";
             this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
         }
@@ -744,7 +751,7 @@ namespace app
 
             std::wstring szLogMessage =
                 this->pConfig->GetString(0x00207020) +
-                L" '" + pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].first + L"' " +
+                L" '" + engine.szName + L"' " +
                 this->pConfig->GetString(0x0020701F) + L", " +
                 this->pConfig->GetString(0x00207021) +
                 L" " + szAftenVersion;
@@ -834,6 +841,21 @@ namespace app
                     if (!ce.second.empty() && ce.second != this->pConfig->GetString(0x00207005).c_str())
                     {
                         this->pConfig->szOutputFile = ce.second;
+                    }
+                }
+                else if (ce.first == L"SelectedEngine")
+                {
+                    int nEngine = util::StringHelper::ToInt(ce.second);
+                    {
+                        if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
+                            nEngine = 0;
+
+                        if (this->pConfig->nCurrentEngine != nEngine)
+                        {
+                            this->pConfig->nCurrentEngine = nEngine;
+                            this->m_CmbEngines.SetCurSel(nEngine);
+                            this->OnCbnSelchangeComboEngines();
+                        }
                     }
                 }
                 else if (ce.first == L"SelectedPreset")
@@ -950,6 +972,7 @@ namespace app
 
         cl.emplace_back(std::make_pair(L"OutputPath", (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath));
         cl.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
+        cl.emplace_back(std::make_pair(L"SelectedEngine", std::to_wstring(this->m_CmbEngines.GetCurSel())));
         cl.emplace_back(std::make_pair(L"SelectedPreset", std::to_wstring(this->m_CmbPresets.GetCurSel())));
         cl.emplace_back(std::make_pair(L"MultipleMonoInput", (this->pConfig->bMultipleMonoInput == true) ? L"true" : L"false"));
         cl.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
@@ -962,22 +985,20 @@ namespace app
     {
         if (this->pConfig->m_Engines.size() == 0)
         {
-            auto ce = std::make_pair(L"Aften", L"libaften.dll");
-            this->pConfig->m_Engines.emplace_back(ce);
+            auto engine = config::CEngine(L"Aften", L"libaften.dll");
+            this->pConfig->m_Engines.emplace_back(engine);
+            this->pConfig->nCurrentEngine = 0;
 
-            auto& preset = GetCurrentPreset();
-            preset.nCurrentEngine = 0;
-
-            this->m_CmbEngines.InsertString(0, ce.first);
-            this->m_CmbEngines.SetCurSel(0);
+            this->m_CmbEngines.InsertString(0, engine.szName.c_str());
+            this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
 
             if (this->api.IsAftenOpen())
-            {
                 this->api.CloseAftenAPI();
-            }
 
-            this->api.szLibPath = pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].second;
+            this->api.szLibPath = engine.szPath;
             this->api.OpenAftenAPI();
+
+            this->ApplyEngineToDlg(engine);
 
             return false;
         }
@@ -985,38 +1006,42 @@ namespace app
         int nSize = (int)this->pConfig->m_Engines.size();
         for (int i = 0; i < nSize; i++)
         {
-            auto& ce = this->pConfig->m_Engines[i];
-            this->m_CmbEngines.InsertString(i, ce.first.c_str());
+            auto& engine = this->pConfig->m_Engines[i];
+            this->m_CmbEngines.InsertString(i, engine.szName.c_str());
         }
 
-        if (GetCurrentPreset().nCurrentEngine > nSize)
-        {
-            auto& preset = GetCurrentPreset();
-            preset.nCurrentEngine = 0;
-        }
+        if (this->pConfig->nCurrentEngine >= nSize)
+            this->pConfig->nCurrentEngine = 0;
 
-        if ((GetCurrentPreset().nCurrentEngine >= 0) && (GetCurrentPreset().nCurrentEngine < nSize))
+        if (this->pConfig->nCurrentEngine >= 0) && this->pConfig->nCurrentEngine < nSize))
         {
             if (this->api.IsAftenOpen())
-            {
                 this->api.CloseAftenAPI();
-            }
 
-            this->api.szLibPath = pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].second;
-            if (this->api.OpenAftenAPI() == false)
-            {
-                this->m_CmbEngines.SetCurSel(0);
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
 
-                auto& preset = GetCurrentPreset();
-                preset.nCurrentEngine = 0;
-            }
-            else
-            {
-                this->m_CmbEngines.SetCurSel(GetCurrentPreset().nCurrentEngine);
-            }
+            this->api.szLibPath = engine.szPath;
+            this->api.OpenAftenAPI();
+
+            this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
+
+            this->ApplyEngineToDlg(engine);
         }
 
         return true;
+    }
+
+    void CMainDlg::ApplyEngineToDlg(config::CEngine &engine)
+    {
+        this->m_ChkSimdMMX.SetCheck(engine.nUsedSIMD[0] == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE.SetCheck(engine.nUsedSIMD[1] == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE2.SetCheck(engine.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE3.SetCheck(engine.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
+
+        if (engine.nThreads == 0)
+            this->m_EdtThreads.SetWindowText(this->pConfig->GetString(0x00207002).c_str());
+        else
+            this->m_EdtThreads.SetWindowText(std::to_wstring(engine.nThreads).c_str());
     }
 
     bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
@@ -1032,7 +1057,7 @@ namespace app
 
     bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return this->pConfig->SaveConfig(szFileName, this->pConfig->m_Engines);
+        return this->pConfig->SaveEngines(szFileName, this->pConfig->m_Engines);
     }
 
     bool CMainDlg::LoadFilesList(std::wstring &szFileName)
@@ -1195,7 +1220,6 @@ namespace app
 
     void CMainDlg::ApplyPresetToDlg(config::CPreset &preset)
     {
-        
         for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options.size(); i++)
         {
             int nOption = preset.nOptions[i];
@@ -1221,23 +1245,6 @@ namespace app
             this->m_ChkVbr.SetCheck(BST_CHECKED);
         }
 
-        this->m_ChkSimdMMX.SetCheck(preset.nUsedSIMD[0] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE.SetCheck(preset.nUsedSIMD[1] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE2.SetCheck(preset.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE3.SetCheck(preset.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
-
-        if (preset.nThreads == 0)
-        {
-            this->m_EdtThreads.SetWindowText(this->pConfig->GetString(0x00207002).c_str());
-        }
-        else
-        {
-            CString szBuff;
-            szBuff.Format(_T("%d"), preset.nThreads);
-            this->m_EdtThreads.SetWindowText(szBuff);
-        }
-
-        this->m_CmbEngines.SetCurSel(preset.nCurrentEngine);
         this->m_CmbRawSampleFormat.SetCurSel(preset.m_RawInput.nRawSampleFormat);
 
         if (preset.m_RawInput.nRawSampleRate == 0)
@@ -1548,8 +1555,11 @@ namespace app
             }
         }
 
-        auto& preset = GetCurrentPreset();
-        preset.nThreads = nPos;
+        if (this->pConfig->nCurrentEngine >= 0)
+        {
+            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            engine.nThreads = nPos;
+        }
     }
 
     void CMainDlg::OnEnChangeEditOutputPath()
@@ -1723,12 +1733,6 @@ namespace app
         pConfig->m_DefaultPreset.m_RawInput.nRawChannels = 0;
         pConfig->m_DefaultPreset.m_RawInput.nRawSampleFormat = 0;
         pConfig->m_DefaultPreset.m_RawInput.nRawSampleRate = 0;
-        pConfig->m_DefaultPreset.nCurrentEngine = 0;
-        pConfig->m_DefaultPreset.nThreads = 0;
-        pConfig->m_DefaultPreset.nUsedSIMD[0] = 1;
-        pConfig->m_DefaultPreset.nUsedSIMD[1] = 1;
-        pConfig->m_DefaultPreset.nUsedSIMD[2] = 1;
-        pConfig->m_DefaultPreset.nUsedSIMD[3] = 1;
 
         this->pConfig->nCurrentPreset = 0;
         this->m_CmbPresets.InsertString(0, pConfig->m_DefaultPreset.szName.c_str());
@@ -1756,22 +1760,6 @@ namespace app
             CString szBuff;
             szBuff.Format(_T("%d"), pConfig->m_DefaultPreset.m_RawInput.nRawChannels);
             this->m_EdtRawChannels.SetWindowText(szBuff);
-        }
-
-        this->m_ChkSimdMMX.SetCheck(pConfig->m_DefaultPreset.nUsedSIMD[0] == 1 ? BST_CHECKED : BST_UNCHECKED);
-        this->m_ChkSimdSSE.SetCheck(pConfig->m_DefaultPreset.nUsedSIMD[1] == 1 ? BST_CHECKED : BST_UNCHECKED);
-        this->m_ChkSimdSSE2.SetCheck(pConfig->m_DefaultPreset.nUsedSIMD[2] == 1 ? BST_CHECKED : BST_UNCHECKED);
-        this->m_ChkSimdSSE3.SetCheck(pConfig->m_DefaultPreset.nUsedSIMD[3] == 1 ? BST_CHECKED : BST_UNCHECKED);
-
-        if (pConfig->m_DefaultPreset.nThreads == 0)
-        {
-            this->m_EdtThreads.SetWindowText(this->pConfig->GetString(0x00207002).c_str());
-        }
-        else
-        {
-            CString szBuff;
-            szBuff.Format(_T("%d"), pConfig->m_DefaultPreset.nThreads);
-            this->m_EdtThreads.SetWindowText(szBuff);
         }
 
         if (pConfig->m_DefaultPreset.nMode == AFTEN_ENC_MODE_CBR)

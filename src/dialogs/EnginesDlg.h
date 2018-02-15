@@ -24,7 +24,7 @@ namespace app
         DECLARE_MESSAGE_MAP()
     public:
         config::CConfiguration * pConfig;
-        std::vector<config::Entry> m_Engines;
+        std::vector<config::CEngine> m_Engines;
         std::wstring szCurrentFileName;
     public:
         volatile bool bUpdateList;

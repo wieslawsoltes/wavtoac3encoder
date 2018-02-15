@@ -42,7 +42,7 @@ namespace worker
         CWorker(CWorkerContext* pContext) : pContext(pContext) { }
         virtual ~CWorker() { }
     public:
-        void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        void InitContext(const config::CEngine *engine, const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
         bool HandleError(LPTSTR pszMessage);
         bool Run();
@@ -60,6 +60,7 @@ namespace worker
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
         config::CPreset * pPreset;
+        config::CPreset * pEngine;
         bool bUseOutPath;
         std::wstring szOutPath;
         bool bMultiMonoInput;

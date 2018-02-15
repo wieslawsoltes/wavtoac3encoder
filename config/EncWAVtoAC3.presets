@@ -1,10 +1,4 @@
 ﻿[Default]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
 mode=0
 b=0
 q=240
@@ -43,12 +37,6 @@ dsurexmod=0
 dheadphon=0
 adconvtyp=0
 [Avisynth 3/2+LFE]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
 mode=0
 b=0
 q=240
@@ -87,12 +75,6 @@ dsurexmod=0
 dheadphon=0
 adconvtyp=0
 [RAW (3/2+LFE, 48000, Float LE)]
-engine=0
-threads=0
-mmx=1
-sse=1
-sse2=1
-sse3=1
 mode=0
 b=0
 q=240

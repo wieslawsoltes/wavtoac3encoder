@@ -347,47 +347,162 @@ namespace config
         return 0;
     }
 
-    void CConfiguration::ParsePreset(CPreset &preset, std::vector<Entry> &cl)
+    void CConfiguration::ParseEngine(CEngine &engine, std::vector<Entry> &cl)
     {
         for (int i = 0; i < (int)cl.size(); i++)
         {
             auto& ce = cl[i];
 
-            if (ce.first == L"engine")
+            if (ce.first == L"path")
             {
-                preset.nCurrentEngine = util::StringHelper::ToInt(ce.second);
-                continue;
-            }
-
-            if (ce.first == TrimOption(m_EncoderOptions.szThreadsOption))
-            {
-                preset.nThreads = util::StringHelper::ToInt(ce.second);
+                engine.szPath = ce.second;
                 continue;
             }
 
             if (ce.first == L"mmx")
             {
-                preset.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse")
             {
-                preset.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse2")
             {
-                preset.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse3")
             {
-                preset.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
                 continue;
             }
+
+            if (ce.first == TrimOption(m_EncoderOptions.szThreadsOption))
+            {
+                engine.nThreads = util::StringHelper::ToInt(ce.second);
+                continue;
+            }
+        }
+    }
+
+    bool CConfiguration::LoadEngines(std::vector<CEngine>& engines, std::wstring& szFileName)
+    {
+        try
+        {
+            std::wstring data = ReadAllText(szFileName);
+            if (data.empty())
+                return false;
+
+            CEngine defaultEngine(L"Aften", L"libaften.dll")
+            CEngine temp;
+            std::vector<Entry> cl;
+            bool bHaveEngine = false;
+            engines.clear();
+
+            std::wistringstream stream;
+            stream.str(data);
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
+            {
+                int nBufferSize = (int)szBuffer.size();
+                if (nBufferSize >= 2)
+                {
+                    if ((szBuffer[0] == '[') && (szBuffer[nBufferSize - 1] == ']'))
+                    {
+                        if (bHaveEngine == true)
+                        {
+                            ParseEngine(temp, cl);
+                            auto engine = temp;
+                            engines.emplace_back(engine);
+                            cl.clear();
+                        }
+                        temp = defaultEngine;
+                        temp.szName = szBuffer.substr(1, szBuffer.size() - 2);
+                        bHaveEngine = true;
+                    }
+                    else
+                    {
+                        auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                        if (parts.size() == 2)
+                        {
+                            cl.emplace_back(std::make_pair(parts[0], parts[1]));
+                        }
+                    }
+                }
+            }
+
+            if (bHaveEngine == true)
+            {
+                ParseEngine(temp, cl);
+                auto engine = temp;
+                engines.emplace_back(engine);
+                cl.clear();
+            }
+
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+
+    bool CConfiguration::SaveEngines(std::vector<CEngine>& engines, std::wstring& szFileName)
+    {
+        try
+        {
+            FILE *fs;
+            errno_t error = _wfopen_s(&fs, szFileName.c_str(), szWriteMode.c_str());
+            if (error != 0)
+                return false;
+
+            std::wstring szBuffer;
+
+            for (int i = 0; i < (const int)engines.size(); i++)
+            {
+                auto& engine = engines[i];
+
+                szBuffer = L"[" + engine.szName + L"]\n";
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"path" + szSeparator + engine.szPath + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"mmx" + szSeparator + std::to_wstring(engine.nUsedSIMD[0]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse" + szSeparator + std::to_wstring(engine.nUsedSIMD[1]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse2" + szSeparator + std::to_wstring(engine.nUsedSIMD[2]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = L"sse3" + szSeparator + std::to_wstring(engine.nUsedSIMD[3]) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+
+                szBuffer = TrimOption(m_EncoderOptions.szThreadsOption) + szSeparator + std::to_wstring(engine.nThreads) + szNewChar;
+                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+            }
+
+            fclose(fs);
+            return true;
+        }
+        catch (...)
+        {
+            return false;
+        }
+    }
+
+    void CConfiguration::ParsePreset(CPreset &preset, std::vector<Entry> &cl)
+    {
+        for (int i = 0; i < (int)cl.size(); i++)
+        {
+            auto& ce = cl[i];
 
             if (ce.first == L"mode")
             {
@@ -451,7 +566,7 @@ namespace config
 
             std::wistringstream stream;
             stream.str(data);
-            for (std::wstring szBuffer; std::getline(stream, szBuffer);) 
+            for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
                 int nBufferSize = (int)szBuffer.size();
                 if (nBufferSize >= 2)
@@ -465,7 +580,6 @@ namespace config
                             presets.emplace_back(preset);
                             cl.clear();
                         }
-    
                         temp = defaultPreset;
                         temp.szName = szBuffer.substr(1, szBuffer.size() - 2);
                         bHavePreset = true;
@@ -513,24 +627,6 @@ namespace config
                 auto& preset = presets[i];
 
                 szBuffer = L"[" + preset.szName + L"]\n";
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"engine" + szSeparator + std::to_wstring(preset.nCurrentEngine) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = TrimOption(m_EncoderOptions.szThreadsOption) + szSeparator + std::to_wstring(preset.nThreads) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"mmx" + szSeparator + std::to_wstring(preset.nUsedSIMD[0]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse" + szSeparator + std::to_wstring(preset.nUsedSIMD[1]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse2" + szSeparator + std::to_wstring(preset.nUsedSIMD[2]) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
-
-                szBuffer = L"sse3" + szSeparator + std::to_wstring(preset.nUsedSIMD[3]) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
                 szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;

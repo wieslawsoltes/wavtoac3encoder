@@ -83,15 +83,16 @@ namespace app
         this->m_Config.bMultipleMonoInput = false;
         this->m_Config.bDisableAllWarnings = false;
         this->m_Config.bSaveConfig = true;
+        this->m_Config.nCurrentEngine = 0;
 #if defined(_WIN32) & !defined(_WIN64)
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x86", L"libaftendll_x86\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x86 (SSE)", L"libaftendll_x86_SSE\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x86 (SSE2)", L"libaftendll_x86_SSE2\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x86 (SSE3)", L"libaftendll_x86_SSE3\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86", L"libaftendll_x86\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE)", L"libaftendll_x86_SSE\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE2)", L"libaftendll_x86_SSE2\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE3)", L"libaftendll_x86_SSE3\\libaften.dll"));
 #else
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x64", L"libaftendll_AMD64\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x64 (SSE2)", L"libaftendll_AMD64_SSE2\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(std::make_pair(L"Aften x64 (SSE3)", L"libaftendll_AMD64_SSE3\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64", L"libaftendll_AMD64\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64 (SSE2)", L"libaftendll_AMD64_SSE2\\libaften.dll"));
+        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64 (SSE3)", L"libaftendll_AMD64_SSE3\\libaften.dll"));
 #endif
     }
 

@@ -24,6 +24,27 @@ namespace config
         std::map<int, std::wstring> m_Strings;
     };
 
+    class CEngine
+    {
+    public:
+        std::wstring szName;
+        std::wstring szPath;
+        int nThreads;
+        std::map<int, int> nUsedSIMD;
+    public:
+        CEngine() { }
+        CEngine(std::wstring name, std::wstring path) : szName(name), szPath(path)
+        {
+            this->nThreads = 0;
+            this->nUsedSIMD = {
+                { 0, 1 },
+                { 1, 1 },
+                { 2, 1 },
+                { 3, 1 }
+            };
+        }
+    };
+
     class CChannelConfig
     {
     public:
@@ -61,9 +82,6 @@ namespace config
         int nBitrate;
         int nQuality;
         CRawInput m_RawInput;
-        std::map<int, int> nUsedSIMD;
-        int nThreads;
-        int nCurrentEngine;
         std::map<int, int> nOptions;
     };
 
@@ -102,7 +120,8 @@ namespace config
         std::wstring m_szFilesListFilePath;
         std::wstring m_szLangFilePath;
     public:
-        std::vector<config::Entry> m_Engines;
+        std::vector<CEngine> m_Engines;
+        int nCurrentEngine;
         std::vector<config::CPreset> m_Presets;
         config::CPreset m_DefaultPreset;
         int nCurrentPreset;
@@ -127,6 +146,9 @@ namespace config
     public:
         int FindValidBitratePos(const int nBitrate);
         int FindOptionIndex(std::wstring szOption);
+        void ParseEngine(CEngine &engine, std::vector<Entry> &cl);
+        bool LoadEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
+        bool SaveEngines(std::vector<CEngine>& engines, std::wstring& szFileName);
         void ParsePreset(CPreset &preset, std::vector<Entry> &cl);
         bool LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
         bool SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset);
