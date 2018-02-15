@@ -946,7 +946,7 @@ namespace app
         for (int i = 0; i < 2; i++)
             nFilesColWidth[i] = this->m_LstFiles.GetColumnWidth(i);
         std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
-        cl.emplace_back(std::make_pair(sL"ColumnSizeFiles", columnSizeFiles));
+        cl.emplace_back(std::make_pair(L"ColumnSizeFiles", columnSizeFiles));
 
         cl.emplace_back(std::make_pair(L"OutputPath", (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath));
         cl.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
@@ -968,7 +968,7 @@ namespace app
             auto& preset = GetCurrentPreset();
             preset.nCurrentEngine = 0;
 
-            this->m_CmbEngines.InsertString(0, ce.first.c_str());
+            this->m_CmbEngines.InsertString(0, ce.first);
             this->m_CmbEngines.SetCurSel(0);
 
             if (this->api.IsAftenOpen())
