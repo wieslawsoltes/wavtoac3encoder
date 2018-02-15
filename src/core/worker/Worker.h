@@ -7,7 +7,7 @@
 #include <map>
 #include <mutex>
 #include <thread>
-#include <condition_variable>
+//#include <condition_variable>
 #include <atlstr.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
@@ -54,8 +54,8 @@ namespace worker
     public:
         std::thread m_Thread;
         std::mutex m_Mutex;
-        std::condition_variable m_ConditionVar;
-        bool bReady;
+        //std::condition_variable m_ConditionVar;
+        //bool bReady;
     public:
         config::CConfiguration * pConfig;
         AftenAPI api;
@@ -111,18 +111,18 @@ namespace worker
                 catch (...) { }
                 this->bTerminate = true;
                 this->Close();
-                this->bReady = true;
-                std::notify_all_at_thread_exit(this->m_ConditionVar, std::move(lk));
+                //this->bReady = true;
+                //std::notify_all_at_thread_exit(this->m_ConditionVar, std::move(lk));
             });
             this->m_Thread.detach();
         }
         virtual void Wait()
         {
             std::unique_lock<std::mutex> lk(this->m_Mutex);
-            while(!this->bReady)
-            {
-                this->m_ConditionVar.wait(lk);
-            }
+            //while(!this->bReady)
+            //{
+            //    this->m_ConditionVar.wait(lk);
+            //}
         }
     };
 }

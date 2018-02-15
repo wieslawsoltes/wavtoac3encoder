@@ -295,7 +295,7 @@ namespace app
         dlg.pConfig = this->pConfig;
 
         dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
-        dlg.pWorkerContext->bReady = false;
+        //dlg.pWorkerContext->bReady = false;
         dlg.pWorkerContext->bTerminate = false;
         dlg.pWorkerContext->bCanUpdateWindow = true;
         dlg.pWorkerContext->nCount = 0;
