@@ -638,7 +638,7 @@ namespace config
                 szBuffer = TrimOption(m_EncoderOptions.szVbrOption) + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                if ((preset.nRawSampleFormat != 0) || (preset.m_RawInput.nRawSampleRate != 0) || (preset.m_RawInput.nRawChannels != 0))
+                if ((preset.m_RawInput.nRawSampleFormat != 0) || (preset.m_RawInput.nRawSampleRate != 0) || (preset.m_RawInput.nRawChannels != 0))
                 {
                     szBuffer = TrimOption(m_EncoderOptions.szRawSampleFormatOption) + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
