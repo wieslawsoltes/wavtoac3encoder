@@ -16,7 +16,38 @@
 
 namespace worker
 {
-    class CWorker;
+    class CWorkerContext;
+
+    class CWorker
+    {
+    public:
+        std::unique_ptr<CWorkerContext>& pContext;
+    private:
+        __int64 nTotalSizeCounter;
+        int nInputFiles;
+        std::wstring szInPath[6];
+        std::wstring szOutPath;
+        AftenOpt opt;
+        AftenContext s;
+        PcmContext pf;
+        uint8_t *frame;
+        FLOAT *fwav;
+        FILE *ifp[6];
+        FILE *ofp;
+        bool bAvisynthInput;
+        AvsAudioInfo infoAVS;
+        CAvs2Raw decoderAVS;
+        Avs2RawStatus statusAVS;
+    public:
+        CWorker(std::unique_ptr<CWorkerContext>& pContext) : pContext(pContext) { }
+        virtual ~CWorker() { }
+    public:
+        void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        void UpdateProgress();
+        bool HandleError(LPTSTR pszMessage);
+        bool Run();
+        bool Encode();
+    };
 
     class CWorkerContext
     {
@@ -95,36 +126,5 @@ namespace worker
                 this->m_ConditionVar.wait(lk);
             }
         }
-    };
-
-    class CWorker
-    {
-    public:
-        std::unique_ptr<CWorkerContext>& pContext;
-    private:
-        __int64 nTotalSizeCounter;
-        int nInputFiles;
-        std::wstring szInPath[6];
-        std::wstring szOutPath;
-        AftenOpt opt;
-        AftenContext s;
-        PcmContext pf;
-        uint8_t *frame;
-        FLOAT *fwav;
-        FILE *ifp[6];
-        FILE *ofp;
-        bool bAvisynthInput;
-        AvsAudioInfo infoAVS;
-        CAvs2Raw decoderAVS;
-        Avs2RawStatus statusAVS;
-    public:
-        CWorker(std::unique_ptr<CWorkerContext>& pContext) : pContext(pContext) { }
-        virtual ~CWorker() { }
-    public:
-        void InitContext(const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
-        void UpdateProgress();
-        bool HandleError(LPTSTR pszMessage);
-        bool Run();
-        bool Encode();
     };
 }
