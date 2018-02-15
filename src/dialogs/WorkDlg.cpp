@@ -261,7 +261,18 @@ namespace app
     {
         try
         {
-            this->pWorkerContext->Start();
+            this->m_Thread = std::thread([this]()
+            {
+                try
+                {
+                    worker::CWorker m_Worker(this->pWorkerContext);
+                    m_Worker.Encode();
+                }
+                catch (...) {}
+                this->pWorkerContext->bTerminate = true;
+                this->pWorkerContext->Close();
+            });
+            this->m_Thread.detach();
         }
         catch (...)
         {

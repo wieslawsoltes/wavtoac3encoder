@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <thread>
 #include <afxwin.h>
 #include <afxcmn.h>
 #include "controls\MyDialogEx.h"
@@ -41,6 +42,7 @@ namespace app
     public:
         config::CConfiguration * pConfig;
         std::unique_ptr<worker::CWorkerContext> pWorkerContext;
+        std::thread m_Thread;
     public:
         controls::CMyStatic m_StcOut;
         controls::CMyStatic m_StcOutInfo;

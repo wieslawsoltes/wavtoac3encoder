@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include <thread>
 #include <atlstr.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
@@ -14,43 +13,8 @@
 
 namespace worker
 {
-    class CWorkerContext;
-
-    class CWorker
-    {
-    public:
-        CWorkerContext* pContext;
-    private:
-        __int64 nTotalSizeCounter;
-        int nInputFiles;
-        std::wstring szInPath[6];
-        std::wstring szOutPath;
-        AftenOpt opt;
-        AftenContext s;
-        PcmContext pf;
-        uint8_t *frame;
-        FLOAT *fwav;
-        FILE *ifp[6];
-        FILE *ofp;
-        bool bAvisynthInput;
-        AvsAudioInfo infoAVS;
-        CAvs2Raw decoderAVS;
-        Avs2RawStatus statusAVS;
-    public:
-        CWorker(CWorkerContext* pContext) : pContext(pContext) { }
-        virtual ~CWorker() { }
-    public:
-        bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
-        void UpdateProgress();
-        bool HandleError(std::wstring szMessage);
-        bool Run();
-        bool Encode();
-    };
-
     class CWorkerContext
     {
-    public:
-        std::thread m_Thread;
     public:
         config::CConfiguration * pConfig;
         AftenAPI api;
@@ -93,21 +57,36 @@ namespace worker
         virtual void StopTotalTimer() = 0;
     public:
         virtual void Close() = 0;
+    };
+
+    class CWorker
+    {
     public:
-        virtual void Start()
-        {
-            this->m_Thread = std::thread([this]()
-            {
-                try
-                {
-                    CWorker m_Worker(this);
-                    m_Worker.Encode();
-                }
-                catch (...) { }
-                this->bTerminate = true;
-                this->Close();
-            });
-            this->m_Thread.detach();
-        }
+        std::unique_ptr<worker::CWorkerContext>& pContext;
+    private:
+        __int64 nTotalSizeCounter;
+        int nInputFiles;
+        std::wstring szInPath[6];
+        std::wstring szOutPath;
+        AftenOpt opt;
+        AftenContext s;
+        PcmContext pf;
+        uint8_t *frame;
+        FLOAT *fwav;
+        FILE *ifp[6];
+        FILE *ofp;
+        bool bAvisynthInput;
+        AvsAudioInfo infoAVS;
+        CAvs2Raw decoderAVS;
+        Avs2RawStatus statusAVS;
+    public:
+        CWorker(std::unique_ptr<worker::CWorkerContext>& pContext) : pContext(pContext) { }
+        virtual ~CWorker() { }
+    public:
+        bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        void UpdateProgress();
+        bool HandleError(std::wstring szMessage);
+        bool Run();
+        bool Encode();
     };
 }
