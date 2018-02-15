@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "MainDlg.h"
 #include "WorkDlg.h"
@@ -295,6 +295,7 @@ namespace app
         dlg.pConfig = this->pConfig;
 
         dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
+        dlg.pWorkerContext->bReady = false;
         dlg.pWorkerContext->bTerminate = false;
         dlg.pWorkerContext->bCanUpdateWindow = true;
         dlg.pWorkerContext->nCount = 0;
@@ -398,11 +399,7 @@ namespace app
         dlg.DoModal();
         countTime.Stop();
 
-        //dlg.pWorkerContext->bTerminate = true;
-        //if (dlg.m_Thread.joinable() == true)
-        //{
-        //    dlg.m_Thread.join();
-        //}
+        dlg.pWorkerContext->Wait();
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;

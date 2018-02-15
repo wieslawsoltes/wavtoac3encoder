@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "Worker.h"
 
 namespace worker
@@ -569,7 +569,6 @@ namespace worker
                     if (fs > 0)
                         fwrite(frame, 1, fs, ofp);
                 }
-
                 return HandleError(_T("User has terminated encoding."));
             }
 

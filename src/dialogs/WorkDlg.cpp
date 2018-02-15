@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "WorkDlg.h"
 #include "utilities\Utilities.h"
@@ -70,9 +70,9 @@ namespace app
         this->KillTimer(WM_FILE_TIMER);
         this->KillTimer(WM_TOTAL_TIMER);
 
-        if (pWorkerContext->bTerminate == false)
+        if (this->pWorkerContext->bTerminate == false)
         {
-            pWorkerContext->bTerminate = true;
+            this->pWorkerContext->bTerminate = true;
         }
 
         CMyDialogEx::OnClose();
@@ -82,9 +82,9 @@ namespace app
     {
         CMyDialogEx::OnDestroy();
 
-        if (pWorkerContext->bTerminate == false)
+        if (this->pWorkerContext->bTerminate == false)
         {
-            pWorkerContext->bTerminate = true;
+            this->pWorkerContext->bTerminate = true;
         }
     }
 
@@ -105,9 +105,9 @@ namespace app
 
     void CWorkDlg::OnBnClickedCancel()
     {
-        if (pWorkerContext->bTerminate == false)
+        if (this->pWorkerContext->bTerminate == false)
         {
-            pWorkerContext->bTerminate = true;
+            this->pWorkerContext->bTerminate = true;
         }
 
         this->EndDialog(IDOK);
@@ -115,7 +115,7 @@ namespace app
 
     void CWorkDlg::InitCtrls()
     {
-        if (pWorkerContext->bMultiMonoInput == false)
+        if (this->pWorkerContext->bMultiMonoInput == false)
         {
             for (int i = 1; i < 6; i++)
             {
@@ -190,70 +190,70 @@ namespace app
     void CWorkDlg::UpdateTotalTimer()
     {
         TCHAR strTime[32] = _T("");
-        pWorkerContext->m_ElapsedTimeTotal += 0.25;
+        this->pWorkerContext->m_ElapsedTimeTotal += 0.25;
 
-        if (pWorkerContext->m_ElapsedTimeTotal <= 59)
+        if (this->pWorkerContext->m_ElapsedTimeTotal <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
                 this->pConfig->GetString(0x00A01006).c_str(),
-                (unsigned long)pWorkerContext->m_ElapsedTimeTotal);
+                (unsigned long)this->pWorkerContext->m_ElapsedTimeTotal);
         }
-        else if (pWorkerContext->m_ElapsedTimeTotal <= 3599)
+        else if (this->pWorkerContext->m_ElapsedTimeTotal <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
                 this->pConfig->GetString(0x00A01006).c_str(),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal % 60));
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
                 this->pConfig->GetString(0x00A01006).c_str(),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
-                ((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
-                ((((unsigned long)pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
+                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
         }
 
-        if (pWorkerContext->bCanUpdateWindow == true)
+        if (this->pWorkerContext->bCanUpdateWindow == true)
         {
-            pWorkerContext->bCanUpdateWindow = false;
+            this->pWorkerContext->bCanUpdateWindow = false;
             m_StcTimeTotal.SetWindowText(strTime);
-            pWorkerContext->bCanUpdateWindow = true;
+            this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
 
     void CWorkDlg::UpdateFileTimer()
     {
         TCHAR strTime[32] = _T("");
-        pWorkerContext->m_ElapsedTimeFile += 0.25;
+        this->pWorkerContext->m_ElapsedTimeFile += 0.25;
 
-        if (pWorkerContext->m_ElapsedTimeFile <= 59)
+        if (this->pWorkerContext->m_ElapsedTimeFile <= 59)
         {
             _stprintf(strTime, _T("%s 00:00:%02u\0"),
                 this->pConfig->GetString(0x00A01005).c_str(),
-                (unsigned long)pWorkerContext->m_ElapsedTimeFile);
+                (unsigned long)this->pWorkerContext->m_ElapsedTimeFile);
         }
-        else if (pWorkerContext->m_ElapsedTimeFile <= 3599)
+        else if (this->pWorkerContext->m_ElapsedTimeFile <= 3599)
         {
             _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
                 this->pConfig->GetString(0x00A01005).c_str(),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile % 60));
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60),
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile % 60));
         }
         else
         {
             _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
                 this->pConfig->GetString(0x00A01005).c_str(),
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) / 60,
-                ((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60,
-                ((((unsigned long)pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) / 60,
+                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60,
+                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
         }
 
-        if (pWorkerContext->bCanUpdateWindow == true)
+        if (this->pWorkerContext->bCanUpdateWindow == true)
         {
-            pWorkerContext->bCanUpdateWindow = false;
+            this->pWorkerContext->bCanUpdateWindow = false;
             m_StcTimeCurrent.SetWindowText(strTime);
-            pWorkerContext->bCanUpdateWindow = true;
+            this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
 
@@ -261,20 +261,7 @@ namespace app
     {
         try
         {
-            m_Thread = std::thread([this]()  
-            {
-                try
-                {
-                    worker::CWorker m_Worker(this->pWorkerContext);
-                    m_Worker.Encode();
-                }
-                catch (...)
-                {
-                    this->pWorkerContext->bTerminate = true;
-                    this->pWorkerContext->Close();
-                }
-            });
-            m_Thread.detach();
+            this->pWorkerContext->Start();
         }
         catch (...)
         {
