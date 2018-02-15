@@ -123,12 +123,6 @@ namespace app
         {
             this->EndDialog(IDOK);
         }
-
-        if (m_Thread.joinable() == true)
-        {
-            m_Thread.join();
-            this->EndDialog(IDOK);
-        }
     }
 
     void CWorkDlg::InitCtrls()
