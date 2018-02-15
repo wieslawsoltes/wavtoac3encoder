@@ -934,37 +934,26 @@ namespace app
         std::vector<config::Entry> cl;
 
         std::wstring mainWindow = this->GetWindowRectStr();
-        cl.emplace_back(std::make_pair(std::wstring(L"MainWindow"), mainWindow));
+        cl.emplace_back(std::make_pair(L"MainWindow", mainWindow));
 
         int nSettingsColWidth[2];
         for (int i = 0; i < 2; i++)
             nSettingsColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
         std::wstring columnSizeSettings = std::to_wstring(nSettingsColWidth[0]) + L" " +  std::to_wstring(nSettingsColWidth[1]);
-        cl.emplace_back(std::make_pair(std::wstring(L"ColumnSizeSettings"), columnSizeSettings));
+        cl.emplace_back(std::make_pair(L"ColumnSizeSettings", columnSizeSettings));
 
         int nFilesColWidth[2];
         for (int i = 0; i < 2; i++)
             nFilesColWidth[i] = this->m_LstFiles.GetColumnWidth(i);
         std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
-        cl.emplace_back(std::make_pair(std::wstring(L"ColumnSizeFiles"), columnSizeFiles));
+        cl.emplace_back(std::make_pair(sL"ColumnSizeFiles", columnSizeFiles));
 
-        std::wstring outputPath = (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath;
-        cl.emplace_back(std::make_pair(std::wstring( L"OutputPath"), outputPath));
-
-        std::wstring outputFile = (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile;
-        cl.emplace_back(std::make_pair(std::wstring(L"OutputFile"), outputFile));
-
-        std::wstring selectedPreset = std::to_wstring(this->m_CmbPresets.GetCurSel());
-        cl.emplace_back(std::make_pair(std::wstring(L"SelectedPreset"), selectedPreset));
-
-        std::wstring multipleMonoInput = (this->pConfig->bMultipleMonoInput == true) ? L"true" : L"false";
-        cl.emplace_back(std::make_pair(std::wstring( L"MultipleMonoInput"), multipleMonoInput));
-
-        std::wstring disableAllWarnings = (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false";
-        cl.emplace_back(std::make_pair(std::wstring(L"DisableAllWarnings"), disableAllWarnings));
-
-        std::wstring saveConfig = (this->pConfig->bSaveConfig == true) ? L"true" : L"false";
-        cl.emplace_back(std::make_pair(std::wstring(L"SaveConfig"), saveConfig));
+        cl.emplace_back(std::make_pair(L"OutputPath", (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath));
+        cl.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
+        cl.emplace_back(std::make_pair(L"SelectedPreset", std::to_wstring(this->m_CmbPresets.GetCurSel())));
+        cl.emplace_back(std::make_pair(L"MultipleMonoInput", (this->pConfig->bMultipleMonoInput == true) ? L"true" : L"false"));
+        cl.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
+        cl.emplace_back(std::make_pair(L"SaveConfig", (this->pConfig->bSaveConfig == true) ? L"true" : L"false"));
 
         return this->pConfig->SaveConfig(szFileName, cl);
     }
@@ -973,7 +962,7 @@ namespace app
     {
         if (this->pConfig->m_Engines.size() == 0)
         {
-            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"));
+            auto ce = std::make_pair(L"Aften", L"libaften.dll");
             this->pConfig->m_Engines.emplace_back(ce);
 
             auto& preset = GetCurrentPreset();
@@ -1032,36 +1021,13 @@ namespace app
 
     bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
     {
-        this->pConfig->m_Engines.clear();
-        this->m_CmbEngines.ResetContent();
-
+        std::vector<config::Entry> engines;
         if (this->pConfig->LoadConfig(szFileName, this->pConfig->m_Engines) == true)
         {
-            return this->UpdateProgramEngines();
+            this->pConfig->m_Engines = engines;
+            this->m_CmbEngines.ResetContent();
         }
-        else
-        {
-            auto ce = std::make_pair(std::wstring(L"Aften"), std::wstring(L"libaften.dll"));
-
-            this->pConfig->m_Engines.clear();
-            this->pConfig->m_Engines.emplace_back(ce);
-
-            auto& preset = GetCurrentPreset();
-            preset.nCurrentEngine = 0;
-
-            this->m_CmbEngines.InsertString(0, ce.first.c_str());
-            this->m_CmbEngines.SetCurSel(0);
-
-            if (this->api.IsAftenOpen())
-            {
-                this->api.CloseAftenAPI();
-            }
-
-            this->api.szLibPath = pConfig->m_Engines[GetCurrentPreset().nCurrentEngine].second;
-            this->api.OpenAftenAPI();
-        }
-
-        return false;
+        return this->UpdateProgramEngines();
     }
 
     bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
