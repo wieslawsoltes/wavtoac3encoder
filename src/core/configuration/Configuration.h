@@ -69,6 +69,10 @@ namespace config
     class CRawInput
     {
     public:
+        static const int nDefaultRawChannels = 0;
+        static const int nDefaultRawSampleFormat = 0;
+        static const int nDefaultRawSampleRate = 0;
+    public:
         int nRawSampleFormat;
         int nRawSampleRate;
         int nRawChannels;
@@ -76,6 +80,9 @@ namespace config
 
     class CPreset
     {
+    public:
+        static const int nDefaultBitrate = 0;
+        static const int nDefaultQuality = 240;
     public:
         std::wstring szName;
         AftenEncMode nMode;
