@@ -73,9 +73,6 @@ var copyConfigAction = new Action<string> ((output) =>
     var outputDir = artifactsDir.Combine(output);
     var langDir = outputDir.Combine("lang");
     CopyFileToDirectory(File("./config/EncWAVtoAC3.portable"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.config"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.files"), outputDir);
-    CopyFileToDirectory(File("./config/EncWAVtoAC3.lang"), outputDir);
     CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
     CleanDirectory(langDir);
     CopyFiles("./config/lang/*.txt", langDir);
@@ -85,14 +82,11 @@ var copyEnginesX86Action = new Action<string> ((output) =>
 {
     var outputDir = artifactsDir.Combine(output);
     var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
-    var aftenDll = "libaften.dll";
-    var aftenDlls = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
-    var enginesFile = File("./config/EncWAVtoAC3-x86.engines");
-    CopyFileToDirectory(enginesFile, outputDir);
-    foreach (var dir in aftenDlls)
+    var dirs = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
+    foreach (var dir in dirs)
     {
         CleanDirectory(outputDir.Combine(dir));
-        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath("libaften.dll"), outputDir.Combine(dir));
     }
 });
 
@@ -100,14 +94,11 @@ var copyEnginesX64Action = new Action<string> ((output) =>
 {
     var outputDir = artifactsDir.Combine(output);
     var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
-    var aftenDll = "libaften.dll";
-    var aftenDlls = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
-    var enginesFile = File("./config/EncWAVtoAC3-x64.engines");
-    CopyFileToDirectory(enginesFile, outputDir);
-    foreach (var dir in aftenDlls)
+    var dirs = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
+    foreach (var dir in dirs)
     {
         CleanDirectory(outputDir.Combine(dir));
-        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath(aftenDll), outputDir.Combine(dir));
+        CopyFileToDirectory(aftenBinDir.Combine(dir).CombineWithFilePath("libaften.dll"), outputDir.Combine(dir));
     }
 });
 
