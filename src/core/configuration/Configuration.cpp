@@ -399,7 +399,7 @@ namespace config
             if (data.empty())
                 return false;
 
-            CEngine defaultEngine(L"Aften", L"libaften.dll")
+            CEngine defaultEngine(L"Aften", L"libaften.dll");
             CEngine temp;
             std::vector<Entry> cl;
             bool bHaveEngine = false;

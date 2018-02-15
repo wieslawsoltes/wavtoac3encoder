@@ -60,7 +60,7 @@ namespace worker
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
         config::CPreset * pPreset;
-        config::CPreset * pEngine;
+        config::CEngine * pEngine;
         bool bUseOutPath;
         std::wstring szOutPath;
         bool bMultiMonoInput;
