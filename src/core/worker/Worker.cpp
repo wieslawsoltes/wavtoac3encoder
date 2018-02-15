@@ -277,9 +277,6 @@ namespace worker
 
         pContext->api.LibAften_aften_encode_close(&s);
 
-        pContext->bTerminate = true;
-        pContext->Close();
-
         return false;
     }
 
@@ -342,8 +339,6 @@ namespace worker
                     pContext->SetCurrentTimerInfo(szBuff);
 
                     pContext->m_ElapsedTimeFile = 0L;
-                    pContext->bTerminate = true;
-                    pContext->Close();
 
                     return false;
                 }
@@ -369,9 +364,6 @@ namespace worker
             }
 
             OutputDebugString(_T("Failed to create output file: ") + CAtlString(szOutPath.c_str()));
-
-            pContext->bTerminate = true;
-            pContext->Close();
 
             return false;
         }
@@ -810,6 +802,9 @@ namespace worker
                 posStatus++;
                 nFileCounter++;
                 pContext->nCount = nFileCounter;
+
+                if (pContext->bTerminate == true)
+                    break;
             }
         }
         else
@@ -888,8 +883,6 @@ namespace worker
         }
 
         pContext->StopTotalTimer();
-        pContext->bTerminate = true;
-        pContext->Close();
 
         return true;
     }

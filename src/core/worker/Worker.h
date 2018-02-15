@@ -110,9 +110,11 @@ namespace worker
                 }
                 catch (...)
                 {
-                    this->bTerminate = true;
-                    this->Close();
+
                 }
+
+                this->bTerminate = true;
+                this->Close();
                 this->bReady = true;
                 std::notify_all_at_thread_exit(this->m_ConditionVar, std::move(lk));
             });
