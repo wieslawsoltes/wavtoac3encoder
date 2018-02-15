@@ -108,11 +108,7 @@ namespace worker
                     CWorker m_Worker(this);
                     m_Worker.Encode();
                 }
-                catch (...)
-                {
-
-                }
-
+                catch (...) { }
                 this->bTerminate = true;
                 this->Close();
                 this->bReady = true;
