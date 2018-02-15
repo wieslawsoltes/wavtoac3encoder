@@ -43,7 +43,6 @@ namespace app
         bool bVisible;
     public:
         config::CConfiguration * pConfig;
-        AftenAPI api;
     public:
         controls::CMyStatusBarCtrl m_StatusBar;
         controls::CMySliderCtrl m_SldBitrate;
@@ -103,7 +102,7 @@ namespace app
         bool SaveFilesList(std::wstring &szFileName, int nFormat);
         bool LoadProgramConfig(std::wstring szFileName);
         bool SaveProgramConfig(std::wstring szFileName);
-        bool UpdateProgramEngines();
+        void UpdateProgramEngines();
         void ApplyEngineToDlg(config::CEngine &engine);
         bool LoadProgramEngines(std::wstring szFileName);
         bool SaveProgramEngines(std::wstring szFileName);

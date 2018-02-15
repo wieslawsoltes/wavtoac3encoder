@@ -3,18 +3,37 @@
 
 namespace worker
 {
-    void CWorker::InitContext(const config::CEngine *engine, const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s)
+    bool CWorker::InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s)
     {
+        if (api.OpenAftenAPI(engine->szPath) == false)
+        {
+            std::wstring szLogMessage =
+                pContext->pConfig->GetString(0x0020701E) +
+                L" '" + engine->szName + L"' " +
+                pContext->pConfig->GetString(0x0020701F) + L"!" + L"\n";
+            OutputDebugString(szLogMessage.c_str());
+            return false;
+        }
+        else
+        {
+            const char *szAftenVersionAnsi = api.LibAften_aften_get_version();
+            std::wstring szVersion = util::StringHelper::Convert(szAftenVersionAnsi);
+            std::wstring szLogMessage =
+                pContext->pConfig->GetString(0x00207020) +
+                L" '" + engine->szName + L"' " +
+                pContext->pConfig->GetString(0x0020701F) + L", " +
+                pContext->pConfig->GetString(0x00207021) +
+                L" " + szVersion + L"\n";
+            OutputDebugString(szLogMessage.c_str());
+        }
+
         api.LibAften_aften_set_defaults(&s);
 
-        if (engine != nullptr)
-        {
-            s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
-            s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
-            s.system.wanted_simd_instructions.sse2 = engine->nUsedSIMD.at(2);
-            s.system.wanted_simd_instructions.sse3 = engine->nUsedSIMD.at(3);
-            s.system.n_threads = engine->nThreads;
-        }
+        s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
+        s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
+        s.system.wanted_simd_instructions.sse2 = engine->nUsedSIMD.at(2);
+        s.system.wanted_simd_instructions.sse3 = engine->nUsedSIMD.at(3);
+        s.system.n_threads = engine->nThreads;
 
         s.params.encoding_mode = preset->nMode;
         s.params.bitrate = preset->nBitrate;
@@ -114,6 +133,8 @@ namespace worker
         SetSetting(s.meta.adconvtyp, int)
 
         #undef SetSetting
+
+        return true;
     }
 
     void CWorker::UpdateProgress()
@@ -248,12 +269,9 @@ namespace worker
         }
     }
 
-    bool CWorker::HandleError(LPTSTR pszMessage)
+    bool CWorker::HandleError(std::wstring szMessage)
     {
-        pContext->StopCurrentTimer();
-        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-        pContext->SetCurrentTimerInfo(szBuff);
-        pContext->m_ElapsedTimeFile = 0L;
+        OutputDebugString((szMessage + L"\n").c_str());
 
         if (fwav)
             free(fwav);
@@ -279,6 +297,13 @@ namespace worker
             fclose(ofp);
 
         pContext->api.LibAften_aften_encode_close(&s);
+
+        pContext->api.CloseAftenAPI();
+
+        pContext->StopCurrentTimer();
+        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
+        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->m_ElapsedTimeFile = 0L;
 
         return false;
     }
@@ -312,11 +337,10 @@ namespace worker
 
         memset(ifp, 0, 6 * sizeof(FILE *));
 
-        char szInputFileAVS[MAX_PATH] = "";
         if (bAvisynthInput == true)
         {
-            util::Utilities::ConvertUnicodeToAnsi(szInPath[0].c_str(), szInputFileAVS, szInPath[0].length());
-            if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
+            std::string szInputFileAVS = util::StringHelper::Convert(szInPath[0]);
+            if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
                 OutputDebugString(_T("Failed to initialize Avisynth."));
                 return false;
@@ -738,7 +762,6 @@ namespace worker
 
         int nFileCounter = 0;
         int nTotalFiles = (int)pContext->m_Files.size();
-        int posStatus = 0;
 
         nTotalSizeCounter = 0;
 
@@ -770,9 +793,7 @@ namespace worker
                 }
 
                 CAtlString szTitle;
-                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(),
-                    nFileCounter + 1,
-                    nTotalFiles);
+                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(), nFileCounter + 1, nTotalFiles);
                 std::wstring szTitleStr = szTitle;
                 pContext->SetTitleInfo(szTitleStr);
 
@@ -791,18 +812,19 @@ namespace worker
 
                 ZeroMemory(&s, sizeof(AftenContext));
                 ZeroMemory(&opt, sizeof(AftenOpt));
-                InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s);
+                if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                    return false;
 
                 nInputFiles = 1;
 
                 if (Run() == false)
                 {
-                    pContext->m_Status[posStatus] = false;
+                    pContext->m_Status[i] = false;
+                    pContext->api.CloseAftenAPI();
                     return false;
                 }
 
-                pContext->m_Status[posStatus] = true;
-                posStatus++;
+                pContext->m_Status[i] = true;
                 nFileCounter++;
                 pContext->nCount = nFileCounter;
 
@@ -862,7 +884,8 @@ namespace worker
 
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
-            InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s);
+            if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                return false;
 
             nInputFiles = nFileCounter;
 
@@ -873,6 +896,7 @@ namespace worker
                     pContext->m_Status[i] = false;
                 }
                 pContext->nCount = 0;
+                pContext->api.CloseAftenAPI();
                 return false;
             }
             else
@@ -886,6 +910,7 @@ namespace worker
         }
 
         pContext->StopTotalTimer();
+        pContext->api.CloseAftenAPI();
 
         return true;
     }

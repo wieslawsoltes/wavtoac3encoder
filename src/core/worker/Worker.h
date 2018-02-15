@@ -5,9 +5,7 @@
 #include <memory>
 #include <vector>
 #include <map>
-#include <mutex>
 #include <thread>
-#include <chrono>
 #include <atlstr.h>
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
@@ -42,9 +40,9 @@ namespace worker
         CWorker(CWorkerContext* pContext) : pContext(pContext) { }
         virtual ~CWorker() { }
     public:
-        void InitContext(const config::CEngine *engine, const config::CPreset *preset, const AftenAPI &api, AftenOpt &opt, AftenContext &s);
+        bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
-        bool HandleError(LPTSTR pszMessage);
+        bool HandleError(std::wstring szMessage);
         bool Run();
         bool Encode();
     };
@@ -53,7 +51,6 @@ namespace worker
     {
     public:
         std::thread m_Thread;
-        std::timed_mutex m_Mutex;
     public:
         config::CConfiguration * pConfig;
         AftenAPI api;
@@ -101,7 +98,6 @@ namespace worker
         {
             this->m_Thread = std::thread([this]()
             {
-                std::unique_lock<std::timed_mutex> lk(this->m_Mutex);
                 try
                 {
                     CWorker m_Worker(this);
@@ -112,13 +108,6 @@ namespace worker
                 this->Close();
             });
             this->m_Thread.detach();
-        }
-        virtual void Wait(int ms = 0)
-        {
-            if (ms == 0)
-                std::unique_lock<std::timed_mutex> lk(this->m_Mutex);
-            else
-                std::unique_lock<std::timed_mutex> lk(this->m_Mutex, std::chrono::milliseconds(ms));
         }
     };
 }

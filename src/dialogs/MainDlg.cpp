@@ -280,17 +280,6 @@ namespace app
 
         bWorking = true;
 
-        if (this->api.IsAftenOpen())
-            this->api.CloseAftenAPI();
-
-        if (this->api.OpenAftenAPI() == false)
-        {
-            OutputDebugString(_T("Error: Failed to load libaften.dll dynamic library!"));
-            MessageBox(this->pConfig->GetString(0x00207013).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
-            bWorking = false;
-            return;
-        }
-
         CWorkDlg dlg;
         dlg.pConfig = this->pConfig;
 
@@ -394,7 +383,6 @@ namespace app
         }
 
         dlg.pWorkerContext->bMultiMonoInput = this->pConfig->bMultipleMonoInput;
-        dlg.pWorkerContext->api = this->api;
 
         worker::CTimeCount countTime;
         CString szText;
@@ -402,8 +390,6 @@ namespace app
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
-
-        dlg.pWorkerContext->Wait(1000);
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
@@ -712,9 +698,6 @@ namespace app
 
     void CMainDlg::OnCbnSelchangeComboEngines()
     {
-        if (this->api.IsAftenOpen())
-            this->api.CloseAftenAPI();
-
         int nSel = this->m_CmbEngines.GetCurSel();
         if (nSel == CB_ERR)
             return;
@@ -729,34 +712,6 @@ namespace app
         auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
 
         this->ApplyEngineToDlg(engine);
-
-        this->api.szLibPath = engine.szPath;
-        if (this->api.OpenAftenAPI() == false)
-        {
-            std::wstring szLogMessage =
-                this->pConfig->GetString(0x0020701E) +
-                L" '" + engine.szName + L"' " +
-                this->pConfig->GetString(0x0020701F) + L"!";
-            this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
-        }
-        else
-        {
-            const char *szAftenVersionAnsi = this->api.LibAften_aften_get_version();
-            int nVersionLen = strlen(szAftenVersionAnsi);
-            TCHAR szAftenVersion[256] = _T("");
-            ZeroMemory(szAftenVersion, 256 * sizeof(TCHAR));
-            int nChars = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szAftenVersionAnsi, nVersionLen, szAftenVersion, 256);
-            if (nChars == 0)
-                _stprintf(szAftenVersion, _T("?.??"));
-
-            std::wstring szLogMessage =
-                this->pConfig->GetString(0x00207020) +
-                L" '" + engine.szName + L"' " +
-                this->pConfig->GetString(0x0020701F) + L", " +
-                this->pConfig->GetString(0x00207021) +
-                L" " + szAftenVersion;
-            this->m_StatusBar.SetText(szLogMessage.c_str(), 0, 0);
-        }
     }
 
     void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
@@ -977,7 +932,7 @@ namespace app
         return this->pConfig->SaveEntries(szFileName, cl);
     }
 
-    bool CMainDlg::UpdateProgramEngines()
+    void CMainDlg::UpdateProgramEngines()
     {
         if (this->pConfig->m_Engines.size() == 0)
         {
@@ -988,43 +943,27 @@ namespace app
             this->m_CmbEngines.InsertString(0, engine.szName.c_str());
             this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
 
-            if (this->api.IsAftenOpen())
-                this->api.CloseAftenAPI();
-
-            this->api.szLibPath = engine.szPath;
-            this->api.OpenAftenAPI();
-
-            this->ApplyEngineToDlg(engine);
-
-            return false;
-        }
-
-        int nSize = (int)this->pConfig->m_Engines.size();
-        for (int i = 0; i < nSize; i++)
-        {
-            auto& engine = this->pConfig->m_Engines[i];
-            this->m_CmbEngines.InsertString(i, engine.szName.c_str());
-        }
-
-        if (this->pConfig->nCurrentEngine >= nSize)
-            this->pConfig->nCurrentEngine = 0;
-
-        if ((this->pConfig->nCurrentEngine >= 0) && (this->pConfig->nCurrentEngine < nSize))
-        {
-            if (this->api.IsAftenOpen())
-                this->api.CloseAftenAPI();
-
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
-
-            this->api.szLibPath = engine.szPath;
-            this->api.OpenAftenAPI();
-
-            this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
-
             this->ApplyEngineToDlg(engine);
         }
+        else
+        {
+            int nSize = (int)this->pConfig->m_Engines.size();
+            for (int i = 0; i < nSize; i++)
+            {
+                auto& engine = this->pConfig->m_Engines[i];
+                this->m_CmbEngines.InsertString(i, engine.szName.c_str());
+            }
 
-        return true;
+            if (this->pConfig->nCurrentEngine >= nSize)
+                this->pConfig->nCurrentEngine = 0;
+
+            if ((this->pConfig->nCurrentEngine >= 0) && (this->pConfig->nCurrentEngine < nSize))
+            {
+                auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+                this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
+                this->ApplyEngineToDlg(engine);
+            }
+        }
     }
 
     void CMainDlg::ApplyEngineToDlg(config::CEngine &engine)
@@ -1047,8 +986,10 @@ namespace app
         {
             this->pConfig->m_Engines = engines;
             this->m_CmbEngines.ResetContent();
+            this->UpdateProgramEngines();
+            return true;
         }
-        return this->UpdateProgramEngines();
+        return false;
     }
 
     bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
@@ -2428,10 +2369,8 @@ namespace app
         memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
 
         CAvs2Raw decoderAVS;
-        char szInputFileAVS[MAX_PATH] = "";
-
-        util::Utilities::ConvertUnicodeToAnsi(szFileName.c_str(), szInputFileAVS, szFileName.length());
-        if (decoderAVS.OpenAvisynth(szInputFileAVS) == false)
+        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
+        if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
             OutputDebugString(_T("Error: Failed to initialize Avisynth!"));
             this->MessageBox(this->pConfig->GetString(0x00207022).c_str(),

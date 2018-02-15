@@ -71,7 +71,9 @@ namespace app
     private:
         bool IsValid()
         {
-            return (pWorkDlg != nullptr) && (::IsWindow(pWorkDlg->GetSafeHwnd()) == TRUE);
+            return (this->bTerminate == false) 
+                && (pWorkDlg != nullptr) 
+                && (::IsWindow(pWorkDlg->GetSafeHwnd()) == TRUE);
         }
     public:
         void SetTitleInfo(std::wstring szInfo)
@@ -184,10 +186,7 @@ namespace app
     public:
         void Close()
         {
-            if (IsValid())
-            {
-                ::PostMessage(pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
-            }
+            ::PostMessage(pWorkDlg->GetSafeHwnd(), WM_CLOSE, 0, 0);
         }
     };
 }
