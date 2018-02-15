@@ -655,7 +655,7 @@ namespace config
                 {
                     auto& option = m_EncoderOptions.m_Options[j];
                     int nOptionValue = preset.nOptions[j];
-                    if(option.nIgnoreValue != nOptionValue)
+                    if(option.nDefaultValue != nOptionValue)
                     {
                         szBuffer = TrimOption(option.szOption) + szSeparator + std::to_wstring(nOptionValue) + szNewChar;
                         std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
