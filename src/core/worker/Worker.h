@@ -100,7 +100,7 @@ namespace worker
         {
             this->m_Thread = std::thread([this]()
             {
-                std::unique_lock<std::mutex> lk(this->m_Mutex);
+                std::unique_lock<std::timed_mutex> lk(this->m_Mutex);
                 try
                 {
                     CWorker m_Worker(this);
@@ -115,7 +115,7 @@ namespace worker
         virtual void Wait(int ms = 0)
         {
             if (ms == 0)
-                std::unique_lock<std::mutex> lk(this->m_Mutex);
+                std::unique_lock<std::timed_mutex> lk(this->m_Mutex);
             else
                 std::unique_lock<std::timed_mutex> lk(this->m_Mutex, std::chrono::milliseconds(ms));
         }
