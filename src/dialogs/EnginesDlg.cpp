@@ -172,8 +172,8 @@ namespace app
 
     bool CEnginesDlg::LoadProgramEngines(std::wstring szFileName)
     {
-        std::vector<config::Entry> engines;
-        if (this->pConfig->LoadEngines(szFileName, engines) == true)
+        std::vector<config::CEngine> engines;
+        if (this->pConfig->LoadEngines(engines, szFileName) == true)
         {
             this->m_Engines = engines;
             this->m_LstEngines.DeleteAllItems();
@@ -184,7 +184,7 @@ namespace app
 
     bool CEnginesDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return this->pConfig->SaveEngines(szFileName, this->m_Engines);
+        return this->pConfig->SaveEngines(this->m_Engines, szFileName);
     }
 
     void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
@@ -198,8 +198,8 @@ namespace app
             {
                 int nItem = m_LstEngines.GetNextSelectedItem(pos);
                 auto& engine = this->m_Engines[nItem];
-                this->m_EdtEngineName.SetWindowText(ce.szName.c_str());
-                this->m_EdtEnginePath.SetWindowText(ce.szPath.c_str());
+                this->m_EdtEngineName.SetWindowText(engine.szName.c_str());
+                this->m_EdtEnginePath.SetWindowText(engine.szPath.c_str());
             }
             else
             {
@@ -224,7 +224,7 @@ namespace app
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEngineName.GetWindowText(szText);
             auto& engine = this->m_Engines[nIndex];
-            ce.szName = szText;
+            engine.szName = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 0, szText);
         }
@@ -239,7 +239,7 @@ namespace app
             int nIndex = this->m_LstEngines.GetNextSelectedItem(pos);
             this->m_EdtEnginePath.GetWindowText(szText);
             auto& engine = this->m_Engines[nIndex];
-            ce.szPath = szText;
+            engine.szPath = szText;
             bUpdateList = false;
             this->m_LstEngines.SetItemText(nIndex, 1, szText);
         }

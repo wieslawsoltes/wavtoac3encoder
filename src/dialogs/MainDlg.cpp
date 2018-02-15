@@ -735,7 +735,7 @@ namespace app
         {
             std::wstring szLogMessage =
                 this->pConfig->GetString(0x0020701E) +
-                L" '" + pengine.szname + L"' " +
+                L" '" + engine.szName + L"' " +
                 this->pConfig->GetString(0x0020701F) + L"!";
             this->m_StatusBar.SetText(szLogMessage.c_str() , 0, 0);
         }
@@ -1013,7 +1013,7 @@ namespace app
         if (this->pConfig->nCurrentEngine >= nSize)
             this->pConfig->nCurrentEngine = 0;
 
-        if (this->pConfig->nCurrentEngine >= 0) && this->pConfig->nCurrentEngine < nSize))
+        if ((this->pConfig->nCurrentEngine >= 0) && (this->pConfig->nCurrentEngine < nSize))
         {
             if (this->api.IsAftenOpen())
                 this->api.CloseAftenAPI();
@@ -1046,8 +1046,8 @@ namespace app
 
     bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
     {
-        std::vector<config::Entry> engines;
-        if (this->pConfig->LoadConfig(szFileName, engines) == true)
+        std::vector<config::CEngine> engines;
+        if (this->pConfig->LoadEngines(engines, szFileName) == true)
         {
             this->pConfig->m_Engines = engines;
             this->m_CmbEngines.ResetContent();
@@ -1057,7 +1057,7 @@ namespace app
 
     bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
     {
-        return this->pConfig->SaveEngines(szFileName, this->pConfig->m_Engines);
+        return this->pConfig->SaveEngines(this->pConfig->m_Engines, szFileName);
     }
 
     bool CMainDlg::LoadFilesList(std::wstring &szFileName)
