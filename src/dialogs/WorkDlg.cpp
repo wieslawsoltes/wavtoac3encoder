@@ -75,11 +75,6 @@ namespace app
             pWorkerContext->bTerminate = true;
         }
 
-        if (m_Thread.joinable() == true)
-        {
-            m_Thread.join();
-        }
-
         CMyDialogEx::OnClose();
     }
 
@@ -90,11 +85,6 @@ namespace app
         if (pWorkerContext->bTerminate == false)
         {
             pWorkerContext->bTerminate = true;
-        }
-
-        if (m_Thread.joinable() == true)
-        {
-            m_Thread.join();
         }
     }
 
@@ -119,10 +109,8 @@ namespace app
         {
             pWorkerContext->bTerminate = true;
         }
-        else
-        {
-            this->EndDialog(IDOK);
-        }
+
+        this->EndDialog(IDOK);
     }
 
     void CWorkDlg::InitCtrls()

@@ -400,7 +400,9 @@ namespace app
 
         dlg.pWorkerContext->bTerminate = true;
         if (dlg.m_Thread.joinable() == true)
+        {
             dlg.m_Thread.join();
+        }
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
