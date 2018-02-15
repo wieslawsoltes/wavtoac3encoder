@@ -81,6 +81,7 @@ namespace config
     class CPreset
     {
     public:
+        static const AftenEncMode nDefaultMode = AFTEN_ENC_MODE_CBR;
         static const int nDefaultBitrate = 0;
         static const int nDefaultQuality = 240;
     public:

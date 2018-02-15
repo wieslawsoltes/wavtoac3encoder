@@ -629,16 +629,27 @@ namespace config
                 szBuffer = L"[" + preset.szName + L"]\n";
                 std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
 
-                szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                if (preset.nMode != CPreset::nDefaultMode)
+                {
+                    szBuffer = L"mode" + szSeparator + std::to_wstring(preset.nMode) + szNewChar;
+                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                }
 
-                szBuffer = TrimOption(m_EncoderOptions.szCbrOption) + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                if (preset.nBitrate != CPreset::nDefaultBitrate)
+                {
+                    szBuffer = TrimOption(m_EncoderOptions.szCbrOption) + szSeparator + std::to_wstring(preset.nBitrate) + szNewChar;
+                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                }
 
-                szBuffer = TrimOption(m_EncoderOptions.szVbrOption) + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
-                std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                if (preset.nQuality != CPreset::nDefaultQuality)
+                {
+                    szBuffer = TrimOption(m_EncoderOptions.szVbrOption) + szSeparator + std::to_wstring(preset.nQuality) + szNewChar;
+                    std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
+                }
 
-                if ((preset.m_RawInput.nRawSampleFormat != 0) || (preset.m_RawInput.nRawSampleRate != 0) || (preset.m_RawInput.nRawChannels != 0))
+                if ((preset.m_RawInput.nRawSampleFormat != CRawInput::nDefaultRawChannels)
+                    || (preset.m_RawInput.nRawSampleRate != CRawInput::nDefaultRawSampleFormat)
+                    || (preset.m_RawInput.nRawChannels != CRawInput::nDefaultRawSampleRate))
                 {
                     szBuffer = TrimOption(m_EncoderOptions.szRawSampleFormatOption) + szSeparator + std::to_wstring(preset.m_RawInput.nRawSampleFormat) + szNewChar;
                     std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);
@@ -655,7 +666,7 @@ namespace config
                 {
                     auto& option = m_EncoderOptions.m_Options[j];
                     int nOptionValue = preset.nOptions[j];
-                    if(option.nDefaultValue != nOptionValue)
+                    if(nOptionValue != option.nDefaultValue)
                     {
                         szBuffer = TrimOption(option.szOption) + szSeparator + std::to_wstring(nOptionValue) + szNewChar;
                         std::fwrite(szBuffer.data(), sizeof(wchar_t), szBuffer.size(), fs);

@@ -1715,20 +1715,22 @@ namespace app
 
     void CMainDlg::InitDefaultPreset()
     {
+        pConfig->m_DefaultPreset.szName = this->pConfig->GetString(0x00207001);
+
+        pConfig->m_DefaultPreset.nMode = config::CPreset::nDefaultMode;
+        pConfig->m_DefaultPreset.nBitrate = config::CPreset::nDefaultBitrate;
+        pConfig->m_DefaultPreset.nQuality = config::CPreset::nDefaultQuality;
+
+        pConfig->m_DefaultPreset.m_RawInput.nRawChannels = config::CRawInput::nDefaultRawChannels;
+        pConfig->m_DefaultPreset.m_RawInput.nRawSampleFormat = config::CRawInput::nDefaultRawSampleFormat;
+        pConfig->m_DefaultPreset.m_RawInput.nRawSampleRate = config::CRawInput::nDefaultRawSampleRate;
+
         int nOptionsSize = (int)this->pConfig->m_EncoderOptions.m_Options.size();
         for (int i = 0; i < nOptionsSize; i++)
         {
             auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
             pConfig->m_DefaultPreset.nOptions[i] = option.nDefaultValue;
         }
-
-        pConfig->m_DefaultPreset.szName = this->pConfig->GetString(0x00207001);
-        pConfig->m_DefaultPreset.nMode = AFTEN_ENC_MODE_CBR;
-        pConfig->m_DefaultPreset.nBitrate = 0;
-        pConfig->m_DefaultPreset.nQuality = 240;
-        pConfig->m_DefaultPreset.m_RawInput.nRawChannels = 0;
-        pConfig->m_DefaultPreset.m_RawInput.nRawSampleFormat = 0;
-        pConfig->m_DefaultPreset.m_RawInput.nRawSampleRate = 0;
 
         this->pConfig->nCurrentPreset = 0;
         this->m_CmbPresets.InsertString(0, pConfig->m_DefaultPreset.szName.c_str());
