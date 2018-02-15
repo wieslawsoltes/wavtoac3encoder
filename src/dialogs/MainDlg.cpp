@@ -1022,7 +1022,7 @@ namespace app
     bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
     {
         std::vector<config::Entry> engines;
-        if (this->pConfig->LoadConfig(szFileName, this->pConfig->m_Engines) == true)
+        if (this->pConfig->LoadConfig(szFileName, engines) == true)
         {
             this->pConfig->m_Engines = engines;
             this->m_CmbEngines.ResetContent();
