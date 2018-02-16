@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "MainDlg.h"
 #include "WorkDlg.h"
