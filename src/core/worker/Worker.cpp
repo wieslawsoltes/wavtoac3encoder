@@ -395,7 +395,7 @@ namespace worker
         {
             if (pcm_init(&state.pf, state.nInputFiles, state.ifp, read_format, input_file_format))
             {
-                return EncoderError(L"[Error] Failed to initialize PCM library.");
+                return EncoderError(state, L"[Error] Failed to initialize PCM library.");
             }
 
             if (state.opt.read_to_eof)
@@ -433,7 +433,7 @@ namespace worker
                 {
                     if (state.s.lfe != 0)
                     {
-                        return EncoderError(L"[Error] Invalid channel configuration.");
+                        return EncoderError(state, L"[Error] Invalid channel configuration.");
                     }
                 }
             }
@@ -447,13 +447,13 @@ namespace worker
                 {
                     if (state.s.lfe != 1)
                     {
-                        return EncoderError(L"[Error] Invalid channel configuration.");
+                        return EncoderError(state, L"[Error] Invalid channel configuration.");
                     }
                 }
             }
             else
             {
-                return EncoderError(L"[Error] Invalid channel configuration.");
+                return EncoderError(state, L"[Error] Invalid channel configuration.");
             }
         }
         else
@@ -463,11 +463,11 @@ namespace worker
             {
                 if (state.s.lfe == 0 && ch == 6)
                 {
-                    return EncoderError(L"[Error] Invalid channel configuration.");
+                    return EncoderError(state, L"[Error] Invalid channel configuration.");
                 }
                 else if (state.s.lfe == 1 && ch == 1)
                 {
-                    return EncoderError(L"[Error] Invalid channel configuration.");
+                    return EncoderError(state, L"[Error] Invalid channel configuration.");
                 }
 
                 if (state.s.lfe)
@@ -478,7 +478,7 @@ namespace worker
 
             if (state.api.LibAften_aften_wav_channels_to_acmod(ch, state.pf.ch_mask, &state.s.acmod, &state.s.lfe))
             {
-                return EncoderError(L"[Error] Invalid channel configuration.");
+                return EncoderError(state, L"[Error] Invalid channel configuration.");
             }
         }
 
@@ -502,7 +502,7 @@ namespace worker
         state.fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * state.s.channels, sizeof(FLOAT));
         if (state.frame == nullptr || state.fwav == nullptr)
         {
-            return EncoderError(L"[Error] Failed to allocate samples memory.");
+            return EncoderError(state, L"[Error] Failed to allocate samples memory.");
         }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
@@ -547,7 +547,7 @@ namespace worker
 
         if (state.api.LibAften_aften_encode_init(&state.s))
         {
-            return EncoderError(L"[Error] Failed to initialize aften encoder.");
+            return EncoderError(state, L"[Error] Failed to initialize aften encoder.");
         }
 
         SetInfo(state);
@@ -567,7 +567,7 @@ namespace worker
                     if (fs > 0)
                         fwrite(state.frame, 1, fs, state.ofp);
                 }
-                return EncoderError(L"[Info] User terminated encoding.");
+                return EncoderError(state, L"[Info] User terminated encoding.");
             }
 
             if (state.bAvisynthInput == false)
@@ -587,7 +587,7 @@ namespace worker
 
             if (fs < 0)
             {
-                return EncoderError(L"[Error] Failed to encode state.frame.");
+                return EncoderError(state, L"[Error] Failed to encode state.frame.");
             }
             else
             {
@@ -782,14 +782,14 @@ namespace worker
 
                 ZeroMemory(&state.s, sizeof(AftenContext));
                 ZeroMemory(&state.opt, sizeof(AftenOpt));
-                if (InitEngine(pContext->pEngine, pContext->pPreset, state.api, state.opt, state.s) == false)
+                if (InitEngine(state) == false)
                 {
                     return false;
                 }
 
                 state.nInputFiles = 1;
 
-                if (Encode() == false)
+                if (Encode(state) == false)
                 {
                     pContext->m_Status[i] = false;
                     state.api.CloseAftenAPI();
@@ -855,14 +855,14 @@ namespace worker
 
             ZeroMemory(&state.s, sizeof(AftenContext));
             ZeroMemory(&state.opt, sizeof(AftenOpt));
-            if (InitEngine(pContext->pEngine, pContext->pPreset, state.api, state.opt, state.s) == false)
+            if (InitEngine(state) == false)
             {
                 return false;
             }
 
             state.nInputFiles = nFileCounter;
 
-            if (Encode() == false)
+            if (Encode(state) == false)
             {
                 for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
