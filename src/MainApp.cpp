@@ -1,8 +1,6 @@
 ﻿#include "StdAfx.h"
 #include "MainApp.h"
 #include "dialogs\MainDlg.h"
-#include "utilities\Utilities.h"
-#include "configuration\Configuration.h"
 
 namespace app
 {
@@ -14,10 +12,13 @@ namespace app
 
     CEncWAVtoAC3App::CEncWAVtoAC3App()
     {
+        Log = std::make_unique<FileLog>();
+        Log->Open(FILENAME_LOG);
     }
 
     CEncWAVtoAC3App::~CEncWAVtoAC3App()
     {
+        Log->Close();
     }
 
     BOOL CEncWAVtoAC3App::InitInstance()
@@ -29,7 +30,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Failed to load config."), _T("Error"), MB_OK | MB_ICONERROR);
+            Log->Log(L"Error: Failed to load config.");
         }
 
         try
@@ -45,7 +46,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Failed to init application."), _T("Error"), MB_OK | MB_ICONERROR);
+            Log->Log(L"Error: Failed to init application.");
         }
 
         try
@@ -57,7 +58,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Main dialog exception."), _T("Error"), MB_OK | MB_ICONERROR);
+            Log->Log(L"Error: Main dialog exception.");
         }
 
         try
@@ -66,7 +67,7 @@ namespace app
         }
         catch (...)
         {
-            MessageBox(nullptr, _T("Failed to save config."), _T("Error"), MB_OK | MB_ICONERROR);
+            Log->Log(L"Error: Failed to save config.");
         }
 
         return FALSE;
