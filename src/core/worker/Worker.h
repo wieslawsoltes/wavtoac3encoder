@@ -18,7 +18,6 @@ namespace worker
     {
     public:
         config::CConfiguration * pConfig;
-        AftenAPI api;
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
         config::CPreset * pPreset;
@@ -60,15 +59,15 @@ namespace worker
         virtual void Close() = 0;
     };
 
-    class CWorker
+    class CState
     {
     public:
-        std::unique_ptr<worker::CWorkerContext>& pContext;
-    private:
-        __int64 nTotalSizeCounter;
+        config::CPreset * preset;
+        config::CEngine * engine;
         int nInputFiles;
         std::wstring szInPath[6];
         std::wstring szOutPath;
+        AftenAPI api;
         AftenOpt opt;
         AftenContext s;
         PcmContext pf;
@@ -80,14 +79,22 @@ namespace worker
         AvsAudioInfo infoAVS;
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
+        __int64 nTotalSizeCounter = 0;
+    }
+
+    class CWorker
+    {
+    public:
+        std::unique_ptr<worker::CWorkerContext>& pContext;
     public:
         CWorker(std::unique_ptr<worker::CWorkerContext>& pContext) : pContext(pContext) { }
         virtual ~CWorker() { }
+    protected:
+        void SetInfo(CState& state);
+        bool InitEngine(CState& state);
+        bool EncoderError(CState& state, const std::wstring szMessage);
+        bool Encode(CState& state);
     public:
-        bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
-        void UpdateProgress();
-        bool HandleError(const std::wstring szMessage);
         bool Run();
-        bool Encode();
     };
 }

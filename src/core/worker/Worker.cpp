@@ -3,139 +3,15 @@
 
 namespace worker
 {
-    bool CWorker::InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s)
+    void CWorker::SetInfo(CState& state)
     {
-        if (api.OpenAftenAPI(engine->szPath) == false)
-        {
-            logger::Log->Log(L"[Error] Failed to load '" + engine->szName + L"' library: " + engine->szPath);
-            return false;
-        }
-        else
-        {
-            const char *szAftenVersionAnsi = api.LibAften_aften_get_version();
-            std::wstring szVersion = util::StringHelper::Convert(szAftenVersionAnsi);
-            logger::Log->Log( L"[Info] Loaded '" + engine->szName + L"' library" + L", version " + szVersion + L": " + engine->szPath);
-        }
-
-        api.LibAften_aften_set_defaults(&s);
-
-        s.system.wanted_simd_instructions.mmx = engine->nUsedSIMD.at(0);
-        s.system.wanted_simd_instructions.sse = engine->nUsedSIMD.at(1);
-        s.system.wanted_simd_instructions.sse2 = engine->nUsedSIMD.at(2);
-        s.system.wanted_simd_instructions.sse3 = engine->nUsedSIMD.at(3);
-        s.system.n_threads = engine->nThreads;
-
-        s.params.encoding_mode = preset->nMode;
-        s.params.bitrate = preset->nBitrate;
-        s.params.quality = preset->nQuality;
-
-        if (preset->m_RawInput.nRawSampleFormat != 0)
-        {
-            switch (preset->m_RawInput.nRawSampleFormat)
-            {
-            case 1: opt.raw_fmt = PCM_SAMPLE_FMT_U8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 2: opt.raw_fmt = PCM_SAMPLE_FMT_S8; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 3: opt.raw_fmt = PCM_SAMPLE_FMT_S16; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 4: opt.raw_fmt = PCM_SAMPLE_FMT_S16; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            case 5: opt.raw_fmt = PCM_SAMPLE_FMT_S20; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 6: opt.raw_fmt = PCM_SAMPLE_FMT_S20; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            case 7: opt.raw_fmt = PCM_SAMPLE_FMT_S24; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 8: opt.raw_fmt = PCM_SAMPLE_FMT_S24; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            case 9: opt.raw_fmt = PCM_SAMPLE_FMT_S32; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 10: opt.raw_fmt = PCM_SAMPLE_FMT_S32; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            case 11: opt.raw_fmt = PCM_SAMPLE_FMT_FLT; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 12: opt.raw_fmt = PCM_SAMPLE_FMT_FLT; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            case 13: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_LE; break;
-            case 14: opt.raw_fmt = PCM_SAMPLE_FMT_DBL; opt.raw_order = PCM_BYTE_ORDER_BE; break;
-            };
-            opt.raw_input = 1;
-        }
-
-        if (preset->m_RawInput.nRawSampleRate != 0)
-        {
-            opt.raw_sr = preset->m_RawInput.nRawSampleRate;
-            opt.raw_input = 1;
-        }
-
-        if (preset->m_RawInput.nRawChannels != 0)
-        {
-            opt.raw_ch = preset->m_RawInput.nRawChannels;
-            opt.raw_input = 1;
-        }
-
-        #define SetSetting(set, type) \
-            nOption++; \
-            { \
-                auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption]; \
-                int nOptionValue = preset->nOptions.at(nOption); \
-                if(option.nIgnoreValue != nOptionValue) \
-                { \
-                    int nValue = option.m_Values[nOptionValue].second; \
-                    (set) = (type) nValue; \
-                } \
-            }
-
-        int nOption = -1;
-
-        SetSetting(s.params.bitalloc_fast, int)
-        SetSetting(s.params.expstr_search, int)
-        SetSetting(opt.pad_start, int)
-        SetSetting(s.params.bwcode, int)
-        SetSetting(s.params.min_bwcode, int)
-        SetSetting(s.params.max_bwcode, int)
-        SetSetting(s.params.use_rematrixing, int)
-        SetSetting(s.params.use_block_switching, int)
-        SetSetting(s.meta.cmixlev, int)
-        SetSetting(s.meta.surmixlev, int)
-        SetSetting(s.meta.dsurmod, int)
-        SetSetting(s.meta.dialnorm, int)
-        SetSetting(s.params.dynrng_profile, DynRngProfile)
-        SetSetting(s.acmod, int)
-        SetSetting(s.lfe, int)
-
-        nOption++;
-        {
-            auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption];
-            int nOptionValue = preset->nOptions.at(nOption);
-            if (option.nIgnoreValue != nOptionValue)
-            {
-                int nValue = option.m_Values[nOptionValue].second;
-                auto& channelConfig = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
-                s.acmod = channelConfig.acmod;
-                s.lfe = channelConfig.lfe;
-            }
-        }
-
-        SetSetting(opt.chmap, int)
-        SetSetting(opt.read_to_eof, int)
-        SetSetting(s.params.use_bw_filter, int)
-        SetSetting(s.params.use_dc_filter, int)
-        SetSetting(s.params.use_lfe_filter, int)
-        SetSetting(s.meta.xbsi1e, int)
-        SetSetting(s.meta.dmixmod, int)
-        SetSetting(s.meta.ltrtcmixlev, int)
-        SetSetting(s.meta.ltrtsmixlev, int)
-        SetSetting(s.meta.lorocmixlev, int)
-        SetSetting(s.meta.lorosmixlev, int)
-        SetSetting(s.meta.xbsi2e, int)
-        SetSetting(s.meta.dsurexmod, int)
-        SetSetting(s.meta.dheadphonmod, int)
-        SetSetting(s.meta.adconvtyp, int)
-
-        #undef SetSetting
-
-        return true;
-    }
-
-    void CWorker::UpdateProgress()
-    {
-        if (bAvisynthInput == false)
+        if (state.bAvisynthInput == false)
         {
             CAtlString szInputInfo = _T("");
 
-            for (int i = 0; i < nInputFiles; i++)
+            for (int i = 0; i < state.nInputFiles; i++)
             {
-                PcmFile *pf_info = &pf.pcm_file[i];
+                PcmFile *pf_info = &state.pf.pcm_file[i];
                 std::wstring type, chan, order;
                 std::wstring fmt = L"";
 
@@ -219,7 +95,7 @@ namespace worker
             CAtlString szInputInfo = _T("");
             std::wstring chan = L"?-channel";
 
-            switch (infoAVS.nAudioChannels)
+            switch (state.infoAVS.nAudioChannels)
             {
             case 1: chan = pContext->pConfig->GetString(0x00A0200D).c_str(); break;
             case 2: chan = pContext->pConfig->GetString(0x00A0200E).c_str(); break;
@@ -232,7 +108,7 @@ namespace worker
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
                 pContext->pConfig->GetString(0x00A02017).c_str(),
-                infoAVS.nSamplesPerSecond, chan.c_str());
+                state.infoAVS.nSamplesPerSecond, chan.c_str());
             std::wstring szInputInfoStr = szInputInfo;
             pContext->SetInputTypeInfo(0, szInputInfoStr);
         }
@@ -251,52 +127,175 @@ namespace worker
                 L"3/2"
             };
 
-            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), s.samplerate, acmod_str[s.acmod].c_str());
-            if (s.lfe)
+            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), state.s.samplerate, acmod_str[state.s.acmod].c_str());
+            if (state.s.lfe)
                 szOutputInfo += _T(" + LFE");
             std::wstring szOutputInfoStr = szOutputInfo;
             pContext->SetOutputTypeInfo(szOutputInfoStr);
         }
     }
 
-    bool CWorker::HandleError(const std::wstring szMessage)
+    bool CWorker::InitEngine(CState& state)
     {
-        logger::Log->Log(szMessage);
-
-        if (fwav)
-            free(fwav);
-
-        if (frame)
-            free(frame);
-
-        if (bAvisynthInput == false)
+        if (state.api.OpenAftenAPI(state.engine->szPath) == false)
         {
-            pcm_close(&pf);
-            for (int i = 0; i < nInputFiles; i++)
+            logger::Log->Log(L"[Error] Failed to load '" + state.engine->szName + L"' library: " + state.engine->szPath);
+            return false;
+        }
+        else
+        {
+            const char *version = state.api.LibAften_aften_get_version();
+            std::wstring szVersion = util::StringHelper::Convert(version);
+            logger::Log->Log( L"[Info] Loaded '" + state.engine->szName + L"' library" + L", version " + szVersion + L": " + state.engine->szPath);
+        }
+
+        state.api.LibAften_aften_set_defaults(&state.s);
+
+        state.s.system.wanted_simd_instructions.mmx = state.engine->nUsedSIMD.at(0);
+        state.s.system.wanted_simd_instructions.sse = state.engine->nUsedSIMD.at(1);
+        state.s.system.wanted_simd_instructions.sse2 = state.engine->nUsedSIMD.at(2);
+        state.s.system.wanted_simd_instructions.sse3 = state.engine->nUsedSIMD.at(3);
+        state.s.system.n_threads = state.engine->nThreads;
+
+        state.s.params.encoding_mode = state.preset->nMode;
+        state.s.params.bitrate = state.preset->nBitrate;
+        state.s.params.quality = state.preset->nQuality;
+
+        if (state.preset->m_RawInput.nRawSampleFormat != 0)
+        {
+            switch (state.preset->m_RawInput.nRawSampleFormat)
             {
-                if (ifp[i])
-                    fclose(ifp[i]);
+            case 1: state.opt.raw_fmt = PCM_SAMPLE_FMT_U8; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 2: state.opt.raw_fmt = PCM_SAMPLE_FMT_S8; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 3: state.opt.raw_fmt = PCM_SAMPLE_FMT_S16; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 4: state.opt.raw_fmt = PCM_SAMPLE_FMT_S16; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            case 5: state.opt.raw_fmt = PCM_SAMPLE_FMT_S20; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 6: state.opt.raw_fmt = PCM_SAMPLE_FMT_S20; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            case 7: state.opt.raw_fmt = PCM_SAMPLE_FMT_S24; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 8: state.opt.raw_fmt = PCM_SAMPLE_FMT_S24; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            case 9: state.opt.raw_fmt = PCM_SAMPLE_FMT_S32; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 10: state.opt.raw_fmt = PCM_SAMPLE_FMT_S32; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            case 11: state.opt.raw_fmt = PCM_SAMPLE_FMT_FLT; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 12: state.opt.raw_fmt = PCM_SAMPLE_FMT_FLT; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            case 13: state.opt.raw_fmt = PCM_SAMPLE_FMT_DBL; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
+            case 14: state.opt.raw_fmt = PCM_SAMPLE_FMT_DBL; state.opt.raw_order = PCM_BYTE_ORDER_BE; break;
+            };
+            state.opt.raw_input = 1;
+        }
+
+        if (state.preset->m_RawInput.nRawSampleRate != 0)
+        {
+            state.opt.raw_sr = state.preset->m_RawInput.nRawSampleRate;
+            state.opt.raw_input = 1;
+        }
+
+        if (state.preset->m_RawInput.nRawChannels != 0)
+        {
+            state.opt.raw_ch = state.preset->m_RawInput.nRawChannels;
+            state.opt.raw_input = 1;
+        }
+
+        #define SetSetting(set, type) \
+            nOption++; \
+            { \
+                auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption]; \
+                int nOptionValue = state.preset->nOptions.at(nOption); \
+                if(option.nIgnoreValue != nOptionValue) \
+                { \
+                    int nValue = option.m_Values[nOptionValue].second; \
+                    (set) = (type) nValue; \
+                } \
+            }
+
+        int nOption = -1;
+
+        SetSetting(state.s.params.bitalloc_fast, int)
+        SetSetting(state.s.params.expstr_search, int)
+        SetSetting(state.opt.pad_start, int)
+        SetSetting(state.s.params.bwcode, int)
+        SetSetting(state.s.params.min_bwcode, int)
+        SetSetting(state.s.params.max_bwcode, int)
+        SetSetting(state.s.params.use_rematrixing, int)
+        SetSetting(state.s.params.use_block_switching, int)
+        SetSetting(state.s.meta.cmixlev, int)
+        SetSetting(state.s.meta.surmixlev, int)
+        SetSetting(state.s.meta.dsurmod, int)
+        SetSetting(state.s.meta.dialnorm, int)
+        SetSetting(state.s.params.dynrng_profile, DynRngProfile)
+        SetSetting(state.s.acmod, int)
+        SetSetting(state.s.lfe, int)
+
+        nOption++;
+        {
+            auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption];
+            int nOptionValue = state.preset->nOptions.at(nOption);
+            if (option.nIgnoreValue != nOptionValue)
+            {
+                int nValue = option.m_Values[nOptionValue].second;
+                auto& channelConfig = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
+                state.s.acmod = channelConfig.acmod;
+                state.s.lfe = channelConfig.lfe;
+            }
+        }
+
+        SetSetting(state.opt.chmap, int)
+        SetSetting(state.opt.read_to_eof, int)
+        SetSetting(state.s.params.use_bw_filter, int)
+        SetSetting(state.s.params.use_dc_filter, int)
+        SetSetting(state.s.params.use_lfe_filter, int)
+        SetSetting(state.s.meta.xbsi1e, int)
+        SetSetting(state.s.meta.dmixmod, int)
+        SetSetting(state.s.meta.ltrtcmixlev, int)
+        SetSetting(state.s.meta.ltrtsmixlev, int)
+        SetSetting(state.s.meta.lorocmixlev, int)
+        SetSetting(state.s.meta.lorosmixlev, int)
+        SetSetting(state.s.meta.xbsi2e, int)
+        SetSetting(state.s.meta.dsurexmod, int)
+        SetSetting(state.s.meta.dheadphonmod, int)
+        SetSetting(state.s.meta.adconvtyp, int)
+
+        #undef SetSetting
+
+        return true;
+    }
+
+    bool CWorker::EncoderError(CState& state, const std::wstring szMessage)
+    {
+        if (state.fwav)
+            free(state.fwav);
+
+        if (state.frame)
+            free(state.frame);
+
+        if (state.bAvisynthInput == false)
+        {
+            pcm_close(&state.pf);
+            for (int i = 0; i < state.nInputFiles; i++)
+            {
+                if (state.ifp[i])
+                    fclose(state.ifp[i]);
             }
         }
         else
         {
-            decoderAVS.CloseAvisynth();
+            state.decoderAVS.CloseAvisynth();
         }
 
-        if (ofp)
-            fclose(ofp);
+        if (state.ofp)
+            fclose(state.ofp);
 
-        pContext->api.LibAften_aften_encode_close(&s);
-        pContext->api.CloseAftenAPI();
+        state.api.LibAften_aften_encode_close(&state.s);
+        state.api.CloseAftenAPI();
+
         pContext->StopCurrentTimer();
-        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
+        logger::Log->Log(szMessage);
         return false;
     }
 
-    bool CWorker::Run()
+    bool CWorker::Encode(CState& state)
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
         int nr, fs;
@@ -308,72 +307,70 @@ namespace worker
         int input_file_format;
         enum PcmSampleFormat read_format;
 
-        frame = nullptr;
-        fwav = nullptr;
+        state.frame = nullptr;
+        state.fwav = nullptr;
 
-        for (int i = 0; i < nInputFiles; i++)
-            ifp[i] = nullptr;
+        for (int i = 0; i < state.nInputFiles; i++)
+            state.ifp[i] = nullptr;
 
-        ofp = nullptr;
+        state.ofp = nullptr;
 
-        bAvisynthInput = false;
-        std::wstring szExt = util::Utilities::GetFileExtension(szInPath[0]);
+        state.bAvisynthInput = false;
+        std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
         if (util::StringHelper::TowLower(szExt) == L"avs")
-            bAvisynthInput = true;
+            state.bAvisynthInput = true;
 
         pContext->nInTotalSize = 0;
 
-        memset(ifp, 0, 6 * sizeof(FILE *));
+        memset(state.ifp, 0, 6 * sizeof(FILE *));
 
-        if (bAvisynthInput == true)
+        if (state.bAvisynthInput == true)
         {
-            std::string szInputFileAVS = util::StringHelper::Convert(szInPath[0]);
-            if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
+            std::string szInputFileAVS = util::StringHelper::Convert(state.szInPath[0]);
+            if (state.decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
                 logger::Log->Log(L"[Error] Failed to initialize Avisynth.");
                 return false;
             }
             else
             {
-                infoAVS = decoderAVS.GetInputInfo();
-                pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+                state.infoAVS = state.decoderAVS.GetInputInfo();
+                pContext->nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
                 logger::Log->Log(L"[Info] Avisynth initialized successfully.");
             }
         }
         else
         {
-            for (int i = 0; i < nInputFiles; i++)
+            for (int i = 0; i < state.nInputFiles; i++)
             {
-                errno_t error = _tfopen_s(&ifp[i], szInPath[i].c_str(), _T("rb"));
+                errno_t error = _tfopen_s(&state.ifp[i], state.szInPath[i].c_str(), _T("rb"));
                 if (error != 0)
                 {
-                    logger::Log->Log(L"[Error] Failed to open input file: " + szInPath[i]);
+                    logger::Log->Log(L"[Error] Failed to open input file: " + state.szInPath[i]);
                     pContext->StopCurrentTimer();
-                    std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-                    pContext->SetCurrentTimerInfo(szBuff);
+                    pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
                     pContext->m_ElapsedTimeFile = 0L;
                     return false;
                 }
                 else
                 {
-                    pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(ifp[i]);
+                    pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
                 }
             }
         }
 
-        errno_t error = _tfopen_s(&ofp, szOutPath.c_str(), _T("wb"));
+        errno_t error = _tfopen_s(&state.ofp, state.szOutPath.c_str(), _T("wb"));
         if (error != 0)
         {
-            std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-            pContext->SetCurrentTimerInfo(szBuff);
+            pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
             pContext->StopCurrentTimer();
             pContext->m_ElapsedTimeFile = 0L;
-            for (int i = 0; i < nInputFiles; i++)
+            for (int i = 0; i < state.nInputFiles; i++)
             {
-                if (ifp[i])
-                    fclose(ifp[i]);
+                if (state.ifp[i])
+                    fclose(state.ifp[i]);
             }
-            logger::Log->Log(L"[Error] Failed to create output file: " + szOutPath);
+            logger::Log->Log(L"[Error] Failed to create output file: " + state.szOutPath);
             return false;
         }
 
@@ -385,127 +382,127 @@ namespace worker
 
         input_file_format = PCM_FORMAT_UNKNOWN;
 
-        if ((opt.raw_input) || (bAvisynthInput == true))
+        if ((state.opt.raw_input) || (state.bAvisynthInput == true))
         {
             input_file_format = PCM_FORMAT_RAW;
         }
         else
         {
-            input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(szInPath[0]));
+            input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(state.szInPath[0]));
         }
 
-        if (bAvisynthInput == false)
+        if (state.bAvisynthInput == false)
         {
-            if (pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format))
+            if (pcm_init(&state.pf, state.nInputFiles, state.ifp, read_format, input_file_format))
             {
-                return HandleError(L"[Error] Failed to initialize PCM library.");
+                return EncoderError(L"[Error] Failed to initialize PCM library.");
             }
 
-            if (opt.read_to_eof)
-                pcm_set_read_to_eof(&pf, 1);
+            if (state.opt.read_to_eof)
+                pcm_set_read_to_eof(&state.pf, 1);
 
-            if (opt.raw_input)
+            if (state.opt.raw_input)
             {
-                pcm_set_source_params(&pf, opt.raw_ch, opt.raw_fmt, opt.raw_order, opt.raw_sr);
+                pcm_set_source_params(&state.pf, state.opt.raw_ch, state.opt.raw_fmt, state.opt.raw_order, state.opt.raw_sr);
             }
         }
 
-        if (bAvisynthInput == true)
+        if (state.bAvisynthInput == true)
         {
-            statusAVS.nStart = 0;
-            statusAVS.nSamples = infoAVS.nAudioSamples;
-            statusAVS.nSamplesLeft = infoAVS.nAudioSamples;
-            statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
-            pf.samples = infoAVS.nAudioSamples;
-            pf.sample_rate = infoAVS.nSamplesPerSecond;
-            pf.channels = infoAVS.nAudioChannels;
-            pf.ch_mask = 0xFFFFFFFF;
+            state.statusAVS.nStart = 0;
+            state.statusAVS.nSamples = state.infoAVS.nAudioSamples;
+            state.statusAVS.nSamplesLeft = state.infoAVS.nAudioSamples;
+            state.statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
+            state.pf.samples = state.infoAVS.nAudioSamples;
+            state.pf.sample_rate = state.infoAVS.nSamplesPerSecond;
+            state.pf.channels = state.infoAVS.nAudioChannels;
+            state.pf.ch_mask = 0xFFFFFFFF;
         }
 
-        if (s.acmod >= 0)
+        if (state.s.acmod >= 0)
         {
             static const int acmod_to_ch[8] = { 2, 1, 2, 3, 3, 4, 4, 5 };
-            int ch = acmod_to_ch[s.acmod];
-            if (ch == pf.channels)
+            int ch = acmod_to_ch[state.s.acmod];
+            if (ch == state.pf.channels)
             {
-                if (s.lfe < 0)
+                if (state.s.lfe < 0)
                 {
-                    s.lfe = 0;
+                    state.s.lfe = 0;
                 }
                 else
                 {
-                    if (s.lfe != 0)
+                    if (state.s.lfe != 0)
                     {
-                        return HandleError(L"[Error] Invalid channel configuration.");
+                        return EncoderError(L"[Error] Invalid channel configuration.");
                     }
                 }
             }
-            else if (ch == (pf.channels - 1))
+            else if (ch == (state.pf.channels - 1))
             {
-                if (s.lfe < 0)
+                if (state.s.lfe < 0)
                 {
-                    s.lfe = 1;
+                    state.s.lfe = 1;
                 }
                 else
                 {
-                    if (s.lfe != 1)
+                    if (state.s.lfe != 1)
                     {
-                        return HandleError(L"[Error] Invalid channel configuration.");
+                        return EncoderError(L"[Error] Invalid channel configuration.");
                     }
                 }
             }
             else
             {
-                return HandleError(L"[Error] Invalid channel configuration.");
+                return EncoderError(L"[Error] Invalid channel configuration.");
             }
         }
         else
         {
-            int ch = pf.channels;
-            if (s.lfe >= 0)
+            int ch = state.pf.channels;
+            if (state.s.lfe >= 0)
             {
-                if (s.lfe == 0 && ch == 6)
+                if (state.s.lfe == 0 && ch == 6)
                 {
-                    return HandleError(L"[Error] Invalid channel configuration.");
+                    return EncoderError(L"[Error] Invalid channel configuration.");
                 }
-                else if (s.lfe == 1 && ch == 1)
+                else if (state.s.lfe == 1 && ch == 1)
                 {
-                    return HandleError(L"[Error] Invalid channel configuration.");
+                    return EncoderError(L"[Error] Invalid channel configuration.");
                 }
 
-                if (s.lfe)
+                if (state.s.lfe)
                 {
-                    pf.ch_mask |= 0x08;
+                    state.pf.ch_mask |= 0x08;
                 }
             }
 
-            if (pContext->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
+            if (state.api.LibAften_aften_wav_channels_to_acmod(ch, state.pf.ch_mask, &state.s.acmod, &state.s.lfe))
             {
-                return HandleError(L"[Error] Invalid channel configuration.");
+                return EncoderError(L"[Error] Invalid channel configuration.");
             }
         }
 
-        if (bAvisynthInput == false)
+        if (state.bAvisynthInput == false)
         {
 #ifdef CONFIG_DOUBLE
-            s.sample_format = A52_SAMPLE_FMT_DBL;
+            state.s.sample_format = A52_SAMPLE_FMT_DBL;
 #else
-            s.sample_format = A52_SAMPLE_FMT_FLT;
+            state.s.sample_format = A52_SAMPLE_FMT_FLT;
 #endif
-            s.channels = pf.channels;
-            s.samplerate = pf.sample_rate;
+            state.s.channels = state.pf.channels;
+            state.s.samplerate = state.pf.sample_rate;
         }
         else
         {
-            s.sample_format = A52_SAMPLE_FMT_FLT;
-            s.channels = infoAVS.nAudioChannels;
-            s.samplerate = infoAVS.nSamplesPerSecond;
+            state.s.sample_format = A52_SAMPLE_FMT_FLT;
+            state.s.channels = state.infoAVS.nAudioChannels;
+            state.s.samplerate = state.infoAVS.nSamplesPerSecond;
         }
-        frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
-        fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
-        if (frame == nullptr || fwav == nullptr)
+        state.frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
+        state.fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * state.s.channels, sizeof(FLOAT));
+        if (state.frame == nullptr || state.fwav == nullptr)
         {
-            return HandleError(L"[Error] Failed to allocate samples memory.");
+            return EncoderError(L"[Error] Failed to allocate samples memory.");
         }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
@@ -516,44 +513,44 @@ namespace worker
         fs = 0;
         nr = 0;
 
-        if (opt.chmap == 0)
-            aften_remap = pContext->api.LibAften_aften_remap_wav_to_a52;
-        else if (opt.chmap == 2)
-            aften_remap = pContext->api.LibAften_aften_remap_mpeg_to_a52;
+        if (state.opt.chmap == 0)
+            aften_remap = state.api.LibAften_aften_remap_wav_to_a52;
+        else if (state.opt.chmap == 2)
+            aften_remap = state.api.LibAften_aften_remap_mpeg_to_a52;
 
-        if (!opt.pad_start)
+        if (!state.opt.pad_start)
         {
             int diff;
 
-            if (bAvisynthInput == false)
+            if (state.bAvisynthInput == false)
             {
-                nr = pcm_read_samples(&pf, fwav, 256);
+                nr = pcm_read_samples(&state.pf, state.fwav, 256);
             }
             else
             {
-                statusAVS.nSamplesToRead = 256;
-                nr = decoderAVS.GetAudio(fwav, &statusAVS);
+                state.statusAVS.nSamplesToRead = 256;
+                nr = state.decoderAVS.GetAudio(state.fwav, &state.statusAVS);
             }
 
             diff = 256 - nr;
             if (diff > 0)
             {
-                memmove(fwav + diff * s.channels, fwav, nr);
-                memset(fwav, 0, diff * s.channels * sizeof(FLOAT));
+                memmove(state.fwav + diff * state.s.channels, state.fwav, nr);
+                memset(state.fwav, 0, diff * state.s.channels * sizeof(FLOAT));
             }
 
             if (aften_remap)
-                aften_remap(fwav + diff, nr, s.channels, s.sample_format, s.acmod);
+                aften_remap(state.fwav + diff, nr, state.s.channels, state.s.sample_format, state.s.acmod);
 
-            s.initial_samples = fwav;
+            state.s.initial_samples = state.fwav;
         }
 
-        if (pContext->api.LibAften_aften_encode_init(&s))
+        if (state.api.LibAften_aften_encode_init(&state.s))
         {
-            return HandleError(L"[Error] Failed to initialize aften encoder.");
+            return EncoderError(L"[Error] Failed to initialize aften encoder.");
         }
 
-        UpdateProgress();
+        SetInfo(state);
 
         int nCurTotalPos = 0;
         __int64 nCurPos = 0;
@@ -566,31 +563,31 @@ namespace worker
             {
                 while (fs > 0)
                 {
-                    fs = pContext->api.LibAften_aften_encode_frame(&s, frame, nullptr, 0);
+                    fs = state.api.LibAften_aften_encode_frame(&state.s, state.frame, nullptr, 0);
                     if (fs > 0)
-                        fwrite(frame, 1, fs, ofp);
+                        fwrite(state.frame, 1, fs, state.ofp);
                 }
-                return HandleError(L"[Info] User terminated encoding.");
+                return EncoderError(L"[Info] User terminated encoding.");
             }
 
-            if (bAvisynthInput == false)
+            if (state.bAvisynthInput == false)
             {
-                nr = pcm_read_samples(&pf, fwav, A52_SAMPLES_PER_FRAME);
+                nr = pcm_read_samples(&state.pf, state.fwav, A52_SAMPLES_PER_FRAME);
             }
             else
             {
-                statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
-                nr = decoderAVS.GetAudio(fwav, &statusAVS);
+                state.statusAVS.nSamplesToRead = A52_SAMPLES_PER_FRAME;
+                nr = state.decoderAVS.GetAudio(state.fwav, &state.statusAVS);
             }
 
             if (aften_remap)
-                aften_remap(fwav, nr, s.channels, s.sample_format, s.acmod);
+                aften_remap(state.fwav, nr, state.s.channels, state.s.sample_format, state.s.acmod);
 
-            fs = pContext->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
+            fs = state.api.LibAften_aften_encode_frame(&state.s, state.frame, state.fwav, nr);
 
             if (fs < 0)
             {
-                return HandleError(L"[Error] Failed to encode frame.");
+                return EncoderError(L"[Error] Failed to encode state.frame.");
             }
             else
             {
@@ -598,38 +595,38 @@ namespace worker
                 {
                     samplecount += A52_SAMPLES_PER_FRAME;
                     bytecount += fs;
-                    qual += s.status.quality;
-                    bw += s.status.bwcode;
+                    qual += state.s.status.quality;
+                    bw += state.s.status.bwcode;
                 }
 
-                t1 = samplecount / pf.sample_rate;
-                if (frame_cnt > 0 && (t1 > t0 || samplecount >= pf.samples))
+                t1 = samplecount / state.pf.sample_rate;
+                if (frame_cnt > 0 && (t1 > t0 || samplecount >= state.pf.samples))
                 {
-                    kbps = (bytecount * FCONST(8.0) * pf.sample_rate) / (FCONST(1000.0) * samplecount);
+                    kbps = (bytecount * FCONST(8.0) * state.pf.sample_rate) / (FCONST(1000.0) * samplecount);
                     percent = 0;
-                    if (pf.samples > 0)
+                    if (state.pf.samples > 0)
                     {
-                        percent = (uint32_t)((samplecount * FCONST(100.0)) / pf.samples);
+                        percent = (uint32_t)((samplecount * FCONST(100.0)) / state.pf.samples);
                         percent = CLIP(percent, 0, 100);
                     }
 
-                    if (bAvisynthInput == false)
+                    if (state.bAvisynthInput == false)
                     {
                         if (pContext->bMultiMonoInput == false)
                         {
-                            nCurPos = _ftelli64(ifp[0]);
+                            nCurPos = _ftelli64(state.ifp[0]);
                         }
                         else
                         {
-                            for (int i = 0; i < nInputFiles; i++)
+                            for (int i = 0; i < state.nInputFiles; i++)
                             {
-                                nCurPos += _ftelli64(ifp[i]);
+                                nCurPos += _ftelli64(state.ifp[i]);
                             }
                         }
                     }
                     else
                     {
-                        nCurPos = samplecount * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+                        nCurPos = samplecount * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
                     }
 
                     if (pContext->bCanUpdateWindow == true)
@@ -648,7 +645,7 @@ namespace worker
                         pContext->bCanUpdateWindow = true;
                     }
 
-                    nCurTotalPos = (100 * (nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
+                    nCurTotalPos = (100 * (state.nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
 
                     if (pContext->bCanUpdateWindow == true)
                     {
@@ -659,12 +656,12 @@ namespace worker
                 }
                 t0 = t1;
 
-                fwrite(frame, 1, fs, ofp);
+                fwrite(state.frame, 1, fs, state.ofp);
 
                 if (pContext->bCanUpdateWindow == true)
                 {
                     pContext->bCanUpdateWindow = false;
-                    nOutPrevCurPos = _ftelli64(ofp);
+                    nOutPrevCurPos = _ftelli64(state.ofp);
                     pContext->bCanUpdateWindow = true;
                 }
 
@@ -673,62 +670,64 @@ namespace worker
             }
         } while (nr > 0 || fs > 0 || !frame_cnt);
 
-        if (fwav)
-            free(fwav);
+        if (state.fwav)
+            free(state.fwav);
 
-        if (frame)
-            free(frame);
+        if (state.frame)
+            free(state.frame);
 
-        if (bAvisynthInput == false)
+        if (state.bAvisynthInput == false)
         {
-            pcm_close(&pf);
+            pcm_close(&state.pf);
         }
         else
         {
-            decoderAVS.CloseAvisynth();
+            state.decoderAVS.CloseAvisynth();
         }
 
-        if (bAvisynthInput == false)
+        if (state.bAvisynthInput == false)
         {
             if (pContext->bMultiMonoInput == false)
             {
-                nTotalSizeCounter += _ftelli64(ifp[0]);
+                state.nTotalSizeCounter += _ftelli64(state.ifp[0]);
             }
             else
             {
-                for (int i = 0; i < nInputFiles; i++)
+                for (int i = 0; i < state.nInputFiles; i++)
                 {
-                    nTotalSizeCounter += _ftelli64(ifp[i]);
+                    state.nTotalSizeCounter += _ftelli64(state.ifp[i]);
                 }
             }
         }
         else
         {
-            nTotalSizeCounter += pContext->nInTotalSize;
+            state.nTotalSizeCounter += pContext->nInTotalSize;
         }
 
-        for (int i = 0; i < nInputFiles; i++)
+        for (int i = 0; i < state.nInputFiles; i++)
         {
-            if (ifp[i])
-                fclose(ifp[i]);
+            if (state.ifp[i])
+                fclose(state.ifp[i]);
         }
 
-        if (ofp)
-            fclose(ofp);
+        if (state.ofp)
+            fclose(state.ofp);
 
-        pContext->api.LibAften_aften_encode_close(&s);
+        state.api.LibAften_aften_encode_close(&state.s);
 
         pContext->StopCurrentTimer();
-        std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-        pContext->SetCurrentTimerInfo(szBuff);
+        pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
         return true;
     }
 
-    bool CWorker::Encode()
+    bool CWorker::Run()
     {
-        std::wstring szBuff = L"";
+        CState state;
+        state.preset = pContext->pPreset;
+        state.engine = pContext->pEngine;
+        state.nTotalSizeCounter = 0;
 
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
@@ -736,42 +735,37 @@ namespace worker
         pContext->SetTotalProgress(0);
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
-
-        szBuff = pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00");
-
-        pContext->SetTotalTimerInfo(szBuff);
+        pContext->SetTotalTimerInfo(pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
         pContext->StartTotalTimer(250);
 
         int nFileCounter = 0;
         int nTotalFiles = (int)pContext->m_Files.size();
 
-        nTotalSizeCounter = 0;
-
         if (pContext->bMultiMonoInput == false)
         {
             for (int i = 0; i < (int)pContext->m_Files.size(); i++)
             {
-                szInPath[0] = L"-";
-                szInPath[1] = L"-";
-                szInPath[2] = L"-";
-                szInPath[3] = L"-";
-                szInPath[4] = L"-";
-                szInPath[5] = L"-";
-                szOutPath = L"";
+                state.szInPath[0] = L"-";
+                state.szInPath[1] = L"-";
+                state.szInPath[2] = L"-";
+                state.szInPath[3] = L"-";
+                state.szInPath[4] = L"-";
+                state.szInPath[5] = L"-";
+                state.szOutPath = L"";
 
-                szInPath[0] = pContext->m_Files[i];
-                szOutPath = szInPath[0];
+                state.szInPath[0] = pContext->m_Files[i];
+                state.szOutPath = state.szInPath[0];
 
-                std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-                szOutPath = 
-                    szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
+                std::wstring szExt = util::Utilities::GetFileExtension(state.szOutPath);
+                state.szOutPath =
+                    state.szOutPath.substr(0, state.szOutPath.length() - szExt.length() - 1) +
                     L"." + 
                     pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
                 if (pContext->bUseOutPath == true)
                 {
-                    std::wstring szFile = util::Utilities::GetFileName(szOutPath);
-                    szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
+                    std::wstring szFile = util::Utilities::GetFileName(state.szOutPath);
+                    state.szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
                 }
 
                 CAtlString szTitle;
@@ -779,32 +773,26 @@ namespace worker
                 std::wstring szTitleStr = szTitle;
                 pContext->SetTitleInfo(szTitleStr);
 
-                szBuff = pContext->pConfig->GetString(0x00A01003) + L"\t" + szInPath[0];
-                pContext->SetInputFileInfo(0, szBuff);
-
-                szBuff = pContext->pConfig->GetString(0x00A01004) + L"\t" + szOutPath;
-                pContext->SetOutputFileInfo(szBuff);
-
-                szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-                pContext->SetCurrentTimerInfo(szBuff);
-
+                pContext->SetInputFileInfo(0, pContext->pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
+                pContext->SetOutputFileInfo(pContext->pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
+                pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
                 pContext->m_ElapsedTimeFile = 0L;
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
 
-                ZeroMemory(&s, sizeof(AftenContext));
-                ZeroMemory(&opt, sizeof(AftenOpt));
-                if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                ZeroMemory(&state.s, sizeof(AftenContext));
+                ZeroMemory(&state.opt, sizeof(AftenOpt));
+                if (InitEngine(pContext->pEngine, pContext->pPreset, state.api, state.opt, state.s) == false)
                 {
                     return false;
                 }
 
-                nInputFiles = 1;
+                state.nInputFiles = 1;
 
-                if (Run() == false)
+                if (Encode() == false)
                 {
                     pContext->m_Status[i] = false;
-                    pContext->api.CloseAftenAPI();
+                    state.api.CloseAftenAPI();
                     return false;
                 }
 
@@ -821,31 +809,31 @@ namespace worker
         }
         else
         {
-            szInPath[0] = _T("-");
-            szInPath[1] = _T("-");
-            szInPath[2] = _T("-");
-            szInPath[3] = _T("-");
-            szInPath[4] = _T("-");
-            szInPath[5] = _T("-");
-            szOutPath = _T("");
+            state.szInPath[0] = _T("-");
+            state.szInPath[1] = _T("-");
+            state.szInPath[2] = _T("-");
+            state.szInPath[3] = _T("-");
+            state.szInPath[4] = _T("-");
+            state.szInPath[5] = _T("-");
+            state.szOutPath = _T("");
 
             nFileCounter = (int)pContext->m_Files.size();
 
             for (int i = 0; i < nFileCounter; i++)
             {
-                szInPath[i] = pContext->m_Files[i];
+                state.szInPath[i] = pContext->m_Files[i];
             }
 
-            szOutPath = szInPath[0];
+            state.szOutPath = state.szInPath[0];
 
-            std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
-            szOutPath = 
-                szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
+            std::wstring szExt = util::Utilities::GetFileExtension(state.szOutPath);
+            state.szOutPath =
+                state.szOutPath.substr(0, state.szOutPath.length() - szExt.length() - 1) +
                 L"." + 
                 pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
             if (pContext->bUseOutPath == true)
-                szOutPath = pContext->szOutPath;
+                state.szOutPath = pContext->szOutPath;
 
             CAtlString szTitle;
             szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(),
@@ -853,39 +841,35 @@ namespace worker
             std::wstring szTitleStr = szTitle;
             pContext->SetTitleInfo(szTitleStr);
 
-            szBuff = pContext->pConfig->GetString(0x00A01003) + L"\t" + szInPath[0];
-            pContext->SetInputFileInfo(0, szBuff);
+            pContext->SetInputFileInfo(0, pContext->pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
 
             for (int i = 1; i < nFileCounter; i++)
-                pContext->SetInputFileInfo(i, L"\t" + szInPath[i]);
+                pContext->SetInputFileInfo(i, L"\t" + state.szInPath[i]);
 
-            szBuff = pContext->pConfig->GetString(0x00A01004) + L"\t" + szOutPath;
-            pContext->SetOutputFileInfo(szBuff);
-
-            szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
-            pContext->SetCurrentTimerInfo(szBuff);
+            pContext->SetOutputFileInfo(pContext->pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
+            pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
 
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
 
-            ZeroMemory(&s, sizeof(AftenContext));
-            ZeroMemory(&opt, sizeof(AftenOpt));
-            if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+            ZeroMemory(&state.s, sizeof(AftenContext));
+            ZeroMemory(&state.opt, sizeof(AftenOpt));
+            if (InitEngine(pContext->pEngine, pContext->pPreset, state.api, state.opt, state.s) == false)
             {
                 return false;
             }
 
-            nInputFiles = nFileCounter;
+            state.nInputFiles = nFileCounter;
 
-            if (Run() == false)
+            if (Encode() == false)
             {
                 for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
                     pContext->m_Status[i] = false;
                 }
                 pContext->nCount = 0;
-                pContext->api.CloseAftenAPI();
+                state.api.CloseAftenAPI();
                 return false;
             }
             else
@@ -899,7 +883,7 @@ namespace worker
         }
 
         pContext->StopTotalTimer();
-        pContext->api.CloseAftenAPI();
+        state.api.CloseAftenAPI();
 
         return true;
     }

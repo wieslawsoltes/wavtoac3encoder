@@ -266,7 +266,7 @@ namespace app
                 try
                 {
                     worker::CWorker m_Worker(this->pWorkerContext);
-                    m_Worker.Encode();
+                    m_Worker.Run();
                 }
                 catch (...)
                 {
