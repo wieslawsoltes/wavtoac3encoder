@@ -45,14 +45,2953 @@ mode=1
 [VBR Quality 1023 (max)]
 mode=1
 q=1023
-[Avisynth 3/2+LFE]
+[Avisynth 1+1 (Ch1,Ch2)]
+acmod=0
+chconfig=0
+readtoeof=1
+[Avisynth 1/0 (C)]
+acmod=1
+chconfig=1
+readtoeof=1
+[Avisynth 2/0 (L,R)]
+acmod=2
+chconfig=2
+readtoeof=1
+[Avisynth 3/0 (L,R,C)]
+acmod=3
+chconfig=3
+readtoeof=1
+[Avisynth 2/1 (L,R,S)]
+acmod=4
+chconfig=4
+readtoeof=1
+[Avisynth 3/1 (L,R,C,S)]
+acmod=5
+chconfig=5
+readtoeof=1
+[Avisynth 2/2 (L,R,SL,SR)]
+acmod=6
+chconfig=6
+readtoeof=1
+[Avisynth 3/2 (L,R,C,SL,SR)]
+acmod=7
+chconfig=7
+readtoeof=1
+[Avisynth 1+1 (Ch1,Ch2) + LFE]
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[Avisynth 1/0 (C) + LFE]
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[Avisynth 2/0 (L,R) + LFE]
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[Avisynth 3/0 (L,R,C) + LFE]
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[Avisynth 2/1 (L,R,S) + LFE]
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[Avisynth 3/1 (L,R,C,S) + LFE]
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[Avisynth 2/2 (L,R,SL,SR) + LFE]
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[Avisynth 3/2 (L,R,C,SL,SR) + LFE]
 acmod=7
 lfe=1
 chconfig=15
 readtoeof=1
-[RAW (3/2+LFE, 48000, Float LE)]
+[RAW (44100,s16_le) 1+1 (Ch1,Ch2)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,s16_le) 1/0 = (C)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,s16_le) 2/0 (L,R)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,s16_le) 3/0 (L,R,C)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,s16_le) 2/1 (L,R,S)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,s16_le) 3/1 (L,R,C,S)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,s16_le) 2/2 (L,R,SL,SR)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,s16_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=3
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,s16_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,s16_le) 1/0 (C) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,s16_le) 2/0 (L,R) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,s16_le) 3/0 (L,R,C) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,s16_le) 2/1 (L,R,S) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,s16_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,s16_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,s16_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,s16_le) 1+1 (Ch1,Ch2)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,s16_le) 1/0 = (C)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,s16_le) 2/0 (L,R)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,s16_le) 3/0 (L,R,C)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,s16_le) 2/1 (L,R,S)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,s16_le) 3/1 (L,R,C,S)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,s16_le) 2/2 (L,R,SL,SR)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,s16_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=3
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,s16_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,s16_le) 1/0 (C) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,s16_le) 2/0 (L,R) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,s16_le) 3/0 (L,R,C) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,s16_le) 2/1 (L,R,S) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,s16_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,s16_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,s16_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,s16_le) 1+1 (Ch1,Ch2)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,s16_le) 1/0 = (C)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,s16_le) 2/0 (L,R)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,s16_le) 3/0 (L,R,C)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,s16_le) 2/1 (L,R,S)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,s16_le) 3/1 (L,R,C,S)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,s16_le) 2/2 (L,R,SL,SR)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,s16_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=3
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,s16_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,s16_le) 1/0 (C) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,s16_le) 2/0 (L,R) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,s16_le) 3/0 (L,R,C) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,s16_le) 2/1 (L,R,S) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,s16_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,s16_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,s16_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,s16_le) 1+1 (Ch1,Ch2)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,s16_le) 1/0 = (C)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,s16_le) 2/0 (L,R)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,s16_le) 3/0 (L,R,C)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,s16_le) 2/1 (L,R,S)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,s16_le) 3/1 (L,R,C,S)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,s16_le) 2/2 (L,R,SL,SR)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,s16_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=3
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,s16_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,s16_le) 1/0 (C) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,s16_le) 2/0 (L,R) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,s16_le) 3/0 (L,R,C) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,s16_le) 2/1 (L,R,S) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,s16_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,s16_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,s16_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=3
+raw_sr=192000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (44100,s20_le) 1+1 (Ch1,Ch2)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,s20_le) 1/0 = (C)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,s20_le) 2/0 (L,R)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,s20_le) 3/0 (L,R,C)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,s20_le) 2/1 (L,R,S)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,s20_le) 3/1 (L,R,C,S)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,s20_le) 2/2 (L,R,SL,SR)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,s20_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=5
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,s20_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,s20_le) 1/0 (C) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,s20_le) 2/0 (L,R) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,s20_le) 3/0 (L,R,C) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,s20_le) 2/1 (L,R,S) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,s20_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,s20_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,s20_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,s20_le) 1+1 (Ch1,Ch2)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,s20_le) 1/0 = (C)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,s20_le) 2/0 (L,R)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,s20_le) 3/0 (L,R,C)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,s20_le) 2/1 (L,R,S)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,s20_le) 3/1 (L,R,C,S)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,s20_le) 2/2 (L,R,SL,SR)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,s20_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=5
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,s20_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,s20_le) 1/0 (C) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,s20_le) 2/0 (L,R) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,s20_le) 3/0 (L,R,C) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,s20_le) 2/1 (L,R,S) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,s20_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,s20_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,s20_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,s20_le) 1+1 (Ch1,Ch2)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,s20_le) 1/0 = (C)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,s20_le) 2/0 (L,R)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,s20_le) 3/0 (L,R,C)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,s20_le) 2/1 (L,R,S)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,s20_le) 3/1 (L,R,C,S)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,s20_le) 2/2 (L,R,SL,SR)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,s20_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=5
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,s20_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,s20_le) 1/0 (C) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,s20_le) 2/0 (L,R) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,s20_le) 3/0 (L,R,C) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,s20_le) 2/1 (L,R,S) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,s20_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,s20_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,s20_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,s20_le) 1+1 (Ch1,Ch2)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,s20_le) 1/0 = (C)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,s20_le) 2/0 (L,R)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,s20_le) 3/0 (L,R,C)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,s20_le) 2/1 (L,R,S)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,s20_le) 3/1 (L,R,C,S)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,s20_le) 2/2 (L,R,SL,SR)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,s20_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=5
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,s20_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,s20_le) 1/0 (C) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,s20_le) 2/0 (L,R) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,s20_le) 3/0 (L,R,C) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,s20_le) 2/1 (L,R,S) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,s20_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,s20_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,s20_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=5
+raw_sr=192000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (44100,s24_le) 1+1 (Ch1,Ch2)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,s24_le) 1/0 = (C)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,s24_le) 2/0 (L,R)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,s24_le) 3/0 (L,R,C)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,s24_le) 2/1 (L,R,S)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,s24_le) 3/1 (L,R,C,S)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,s24_le) 2/2 (L,R,SL,SR)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,s24_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=7
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,s24_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,s24_le) 1/0 (C) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,s24_le) 2/0 (L,R) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,s24_le) 3/0 (L,R,C) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,s24_le) 2/1 (L,R,S) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,s24_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,s24_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,s24_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,s24_le) 1+1 (Ch1,Ch2)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,s24_le) 1/0 = (C)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,s24_le) 2/0 (L,R)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,s24_le) 3/0 (L,R,C)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,s24_le) 2/1 (L,R,S)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,s24_le) 3/1 (L,R,C,S)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,s24_le) 2/2 (L,R,SL,SR)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,s24_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=7
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,s24_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,s24_le) 1/0 (C) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,s24_le) 2/0 (L,R) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,s24_le) 3/0 (L,R,C) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,s24_le) 2/1 (L,R,S) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,s24_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,s24_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,s24_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,s24_le) 1+1 (Ch1,Ch2)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,s24_le) 1/0 = (C)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,s24_le) 2/0 (L,R)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,s24_le) 3/0 (L,R,C)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,s24_le) 2/1 (L,R,S)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,s24_le) 3/1 (L,R,C,S)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,s24_le) 2/2 (L,R,SL,SR)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,s24_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=7
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,s24_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,s24_le) 1/0 (C) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,s24_le) 2/0 (L,R) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,s24_le) 3/0 (L,R,C) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,s24_le) 2/1 (L,R,S) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,s24_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,s24_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,s24_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,s24_le) 1+1 (Ch1,Ch2)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,s24_le) 1/0 = (C)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,s24_le) 2/0 (L,R)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,s24_le) 3/0 (L,R,C)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,s24_le) 2/1 (L,R,S)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,s24_le) 3/1 (L,R,C,S)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,s24_le) 2/2 (L,R,SL,SR)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,s24_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=7
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,s24_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,s24_le) 1/0 (C) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,s24_le) 2/0 (L,R) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,s24_le) 3/0 (L,R,C) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,s24_le) 2/1 (L,R,S) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,s24_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,s24_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,s24_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=7
+raw_sr=192000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (44100,s32_le) 1+1 (Ch1,Ch2)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,s32_le) 1/0 = (C)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,s32_le) 2/0 (L,R)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,s32_le) 3/0 (L,R,C)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,s32_le) 2/1 (L,R,S)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,s32_le) 3/1 (L,R,C,S)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,s32_le) 2/2 (L,R,SL,SR)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,s32_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=9
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,s32_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,s32_le) 1/0 (C) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,s32_le) 2/0 (L,R) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,s32_le) 3/0 (L,R,C) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,s32_le) 2/1 (L,R,S) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,s32_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,s32_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,s32_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,s32_le) 1+1 (Ch1,Ch2)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,s32_le) 1/0 = (C)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,s32_le) 2/0 (L,R)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,s32_le) 3/0 (L,R,C)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,s32_le) 2/1 (L,R,S)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,s32_le) 3/1 (L,R,C,S)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,s32_le) 2/2 (L,R,SL,SR)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,s32_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=9
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,s32_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,s32_le) 1/0 (C) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,s32_le) 2/0 (L,R) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,s32_le) 3/0 (L,R,C) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,s32_le) 2/1 (L,R,S) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,s32_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,s32_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,s32_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,s32_le) 1+1 (Ch1,Ch2)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,s32_le) 1/0 = (C)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,s32_le) 2/0 (L,R)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,s32_le) 3/0 (L,R,C)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,s32_le) 2/1 (L,R,S)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,s32_le) 3/1 (L,R,C,S)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,s32_le) 2/2 (L,R,SL,SR)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,s32_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=9
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,s32_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,s32_le) 1/0 (C) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,s32_le) 2/0 (L,R) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,s32_le) 3/0 (L,R,C) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,s32_le) 2/1 (L,R,S) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,s32_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,s32_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,s32_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,s32_le) 1+1 (Ch1,Ch2)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,s32_le) 1/0 = (C)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,s32_le) 2/0 (L,R)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,s32_le) 3/0 (L,R,C)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,s32_le) 2/1 (L,R,S)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,s32_le) 3/1 (L,R,C,S)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,s32_le) 2/2 (L,R,SL,SR)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,s32_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=9
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,s32_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,s32_le) 1/0 (C) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,s32_le) 2/0 (L,R) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,s32_le) 3/0 (L,R,C) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,s32_le) 2/1 (L,R,S) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,s32_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,s32_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,s32_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=9
+raw_sr=192000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (44100,float_le) 1+1 (Ch1,Ch2)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,float_le) 1/0 = (C)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,float_le) 2/0 (L,R)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,float_le) 3/0 (L,R,C)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,float_le) 2/1 (L,R,S)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,float_le) 3/1 (L,R,C,S)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,float_le) 2/2 (L,R,SL,SR)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,float_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=11
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,float_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,float_le) 1/0 (C) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,float_le) 2/0 (L,R) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,float_le) 3/0 (L,R,C) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,float_le) 2/1 (L,R,S) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,float_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,float_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,float_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,float_le) 1+1 (Ch1,Ch2)]
 raw_fmt=11
 raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,float_le) 1/0 = (C)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,float_le) 2/0 (L,R)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,float_le) 3/0 (L,R,C)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,float_le) 2/1 (L,R,S)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,float_le) 3/1 (L,R,C,S)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,float_le) 2/2 (L,R,SL,SR)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,float_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=11
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,float_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,float_le) 1/0 (C) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,float_le) 2/0 (L,R) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,float_le) 3/0 (L,R,C) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,float_le) 2/1 (L,R,S) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,float_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,float_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,float_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,float_le) 1+1 (Ch1,Ch2)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,float_le) 1/0 = (C)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,float_le) 2/0 (L,R)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,float_le) 3/0 (L,R,C)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,float_le) 2/1 (L,R,S)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,float_le) 3/1 (L,R,C,S)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,float_le) 2/2 (L,R,SL,SR)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,float_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=11
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,float_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,float_le) 1/0 (C) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,float_le) 2/0 (L,R) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,float_le) 3/0 (L,R,C) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,float_le) 2/1 (L,R,S) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,float_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,float_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,float_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,float_le) 1+1 (Ch1,Ch2)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,float_le) 1/0 = (C)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,float_le) 2/0 (L,R)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,float_le) 3/0 (L,R,C)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,float_le) 2/1 (L,R,S)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,float_le) 3/1 (L,R,C,S)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,float_le) 2/2 (L,R,SL,SR)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,float_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=11
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,float_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,float_le) 1/0 (C) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,float_le) 2/0 (L,R) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,float_le) 3/0 (L,R,C) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,float_le) 2/1 (L,R,S) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,float_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,float_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,float_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=11
+raw_sr=192000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (44100,double_le) 1+1 (Ch1,Ch2)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (44100,double_le) 1/0 = (C)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (44100,double_le) 2/0 (L,R)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (44100,double_le) 3/0 (L,R,C)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (44100,double_le) 2/1 (L,R,S)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (44100,double_le) 3/1 (L,R,C,S)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (44100,double_le) 2/2 (L,R,SL,SR)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (44100,double_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=13
+raw_sr=44100
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (44100,double_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (44100,double_le) 1/0 (C) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (44100,double_le) 2/0 (L,R) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (44100,double_le) 3/0 (L,R,C) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (44100,double_le) 2/1 (L,R,S) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (44100,double_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (44100,double_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (44100,double_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=44100
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (48000,double_le) 1+1 (Ch1,Ch2)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (48000,double_le) 1/0 = (C)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (48000,double_le) 2/0 (L,R)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (48000,double_le) 3/0 (L,R,C)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (48000,double_le) 2/1 (L,R,S)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (48000,double_le) 3/1 (L,R,C,S)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (48000,double_le) 2/2 (L,R,SL,SR)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (48000,double_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=13
+raw_sr=48000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (48000,double_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (48000,double_le) 1/0 (C) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (48000,double_le) 2/0 (L,R) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (48000,double_le) 3/0 (L,R,C) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (48000,double_le) 2/1 (L,R,S) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (48000,double_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (48000,double_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (48000,double_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=48000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (96000,double_le) 1+1 (Ch1,Ch2)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (96000,double_le) 1/0 = (C)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (96000,double_le) 2/0 (L,R)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (96000,double_le) 3/0 (L,R,C)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (96000,double_le) 2/1 (L,R,S)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (96000,double_le) 3/1 (L,R,C,S)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (96000,double_le) 2/2 (L,R,SL,SR)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (96000,double_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=13
+raw_sr=96000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (96000,double_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (96000,double_le) 1/0 (C) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (96000,double_le) 2/0 (L,R) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (96000,double_le) 3/0 (L,R,C) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (96000,double_le) 2/1 (L,R,S) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (96000,double_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (96000,double_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (96000,double_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=96000
+raw_ch=6
+acmod=7
+lfe=1
+chconfig=15
+readtoeof=1
+[RAW (192000,double_le) 1+1 (Ch1,Ch2)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=2
+acmod=0
+chconfig=0
+readtoeof=1
+[RAW (192000,double_le) 1/0 = (C)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=1
+acmod=1
+chconfig=1
+readtoeof=1
+[RAW (192000,double_le) 2/0 (L,R)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=2
+acmod=2
+chconfig=2
+readtoeof=1
+[RAW (192000,double_le) 3/0 (L,R,C)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=3
+acmod=3
+chconfig=3
+readtoeof=1
+[RAW (192000,double_le) 2/1 (L,R,S)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=3
+acmod=4
+chconfig=4
+readtoeof=1
+[RAW (192000,double_le) 3/1 (L,R,C,S)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=4
+acmod=5
+chconfig=5
+readtoeof=1
+[RAW (192000,double_le) 2/2 (L,R,SL,SR)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=4
+acmod=6
+chconfig=6
+readtoeof=1
+[RAW (192000,double_le) 3/2 (L,R,C,SL,SR)]
+raw_fmt=13
+raw_sr=192000
+raw_ch=5
+acmod=7
+chconfig=7
+readtoeof=1
+[RAW (192000,double_le) 1+1 (Ch1,Ch2) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=3
+acmod=0
+lfe=1
+chconfig=8
+readtoeof=1
+[RAW (192000,double_le) 1/0 (C) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=2
+acmod=1
+lfe=1
+chconfig=9
+readtoeof=1
+[RAW (192000,double_le) 2/0 (L,R) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=3
+acmod=2
+lfe=1
+chconfig=10
+readtoeof=1
+[RAW (192000,double_le) 3/0 (L,R,C) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=4
+acmod=3
+lfe=1
+chconfig=11
+readtoeof=1
+[RAW (192000,double_le) 2/1 (L,R,S) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=4
+acmod=4
+lfe=1
+chconfig=12
+readtoeof=1
+[RAW (192000,double_le) 3/1 (L,R,C,S) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=5
+acmod=5
+lfe=1
+chconfig=13
+readtoeof=1
+[RAW (192000,double_le) 2/2 (L,R,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=192000
+raw_ch=5
+acmod=6
+lfe=1
+chconfig=14
+readtoeof=1
+[RAW (192000,double_le) 3/2 (L,R,C,SL,SR) + LFE]
+raw_fmt=13
+raw_sr=192000
 raw_ch=6
 acmod=7
 lfe=1
