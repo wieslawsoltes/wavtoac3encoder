@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 #include <wchar.h>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
+#include "logger\Log.h"
 #include "worker\AftenAPI.h"
 
 namespace config
@@ -116,16 +118,18 @@ namespace config
     class CConfiguration
     {
     public:
+        std::unique_ptr<logger::ILog> Log;
         std::map<int, std::wstring> * pStrings;
         std::vector<CLanguage> m_Languages;
         std::wstring m_szLangFileName;
         int m_nLangId;
         bool m_bIsPortable;
-        std::wstring m_szPresetsFilePath;
-        std::wstring m_szConfigFilePath;
-        std::wstring m_szEnginesFilePath;
-        std::wstring m_szFilesListFilePath;
-        std::wstring m_szLangFilePath;
+        std::wstring szLogFilePath;
+        std::wstring szPresetsFilePath;
+        std::wstring szConfigFilePath;
+        std::wstring szEnginesFilePath;
+        std::wstring szFilesListFilePath;
+        std::wstring szLangFilePath;
         std::vector<CEngine> m_Engines;
         int nCurrentEngine;
         std::vector<config::CPreset> m_Presets;
@@ -133,7 +137,8 @@ namespace config
         int nCurrentPreset;
         std::wstring szOutputPath;
         std::wstring szOutputFile;
-        bool bMultipleMonoInput;
+        bool bUseOutputPath;
+        bool bMultiMonoInput;
         bool bDisableAllWarnings;
         bool bSaveConfig;
         CEncoderOptions m_EncoderOptions;

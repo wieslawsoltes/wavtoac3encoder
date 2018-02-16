@@ -40,9 +40,6 @@
     <Filter Include="Source Files\Configuration">
       <UniqueIdentifier>{984ba221-cf5d-4c5c-a79c-0f9d2bd2b6c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Logger">
-      <UniqueIdentifier>{8a848042-a5bb-4c98-8dde-b5e4cbf70610}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Worker\Aften">
       <UniqueIdentifier>{5ddae83e-0813-433f-bb82-d1008be65646}</UniqueIdentifier>
     </Filter>
@@ -112,9 +109,6 @@
     </ClCompile>
     <ClCompile Include="configuration\Configuration.cpp">
       <Filter>Source Files\Configuration</Filter>
-    </ClCompile>
-    <ClCompile Include="logger\Log.cpp">
-      <Filter>Source Files\Logger</Filter>
     </ClCompile>
     <ClCompile Include="..\aften\pcm\aiff.c">
       <Filter>Source Files\Worker\Aften\Pcm</Filter>

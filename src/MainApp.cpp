@@ -12,19 +12,47 @@ namespace app
 
     CEncWAVtoAC3App::CEncWAVtoAC3App()
     {
-        logger::Log = std::make_unique<logger::FileLog>();
-        logger::Log->Open(FILENAME_LOG);
-        logger::Log->Log(L"[Info] Program started.");
     }
 
     CEncWAVtoAC3App::~CEncWAVtoAC3App()
     {
-        logger::Log->Log(L"[Info] Program exited.");
-        logger::Log->Close();
     }
 
     BOOL CEncWAVtoAC3App::InitInstance()
     {
+        this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
+
+        if (this->m_Config.m_bIsPortable == true)
+        {
+            this->m_Config.szLogFilePath = util::Utilities::GetExeFilePath() + FILENAME_LOG;
+            this->m_Config.szPresetsFilePath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
+            this->m_Config.szConfigFilePath = util::Utilities::GetExeFilePath() + FILENAME_CONFIG;
+            this->m_Config.szEnginesFilePath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
+            this->m_Config.szFilesListFilePath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
+            this->m_Config.szLangFilePath = util::Utilities::GetExeFilePath() + FILENAME_LANG;
+        }
+        else
+        {
+            ::CreateDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
+            this->m_Config.szLogFilePath = util::Utilities::GetSettingsFilePath(FILENAME_LOG, DIRECTORY_CONFIG);
+            this->m_Config.szPresetsFilePath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
+            this->m_Config.szConfigFilePath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
+            this->m_Config.szEnginesFilePath = util::Utilities::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
+            this->m_Config.szFilesListFilePath = util::Utilities::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
+            this->m_Config.szLangFilePath = util::Utilities::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
+        }
+
+        if (this->m_Config.m_bIsPortable == true)
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+        else
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
+
+        this->m_Config.Log = std::make_unique<logger::FileLog>();
+        this->m_Config.Log->Open(this->m_Config.szLogFilePath);
+
+        std::wstring szConfigMode = this->m_Config.m_bIsPortable ? L"Portable" : L"Roaming";
+        this->m_Config.Log->Log(L"[Info] Program started: " + szConfigMode);
+
         try
         {
             LoadDefaults();
@@ -32,7 +60,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to load config.");
+            this->m_Config.Log->Log(L"[Error] Failed to load config.");
         }
 
         try
@@ -48,7 +76,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to init application.");
+            this->m_Config.Log->Log(L"[Error] Failed to init application.");
         }
 
         try
@@ -60,7 +88,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Main dialog exception.");
+            this->m_Config.Log->Log(L"[Error] Main dialog exception.");
         }
 
         try
@@ -69,8 +97,11 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to save config.");
+            this->m_Config.Log->Log(L"[Error] Failed to save config.");
         }
+
+        this->m_Config.Log->Log(L"[Info] Program exited.");
+        this->m_Config.Log->Close();
 
         return FALSE;
     }
@@ -83,7 +114,7 @@ namespace app
         this->m_Config.nCurrentPreset = 0;
         this->m_Config.szOutputPath = L"";
         this->m_Config.szOutputFile = L"";
-        this->m_Config.bMultipleMonoInput = false;
+        this->m_Config.bMultiMonoInput = false;
         this->m_Config.bDisableAllWarnings = false;
         this->m_Config.bSaveConfig = true;
         this->m_Config.nCurrentEngine = 0;
@@ -103,50 +134,16 @@ namespace app
     {
         this->m_Config.SetEncoderOptions();
 
-        this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
+        this->m_Config.LoadLanguagePath(this->m_Config.szLangFilePath);
 
         if (this->m_Config.m_bIsPortable == true)
-        {
-            this->m_Config.m_szPresetsFilePath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
-            this->m_Config.m_szConfigFilePath = util::Utilities::GetExeFilePath() + FILENAME_CONFIG;
-            this->m_Config.m_szEnginesFilePath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
-            this->m_Config.m_szFilesListFilePath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
-            this->m_Config.m_szLangFilePath = util::Utilities::GetExeFilePath() + FILENAME_LANG;
-        }
-        else
-        {
-            ::CreateDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
-
-            this->m_Config.m_szPresetsFilePath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
-            this->m_Config.m_szConfigFilePath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
-            this->m_Config.m_szEnginesFilePath = util::Utilities::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
-            this->m_Config.m_szFilesListFilePath = util::Utilities::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
-            this->m_Config.m_szLangFilePath = util::Utilities::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
-        }
-
-        if (this->m_Config.m_bIsPortable == true)
-        {
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        }
-        else
-        {
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
-        }
-
-        this->m_Config.LoadLanguagePath(this->m_Config.m_szLangFilePath);
-
-        if (this->m_Config.m_bIsPortable == true)
-        {
             this->m_Config.LoadLLanguages(util::Utilities::GetExeFilePath() + L"lang");
-        }
         else
-        {
             this->m_Config.LoadLLanguages(util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
-        }
     }
 
     void CEncWAVtoAC3App::SaveConfig()
     {
-        this->m_Config.SaveLanguagePath(this->m_Config.m_szLangFilePath);
+        this->m_Config.SaveLanguagePath(this->m_Config.szLangFilePath);
     }
 }

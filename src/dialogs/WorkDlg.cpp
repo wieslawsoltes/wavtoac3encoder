@@ -115,7 +115,7 @@ namespace app
 
     void CWorkDlg::InitCtrls()
     {
-        if (this->pWorkerContext->bMultiMonoInput == false)
+        if (this->pWorkerContext->pConfig->bMultiMonoInput == false)
         {
             for (int i = 1; i < 6; i++)
             {
@@ -270,7 +270,7 @@ namespace app
                 }
                 catch (...)
                 {
-                    logger::Log->Log(L"[Error] Unknown exception thrown while encoding.");
+                    this->pConfig->Log->Log(L"[Error] Unknown exception thrown while encoding.");
                 }
                 this->pWorkerContext->bTerminate = true;
                 this->pWorkerContext->Close();
@@ -279,7 +279,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to create worker thread.");
+            this->pConfig->Log->Log(L"[Error] Failed to create worker thread.");
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
     }

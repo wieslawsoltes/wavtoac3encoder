@@ -139,14 +139,14 @@ namespace worker
     {
         if (state.api.OpenAftenAPI(state.engine->szPath) == false)
         {
-            logger::Log->Log(L"[Error] Failed to load '" + state.engine->szName + L"' library: " + state.engine->szPath);
+            this->pContext->pConfig->Log->Log(L"[Error] Failed to load '" + state.engine->szName + L"' library: " + state.engine->szPath);
             return false;
         }
         else
         {
             const char *version = state.api.LibAften_aften_get_version();
             std::wstring szVersion = util::StringHelper::Convert(version);
-            logger::Log->Log( L"[Info] Loaded '" + state.engine->szName + L"' library" + L", version " + szVersion + L": " + state.engine->szPath);
+            this->pContext->pConfig->Log->Log( L"[Info] Loaded '" + state.engine->szName + L"' library" + L", version " + szVersion + L": " + state.engine->szPath);
         }
 
         state.api.LibAften_aften_set_defaults(&state.s);
@@ -291,7 +291,7 @@ namespace worker
         pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
-        logger::Log->Log(szMessage);
+        this->pContext->pConfig->Log->Log(szMessage);
         return false;
     }
 
@@ -329,15 +329,12 @@ namespace worker
             std::string szInputFileAVS = util::StringHelper::Convert(state.szInPath[0]);
             if (state.decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
-                logger::Log->Log(L"[Error] Failed to initialize Avisynth.");
+                this->pContext->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
                 return false;
             }
-            else
-            {
-                state.infoAVS = state.decoderAVS.GetInputInfo();
-                pContext->nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
-                logger::Log->Log(L"[Info] Avisynth initialized successfully.");
-            }
+            state.infoAVS = state.decoderAVS.GetInputInfo();
+            pContext->nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
+            this->pContext->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
         }
         else
         {
@@ -346,16 +343,14 @@ namespace worker
                 errno_t error = _tfopen_s(&state.ifp[i], state.szInPath[i].c_str(), _T("rb"));
                 if (error != 0)
                 {
-                    logger::Log->Log(L"[Error] Failed to open input file: " + state.szInPath[i]);
+                    this->pContext->pConfig->Log->Log(L"[Error] Failed to open input file: " + state.szInPath[i]);
                     pContext->StopCurrentTimer();
                     pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
                     pContext->m_ElapsedTimeFile = 0L;
                     return false;
                 }
-                else
-                {
-                    pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
-                }
+                pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
+                this->pContext->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
             }
         }
 
@@ -370,9 +365,11 @@ namespace worker
                 if (state.ifp[i])
                     fclose(state.ifp[i]);
             }
-            logger::Log->Log(L"[Error] Failed to create output file: " + state.szOutPath);
+            this->pContext->pConfig->Log->Log(L"[Error] Failed to create output file: " + state.szOutPath);
             return false;
         }
+
+        this->pContext->pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
 
 #ifdef CONFIG_DOUBLE
         read_format = PCM_SAMPLE_FMT_DBL;
@@ -612,7 +609,7 @@ namespace worker
 
                     if (state.bAvisynthInput == false)
                     {
-                        if (pContext->bMultiMonoInput == false)
+                        if (pContext->pConfig->bMultiMonoInput == false)
                         {
                             nCurPos = _ftelli64(state.ifp[0]);
                         }
@@ -687,7 +684,7 @@ namespace worker
 
         if (state.bAvisynthInput == false)
         {
-            if (pContext->bMultiMonoInput == false)
+            if (pContext->pConfig->bMultiMonoInput == false)
             {
                 state.nTotalSizeCounter += _ftelli64(state.ifp[0]);
             }
@@ -741,7 +738,7 @@ namespace worker
         int nFileCounter = 0;
         int nTotalFiles = (int)pContext->m_Files.size();
 
-        if (pContext->bMultiMonoInput == false)
+        if (pContext->pConfig->bMultiMonoInput == false)
         {
             for (int i = 0; i < (int)pContext->m_Files.size(); i++)
             {
@@ -762,10 +759,10 @@ namespace worker
                     L"." + 
                     pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
-                if (pContext->bUseOutPath == true)
+                if (pContext->pConfig->bUseOutputPath == true)
                 {
                     std::wstring szFile = util::Utilities::GetFileName(state.szOutPath);
-                    state.szOutPath = util::Utilities::CombinePath(pContext->szOutPath, szFile);
+                    state.szOutPath = util::Utilities::CombinePath(pContext->pConfig->szOutputPath, szFile);
                 }
 
                 CAtlString szTitle;
@@ -802,7 +799,7 @@ namespace worker
 
                 if (pContext->bTerminate == true)
                 {
-                    logger::Log->Log(L"[Info] User terminated encoding.");
+                    this->pContext->pConfig->Log->Log(L"[Info] User terminated encoding.");
                     break;
                 }
             }
@@ -832,8 +829,8 @@ namespace worker
                 L"." + 
                 pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
 
-            if (pContext->bUseOutPath == true)
-                state.szOutPath = pContext->szOutPath;
+            if (pContext->pConfig->bUseOutputPath == true)
+                state.szOutPath = pContext->pConfig->szOutputPath;
 
             CAtlString szTitle;
             szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(),

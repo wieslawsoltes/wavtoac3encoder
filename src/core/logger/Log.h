@@ -65,10 +65,11 @@ namespace logger
                     std::fwrite(szData.data(), sizeof(wchar_t), szData.size(), fs);
                     std::fflush(fs);
                 }
+#ifdef _DEBUG
+                OutputDebugString(szData.c_str());
+#endif
             }
             catch (...) { }
         }
     };
-
-    extern std::unique_ptr<ILog> Log;
 }

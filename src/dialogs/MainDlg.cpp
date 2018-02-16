@@ -222,7 +222,7 @@ namespace app
             }
             catch (...)
             {
-                logger::Log->Log(L"[Error] Failed to save configuration.");
+                this->pConfig->Log->Log(L"[Error] Failed to save configuration.");
             }
         }
 
@@ -266,14 +266,14 @@ namespace app
         int nItemsCount = this->m_LstFiles.GetItemCount();
         if (nItemsCount <= 0)
         {
-            logger::Log->Log(L"[Error] Add at least one file to the file list.");
+            this->pConfig->Log->Log(L"[Error] Add at least one file to the file list.");
             MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
 
-        if ((this->pConfig->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
+        if ((this->pConfig->bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
-            logger::Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
+            this->pConfig->Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
             MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
@@ -308,9 +308,9 @@ namespace app
             dlg.pWorkerContext->nTotalSize += _ttoi64(szSizeBuff);
         }
 
-        if ((this->pConfig->bMultipleMonoInput == true) && (bAvisynthInput == true))
+        if ((this->pConfig->bMultiMonoInput == true) && (bAvisynthInput == true))
         {
-            logger::Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
+            this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
             MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             bWorking = false;
             return;
@@ -323,28 +323,28 @@ namespace app
         else
             dlg.pWorkerContext->pEngine = nullptr;
 
-        CString szOutPath;
-        this->m_EdtOutPath.GetWindowText(szOutPath);
-        dlg.pWorkerContext->szOutPath = szOutPath;
-        dlg.pWorkerContext->bUseOutPath = false;
+        CString szOutputPath;
+        this->m_EdtOutPath.GetWindowText(szOutputPath);
+        this->pConfig->szOutputPath = szOutputPath;
+        this->pConfig->bUseOutputPath = false;
 
-        int nLen = dlg.pWorkerContext->szOutPath.length();
+        int nLen = this->pConfig->szOutputPath.length();
         if (nLen < 3)
         {
-            logger::Log->Log(L"[Error] Invalid output path.");
+            this->pConfig->Log->Log(L"[Error] Invalid output path.");
             this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
             bWorking = false;
             return;
         }
 
-        std::wstring szExt = dlg.pWorkerContext->szOutPath.substr(dlg.pWorkerContext->szOutPath.length() - 4, 4);
-        if (this->pConfig->bMultipleMonoInput == true)
+        std::wstring szExt = this->pConfig->szOutputPath.substr(this->pConfig->szOutputPath.length() - 4, 4);
+        if (this->pConfig->bMultiMonoInput == true)
         {
-            if (dlg.pWorkerContext->szOutPath != this->pConfig->GetString(0x00207005).c_str())
+            if (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str())
             {
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
-                    logger::Log->Log(L"[Error] Invalid output file.");
+                    this->pConfig->Log->Log(L"[Error] Invalid output file.");
                     this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
@@ -352,15 +352,15 @@ namespace app
             }
         }
 
-        if ((!dlg.pWorkerContext->szOutPath.empty()) &&
-            ((dlg.pWorkerContext->szOutPath != this->pConfig->GetString(0x00207004).c_str() && this->pConfig->bMultipleMonoInput == false) ||
-            (dlg.pWorkerContext->szOutPath != this->pConfig->GetString(0x00207005).c_str() && this->pConfig->bMultipleMonoInput == true)))
+        if ((!this->pConfig->szOutputPath.empty()) &&
+            ((this->pConfig->szOutputPath != this->pConfig->GetString(0x00207004).c_str() && this->pConfig->bMultiMonoInput == false) ||
+            (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str() && this->pConfig->bMultiMonoInput == true)))
         {
-            if (this->pConfig->bMultipleMonoInput == false)
+            if (this->pConfig->bMultiMonoInput == false)
             {
-                if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
+                if (util::Utilities::MakeFullPath(this->pConfig->szOutputPath) == false)
                 {
-                    logger::Log->Log(L"[Error] Failed to create output path.");
+                    this->pConfig->Log->Log(L"[Error] Failed to create output path.");
                     this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
@@ -368,21 +368,19 @@ namespace app
             }
             else
             {
-                std::wstring szFile = util::Utilities::GetFileName(dlg.pWorkerContext->szOutPath);
-                std::wstring szOutPath = dlg.pWorkerContext->szOutPath.substr(0, dlg.pWorkerContext->szOutPath.length() - szFile.length());
-                if (util::Utilities::MakeFullPath(szOutPath) == false)
+                std::wstring szFile = util::Utilities::GetFileName(this->pConfig->szOutputPath);
+                std::wstring szOutputPath = this->pConfig->szOutputPath.substr(0, this->pConfig->szOutputPath.length() - szFile.length());
+                if (util::Utilities::MakeFullPath(szOutputPath) == false)
                 {
-                    logger::Log->Log(L"[Error] Failed to create output path.");
+                    this->pConfig->Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
                     this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
                 }
             }
 
-            dlg.pWorkerContext->bUseOutPath = true;
+            this->pConfig->bUseOutputPath = true;
         }
-
-        dlg.pWorkerContext->bMultiMonoInput = this->pConfig->bMultipleMonoInput;
 
         worker::CTimeCount countTime;
         CString szText;
@@ -403,18 +401,18 @@ namespace app
         if (dlg.pWorkerContext->nCount <= 0)
         {
             szText = _T("");
-            logger::Log->Log(L"[Error] Failed to encode all files.");
+            this->pConfig->Log->Log(L"[Error] Failed to encode all files.");
         }
         else
         {
-            if (this->pConfig->bMultipleMonoInput == true)
+            if (this->pConfig->bMultiMonoInput == true)
             {
                 szText.Format(this->pConfig->GetString(0x00207018).c_str(),
                     dlg.pWorkerContext->nCount,
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
 
-                logger::Log->Log(
+                this->pConfig->Log->Log(
                     L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
                     L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
             }
@@ -427,7 +425,7 @@ namespace app
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
 
-                logger::Log->Log(
+                this->pConfig->Log->Log(
                     L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
                     L" file" + ((dlg.pWorkerContext->nCount == 1) ? L"" : L"s") +
                     L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
@@ -547,7 +545,7 @@ namespace app
 
     void CMainDlg::OnBnClickedButtonBrowse()
     {
-        if (this->pConfig->bMultipleMonoInput == true)
+        if (this->pConfig->bMultiMonoInput == true)
         {
             CFileDialog fd(FALSE,
                 this->pConfig->m_EncoderOptions.szSupportedOutputExt[0].c_str(),
@@ -637,23 +635,23 @@ namespace app
 
     void CMainDlg::OnBnClickedCheckMultipleMonoInput()
     {
-        this->pConfig->bMultipleMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
+        this->pConfig->bMultiMonoInput = this->m_ChkMultipleMonoInput.GetCheck() == BST_CHECKED ? true : false;
 
-        if (this->pConfig->bMultipleMonoInput == true)
+        if (this->pConfig->bMultiMonoInput == true)
             this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200B).c_str());
         else
             this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
 
-        std::wstring szBuff = this->pConfig->bMultipleMonoInput == true ? this->pConfig->szOutputFile : this->pConfig->szOutputPath;
+        std::wstring szBuff = this->pConfig->bMultiMonoInput == true ? this->pConfig->szOutputFile : this->pConfig->szOutputPath;
 
         if (szBuff.empty() || szBuff == this->pConfig->GetString(0x00207004).c_str() || szBuff == this->pConfig->GetString(0x00207005).c_str())
         {
-            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultipleMonoInput == true ? 
+            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultiMonoInput == true ? 
                 this->pConfig->GetString(0x00207005).c_str() : this->pConfig->GetString(0x00207004).c_str());
         }
         else
         {
-            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultipleMonoInput == true ? this->pConfig->szOutputFile.c_str() : this->pConfig->szOutputPath.c_str());
+            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultiMonoInput == true ? this->pConfig->szOutputFile.c_str() : this->pConfig->szOutputPath.c_str());
         }
     }
 
@@ -834,24 +832,24 @@ namespace app
                         this->OnCbnSelchangeComboPresets();
                     }
                 }
-                else if (ce.first == L"MultipleMonoInput")
+                else if (ce.first == L"MultiMonoInput")
                 {
                     if (ce.second == L"true")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
-                        this->pConfig->bMultipleMonoInput = true;
+                        this->pConfig->bMultiMonoInput = true;
                         this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200B).c_str());
                     }
                     else if (ce.second == L"false")
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
-                        this->pConfig->bMultipleMonoInput = false;
+                        this->pConfig->bMultiMonoInput = false;
                         this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
                     }
                     else
                     {
                         this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
-                        this->pConfig->bMultipleMonoInput = false;
+                        this->pConfig->bMultiMonoInput = false;
                         this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
                     }
                 }
@@ -892,7 +890,7 @@ namespace app
                     }
                 }
             }
-            if (this->pConfig->bMultipleMonoInput == true)
+            if (this->pConfig->bMultiMonoInput == true)
             {
                 if (this->pConfig->szOutputFile.empty())
                     this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207005).c_str());
@@ -935,7 +933,7 @@ namespace app
         cl.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
         cl.emplace_back(std::make_pair(L"SelectedEngine", std::to_wstring(this->m_CmbEngines.GetCurSel())));
         cl.emplace_back(std::make_pair(L"SelectedPreset", std::to_wstring(this->m_CmbPresets.GetCurSel())));
-        cl.emplace_back(std::make_pair(L"MultipleMonoInput", (this->pConfig->bMultipleMonoInput == true) ? L"true" : L"false"));
+        cl.emplace_back(std::make_pair(L"MultiMonoInput", (this->pConfig->bMultiMonoInput == true) ? L"true" : L"false"));
         cl.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
         cl.emplace_back(std::make_pair(L"SaveConfig", (this->pConfig->bSaveConfig == true) ? L"true" : L"false"));
 
@@ -1039,11 +1037,11 @@ namespace app
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
+        bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->szPresetsFilePath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
-            logger::Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->m_szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->m_szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsFilePath);
 
         if (bPresetsRet == true)
         {
@@ -1065,50 +1063,50 @@ namespace app
             }
         }
 
-        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
+        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->szEnginesFilePath);
         if (bEnginesRet == true)
-            logger::Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->m_szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->m_szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesFilePath);
 
-        bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
+        bool bConfigRet = this->LoadProgramConfig(this->pConfig->szConfigFilePath);
         if (bConfigRet == true)
-            logger::Log->Log(L"[Info] Loaded program config: " + this->pConfig->m_szConfigFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to load program config: " + this->pConfig->m_szConfigFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigFilePath);
 
-        bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
+        bool bFilesRet = this->LoadFilesList(this->pConfig->szFilesListFilePath);
         if (bConfigRet == true)
-            logger::Log->Log(L"[Info] Loaded files list: " + this->pConfig->m_szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesListFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to load files list: " + this->pConfig->m_szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesListFilePath);
     }
 
     void CMainDlg::SaveAllConfiguration()
     {
-        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
+        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->szPresetsFilePath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
-            logger::Log->Log(L"[Info] Saved encoder presets: " + this->pConfig->m_szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved encoder presets: " + this->pConfig->szPresetsFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->m_szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->szPresetsFilePath);
 
-        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->m_szEnginesFilePath);
+        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->szEnginesFilePath);
         if (bPresetsRet == true)
-            logger::Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->m_szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->szEnginesFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->m_szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->szEnginesFilePath);
 
-        bool bConfigRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
+        bool bConfigRet = this->SaveProgramConfig(this->pConfig->szConfigFilePath);
         if (bPresetsRet == true)
-            logger::Log->Log(L"[Info] Saved program config: " + this->pConfig->m_szConfigFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to save program config: " + this->pConfig->m_szConfigFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigFilePath);
 
-        bool bFilesRet = this->SaveFilesList(this->pConfig->m_szFilesListFilePath, 0);
+        bool bFilesRet = this->SaveFilesList(this->pConfig->szFilesListFilePath, 0);
         if (bFilesRet == true)
-            logger::Log->Log(L"[Info] Saved files list: " + this->pConfig->m_szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesListFilePath);
         else
-            logger::Log->Log(L"[Error] Failed to save files list: " + this->pConfig->m_szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save files list: " + this->pConfig->szFilesListFilePath);
     }
 
     void CMainDlg::UpdateBitrateText()
@@ -1538,7 +1536,7 @@ namespace app
         CString szBuff;
         this->m_EdtOutPath.GetWindowText(szBuff);
 
-        if (this->pConfig->bMultipleMonoInput == true)
+        if (this->pConfig->bMultiMonoInput == true)
             this->pConfig->szOutputFile = szBuff;
         else
             this->pConfig->szOutputPath = szBuff;
@@ -1582,14 +1580,14 @@ namespace app
         this->m_EdtOutPath.GetWindowText(szBuff);
         if (szBuff.Compare(_T("")) == 0)
         {
-            if (this->pConfig->bMultipleMonoInput == true)
+            if (this->pConfig->bMultiMonoInput == true)
                 this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207005).c_str());
             else
                 this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207004).c_str());
         }
         else
         {
-            if (this->pConfig->bMultipleMonoInput == true)
+            if (this->pConfig->bMultiMonoInput == true)
                 this->pConfig->szOutputFile = szBuff;
             else
                 this->pConfig->szOutputPath = szBuff;
@@ -1856,7 +1854,7 @@ namespace app
         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
             this->pConfig->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
-        if (this->pConfig->bMultipleMonoInput == true)
+        if (this->pConfig->bMultiMonoInput == true)
             this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207005).c_str());
         else
             this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207004).c_str());
@@ -1881,7 +1879,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to init dialog.");
+            this->pConfig->Log->Log(L"[Error] Failed to init dialog.");
         }
 
         this->DragAcceptFiles(TRUE);
@@ -1892,7 +1890,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to load configuration.");
+            this->pConfig->Log->Log(L"[Error] Failed to load configuration.");
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
@@ -1951,11 +1949,11 @@ namespace app
 
         this->InitTooltips();
 
-        std::wstring szBuff = this->pConfig->bMultipleMonoInput == true ? this->pConfig->szOutputFile : this->pConfig->szOutputPath;
+        std::wstring szBuff = this->pConfig->bMultiMonoInput == true ? this->pConfig->szOutputFile : this->pConfig->szOutputPath;
         if (szBuff.empty() || szBuff.substr(0, 1) == L"<")
-            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultipleMonoInput == true ? this->pConfig->GetString(0x00207005).c_str() : this->pConfig->GetString(0x00207004).c_str());
+            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultiMonoInput == true ? this->pConfig->GetString(0x00207005).c_str() : this->pConfig->GetString(0x00207004).c_str());
         else
-            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultipleMonoInput == true ? this->pConfig->szOutputFile.c_str() : this->pConfig->szOutputPath.c_str());
+            this->m_EdtOutPath.SetWindowText(this->pConfig->bMultiMonoInput == true ? this->pConfig->szOutputFile.c_str() : this->pConfig->szOutputPath.c_str());
     }
 
     void CMainDlg::InitLangButtons()
@@ -2406,7 +2404,7 @@ namespace app
         std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
         if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
-            logger::Log->Log(L"[Error] Failed to initialize Avisynth.");
+            this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
             this->MessageBox(this->pConfig->GetString(0x00207022).c_str(),
                 this->pConfig->GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
@@ -2781,7 +2779,7 @@ namespace app
                 int nOptionValue = preset.nOptions[nIndexChconfig];
                 this->m_LstSettings.SetItemText(nIndexChconfig, 1, optionChconfig.m_Values[nOptionValue].first.c_str());
 
-                if (this->pConfig->bMultipleMonoInput == false)
+                if (this->pConfig->bMultiMonoInput == false)
                 {
                     this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
                     this->OnBnClickedCheckMultipleMonoInput();
@@ -2903,7 +2901,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to load configuration.");
+            this->pConfig->Log->Log(L"[Error] Failed to load configuration.");
         }
     }
 
@@ -2915,7 +2913,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"[Error] Failed to save configuration.");
+            this->pConfig->Log->Log(L"[Error] Failed to save configuration.");
         }
     }
 

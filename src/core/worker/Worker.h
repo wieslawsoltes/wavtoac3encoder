@@ -22,9 +22,6 @@ namespace worker
         std::vector<bool> m_Status;
         config::CPreset * pPreset;
         config::CEngine * pEngine;
-        bool bUseOutPath;
-        std::wstring szOutPath;
-        bool bMultiMonoInput;
         int nThreads;
         __int64 nInTotalSize;
         __int64 nOutTotalSize;
