@@ -587,7 +587,8 @@ namespace app
                 return;
             }
 
-            static std::wstring szTitle = this->pConfig->GetString(0x0020701D);
+            static std::wstring szTitle;
+            szTitle = this->pConfig->GetString(0x0020701D);
 
             bi.hwndOwner = this->GetSafeHwnd();
             bi.pidlRoot = pidlDesktop;
@@ -2564,7 +2565,8 @@ namespace app
             return;
         }
         
-        static std::wstring szTitle = this->pConfig->GetString(0x0020700B);
+        static std::wstring szTitle;
+        szTitle = this->pConfig->GetString(0x0020700B)
 
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
