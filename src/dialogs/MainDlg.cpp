@@ -416,8 +416,7 @@ namespace app
 
                 logger::Log->Log(
                     L"[Info] Encoded " +  std::to_wstring(dlg.pWorkerContext->nCount) +
-                    " mono files in" +  szElapsedFormatted +
-                    " (" + std::to_wstring(szElapsedSeconds) + " + "s).");
+                    L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
             }
             else
             {
@@ -430,9 +429,8 @@ namespace app
 
                 logger::Log->Log(
                     L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
-                    " file" + dlg.pWorkerContext->nCount == 1 ? L""L : L"s" +
-                    " in " + szElapsedFormatted +
-                    " (" + std::to_wstring(szElapsedSeconds) + "s).");
+                    L" file" + dlg.pWorkerContext->nCount == 1 ? L"" : L"s" +
+                    L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
             }
         }
 
