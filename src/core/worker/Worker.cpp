@@ -588,7 +588,7 @@ namespace worker
 
             fs = pContext->api.LibAften_aften_encode_frame(&s, frame, fwav, nr);
 
-            if (fs <= 0)
+            if (fs < 0)
             {
                 return HandleError(L"[Error] Failed to encode frame.");
             }
