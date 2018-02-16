@@ -270,7 +270,7 @@ namespace app
                 }
                 catch (...)
                 {
-                    logger::Log->Log(L"Error: Unknown exception thrown during encoding.");
+                    logger::Log->Log(L"[Error] Unknown exception thrown while encoding.");
                 }
                 this->pWorkerContext->bTerminate = true;
                 this->pWorkerContext->Close();
@@ -279,7 +279,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"Error: Failed to create worker thread.");
+            logger::Log->Log(L"[Error] Failed to create worker thread.");
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
     }

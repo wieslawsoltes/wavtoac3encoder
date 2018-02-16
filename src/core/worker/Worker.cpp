@@ -7,24 +7,14 @@ namespace worker
     {
         if (api.OpenAftenAPI(engine->szPath) == false)
         {
-            std::wstring szLogMessage =
-                pContext->pConfig->GetString(0x0020701E) +
-                L" '" + engine->szName + L"' " +
-                pContext->pConfig->GetString(0x0020701F) + L"!";
-            logger::Log->Log(szLogMessage);
+            logger::Log->Log(L"[Error] Failed to load '" + engine->szName + L"' library: " + engine->szPath);
             return false;
         }
         else
         {
             const char *szAftenVersionAnsi = api.LibAften_aften_get_version();
             std::wstring szVersion = util::StringHelper::Convert(szAftenVersionAnsi);
-            std::wstring szLogMessage =
-                pContext->pConfig->GetString(0x00207020) +
-                L" '" + engine->szName + L"' " +
-                pContext->pConfig->GetString(0x0020701F) + L", " +
-                pContext->pConfig->GetString(0x00207021) +
-                L" " + szVersion;
-            logger::Log->Log(szLogMessage);
+            logger::Log->Log( L"[Info] Loaded '" + engine->szName + L"' library" + L", version " + szVersion + L": " + engine->szPath);
         }
 
         api.LibAften_aften_set_defaults(&s);
@@ -340,14 +330,14 @@ namespace worker
             std::string szInputFileAVS = util::StringHelper::Convert(szInPath[0]);
             if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
-                logger::Log->Log(L"Error: Failed to initialize Avisynth.");
+                logger::Log->Log(L"[Error] Failed to initialize Avisynth.");
                 return false;
             }
             else
             {
                 infoAVS = decoderAVS.GetInputInfo();
                 pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-                logger::Log->Log(L"Avisynth initialized successfully.");
+                logger::Log->Log(L"[Info] Avisynth initialized successfully.");
             }
         }
         else
@@ -357,7 +347,7 @@ namespace worker
                 errno_t error = _tfopen_s(&ifp[i], szInPath[i].c_str(), _T("rb"));
                 if (error != 0)
                 {
-                    logger::Log->Log(L"Error: Failed to open input file: " + szInPath[i]);
+                    logger::Log->Log(L"[Error] Failed to open input file: " + szInPath[i]);
                     pContext->StopCurrentTimer();
                     std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
                     pContext->SetCurrentTimerInfo(szBuff);
@@ -383,7 +373,7 @@ namespace worker
                 if (ifp[i])
                     fclose(ifp[i]);
             }
-            logger::Log->Log(L"Error: Failed to create output file: " + szOutPath);
+            logger::Log->Log(L"[Error] Failed to create output file: " + szOutPath);
             return false;
         }
 
@@ -408,7 +398,7 @@ namespace worker
         {
             if (pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format))
             {
-                return HandleError(L"Error: Failed to initialize PCM library.");
+                return HandleError(L"[Error] Failed to initialize PCM library.");
             }
 
             if (opt.read_to_eof)
@@ -446,7 +436,7 @@ namespace worker
                 {
                     if (s.lfe != 0)
                     {
-                        return HandleError(L"Error: Invalid channel configuration.");
+                        return HandleError(L"[Error] Invalid channel configuration.");
                     }
                 }
             }
@@ -460,13 +450,13 @@ namespace worker
                 {
                     if (s.lfe != 1)
                     {
-                        return HandleError(L"Error: Invalid channel configuration.");
+                        return HandleError(L"[Error] Invalid channel configuration.");
                     }
                 }
             }
             else
             {
-                return HandleError(L"Error: Invalid channel configuration.");
+                return HandleError(L"[Error] Invalid channel configuration.");
             }
         }
         else
@@ -476,11 +466,11 @@ namespace worker
             {
                 if (s.lfe == 0 && ch == 6)
                 {
-                    return HandleError(L"Error: Invalid channel configuration.");
+                    return HandleError(L"[Error] Invalid channel configuration.");
                 }
                 else if (s.lfe == 1 && ch == 1)
                 {
-                    return HandleError(L"Error: Invalid channel configuration.");
+                    return HandleError(L"[Error] Invalid channel configuration.");
                 }
 
                 if (s.lfe)
@@ -491,7 +481,7 @@ namespace worker
 
             if (pContext->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
             {
-                return HandleError(L"Error: Invalid channel configuration.");
+                return HandleError(L"[Error] Invalid channel configuration.");
             }
         }
 
@@ -515,7 +505,7 @@ namespace worker
         fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
         if (frame == nullptr || fwav == nullptr)
         {
-            return HandleError(L"Error: Failed to allocate samples memory.");
+            return HandleError(L"[Error] Failed to allocate samples memory.");
         }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
@@ -560,7 +550,7 @@ namespace worker
 
         if (pContext->api.LibAften_aften_encode_init(&s))
         {
-            return HandleError(L"Error: Failed to initialize aften encoder.");
+            return HandleError(L"[Error] Failed to initialize aften encoder.");
         }
 
         UpdateProgress();
@@ -580,7 +570,7 @@ namespace worker
                     if (fs > 0)
                         fwrite(frame, 1, fs, ofp);
                 }
-                return HandleError(L"Info: User terminated encoding.");
+                return HandleError(L"[Info] User terminated encoding.");
             }
 
             if (bAvisynthInput == false)
@@ -600,7 +590,7 @@ namespace worker
 
             if (fs < 0)
             {
-                return HandleError(L"Error: Failed to encode frame.");
+                return HandleError(L"[Error] Failed to encode frame.");
             }
             else
             {
@@ -824,7 +814,7 @@ namespace worker
 
                 if (pContext->bTerminate == true)
                 {
-                    logger::Log->Log(L"Info: User terminated encoding.");
+                    logger::Log->Log(L"[Info] User terminated encoding.");
                     break;
                 }
             }
