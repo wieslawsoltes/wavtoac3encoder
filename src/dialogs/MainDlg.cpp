@@ -989,6 +989,7 @@ namespace app
             this->UpdateProgramEngines();
             return true;
         }
+        this->m_CmbEngines.ResetContent();
         this->UpdateProgramEngines();
         return false;
     }
