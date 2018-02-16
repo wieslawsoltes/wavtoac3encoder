@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <afxwin.h>
+#include "logger\Log.h"
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
 #include "controls\MyDialogEx.h"

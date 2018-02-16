@@ -16,6 +16,7 @@
 #include "controls\MyStatusBarCtrl.h"
 #include "controls\MySpinButtonCtrl.h"
 #include "utilities\StringHelper.h"
+#include "logger\Log.h"
 #include "configuration\Configuration.h"
 #include "libaften\aften.h"
 #include "avs\src\Avs2Raw.h"

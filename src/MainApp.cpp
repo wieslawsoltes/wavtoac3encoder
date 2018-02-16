@@ -12,13 +12,13 @@ namespace app
 
     CEncWAVtoAC3App::CEncWAVtoAC3App()
     {
-        log::Log = std::make_unique<log::FileLog>();
-        log::Log->Open(FILENAME_LOG);
+        logger::Log = std::make_unique<logger::FileLog>();
+        logger::Log->Open(FILENAME_LOG);
     }
 
     CEncWAVtoAC3App::~CEncWAVtoAC3App()
     {
-        log::Log->Close();
+        logger::Log->Close();
     }
 
     BOOL CEncWAVtoAC3App::InitInstance()
@@ -30,7 +30,7 @@ namespace app
         }
         catch (...)
         {
-            log::Log->Log(L"Error: Failed to load config.");
+            logger::Log->Log(L"Error: Failed to load config.");
         }
 
         try
@@ -46,7 +46,7 @@ namespace app
         }
         catch (...)
         {
-            log::Log->Log(L"Error: Failed to init application.");
+            logger::Log->Log(L"Error: Failed to init application.");
         }
 
         try
@@ -58,7 +58,7 @@ namespace app
         }
         catch (...)
         {
-            log::Log->Log(L"Error: Main dialog exception.");
+            logger::Log->Log(L"Error: Main dialog exception.");
         }
 
         try
@@ -67,7 +67,7 @@ namespace app
         }
         catch (...)
         {
-            log::Log->Log(L"Error: Failed to save config.");
+            logger::Log->Log(L"Error: Failed to save config.");
         }
 
         return FALSE;

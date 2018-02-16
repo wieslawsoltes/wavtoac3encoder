@@ -268,7 +268,10 @@ namespace app
                     worker::CWorker m_Worker(this->pWorkerContext);
                     m_Worker.Encode();
                 }
-                catch (...) {}
+                catch (...)
+                {
+                    logger::Log->Log(L"Error: Unknown exception thrown during encoding.");
+                }
                 this->pWorkerContext->bTerminate = true;
                 this->pWorkerContext->Close();
             });
@@ -276,7 +279,7 @@ namespace app
         }
         catch (...)
         {
-            OutputDebugString(_T("Error: Failed to create worker thread!"));
+            logger::Log->Log(L"Error: Failed to create worker thread.");
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
     }

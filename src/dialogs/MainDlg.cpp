@@ -222,7 +222,7 @@ namespace app
             }
             catch (...)
             {
-                OutputDebugString(_T("Failed to save configuration."));
+                logger::Log->Log(L"Error: Failed to save configuration.");
             }
         }
 
@@ -266,14 +266,14 @@ namespace app
         int nItemsCount = this->m_LstFiles.GetItemCount();
         if (nItemsCount <= 0)
         {
-            OutputDebugString(_T("Error: Add at least one file to the file list!"));
+            logger::Log->Log(L"Error: Add at least one file to the file list.");
             MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
 
         if ((this->pConfig->bMultipleMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
-            OutputDebugString(_T("Error: Supported are minimum 1 and maximum 6 mono input files!"));
+            logger::Log->Log(L"Error: Supported are minimum 1 and maximum 6 mono input files.");
             MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             return;
         }
@@ -310,7 +310,7 @@ namespace app
 
         if ((this->pConfig->bMultipleMonoInput == true) && (bAvisynthInput == true))
         {
-            OutputDebugString(_T("Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts!"));
+            logger::Log->Log(L"Error: Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
             MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             bWorking = false;
             return;
@@ -331,7 +331,7 @@ namespace app
         int nLen = dlg.pWorkerContext->szOutPath.length();
         if (nLen < 3)
         {
-            OutputDebugString(_T("Error: Invalid output path!"));
+            logger::Log->Log(L"Error: Invalid output path.");
             this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
             bWorking = false;
             return;
@@ -344,7 +344,7 @@ namespace app
             {
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
-                    OutputDebugString(_T("Error: Invalid output file!"));
+                    logger::Log->Log(L"Error: Invalid output file.");
                     this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
@@ -360,7 +360,7 @@ namespace app
             {
                 if (util::Utilities::MakeFullPath(dlg.pWorkerContext->szOutPath) == false)
                 {
-                    OutputDebugString(_T("Error: Failed to create output path!"));
+                    logger::Log->Log(L"Error: Failed to create output path.");
                     this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
@@ -372,7 +372,7 @@ namespace app
                 std::wstring szOutPath = dlg.pWorkerContext->szOutPath.substr(0, dlg.pWorkerContext->szOutPath.length() - szFile.length());
                 if (util::Utilities::MakeFullPath(szOutPath) == false)
                 {
-                    OutputDebugString(_T("Error: Failed to create output path!"));
+                    logger::Log->Log(L"Error: Failed to create output path.");
                     this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
                     bWorking = false;
                     return;
@@ -403,7 +403,7 @@ namespace app
         if (dlg.pWorkerContext->nCount <= 0)
         {
             szText = _T("");
-            OutputDebugString(_T("Error: Failed to encode all files."));
+            logger::Log->Log(L"Error: Failed to encode all files.");
         }
         else
         {
@@ -1028,7 +1028,10 @@ namespace app
     void CMainDlg::LoadAllConfiguration()
     {
         bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
-        OutputDebugString(((bPresetsRet ? L"Loaded encoder presets: " : L"Failed to load encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
+        if (bPresetsRet == true)
+            logger::Log->Log(L"Info: Loaded encoder presets: " + this->pConfig->m_szPresetsFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to load encoder presets: " + this->pConfig->m_szPresetsFilePath);
 
         if (bPresetsRet == true)
         {
@@ -1051,30 +1054,49 @@ namespace app
         }
 
         bool bEnginesRet = this->LoadProgramEngines(this->pConfig->m_szEnginesFilePath);
-        OutputDebugString(((bEnginesRet ? L"Loaded encoder engines: " : L"Failed to load encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+        if (bEnginesRet == true)
+            logger::Log->Log(L"Info: Loaded encoder engines: " + this->pConfig->m_szEnginesFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to load encoder engines: " + this->pConfig->m_szEnginesFilePath);
 
         bool bConfigRet = this->LoadProgramConfig(this->pConfig->m_szConfigFilePath);
-        OutputDebugString(((bConfigRet ? L"Loaded program config: " : L"Failed to load program config: ") + this->pConfig->m_szConfigFilePath).c_str());
+        if (bConfigRet == true)
+            logger::Log->Log(L"Info: Loaded program config: " + this->pConfig->m_szConfigFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to load program config: " + this->pConfig->m_szConfigFilePath);
 
         bool bFilesRet = this->LoadFilesList(this->pConfig->m_szFilesListFilePath);
-        OutputDebugString(((bFilesRet ? L"Loaded files list: " : L"Failed to load files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
+        if (bConfigRet == true)
+            logger::Log->Log(L"Info: Loaded files list: " + this->pConfig->m_szFilesListFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to load files list: " + this->pConfig->m_szFilesListFilePath);
     }
 
     void CMainDlg::SaveAllConfiguration()
     {
-        bool bRet = false;
+        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
+        if (bPresetsRet == true)
+            logger::Log->Log(L"Info: "Saved encoder presets: " + this->pConfig->m_szPresetsFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to save encoder presets: " + this->pConfig->m_szPresetsFilePath);
 
-        bRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
-        OutputDebugString(((bRet ? L"Saved encoder presets: " : L"Error: Failed to save encoder presets: ") + this->pConfig->m_szPresetsFilePath).c_str());
+        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->m_szEnginesFilePath);
+        if (bPresetsRet == true)
+            logger::Log->Log(L"Info: Saved encoder engines: " + this->pConfig->m_szEnginesFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to save encoder engines: " + this->pConfig->m_szEnginesFilePath);
 
-        bRet = this->SaveProgramEngines(this->pConfig->m_szEnginesFilePath);
-        OutputDebugString(((bRet ? L"Saved encoder engines: " : L"Error: Failed to save encoder engines: ") + this->pConfig->m_szEnginesFilePath).c_str());
+        bool bConfigRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
+        if (bPresetsRet == true)
+            logger::Log->Log(L"Info: Saved program config: " + this->pConfig->m_szConfigFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to save program config: " + this->pConfig->m_szConfigFilePath);
 
-        bRet = this->SaveProgramConfig(this->pConfig->m_szConfigFilePath);
-        OutputDebugString(((bRet ? L"Saved program config: " : L"Error: Failed to save program config: ") + this->pConfig->m_szConfigFilePath).c_str());
-
-        bRet = this->SaveFilesList(this->pConfig->m_szFilesListFilePath, 0);
-        OutputDebugString(((bRet ? L"Saved files list: " : L"Error: Failed to save files list: ") + this->pConfig->m_szFilesListFilePath).c_str());
+        bool bFilesRet = this->SaveFilesList(this->pConfig->m_szFilesListFilePath, 0);
+        if (bFilesRet == true)
+            logger::Log->Log(L"Info: Saved files list: " + this->pConfig->m_szFilesListFilePath);
+        else
+            logger::Log->Log(L"Error: Failed to save files list: " + this->pConfig->m_szFilesListFilePath);
     }
 
     void CMainDlg::UpdateBitrateText()
@@ -1847,7 +1869,7 @@ namespace app
         }
         catch (...)
         {
-            OutputDebugString(_T("Failed to init dialog."));
+            logger::Log->Log(L"Error: Failed to init dialog.");
         }
 
         this->DragAcceptFiles(TRUE);
@@ -1858,7 +1880,7 @@ namespace app
         }
         catch (...)
         {
-            OutputDebugString(_T("Failed to load configuration."));
+            logger::Log->Log(L"Error: Failed to load configuration."");
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
@@ -2372,7 +2394,7 @@ namespace app
         std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
         if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
-            OutputDebugString(_T("Error: Failed to initialize Avisynth!"));
+            logger::Log->Log(L"Error: Failed to initialize Avisynth.");
             this->MessageBox(this->pConfig->GetString(0x00207022).c_str(),
                 this->pConfig->GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
@@ -2868,7 +2890,7 @@ namespace app
         }
         catch (...)
         {
-            OutputDebugString(_T("Failed to load configuration."));
+            logger::Log->Log(L"Error: Failed to load configuration.");
         }
     }
 
@@ -2880,7 +2902,7 @@ namespace app
         }
         catch (...)
         {
-            OutputDebugString(_T("Failed to save configuration."));
+            logger::Log->Log(L"Error: Failed to save configuration.");
         }
     }
 

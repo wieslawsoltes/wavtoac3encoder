@@ -10,8 +10,8 @@ namespace worker
             std::wstring szLogMessage =
                 pContext->pConfig->GetString(0x0020701E) +
                 L" '" + engine->szName + L"' " +
-                pContext->pConfig->GetString(0x0020701F) + L"!" + L"\n";
-            OutputDebugString(szLogMessage.c_str());
+                pContext->pConfig->GetString(0x0020701F) + L"!";
+            logger::Log->Log(szLogMessage);
             return false;
         }
         else
@@ -23,8 +23,8 @@ namespace worker
                 L" '" + engine->szName + L"' " +
                 pContext->pConfig->GetString(0x0020701F) + L", " +
                 pContext->pConfig->GetString(0x00207021) +
-                L" " + szVersion + L"\n";
-            OutputDebugString(szLogMessage.c_str());
+                L" " + szVersion;
+            logger::Log->Log(szLogMessage);
         }
 
         api.LibAften_aften_set_defaults(&s);
@@ -269,9 +269,9 @@ namespace worker
         }
     }
 
-    bool CWorker::HandleError(std::wstring szMessage)
+    bool CWorker::HandleError(const std::wstring szMessage)
     {
-        OutputDebugString((szMessage + L"\n").c_str());
+        logger::Log->Log(szMessage);
 
         if (fwav)
             free(fwav);
@@ -297,9 +297,7 @@ namespace worker
             fclose(ofp);
 
         pContext->api.LibAften_aften_encode_close(&s);
-
         pContext->api.CloseAftenAPI();
-
         pContext->StopCurrentTimer();
         std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
         pContext->SetCurrentTimerInfo(szBuff);
@@ -342,14 +340,14 @@ namespace worker
             std::string szInputFileAVS = util::StringHelper::Convert(szInPath[0]);
             if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
             {
-                OutputDebugString(_T("Failed to initialize Avisynth."));
+                logger::Log->Log(L"Error: Failed to initialize Avisynth.");
                 return false;
             }
             else
             {
                 infoAVS = decoderAVS.GetInputInfo();
                 pContext->nInTotalSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-                OutputDebugString(_T("Avisynth initialized successfully."));
+                logger::Log->Log(L"Avisynth initialized successfully.");
             }
         }
         else
@@ -359,14 +357,11 @@ namespace worker
                 errno_t error = _tfopen_s(&ifp[i], szInPath[i].c_str(), _T("rb"));
                 if (error != 0)
                 {
-                    OutputDebugString(_T("Failed to open input file: ") + CAtlString(szInPath[i].c_str()));
+                    logger::Log->Log(L"Error: Failed to open input file: " + szInPath[i]);
                     pContext->StopCurrentTimer();
-
                     std::wstring szBuff = pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00");
                     pContext->SetCurrentTimerInfo(szBuff);
-
                     pContext->m_ElapsedTimeFile = 0L;
-
                     return false;
                 }
                 else
@@ -383,15 +378,12 @@ namespace worker
             pContext->SetCurrentTimerInfo(szBuff);
             pContext->StopCurrentTimer();
             pContext->m_ElapsedTimeFile = 0L;
-
             for (int i = 0; i < nInputFiles; i++)
             {
                 if (ifp[i])
                     fclose(ifp[i]);
             }
-
-            OutputDebugString(_T("Failed to create output file: ") + CAtlString(szOutPath.c_str()));
-
+            logger::Log->Log(L"Error: Failed to create output file: " + szOutPath);
             return false;
         }
 
@@ -416,7 +408,7 @@ namespace worker
         {
             if (pcm_init(&pf, nInputFiles, ifp, read_format, input_file_format))
             {
-                return HandleError(_T("Failed to initialize PCM library."));
+                return HandleError(L"Error: Failed to initialize PCM library.");
             }
 
             if (opt.read_to_eof)
@@ -454,7 +446,7 @@ namespace worker
                 {
                     if (s.lfe != 0)
                     {
-                        return HandleError(_T("Invalid channel configuration."));
+                        return HandleError(L"Error: Invalid channel configuration.");
                     }
                 }
             }
@@ -468,13 +460,13 @@ namespace worker
                 {
                     if (s.lfe != 1)
                     {
-                        return HandleError(_T("Invalid channel configuration."));
+                        return HandleError(L"Error: Invalid channel configuration.");
                     }
                 }
             }
             else
             {
-                return HandleError(_T("Invalid channel configuration."));
+                return HandleError(L"Error: Invalid channel configuration.");
             }
         }
         else
@@ -484,11 +476,11 @@ namespace worker
             {
                 if (s.lfe == 0 && ch == 6)
                 {
-                    return HandleError(_T("Invalid channel configuration."));
+                    return HandleError(L"Error: Invalid channel configuration.");
                 }
                 else if (s.lfe == 1 && ch == 1)
                 {
-                    return HandleError(_T("Invalid channel configuration."));
+                    return HandleError(L"Error: Invalid channel configuration.");
                 }
 
                 if (s.lfe)
@@ -499,7 +491,7 @@ namespace worker
 
             if (pContext->api.LibAften_aften_wav_channels_to_acmod(ch, pf.ch_mask, &s.acmod, &s.lfe))
             {
-                return HandleError(_T("Invalid channel configuration."));
+                return HandleError(L"Error: Invalid channel configuration.");
             }
         }
 
@@ -523,7 +515,7 @@ namespace worker
         fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * s.channels, sizeof(FLOAT));
         if (frame == nullptr || fwav == nullptr)
         {
-            return HandleError(_T("Failed to allocate memory."));
+            return HandleError(L"Error: Failed to allocate samples memory.");
         }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
@@ -568,7 +560,7 @@ namespace worker
 
         if (pContext->api.LibAften_aften_encode_init(&s))
         {
-            return HandleError(_T("Failed to initialize encoder."));
+            return HandleError(L"Error: Failed to initialize aften encoder.");
         }
 
         UpdateProgress();
@@ -588,7 +580,7 @@ namespace worker
                     if (fs > 0)
                         fwrite(frame, 1, fs, ofp);
                 }
-                return HandleError(_T("User has terminated encoding."));
+                return HandleError(L"Info: User terminated encoding.");
             }
 
             if (bAvisynthInput == false)
@@ -608,7 +600,7 @@ namespace worker
 
             if (fs < 0)
             {
-                return HandleError(_T("Failed to encode frame."));
+                return HandleError(L"Error: Failed to encode frame.");
             }
             else
             {
@@ -779,7 +771,7 @@ namespace worker
 
                 szInPath[0] = pContext->m_Files[i];
                 szOutPath = szInPath[0];
-                
+
                 std::wstring szExt = util::Utilities::GetFileExtension(szOutPath);
                 szOutPath = 
                     szOutPath.substr(0, szOutPath.length() - szExt.length() - 1) + 
@@ -813,7 +805,9 @@ namespace worker
                 ZeroMemory(&s, sizeof(AftenContext));
                 ZeroMemory(&opt, sizeof(AftenOpt));
                 if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+                {
                     return false;
+                }
 
                 nInputFiles = 1;
 
@@ -829,7 +823,10 @@ namespace worker
                 pContext->nCount = nFileCounter;
 
                 if (pContext->bTerminate == true)
+                {
+                    logger::Log->Log(L"Info: User terminated encoding.");
                     break;
+                }
             }
         }
         else
@@ -885,7 +882,9 @@ namespace worker
             ZeroMemory(&s, sizeof(AftenContext));
             ZeroMemory(&opt, sizeof(AftenOpt));
             if (InitContext(pContext->pEngine, pContext->pPreset, pContext->api, opt, s) == false)
+            {
                 return false;
+            }
 
             nInputFiles = nFileCounter;
 

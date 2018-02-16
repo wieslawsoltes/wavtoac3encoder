@@ -8,6 +8,7 @@
 #include "controls\MyEdit.h"
 #include "controls\MyListCtrl.h"
 #include "utilities\StringHelper.h"
+#include "logger\Log.h"
 #include "configuration\Configuration.h"
 
 namespace app

@@ -22,7 +22,7 @@
     <Filter Include="Header Files\Configuration">
       <UniqueIdentifier>{785ded21-51bf-4ad7-a04b-af8a49d822ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Log">
+    <Filter Include="Header Files\Logger">
       <UniqueIdentifier>{fd2a1f6b-3cb3-4cc7-bade-1eb7caaeab2d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Worker\Aften">
@@ -40,7 +40,7 @@
     <Filter Include="Source Files\Configuration">
       <UniqueIdentifier>{984ba221-cf5d-4c5c-a79c-0f9d2bd2b6c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Log">
+    <Filter Include="Source Files\Logger">
       <UniqueIdentifier>{8a848042-a5bb-4c98-8dde-b5e4cbf70610}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Worker\Aften">
@@ -60,8 +60,8 @@
     <ClInclude Include="configuration\Configuration.h">
       <Filter>Header Files\Configuration</Filter>
     </ClInclude>
-    <ClInclude Include="log\Log.h">
-      <Filter>Header Files\Log</Filter>
+    <ClInclude Include="logger\Log.h">
+      <Filter>Header Files\Logger</Filter>
     </ClInclude>
     <ClInclude Include="..\aften\libaften\aften.h">
       <Filter>Header Files\Worker\Aften</Filter>
@@ -113,8 +113,8 @@
     <ClCompile Include="configuration\Configuration.cpp">
       <Filter>Source Files\Configuration</Filter>
     </ClCompile>
-    <ClCompile Include="log\Log.cpp">
-      <Filter>Source Files\Log</Filter>
+    <ClCompile Include="logger\Log.cpp">
+      <Filter>Source Files\Logger</Filter>
     </ClCompile>
     <ClCompile Include="..\aften\pcm\aiff.c">
       <Filter>Source Files\Worker\Aften\Pcm</Filter>

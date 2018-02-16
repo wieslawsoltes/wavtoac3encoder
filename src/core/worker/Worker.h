@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include <atlstr.h>
+#include "logger\Log.h"
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
 #include "utilities\Utilities.h"
@@ -85,7 +86,7 @@ namespace worker
     public:
         bool InitContext(const config::CEngine *engine, const config::CPreset *preset, AftenAPI &api, AftenOpt &opt, AftenContext &s);
         void UpdateProgress();
-        bool HandleError(std::wstring szMessage);
+        bool HandleError(const std::wstring szMessage);
         bool Run();
         bool Encode();
     };
