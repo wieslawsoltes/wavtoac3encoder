@@ -989,6 +989,7 @@ namespace app
             this->UpdateProgramEngines();
             return true;
         }
+        this->UpdateProgramEngines();
         return false;
     }
 
