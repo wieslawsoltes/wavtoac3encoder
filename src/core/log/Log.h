@@ -27,7 +27,7 @@ namespace config
         };
         FileLog(const std::wstring szPath) : fs(nullptr), ILog() 
         {
-            Open(szPath)
+            Open(szPath);
         };
         virtual ~FileLog() 
         {
