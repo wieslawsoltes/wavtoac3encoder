@@ -3,7 +3,7 @@
 #include "StdAfx.h"
 #include "Log.h"
 
-namespace config
+namespace log
 {
     std::unique_ptr<ILog> Log;
 }

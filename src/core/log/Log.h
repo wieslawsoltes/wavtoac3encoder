@@ -5,7 +5,7 @@
 #include <memory>
 #include <cstdio>
 
-namespace config
+namespace log
 {
     class ILog
     {
