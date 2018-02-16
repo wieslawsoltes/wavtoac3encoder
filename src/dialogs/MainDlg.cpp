@@ -2566,7 +2566,7 @@ namespace app
         }
         
         static std::wstring szTitle;
-        szTitle = this->pConfig->GetString(0x0020700B)
+        szTitle = this->pConfig->GetString(0x0020700B);
 
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
