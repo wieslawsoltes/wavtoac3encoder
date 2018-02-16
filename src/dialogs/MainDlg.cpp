@@ -1880,7 +1880,7 @@ namespace app
         }
         catch (...)
         {
-            logger::Log->Log(L"Error: Failed to load configuration."");
+            logger::Log->Log(L"Error: Failed to load configuration.");
         }
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
