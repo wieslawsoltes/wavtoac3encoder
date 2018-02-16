@@ -413,6 +413,11 @@ namespace app
                     dlg.pWorkerContext->nCount,
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
+
+                logger::Log->Log(
+                    L"[Info] Encoded " +  std::to_wstring(dlg.pWorkerContext->nCount) +
+                    " mono files in" +  szElapsedFormatted +
+                    " (" + std::to_wstring(szElapsedSeconds) + " + "s).");
             }
             else
             {
@@ -422,6 +427,12 @@ namespace app
                     this->pConfig->GetString(0x0020701A).c_str(),
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
+
+                logger::Log->Log(
+                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
+                    " file" + dlg.pWorkerContext->nCount == 1 ? L""L : L"s" +
+                    " in " + szElapsedFormatted +
+                    " (" + std::to_wstring(szElapsedSeconds) + "s).");
             }
         }
 
