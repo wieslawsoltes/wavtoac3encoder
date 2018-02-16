@@ -1076,7 +1076,7 @@ namespace app
     {
         bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->m_szPresetsFilePath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
-            logger::Log->Log(L"Info: "Saved encoder presets: " + this->pConfig->m_szPresetsFilePath);
+            logger::Log->Log(L"Info: Saved encoder presets: " + this->pConfig->m_szPresetsFilePath);
         else
             logger::Log->Log(L"Error: Failed to save encoder presets: " + this->pConfig->m_szPresetsFilePath);
 
