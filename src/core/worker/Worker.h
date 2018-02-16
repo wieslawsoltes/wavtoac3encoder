@@ -80,7 +80,7 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
         __int64 nTotalSizeCounter = 0;
-    }
+    };
 
     class CWorker
     {

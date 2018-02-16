@@ -114,7 +114,7 @@ namespace worker
         }
 
         {
-        CAtlString szOutputInfo = _T("");
+            CAtlString szOutputInfo = _T("");
             std::wstring acmod_str[] =
             {
                 pContext->pConfig->GetString(0x00A02018),
