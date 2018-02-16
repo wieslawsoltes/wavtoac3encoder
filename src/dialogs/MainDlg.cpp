@@ -590,8 +590,8 @@ namespace app
             bi.hwndOwner = this->GetSafeHwnd();
             bi.pidlRoot = pidlDesktop;
             bi.pszDisplayName = lpBuffer;
-            bi.lpszTitle = szTitle;
-            bi.lpfn = this->pConfig->GetString(0x0020701D).c_str();
+            bi.lpszTitle = this->pConfig->GetString(0x0020701D).c_str();
+            bi.lpfn = nullptr;
             bi.lParam = 0;
             bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
             bi.iImage = 0;
