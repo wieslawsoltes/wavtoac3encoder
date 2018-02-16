@@ -587,10 +587,12 @@ namespace app
                 return;
             }
 
+            static std::wstring szTitle = this->pConfig->GetString(0x0020701D);
+
             bi.hwndOwner = this->GetSafeHwnd();
             bi.pidlRoot = pidlDesktop;
             bi.pszDisplayName = lpBuffer;
-            bi.lpszTitle = this->pConfig->GetString(0x0020701D).c_str();
+            bi.lpszTitle = szTitle.c_str();
             bi.lpfn = nullptr;
             bi.lParam = 0;
             bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
@@ -2561,11 +2563,13 @@ namespace app
             pMalloc->Release();
             return;
         }
+        
+        static std::wstring szTitle = this->pConfig->GetString(0x0020700B);
 
         bi.hwndOwner = this->GetSafeHwnd();
         bi.pidlRoot = pidlDesktop;
         bi.pszDisplayName = lpBuffer;
-        bi.lpszTitle = this->pConfig->GetString(0x0020700B).c_str();
+        bi.lpszTitle = szTitle.c_str();
         bi.lpfn = nullptr;
         bi.lParam = 0;
         bi.ulFlags = BIF_STATUSTEXT | BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_NONEWFOLDERBUTTON;
