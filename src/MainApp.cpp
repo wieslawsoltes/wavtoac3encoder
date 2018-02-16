@@ -19,7 +19,7 @@ namespace app
 
     CEncWAVtoAC3App::~CEncWAVtoAC3App()
     {
-        ogger::Log->Log(L"[Info] Program exited.");
+        logger::Log->Log(L"[Info] Program exited.");
         logger::Log->Close();
     }
 
