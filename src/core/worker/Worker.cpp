@@ -684,8 +684,9 @@ namespace worker
                 if (pConfig->bUseOutputPath == true)
                 {
                     std::wstring szInFile = state.szInPath[0];
-                    std::wstring szInFileName = util::Utilities::GetFileName(szInFile);
-                    state.szOutPath = util::Utilities::CombinePath(pConfig->szOutputPath, szInFileName);
+                    std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                    std::wstring szInFileName = util::Utilities::GetOnlyFileName(szInFile);
+                    state.szOutPath = util::Utilities::CombinePath(pConfig->szOutputPath, szInFileName + L"." + szOutExt);
                 }
                 else
                 {
