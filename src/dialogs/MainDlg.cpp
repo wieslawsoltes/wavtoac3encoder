@@ -6,7 +6,7 @@
 #include "EnginesDlg.h"
 #include "AboutDlg.h"
 #include "utilities\Utilities.h"
-#include "worker\TimeCount.h"
+#include "utilities\TimeCount.h"
 
 namespace app
 {
@@ -376,14 +376,14 @@ namespace app
             this->pConfig->bUseOutputPath = true;
         }
 
-        worker::CTimeCount countTime;
+        util::CTimeCount countTime;
 
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
 
-        std::wstring szElapsedFormatted = countTime.Formatted();
-        double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
+        std::wstring szElapsedFormatted = countTime.Format(countTime.ElapsedTime());
+        double szElapsedSeconds = countTime.ElapsedTime().count() / 1000.0f;
 
         for (int i = (int)this->pConfig->m_Status.size() - 1; i >= 0; i--)
         {

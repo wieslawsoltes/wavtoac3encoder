@@ -90,9 +90,6 @@
     <ClInclude Include="worker\AftenAPI.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
-    <ClInclude Include="worker\TimeCount.h">
-      <Filter>Header Files\Worker</Filter>
-    </ClInclude>
     <ClInclude Include="worker\Worker.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
@@ -139,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="..\aften\pcm\wav.c">
       <Filter>Source Files\Worker\Aften\Pcm</Filter>
-    </ClCompile>
-    <ClCompile Include="worker\TimeCount.cpp">
-      <Filter>Source Files\Worker</Filter>
     </ClCompile>
     <ClCompile Include="worker\Worker.cpp">
       <Filter>Source Files\Worker</Filter>
