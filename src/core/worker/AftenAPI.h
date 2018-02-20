@@ -124,3 +124,7 @@ public:
     enum PcmSampleFormat raw_fmt;
     int raw_order;
 };
+
+#ifdef inline
+#undef inline
+#endif
