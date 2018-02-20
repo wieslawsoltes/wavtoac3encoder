@@ -76,7 +76,7 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
-        CState(config::CPreset& preset, config::CEngine& engine) : preset(engine), preset(engine) { }
+        CState(config::CPreset& preset, config::CEngine& engine) : preset(engine), engine(engine) { }
         virtual ~CState() { }
     };
 
@@ -90,7 +90,7 @@ namespace worker
     protected:
         void SetInfo(CState& state, config::CConfiguration* pConfig);
         bool InitEngine(CState& state, config::CConfiguration* pConfig);
-        void Clean(CState& sate);
+        void Clean(CState& state);
         bool EncoderError(CState& state, const std::wstring szMessage);
         bool Encode(CState& state);
     public:

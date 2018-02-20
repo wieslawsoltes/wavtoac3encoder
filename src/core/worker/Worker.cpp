@@ -262,7 +262,7 @@ namespace worker
         return true;
     }
 
-    void CWorker::Clean(CState& sate)
+    void CWorker::Clean(CState& state)
     {
         if (state.fwav)
             free(state.fwav);
