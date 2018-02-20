@@ -654,6 +654,16 @@ namespace worker
 
     bool CWorker::Run()
     {
+        pContext->SetCurrentProgressRange(0, 100);
+        pContext->SetTotalProgressRange(0, 100);
+        pContext->SetCurrentProgress(0);
+        pContext->SetTotalProgress(0);
+        pContext->StopCurrentTimer();
+        pContext->m_ElapsedTimeTotal = 0L;
+        pContext->SetTotalTimerInfo(pContext->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
+        pContext->StartTotalTimer(250);
+        pContext->nTotalSizeCounter = 0;
+
         if (pContext->pConfig->bMultiMonoInput == false)
         {
             int nTotalFiles = (int)pContext->m_Files.size();
@@ -693,12 +703,16 @@ namespace worker
                 pContext->SetCurrentProgress(0);
 
                 if (this->InitEngine(state, pContext->pConfig) == false)
+                {
+                    pContext->StopTotalTimer();
                     return false;
+                }
 
                 if (this->Encode(state) == false)
                 {
                     state.api.CloseAftenAPI();
                     pContext->m_Status[i] = false;
+                    pContext->StopTotalTimer();
                     return false;
                 }
 
@@ -709,6 +723,7 @@ namespace worker
                 if (pContext->bTerminate == true)
                 {
                     this->pContext->pConfig->Log->Log(L"[Info] User terminated encoding.");
+                    pContext->StopTotalTimer();
                     break;
                 }
             }
@@ -756,7 +771,10 @@ namespace worker
             pContext->SetCurrentProgress(0);
 
             if (this->InitEngine(state, pContext->pConfig) == false)
+            {
+                pContext->StopTotalTimer();
                 return false;
+            }
 
             if (this->Encode(state) == false)
             {
@@ -765,6 +783,7 @@ namespace worker
                     pContext->m_Status[i] = false;
 
                 pContext->nCount = 0;
+                pContext->StopTotalTimer();
                 return false;
             }
 
@@ -773,6 +792,7 @@ namespace worker
                 pContext->m_Status[i] = true;
 
             pContext->nCount = nTotalFiles;
+            pContext->StopTotalTimer();
             return true;
         }
     }

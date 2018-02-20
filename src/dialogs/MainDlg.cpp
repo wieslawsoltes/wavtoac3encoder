@@ -375,24 +375,12 @@ namespace app
             this->pConfig->bUseOutputPath = true;
         }
 
-        dlg.pWorkerContext->SetCurrentProgressRange(0, 100);
-        dlg.pWorkerContext->SetTotalProgressRange(0, 100);
-        dlg.pWorkerContext->SetCurrentProgress(0);
-        dlg.pWorkerContext->SetTotalProgress(0);
-        dlg.pWorkerContext->StopCurrentTimer();
-        dlg.pWorkerContext->m_ElapsedTimeTotal = 0L;
-        dlg.pWorkerContext->SetTotalTimerInfo(pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
-        dlg.pWorkerContext->StartTotalTimer(250);
-        dlg.pWorkerContext->nTotalSizeCounter = 0;
-
         worker::CTimeCount countTime;
         CString szText;
 
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
-
-        dlg.pWorkerContext->StopTotalTimer();
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
