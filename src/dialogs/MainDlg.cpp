@@ -258,16 +258,14 @@ namespace app
         if (bWorking == true)
             return;
 
-        if (this->pConfig->m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        else
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
+        bWorking = true;
 
         int nItemsCount = this->m_LstFiles.GetItemCount();
         if (nItemsCount <= 0)
         {
             this->pConfig->Log->Log(L"[Error] Add at least one file to the file list.");
             MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            bWorking = false;
             return;
         }
 
@@ -275,10 +273,14 @@ namespace app
         {
             this->pConfig->Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
             MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            bWorking = false;
             return;
         }
 
-        bWorking = true;
+        if (this->pConfig->m_bIsPortable == true)
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+        else
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
 
         CWorkDlg dlg;
 
@@ -286,34 +288,34 @@ namespace app
         dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(&dlg);
         dlg.pWorkerContext->bTerminate = false;
         dlg.pWorkerContext->bCanUpdateWindow = true;
-        dlg.pWorkerContext->nCount = 0;
+        dlg.pWorkerContext->nEncodedFiles = 0;
         dlg.pWorkerContext->m_ElapsedTimeFile = 0;
         dlg.pWorkerContext->m_ElapsedTimeTotal = 0;
-
-        CString szSizeBuff;
-        bool bAvisynthInput = false;
-
         dlg.pWorkerContext->nTotalSize = 0;
+
+        this->pConfig->m_Files.clear();
+        this->pConfig->m_Status.clear();
+
         for (int i = 0; i < nItemsCount; i++)
         {
             std::wstring szFileBuffer = this->m_LstFiles.GetItemText(i, 0);
             std::wstring szExt = util::Utilities::GetFileExtension(szFileBuffer);
             if (util::StringHelper::TowLower(szExt) == L"avs")
-                bAvisynthInput = true;
+            {
+                if (this->pConfig->bMultiMonoInput == true)
+                {
+                    this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
+                    MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+                    bWorking = false;
+                    return;
+                }
+            }
 
-            dlg.pWorkerContext->m_Files.emplace_back(szFileBuffer);
-            dlg.pWorkerContext->m_Status.emplace_back(false);
+            this->pConfig->m_Files.emplace_back(szFileBuffer);
+            this->pConfig->m_Status.emplace_back(false);
 
-            szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
+            CString szSizeBuff = this->m_LstFiles.GetItemText(i, 1);
             dlg.pWorkerContext->nTotalSize += _ttoi64(szSizeBuff);
-        }
-
-        if ((this->pConfig->bMultiMonoInput == true) && (bAvisynthInput == true))
-        {
-            this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
-            MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
-            bWorking = false;
-            return;
         }
 
         CString szOutputPath;
@@ -371,12 +373,10 @@ namespace app
                     return;
                 }
             }
-
             this->pConfig->bUseOutputPath = true;
         }
 
         worker::CTimeCount countTime;
-        CString szText;
 
         countTime.Start();
         dlg.DoModal();
@@ -385,48 +385,48 @@ namespace app
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
 
-        for (int i = (int)dlg.pWorkerContext->m_Status.size() - 1; i >= 0; i--)
+        for (int i = (int)this->pConfig->m_Status.size() - 1; i >= 0; i--)
         {
-            if (dlg.pWorkerContext->m_Status[i]  == true)
+            if (this->pConfig->m_Status[i]  == true)
                 this->m_LstFiles.DeleteItem(i);
         }
 
-        if (dlg.pWorkerContext->nCount <= 0)
+        CString szStatus;
+        if (dlg.pWorkerContext->nEncodedFiles <= 0)
         {
-            szText = _T("");
+            szStatus = _T("");
             this->pConfig->Log->Log(L"[Error] Failed to encode all files.");
         }
         else
         {
             if (this->pConfig->bMultiMonoInput == true)
             {
-                szText.Format(this->pConfig->GetString(0x00207018).c_str(),
-                    dlg.pWorkerContext->nCount,
+                szStatus.Format(this->pConfig->GetString(0x00207018).c_str(),
+                    dlg.pWorkerContext->nEncodedFiles,
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
 
                 this->pConfig->Log->Log(
-                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
+                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
                     L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
             }
             else
             {
-                szText.Format(this->pConfig->GetString(0x00207019).c_str(),
-                    dlg.pWorkerContext->nCount,
-                    dlg.pWorkerContext->nCount == 1 ? _T("") :
+                szStatus.Format(this->pConfig->GetString(0x00207019).c_str(),
+                    dlg.pWorkerContext->nEncodedFiles,
+                    dlg.pWorkerContext->nEncodedFiles == 1 ? _T("") :
                     this->pConfig->GetString(0x0020701A).c_str(),
                     szElapsedFormatted.c_str(),
                     szElapsedSeconds);
 
                 this->pConfig->Log->Log(
-                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nCount) +
-                    L" file" + ((dlg.pWorkerContext->nCount == 1) ? L"" : L"s") +
+                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
+                    L" file" + ((dlg.pWorkerContext->nEncodedFiles == 1) ? L"" : L"s") +
                     L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
             }
         }
 
-        this->m_StatusBar.SetText(szText, 0, 0);
-
+        this->m_StatusBar.SetText(szStatus, 0, 0);
         bWorking = false;
     }
 

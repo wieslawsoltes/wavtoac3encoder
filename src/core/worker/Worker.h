@@ -17,9 +17,7 @@ namespace worker
     class CWorkerContext
     {
     public:
-        std::vector<std::wstring> m_Files;
-        std::vector<bool> m_Status;
-        int nCount;
+        int nEncodedFiles;
         __int64 nTotalSize;
         __int64 nTotalSizeCounter;
         double m_ElapsedTimeFile;

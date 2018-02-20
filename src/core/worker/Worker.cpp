@@ -671,13 +671,13 @@ namespace worker
 
         if (pConfig->bMultiMonoInput == false)
         {
-            int nTotalFiles = (int)pContext->m_Files.size();
+            int nTotalFiles = (int)pConfig->m_Files.size();
             for (int i = 0; i < nTotalFiles; i++)
             {
                 CState state(pConfig->GetCurrentPreset(), pConfig->GetCurrentEngine());
 
                 state.nInputFiles = 1;
-                state.szInPath[0] = pContext->m_Files[i];
+                state.szInPath[0] = pConfig->m_Files[i];
                 for (int j = 1; j < 6; j++)
                     state.szInPath[j] = L"-";
 
@@ -716,14 +716,14 @@ namespace worker
                 if (this->Encode(state, pConfig) == false)
                 {
                     state.api.CloseAftenAPI();
-                    pContext->m_Status[i] = false;
+                    pConfig->m_Status[i] = false;
                     pContext->StopTotalTimer();
                     return false;
                 }
 
                 state.api.CloseAftenAPI();
-                pContext->m_Status[i] = true;
-                pContext->nCount = i;
+                pConfig->m_Status[i] = true;
+                pContext->nEncodedFiles = i;
 
                 if (pContext->bTerminate == true)
                 {
@@ -741,11 +741,11 @@ namespace worker
             for (int j = 0; j < 6; j++)
                 state.szInPath[j] = L"-";
 
-            int nTotalFiles = (int)pContext->m_Files.size();
+            int nTotalFiles = (int)pConfig->m_Files.size();
             state.nInputFiles = nTotalFiles;
 
             for (int j = 0; j < nTotalFiles; j++)
-                state.szInPath[j] = pContext->m_Files[j];
+                state.szInPath[j] = pConfig->m_Files[j];
 
             if (pConfig->bUseOutputPath == true)
             {
@@ -784,19 +784,19 @@ namespace worker
             if (this->Encode(state, pConfig) == false)
             {
                 state.api.CloseAftenAPI();
-                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
-                    pContext->m_Status[i] = false;
+                for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
+                    pConfig->m_Status[i] = false;
 
-                pContext->nCount = 0;
+                pContext->nEncodedFiles = 0;
                 pContext->StopTotalTimer();
                 return false;
             }
 
             state.api.CloseAftenAPI();
-            for (int i = 0; i < (int)pContext->m_Status.size(); i++)
-                pContext->m_Status[i] = true;
+            for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
+                pConfig->m_Status[i] = true;
 
-            pContext->nCount = nTotalFiles;
+            pContext->nEncodedFiles = nTotalFiles;
             pContext->StopTotalTimer();
             return true;
         }
