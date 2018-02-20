@@ -256,47 +256,6 @@ namespace worker
         state.api.CloseAftenAPI();
     }
 
-    void CWorker::Clean(CState& state)
-    {
-        if (state.fwav)
-            free(state.fwav);
-
-        if (state.frame)
-            free(state.frame);
-
-        if (state.bAvisynthInput == false)
-        {
-            pcm_close(&state.pf);
-            for (int i = 0; i < state.nInputFiles; i++)
-            {
-                if (state.ifp[i])
-                    fclose(state.ifp[i]);
-            }
-        }
-        else
-        {
-            state.decoderAVS.CloseAvisynth();
-        }
-
-        if (state.ofp)
-            fclose(state.ofp);
-
-        state.api.LibAften_aften_encode_close(&state.s);
-    }
-
-    bool CWorker::EncoderError(CState& state, config::CConfiguration* pConfig, const std::wstring szMessage)
-    {
-        this->Clean(state);
-
-        pContext->StopCurrentTimer();
-        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
-        pContext->m_ElapsedTimeFile = 0L;
-
-        pConfig->Log->Log(szMessage);
-
-        return false;
-    }
-
     bool CWorker::Encode(CState& state, config::CConfiguration* pConfig)
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
@@ -309,28 +268,59 @@ namespace worker
         int input_file_format;
         enum PcmSampleFormat read_format;
 
+        auto Clean = [](CState& state)
+        {
+            if (state.fwav)
+                free(state.fwav);
+
+            if (state.frame)
+                free(state.frame);
+
+            if (state.bAvisynthInput == false)
+            {
+                pcm_close(&state.pf);
+                for (int i = 0; i < state.nInputFiles; i++)
+                {
+                    if (state.ifp[i])
+                        fclose(state.ifp[i]);
+                }
+            }
+            else
+            {
+                state.decoderAVS.CloseAvisynth();
+            }
+
+            if (state.ofp)
+                fclose(state.ofp);
+
+            state.api.LibAften_aften_encode_close(&state.s);
+        };
+
+        auto Error = [this, &state, pConfig, &Clean](const std::wstring szMessage) -> bool
+        {
+            Clean(state);
+            pConfig->Log->Log(szMessage);
+            return false;
+        };
+
         state.frame = nullptr;
         state.fwav = nullptr;
 
+        memset(state.ifp, 0, 6 * sizeof(FILE *));
         for (int i = 0; i < state.nInputFiles; i++)
             state.ifp[i] = nullptr;
 
         state.ofp = nullptr;
-
-        state.bAvisynthInput = false;
-        std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
-            state.bAvisynthInput = true;
-
         state.nInTotalSize = 0;
 
-        memset(state.ifp, 0, 6 * sizeof(FILE *));
+        std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
+        state.bAvisynthInput = util::StringHelper::TowLower(szExt) == L"avs";
 
         if (state.bAvisynthInput == true)
         {
             std::string szInputFileAVS = util::StringHelper::Convert(state.szInPath[0]);
             if (state.decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
-                return this->EncoderError(state, pConfig, L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
+                return Error(L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
 
             state.infoAVS = state.decoderAVS.GetInputInfo();
             state.nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
@@ -342,7 +332,7 @@ namespace worker
             {
                 errno_t error = _wfopen_s(&state.ifp[i], state.szInPath[i].c_str(), L"rb");
                 if (error != 0)
-                    return this->EncoderError(state, pConfig, L"[Error] Failed to open input file: " + state.szInPath[i]);
+                    return Error(L"[Error] Failed to open input file: " + state.szInPath[i]);
 
                 state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
                 pConfig->Log->Log(L"[Info] Input file: " + state.szInPath[i]);
@@ -351,7 +341,7 @@ namespace worker
 
         errno_t error = _wfopen_s(&state.ofp, state.szOutPath.c_str(), L"wb");
         if (error != 0)
-            return this->EncoderError(state, pConfig, L"[Error] Failed to create output file: " + state.szOutPath);
+            return Error(L"[Error] Failed to create output file: " + state.szOutPath);
 
         pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
 
@@ -368,14 +358,13 @@ namespace worker
         }
         else
         {
-            std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
             input_file_format = pConfig->GetSupportedInputFormat(szExt);
         }
 
         if (state.bAvisynthInput == false)
         {
             if (pcm_init(&state.pf, state.nInputFiles, state.ifp, read_format, input_file_format))
-                return this->EncoderError(state, pConfig, L"[Error] Failed to initialize PCM library.");
+                return Error(L"[Error] Failed to initialize PCM library.");
 
             if (state.opt.read_to_eof)
                 pcm_set_read_to_eof(&state.pf, 1);
@@ -408,7 +397,7 @@ namespace worker
                 else
                 {
                     if (state.s.lfe != 0)
-                        return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                        return Error(L"[Error] Invalid channel configuration.");
                 }
             }
             else if (ch == (state.pf.channels - 1))
@@ -420,12 +409,12 @@ namespace worker
                 else
                 {
                     if (state.s.lfe != 1)
-                        return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                        return Error(L"[Error] Invalid channel configuration.");
                 }
             }
             else
             {
-                return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                return Error(L"[Error] Invalid channel configuration.");
             }
         }
         else
@@ -434,16 +423,16 @@ namespace worker
             if (state.s.lfe >= 0)
             {
                 if (state.s.lfe == 0 && ch == 6)
-                    return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                    return Error(L"[Error] Invalid channel configuration.");
                 else if (state.s.lfe == 1 && ch == 1)
-                    return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                    return Error(L"[Error] Invalid channel configuration.");
 
                 if (state.s.lfe)
                     state.pf.ch_mask |= 0x08;
             }
 
             if (state.api.LibAften_aften_wav_channels_to_acmod(ch, state.pf.ch_mask, &state.s.acmod, &state.s.lfe))
-                return this->EncoderError(state, pConfig, L"[Error] Invalid channel configuration.");
+                return Error(L"[Error] Invalid channel configuration.");
         }
 
         if (state.bAvisynthInput == false)
@@ -466,7 +455,7 @@ namespace worker
         state.frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
         state.fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * state.s.channels, sizeof(FLOAT));
         if (state.frame == nullptr || state.fwav == nullptr)
-            return this->EncoderError(state, pConfig, L"[Error] Failed to allocate samples memory.");
+            return Error(L"[Error] Failed to allocate samples memory.");
 
         samplecount = bytecount = t0 = t1 = percent = 0;
         qual = bw = 0.0;
@@ -509,7 +498,7 @@ namespace worker
         }
 
         if (state.api.LibAften_aften_encode_init(&state.s))
-            return this->EncoderError(state, pConfig, L"[Error] Failed to initialize aften encoder.");
+            return Error(L"[Error] Failed to initialize aften encoder.");
 
         this->SetInfo(state, pConfig);
 
@@ -528,7 +517,7 @@ namespace worker
                     if (fs > 0)
                         fwrite(state.frame, 1, fs, state.ofp);
                 }
-                return this->EncoderError(state, pConfig, L"[Info] User terminated encoding.");
+                return Error(L"[Info] User terminated encoding.");
             }
 
             if (state.bAvisynthInput == false)
@@ -547,7 +536,7 @@ namespace worker
             fs = state.api.LibAften_aften_encode_frame(&state.s, state.frame, state.fwav, nr);
             if (fs < 0)
             {
-                return this->EncoderError(state, pConfig, L"[Error] Failed to encode frame.");
+                return Error(L"[Error] Failed to encode frame.");
             }
             else
             {
@@ -632,7 +621,7 @@ namespace worker
             pContext->nTotalSizeCounter += state.nInTotalSize;
         }
 
-        this->Clean(state);
+        Clean(state);
 
         pContext->StopCurrentTimer();
         pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
@@ -700,9 +689,15 @@ namespace worker
 
                 if (this->Encode(state, pConfig) == false)
                 {
+                    pContext->StopCurrentTimer();
+                    pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
+                    pContext->m_ElapsedTimeFile = 0L;
+
                     this->CloseEngine(state, pConfig);
                     pConfig->m_Status[i] = false;
+
                     pContext->StopTotalTimer();
+
                     return false;
                 }
 
@@ -768,12 +763,17 @@ namespace worker
 
             if (this->Encode(state, pConfig) == false)
             {
+                pContext->StopCurrentTimer();
+                pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
+                pContext->m_ElapsedTimeFile = 0L;
+
                 this->CloseEngine(state, pConfig);
                 for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
                     pConfig->m_Status[i] = false;
 
                 pContext->nEncodedFiles = 0;
                 pContext->StopTotalTimer();
+
                 return false;
             }
 

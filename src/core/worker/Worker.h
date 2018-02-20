@@ -87,8 +87,6 @@ namespace worker
         void SetInfo(CState& state, config::CConfiguration* pConfig);
         bool OpenEngine(CState& state, config::CConfiguration* pConfig);
         void CloseEngine(CState& state, config::CConfiguration* pConfig);
-        void Clean(CState& state);
-        bool EncoderError(CState& state, config::CConfiguration* pConfig, const std::wstring szMessage);
         bool Encode(CState& state, config::CConfiguration* pConfig);
     public:
         bool Run(config::CConfiguration* pConfig);
