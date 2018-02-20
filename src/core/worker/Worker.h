@@ -76,7 +76,7 @@ namespace worker
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
     public:
-        CState(config::CPreset& preset, config::CEngine& engine) : preset(engine), engine(engine) { }
+        CState(config::CPreset& preset, config::CEngine& engine) : preset(preset), engine(engine) { }
         virtual ~CState() { }
     };
 
