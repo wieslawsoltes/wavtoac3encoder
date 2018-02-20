@@ -7,8 +7,6 @@ namespace worker
     {
         if (state.bAvisynthInput == false)
         {
-            CAtlString szInputInfo = _T("");
-
             for (int i = 0; i < state.nInputFiles; i++)
             {
                 PcmFile *pf_info = &state.pf.pcm_file[i];
@@ -82,17 +80,15 @@ namespace worker
                     order = L"\b";
                 }
 
-                szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
-                    fmt.c_str(), type.c_str(), pf_info->bit_width, order.c_str(), pf_info->sample_rate, chan.c_str());
+                CAtlString szInputInfo = _T("");
+                szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"), fmt.c_str(), type.c_str(), pf_info->bit_width, order.c_str(), pf_info->sample_rate, chan.c_str());
                 std::wstring szInputInfoStr = szInputInfo;
                 pContext->SetInputTypeInfo(i, szInputInfoStr);
             }
         }
         else
         {
-            CAtlString szInputInfo = _T("");
             std::wstring chan = L"?-channel";
-
             switch (state.infoAVS.nAudioChannels)
             {
             case 1: chan = pConfig->GetString(0x00A0200D).c_str(); break;
@@ -104,36 +100,31 @@ namespace worker
             default: chan = pConfig->GetString(0x00A02013).c_str(); break;
             }
 
-            szInputInfo.Format(_T("\t%s %d Hz %s"),
-                pConfig->GetString(0x00A02017).c_str(),
-                state.infoAVS.nSamplesPerSecond, chan.c_str());
+            CAtlString szInputInfo = _T("");
+            szInputInfo.Format(_T("\t%s %d Hz %s"), pConfig->GetString(0x00A02017).c_str(), state.infoAVS.nSamplesPerSecond, chan.c_str());
             std::wstring szInputInfoStr = szInputInfo;
             pContext->SetInputTypeInfo(0, szInputInfoStr);
         }
 
+        std::wstring acmod_str[] =
         {
-            CAtlString szOutputInfo = _T("");
-            std::wstring acmod_str[] =
-            {
-                pConfig->GetString(0x00A02018),
-                pConfig->GetString(0x00A02019),
-                pConfig->GetString(0x00A0201A),
-                L"3/0",
-                L"2/1",
-                L"3/1",
-                L"2/2",
-                L"3/2"
-            };
+            pConfig->GetString(0x00A02018),
+            pConfig->GetString(0x00A02019),
+            pConfig->GetString(0x00A0201A),
+            L"3/0",
+            L"2/1",
+            L"3/1",
+            L"2/2",
+            L"3/2"
+        };
 
-            szOutputInfo.Format(_T("\tAC3 %d Hz %s"), state.s.samplerate, acmod_str[state.s.acmod].c_str());
-            if (state.s.lfe)
-                szOutputInfo += _T(" + LFE");
-            std::wstring szOutputInfoStr = szOutputInfo;
-            pContext->SetOutputTypeInfo(szOutputInfoStr);
-        }
+        CAtlString szOutputInfo = _T("");
+        szOutputInfo.Format(_T("\tAC3 %d Hz %s%s"), state.s.samplerate, acmod_str[state.s.acmod].c_str(), state.s.lfe ? _T(" + LFE") : _T(""));
+        std::wstring szOutputInfoStr = szOutputInfo;
+        pContext->SetOutputTypeInfo(szOutputInfoStr);
     }
 
-    bool CWorker::InitEngine(CState& state, config::CConfiguration* pConfig)
+    bool CWorker::OpenEngine(CState& state, config::CConfiguration* pConfig)
     {
         ZeroMemory(&state.s, sizeof(AftenContext));
         ZeroMemory(&state.opt, sizeof(AftenOpt));
@@ -258,6 +249,11 @@ namespace worker
         #undef SetSetting
 
         return true;
+    }
+
+    void CWorker::CloseEngine(CState& state, config::CConfiguration* pConfig)
+    {
+        state.api.CloseAftenAPI();
     }
 
     void CWorker::Clean(CState& state)
@@ -696,7 +692,7 @@ namespace worker
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
 
-                if (this->InitEngine(state, pConfig) == false)
+                if (this->OpenEngine(state, pConfig) == false)
                 {
                     pContext->StopTotalTimer();
                     return false;
@@ -704,13 +700,13 @@ namespace worker
 
                 if (this->Encode(state, pConfig) == false)
                 {
-                    state.api.CloseAftenAPI();
+                    this->CloseEngine(state, pConfig);
                     pConfig->m_Status[i] = false;
                     pContext->StopTotalTimer();
                     return false;
                 }
 
-                state.api.CloseAftenAPI();
+                this->CloseEngine(state, pConfig);
                 pConfig->m_Status[i] = true;
                 pContext->nEncodedFiles = i;
 
@@ -764,7 +760,7 @@ namespace worker
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
 
-            if (this->InitEngine(state, pConfig) == false)
+            if (this->OpenEngine(state, pConfig) == false)
             {
                 pContext->StopTotalTimer();
                 return false;
@@ -772,7 +768,7 @@ namespace worker
 
             if (this->Encode(state, pConfig) == false)
             {
-                state.api.CloseAftenAPI();
+                this->CloseEngine(state, pConfig);
                 for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
                     pConfig->m_Status[i] = false;
 
@@ -781,7 +777,7 @@ namespace worker
                 return false;
             }
 
-            state.api.CloseAftenAPI();
+            this->CloseEngine(state, pConfig);
             for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
                 pConfig->m_Status[i] = true;
 

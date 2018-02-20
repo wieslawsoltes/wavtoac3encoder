@@ -85,7 +85,8 @@ namespace worker
         virtual ~CWorker() { }
     protected:
         void SetInfo(CState& state, config::CConfiguration* pConfig);
-        bool InitEngine(CState& state, config::CConfiguration* pConfig);
+        bool OpenEngine(CState& state, config::CConfiguration* pConfig);
+        bool CloseEngine(CState& state, config::CConfiguration* pConfig);
         void Clean(CState& state);
         bool EncoderError(CState& state, config::CConfiguration* pConfig, const std::wstring szMessage);
         bool Encode(CState& state, config::CConfiguration* pConfig);
