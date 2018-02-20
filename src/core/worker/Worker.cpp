@@ -3,7 +3,7 @@
 
 namespace worker
 {
-    void CWorker::SetInfo(CState& state)
+    void CWorker::SetInfo(CState& state, config::CConfiguration* pConfig)
     {
         if (state.bAvisynthInput == false)
         {
@@ -15,49 +15,49 @@ namespace worker
                 std::wstring type, chan, order;
                 std::wstring fmt = L"";
 
-                type = pContext->pConfig->GetString(0x00A02001).c_str();
-                chan = pContext->pConfig->GetString(0x00A02002).c_str();
+                type = pConfig->GetString(0x00A02001).c_str();
+                chan = pConfig->GetString(0x00A02002).c_str();
                 order = L"";
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
                     if (pf_info->source_format == PCM_SAMPLE_FMT_U8)
-                        type = pContext->pConfig->GetString(0x00A02003).c_str();
+                        type = pConfig->GetString(0x00A02003).c_str();
                     else
-                        type = pContext->pConfig->GetString(0x00A02004).c_str();
+                        type = pConfig->GetString(0x00A02004).c_str();
                 }
                 else if (pf_info->sample_type == PCM_SAMPLE_TYPE_FLOAT)
                 {
-                    type = pContext->pConfig->GetString(0x00A02005).c_str();
+                    type = pConfig->GetString(0x00A02005).c_str();
                 }
                 else
                 {
-                    type = pContext->pConfig->GetString(0x00A02006).c_str();
+                    type = pConfig->GetString(0x00A02006).c_str();
                 }
 
                 if (pf_info->ch_mask & 0x08)
                 {
                     switch (pf_info->channels - 1)
                     {
-                    case 1: chan = pContext->pConfig->GetString(0x00A02007).c_str(); break;
-                    case 2: chan = pContext->pConfig->GetString(0x00A02008).c_str(); break;
-                    case 3: chan = pContext->pConfig->GetString(0x00A02009).c_str(); break;
-                    case 4: chan = pContext->pConfig->GetString(0x00A0200A).c_str(); break;
-                    case 5: chan = pContext->pConfig->GetString(0x00A0200B).c_str(); break;
-                    default: chan = pContext->pConfig->GetString(0x00A0200C).c_str(); break;
+                    case 1: chan = pConfig->GetString(0x00A02007).c_str(); break;
+                    case 2: chan = pConfig->GetString(0x00A02008).c_str(); break;
+                    case 3: chan = pConfig->GetString(0x00A02009).c_str(); break;
+                    case 4: chan = pConfig->GetString(0x00A0200A).c_str(); break;
+                    case 5: chan = pConfig->GetString(0x00A0200B).c_str(); break;
+                    default: chan = pConfig->GetString(0x00A0200C).c_str(); break;
                     }
                 }
                 else
                 {
                     switch (pf_info->channels)
                     {
-                    case 1: chan = pContext->pConfig->GetString(0x00A0200D).c_str(); break;
-                    case 2: chan = pContext->pConfig->GetString(0x00A0200E).c_str(); break;
-                    case 3: chan = pContext->pConfig->GetString(0x00A0200F).c_str(); break;
-                    case 4: chan = pContext->pConfig->GetString(0x00A02010).c_str(); break;
-                    case 5: chan = pContext->pConfig->GetString(0x00A02011).c_str(); break;
-                    case 6: chan = pContext->pConfig->GetString(0x00A02012).c_str(); break;
-                    default: chan = pContext->pConfig->GetString(0x00A02013).c_str(); break;
+                    case 1: chan = pConfig->GetString(0x00A0200D).c_str(); break;
+                    case 2: chan = pConfig->GetString(0x00A0200E).c_str(); break;
+                    case 3: chan = pConfig->GetString(0x00A0200F).c_str(); break;
+                    case 4: chan = pConfig->GetString(0x00A02010).c_str(); break;
+                    case 5: chan = pConfig->GetString(0x00A02011).c_str(); break;
+                    case 6: chan = pConfig->GetString(0x00A02012).c_str(); break;
+                    default: chan = pConfig->GetString(0x00A02013).c_str(); break;
                     }
                 }
 
@@ -68,15 +68,15 @@ namespace worker
                 }
                 else
                 {
-                    fmt = pContext->pConfig->GetString(0x00A02014);
+                    fmt = pConfig->GetString(0x00A02014);
                 }
 
                 if (pf_info->source_format > PCM_SAMPLE_FMT_S8)
                 {
                     switch (pf_info->order)
                     {
-                    case PCM_BYTE_ORDER_LE: order = pContext->pConfig->GetString(0x00A02015).c_str(); break;
-                    case PCM_BYTE_ORDER_BE: order = pContext->pConfig->GetString(0x00A02016).c_str(); break;
+                    case PCM_BYTE_ORDER_LE: order = pConfig->GetString(0x00A02015).c_str(); break;
+                    case PCM_BYTE_ORDER_BE: order = pConfig->GetString(0x00A02016).c_str(); break;
                     }
                 }
                 else
@@ -97,17 +97,17 @@ namespace worker
 
             switch (state.infoAVS.nAudioChannels)
             {
-            case 1: chan = pContext->pConfig->GetString(0x00A0200D).c_str(); break;
-            case 2: chan = pContext->pConfig->GetString(0x00A0200E).c_str(); break;
-            case 3: chan = pContext->pConfig->GetString(0x00A0200F).c_str(); break;
-            case 4: chan = pContext->pConfig->GetString(0x00A02010).c_str(); break;
-            case 5: chan = pContext->pConfig->GetString(0x00A02011).c_str(); break;
-            case 6: chan = pContext->pConfig->GetString(0x00A02012).c_str(); break;
-            default: chan = pContext->pConfig->GetString(0x00A02013).c_str(); break;
+            case 1: chan = pConfig->GetString(0x00A0200D).c_str(); break;
+            case 2: chan = pConfig->GetString(0x00A0200E).c_str(); break;
+            case 3: chan = pConfig->GetString(0x00A0200F).c_str(); break;
+            case 4: chan = pConfig->GetString(0x00A02010).c_str(); break;
+            case 5: chan = pConfig->GetString(0x00A02011).c_str(); break;
+            case 6: chan = pConfig->GetString(0x00A02012).c_str(); break;
+            default: chan = pConfig->GetString(0x00A02013).c_str(); break;
             }
 
             szInputInfo.Format(_T("\t%s %d Hz %s"),
-                pContext->pConfig->GetString(0x00A02017).c_str(),
+                pConfig->GetString(0x00A02017).c_str(),
                 state.infoAVS.nSamplesPerSecond, chan.c_str());
             std::wstring szInputInfoStr = szInputInfo;
             pContext->SetInputTypeInfo(0, szInputInfoStr);
@@ -117,9 +117,9 @@ namespace worker
             CAtlString szOutputInfo = _T("");
             std::wstring acmod_str[] =
             {
-                pContext->pConfig->GetString(0x00A02018),
-                pContext->pConfig->GetString(0x00A02019),
-                pContext->pConfig->GetString(0x00A0201A),
+                pConfig->GetString(0x00A02018),
+                pConfig->GetString(0x00A02019),
+                pConfig->GetString(0x00A0201A),
                 L"3/0",
                 L"2/1",
                 L"3/1",
@@ -135,35 +135,38 @@ namespace worker
         }
     }
 
-    bool CWorker::InitEngine(CState& state)
+    bool CWorker::InitEngine(CState& state, config::CConfiguration* pConfig)
     {
-        if (state.api.OpenAftenAPI(state.engine->szPath) == false)
+        ZeroMemory(&state.s, sizeof(AftenContext));
+        ZeroMemory(&state.opt, sizeof(AftenOpt));
+
+        if (state.api.OpenAftenAPI(state.engine.szPath) == false)
         {
-            this->pContext->pConfig->Log->Log(L"[Error] Failed to load '" + state.engine->szName + L"' library: " + state.engine->szPath);
+            pConfig->Log->Log(L"[Error] Failed to load '" + state.engine.szName + L"' library: " + state.engine.szPath);
             return false;
         }
         else
         {
             const char *version = state.api.LibAften_aften_get_version();
             std::wstring szVersion = util::StringHelper::Convert(version);
-            this->pContext->pConfig->Log->Log( L"[Info] Loaded '" + state.engine->szName + L"' library" + L", version " + szVersion + L": " + state.engine->szPath);
+            pConfig->Log->Log( L"[Info] Loaded '" + state.engine.szName + L"' library" + L", version " + szVersion + L": " + state.engine.szPath);
         }
 
         state.api.LibAften_aften_set_defaults(&state.s);
 
-        state.s.system.wanted_simd_instructions.mmx = state.engine->nUsedSIMD.at(0);
-        state.s.system.wanted_simd_instructions.sse = state.engine->nUsedSIMD.at(1);
-        state.s.system.wanted_simd_instructions.sse2 = state.engine->nUsedSIMD.at(2);
-        state.s.system.wanted_simd_instructions.sse3 = state.engine->nUsedSIMD.at(3);
-        state.s.system.n_threads = state.engine->nThreads;
+        state.s.system.wanted_simd_instructions.mmx = state.engine.nUsedSIMD.at(0);
+        state.s.system.wanted_simd_instructions.sse = state.engine.nUsedSIMD.at(1);
+        state.s.system.wanted_simd_instructions.sse2 = state.engine.nUsedSIMD.at(2);
+        state.s.system.wanted_simd_instructions.sse3 = state.engine.nUsedSIMD.at(3);
+        state.s.system.n_threads = state.engine.nThreads;
 
-        state.s.params.encoding_mode = state.preset->nMode;
-        state.s.params.bitrate = state.preset->nBitrate;
-        state.s.params.quality = state.preset->nQuality;
+        state.s.params.encoding_mode = state.preset.nMode;
+        state.s.params.bitrate = state.preset.nBitrate;
+        state.s.params.quality = state.preset.nQuality;
 
-        if (state.preset->m_RawInput.nRawSampleFormat != 0)
+        if (state.preset.m_RawInput.nRawSampleFormat != 0)
         {
-            switch (state.preset->m_RawInput.nRawSampleFormat)
+            switch (state.preset.m_RawInput.nRawSampleFormat)
             {
             case 1: state.opt.raw_fmt = PCM_SAMPLE_FMT_U8; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
             case 2: state.opt.raw_fmt = PCM_SAMPLE_FMT_S8; state.opt.raw_order = PCM_BYTE_ORDER_LE; break;
@@ -183,23 +186,23 @@ namespace worker
             state.opt.raw_input = 1;
         }
 
-        if (state.preset->m_RawInput.nRawSampleRate != 0)
+        if (state.preset.m_RawInput.nRawSampleRate != 0)
         {
-            state.opt.raw_sr = state.preset->m_RawInput.nRawSampleRate;
+            state.opt.raw_sr = state.preset.m_RawInput.nRawSampleRate;
             state.opt.raw_input = 1;
         }
 
-        if (state.preset->m_RawInput.nRawChannels != 0)
+        if (state.preset.m_RawInput.nRawChannels != 0)
         {
-            state.opt.raw_ch = state.preset->m_RawInput.nRawChannels;
+            state.opt.raw_ch = state.preset.m_RawInput.nRawChannels;
             state.opt.raw_input = 1;
         }
 
         #define SetSetting(set, type) \
             nOption++; \
             { \
-                auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption]; \
-                int nOptionValue = state.preset->nOptions.at(nOption); \
+                auto& option = pConfig->m_EncoderOptions.m_Options[nOption]; \
+                int nOptionValue = state.preset.nOptions.at(nOption); \
                 if(option.nIgnoreValue != nOptionValue) \
                 { \
                     int nValue = option.m_Values[nOptionValue].second; \
@@ -227,12 +230,12 @@ namespace worker
 
         nOption++;
         {
-            auto& option = pContext->pConfig->m_EncoderOptions.m_Options[nOption];
-            int nOptionValue = state.preset->nOptions.at(nOption);
+            auto& option = pConfig->m_EncoderOptions.m_Options[nOption];
+            int nOptionValue = state.preset.nOptions.at(nOption);
             if (option.nIgnoreValue != nOptionValue)
             {
                 int nValue = option.m_Values[nOptionValue].second;
-                auto& channelConfig = pContext->pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
+                auto& channelConfig = pConfig->m_EncoderOptions.m_ChannelConfig[nValue];
                 state.s.acmod = channelConfig.acmod;
                 state.s.lfe = channelConfig.lfe;
             }
@@ -259,7 +262,7 @@ namespace worker
         return true;
     }
 
-    bool CWorker::EncoderError(CState& state, const std::wstring szMessage)
+    void CWorker::Clean(CState& sate)
     {
         if (state.fwav)
             free(state.fwav);
@@ -285,12 +288,18 @@ namespace worker
             fclose(state.ofp);
 
         state.api.LibAften_aften_encode_close(&state.s);
+    }
+
+    bool CWorker::EncoderError(CState& state, const std::wstring szMessage)
+    {
+        this->Clean(state);
 
         pContext->StopCurrentTimer();
         pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
-        this->pContext->pConfig->Log->Log(szMessage);
+        pContext->pConfig->Log->Log(szMessage);
+
         return false;
     }
 
@@ -327,10 +336,8 @@ namespace worker
         {
             std::string szInputFileAVS = util::StringHelper::Convert(state.szInPath[0]);
             if (state.decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
-            {
-                this->pContext->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
-                return false;
-            }
+                return this->EncoderError(state, L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
+
             state.infoAVS = state.decoderAVS.GetInputInfo();
             state.nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
             this->pContext->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
@@ -341,13 +348,8 @@ namespace worker
             {
                 errno_t error = _tfopen_s(&state.ifp[i], state.szInPath[i].c_str(), _T("rb"));
                 if (error != 0)
-                {
-                    this->pContext->pConfig->Log->Log(L"[Error] Failed to open input file: " + state.szInPath[i]);
-                    pContext->StopCurrentTimer();
-                    pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
-                    pContext->m_ElapsedTimeFile = 0L;
-                    return false;
-                }
+                    return this->EncoderError(state, L"[Error] Failed to open input file: " + state.szInPath[i]);
+
                 state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
                 this->pContext->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
             }
@@ -355,18 +357,7 @@ namespace worker
 
         errno_t error = _tfopen_s(&state.ofp, state.szOutPath.c_str(), _T("wb"));
         if (error != 0)
-        {
-            pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
-            pContext->StopCurrentTimer();
-            pContext->m_ElapsedTimeFile = 0L;
-            for (int i = 0; i < state.nInputFiles; i++)
-            {
-                if (state.ifp[i])
-                    fclose(state.ifp[i]);
-            }
-            this->pContext->pConfig->Log->Log(L"[Error] Failed to create output file: " + state.szOutPath);
-            return false;
-        }
+            return this->EncoderError(state, L"[Error] Failed to create output file: " + state.szOutPath);
 
         this->pContext->pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
 
@@ -377,33 +368,23 @@ namespace worker
 #endif
 
         input_file_format = PCM_FORMAT_UNKNOWN;
-
         if ((state.opt.raw_input) || (state.bAvisynthInput == true))
-        {
             input_file_format = PCM_FORMAT_RAW;
-        }
         else
-        {
             input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(state.szInPath[0]));
-        }
 
         if (state.bAvisynthInput == false)
         {
             if (pcm_init(&state.pf, state.nInputFiles, state.ifp, read_format, input_file_format))
-            {
                 return this->EncoderError(state, L"[Error] Failed to initialize PCM library.");
-            }
 
             if (state.opt.read_to_eof)
                 pcm_set_read_to_eof(&state.pf, 1);
 
             if (state.opt.raw_input)
-            {
                 pcm_set_source_params(&state.pf, state.opt.raw_ch, state.opt.raw_fmt, state.opt.raw_order, state.opt.raw_sr);
-            }
         }
-
-        if (state.bAvisynthInput == true)
+        else
         {
             state.statusAVS.nStart = 0;
             state.statusAVS.nSamples = state.infoAVS.nAudioSamples;
@@ -428,9 +409,7 @@ namespace worker
                 else
                 {
                     if (state.s.lfe != 0)
-                    {
                         return this->EncoderError(state, L"[Error] Invalid channel configuration.");
-                    }
                 }
             }
             else if (ch == (state.pf.channels - 1))
@@ -442,9 +421,7 @@ namespace worker
                 else
                 {
                     if (state.s.lfe != 1)
-                    {
                         return this->EncoderError(state, L"[Error] Invalid channel configuration.");
-                    }
                 }
             }
             else
@@ -458,24 +435,16 @@ namespace worker
             if (state.s.lfe >= 0)
             {
                 if (state.s.lfe == 0 && ch == 6)
-                {
                     return this->EncoderError(state, L"[Error] Invalid channel configuration.");
-                }
                 else if (state.s.lfe == 1 && ch == 1)
-                {
                     return this->EncoderError(state, L"[Error] Invalid channel configuration.");
-                }
 
                 if (state.s.lfe)
-                {
                     state.pf.ch_mask |= 0x08;
-                }
             }
 
             if (state.api.LibAften_aften_wav_channels_to_acmod(ch, state.pf.ch_mask, &state.s.acmod, &state.s.lfe))
-            {
                 return this->EncoderError(state, L"[Error] Invalid channel configuration.");
-            }
         }
 
         if (state.bAvisynthInput == false)
@@ -494,12 +463,11 @@ namespace worker
             state.s.channels = state.infoAVS.nAudioChannels;
             state.s.samplerate = state.infoAVS.nSamplesPerSecond;
         }
+
         state.frame = (uint8_t *)calloc(A52_MAX_CODED_FRAME_SIZE, 1);
         state.fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * state.s.channels, sizeof(FLOAT));
         if (state.frame == nullptr || state.fwav == nullptr)
-        {
             return this->EncoderError(state, L"[Error] Failed to allocate samples memory.");
-        }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
         qual = bw = 0.0;
@@ -542,11 +510,9 @@ namespace worker
         }
 
         if (state.api.LibAften_aften_encode_init(&state.s))
-        {
             return this->EncoderError(state, L"[Error] Failed to initialize aften encoder.");
-        }
 
-        this->SetInfo(state);
+        this->SetInfo(state, pContext->pConfig);
 
         int nCurTotalPos = 0;
         __int64 nCurPos = 0;
@@ -580,7 +546,6 @@ namespace worker
                 aften_remap(state.fwav, nr, state.s.channels, state.s.sample_format, state.s.acmod);
 
             fs = state.api.LibAften_aften_encode_frame(&state.s, state.frame, state.fwav, nr);
-
             if (fs < 0)
             {
                 return this->EncoderError(state, L"[Error] Failed to encode frame.");
@@ -615,9 +580,7 @@ namespace worker
                         else
                         {
                             for (int i = 0; i < state.nInputFiles; i++)
-                            {
                                 nCurPos += _ftelli64(state.ifp[i]);
-                            }
                         }
                     }
                     else
@@ -633,7 +596,6 @@ namespace worker
                     }
 
                     percent = (100 * nCurPos) / state.nInTotalSize;
-
                     if (pContext->bCanUpdateWindow == true)
                     {
                         pContext->bCanUpdateWindow = false;
@@ -642,7 +604,6 @@ namespace worker
                     }
 
                     nCurTotalPos = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
-
                     if (pContext->bCanUpdateWindow == true)
                     {
                         pContext->bCanUpdateWindow = false;
@@ -653,7 +614,6 @@ namespace worker
                 t0 = t1;
 
                 fwrite(state.frame, 1, fs, state.ofp);
-
                 if (pContext->bCanUpdateWindow == true)
                 {
                     pContext->bCanUpdateWindow = false;
@@ -666,21 +626,6 @@ namespace worker
             }
         } while (nr > 0 || fs > 0 || !frame_cnt);
 
-        if (state.fwav)
-            free(state.fwav);
-
-        if (state.frame)
-            free(state.frame);
-
-        if (state.bAvisynthInput == false)
-        {
-            pcm_close(&state.pf);
-        }
-        else
-        {
-            state.decoderAVS.CloseAvisynth();
-        }
-
         if (state.bAvisynthInput == false)
         {
             if (pContext->pConfig->bMultiMonoInput == false)
@@ -690,9 +635,7 @@ namespace worker
             else
             {
                 for (int i = 0; i < state.nInputFiles; i++)
-                {
                     pContext->nTotalSizeCounter += _ftelli64(state.ifp[i]);
-                }
             }
         }
         else
@@ -700,16 +643,7 @@ namespace worker
             pContext->nTotalSizeCounter += state.nInTotalSize;
         }
 
-        for (int i = 0; i < state.nInputFiles; i++)
-        {
-            if (state.ifp[i])
-                fclose(state.ifp[i]);
-        }
-
-        if (state.ofp)
-            fclose(state.ofp);
-
-        state.api.LibAften_aften_encode_close(&state.s);
+        this->Clean(state);
 
         pContext->StopCurrentTimer();
         pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
@@ -720,52 +654,34 @@ namespace worker
 
     bool CWorker::Run()
     {
-        pContext->SetCurrentProgressRange(0, 100);
-        pContext->SetTotalProgressRange(0, 100);
-        pContext->SetCurrentProgress(0);
-        pContext->SetTotalProgress(0);
-        pContext->StopCurrentTimer();
-        pContext->m_ElapsedTimeTotal = 0L;
-        pContext->SetTotalTimerInfo(pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
-        pContext->StartTotalTimer(250);
-        pContext->nTotalSizeCounter = 0;
-
-        int nFileCounter = 0;
-        int nTotalFiles = (int)pContext->m_Files.size();
-
         if (pContext->pConfig->bMultiMonoInput == false)
         {
-            for (int i = 0; i < (int)pContext->m_Files.size(); i++)
+            int nTotalFiles = (int)pContext->m_Files.size();
+            for (int i = 0; i < nTotalFiles; i++)
             {
-                CState state;
-                state.preset = pContext->pPreset;
-                state.engine = pContext->pEngine;
+                CState state(pContext->pConfig->GetCurrentPreset(), pContext->pConfig->GetCurrentEngine());
 
-                state.szInPath[0] = L"-";
-                state.szInPath[1] = L"-";
-                state.szInPath[2] = L"-";
-                state.szInPath[3] = L"-";
-                state.szInPath[4] = L"-";
-                state.szInPath[5] = L"-";
-                state.szOutPath = L"";
-
+                state.nInputFiles = 1;
                 state.szInPath[0] = pContext->m_Files[i];
-                state.szOutPath = state.szInPath[0];
-
-                std::wstring szExt = util::Utilities::GetFileExtension(state.szOutPath);
-                state.szOutPath =
-                    state.szOutPath.substr(0, state.szOutPath.length() - szExt.length() - 1) +
-                    L"." + 
-                    pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                for (int j = 1; j < 6; j++)
+                    state.szInPath[j] = L"-";
 
                 if (pContext->pConfig->bUseOutputPath == true)
                 {
-                    std::wstring szFile = util::Utilities::GetFileName(state.szOutPath);
-                    state.szOutPath = util::Utilities::CombinePath(pContext->pConfig->szOutputPath, szFile);
+                    std::wstring szInFile = state.szInPath[0];
+                    std::wstring szInFileName = util::Utilities::GetFileName(szInFile);
+                    state.szOutPath = util::Utilities::CombinePath(pContext->pConfig->szOutputPath, szInFileName);
+                }
+                else
+                {
+                    std::wstring szInFile = state.szInPath[0];
+                    std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
+                    std::wstring szOutExt = pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                    state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
                 }
 
                 CAtlString szTitle;
-                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(), nFileCounter + 1, nTotalFiles);
+                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(), i + 1, nTotalFiles);
                 std::wstring szTitleStr = szTitle;
                 pContext->SetTitleInfo(szTitleStr);
 
@@ -776,27 +692,19 @@ namespace worker
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
 
-                ZeroMemory(&state.s, sizeof(AftenContext));
-                ZeroMemory(&state.opt, sizeof(AftenOpt));
-                if (this->InitEngine(state) == false)
-                {
+                if (this->InitEngine(state, pContext->pConfig) == false)
                     return false;
-                }
-
-                state.nInputFiles = 1;
 
                 if (this->Encode(state) == false)
                 {
-                    pContext->m_Status[i] = false;
                     state.api.CloseAftenAPI();
+                    pContext->m_Status[i] = false;
                     return false;
                 }
 
                 state.api.CloseAftenAPI();
-
                 pContext->m_Status[i] = true;
-                nFileCounter++;
-                pContext->nCount = nFileCounter;
+                pContext->nCount = i;
 
                 if (pContext->bTerminate == true)
                 {
@@ -804,90 +712,68 @@ namespace worker
                     break;
                 }
             }
+            return true;
         }
         else
         {
-            CState state;
-            state.preset = pContext->pPreset;
-            state.engine = pContext->pEngine;
+            CState state(pContext->pConfig->GetCurrentPreset(), pContext->pConfig->GetCurrentEngine());
 
-            state.szInPath[0] = L"-";
-            state.szInPath[1] = L"-";
-            state.szInPath[2] = L"-";
-            state.szInPath[3] = L"-";
-            state.szInPath[4] = L"-";
-            state.szInPath[5] = L"-";
-            state.szOutPath = L"";
+            for (int j = 0; j < 6; j++)
+                state.szInPath[j] = L"-";
 
-            nFileCounter = (int)pContext->m_Files.size();
+            int nTotalFiles = (int)pContext->m_Files.size();
+            state.nInputFiles = nTotalFiles;
 
-            for (int i = 0; i < nFileCounter; i++)
-            {
-                state.szInPath[i] = pContext->m_Files[i];
-            }
-
-            state.szOutPath = state.szInPath[0];
-
-            std::wstring szExt = util::Utilities::GetFileExtension(state.szOutPath);
-            state.szOutPath =
-                state.szOutPath.substr(0, state.szOutPath.length() - szExt.length() - 1) +
-                L"." + 
-                pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+            for (int j = 0; j < nTotalFiles; j++)
+                state.szInPath[j] = pContext->m_Files[j];
 
             if (pContext->pConfig->bUseOutputPath == true)
+            {
                 state.szOutPath = pContext->pConfig->szOutputPath;
+            }
+            else
+            {
+                std::wstring szInFile = state.szInPath[0];
+                std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
+                std::wstring szOutExt = pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
+            }
 
             CAtlString szTitle;
-            szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(),
-                nTotalFiles);
+            szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(), nTotalFiles);
             std::wstring szTitleStr = szTitle;
             pContext->SetTitleInfo(szTitleStr);
 
             pContext->SetInputFileInfo(0, pContext->pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
 
-            for (int i = 1; i < nFileCounter; i++)
-                pContext->SetInputFileInfo(i, L"\t" + state.szInPath[i]);
+            for (int j = 1; j < nTotalFiles; j++)
+                pContext->SetInputFileInfo(j, L"\t" + state.szInPath[j]);
 
             pContext->SetOutputFileInfo(pContext->pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
             pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
-
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
 
-            ZeroMemory(&state.s, sizeof(AftenContext));
-            ZeroMemory(&state.opt, sizeof(AftenOpt));
-            if (this->InitEngine(state) == false)
-            {
+            if (this->InitEngine(state, pContext->pConfig) == false)
                 return false;
-            }
-
-            state.nInputFiles = nFileCounter;
 
             if (this->Encode(state) == false)
             {
-                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
-                {
-                    pContext->m_Status[i] = false;
-                }
-                pContext->nCount = 0;
                 state.api.CloseAftenAPI();
+                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
+                    pContext->m_Status[i] = false;
+
+                pContext->nCount = 0;
                 return false;
             }
-            else
-            {
-                state.api.CloseAftenAPI();
 
-                for (int i = 0; i < (int)pContext->m_Status.size(); i++)
-                {
-                    pContext->m_Status[i] = true;
-                }
-                pContext->nCount = nFileCounter;
-            }
+            state.api.CloseAftenAPI();
+            for (int i = 0; i < (int)pContext->m_Status.size(); i++)
+                pContext->m_Status[i] = true;
+
+            pContext->nCount = nTotalFiles;
+            return true;
         }
-
-        pContext->StopTotalTimer();
-
-        return true;
     }
 }

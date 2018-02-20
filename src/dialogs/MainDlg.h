@@ -109,7 +109,6 @@ namespace app
         bool SaveProgramEngines(std::wstring szFileName);
         void LoadAllConfiguration();
         void SaveAllConfiguration();
-        config::CPreset& GetCurrentPreset();
         void HandleDropFiles(HDROP hDropInfo);
         void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
         void AddItemToFileList(std::wstring szPath);

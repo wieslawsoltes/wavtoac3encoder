@@ -316,13 +316,6 @@ namespace app
             return;
         }
 
-        dlg.pWorkerContext->pPreset = &this->GetCurrentPreset();
-
-        if (this->pConfig->nCurrentEngine >= 0)
-            dlg.pWorkerContext->pEngine = &pConfig->m_Engines[this->pConfig->nCurrentEngine];
-        else
-            dlg.pWorkerContext->pEngine = nullptr;
-
         CString szOutputPath;
         this->m_EdtOutPath.GetWindowText(szOutputPath);
         this->pConfig->szOutputPath = szOutputPath;
@@ -382,12 +375,24 @@ namespace app
             this->pConfig->bUseOutputPath = true;
         }
 
+        dlg.pWorkerContext->SetCurrentProgressRange(0, 100);
+        dlg.pWorkerContext->SetTotalProgressRange(0, 100);
+        dlg.pWorkerContext->SetCurrentProgress(0);
+        dlg.pWorkerContext->SetTotalProgress(0);
+        dlg.pWorkerContext->StopCurrentTimer();
+        dlg.pWorkerContext->m_ElapsedTimeTotal = 0L;
+        dlg.pWorkerContext->SetTotalTimerInfo(pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
+        dlg.pWorkerContext->StartTotalTimer(250);
+        dlg.pWorkerContext->nTotalSizeCounter = 0;
+
         worker::CTimeCount countTime;
         CString szText;
 
         countTime.Start();
         dlg.DoModal();
         countTime.Stop();
+
+        dlg.pWorkerContext->StopTotalTimer();
 
         std::wstring szElapsedFormatted = countTime.Formatted();
         double szElapsedSeconds = countTime.ElapsedMilliseconds() / 1000.0f;
@@ -441,7 +446,7 @@ namespace app
     {
         if (this->pConfig->nCurrentEngine >= 0)
         {
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            auto& engine = this->pConfig->GetCurrentEngine();
             engine.nUsedSIMD[0] = this->m_ChkSimdMMX.GetCheck() == BST_CHECKED ? 1 : 0;
         }
     }
@@ -450,7 +455,7 @@ namespace app
     {
         if (this->pConfig->nCurrentEngine >= 0)
         {
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            auto& engine = this->pConfig->GetCurrentEngine();
             engine.nUsedSIMD[1] = this->m_ChkSimdSSE.GetCheck() == BST_CHECKED ? 1 : 0;
         }
     }
@@ -459,7 +464,7 @@ namespace app
     {
         if (this->pConfig->nCurrentEngine >= 0)
         {
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            auto& engine = this->pConfig->GetCurrentEngine();
             engine.nUsedSIMD[2] = this->m_ChkSimdSSE2.GetCheck() == BST_CHECKED ? 1 : 0;
         }
     }
@@ -468,7 +473,7 @@ namespace app
     {
         if (this->pConfig->nCurrentEngine >= 0)
         {
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            auto& engine = this->pConfig->GetCurrentEngine();
             engine.nUsedSIMD[3] = this->m_ChkSimdSSE3.GetCheck() == BST_CHECKED ? 1 : 0;
         }
     }
@@ -477,18 +482,18 @@ namespace app
     {
         if (this->m_ChkVbr.GetCheck() == BST_CHECKED)
         {
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             preset.nMode = AFTEN_ENC_MODE_VBR;
             this->m_SldBitrate.SetRange(0, 1023, TRUE);
-            int nNewPos = GetCurrentPreset().nQuality;
+            int nNewPos = preset.nQuality;
             this->m_SldBitrate.SetPos(nNewPos);
         }
         else
         {
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             preset.nMode = AFTEN_ENC_MODE_CBR;
             this->m_SldBitrate.SetRange(0, (int)this->pConfig->m_EncoderOptions.nValidCbrBitrates.size() - 1, TRUE);
-            int nNewPos = this->pConfig->FindValidBitrateIndex(GetCurrentPreset().nBitrate);
+            int nNewPos = this->pConfig->FindValidBitrateIndex(preset.nBitrate);
             this->m_SldBitrate.SetPos(nNewPos);
         }
 
@@ -498,7 +503,7 @@ namespace app
     void CMainDlg::OnBnClickedButtonPresetAdd()
     {
         static int nCount = 0;
-        auto preset = GetCurrentPreset();
+        auto preset = this->pConfig->GetCurrentPreset();
         nCount++;
         preset.szName = this->pConfig->GetString(0x0020701B) + L" (" + std::to_wstring(nCount) + L")";
         this->pConfig->m_Presets.emplace_back(preset);
@@ -629,7 +634,7 @@ namespace app
             auto preset = pConfig->m_DefaultPreset;
             this->pConfig->m_Presets[nPreset] = preset;
 
-            this->ApplyPresetToDlg(GetCurrentPreset());
+            this->ApplyPresetToDlg(this->pConfig->GetCurrentPreset());
         }
     }
 
@@ -685,7 +690,7 @@ namespace app
         {
             int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
             int nVal = this->m_CmbValue.GetCurSel();
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             preset.nOptions[nItem] = nVal;
             auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
             std::wstring szName = option.m_Values[nVal].first;
@@ -699,7 +704,7 @@ namespace app
         if (nPreset != CB_ERR)
         {
             this->pConfig->nCurrentPreset = nPreset;
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             this->ApplyPresetToDlg(preset);
         }
     }
@@ -717,14 +722,13 @@ namespace app
         else
             ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
 
-        auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
-
+        auto& engine = this->pConfig->GetCurrentEngine();
         this->ApplyEngineToDlg(engine);
     }
 
     void CMainDlg::OnCbnSelchangeComboRawSampleFormat()
     {
-        auto& preset = GetCurrentPreset();
+        auto& preset = this->pConfig->GetCurrentPreset();
         preset.m_RawInput.nRawSampleFormat = this->m_CmbRawSampleFormat.GetCurSel();
     }
 
@@ -738,7 +742,7 @@ namespace app
                 CString *szName = (CString *)wParam;
                 DWORD dwEditSel = this->m_CmbPresets.GetEditSel();
 
-                auto& preset = GetCurrentPreset();
+                auto& preset = this->pConfig->GetCurrentPreset();
                 preset.szName = *szName;
 
                 this->m_CmbPresets.DeleteString(nPreset);
@@ -967,7 +971,7 @@ namespace app
 
             if ((this->pConfig->nCurrentEngine >= 0) && (this->pConfig->nCurrentEngine < nSize))
             {
-                auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+                auto& engine = this->pConfig->GetCurrentEngine();
                 this->m_CmbEngines.SetCurSel(this->pConfig->nCurrentEngine);
                 this->ApplyEngineToDlg(engine);
             }
@@ -1119,7 +1123,7 @@ namespace app
             m_StcQualityBitrate.SetWindowText(this->pConfig->GetString(0x00202002).c_str());
             szBuff.Format(_T("%d"), nCurPos);
 
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             preset.nQuality = nCurPos;
         }
         else
@@ -1132,20 +1136,12 @@ namespace app
                 else
                     szBuff.Format(_T("%d kbps"), this->pConfig->m_EncoderOptions.nValidCbrBitrates[nCurPos]);
 
-                auto& preset = GetCurrentPreset();
+                auto& preset = this->pConfig->GetCurrentPreset();
                 preset.nBitrate = this->pConfig->m_EncoderOptions.nValidCbrBitrates[nCurPos];
             }
         }
 
         this->m_StcBitrate.SetWindowText(szBuff);
-    }
-
-    config::CPreset& CMainDlg::GetCurrentPreset()
-    {
-        if (this->pConfig->m_Presets.size() > 0)
-            return this->pConfig->m_Presets[this->pConfig->nCurrentPreset];
-        else
-            return pConfig->m_DefaultPreset;
     }
 
     void CMainDlg::AddItemToFileList(std::wstring szPath)
@@ -1317,7 +1313,7 @@ namespace app
         }
         else
         {
-            this->m_CmbValue.SetCurSel(GetCurrentPreset().nOptions[nItem]);
+            this->m_CmbValue.SetCurSel(this->pConfig->GetCurrentPreset().nOptions[nItem]);
         }
     }
 
@@ -1456,7 +1452,7 @@ namespace app
             }
         }
 
-        auto& preset = GetCurrentPreset();
+        auto& preset = this->pConfig->GetCurrentPreset();
         preset.m_RawInput.nRawSampleRate = nPos;
     }
 
@@ -1490,7 +1486,7 @@ namespace app
             }
         }
 
-        auto& preset = GetCurrentPreset();
+        auto& preset = this->pConfig->GetCurrentPreset();
         preset.m_RawInput.nRawChannels = nPos;
     }
 
@@ -1526,7 +1522,7 @@ namespace app
 
         if (this->pConfig->nCurrentEngine >= 0)
         {
-            auto& engine = pConfig->m_Engines[this->pConfig->nCurrentEngine];
+            auto& engine = this->pConfig->GetCurrentEngine();
             engine.nThreads = nPos;
         }
     }
@@ -1941,7 +1937,7 @@ namespace app
 
         if (initLangMenu == false)
         {
-            auto& preset = GetCurrentPreset();
+            auto& preset = this->pConfig->GetCurrentPreset();
             this->ApplyPresetToDlg(preset);
         }
 
@@ -2312,7 +2308,7 @@ namespace app
                     return;
                 }
 
-                auto& preset = GetCurrentPreset();
+                auto& preset = this->pConfig->GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
                 auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
@@ -2338,7 +2334,7 @@ namespace app
                     return;
                 }
 
-                auto& preset = GetCurrentPreset();
+                auto& preset = this->pConfig->GetCurrentPreset();
                 preset.nOptions[nItem] = nVal;
 
                 auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
@@ -2610,7 +2606,7 @@ namespace app
         int nIndexChconfig = this->pConfig->FindOptionIndex(_T("chconfig"));
         bool bUpdateChconfig = false;
 
-        auto& preset = GetCurrentPreset();
+        auto& preset = this->pConfig->GetCurrentPreset();
         int nOptionValue = preset.nOptions[nIndexChconfig];
         auto& optionChconfig = this->pConfig->m_EncoderOptions.m_Options[nIndexChconfig];
 

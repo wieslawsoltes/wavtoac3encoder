@@ -163,7 +163,9 @@ namespace config
         int FindOptionIndex(std::wstring szOption);
         bool IsSupportedInputExt(std::wstring &szExt);
         int GetSupportedInputFormat(std::wstring &szExt);
-        void SetEncoderOptions();
         std::wstring GetSupportedInputFilesFilter();
+        CPreset& GetCurrentPreset();
+        CEngine& GetCurrentEngine();
+        void SetEncoderOptions();
     };
 }

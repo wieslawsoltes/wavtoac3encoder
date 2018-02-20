@@ -720,6 +720,19 @@ namespace config
         return szFilter;
     }
 
+    CPreset& CConfiguration::GetCurrentPreset()
+    {
+        if (this->m_Presets.size() > 0)
+            return this->m_Presets[this->nCurrentPreset];
+        else
+            return this->m_DefaultPreset;
+    }
+
+    CEngine& CConfiguration::GetCurrentEngine()
+    {
+        return this->m_Engines[this->nCurrentEngine];
+    }
+
     void CConfiguration::SetEncoderOptions()
     {
         m_EncoderOptions.nValidCbrBitrates = {

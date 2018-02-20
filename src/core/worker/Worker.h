@@ -20,8 +20,6 @@ namespace worker
         config::CConfiguration * pConfig;
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
-        config::CPreset * pPreset;
-        config::CEngine * pEngine;
         int nThreads;
         int nCount;
         __int64 nTotalSize;
@@ -58,8 +56,9 @@ namespace worker
     class CState
     {
     public:
-        config::CPreset * preset;
-        config::CEngine * engine;
+        config::CPreset& preset;
+        config::CEngine& engine;
+    public:
         __int64 nInTotalSize;
         int nInputFiles;
         std::wstring szInPath[6];
@@ -76,6 +75,9 @@ namespace worker
         AvsAudioInfo infoAVS;
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
+    public:
+        CState(config::CPreset& preset, config::CEngine& engine) : preset(engine), preset(engine) { }
+        virtual ~CState() { }
     };
 
     class CWorker
@@ -86,8 +88,9 @@ namespace worker
         CWorker(std::unique_ptr<worker::CWorkerContext>& pContext) : pContext(pContext) { }
         virtual ~CWorker() { }
     protected:
-        void SetInfo(CState& state);
-        bool InitEngine(CState& state);
+        void SetInfo(CState& state, config::CConfiguration* pConfig);
+        bool InitEngine(CState& state, config::CConfiguration* pConfig);
+        void Clean(CState& sate);
         bool EncoderError(CState& state, const std::wstring szMessage);
         bool Encode(CState& state);
     public:
