@@ -15,7 +15,7 @@
 #include "controls\MyComboBox.h"
 #include "controls\MySliderCtrl.h"
 
-namespace app
+namespace dialogs
 {
     class CMuxDlg : public controls::CMyDialogEx
     {

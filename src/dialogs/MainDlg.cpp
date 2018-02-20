@@ -8,7 +8,7 @@
 #include "utilities\Utilities.h"
 #include "utilities\TimeCount.h"
 
-namespace app
+namespace dialogs
 {
     IMPLEMENT_DYNAMIC(CMainDlg, CDialog)
     CMainDlg::CMainDlg(CWnd* pParent /*=nullptr*/)

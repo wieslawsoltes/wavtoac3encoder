@@ -17,7 +17,7 @@
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 
-namespace app
+namespace dialogs
 {
     class CWorkDlg : public controls::CMyDialogEx
     {

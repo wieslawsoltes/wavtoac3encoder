@@ -10,7 +10,7 @@
 #include "logger\Log.h"
 #include "configuration\Configuration.h"
 
-namespace app
+namespace dialogs
 {
     class CAboutDlg : public controls::CMyDialogEx
     {

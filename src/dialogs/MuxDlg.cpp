@@ -3,7 +3,7 @@
 #include "MuxDlg.h"
 #include "utilities\Utilities.h"
 
-namespace app
+namespace dialogs
 {
     const int nNumChannelConfig = 8;
 

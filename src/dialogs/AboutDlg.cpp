@@ -2,7 +2,7 @@
 #include "MainApp.h"
 #include "AboutDlg.h"
 
-namespace app
+namespace dialogs
 {
     IMPLEMENT_DYNAMIC(CAboutDlg, CDialog)
     CAboutDlg::CAboutDlg(CWnd* pParent /*=nullptr*/)

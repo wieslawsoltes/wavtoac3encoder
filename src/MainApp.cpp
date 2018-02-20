@@ -81,7 +81,7 @@ namespace app
 
         try
         {
-            CMainDlg dlg;
+            dialogs::CMainDlg dlg;
             m_pMainWnd = &dlg;
             dlg.pConfig = &this->m_Config;
             dlg.DoModal();

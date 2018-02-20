@@ -3,7 +3,7 @@
 #include "EnginesDlg.h"
 #include "utilities\Utilities.h"
 
-namespace app
+namespace dialogs
 {
     IMPLEMENT_DYNAMIC(CEnginesDlg, CDialog)
     CEnginesDlg::CEnginesDlg(CWnd* pParent /*=nullptr*/)

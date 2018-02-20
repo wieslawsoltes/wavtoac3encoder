@@ -11,7 +11,7 @@
 #include "logger\Log.h"
 #include "configuration\Configuration.h"
 
-namespace app
+namespace dialogs
 {
     class CEnginesDlg : public controls::CMyDialogEx
     {

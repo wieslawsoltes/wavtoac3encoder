@@ -3,7 +3,7 @@
 #include "WorkDlg.h"
 #include "utilities\Utilities.h"
 
-namespace app
+namespace dialogs
 {
     int CWorkDlg::nIDIn[6]
     {

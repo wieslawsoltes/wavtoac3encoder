@@ -28,7 +28,7 @@
 #define ID_LANGUAGE_MENU_START 2000
 #define ID_LANGUAGE_MENU_MAX 2999
 
-namespace app
+namespace dialogs
 {
     class CMainDlg : public controls::CMyDialogEx
     {
