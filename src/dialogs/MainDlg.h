@@ -19,7 +19,6 @@
 #include "utilities\StringHelper.h"
 #include "logger\Log.h"
 #include "configuration\Configuration.h"
-#include "libaften\aften.h"
 #include "avs\src\Avs2Raw\Avs2Raw.h"
 
 #define IDC_STATUSBAR 1500
