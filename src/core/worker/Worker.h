@@ -17,10 +17,8 @@ namespace worker
     class CWorkerContext
     {
     public:
-        config::CConfiguration * pConfig;
         std::vector<std::wstring> m_Files;
         std::vector<bool> m_Status;
-        int nThreads;
         int nCount;
         __int64 nTotalSize;
         __int64 nTotalSizeCounter;
@@ -91,9 +89,9 @@ namespace worker
         void SetInfo(CState& state, config::CConfiguration* pConfig);
         bool InitEngine(CState& state, config::CConfiguration* pConfig);
         void Clean(CState& state);
-        bool EncoderError(CState& state, const std::wstring szMessage);
-        bool Encode(CState& state);
+        bool EncoderError(CState& state, const std::wstring szMessage, config::CConfiguration* pConfig);
+        bool Encode(CState& state, config::CConfiguration* pConfig);
     public:
-        bool Run();
+        bool Run(config::CConfiguration* pConfig);
     };
 }

@@ -290,20 +290,20 @@ namespace worker
         state.api.LibAften_aften_encode_close(&state.s);
     }
 
-    bool CWorker::EncoderError(CState& state, const std::wstring szMessage)
+    bool CWorker::EncoderError(CState& state, const std::wstring szMessage, config::CConfiguration* pConfig)
     {
         this->Clean(state);
 
         pContext->StopCurrentTimer();
-        pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
-        pContext->pConfig->Log->Log(szMessage);
+        pConfig->Log->Log(szMessage);
 
         return false;
     }
 
-    bool CWorker::Encode(CState& state)
+    bool CWorker::Encode(CState& state, config::CConfiguration* pConfig)
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
         int nr, fs;
@@ -340,7 +340,7 @@ namespace worker
 
             state.infoAVS = state.decoderAVS.GetInputInfo();
             state.nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
-            this->pContext->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
+            this->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
         }
         else
         {
@@ -351,7 +351,7 @@ namespace worker
                     return this->EncoderError(state, L"[Error] Failed to open input file: " + state.szInPath[i]);
 
                 state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
-                this->pContext->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
+                this->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
             }
         }
 
@@ -359,7 +359,7 @@ namespace worker
         if (error != 0)
             return this->EncoderError(state, L"[Error] Failed to create output file: " + state.szOutPath);
 
-        this->pContext->pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
+        this->pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
 
 #ifdef CONFIG_DOUBLE
         read_format = PCM_SAMPLE_FMT_DBL;
@@ -371,7 +371,7 @@ namespace worker
         if ((state.opt.raw_input) || (state.bAvisynthInput == true))
             input_file_format = PCM_FORMAT_RAW;
         else
-            input_file_format = pContext->pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(state.szInPath[0]));
+            input_file_format = pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(state.szInPath[0]));
 
         if (state.bAvisynthInput == false)
         {
@@ -512,7 +512,7 @@ namespace worker
         if (state.api.LibAften_aften_encode_init(&state.s))
             return this->EncoderError(state, L"[Error] Failed to initialize aften encoder.");
 
-        this->SetInfo(state, pContext->pConfig);
+        this->SetInfo(state, pConfig);
 
         int nCurTotalPos = 0;
         __int64 nCurPos = 0;
@@ -573,7 +573,7 @@ namespace worker
 
                     if (state.bAvisynthInput == false)
                     {
-                        if (pContext->pConfig->bMultiMonoInput == false)
+                        if (pConfig->bMultiMonoInput == false)
                         {
                             nCurPos = _ftelli64(state.ifp[0]);
                         }
@@ -628,7 +628,7 @@ namespace worker
 
         if (state.bAvisynthInput == false)
         {
-            if (pContext->pConfig->bMultiMonoInput == false)
+            if (pConfig->bMultiMonoInput == false)
             {
                 pContext->nTotalSizeCounter += _ftelli64(state.ifp[0]);
             }
@@ -646,13 +646,13 @@ namespace worker
         this->Clean(state);
 
         pContext->StopCurrentTimer();
-        pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
         pContext->m_ElapsedTimeFile = 0L;
 
         return true;
     }
 
-    bool CWorker::Run()
+    bool CWorker::Run(config::CConfiguration* pConfig)
     {
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
@@ -660,49 +660,49 @@ namespace worker
         pContext->SetTotalProgress(0);
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
-        pContext->SetTotalTimerInfo(pContext->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
+        pContext->SetTotalTimerInfo(pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
         pContext->StartTotalTimer(250);
         pContext->nTotalSizeCounter = 0;
 
-        if (pContext->pConfig->bMultiMonoInput == false)
+        if (pConfig->bMultiMonoInput == false)
         {
             int nTotalFiles = (int)pContext->m_Files.size();
             for (int i = 0; i < nTotalFiles; i++)
             {
-                CState state(pContext->pConfig->GetCurrentPreset(), pContext->pConfig->GetCurrentEngine());
+                CState state(pConfig->GetCurrentPreset(), pConfig->GetCurrentEngine());
 
                 state.nInputFiles = 1;
                 state.szInPath[0] = pContext->m_Files[i];
                 for (int j = 1; j < 6; j++)
                     state.szInPath[j] = L"-";
 
-                if (pContext->pConfig->bUseOutputPath == true)
+                if (pConfig->bUseOutputPath == true)
                 {
                     std::wstring szInFile = state.szInPath[0];
                     std::wstring szInFileName = util::Utilities::GetFileName(szInFile);
-                    state.szOutPath = util::Utilities::CombinePath(pContext->pConfig->szOutputPath, szInFileName);
+                    state.szOutPath = util::Utilities::CombinePath(pConfig->szOutputPath, szInFileName);
                 }
                 else
                 {
                     std::wstring szInFile = state.szInPath[0];
                     std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
-                    std::wstring szOutExt = pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                    std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
                     state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
                 }
 
                 CAtlString szTitle;
-                szTitle.Format(pContext->pConfig->GetString(0x00A0100C).c_str(), i + 1, nTotalFiles);
+                szTitle.Format(pConfig->GetString(0x00A0100C).c_str(), i + 1, nTotalFiles);
                 std::wstring szTitleStr = szTitle;
                 pContext->SetTitleInfo(szTitleStr);
 
-                pContext->SetInputFileInfo(0, pContext->pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
-                pContext->SetOutputFileInfo(pContext->pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
-                pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+                pContext->SetInputFileInfo(0, pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
+                pContext->SetOutputFileInfo(pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
+                pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
                 pContext->m_ElapsedTimeFile = 0L;
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
 
-                if (this->InitEngine(state, pContext->pConfig) == false)
+                if (this->InitEngine(state, pConfig) == false)
                 {
                     pContext->StopTotalTimer();
                     return false;
@@ -722,7 +722,7 @@ namespace worker
 
                 if (pContext->bTerminate == true)
                 {
-                    this->pContext->pConfig->Log->Log(L"[Info] User terminated encoding.");
+                    this->pConfig->Log->Log(L"[Info] User terminated encoding.");
                     pContext->StopTotalTimer();
                     break;
                 }
@@ -731,7 +731,7 @@ namespace worker
         }
         else
         {
-            CState state(pContext->pConfig->GetCurrentPreset(), pContext->pConfig->GetCurrentEngine());
+            CState state(pConfig->GetCurrentPreset(), pConfig->GetCurrentEngine());
 
             for (int j = 0; j < 6; j++)
                 state.szInPath[j] = L"-";
@@ -742,35 +742,35 @@ namespace worker
             for (int j = 0; j < nTotalFiles; j++)
                 state.szInPath[j] = pContext->m_Files[j];
 
-            if (pContext->pConfig->bUseOutputPath == true)
+            if (pConfig->bUseOutputPath == true)
             {
-                state.szOutPath = pContext->pConfig->szOutputPath;
+                state.szOutPath = pConfig->szOutputPath;
             }
             else
             {
                 std::wstring szInFile = state.szInPath[0];
                 std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
-                std::wstring szOutExt = pContext->pConfig->m_EncoderOptions.szSupportedOutputExt[0];
+                std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
                 state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
             }
 
             CAtlString szTitle;
-            szTitle.Format(pContext->pConfig->GetString(0x00A0100D).c_str(), nTotalFiles);
+            szTitle.Format(pConfig->GetString(0x00A0100D).c_str(), nTotalFiles);
             std::wstring szTitleStr = szTitle;
             pContext->SetTitleInfo(szTitleStr);
 
-            pContext->SetInputFileInfo(0, pContext->pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
+            pContext->SetInputFileInfo(0, pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
 
             for (int j = 1; j < nTotalFiles; j++)
                 pContext->SetInputFileInfo(j, L"\t" + state.szInPath[j]);
 
-            pContext->SetOutputFileInfo(pContext->pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
-            pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+            pContext->SetOutputFileInfo(pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
+            pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
 
-            if (this->InitEngine(state, pContext->pConfig) == false)
+            if (this->InitEngine(state, pConfig) == false)
             {
                 pContext->StopTotalTimer();
                 return false;
