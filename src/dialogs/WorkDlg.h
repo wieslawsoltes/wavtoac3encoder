@@ -64,13 +64,8 @@ namespace app
     private:
         CWorkDlg * pWorkDlg;
     public:
-        CWorkDlgWorkerContext(config::CConfiguration * pConfig, CWorkDlg* pDlg)
-            : worker::CWorkerContext(pConfig), pWorkDlg(pDlg)
-        {
-        }
-        virtual ~CWorkDlgWorkerContext()
-        {
-        }
+        CWorkDlgWorkerContext(CWorkDlg* pDlg) : pWorkDlg(pDlg) { }
+        virtual ~CWorkDlgWorkerContext() { }
     private:
         bool IsValid()
         {

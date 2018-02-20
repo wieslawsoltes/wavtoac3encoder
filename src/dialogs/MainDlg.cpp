@@ -281,9 +281,9 @@ namespace app
         bWorking = true;
 
         CWorkDlg dlg;
-        dlg.pConfig = this->pConfig;
 
-        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(this->pConfig, &dlg);
+        dlg.pConfig = this->pConfig;
+        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(&dlg);
         dlg.pWorkerContext->bTerminate = false;
         dlg.pWorkerContext->bCanUpdateWindow = true;
         dlg.pWorkerContext->nCount = 0;
