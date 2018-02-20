@@ -584,7 +584,7 @@ namespace worker
 
             if (fs < 0)
             {
-                return EncoderError(state, L"[Error] Failed to encode state.frame.");
+                return EncoderError(state, L"[Error] Failed to encode frame.");
             }
             else
             {
