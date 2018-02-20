@@ -115,7 +115,7 @@ namespace app
 
     void CWorkDlg::InitCtrls()
     {
-        if (this->pWorkerContext->pConfig->bMultiMonoInput == false)
+        if (this->pConfig->bMultiMonoInput == false)
         {
             for (int i = 1; i < 6; i++)
             {
