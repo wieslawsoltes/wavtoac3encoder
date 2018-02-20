@@ -349,7 +349,7 @@ namespace worker
                     return this->EncoderError(state, pConfig, L"[Error] Failed to open input file: " + state.szInPath[i]);
 
                 state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
-                pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
+                pConfig->Log->Log(L"[Info] Input file: " + state.szInPath[i]);
             }
         }
 
