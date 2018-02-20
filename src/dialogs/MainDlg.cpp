@@ -1602,13 +1602,6 @@ namespace dialogs
             this->m_EdtThreads.SetWindowText(this->pConfig->GetString(0x00207002).c_str());
     }
 
-    void CMainDlg::InitTitle()
-    {
-        CString szDialogTitle = _T("");
-        szDialogTitle.Format(_T("WAV to AC3 Encoder %s"), _T(VER_FILE_VERSION_SHORT_STR));
-        this->SetWindowText(szDialogTitle);
-    }
-
     void CMainDlg::InitTooltips()
     {
         this->m_SldBitrate.SetTooltipText(this->pConfig->GetString(0x00206001).c_str());
@@ -1855,7 +1848,6 @@ namespace dialogs
 
         try
         {
-            this->InitTitle();
             this->InitDialogControls();
             this->InitLang(true);
             this->InitDefaultPreset();

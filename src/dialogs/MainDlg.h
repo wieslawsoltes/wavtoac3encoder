@@ -85,7 +85,6 @@ namespace dialogs
         virtual BOOL OnInitDialog();
         virtual BOOL PreTranslateMessage(MSG* pMsg);
     public:
-        void InitTitle();
         void InitTooltips();
         void InitSettingsList();
         void InitDefaultPreset();
