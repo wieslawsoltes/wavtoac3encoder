@@ -30,11 +30,12 @@ namespace app
         virtual void DoDataExchange(CDataExchange* pDX);
         virtual BOOL OnInitDialog();
     protected:
-        void InitCtrls();
+        void HideCtrls();
         void InitLang();
-        void CreateWorker();
+        void FormatTime(double fTime, TCHAR szBuffer[32], int nPrefixKey);
         void UpdateFileTimer();
         void UpdateTotalTimer();
+        void CreateWorker();
     protected:
         DECLARE_MESSAGE_MAP()
     public:

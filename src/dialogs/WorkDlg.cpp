@@ -58,7 +58,9 @@ namespace app
     {
         CMyDialogEx::OnInitDialog();
 
-        InitCtrls();
+        if (this->pConfig->bMultiMonoInput == false)
+            HideCtrls();
+
         InitLang();
         CreateWorker();
 
@@ -99,7 +101,6 @@ namespace app
             UpdateFileTimer();
             return;
         };
-
         CMyDialogEx::OnTimer(nIDEvent);
     }
 
@@ -109,150 +110,124 @@ namespace app
         {
             this->pWorkerContext->bTerminate = true;
         }
-
         this->EndDialog(IDOK);
     }
 
-    void CWorkDlg::InitCtrls()
+    void CWorkDlg::HideCtrls()
     {
-        if (this->pConfig->bMultiMonoInput == false)
+        for (int i = 1; i < 6; i++)
         {
-            for (int i = 1; i < 6; i++)
-            {
-                this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
-                this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
-            }
-
-            CRect rcIn[6], rcInInfo[6];
-            CRect rcOut, rcOutInfo;
-            CRect rcElapsed[2];
-            CRect rcProgress[2];
-            CRect rcGroup, rcBtnCancel;
-            CRect rcDlg;
-
-            for (int i = 0; i < 6; i++)
-            {
-                this->GetDlgItem(this->nIDIn[i])->GetWindowRect(rcIn[i]);
-                this->GetDlgItem(this->nIDInInfo[i])->GetWindowRect(rcInInfo[i]);
-            }
-
-            this->m_StcOut.GetWindowRect(rcOut);
-            this->m_StcOutInfo.GetWindowRect(rcOutInfo);
-            this->m_StcTimeCurrent.GetWindowRect(rcElapsed[0]);
-            this->m_StcTimeTotal.GetWindowRect(rcElapsed[1]);
-            this->m_PrgCurrent.GetWindowRect(rcProgress[0]);
-            this->m_PrgTotal.GetWindowRect(rcProgress[1]);
-            this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->GetWindowRect(rcGroup);
-            this->m_BtnCancel.GetWindowRect(rcBtnCancel);
-
-            this->GetWindowRect(rcDlg);
-
-            int nHeight = 0;
-            nHeight = abs(rcInInfo[1].top - rcOutInfo.top);
-
-            rcOut.MoveToY(rcOut.top - nHeight);
-            this->ScreenToClient(rcOut);
-            this->m_StcOut.MoveWindow(rcOut);
-
-            rcOutInfo.MoveToY(rcOutInfo.top - nHeight);
-            this->ScreenToClient(rcOutInfo);
-            this->m_StcOutInfo.MoveWindow(rcOutInfo);
-
-            rcElapsed[0].MoveToY(rcElapsed[0].top - nHeight);
-            this->ScreenToClient(rcElapsed[0]);
-            this->m_StcTimeCurrent.MoveWindow(rcElapsed[0]);
-
-            rcElapsed[1].MoveToY(rcElapsed[1].top - nHeight);
-            this->ScreenToClient(rcElapsed[1]);
-            this->m_StcTimeTotal.MoveWindow(rcElapsed[1]);
-
-            rcProgress[0].MoveToY(rcProgress[0].top - nHeight);
-            this->ScreenToClient(rcProgress[0]);
-            this->m_PrgCurrent.MoveWindow(rcProgress[0]);
-
-            rcProgress[1].MoveToY(rcProgress[1].top - nHeight);
-            this->ScreenToClient(rcProgress[1]);
-            this->m_PrgTotal.MoveWindow(rcProgress[1]);
-
-            rcBtnCancel.MoveToY(rcBtnCancel.top - nHeight);
-            this->ScreenToClient(rcBtnCancel);
-            this->m_BtnCancel.MoveWindow(rcBtnCancel);
-
-            rcGroup.bottom -= nHeight;
-            this->ScreenToClient(rcGroup);
-            this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->MoveWindow(rcGroup);
-
-            rcDlg.bottom -= nHeight;
-            this->MoveWindow(rcDlg);
+            this->GetDlgItem(nIDIn[i])->ShowWindow(SW_HIDE);
+            this->GetDlgItem(nIDInInfo[i])->ShowWindow(SW_HIDE);
         }
+
+        CRect rcIn[6], rcInInfo[6];
+        CRect rcOut, rcOutInfo;
+        CRect rcElapsed[2];
+        CRect rcProgress[2];
+        CRect rcGroup, rcBtnCancel;
+        CRect rcDlg;
+
+        for (int i = 0; i < 6; i++)
+        {
+            this->GetDlgItem(this->nIDIn[i])->GetWindowRect(rcIn[i]);
+            this->GetDlgItem(this->nIDInInfo[i])->GetWindowRect(rcInInfo[i]);
+        }
+
+        this->m_StcOut.GetWindowRect(rcOut);
+        this->m_StcOutInfo.GetWindowRect(rcOutInfo);
+        this->m_StcTimeCurrent.GetWindowRect(rcElapsed[0]);
+        this->m_StcTimeTotal.GetWindowRect(rcElapsed[1]);
+        this->m_PrgCurrent.GetWindowRect(rcProgress[0]);
+        this->m_PrgTotal.GetWindowRect(rcProgress[1]);
+        this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->GetWindowRect(rcGroup);
+        this->m_BtnCancel.GetWindowRect(rcBtnCancel);
+
+        this->GetWindowRect(rcDlg);
+
+        int nHeight = 0;
+        nHeight = abs(rcInInfo[1].top - rcOutInfo.top);
+
+        rcOut.MoveToY(rcOut.top - nHeight);
+        this->ScreenToClient(rcOut);
+        this->m_StcOut.MoveWindow(rcOut);
+
+        rcOutInfo.MoveToY(rcOutInfo.top - nHeight);
+        this->ScreenToClient(rcOutInfo);
+        this->m_StcOutInfo.MoveWindow(rcOutInfo);
+
+        rcElapsed[0].MoveToY(rcElapsed[0].top - nHeight);
+        this->ScreenToClient(rcElapsed[0]);
+        this->m_StcTimeCurrent.MoveWindow(rcElapsed[0]);
+
+        rcElapsed[1].MoveToY(rcElapsed[1].top - nHeight);
+        this->ScreenToClient(rcElapsed[1]);
+        this->m_StcTimeTotal.MoveWindow(rcElapsed[1]);
+
+        rcProgress[0].MoveToY(rcProgress[0].top - nHeight);
+        this->ScreenToClient(rcProgress[0]);
+        this->m_PrgCurrent.MoveWindow(rcProgress[0]);
+
+        rcProgress[1].MoveToY(rcProgress[1].top - nHeight);
+        this->ScreenToClient(rcProgress[1]);
+        this->m_PrgTotal.MoveWindow(rcProgress[1]);
+
+        rcBtnCancel.MoveToY(rcBtnCancel.top - nHeight);
+        this->ScreenToClient(rcBtnCancel);
+        this->m_BtnCancel.MoveWindow(rcBtnCancel);
+
+        rcGroup.bottom -= nHeight;
+        this->ScreenToClient(rcGroup);
+        this->GetDlgItem(IDC_STATIC_GROUP_ENCODING)->MoveWindow(rcGroup);
+
+        rcDlg.bottom -= nHeight;
+        this->MoveWindow(rcDlg);
+    }
+
+    void CWorkDlg::InitLang()
+    {
+        this->SetWindowText(this->pConfig->GetString(0x00A01001).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00A01002).c_str());
+    }
+
+    void CWorkDlg::FormatTime(double fTime, TCHAR szBuffer[32], int nPrefixKey)
+    {
+        std::wstring szPrefix = this->pConfig->GetString(nPrefixKey);
+        unsigned long nTime = (unsigned long)fTime;
+        if (fTime <= 59)
+            _stprintf(szBuffer, _T("%s 00:00:%02u\0"), szPrefix.c_str(), nTime);
+        else if (fTime <= 3599)
+            _stprintf(szBuffer, _T("%s 00:%02u:%02u\0"), szPrefix.c_str(), (nTime / 60), (nTime % 60));
+        else
+            _stprintf(szBuffer, _T("%s %02u:%02u:%02u\0"), szPrefix.c_str(), (nTime / 60) / 60, (nTime / 60) % 60, (((nTime / 60) % 60) * 60) % 60);
     }
 
     void CWorkDlg::UpdateTotalTimer()
     {
-        TCHAR strTime[32] = _T("");
         this->pWorkerContext->m_ElapsedTimeTotal += 0.25;
 
-        if (this->pWorkerContext->m_ElapsedTimeTotal <= 59)
-        {
-            _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                this->pConfig->GetString(0x00A01006).c_str(),
-                (unsigned long)this->pWorkerContext->m_ElapsedTimeTotal);
-        }
-        else if (this->pWorkerContext->m_ElapsedTimeTotal <= 3599)
-        {
-            _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                this->pConfig->GetString(0x00A01006).c_str(),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal % 60));
-        }
-        else
-        {
-            _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                this->pConfig->GetString(0x00A01006).c_str(),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) / 60,
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60,
-                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeTotal / 60) % 60) * 60) % 60);
-        }
+        TCHAR szBuffer[32] = _T("");
+        this->FormatTime(this->pWorkerContext->m_ElapsedTimeTotal, szBuffer, 0x00A01006);
 
         if (this->pWorkerContext->bCanUpdateWindow == true)
         {
             this->pWorkerContext->bCanUpdateWindow = false;
-            m_StcTimeTotal.SetWindowText(strTime);
+            m_StcTimeTotal.SetWindowText(szBuffer);
             this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
 
     void CWorkDlg::UpdateFileTimer()
     {
-        TCHAR strTime[32] = _T("");
         this->pWorkerContext->m_ElapsedTimeFile += 0.25;
 
-        if (this->pWorkerContext->m_ElapsedTimeFile <= 59)
-        {
-            _stprintf(strTime, _T("%s 00:00:%02u\0"),
-                this->pConfig->GetString(0x00A01005).c_str(),
-                (unsigned long)this->pWorkerContext->m_ElapsedTimeFile);
-        }
-        else if (this->pWorkerContext->m_ElapsedTimeFile <= 3599)
-        {
-            _stprintf(strTime, _T("%s 00:%02u:%02u\0"),
-                this->pConfig->GetString(0x00A01005).c_str(),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile % 60));
-        }
-        else
-        {
-            _stprintf(strTime, _T("%s %02u:%02u:%02u\0"),
-                this->pConfig->GetString(0x00A01005).c_str(),
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) / 60,
-                ((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60,
-                ((((unsigned long)this->pWorkerContext->m_ElapsedTimeFile / 60) % 60) * 60) % 60);
-        }
+        TCHAR szBuffer[32] = _T("");
+        this->FormatTime(this->pWorkerContext->m_ElapsedTimeFile, szBuffer, 0x00A01005);
 
         if (this->pWorkerContext->bCanUpdateWindow == true)
         {
             this->pWorkerContext->bCanUpdateWindow = false;
-            m_StcTimeCurrent.SetWindowText(strTime);
+            m_StcTimeCurrent.SetWindowText(szBuffer);
             this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
@@ -282,11 +257,5 @@ namespace app
             this->pConfig->Log->Log(L"[Error] Failed to create worker thread.");
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
-    }
-
-    void CWorkDlg::InitLang()
-    {
-        this->SetWindowText(this->pConfig->GetString(0x00A01001).c_str());
-        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00A01002).c_str());
     }
 }
