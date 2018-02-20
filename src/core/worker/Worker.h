@@ -10,7 +10,7 @@
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
 #include "utilities\Utilities.h"
-#include "avs\src\Avs2Raw.h"
+#include "avs\src\Avs2Raw\Avs2Raw.h"
 
 namespace worker
 {

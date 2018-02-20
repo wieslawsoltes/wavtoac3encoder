@@ -180,7 +180,7 @@
     <ClInclude Include="..\avs\avisynth64\src\internal.h" />
     <ClInclude Include="..\avs\avisynth\src\core\avisynth.h" />
     <ClInclude Include="..\avs\avisynth\src\internal.h" />
-    <ClInclude Include="..\avs\src\Avs2Raw.h" />
+    <ClInclude Include="..\avs\src\Avs2Raw\Avs2Raw.h" />
     <ClInclude Include="configuration\Configuration.h" />
     <ClInclude Include="configuration\Strings.h" />
     <ClInclude Include="logger\Log.h" />

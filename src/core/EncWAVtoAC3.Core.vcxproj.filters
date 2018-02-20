@@ -96,7 +96,7 @@
     <ClInclude Include="worker\Worker.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
-    <ClInclude Include="..\avs\src\Avs2Raw.h">
+    <ClInclude Include="..\avs\src\Avs2Raw\Avs2Raw.h">
       <Filter>Header Files\Worker</Filter>
     </ClInclude>
     <ClInclude Include="configuration\Strings.h">
