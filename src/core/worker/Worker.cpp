@@ -340,7 +340,7 @@ namespace worker
 
             state.infoAVS = state.decoderAVS.GetInputInfo();
             state.nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
-            this->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
+            pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
         }
         else
         {
@@ -351,7 +351,7 @@ namespace worker
                     return this->EncoderError(state, pConfig, L"[Error] Failed to open input file: " + state.szInPath[i]);
 
                 state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
-                this->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
+                pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
             }
         }
 
@@ -359,7 +359,7 @@ namespace worker
         if (error != 0)
             return this->EncoderError(state, pConfig, L"[Error] Failed to create output file: " + state.szOutPath);
 
-        this->pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
+        pConfig->Log->Log(L"[Info] Output file: " + state.szOutPath);
 
 #ifdef CONFIG_DOUBLE
         read_format = PCM_SAMPLE_FMT_DBL;
@@ -369,9 +369,14 @@ namespace worker
 
         input_file_format = PCM_FORMAT_UNKNOWN;
         if ((state.opt.raw_input) || (state.bAvisynthInput == true))
+        {
             input_file_format = PCM_FORMAT_RAW;
+        }
         else
-            input_file_format = pConfig->GetSupportedInputFormat(util::Utilities::GetFileExtension(state.szInPath[0]));
+        {
+            std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
+            input_file_format = pConfig->GetSupportedInputFormat(szExt);
+        }
 
         if (state.bAvisynthInput == false)
         {
@@ -722,7 +727,7 @@ namespace worker
 
                 if (pContext->bTerminate == true)
                 {
-                    this->pConfig->Log->Log(L"[Info] User terminated encoding.");
+                    pConfig->Log->Log(L"[Info] User terminated encoding.");
                     pContext->StopTotalTimer();
                     break;
                 }
