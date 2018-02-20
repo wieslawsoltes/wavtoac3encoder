@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <utility>
 #include <afxcmn.h>
 #include <afxwin.h>
