@@ -115,6 +115,14 @@ namespace config
         std::vector<COption> m_Options;
     };
 
+    class CFile
+    {
+    public:
+        std::wstring szPath;
+        std::wstring szSize;
+        bool bStatus;
+    };
+
     class CConfiguration
     {
     public:
@@ -135,8 +143,7 @@ namespace config
         std::vector<config::CPreset> m_Presets;
         config::CPreset m_DefaultPreset;
         int nCurrentPreset;
-        std::vector<std::wstring> m_Files;
-        std::vector<bool> m_Status;
+        std::vector<CFile> m_Files;
         std::wstring szOutputPath;
         std::wstring szOutputFile;
         bool bUseOutputPath;

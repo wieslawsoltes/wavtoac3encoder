@@ -648,9 +648,10 @@ namespace worker
             for (int i = 0; i < nTotalFiles; i++)
             {
                 CState state(pConfig->GetCurrentPreset(), pConfig->GetCurrentEngine());
+                config::CFile& file = pConfig->m_Files[i];
 
                 state.nInputFiles = 1;
-                state.szInPath[0] = pConfig->m_Files[i];
+                state.szInPath[0] = file.szPath;
                 for (int j = 1; j < 6; j++)
                     state.szInPath[j] = L"-";
 
@@ -694,15 +695,14 @@ namespace worker
                     pContext->m_ElapsedTimeFile = 0L;
 
                     this->CloseEngine(state, pConfig);
-                    pConfig->m_Status[i] = false;
-
+                    file.bStatus = false;
                     pContext->StopTotalTimer();
 
                     return false;
                 }
 
                 this->CloseEngine(state, pConfig);
-                pConfig->m_Status[i] = true;
+                file.bStatus = true;
                 pContext->nEncodedFiles = i;
 
                 if (pContext->bTerminate == true)
@@ -725,7 +725,10 @@ namespace worker
             state.nInputFiles = nTotalFiles;
 
             for (int j = 0; j < nTotalFiles; j++)
-                state.szInPath[j] = pConfig->m_Files[j];
+            {
+                config::CFile& file = pConfig->m_Files[j];
+                state.szInPath[j] = file.szPath;
+            }
 
             if (pConfig->bUseOutputPath == true)
             {
@@ -768,8 +771,11 @@ namespace worker
                 pContext->m_ElapsedTimeFile = 0L;
 
                 this->CloseEngine(state, pConfig);
-                for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
-                    pConfig->m_Status[i] = false;
+                for (int i = 0; i < (int)pConfig->m_Files.size(); i++)
+                {
+                    config::CFile& file = pConfig->m_Files[i];
+                    file.bStatus = false;
+                }
 
                 pContext->nEncodedFiles = 0;
                 pContext->StopTotalTimer();
@@ -778,8 +784,11 @@ namespace worker
             }
 
             this->CloseEngine(state, pConfig);
-            for (int i = 0; i < (int)pConfig->m_Status.size(); i++)
-                pConfig->m_Status[i] = true;
+            for (int i = 0; i < (int)pConfig->m_Files.size(); i++)
+            {
+                config::CFile& file = pConfig->m_Files[i];
+                file.bStatus = true;
+            }
 
             pContext->nEncodedFiles = nTotalFiles;
             pContext->StopTotalTimer();

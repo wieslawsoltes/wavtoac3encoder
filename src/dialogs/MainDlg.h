@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <algorithm>
 #include <afxcmn.h>
 #include <afxwin.h>
 #include "controls\MyDialogEx.h"
@@ -39,8 +40,6 @@ namespace dialogs
         HICON m_hIcon;
         HACCEL m_hAccelTable;
     public:
-        int nSortColumn;
-        bool nSortOrder[2];
         bool bVisible;
     public:
         config::CConfiguration * pConfig;
@@ -110,7 +109,7 @@ namespace dialogs
         void SaveAllConfiguration();
         void HandleDropFiles(HDROP hDropInfo);
         void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
-        void AddItemToFileList(std::wstring szPath);
+        std::wstring GetFileSize(std::wstring& szPath);
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
         void ApplyPresetToDlg(config::CPreset &preset);
@@ -172,6 +171,7 @@ namespace dialogs
         afx_msg void OnCbnSelchangeComboRawSampleFormat();
         afx_msg void OnCbnSelchangeComboEngines();
         afx_msg void OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult);
+        afx_msg void OnLvnGetdispinfoListFiles(NMHDR* pNMHDR, LRESULT* pResult);
         afx_msg void OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult);
         afx_msg void OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult);
         afx_msg void OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult);
