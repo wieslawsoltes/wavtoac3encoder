@@ -12,12 +12,10 @@ namespace worker
             for (int i = 0; i < state.nInputFiles; i++)
             {
                 PcmFile *pf_info = &state.pf.pcm_file[i];
-                std::wstring type, chan, order;
+                std::wstring type = pConfig->GetString(0x00A02001).c_str();
+                std::wstring chan = pConfig->GetString(0x00A02002).c_str();
+                std::wstring order = L"";
                 std::wstring fmt = L"";
-
-                type = pConfig->GetString(0x00A02001).c_str();
-                chan = pConfig->GetString(0x00A02002).c_str();
-                order = L"";
 
                 if (pf_info->sample_type == PCM_SAMPLE_TYPE_INT)
                 {
@@ -81,7 +79,7 @@ namespace worker
                 }
                 else
                 {
-                    order = _T("\b");
+                    order = L"\b";
                 }
 
                 szInputInfo.Format(_T("\t%s %s %d-bit %s %d Hz %s"),
@@ -295,7 +293,7 @@ namespace worker
         this->Clean(state);
 
         pContext->StopCurrentTimer();
-        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
         pContext->m_ElapsedTimeFile = 0L;
 
         pConfig->Log->Log(szMessage);
@@ -346,7 +344,7 @@ namespace worker
         {
             for (int i = 0; i < state.nInputFiles; i++)
             {
-                errno_t error = _tfopen_s(&state.ifp[i], state.szInPath[i].c_str(), _T("rb"));
+                errno_t error = _wfopen_s(&state.ifp[i], state.szInPath[i].c_str(), L"rb");
                 if (error != 0)
                     return this->EncoderError(state, pConfig, L"[Error] Failed to open input file: " + state.szInPath[i]);
 
@@ -355,7 +353,7 @@ namespace worker
             }
         }
 
-        errno_t error = _tfopen_s(&state.ofp, state.szOutPath.c_str(), _T("wb"));
+        errno_t error = _wfopen_s(&state.ofp, state.szOutPath.c_str(), L"wb");
         if (error != 0)
             return this->EncoderError(state, pConfig, L"[Error] Failed to create output file: " + state.szOutPath);
 
@@ -593,25 +591,14 @@ namespace worker
                         nCurPos = samplecount * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
                     }
 
+                    percent = (100 * nCurPos) / state.nInTotalSize;
+                    nCurTotalPos = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
+
                     if (pContext->bCanUpdateWindow == true)
                     {
                         pContext->bCanUpdateWindow = false;
                         nInPrevCurPos = nCurPos;
-                        pContext->bCanUpdateWindow = true;
-                    }
-
-                    percent = (100 * nCurPos) / state.nInTotalSize;
-                    if (pContext->bCanUpdateWindow == true)
-                    {
-                        pContext->bCanUpdateWindow = false;
                         pContext->SetCurrentProgress(percent);
-                        pContext->bCanUpdateWindow = true;
-                    }
-
-                    nCurTotalPos = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
-                    if (pContext->bCanUpdateWindow == true)
-                    {
-                        pContext->bCanUpdateWindow = false;
                         pContext->SetTotalProgress(nCurTotalPos);
                         pContext->bCanUpdateWindow = true;
                     }
@@ -619,6 +606,7 @@ namespace worker
                 t0 = t1;
 
                 fwrite(state.frame, 1, fs, state.ofp);
+
                 if (pContext->bCanUpdateWindow == true)
                 {
                     pContext->bCanUpdateWindow = false;
@@ -651,7 +639,7 @@ namespace worker
         this->Clean(state);
 
         pContext->StopCurrentTimer();
-        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+        pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
         pContext->m_ElapsedTimeFile = 0L;
 
         return true;
@@ -665,7 +653,7 @@ namespace worker
         pContext->SetTotalProgress(0);
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
-        pContext->SetTotalTimerInfo(pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
+        pContext->SetTotalTimerInfo(pConfig->GetString(0x00A01006) + L" 00:00:00");
         pContext->StartTotalTimer(250);
         pContext->nTotalSizeCounter = 0;
 
@@ -703,7 +691,7 @@ namespace worker
 
                 pContext->SetInputFileInfo(0, pConfig->GetString(0x00A01003) + L"\t" + state.szInPath[0]);
                 pContext->SetOutputFileInfo(pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
-                pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+                pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
                 pContext->m_ElapsedTimeFile = 0L;
                 pContext->StartCurrentTimer(250);
                 pContext->SetCurrentProgress(0);
@@ -771,7 +759,7 @@ namespace worker
                 pContext->SetInputFileInfo(j, L"\t" + state.szInPath[j]);
 
             pContext->SetOutputFileInfo(pConfig->GetString(0x00A01004) + L"\t" + state.szOutPath);
-            pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
+            pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
             pContext->SetCurrentProgress(0);
