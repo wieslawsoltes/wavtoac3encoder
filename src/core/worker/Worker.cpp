@@ -285,7 +285,6 @@ namespace worker
             fclose(state.ofp);
 
         state.api.LibAften_aften_encode_close(&state.s);
-        state.api.CloseAftenAPI();
 
         pContext->StopCurrentTimer();
         pContext->SetCurrentTimerInfo(pContext->pConfig->GetString(0x00A01005) + std::wstring(L" 00:00:00"));
@@ -320,7 +319,7 @@ namespace worker
         if (util::StringHelper::TowLower(szExt) == L"avs")
             state.bAvisynthInput = true;
 
-        pContext->nInTotalSize = 0;
+        state.nInTotalSize = 0;
 
         memset(state.ifp, 0, 6 * sizeof(FILE *));
 
@@ -333,7 +332,7 @@ namespace worker
                 return false;
             }
             state.infoAVS = state.decoderAVS.GetInputInfo();
-            pContext->nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
+            state.nInTotalSize = state.infoAVS.nAudioSamples * state.infoAVS.nBytesPerChannelSample * state.infoAVS.nAudioChannels;
             this->pContext->pConfig->Log->Log(L"[Info] Avisynth initialized successfully: " + state.szInPath[0]);
         }
         else
@@ -349,7 +348,7 @@ namespace worker
                     pContext->m_ElapsedTimeFile = 0L;
                     return false;
                 }
-                pContext->nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
+                state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
                 this->pContext->pConfig->Log->Log(L"[Infio] Input file: " + state.szInPath[i]);
             }
         }
@@ -392,7 +391,7 @@ namespace worker
         {
             if (pcm_init(&state.pf, state.nInputFiles, state.ifp, read_format, input_file_format))
             {
-                return EncoderError(state, L"[Error] Failed to initialize PCM library.");
+                return this->EncoderError(state, L"[Error] Failed to initialize PCM library.");
             }
 
             if (state.opt.read_to_eof)
@@ -430,7 +429,7 @@ namespace worker
                 {
                     if (state.s.lfe != 0)
                     {
-                        return EncoderError(state, L"[Error] Invalid channel configuration.");
+                        return this->EncoderError(state, L"[Error] Invalid channel configuration.");
                     }
                 }
             }
@@ -444,13 +443,13 @@ namespace worker
                 {
                     if (state.s.lfe != 1)
                     {
-                        return EncoderError(state, L"[Error] Invalid channel configuration.");
+                        return this->EncoderError(state, L"[Error] Invalid channel configuration.");
                     }
                 }
             }
             else
             {
-                return EncoderError(state, L"[Error] Invalid channel configuration.");
+                return this->EncoderError(state, L"[Error] Invalid channel configuration.");
             }
         }
         else
@@ -460,11 +459,11 @@ namespace worker
             {
                 if (state.s.lfe == 0 && ch == 6)
                 {
-                    return EncoderError(state, L"[Error] Invalid channel configuration.");
+                    return this->EncoderError(state, L"[Error] Invalid channel configuration.");
                 }
                 else if (state.s.lfe == 1 && ch == 1)
                 {
-                    return EncoderError(state, L"[Error] Invalid channel configuration.");
+                    return this->EncoderError(state, L"[Error] Invalid channel configuration.");
                 }
 
                 if (state.s.lfe)
@@ -475,7 +474,7 @@ namespace worker
 
             if (state.api.LibAften_aften_wav_channels_to_acmod(ch, state.pf.ch_mask, &state.s.acmod, &state.s.lfe))
             {
-                return EncoderError(state, L"[Error] Invalid channel configuration.");
+                return this->EncoderError(state, L"[Error] Invalid channel configuration.");
             }
         }
 
@@ -499,7 +498,7 @@ namespace worker
         state.fwav = (FLOAT *)calloc(A52_SAMPLES_PER_FRAME * state.s.channels, sizeof(FLOAT));
         if (state.frame == nullptr || state.fwav == nullptr)
         {
-            return EncoderError(state, L"[Error] Failed to allocate samples memory.");
+            return this->EncoderError(state, L"[Error] Failed to allocate samples memory.");
         }
 
         samplecount = bytecount = t0 = t1 = percent = 0;
@@ -544,10 +543,10 @@ namespace worker
 
         if (state.api.LibAften_aften_encode_init(&state.s))
         {
-            return EncoderError(state, L"[Error] Failed to initialize aften encoder.");
+            return this->EncoderError(state, L"[Error] Failed to initialize aften encoder.");
         }
 
-        SetInfo(state);
+        this->SetInfo(state);
 
         int nCurTotalPos = 0;
         __int64 nCurPos = 0;
@@ -564,7 +563,7 @@ namespace worker
                     if (fs > 0)
                         fwrite(state.frame, 1, fs, state.ofp);
                 }
-                return EncoderError(state, L"[Info] User terminated encoding.");
+                return this->EncoderError(state, L"[Info] User terminated encoding.");
             }
 
             if (state.bAvisynthInput == false)
@@ -584,7 +583,7 @@ namespace worker
 
             if (fs < 0)
             {
-                return EncoderError(state, L"[Error] Failed to encode frame.");
+                return this->EncoderError(state, L"[Error] Failed to encode frame.");
             }
             else
             {
@@ -633,7 +632,7 @@ namespace worker
                         pContext->bCanUpdateWindow = true;
                     }
 
-                    percent = (100 * nCurPos) / pContext->nInTotalSize;
+                    percent = (100 * nCurPos) / state.nInTotalSize;
 
                     if (pContext->bCanUpdateWindow == true)
                     {
@@ -642,7 +641,7 @@ namespace worker
                         pContext->bCanUpdateWindow = true;
                     }
 
-                    nCurTotalPos = (100 * (state.nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
+                    nCurTotalPos = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
 
                     if (pContext->bCanUpdateWindow == true)
                     {
@@ -686,19 +685,19 @@ namespace worker
         {
             if (pContext->pConfig->bMultiMonoInput == false)
             {
-                state.nTotalSizeCounter += _ftelli64(state.ifp[0]);
+                pContext->nTotalSizeCounter += _ftelli64(state.ifp[0]);
             }
             else
             {
                 for (int i = 0; i < state.nInputFiles; i++)
                 {
-                    state.nTotalSizeCounter += _ftelli64(state.ifp[i]);
+                    pContext->nTotalSizeCounter += _ftelli64(state.ifp[i]);
                 }
             }
         }
         else
         {
-            state.nTotalSizeCounter += pContext->nInTotalSize;
+            pContext->nTotalSizeCounter += state.nInTotalSize;
         }
 
         for (int i = 0; i < state.nInputFiles; i++)
@@ -721,11 +720,6 @@ namespace worker
 
     bool CWorker::Run()
     {
-        CState state;
-        state.preset = pContext->pPreset;
-        state.engine = pContext->pEngine;
-        state.nTotalSizeCounter = 0;
-
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
         pContext->SetCurrentProgress(0);
@@ -734,6 +728,7 @@ namespace worker
         pContext->m_ElapsedTimeTotal = 0L;
         pContext->SetTotalTimerInfo(pContext->pConfig->GetString(0x00A01006) + std::wstring(L" 00:00:00"));
         pContext->StartTotalTimer(250);
+        pContext->nTotalSizeCounter = 0;
 
         int nFileCounter = 0;
         int nTotalFiles = (int)pContext->m_Files.size();
@@ -742,6 +737,10 @@ namespace worker
         {
             for (int i = 0; i < (int)pContext->m_Files.size(); i++)
             {
+                CState state;
+                state.preset = pContext->pPreset;
+                state.engine = pContext->pEngine;
+
                 state.szInPath[0] = L"-";
                 state.szInPath[1] = L"-";
                 state.szInPath[2] = L"-";
@@ -779,19 +778,21 @@ namespace worker
 
                 ZeroMemory(&state.s, sizeof(AftenContext));
                 ZeroMemory(&state.opt, sizeof(AftenOpt));
-                if (InitEngine(state) == false)
+                if (this->InitEngine(state) == false)
                 {
                     return false;
                 }
 
                 state.nInputFiles = 1;
 
-                if (Encode(state) == false)
+                if (this->Encode(state) == false)
                 {
                     pContext->m_Status[i] = false;
                     state.api.CloseAftenAPI();
                     return false;
                 }
+
+                state.api.CloseAftenAPI();
 
                 pContext->m_Status[i] = true;
                 nFileCounter++;
@@ -806,13 +807,17 @@ namespace worker
         }
         else
         {
-            state.szInPath[0] = _T("-");
-            state.szInPath[1] = _T("-");
-            state.szInPath[2] = _T("-");
-            state.szInPath[3] = _T("-");
-            state.szInPath[4] = _T("-");
-            state.szInPath[5] = _T("-");
-            state.szOutPath = _T("");
+            CState state;
+            state.preset = pContext->pPreset;
+            state.engine = pContext->pEngine;
+
+            state.szInPath[0] = L"-";
+            state.szInPath[1] = L"-";
+            state.szInPath[2] = L"-";
+            state.szInPath[3] = L"-";
+            state.szInPath[4] = L"-";
+            state.szInPath[5] = L"-";
+            state.szOutPath = L"";
 
             nFileCounter = (int)pContext->m_Files.size();
 
@@ -852,14 +857,14 @@ namespace worker
 
             ZeroMemory(&state.s, sizeof(AftenContext));
             ZeroMemory(&state.opt, sizeof(AftenOpt));
-            if (InitEngine(state) == false)
+            if (this->InitEngine(state) == false)
             {
                 return false;
             }
 
             state.nInputFiles = nFileCounter;
 
-            if (Encode(state) == false)
+            if (this->Encode(state) == false)
             {
                 for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
@@ -871,6 +876,8 @@ namespace worker
             }
             else
             {
+                state.api.CloseAftenAPI();
+
                 for (int i = 0; i < (int)pContext->m_Status.size(); i++)
                 {
                     pContext->m_Status[i] = true;
@@ -880,7 +887,6 @@ namespace worker
         }
 
         pContext->StopTotalTimer();
-        state.api.CloseAftenAPI();
 
         return true;
     }

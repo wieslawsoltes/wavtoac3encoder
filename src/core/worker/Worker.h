@@ -23,14 +23,13 @@ namespace worker
         config::CPreset * pPreset;
         config::CEngine * pEngine;
         int nThreads;
-        __int64 nInTotalSize;
-        __int64 nOutTotalSize;
-        volatile bool bTerminate;
-        volatile bool bCanUpdateWindow;
+        int nCount;
         __int64 nTotalSize;
+        __int64 nTotalSizeCounter;
         double m_ElapsedTimeFile;
         double m_ElapsedTimeTotal;
-        int nCount;
+        volatile bool bTerminate;
+        volatile bool bCanUpdateWindow;
     public:
         CWorkerContext(config::CConfiguration * pConfig) : pConfig(pConfig) { }
         virtual ~CWorkerContext() { }
@@ -61,6 +60,7 @@ namespace worker
     public:
         config::CPreset * preset;
         config::CEngine * engine;
+        __int64 nInTotalSize;
         int nInputFiles;
         std::wstring szInPath[6];
         std::wstring szOutPath;
@@ -76,7 +76,6 @@ namespace worker
         AvsAudioInfo infoAVS;
         CAvs2Raw decoderAVS;
         Avs2RawStatus statusAVS;
-        __int64 nTotalSizeCounter = 0;
     };
 
     class CWorker
