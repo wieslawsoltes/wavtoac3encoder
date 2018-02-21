@@ -28,28 +28,28 @@ public:
     {
         if (IsValid())
         {
-            pLog->Log(szInfo);
+            pLog->Log(L"[Info] " + szInfo);
         }
     }
     void SetInputTypeInfo(int nID, std::wstring szInfo)
     {
         if (IsValid())
         {
-            pLog->Log(szInfo);
+            pLog->Log(L"[Info] " + szInfo);
         }
     }
     void SetOutputFileInfo(std::wstring szInfo)
     {
         if (IsValid())
         {
-            pLog->Log(szInfo);
+            pLog->Log(L"[Info] " + szInfo);
         }
     }
     void SetOutputTypeInfo(std::wstring szInfo)
     {
         if (IsValid())
         {
-            pLog->Log(szInfo);
+            pLog->Log(L"[Info] " + szInfo);
         }
     }
     void SetCurrentTimerInfo(std::wstring szInfo)
@@ -292,6 +292,15 @@ int _tmain(int argc, wchar_t *argv[])
 {
     App app;
     app.OpenLog();
+
+    if (argc != 1 && argc != 2 && argc != 3 && argc != 5 && argc != 7 && argc != 9 && argc != 11)
+    {
+        app.m_Config.Log->Log(L"[Error] Invalid command-line options.");
+        Help(app.m_Config.Log);
+        app.CloseLog();
+        return -1;
+    }
+
     app.DefaultConfig();
 
     app.m_Config.szLogPath = L"";
@@ -299,7 +308,6 @@ int _tmain(int argc, wchar_t *argv[])
     app.m_Config.szLangPath = L"";
 
     std::vector<std::pair<std::wstring, std::wstring>> m_Options;
-
     if (argc == 1)
     {
         app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
@@ -324,15 +332,7 @@ int _tmain(int argc, wchar_t *argv[])
     else if (argc >= 9)
         m_Options.emplace_back(std::make_pair(argv[7], argv[8]));
     else if (argc >= 11)
-        m_Options.emplace_back(std::make_pair(argv[7], argv[8]));
-
-    if (argc != 1 && argc != 3 && argc != 5 && argc != 7 && argc != 9 && argc != 11)
-    {
-        app.m_Config.Log->Log(L"[Error] Invalid command-line options.");
-        Help(app.m_Config.Log);
-        app.CloseLog();
-        return -1;
-    }
+        m_Options.emplace_back(std::make_pair(argv[9], argv[10]));
 
     for (auto& opt : m_Options)
     {
