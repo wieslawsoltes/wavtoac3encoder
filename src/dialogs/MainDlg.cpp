@@ -206,7 +206,6 @@ namespace dialogs
         {
             CMyDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
         }
-
         CMyDialogEx::OnVScroll(nSBCode, nPos, pScrollBar);
     }
 
@@ -223,7 +222,6 @@ namespace dialogs
                 this->pConfig->Log->Log(L"[Error] Failed to save configuration.");
             }
         }
-
         CMyDialogEx::OnClose();
     }
 
@@ -302,7 +300,6 @@ namespace dialogs
                     return;
                 }
             }
-
             file.bStatus = false;
             dlg.pWorkerContext->nTotalSize += file.nSize;
         }
@@ -377,11 +374,8 @@ namespace dialogs
         for (int i = (int)this->pConfig->m_Files.size() - 1; i >= 0; i--)
         {
             if (this->pConfig->m_Files[i].bStatus == true)
-            {
                 this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + i);
-            }
         }
-
         this->RedrawFiles();
 
         CString szStatus;
@@ -477,7 +471,6 @@ namespace dialogs
             int nNewPos = this->pConfig->FindValidBitrateIndex(preset.nBitrate);
             this->m_SldBitrate.SetPos(nNewPos);
         }
-
         this->UpdateBitrateText();
     }
 
@@ -524,7 +517,6 @@ namespace dialogs
             }
 
             util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-
             this->OnCbnSelchangeComboPresets();
         }
     }
@@ -593,7 +585,6 @@ namespace dialogs
                     this->m_EdtOutPath.SetWindowText(szBuff);
                     this->pConfig->szOutputPath = szBuff;
                 }
-
                 pMalloc->Free(pidlBrowse);
             }
 
@@ -601,8 +592,6 @@ namespace dialogs
             pMalloc->Free(lpBuffer);
             pMalloc->Release();
         }
-
-        return;
     }
 
     void CMainDlg::OnBnClickedButtonPresetsDefaults()
@@ -671,10 +660,13 @@ namespace dialogs
         {
             int nItem = this->m_LstSettings.GetNextSelectedItem(pos);
             int nVal = this->m_CmbValue.GetCurSel();
+
             auto& preset = this->pConfig->GetCurrentPreset();
             preset.nOptions[nItem] = nVal;
+
             auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
             std::wstring szName = option.m_Values[nVal].first;
+
             this->m_LstSettings.SetItemText(nItem, 1, szName.c_str());
         }
     }
@@ -732,7 +724,6 @@ namespace dialogs
                 this->m_CmbPresets.SetEditSel(HIWORD(dwEditSel), LOWORD(dwEditSel));
             }
         }
-
         return(0);
     }
 
@@ -1297,14 +1288,14 @@ namespace dialogs
             if (bResult == true)
             {
                 for (auto& file : files)
-                {
                     this->AddFile(file);
-                }
+
                 this->RedrawFiles();
             }
         }
         catch (...)
         {
+            this->pConfig->Log->Log(L"[Error] Exception thrown when searching for files.");
             MessageBox(this->pConfig->GetString(0x0020702A).c_str(),
                 this->pConfig->GetString(0x00207010).c_str(),
                 MB_OK | MB_ICONERROR);
@@ -1382,12 +1373,10 @@ namespace dialogs
             bHandleDrop = false;
             m_DDParam.pDlg = this;
             m_DDParam.hDropInfo = hDropInfo;
-
             hDDThread = ::CreateThread(nullptr, 0, DragAndDropThread, (LPVOID)&m_DDParam, 0, &dwDDThreadID);
             if (hDDThread == nullptr)
                 bHandleDrop = true;
         }
-
         CMyDialogEx::OnDropFiles(hDropInfo);
     }
 
@@ -1882,7 +1871,6 @@ namespace dialogs
         this->pConfig->SetEncoderOptions();
 
         this->InitRawSamleFormatComboBox();
-
         this->InitSettingsListGroups();
 
         if (initLangMenu == true)
@@ -1902,7 +1890,6 @@ namespace dialogs
         }
 
         this->InitLangMainMenu();
-
         this->InitTooltips();
 
         std::wstring szBuff = this->pConfig->bMultiMonoInput == true ? this->pConfig->szOutputFile : this->pConfig->szOutputPath;
@@ -2108,9 +2095,7 @@ namespace dialogs
     void CMainDlg::OnListDelFiles()
     {
         std::vector<int> list;
-        POSITION pos;
-
-        pos = this->m_LstFiles.GetFirstSelectedItemPosition();
+        POSITION pos = this->m_LstFiles.GetFirstSelectedItemPosition();
         while (pos != nullptr)
         {
             int nItem = this->m_LstFiles.GetNextSelectedItem(pos);
@@ -2136,7 +2121,6 @@ namespace dialogs
         LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
         static int nLastItem = -1;
         POSITION pos = m_LstSettings.GetFirstSelectedItemPosition();
-
         if (pos != nullptr)
         {
             int nItem = m_LstSettings.GetNextSelectedItem(pos);
@@ -2146,7 +2130,6 @@ namespace dialogs
                 nLastItem = nItem;
             }
         }
-
         *pResult = 0;
     }
 
@@ -2244,7 +2227,6 @@ namespace dialogs
     void CMainDlg::OnLvnKeydownListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     {
         LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
-
         switch (pLVKeyDow->wVKey)
         {
         case VK_LEFT:
@@ -2300,11 +2282,8 @@ namespace dialogs
         }
         break;
         default:
-        {
-        }
         break;
         };
-
         *pResult = 0;
     }
 
@@ -2312,14 +2291,12 @@ namespace dialogs
     {
         POINT point;
         GetCursorPos(&point);
-
         CMenu m_hMenu;
         m_hMenu.LoadMenu(IDR_MENU_LIST);
         CMenu *m_hSubMenu = m_hMenu.GetSubMenu(0);
         ::SetForegroundWindow(this->GetSafeHwnd());
 
         InitLangFilesListContextMenu(m_hMenu);
-
         m_hSubMenu->TrackPopupMenu(0, point.x, point.y, this, nullptr);
 
         *pResult = 0;
@@ -2328,7 +2305,6 @@ namespace dialogs
     void CMainDlg::OnNMRclickListSettings(NMHDR *pNMHDR, LRESULT *pResult)
     {
         this->ShowOptionPopup(true);
-
         *pResult = 0;
     }
 
@@ -2341,7 +2317,6 @@ namespace dialogs
             auto& option = this->pConfig->m_EncoderOptions.m_Options[nItem];
             this->MessageBox(option.szHelpText.c_str(), option.szName.c_str(), MB_ICONINFORMATION | MB_OK);
         }
-
         *pResult = 0;
     }
 
@@ -2360,7 +2335,6 @@ namespace dialogs
             this->MessageBox(this->pConfig->GetString(0x00207022).c_str(),
                 this->pConfig->GetString(0x00207010).c_str(),
                 MB_ICONERROR | MB_OK);
-
             return false;
         }
         else
@@ -2412,26 +2386,19 @@ namespace dialogs
                     }
 
                     CString szBuff;
-
                     szBuff.Format(_T("%s\t: %d\n"), this->pConfig->GetString(0x00207025), infoAVS.nSamplesPerSecond);
                     szInfo += szBuff;
-
                     szBuff.Format(_T("%s\t: %d\n"), this->pConfig->GetString(0x00207026), infoAVS.nAudioChannels);
                     szInfo += szBuff;
-
                     szBuff.Format(_T("%s\t: %I64d\n"), this->pConfig->GetString(0x00207027), infoAVS.nAudioSamples);
                     szInfo += szBuff;
-
                     szBuff.Format(_T("%s\t: %I64d"), this->pConfig->GetString(0x00207028), infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels);
                     szInfo += szBuff;
 
-                    this->MessageBox(szInfo.c_str(),
-                        this->pConfig->GetString(0x00207029).c_str(),
-                        MB_ICONINFORMATION | MB_OK);
+                    this->MessageBox(szInfo.c_str(), this->pConfig->GetString(0x00207029).c_str(), MB_ICONINFORMATION | MB_OK);
                 }
             }
         }
-
         *pResult = 0;
     }
 
@@ -2454,7 +2421,6 @@ namespace dialogs
             ZeroMemory(pFiles, dwMaxSize);
 
             std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
-
             CFileDialog fd(TRUE,
                 this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
                 _T(""),
@@ -2767,7 +2733,6 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-
             int nFormat = 0;
             if (fd.GetFileExt().CompareNoCase(_T("files")) == 0)
                 nFormat = 0;
@@ -2916,7 +2881,7 @@ namespace dialogs
 
     void CMainDlg::OnHelpWebsite()
     {
-        util::Utilities::LaunchAndWait(_T("https://github.com/wieslawsoltes/wavtoac3encoder/"), _T(""), FALSE);
+        util::Utilities::LaunchAndWait(L"https://github.com/wieslawsoltes/wavtoac3encoder/", L"", FALSE);
     }
 
     void CMainDlg::OnHelpAbout()
