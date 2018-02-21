@@ -690,6 +690,8 @@ namespace worker
 
                 if (this->Encode(state, pConfig) == false)
                 {
+                    pConfig->Log->Log(L"[Error] Failed to encode files.");
+
                     pContext->StopCurrentTimer();
                     pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
                     pContext->m_ElapsedTimeFile = 0L;
@@ -704,6 +706,7 @@ namespace worker
                 this->CloseEngine(state, pConfig);
                 file.bStatus = true;
                 pContext->nEncodedFiles = i;
+                pConfig->Log->Log(L"[Info] Encoded file.");
 
                 if (pContext->bTerminate == true)
                 {
@@ -766,6 +769,8 @@ namespace worker
 
             if (this->Encode(state, pConfig) == false)
             {
+                pConfig->Log->Log(L"[Error] Failed to encode files.");
+
                 pContext->StopCurrentTimer();
                 pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
                 pContext->m_ElapsedTimeFile = 0L;
@@ -791,6 +796,7 @@ namespace worker
             }
 
             pContext->nEncodedFiles = nTotalFiles;
+            pConfig->Log->Log(L"[Info] Encoded files.");
             pContext->StopTotalTimer();
             return true;
         }
