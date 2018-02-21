@@ -2126,7 +2126,7 @@ namespace dialogs
 
         for (int i = (int)list.size() - 1; i >= 0; i--)
         {
-            this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + i);
+            this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + list[i]);
         }
 
         this->RedrawFiles();
