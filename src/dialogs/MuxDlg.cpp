@@ -56,10 +56,9 @@ namespace dialogs
     {
         for (int i = 0; i < 6; i++)
         {
-            this->szInputFiles[i] = _T("");
-            this->szTmpInputFiles[i] = _T("");
+            this->szInputFiles[i] = _L"";
+            this->szTmpInputFiles[i] = L"";
         }
-
         this->nChannelConfig = nNumChannelConfig - 1;
         this->bLFE = true;
     }
@@ -136,10 +135,7 @@ namespace dialogs
 
         this->m_CmbChannelConfig.SetCurSel(0);
 
-        std::wstring szTmpText;
-        szTmpText = this->pConfig->GetString(0x00C01008);
-
-        this->m_CmbChannelConfig.SetTooltipText(szTmpText.c_str());
+        this->m_CmbChannelConfig.SetTooltipText(this->pConfig->GetString(0x00C01008).c_str());
         this->m_ChkChannelConfigLFE.SetTooltipText(this->pConfig->GetString(0x00C01009).c_str());
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
@@ -174,93 +170,93 @@ namespace dialogs
     void CMuxDlg::RemapFilesToChannels()
     {
         for (int i = 0; i < 6; i++)
-            this->szInputFiles[i] = _T("");
+            this->szInputFiles[i] = L"";
+
+        #define SetFile(dst, src) this->szInputFiles[dst] = szTmpInputFiles[src];
 
         switch (this->nChannelConfig)
         {
         case 0:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-            this->szInputFiles[3] = szTmpInputFiles[2];
+            SetFile(0, 0)
+            SetFile(1, 1)
+            SetFile(3, 2)
             break;
         case 1:
-            this->szInputFiles[2] = szTmpInputFiles[0];
-            this->szInputFiles[3] = szTmpInputFiles[1];
+            SetFile(2, 0)
+            SetFile(3, 1)
             break;
         case 2:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-            this->szInputFiles[3] = szTmpInputFiles[2];
+            SetFile(0, 0)
+            SetFile(1, 1)
+            SetFile(3, 2)
             break;
         case 3:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-            this->szInputFiles[2] = szTmpInputFiles[2];
-            this->szInputFiles[3] = szTmpInputFiles[3];
+            SetFile(0, 0)
+            SetFile(1, 1)
+            SetFile(2, 2)
+            SetFile(3, 3)
             break;
         case 4:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-
+            SetFile(0, 0)
+            SetFile(1, 1)
             if (this->bLFE == true)
             {
-                this->szInputFiles[3] = szTmpInputFiles[2];
-                this->szInputFiles[4] = szTmpInputFiles[3];
+                SetFile(3, 2)
+                SetFile(4, 3)
             }
             else
             {
-                this->szInputFiles[4] = szTmpInputFiles[2];
+                SetFile(4, 2)
             }
             break;
         case 5:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-            this->szInputFiles[2] = szTmpInputFiles[2];
-
+            SetFile(0, 0)
+            SetFile(1, 1)
+            SetFile(2, 2)
             if (this->bLFE == true)
             {
-                this->szInputFiles[3] = szTmpInputFiles[3];
-                this->szInputFiles[4] = szTmpInputFiles[4];
+                SetFile(3, 3)
+                SetFile(4, 4)
             }
             else
             {
-                this->szInputFiles[4] = szTmpInputFiles[3];
+                SetFile(4, 3)
             }
             break;
         case 6:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-
+            SetFile(0, 0)
+            SetFile(1, 1)
             if (this->bLFE == true)
             {
-                this->szInputFiles[3] = szTmpInputFiles[4];
-                this->szInputFiles[4] = szTmpInputFiles[2];
-                this->szInputFiles[5] = szTmpInputFiles[3];
+                SetFile(3, 4)
+                SetFile(4, 2)
+                SetFile(5, 3)
             }
             else
             {
-                this->szInputFiles[4] = szTmpInputFiles[2];
-                this->szInputFiles[5] = szTmpInputFiles[3];
+                SetFile(4, 2)
+                SetFile(5, 3)
             }
             break;
         case 7:
-            this->szInputFiles[0] = szTmpInputFiles[0];
-            this->szInputFiles[1] = szTmpInputFiles[1];
-            this->szInputFiles[2] = szTmpInputFiles[2];
-
+            SetFile(0, 0)
+            SetFile(1, 1)
+            SetFile(2, 2)
             if (this->bLFE == true)
             {
-                this->szInputFiles[3] = szTmpInputFiles[3];
-                this->szInputFiles[4] = szTmpInputFiles[4];
-                this->szInputFiles[5] = szTmpInputFiles[5];
+                SetFile(3, 3)
+                SetFile(4, 4)
+                SetFile(5, 5)
             }
             else
             {
-                this->szInputFiles[4] = szTmpInputFiles[3];
-                this->szInputFiles[5] = szTmpInputFiles[4];
+                SetFile(4, 3)
+                SetFile(5, 4)
             }
             break;
         };
+
+        #undef SetFile
     }
 
     void CMuxDlg::SetFilePaths()
@@ -337,9 +333,7 @@ namespace dialogs
             return false;
 
         for (int i = 0; i < 6; i++)
-        {
-            szTmpInputFiles[i] = _T("");
-        }
+            szTmpInputFiles[i] = L"";
 
         int i = 0;
         for (; i < (int)fl.size(); i++)
@@ -369,11 +363,10 @@ namespace dialogs
         try
         {
             std::vector<std::wstring> fl;
-            std::wstring szBuffer;
+            std::wstring szPrefix = (nFormat == 0 ? L"" : L"\"");
+            std::wstring szSuffix = (nFormat == 0 ? L"" : L"\"");
 
-            #define AddFile(index) \
-                    szBuffer = (nFormat == 0 ? L"" : L"\"") + szInputFiles[index] + (nFormat == 0 ? L"" : L"\"") + L"\n"; \
-                    fl.emplace_back(szBuffer);
+            #define AddFile(index) fl.emplace_back(szPrefix + szInputFiles[index] + szSuffix);
 
             switch (this->nChannelConfig)
             {
@@ -533,7 +526,7 @@ namespace dialogs
     {
         this->m_BtnChannelFL.SetBold(false);
         this->m_EdtChannelFL.SetWindowText(_T(""));
-        this->szInputFiles[0] = _T("");
+        this->szInputFiles[0] = L"";
         this->SetControlsState();
     }
 
@@ -541,7 +534,7 @@ namespace dialogs
     {
         this->m_BtnChannelFC.SetBold(false);
         this->m_EdtChannelFC.SetWindowText(_T(""));
-        this->szInputFiles[2] = _T("");
+        this->szInputFiles[2] = L"";
         this->SetControlsState();
     }
 
@@ -549,7 +542,7 @@ namespace dialogs
     {
         this->m_BtnChannelFR.SetBold(false);
         this->m_EdtChannelFR.SetWindowText(_T(""));
-        this->szInputFiles[1] = _T("");
+        this->szInputFiles[1] = L"";
         this->SetControlsState();
     }
 
@@ -557,23 +550,19 @@ namespace dialogs
     {
         this->m_BtnChannelLFE.SetBold(false);
         this->m_EdtChannelLFE.SetWindowText(_T(""));
-        this->szInputFiles[3] = _T("");
+        this->szInputFiles[3] = L"";
         this->SetControlsState();
     }
 
     void CMuxDlg::OnBnClickedButtonClearSl()
     {
         if (nChannelConfigStates[nChannelConfig][3] == 1)
-        {
             this->m_BtnChannelS.SetBold(false);
-        }
         else
-        {
             this->m_BtnChannelSL.SetBold(false);
-        }
 
         this->m_EdtChannelSL.SetWindowText(_T(""));
-        this->szInputFiles[4] = _T("");
+        this->szInputFiles[4] = L"";
         this->SetControlsState();
     }
 
@@ -581,7 +570,7 @@ namespace dialogs
     {
         this->m_BtnChannelSR.SetBold(false);
         this->m_EdtChannelSR.SetWindowText(_T(""));
-        this->szInputFiles[5] = _T("");
+        this->szInputFiles[5] = L"";
         this->SetControlsState();
     }
 
@@ -641,79 +630,82 @@ namespace dialogs
     {
         for (int i = 0; i < 6; i++)
         {
-            this->szInputFiles[i] = _T("");
-            this->szTmpInputFiles[i] = _T("");
+            this->szInputFiles[i] = L"";
+            this->szTmpInputFiles[i] = L"";
         }
-
         OnCancel();
     }
 
     void CMuxDlg::OnBnClickedOk()
     {
+        #define ResetFile(index) this->szInputFiles[index] = L"";
+
         switch (this->nChannelConfig)
         {
         case 0:
-            this->szInputFiles[2] = _T("");
-            this->szInputFiles[4] = _T("");
-            this->szInputFiles[5] = _T("");
+            ResetFile(2)
+            ResetFile(4)
+            ResetFile(5)
             break;
         case 1:
-            this->szInputFiles[0] = _T("");
-            this->szInputFiles[1] = _T("");
-            this->szInputFiles[4] = _T("");
-            this->szInputFiles[5] = _T("");
+            ResetFile(0)
+            ResetFile(1)
+            ResetFile(4)
+            ResetFile(5)
             break;
         case 2:
-            this->szInputFiles[2] = _T("");
-            this->szInputFiles[4] = _T("");
-            this->szInputFiles[5] = _T("");
+            ResetFile(2)
+            ResetFile(4)
+            ResetFile(5)
             break;
         case 3:
-            this->szInputFiles[4] = _T("");
-            this->szInputFiles[5] = _T("");
+            ResetFile(4)
+            ResetFile(5)
             break;
         case 4:
             if (this->bLFE == true)
             {
-                this->szInputFiles[2] = _T("");
-                this->szInputFiles[5] = _T("");
+                ResetFile(2)
+                ResetFile(5)
             }
             else
             {
-                this->szInputFiles[2] = _T("");
-                this->szInputFiles[3] = _T("");
-                this->szInputFiles[5] = _T("");
+                ResetFile(2)
+                ResetFile(3)
+                ResetFile(5)
             }
             break;
         case 5:
             if (this->bLFE == true)
             {
-                this->szInputFiles[5] = _T("");
+                ResetFile(5)
             }
             else
             {
-                this->szInputFiles[3] = _T("");
-                this->szInputFiles[5] = _T("");
+                ResetFile(3)
+                ResetFile(5)
             }
             break;
         case 6:
             if (this->bLFE == true)
             {
-                this->szInputFiles[2] = _T("");
+                ResetFile(2)
             }
             else
             {
-                this->szInputFiles[2] = _T("");
-                this->szInputFiles[3] = _T("");
+                ResetFile(2)
+                ResetFile(3)
             }
             break;
         case 7:
             if (this->bLFE == false)
             {
-                this->szInputFiles[3] = _T("");
+                ResetFile(3)
             }
             break;
         };
+
+        #undef ResetFile
 
         OnOK();
     }
