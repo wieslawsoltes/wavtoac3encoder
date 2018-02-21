@@ -267,7 +267,7 @@ namespace config
         }
     }
 
-    void CConfiguration::LoadLLanguages(std::wstring szLangPath)
+    void CConfiguration::LoadLanguages(std::wstring szLangPath)
     {
         FindLanguages(szLangPath, false, m_Languages);
 
