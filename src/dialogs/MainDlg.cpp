@@ -2404,11 +2404,10 @@ namespace dialogs
 
     void CMainDlg::OnFileAddFiles()
     {
-        TCHAR *pFiles = nullptr;
-        const DWORD dwMaxSize = (4096 * MAX_PATH);
         try
         {
-            pFiles = (TCHAR *)malloc(dwMaxSize);
+            const DWORD dwMaxSize = (4096 * MAX_PATH);
+            auto pFiles = std::make_unique<TCHAR[]>(dwMaxSize);
             if (pFiles == nullptr)
             {
                 MessageBox(
@@ -2418,8 +2417,6 @@ namespace dialogs
                 return;
             }
 
-            ZeroMemory(pFiles, dwMaxSize);
-
             std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
             CFileDialog fd(TRUE,
                 this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
@@ -2428,7 +2425,7 @@ namespace dialogs
                 szFilter.c_str(),
                 this);
 
-            fd.m_ofn.lpstrFile = pFiles;
+            fd.m_ofn.lpstrFile = pFiles.get();
             fd.m_ofn.nMaxFile = (dwMaxSize) / 2;
 
             if (fd.DoModal() == IDOK)
@@ -2444,17 +2441,6 @@ namespace dialogs
         }
         catch (...)
         {
-            if (pFiles != nullptr)
-            {
-                free(pFiles);
-                pFiles = nullptr;
-            }
-        }
-
-        if (pFiles != nullptr)
-        {
-            free(pFiles);
-            pFiles = nullptr;
             this->pConfig->Log->Log(L"[Error] Exception thrown on adding files.");
         }
     }
