@@ -39,6 +39,8 @@ namespace dialogs
     protected:
         HICON m_hIcon;
         HACCEL m_hAccelTable;
+        CImageList m_ImageListLarge;
+        CImageList m_ImgLisSmall;
     public:
         bool bVisible;
     public:

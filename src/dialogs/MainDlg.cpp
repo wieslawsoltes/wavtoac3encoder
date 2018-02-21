@@ -1767,31 +1767,31 @@ namespace dialogs
         this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 624, 0);
         this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 140, 0);
 
-        SHFILEINFO sfi;
-        HIMAGELIST m_ilLargeTmp;
-        HIMAGELIST m_ilSmallTmp;
         TCHAR szSystemRoot[MAX_PATH + 1];
-
         GetWindowsDirectory(szSystemRoot, MAX_PATH);
         PathStripToRoot(szSystemRoot);
 
-        m_ilLargeTmp = (HIMAGELIST)SHGetFileInfo(szSystemRoot,
+        SHFILEINFO sfiLarge;
+        HIMAGELIST m_ilLargeTmp = (HIMAGELIST)SHGetFileInfo(szSystemRoot,
             0,
-            &sfi,
+            &sfiLarge,
             sizeof(SHFILEINFO),
             SHGFI_SYSICONINDEX | SHGFI_LARGEICON | SHGFI_ICON);
+        this->m_ImageListLarge.Attach(m_ilLargeTmp);
 
-        m_ilSmallTmp = (HIMAGELIST)SHGetFileInfo(szSystemRoot,
+        SHFILEINFO sfiSmall;
+        HIMAGELIST m_ilSmallTmp = (HIMAGELIST)SHGetFileInfo(szSystemRoot,
             0,
-            &sfi,
+            &sfiSmall,
             sizeof(SHFILEINFO),
             SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON);
+        this->m_ImageLisSmall.Attach(m_ilSmallTmp);
 
-        this->m_LstFiles.SetImageList(m_ilLargeTmp, LVSIL_NORMAL);
-        this->m_LstFiles.SetImageList(m_ilSmallTmp, LVSIL_SMALL);
+        this->m_LstFiles.SetImageList(&m_ImageListLarge, LVSIL_NORMAL);
+        this->m_LstFiles.SetImageList(&m_ImageLisSmall, LVSIL_SMALL);
 
         DWORD dwExStyleSettings = this->m_LstSettings.GetExtendedStyle();
-        dwExStyleSettingsdwExStyleFiles |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;
+        dwExStyleSettings |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;
         this->m_LstSettings.SetExtendedStyle(dwExStyleSettings);
 
         this->m_LstSettings.EnableGroupView(TRUE);
