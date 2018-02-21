@@ -149,6 +149,23 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     Zip(outputDir, outputZip);
 });
 
+var packageCliBinariesAction = new Action<string,string> ((configuration, platform) => 
+{
+    var path = "./src/cli/bin/" + configuration + "/" + platform + "/";
+    var output = "EncWAVtoAC3.CLI-" + version + suffix + "-" + platform + (configuration == "Release" ? "" : ("-(" + configuration + ")"));
+    var outputDir = artifactsDir.Combine(output);
+    var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    CleanDirectory(outputDir);
+    CopyFileToDirectory(File("README.md"), outputDir);
+    CopyFileToDirectory(File("COPYING.TXT"), outputDir);
+    CopyFileToDirectory(File(path + "EncWAVtoAC3.CLI.exe"), outputDir);
+    if (configuration == "Debug") CopyFiles(path + "*.pdb", outputDir);
+    copyConfigAction(output);
+    if (platform == "Win32") copyEnginesX86Action(output);
+    if (platform == "x64") copyEnginesX64Action(output);
+    Zip(outputDir, outputZip);
+});
+
 var packageInstallersAction = new Action<string,string> ((configuration, platform) => 
 {
     StartProcess(iscc, new ProcessSettings { 
@@ -185,6 +202,7 @@ Task("Package-Binaries")
     .Does(() =>
 {
     configurations.ForEach(configuration => platforms.ForEach(platform => packageBinariesAction(configuration, platform)));
+    configurations.ForEach(configuration => platforms.ForEach(platform => packageCliBinariesAction(configuration, platform))); 
 });
 
 Task("Package-Installers")
