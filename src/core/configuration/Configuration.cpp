@@ -46,7 +46,7 @@ namespace config
         return buffer;
     }
 
-    bool CConfiguration::LoadEntries(std::wstring &szFileName, std::vector<Entry> &entries)
+    bool CConfiguration::LoadEntries(const std::wstring &szFileName, std::vector<Entry> &entries)
     {
         try
         {
@@ -72,7 +72,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveEntries(std::wstring &szFileName, std::vector<Entry> &entries)
+    bool CConfiguration::SaveEntries(const std::wstring &szFileName, std::vector<Entry> &entries)
     {
         try
         {
@@ -99,7 +99,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadFiles(std::wstring &szFileName, std::vector<std::wstring>& files)
+    bool CConfiguration::LoadFiles(const std::wstring &szFileName, std::vector<std::wstring>& files)
     {
         try
         {
@@ -131,7 +131,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveFiles(std::wstring &szFileName, std::vector<std::wstring>& files, int nFormat)
+    bool CConfiguration::SaveFiles(const std::wstring &szFileName, std::vector<std::wstring>& files, int nFormat)
     {
         try
         {
@@ -158,7 +158,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::FindLanguages(std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& languages)
+    bool CConfiguration::FindLanguages(const std::wstring szPath, const bool bRecurse, std::vector<CLanguage>& languages)
     {
         try
         {
@@ -190,7 +190,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadStrings(std::wstring &szFileName, std::map<int, std::wstring>& strings)
+    bool CConfiguration::LoadStrings(const std::wstring &szFileName, std::map<int, std::wstring>& strings)
     {
         try
         {
@@ -223,7 +223,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadLanguagePath(std::wstring &szFileName)
+    bool CConfiguration::LoadLanguagePath(const std::wstring &szFileName)
     {
         try
         {
@@ -246,7 +246,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveLanguagePath(std::wstring &szFileName)
+    bool CConfiguration::SaveLanguagePath(const std::wstring &szFileName)
     {
         try
         {
@@ -267,7 +267,7 @@ namespace config
         }
     }
 
-    void CConfiguration::LoadLanguages(std::wstring szLangPath)
+    void CConfiguration::LoadLanguages(const std::wstring szLangPath)
     {
         FindLanguages(szLangPath, false, m_Languages);
 
@@ -360,7 +360,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadEngines(std::vector<CEngine>& engines, std::wstring& szFileName)
+    bool CConfiguration::LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName)
     {
         try
         {
@@ -421,7 +421,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SaveEngines(std::vector<CEngine>& engines, std::wstring& szFileName)
+    bool CConfiguration::SaveEngines(std::vector<CEngine>& engines, const std::wstring& szFileName)
     {
         try
         {
@@ -520,7 +520,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadPresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
+    bool CConfiguration::LoadPresets(std::vector<CPreset>& presets, const std::wstring& szFileName, CPreset& defaultPreset)
     {
         try
         {
@@ -580,7 +580,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SavePresets(std::vector<CPreset>& presets, std::wstring& szFileName, CPreset& defaultPreset)
+    bool CConfiguration::SavePresets(std::vector<CPreset>& presets, const std::wstring& szFileName, CPreset& defaultPreset)
     {
         try
         {
@@ -662,7 +662,7 @@ namespace config
         return 0;
     }
 
-    int CConfiguration::FindOptionIndex(std::wstring szOption)
+    int CConfiguration::FindOptionIndex(const std::wstring szOption)
     {
         for (int i = 0; i < (int)m_EncoderOptions.m_Options.size(); i++)
         {
@@ -672,7 +672,7 @@ namespace config
         return 0;
     }
 
-    bool CConfiguration::IsSupportedInputExt(std::wstring &szExt)
+    bool CConfiguration::IsSupportedInputExt(const std::wstring &szExt)
     {
         int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
         for (int i = 0; i < nInputExtSize; i++)
@@ -683,7 +683,7 @@ namespace config
         return false;
     }
 
-    int CConfiguration::GetSupportedInputFormat(std::wstring &szExt)
+    int CConfiguration::GetSupportedInputFormat(const std::wstring &szExt)
     {
         int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
         for (int i = 0; i < nInputExtSize; i++)
@@ -718,6 +718,31 @@ namespace config
         szFilter += this->GetString(0x00207008) + L" (*.*)|*.*||";
 
         return szFilter;
+    }
+
+    void CConfiguration::InitDefaultPreset()
+    {
+        this->m_DefaultPreset.szName = this->GetString(0x00207001);
+
+        this->m_DefaultPreset.nMode = config::CPreset::nDefaultMode;
+        this->m_DefaultPreset.nBitrate = config::CPreset::nDefaultBitrate;
+        this->m_DefaultPreset.nQuality = config::CPreset::nDefaultQuality;
+
+        this->m_DefaultPreset.m_RawInput.nRawChannels = config::CRawInput::nDefaultRawChannels;
+        this->m_DefaultPreset.m_RawInput.nRawSampleFormat = config::CRawInput::nDefaultRawSampleFormat;
+        this->m_DefaultPreset.m_RawInput.nRawSampleRate = config::CRawInput::nDefaultRawSampleRate;
+
+        int nOptionsSize = (int)this->m_EncoderOptions.m_Options.size();
+        for (int i = 0; i < nOptionsSize; i++)
+        {
+            auto& option = this->m_EncoderOptions.m_Options[i];
+            m_DefaultPreset.nOptions[i] = option.nDefaultValue;
+        }
+    }
+
+    void CConfiguration::InitDefaultEngine()
+    {
+        m_DefaultEngine = CEngine(L"Aften", L"libaften.dll");
     }
 
     CPreset& CConfiguration::GetCurrentPreset()

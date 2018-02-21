@@ -4,6 +4,7 @@
 #include <wchar.h>
 #include <memory>
 #include <cstdio>
+#include "utilities\StringHelper.h"
 
 namespace logger
 {
@@ -13,32 +14,58 @@ namespace logger
         ILog() { };
         virtual ~ILog() { }
     public:
-        virtual bool Open(const std::wstring szPath) = 0;
+        virtual bool Open() = 0;
         virtual void Close() = 0;
         virtual void Log(const std::wstring szMessage) = 0;
     };
 
+    class ConsoleLog : public ILog
+    {
+    public:
+        ConsoleLog() : ILog()
+        {
+        };
+        virtual ~ConsoleLog()
+        {
+            Close();
+        }
+    public:
+        bool Open()
+        {
+            return true;
+        }
+        void Close()
+        {
+        }
+        void Log(const std::wstring szMessage)
+        {
+            try
+            {
+                std::wstring szData = szMessage + L"\n";
+                std::string szAnsi = util::StringHelper::Convert(szData);
+                std::fwrite(szAnsi.data(), sizeof(char), szAnsi.size(), stderr);
+                std::fflush(stderr);
+            }
+            catch (...) {}
+        }
+    };
+
     class FileLog : public ILog
     {
+        std::wstring szPath;
         FILE *fs;
     public:
-        FileLog() : fs(nullptr), ILog() 
-        {
-        };
-        FileLog(const std::wstring szPath) : fs(nullptr), ILog() 
-        {
-            Open(szPath);
-        };
+        FileLog(const std::wstring szPath) : szPath(szPath), fs(nullptr), ILog() { };
         virtual ~FileLog() 
         {
             Close();
         }
     public:
-        bool Open(const std::wstring szPath)
+        bool Open()
         {
             try
             {
-                errno_t error = _wfopen_s(&fs, szPath.c_str(), L"wt, ccs=UTF-8");
+                errno_t error = _wfopen_s(&fs, this->szPath.c_str(), L"wt, ccs=UTF-8");
                 return (error != 0) ? false : true;
             }
             catch (...)

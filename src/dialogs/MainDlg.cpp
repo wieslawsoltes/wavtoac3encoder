@@ -1012,11 +1012,11 @@ namespace dialogs
 
     void CMainDlg::LoadAllConfiguration()
     {
-        bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->szPresetsFilePath, this->pConfig->m_DefaultPreset);
+        bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
-            this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsPath);
 
         if (bPresetsRet == true)
         {
@@ -1038,50 +1038,50 @@ namespace dialogs
             }
         }
 
-        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->szEnginesFilePath);
+        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->szEnginesPath);
         if (bEnginesRet == true)
-            this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesPath);
 
-        bool bConfigRet = this->LoadProgramConfig(this->pConfig->szConfigFilePath);
+        bool bConfigRet = this->LoadProgramConfig(this->pConfig->szConfigPath);
         if (bConfigRet == true)
-            this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->LoadFilesList(this->pConfig->szFilesListFilePath);
+        bool bFilesRet = this->LoadFilesList(this->pConfig->szFilesPath);
         if (bConfigRet == true)
-            this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesPath);
     }
 
     void CMainDlg::SaveAllConfiguration()
     {
-        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->szPresetsFilePath, this->pConfig->m_DefaultPreset);
+        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
-            this->pConfig->Log->Log(L"[Info] Saved encoder presets: " + this->pConfig->szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved encoder presets: " + this->pConfig->szPresetsPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->szPresetsFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->szPresetsPath);
 
-        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->szEnginesFilePath);
+        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->szEnginesPath);
         if (bPresetsRet == true)
-            this->pConfig->Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->szEnginesPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->szEnginesFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->szEnginesPath);
 
-        bool bConfigRet = this->SaveProgramConfig(this->pConfig->szConfigFilePath);
+        bool bConfigRet = this->SaveProgramConfig(this->pConfig->szConfigPath);
         if (bPresetsRet == true)
-            this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->SaveFilesList(this->pConfig->szFilesListFilePath, 0);
+        bool bFilesRet = this->SaveFilesList(this->pConfig->szFilesPath, 0);
         if (bFilesRet == true)
-            this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesPath);
         else
-            this->pConfig->Log->Log(L"[Error] Failed to save files list: " + this->pConfig->szFilesListFilePath);
+            this->pConfig->Log->Log(L"[Error] Failed to save files list: " + this->pConfig->szFilesPath);
     }
 
     void CMainDlg::UpdateBitrateText()
@@ -1634,22 +1634,7 @@ namespace dialogs
 
     void CMainDlg::InitDefaultPreset()
     {
-        pConfig->m_DefaultPreset.szName = this->pConfig->GetString(0x00207001);
-
-        pConfig->m_DefaultPreset.nMode = config::CPreset::nDefaultMode;
-        pConfig->m_DefaultPreset.nBitrate = config::CPreset::nDefaultBitrate;
-        pConfig->m_DefaultPreset.nQuality = config::CPreset::nDefaultQuality;
-
-        pConfig->m_DefaultPreset.m_RawInput.nRawChannels = config::CRawInput::nDefaultRawChannels;
-        pConfig->m_DefaultPreset.m_RawInput.nRawSampleFormat = config::CRawInput::nDefaultRawSampleFormat;
-        pConfig->m_DefaultPreset.m_RawInput.nRawSampleRate = config::CRawInput::nDefaultRawSampleRate;
-
-        int nOptionsSize = (int)this->pConfig->m_EncoderOptions.m_Options.size();
-        for (int i = 0; i < nOptionsSize; i++)
-        {
-            auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
-            pConfig->m_DefaultPreset.nOptions[i] = option.nDefaultValue;
-        }
+        this->pConfig->InitDefaultPreset();
 
         this->pConfig->nCurrentPreset = 0;
         this->m_CmbPresets.InsertString(0, pConfig->m_DefaultPreset.szName.c_str());
