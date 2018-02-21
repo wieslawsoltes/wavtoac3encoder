@@ -307,21 +307,21 @@ int _tmain(int argc, wchar_t *argv[])
     app.m_Config.szConfigPath = L"";
     app.m_Config.szLangPath = L"";
 
+    app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
+    app.m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
+    app.m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
+
     std::vector<std::pair<std::wstring, std::wstring>> m_Options;
-    if (argc == 1)
+
+    if (argc == 2)
     {
-        app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
-        app.m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
-        app.m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
-    }
-    else if (argc == 2)
-    {
-        if (argv[1] == L"-h" || argv[1] == L"--help")
+        std::wstring opt = argv[1];
+        if (opt == L"-h" || opt == L"--help")
         {
             Help(app.m_Config.Log);
             app.CloseLog();
-            return -1;
         }
+        return -1;
     }
     else if (argc >= 3)
         m_Options.emplace_back(std::make_pair(argv[1], argv[2]));
