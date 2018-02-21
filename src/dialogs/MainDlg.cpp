@@ -304,7 +304,7 @@ namespace dialogs
             }
 
             file.bStatus = false;
-            dlg.pWorkerContext->nTotalSize += _ttoi64(file.szSize.c_str());
+            dlg.pWorkerContext->nTotalSize += file.nSize;
         }
 
         CString szOutputPath;
@@ -1128,7 +1128,7 @@ namespace dialogs
         this->m_StcBitrate.SetWindowText(szBuff);
     }
 
-    std::wstring CMainDlg::GetFileSize(std::wstring& szPath)
+    ULONGLONG CMainDlg::GetFileSize(std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
         if (util::StringHelper::TowLower(szExt) == L"avs")
@@ -1137,16 +1137,16 @@ namespace dialogs
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
             if (GetAvisynthFileInfo(szPath, &infoAVS) == true)
             {
-                ULONGLONG nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels; return std::to_wstring(nFileSize);
-                return std::to_wstring(nFileSize);
+                ULONGLONG nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+                return nFileSize;
             }
         }
         else
         {
             ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
-            return std::to_wstring(nFileSize);
+            return nFileSize;
         }
-        return std::wstring();
+        return 0;
     }
 
     void CMainDlg::ApplyPresetToDlg(config::CPreset &preset)
@@ -2166,7 +2166,6 @@ namespace dialogs
         NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
         LV_ITEM* pItem = &(pDispInfo)->item;
         int nItem = pItem->iItem;
-
         config::CFile& file = this->pConfig->m_Files[nItem];
 
         if (pItem->mask & LVIF_TEXT)
@@ -2178,7 +2177,7 @@ namespace dialogs
                 szText = file.szPath;
                 break;
             case 1:
-                szText = file.szSize;
+                szText = std::to_wstring(file.nSize);
                 break;
             }
             _tcscpy_s(pItem->pszText, pItem->cchTextMax, szText.c_str());
@@ -2192,7 +2191,6 @@ namespace dialogs
                 &sfi,
                 sizeof(sfi),
                 SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_LINKOVERLAY);
-
             pItem->iImage = sfi.iIcon;
         }
 
@@ -2232,28 +2230,16 @@ namespace dialogs
     void CMainDlg::OnLvnColumnclickListFiles(NMHDR *pNMHDR, LRESULT *pResult)
     {
         LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
-
         static bool bOrder[2]{ false, false };
-
         int nSortColumn = pNMLV->iSubItem;
 
         auto compare = [&nSortColumn](config::CFile& a, config::CFile& b)
         {
             bool order = bOrder[nSortColumn];
             if (nSortColumn == 0)
-            {
-                if (order)
-                    return a.szPath < b.szPath;
-                else
-                    return a.szPath > b.szPath;
-            }
+                return order ? (a.szPath < b.szPath) : (a.szPath > b.szPath);
             else if (nSortColumn == 1)
-            {
-                if (order)
-                    return a.szSize < b.szSize;
-                else
-                    return a.szSize > b.szSize;
-            }
+                return order ? (a.nSize < b.nSize) : (a.nSize > b.nSize);
             return false;
         };
 

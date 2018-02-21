@@ -119,7 +119,7 @@ namespace config
     {
     public:
         std::wstring szPath;
-        std::wstring szSize;
+        unsigned __int64 nSize;
         bool bStatus;
     };
 
