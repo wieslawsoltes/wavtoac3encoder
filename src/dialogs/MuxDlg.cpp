@@ -454,6 +454,7 @@ namespace dialogs
         }
         catch (...)
         {
+            this->pConfig->Log->Log(L"[Error] Exception thrown when saving files.");
             return false;
         }
     }

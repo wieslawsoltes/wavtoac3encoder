@@ -2455,6 +2455,7 @@ namespace dialogs
         {
             free(pFiles);
             pFiles = nullptr;
+            this->pConfig->Log->Log(L"[Error] Exception thrown on adding files.");
         }
     }
 
