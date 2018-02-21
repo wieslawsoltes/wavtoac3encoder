@@ -363,10 +363,8 @@ namespace dialogs
         try
         {
             std::vector<std::wstring> fl;
-            std::wstring szPrefix = (nFormat == 0 ? L"" : L"\"");
-            std::wstring szSuffix = (nFormat == 0 ? L"" : L"\"");
 
-            #define AddFile(index) fl.emplace_back(szPrefix + szInputFiles[index] + szSuffix);
+            #define AddFile(index) fl.emplace_back(szInputFiles[index]);
 
             switch (this->nChannelConfig)
             {
