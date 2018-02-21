@@ -382,8 +382,7 @@ namespace dialogs
             }
         }
 
-        this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-        this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+        this->RedrawFiles();
 
         CString szStatus;
         if (dlg.pWorkerContext->nEncodedFiles <= 0)
@@ -1001,12 +1000,9 @@ namespace dialogs
             this->pConfig->m_Files.clear();
             for (int i = 0; i < (int)fl.size(); i++)
             {
-                std::wstring szPath = fl[i];
-                config::CFile file{ szPath, GetFileSize(szPath) };
-                this->pConfig->m_Files.emplace_back(file);
+                this->AddFile(fl[i]);
             }
-            this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-            this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+            this->RedrawFiles();
             return true;
         }
         return false;
@@ -1128,7 +1124,7 @@ namespace dialogs
         this->m_StcBitrate.SetWindowText(szBuff);
     }
 
-    ULONGLONG CMainDlg::GetFileSize(std::wstring& szPath)
+    ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
         if (util::StringHelper::TowLower(szExt) == L"avs")
@@ -1147,6 +1143,25 @@ namespace dialogs
             return nFileSize;
         }
         return 0;
+    }
+
+    bool CMainDlg::AddFile(const std::wstring& szPath)
+    {
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (this->pConfig->IsSupportedInputExt(szExt) == true)
+        {
+            ULONGLONG nSize = this->GetFileSize(szPath);
+            config::CFile file { szPath, nSize };
+            this->pConfig->m_Files.emplace_back(file);
+            return true;
+        }
+        return false;
+    }
+
+    void CMainDlg::RedrawFiles()
+    {
+        this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
+        this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
     }
 
     void CMainDlg::ApplyPresetToDlg(config::CPreset &preset)
@@ -1242,17 +1257,10 @@ namespace dialogs
                 else
                 {
                     std::wstring szPath = szFile;
-                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(szPath));
-                    if (this->pConfig->IsSupportedInputExt(szExt) == true)
-                    {
-                        config::CFile file{ szPath, GetFileSize(szPath) };
-                        this->pConfig->m_Files.emplace_back(file);
-                    }
+                    this->AddFile(szPath);
                 }
             }
-            this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-            this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
-
+            this->RedrawFiles();
         }
         ::DragFinish(hDropInfo);
     }
@@ -1290,15 +1298,9 @@ namespace dialogs
             {
                 for (auto& file : files)
                 {
-                    std::wstring szExt = util::StringHelper::TowLower(util::Utilities::GetFileExtension(file));
-                    if (this->pConfig->IsSupportedInputExt(szExt) == true)
-                    {
-                        config::CFile f { file, GetFileSize(file) };
-                        this->pConfig->m_Files.emplace_back(f);
-                    }
+                    this->AddFile(file);
                 }
-                this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-                this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+                this->RedrawFiles();
             }
         }
         catch (...)
@@ -2079,14 +2081,12 @@ namespace dialogs
             {
                 config::CFile& file0 = this->pConfig->m_Files[nItem];
                 config::CFile& file1 = this->pConfig->m_Files[nItem - 1];
-
                 std::swap(file0, file1);
+
+                this->RedrawFiles();
 
                 this->m_LstFiles.SetItemState(nItem - 1, LVIS_SELECTED, LVIS_SELECTED);
                 this->m_LstFiles.SetItemState(nItem, 0, LVIS_SELECTED);
-
-                this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-                this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
             }
         }
     }
@@ -2102,14 +2102,12 @@ namespace dialogs
             {
                 config::CFile& file0 = this->pConfig->m_Files[nItem];
                 config::CFile& file1 = this->pConfig->m_Files[nItem + 1];
-
                 std::swap(file0, file1);
+
+                this->RedrawFiles();
 
                 this->m_LstFiles.SetItemState(nItem + 1, LVIS_SELECTED, LVIS_SELECTED);
                 this->m_LstFiles.SetItemState(nItem, 0, LVIS_SELECTED);
-
-                this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-                this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
             }
         }
     }
@@ -2131,15 +2129,13 @@ namespace dialogs
             this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + i);
         }
 
-        this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-        this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+        this->RedrawFiles();
     }
 
     void CMainDlg::OnListClearList()
     {
         this->pConfig->m_Files.clear();
-        this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-        this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+        this->RedrawFiles();
     }
 
     void CMainDlg::OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult)
@@ -2247,7 +2243,7 @@ namespace dialogs
 
         bOrder[nSortColumn] = !bOrder[nSortColumn];
 
-        this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
+        this->RedrawFiles();
 
         *pResult = 0;
     }
@@ -2482,11 +2478,9 @@ namespace dialogs
                 while (pos != nullptr)
                 {
                     std::wstring szFileName = fd.GetNextPathName(pos);
-                    config::CFile file{ szFileName, GetFileSize(szFileName) };
-                    this->pConfig->m_Files.emplace_back(file);
+                    this->AddFile(szFileName);
                 }
-                this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-                this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+                this->RedrawFiles();
             }
         }
         catch (...)
@@ -2624,96 +2618,89 @@ namespace dialogs
             {
                 this->pConfig->m_Files.clear();
 
-                auto AddFile = [this](std::wstring& szPath)
-                {
-                    config::CFile file{ szPath, GetFileSize(szPath) };
-                    this->pConfig->m_Files.emplace_back(file);
-                };
-
                 switch (dlg.nChannelConfig)
                 {
                 case 0:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
-                    AddFile(dlg.szInputFiles[3]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[3]);
                     break;
                 case 1:
-                    AddFile(dlg.szInputFiles[2]);
-                    AddFile(dlg.szInputFiles[3]);
+                    this->AddFile(dlg.szInputFiles[2]);
+                    this->AddFile(dlg.szInputFiles[3]);
                     break;
                 case 2:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
-                    AddFile(dlg.szInputFiles[3]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[3]);
                     break;
                 case 3:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
-                    AddFile(dlg.szInputFiles[2]);
-                    AddFile(dlg.szInputFiles[3]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[2]);
+                    this->AddFile(dlg.szInputFiles[3]);
                     break;
                 case 4:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
                     if (dlg.bLFE == true)
                     {
-                        AddFile(dlg.szInputFiles[3]);
-                        AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[3]);
+                        this->AddFile(dlg.szInputFiles[4]);
                     }
                     else
                     {
-                        AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[4]);
                     }
                     break;
                 case 5:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
-                    AddFile(dlg.szInputFiles[2]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[2]);
                     if (dlg.bLFE == true)
                     {
-                        AddFile(dlg.szInputFiles[3]);
-                        AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[3]);
+                        this->AddFile(dlg.szInputFiles[4]);
                     }
                     else
                     {
-                        AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[4]);
                     }
                     break;
                 case 6:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
                     if (dlg.bLFE == true)
                     {
-                        AddFile(dlg.szInputFiles[4]);
-                        AddFile(dlg.szInputFiles[5]);
-                        AddFile(dlg.szInputFiles[3]);
+                        this->AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[5]);
+                        this->AddFile(dlg.szInputFiles[3]);
                     }
                     else
                     {
-                        AddFile(dlg.szInputFiles[4]);
-                        AddFile(dlg.szInputFiles[5]);
+                        this->AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[5]);
                     }
                     break;
                 case 7:
-                    AddFile(dlg.szInputFiles[0]);
-                    AddFile(dlg.szInputFiles[1]);
-                    AddFile(dlg.szInputFiles[2]);
+                    this->AddFile(dlg.szInputFiles[0]);
+                    this->AddFile(dlg.szInputFiles[1]);
+                    this->AddFile(dlg.szInputFiles[2]);
                     if (dlg.bLFE == true)
                     {
-                        AddFile(dlg.szInputFiles[3]);
-                        AddFile(dlg.szInputFiles[4]);
-                        AddFile(dlg.szInputFiles[5]);
+                        this->AddFile(dlg.szInputFiles[3]);
+                        this->AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[5]);
                     }
                     else
                     {
-                        AddFile(dlg.szInputFiles[4]);
-                        AddFile(dlg.szInputFiles[5]);
+                        this->AddFile(dlg.szInputFiles[4]);
+                        this->AddFile(dlg.szInputFiles[5]);
                     }
                     break;
                 };
 
-                this->m_LstFiles.RedrawItems(0, this->pConfig->m_Files.size() - 1);
-                this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
+                this->RedrawFiles();
 
                 auto& optionAcmod = this->pConfig->m_EncoderOptions.m_Options[nIndexAcmod];
                 preset.nOptions[nIndexAcmod] = (bUpdateChconfig == true) ? optionAcmod.nIgnoreValue : dlg.nChannelConfig;

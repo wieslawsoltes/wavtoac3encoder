@@ -109,7 +109,9 @@ namespace dialogs
         void SaveAllConfiguration();
         void HandleDropFiles(HDROP hDropInfo);
         void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
-        ULONGLONG GetFileSize(std::wstring& szPath);
+        ULONGLONG GetFileSize(const std::wstring& szPath);
+        bool AddFile(const std::wstring& szPath);
+        void RedrawFiles();
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
         void ApplyPresetToDlg(config::CPreset &preset);
