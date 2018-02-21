@@ -1785,10 +1785,10 @@ namespace dialogs
             &sfiSmall,
             sizeof(SHFILEINFO),
             SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON);
-        this->m_ImageLisSmall.Attach(m_ilSmallTmp);
+        this->m_ImageListSmall.Attach(m_ilSmallTmp);
 
         this->m_LstFiles.SetImageList(&m_ImageListLarge, LVSIL_NORMAL);
-        this->m_LstFiles.SetImageList(&m_ImageLisSmall, LVSIL_SMALL);
+        this->m_LstFiles.SetImageList(&m_ImageListSmall, LVSIL_SMALL);
 
         DWORD dwExStyleSettings = this->m_LstSettings.GetExtendedStyle();
         dwExStyleSettings |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;

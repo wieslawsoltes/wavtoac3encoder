@@ -40,7 +40,7 @@ namespace dialogs
         HICON m_hIcon;
         HACCEL m_hAccelTable;
         CImageList m_ImageListLarge;
-        CImageList m_ImgLisSmall;
+        CImageList m_ImageListSmall;
     public:
         bool bVisible;
     public:
