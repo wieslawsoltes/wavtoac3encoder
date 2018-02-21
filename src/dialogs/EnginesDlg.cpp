@@ -43,7 +43,10 @@ namespace dialogs
     {
         CMyDialogEx::OnInitDialog();
 
-        this->m_LstEngines.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+        DWORD dwExStyle = this->m_LstEngines.GetExtendedStyle();
+        dwExStyle |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES;
+        this->m_LstEngines.SetExtendedStyle(dwExStyle);
+
         this->m_LstEngines.InsertColumn(0, this->pConfig->GetString(0x00B0100C).c_str(), 0, 150);
         this->m_LstEngines.InsertColumn(1, this->pConfig->GetString(0x00B0100D).c_str(), 0, 440);
 

@@ -1755,16 +1755,14 @@ namespace dialogs
         CMFCDynamicLayout* layout = this->GetDynamicLayout();
         layout->AddItem(IDC_STATUSBAR, CMFCDynamicLayout::MoveVertical(100), CMFCDynamicLayout::SizeHorizontal(100));
 
-        m_SpnThreads.SetRange32(0, INT_MAX);
-        m_SpnThreads.SetPos(0);
-
 #ifdef _UNICODE
         this->m_LstFiles.SendMessage(CCM_SETUNICODEFORMAT, (WPARAM)(BOOL)TRUE, 0);
+        this->m_LstSettings.SendMessage(CCM_SETUNICODEFORMAT, (WPARAM)(BOOL)TRUE, 0);
 #endif
 
-        DWORD dwExStyle = this->m_LstFiles.GetExtendedStyle();
-        dwExStyle |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES;
-        this->m_LstFiles.SetExtendedStyle(dwExStyle);
+        DWORD dwExStyleFiles = this->m_LstFiles.GetExtendedStyle();
+        dwExStyleFiles |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES;
+        this->m_LstFiles.SetExtendedStyle(dwExStyleFiles);
 
         this->m_LstFiles.InsertColumn(0, _T("File path"), LVCFMT_LEFT, 624, 0);
         this->m_LstFiles.InsertColumn(1, _T("File size (bytes)"), LVCFMT_LEFT, 140, 0);
@@ -1789,31 +1787,26 @@ namespace dialogs
             sizeof(SHFILEINFO),
             SHGFI_SYSICONINDEX | SHGFI_SMALLICON | SHGFI_ICON);
 
-        ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilLargeTmp, LVSIL_NORMAL);
-        ListView_SetImageList(this->m_LstFiles.GetSafeHwnd(), m_ilSmallTmp, LVSIL_SMALL);
+        this->m_LstFiles.SetImageList(m_ilLargeTmp, LVSIL_NORMAL);
+        this->m_LstFiles.SetImageList(m_ilSmallTmp, LVSIL_SMALL);
 
-        HWND listView = this->GetDlgItem(IDC_LIST_SETTINGS)->GetSafeHwnd();
-        ListView_SetExtendedListViewStyle(listView, LVS_EX_FULLROWSELECT);
-        ListView_EnableGroupView(listView, TRUE);
+        DWORD dwExStyleSettings = this->m_LstSettings.GetExtendedStyle();
+        dwExStyleSettingsdwExStyleFiles |= LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER;
+        this->m_LstSettings.SetExtendedStyle(dwExStyleSettings);
 
-        LVCOLUMN lc;
-        lc.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
+        this->m_LstSettings.EnableGroupView(TRUE);
 
-        lc.iSubItem = 0;
-        lc.cx = 265;
-        lc.pszText = _T("Option");
-        ListView_InsertColumn(listView, 0, &lc);
-
-        lc.iSubItem = 1;
-        lc.cx = 210;
-        lc.pszText = _T("Value");
-        ListView_InsertColumn(listView, 1, &lc);
+        this->m_LstSettings.InsertColumn(0, _T("Option"), LVCFMT_LEFT, 265, 0);
+        this->m_LstSettings.InsertColumn(1, _T("Value"), LVCFMT_LEFT, 210, 0);
 
         this->m_SpnRawSampleRate.SetRange32(0, INT_MAX);
         this->m_SpnRawSampleRate.SetPos(0);
 
         this->m_SpnRawChannels.SetRange32(0, INT_MAX);
         this->m_SpnRawChannels.SetPos(0);
+
+        this->m_SpnThreads.SetRange32(0, INT_MAX);
+        this->m_SpnThreads.SetPos(0);
 
         this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
             this->pConfig->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
