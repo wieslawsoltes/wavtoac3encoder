@@ -56,7 +56,7 @@ namespace dialogs
     {
         for (int i = 0; i < 6; i++)
         {
-            this->szInputFiles[i] = _L"";
+            this->szInputFiles[i] = L"";
             this->szTmpInputFiles[i] = L"";
         }
         this->nChannelConfig = nNumChannelConfig - 1;
