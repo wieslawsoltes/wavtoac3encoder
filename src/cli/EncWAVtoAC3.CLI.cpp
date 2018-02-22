@@ -376,7 +376,6 @@ int wmain(int argc, wchar_t *argv[])
             break;
         case OptionId::OptionOutput:
             app.m_Config.szOutputPath = result.Params[0];
-            app.m_Config.bUseOutputPath = true;
             break;
         case OptionId::OptionHelp:
             Help(app.m_Config.Log);
@@ -464,6 +463,29 @@ int wmain(int argc, wchar_t *argv[])
         }
         file.bStatus = false;
         pContext->nTotalSize += file.nSize;
+    }
+
+    if (!app.m_Config.szOutputPath.empty())
+    {
+        if (app.m_Config.bMultiMonoInput == false)
+        {
+            if (util::Utilities::MakeFullPath(app.m_Config.szOutputPath) == false)
+            {
+                app.m_Config.Log->Log(L"[Error] Failed to create output path: " + app.m_Config.szOutputPath);
+                return -1;
+            }
+        }
+        else
+        {
+            std::wstring szFile = util::Utilities::GetFileName(app.m_Config.szOutputPath);
+            std::wstring szOutputPath = app.m_Config.szOutputPath.substr(0, app.m_Config.szOutputPath.length() - szFile.length());
+            if (util::Utilities::MakeFullPath(szOutputPath) == false)
+            {
+                app.m_Config.Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
+                return -1;
+            }
+        }
+        app.m_Config.bUseOutputPath = true;
     }
 
     util::CTimeCount countTime;
