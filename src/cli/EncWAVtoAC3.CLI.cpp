@@ -398,7 +398,7 @@ int wmain(int argc, wchar_t *argv[])
     }
     else
     {
-        app.DefaultEngines();
+        app.DefaultPresets();
         app.m_Config.Log->Log(L"[Info] Using default presets.");
     }
 
@@ -409,7 +409,7 @@ int wmain(int argc, wchar_t *argv[])
     else
     {
         app.DefaultEngines();
-        app.m_Config.Log->Log(L"[Info] Using default presets.");
+        app.m_Config.Log->Log(L"[Info] Using default engines.");
     }
 
     if (app.LoadFiles(app.m_Config.szFilesPath))
