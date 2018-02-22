@@ -320,15 +320,15 @@ int wmain(int argc, wchar_t *argv[])
 
     std::vector<util::Option> options
     {
-        { OptionId::OptionPresets, { L"--presets"       }, 1     },
-        { OptionId::OptionPreset,  { L"--preset", L"-p" }, 1     },
-        { OptionId::OptionEngines, { L"--engines"       }, 1     },
-        { OptionId::OptionEngine,  { L"--engine", L"-e" }, 1     },
-        { OptionId::OptionFiles,   { L"--files"         }, 1     },
-        { OptionId::OptionMono,    { L"--mono", L"-m"   }, 0     },
-        { OptionId::OptionInput,   { L"--input", L"-i"  }, -1    },
-        { OptionId::OptionOutput,  { L"--output", L"-o" }, 1     },
-        { OptionId::OptionHelp,    { L"--help", L"-h"   }, 0     }
+        { OptionId::OptionPresets, { L"--presets"       }, 1  },
+        { OptionId::OptionPreset,  { L"--preset", L"-p" }, 1  },
+        { OptionId::OptionEngines, { L"--engines"       }, 1  },
+        { OptionId::OptionEngine,  { L"--engine", L"-e" }, 1  },
+        { OptionId::OptionFiles,   { L"--files"         }, 1  },
+        { OptionId::OptionMono,    { L"--mono", L"-m"   }, 0  },
+        { OptionId::OptionInput,   { L"--input", L"-i"  }, -1 },
+        { OptionId::OptionOutput,  { L"--output", L"-o" }, 1  },
+        { OptionId::OptionHelp,    { L"--help", L"-h"   }, 0  }
     };
 
     std::vector<util::Result> results;
