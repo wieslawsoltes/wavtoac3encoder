@@ -288,7 +288,7 @@ void Help(std::unique_ptr<logger::ILog>& log)
     log->Log(L"-o <path|file.ac3>           Output path or output file name.");
 }
 
-int _tmain(int argc, wchar_t *argv[])
+int wmain(int argc, wchar_t *argv[])
 {
     App app;
     app.OpenLog();
