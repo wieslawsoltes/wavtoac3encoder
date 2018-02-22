@@ -135,7 +135,7 @@ class App
 {
 public:
     config::CConfiguration m_Config;
-private:
+public:
     bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
         if (pInfoAVS == nullptr)
@@ -280,12 +280,16 @@ public:
 void Help(std::unique_ptr<logger::ILog>& log)
 {
     log->Log(L"EncWAVtoAC3.CLI [options]");
-    log->Log(L"Command-line options:");
-    log->Log(L"-p <input.presets>           Input presets.");
-    log->Log(L"-e <input.engines>           Input engines.");
-    log->Log(L"-f <input.files|input.mux>   Input files or mux.");
-    log->Log(L"-m [0|1]                     Multi-mono input.");
-    log->Log(L"-o <path|file.ac3>           Output path or output file name.");
+    log->Log(L"options:");
+    log->Log(L"--presets <input.presets>           Input presets file.");
+    log->Log(L"--preset,-p <index>                 Set current preset, default: 0.");
+    log->Log(L"--engines <input.engines>           Input engines file.");
+    log->Log(L"--engine,-e <index>                 Set current engine, default: 0.");
+    log->Log(L"--files <input.files|input.mux>     Input files or mux file.");
+    log->Log(L"--mono,-m                           Set multi-mono input files flag.");
+    log->Log(L"--input,-i <filename,...>           Input file names (one or more).");
+    log->Log(L"--output,-o <path|file.ac3>         Output path or output file name.");
+    log->Log(L"--help,-h                           Show command-line help.");
 }
 
 int wmain(int argc, wchar_t *argv[])
@@ -293,70 +297,121 @@ int wmain(int argc, wchar_t *argv[])
     App app;
     app.OpenLog();
 
-    if (argc != 1 && argc != 2 && argc != 3 && argc != 5 && argc != 7 && argc != 9 && argc != 11)
+    app.DefaultConfig();
+    app.m_Config.szLogPath = L"";
+    app.m_Config.szConfigPath = L"";
+    app.m_Config.szLangPath = L"";
+    app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
+    app.m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
+    app.m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
+
+    enum OptionId : int
+    {
+        Presets,
+        Preset,
+        Engines,
+        Engine,
+        Files,
+        Mono,
+        Input,
+        Output,
+        Help
+    };
+
+    std::vector<util::Option> options
+    {
+        { OptionId::Presets,    { L"--presets"       }, 1  },
+        { OptionId::Preset,     { L"--preset", L"-p" }, 1  },
+        { OptionId::Engines,    { L"--engines"       }, 1  },
+        { OptionId::Engine,     { L"--engine", L"-e" }, 1  },
+        { OptionId::Files,      { L"--files"         }, 1  },
+        { OptionId::Mono,       { L"--mono", L"-m"   }, 0  },
+        { OptionId::Input,      { L"--input", L"-i"  }, -1 },
+        { OptionId::Output,     { L"--output", L"-o" }, 1  },
+        { OptionId::Help,       { L"--help", L"-h"   }, 0  }
+    };
+
+    std::vector<util::Result> results;
+    util::ArgvParser parser { false };
+    if (parser.ParseOptions(argc, argv, options, results) == 0)
+    {
+        for (auto& result : results)
+        {
+            switch (result.Id)
+            {
+                case OptionId::Presets:
+                {
+                    app.m_Config.szPresetsPath = result.Params[0];
+                }
+                break;
+                case OptionId::Preset:
+                {
+                    app.m_Config.nCurrentPreset = std::stoi(result.Params[0]);
+                }
+                break;
+                case OptionId::Engines:
+                {
+                    app.m_Config.szEnginesPath = result.Params[0];
+                }
+                break;
+                case OptionId::Engine:
+                {
+                    app.m_Config.nCurrentEngine = std::stoi(result.Params[0]);
+                }
+                break;
+                case OptionId::Files:
+                {
+                    app.m_Config.szFilesPath = result.Params[0];
+                }
+                break;
+                case OptionId::Mono:
+                {
+                    app.m_Config.bMultiMonoInput = true;
+                }
+                break;
+                case OptionId::Input:
+                {
+                    for (auto& param : result.Params)
+                    {
+                        if (app.AddFile(param) == false)
+                        {
+                            app.m_Config.Log->Log(L"[Error] Not supported input file: " + param);
+                            app.CloseLog();
+                            return -1;
+                        }
+                    }
+                }
+                break;
+                case OptionId::Output:
+                {
+                    app.m_Config.szOutputPath = result.Params[0];
+                    app.m_Config.bUseOutputPath = true;
+                }
+                break;
+                case OptionId::Help:
+                {
+                    Help(app.m_Config.Log);
+                    app.CloseLog();
+                    return 0;
+                }
+                break;
+                default:
+                {
+                    app.m_Config.Log->Log(L"[Error] Unknown option.");
+                    Help(app.m_Config.Log);
+                    app.CloseLog();
+                    return -1;
+                }
+                break;
+            }
+        }
+    }
+    else
     {
         app.m_Config.Log->Log(L"[Error] Invalid command-line options.");
         Help(app.m_Config.Log);
         app.CloseLog();
         return -1;
-    }
-
-    app.DefaultConfig();
-
-    app.m_Config.szLogPath = L"";
-    app.m_Config.szConfigPath = L"";
-    app.m_Config.szLangPath = L"";
-
-    app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
-    app.m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
-    app.m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
-
-    std::vector<std::pair<std::wstring, std::wstring>> m_Options;
-
-    if (argc == 2)
-    {
-        std::wstring opt = argv[1];
-        if (opt == L"-h" || opt == L"--help")
-        {
-            Help(app.m_Config.Log);
-            app.CloseLog();
-        }
-        return -1;
-    }
-    else if (argc >= 3)
-        m_Options.emplace_back(std::make_pair(argv[1], argv[2]));
-    else if (argc >= 5)
-        m_Options.emplace_back(std::make_pair(argv[3], argv[4]));
-    else if (argc >= 7)
-        m_Options.emplace_back(std::make_pair(argv[5], argv[6]));
-    else if (argc >= 9)
-        m_Options.emplace_back(std::make_pair(argv[7], argv[8]));
-    else if (argc >= 11)
-        m_Options.emplace_back(std::make_pair(argv[9], argv[10]));
-
-    for (auto& opt : m_Options)
-    {
-        if (opt.first == L"-p")
-        {
-            app.m_Config.szPresetsPath = opt.second;
-        }
-        else if (opt.first == L"-e")
-        {
-            app.m_Config.szEnginesPath = opt.second;
-        }
-        else if (opt.first == L"-f")
-        {
-            app.m_Config.szFilesPath = opt.second;
-        }
-        else if (opt.first == L"-m")
-        {
-            app.m_Config.bMultiMonoInput = std::stoi(opt.second) == 1;
-        }
-        else if (opt.first == L"-o")
-        {
-            app.m_Config.szOutputPath = opt.second;
-            app.m_Config.bUseOutputPath = true;
-        }
     }
 
     if (app.LoadPresets(app.m_Config.szPresetsPath))

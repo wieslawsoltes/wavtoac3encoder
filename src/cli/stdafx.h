@@ -22,3 +22,4 @@
 #include "avs\src\Avs2Raw\Avs2Raw.h"
 #include "configuration\Configuration.h"
 #include "worker\Worker.h"
+#include "ArgvParser.h"
