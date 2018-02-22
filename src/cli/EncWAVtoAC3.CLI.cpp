@@ -418,8 +418,11 @@ int wmain(int argc, wchar_t *argv[])
     }   
     else
     {
-        app.m_Config.Log->Log(L"[Error] Failed to load files: " + app.m_Config.szFilesPath);
-        return -1;
+        if (app.m_Config.m_Files.size() <= 0)
+        {
+            app.m_Config.Log->Log(L"[Error] Failed to load files: " + app.m_Config.szFilesPath);
+            return -1;
+        }
     }
 
     int nItemsCount = app.m_Config.m_Files.size();
