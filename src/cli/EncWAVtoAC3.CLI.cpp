@@ -307,28 +307,28 @@ int wmain(int argc, wchar_t *argv[])
 
     enum OptionId : int
     {
-        Presets,
-        Preset,
-        Engines,
-        Engine,
-        Files,
-        Mono,
-        Input,
-        Output,
-        Help
+        OptionPresets,
+        OptionPreset,
+        OptionEngines,
+        OptionEngine,
+        OptionFiles,
+        OptionMono,
+        OptionInput,
+        OptionOutput,
+        OptionHelp
     };
 
     std::vector<util::Option> options
     {
-        { OptionId::Presets,    { L"--presets"       }, 1  },
-        { OptionId::Preset,     { L"--preset", L"-p" }, 1  },
-        { OptionId::Engines,    { L"--engines"       }, 1  },
-        { OptionId::Engine,     { L"--engine", L"-e" }, 1  },
-        { OptionId::Files,      { L"--files"         }, 1  },
-        { OptionId::Mono,       { L"--mono", L"-m"   }, 0  },
-        { OptionId::Input,      { L"--input", L"-i"  }, -1 },
-        { OptionId::Output,     { L"--output", L"-o" }, 1  },
-        { OptionId::Help,       { L"--help", L"-h"   }, 0  }
+        { OptionId::OptionPresets,    { L"--presets"       }, 1  },
+        { OptionId::OptionPreset,     { L"--preset", L"-p" }, 1  },
+        { OptionId::OptionEngines,    { L"--engines"       }, 1  },
+        { OptionId::OptionEngine,     { L"--engine", L"-e" }, 1  },
+        { OptionId::OptionFiles,      { L"--files"         }, 1  },
+        { OptionId::OptionMono,       { L"--mono", L"-m"   }, 0  },
+        { OptionId::OptionInput,      { L"--input", L"-i"  }, -1 },
+        { OptionId::OptionOutput,     { L"--output", L"-o" }, 1  },
+        { OptionId::OptionHelp,       { L"--help", L"-h"   }, 0  }
     };
 
     std::vector<util::Result> results;
@@ -339,37 +339,37 @@ int wmain(int argc, wchar_t *argv[])
         {
             switch (result.Id)
             {
-                case OptionId::Presets:
+                case OptionId::OptionPresets:
                 {
                     app.m_Config.szPresetsPath = result.Params[0];
                 }
                 break;
-                case OptionId::Preset:
+                case OptionId::OptionPreset:
                 {
                     app.m_Config.nCurrentPreset = std::stoi(result.Params[0]);
                 }
                 break;
-                case OptionId::Engines:
+                case OptionId::OptionEngines:
                 {
                     app.m_Config.szEnginesPath = result.Params[0];
                 }
                 break;
-                case OptionId::Engine:
+                case OptionId::OptionEngine:
                 {
                     app.m_Config.nCurrentEngine = std::stoi(result.Params[0]);
                 }
                 break;
-                case OptionId::Files:
+                case OptionId::OptionFiles:
                 {
                     app.m_Config.szFilesPath = result.Params[0];
                 }
                 break;
-                case OptionId::Mono:
+                case OptionId::OptionMono:
                 {
                     app.m_Config.bMultiMonoInput = true;
                 }
                 break;
-                case OptionId::Input:
+                case OptionId::OptionInput:
                 {
                     for (auto& param : result.Params)
                     {
@@ -382,13 +382,13 @@ int wmain(int argc, wchar_t *argv[])
                     }
                 }
                 break;
-                case OptionId::Output:
+                case OptionId::OptionOutput:
                 {
                     app.m_Config.szOutputPath = result.Params[0];
                     app.m_Config.bUseOutputPath = true;
                 }
                 break;
-                case OptionId::Help:
+                case OptionId::OptionHelp:
                 {
                     Help(app.m_Config.Log);
                     app.CloseLog();
