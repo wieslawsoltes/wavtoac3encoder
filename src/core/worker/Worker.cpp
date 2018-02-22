@@ -705,7 +705,7 @@ namespace worker
 
                 this->CloseEngine(state, pConfig);
                 file.bStatus = true;
-                pContext->nEncodedFiles = i;
+                pContext->nEncodedFiles = i + 1;
                 pConfig->Log->Log(L"[Info] Encoded file.");
 
                 if (pContext->bTerminate == true)
