@@ -320,98 +320,76 @@ int wmain(int argc, wchar_t *argv[])
 
     std::vector<util::Option> options
     {
-        { OptionId::OptionPresets,    { L"--presets"       }, 1  },
-        { OptionId::OptionPreset,     { L"--preset", L"-p" }, 1  },
-        { OptionId::OptionEngines,    { L"--engines"       }, 1  },
-        { OptionId::OptionEngine,     { L"--engine", L"-e" }, 1  },
-        { OptionId::OptionFiles,      { L"--files"         }, 1  },
-        { OptionId::OptionMono,       { L"--mono", L"-m"   }, 0  },
-        { OptionId::OptionInput,      { L"--input", L"-i"  }, -1 },
-        { OptionId::OptionOutput,     { L"--output", L"-o" }, 1  },
-        { OptionId::OptionHelp,       { L"--help", L"-h"   }, 0  }
+        { OptionId::OptionPresets, { L"--presets"       }, 1     },
+        { OptionId::OptionPreset,  { L"--preset", L"-p" }, 1     },
+        { OptionId::OptionEngines, { L"--engines"       }, 1     },
+        { OptionId::OptionEngine,  { L"--engine", L"-e" }, 1     },
+        { OptionId::OptionFiles,   { L"--files"         }, 1     },
+        { OptionId::OptionMono,    { L"--mono", L"-m"   }, 0     },
+        { OptionId::OptionInput,   { L"--input", L"-i"  }, -1    },
+        { OptionId::OptionOutput,  { L"--output", L"-o" }, 1     },
+        { OptionId::OptionHelp,    { L"--help", L"-h"   }, 0     }
     };
 
     std::vector<util::Result> results;
     util::ArgvParser parser { false };
-    if (parser.ParseOptions(argc, argv, options, results) == 0)
-    {
-        for (auto& result : results)
-        {
-            switch (result.Id)
-            {
-                case OptionId::OptionPresets:
-                {
-                    app.m_Config.szPresetsPath = result.Params[0];
-                }
-                break;
-                case OptionId::OptionPreset:
-                {
-                    app.m_Config.nCurrentPreset = std::stoi(result.Params[0]);
-                }
-                break;
-                case OptionId::OptionEngines:
-                {
-                    app.m_Config.szEnginesPath = result.Params[0];
-                }
-                break;
-                case OptionId::OptionEngine:
-                {
-                    app.m_Config.nCurrentEngine = std::stoi(result.Params[0]);
-                }
-                break;
-                case OptionId::OptionFiles:
-                {
-                    app.m_Config.szFilesPath = result.Params[0];
-                }
-                break;
-                case OptionId::OptionMono:
-                {
-                    app.m_Config.bMultiMonoInput = true;
-                }
-                break;
-                case OptionId::OptionInput:
-                {
-                    for (auto& param : result.Params)
-                    {
-                        if (app.AddFile(param) == false)
-                        {
-                            app.m_Config.Log->Log(L"[Error] Not supported input file: " + param);
-                            app.CloseLog();
-                            return -1;
-                        }
-                    }
-                }
-                break;
-                case OptionId::OptionOutput:
-                {
-                    app.m_Config.szOutputPath = result.Params[0];
-                    app.m_Config.bUseOutputPath = true;
-                }
-                break;
-                case OptionId::OptionHelp:
-                {
-                    Help(app.m_Config.Log);
-                    app.CloseLog();
-                    return 0;
-                }
-                break;
-                default:
-                {
-                    app.m_Config.Log->Log(L"[Error] Unknown option.");
-                    Help(app.m_Config.Log);
-                    app.CloseLog();
-                    return -1;
-                }
-                break;
-            }
-        }
-    }
-    else
+    if (parser.ParseOptions(argc, argv, options, results) != 0)
     {
         app.m_Config.Log->Log(L"[Error] Invalid command-line options.");
         Help(app.m_Config.Log);
         app.CloseLog();
         return -1;
+    }
+
+    for (auto& result : results)
+    {
+        switch (result.Id)
+        {
+        case OptionId::OptionPresets:
+            app.m_Config.szPresetsPath = result.Params[0];
+            break;
+        case OptionId::OptionPreset:
+            app.m_Config.nCurrentPreset = std::stoi(result.Params[0]);
+            break;
+        case OptionId::OptionEngines:
+            app.m_Config.szEnginesPath = result.Params[0];
+            break;
+        case OptionId::OptionEngine:
+            app.m_Config.nCurrentEngine = std::stoi(result.Params[0]);
+            break;
+        case OptionId::OptionFiles:
+            app.m_Config.szFilesPath = result.Params[0];
+            break;
+        case OptionId::OptionMono:
+            app.m_Config.bMultiMonoInput = true;
+            break;
+        case OptionId::OptionInput:
+            for (auto& param : result.Params)
+            {
+                if (app.AddFile(param) == false)
+                {
+                    app.m_Config.Log->Log(L"[Error] Not supported input file: " + param);
+                    app.CloseLog();
+                    return -1;
+                }
+            }
+            break;
+        case OptionId::OptionOutput:
+            app.m_Config.szOutputPath = result.Params[0];
+            app.m_Config.bUseOutputPath = true;
+            break;
+        case OptionId::OptionHelp:
+            Help(app.m_Config.Log);
+            app.CloseLog();
+            return 0;
+            break;
+        default:
+            app.m_Config.Log->Log(L"[Error] Unknown option.");
+            Help(app.m_Config.Log);
+            app.CloseLog();
+            return -1;
+            break;
+        }
     }
 
     if (app.LoadPresets(app.m_Config.szPresetsPath))
@@ -530,7 +508,6 @@ int wmain(int argc, wchar_t *argv[])
                 L" file" + ((pContext->nEncodedFiles == 1) ? L"" : L"s") +
                 L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
         }
-
         app.CloseLog();
         return 0;
     }
