@@ -49,7 +49,7 @@ namespace util
             return unique != results.end();
         }
     public:
-        int ParseOptions(const int argc, const wchar_t *argv[], const std::vector<Option> options, std::vector<Result>& results)
+        int ParseOptions(const int argc, wchar_t *argv[], const std::vector<Option> options, std::vector<Result>& results)
         {
             for (int i = 1; i < argc; i++)
             {
