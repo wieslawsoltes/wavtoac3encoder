@@ -160,7 +160,7 @@ var packageCliBinariesAction = new Action<string,string> ((configuration, platfo
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
     CopyFileToDirectory(File(path + "EncWAVtoAC3.CLI.exe"), outputDir);
     if (configuration == "Debug") CopyFiles(path + "*.pdb", outputDir);
-    copyConfigAction(output);
+    CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
     if (platform == "Win32") copyEnginesX86Action(output);
     if (platform == "x64") copyEnginesX64Action(output);
     Zip(outputDir, outputZip);

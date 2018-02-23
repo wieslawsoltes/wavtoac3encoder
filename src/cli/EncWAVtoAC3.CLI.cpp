@@ -1,9 +1,5 @@
 ﻿#include "stdafx.h"
 
-#define FILENAME_PRESETS std::wstring(L"EncWAVtoAC3.presets")
-#define FILENAME_ENGINES std::wstring(L"EncWAVtoAC3.engines")
-#define FILENAME_FILES std::wstring(L"EncWAVtoAC3.files")
-
 class CConsoleWorkerContext : public worker::CWorkerContext
 {
 private:
@@ -54,80 +50,39 @@ public:
     }
     void SetCurrentTimerInfo(std::wstring szInfo)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void SetTotalTimerInfo(std::wstring szInfo)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
 public:
     void SetCurrentProgressRange(int nMin, int nMax)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void SetTotalProgressRange(int nMin, int nMax)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void SetCurrentProgress(int nPos)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void SetTotalProgress(int nPos)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
 public:
     void StartCurrentTimer(int nResolution)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void StopCurrentTimer()
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void StartTotalTimer(int nResolution)
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
     void StopTotalTimer()
     {
-        if (IsValid())
-        {
-            // TODO:
-        }
     }
 public:
     void Close()
     {
-        // TODO:
     }
 };
 
@@ -187,7 +142,17 @@ public:
             this->m_Config.m_Files.emplace_back(file);
             return true;
         }
+        this->m_Config.Log->Log(L"[Error] Not supported input file: " + szPath);
         return false;
+    }
+    bool AddFiles(const std::vector<std::wstring>& files)
+    {
+        for (auto& file : files)
+        {
+            if (this->AddFile(file) == false)
+                return false;
+        }
+        return true;
     }
 public:
     void OpenLog()
@@ -218,6 +183,12 @@ public:
         this->m_Config.InitDefaultEngine();
         this->m_Config.m_Presets.emplace_back(this->m_Config.m_DefaultPreset);
         this->m_Config.m_Engines.emplace_back(this->m_Config.m_DefaultEngine);
+        this->m_Config.szLogPath = L"";
+        this->m_Config.szConfigPath = L"";
+        this->m_Config.szLangPath = L"";
+        this->m_Config.szPresetsPath = L"";
+        this->m_Config.szEnginesPath = L"";
+        this->m_Config.szFilesPath = L"";
     }
     void DefaultPresets()
     {
@@ -241,6 +212,7 @@ public:
 #endif
         this->m_Config.nCurrentEngine = 0;
     }
+public:
     bool LoadPresets(const std::wstring &szFileName)
     {
         std::vector<config::CPreset> presets;
@@ -275,6 +247,154 @@ public:
         }
         return false;
     }
+public:
+    bool Init()
+    {
+        if (!this->m_Config.szPresetsPath.empty() && this->LoadPresets(this->m_Config.szPresetsPath))
+        {
+            this->m_Config.Log->Log(L"[Info] Loaded presets: " + this->m_Config.szPresetsPath);
+        }
+        else
+        {
+            this->DefaultPresets();
+            this->m_Config.Log->Log(L"[Info] Using default presets.");
+        }
+
+        if (!this->m_Config.szEnginesPath.empty() && this->LoadEngines(this->m_Config.szEnginesPath))
+        {
+            this->m_Config.Log->Log(L"[Info] Loaded engines: " + this->m_Config.szEnginesPath);
+        }
+        else
+        {
+            this->DefaultEngines();
+            this->m_Config.Log->Log(L"[Info] Using default engines.");
+        }
+
+        if (!this->m_Config.szFilesPath.empty() && this->LoadFiles(this->m_Config.szFilesPath))
+        {
+            this->m_Config.Log->Log(L"[Info] Loaded files: " + this->m_Config.szFilesPath);
+        }
+        else
+        {
+            this->m_Config.Log->Log(L"[Error] Failed to load files: " + this->m_Config.szFilesPath);
+            return false;
+        }
+
+        int nItemsCount = this->m_Config.m_Files.size();
+        if (nItemsCount <= 0)
+        {
+            this->m_Config.Log->Log(L"[Error] Add at least one file to the file list.");
+            return false1;
+        }
+
+        if ((this->m_Config.bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
+        {
+            this->m_Config.Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
+            return false;
+        }
+
+        if (this->m_Config.m_bIsPortable == true)
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+
+        return true;
+    }
+    bool Encode()
+    {
+        std::unique_ptr<worker::CWorkerContext> pContext = std::make_unique<CConsoleWorkerContext>(this->m_Config.Log);
+
+        pContext->bTerminate = false;
+        pContext->bCanUpdateWindow = true;
+        pContext->nEncodedFiles = 0;
+        pContext->m_ElapsedTimeFile = 0;
+        pContext->m_ElapsedTimeTotal = 0;
+        pContext->nTotalSize = 0;
+
+        for (int i = 0; i < nItemsCount; i++)
+        {
+            config::CFile& file = this->m_Config.m_Files[i];
+            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
+            {
+                if (this->m_Config.bMultiMonoInput == true)
+                {
+                    this->m_Config.Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
+                    return false;
+                }
+            }
+            file.bStatus = false;
+            pContext->nTotalSize += file.nSize;
+        }
+
+        if (!this->m_Config.szOutputPath.empty())
+        {
+            if (this->m_Config.bMultiMonoInput == false)
+            {
+                if (util::Utilities::MakeFullPath(this->m_Config.szOutputPath) == false)
+                {
+                    this->m_Config.Log->Log(L"[Error] Failed to create output path: " + this->m_Config.szOutputPath);
+                    return false;
+                }
+            }
+            else
+            {
+                std::wstring szFile = util::Utilities::GetFileName(this->m_Config.szOutputPath);
+                std::wstring szOutputPath = this->m_Config.szOutputPath.substr(0, this->m_Config.szOutputPath.length() - szFile.length());
+                if (util::Utilities::MakeFullPath(szOutputPath) == false)
+                {
+                    this->m_Config.Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
+                    return false;
+                }
+            }
+            this->m_Config.bUseOutputPath = true;
+        }
+
+        util::CTimeCount countTime;
+        countTime.Start();
+
+        std::thread m_Thread = std::thread([&app, &pContext]()
+        {
+            try
+            {
+                worker::CWorker m_Worker(pContext);
+                m_Worker.Run(&this->m_Config);
+            }
+            catch (...)
+            {
+                this->m_Config.Log->Log(L"[Error] Unknown exception thrown while encoding.");
+            }
+            pContext->bTerminate = true;
+            pContext->Close();
+        });
+
+        m_Thread.join();
+        countTime.Stop();
+
+        std::wstring szElapsedFormatted = countTime.Format(countTime.ElapsedTime());
+        double szElapsedSeconds = countTime.ElapsedTime().count() / 1000.0f;
+
+        if (pContext->nEncodedFiles <= 0)
+        {
+            this->m_Config.Log->Log(L"[Error] Failed to encode all files.");
+            return false;
+        }
+        else
+        {
+            if (this->m_Config.bMultiMonoInput == true)
+            {
+                this->m_Config.Log->Log(
+                    L"[Info] Encoded " + std::to_wstring(pContext->nEncodedFiles) +
+                    L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
+            }
+            else
+            {
+                this->m_Config.Log->Log(
+                    L"[Info] Encoded " + std::to_wstring(pContext->nEncodedFiles) +
+                    L" file" + ((pContext->nEncodedFiles == 1) ? L"" : L"s") +
+                    L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
+            }
+            return true;
+        }
+    }
 };
 
 void Help(std::unique_ptr<logger::ILog>& log)
@@ -292,48 +412,42 @@ void Help(std::unique_ptr<logger::ILog>& log)
     log->Log(L"--help,-h                           Show command-line help.");
 }
 
+enum OptionId : int
+{
+    OptionPresets,
+    OptionPreset,
+    OptionEngines,
+    OptionEngine,
+    OptionFiles,
+    OptionMono,
+    OptionInput,
+    OptionOutput,
+    OptionHelp
+};
+
+std::vector<util::Option> m_Options
+{
+    { OptionId::OptionPresets, { L"--presets"       }, 1  },
+    { OptionId::OptionPreset,  { L"--preset", L"-p" }, 1  },
+    { OptionId::OptionEngines, { L"--engines"       }, 1  },
+    { OptionId::OptionEngine,  { L"--engine", L"-e" }, 1  },
+    { OptionId::OptionFiles,   { L"--files"         }, 1  },
+    { OptionId::OptionMono,    { L"--mono", L"-m"   }, 0  },
+    { OptionId::OptionInput,   { L"--input", L"-i"  }, -1 },
+    { OptionId::OptionOutput,  { L"--output", L"-o" }, 1  },
+    { OptionId::OptionHelp,    { L"--help", L"-h"   }, 0  }
+};
+
 int wmain(int argc, wchar_t *argv[])
 {
     App app;
+
     app.OpenLog();
-
     app.DefaultConfig();
-    app.m_Config.szLogPath = L"";
-    app.m_Config.szConfigPath = L"";
-    app.m_Config.szLangPath = L"";
-    app.m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
-    app.m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
-    app.m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
-
-    enum OptionId : int
-    {
-        OptionPresets,
-        OptionPreset,
-        OptionEngines,
-        OptionEngine,
-        OptionFiles,
-        OptionMono,
-        OptionInput,
-        OptionOutput,
-        OptionHelp
-    };
-
-    std::vector<util::Option> options
-    {
-        { OptionId::OptionPresets, { L"--presets"       }, 1  },
-        { OptionId::OptionPreset,  { L"--preset", L"-p" }, 1  },
-        { OptionId::OptionEngines, { L"--engines"       }, 1  },
-        { OptionId::OptionEngine,  { L"--engine", L"-e" }, 1  },
-        { OptionId::OptionFiles,   { L"--files"         }, 1  },
-        { OptionId::OptionMono,    { L"--mono", L"-m"   }, 0  },
-        { OptionId::OptionInput,   { L"--input", L"-i"  }, -1 },
-        { OptionId::OptionOutput,  { L"--output", L"-o" }, 1  },
-        { OptionId::OptionHelp,    { L"--help", L"-h"   }, 0  }
-    };
 
     std::vector<util::Result> results;
     util::ArgvParser parser { false };
-    if (parser.ParseOptions(argc, argv, options, results) != 0)
+    if (parser.ParseOptions(argc, argv, m_Options, results) != 0)
     {
         app.m_Config.Log->Log(L"[Error] Invalid command-line options.");
         Help(app.m_Config.Log);
@@ -364,14 +478,10 @@ int wmain(int argc, wchar_t *argv[])
             app.m_Config.bMultiMonoInput = true;
             break;
         case OptionId::OptionInput:
-            for (auto& param : result.Params)
+            if (app.AddFiles(Params) == false)
             {
-                if (app.AddFile(param) == false)
-                {
-                    app.m_Config.Log->Log(L"[Error] Not supported input file: " + param);
-                    app.CloseLog();
-                    return -1;
-                }
+                app.CloseLog();
+                return -1;
             }
             break;
         case OptionId::OptionOutput:
@@ -381,159 +491,25 @@ int wmain(int argc, wchar_t *argv[])
             Help(app.m_Config.Log);
             app.CloseLog();
             return 0;
-            break;
         default:
             app.m_Config.Log->Log(L"[Error] Unknown option.");
             Help(app.m_Config.Log);
             app.CloseLog();
             return -1;
-            break;
         }
     }
 
-    if (app.LoadPresets(app.m_Config.szPresetsPath))
+    if (app.Init() == false)
     {
-        app.m_Config.Log->Log(L"[Info] Loaded presets: " + app.m_Config.szPresetsPath);
-    }
-    else
-    {
-        app.DefaultPresets();
-        app.m_Config.Log->Log(L"[Info] Using default presets.");
-    }
-
-    if (app.LoadEngines(app.m_Config.szEnginesPath))
-    {
-        app.m_Config.Log->Log(L"[Info] Loaded engines: " + app.m_Config.szEnginesPath);
-    }
-    else
-    {
-        app.DefaultEngines();
-        app.m_Config.Log->Log(L"[Info] Using default engines.");
-    }
-
-    if (app.LoadFiles(app.m_Config.szFilesPath))
-    {
-        app.m_Config.Log->Log(L"[Info] Loaded files: " + app.m_Config.szFilesPath);
-    }   
-    else
-    {
-        if (app.m_Config.m_Files.size() <= 0)
-        {
-            app.m_Config.Log->Log(L"[Error] Failed to load files: " + app.m_Config.szFilesPath);
-            return -1;
-        }
-    }
-
-    int nItemsCount = app.m_Config.m_Files.size();
-    if (nItemsCount <= 0)
-    {
-        app.m_Config.Log->Log(L"[Error] Add at least one file to the file list.");
-        return -1;
-    }
-
-    if ((app.m_Config.bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
-    {
-        app.m_Config.Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
-        return -1;
-    }
-
-    if (app.m_Config.m_bIsPortable == true)
-        ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-
-    std::unique_ptr<worker::CWorkerContext> pContext = std::make_unique<CConsoleWorkerContext>(app.m_Config.Log);
-
-    pContext->bTerminate = false;
-    pContext->bCanUpdateWindow = true;
-    pContext->nEncodedFiles = 0;
-    pContext->m_ElapsedTimeFile = 0;
-    pContext->m_ElapsedTimeTotal = 0;
-    pContext->nTotalSize = 0;
-
-    for (int i = 0; i < nItemsCount; i++)
-    {
-        config::CFile& file = app.m_Config.m_Files[i];
-        std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
-        {
-            if (app.m_Config.bMultiMonoInput == true)
-            {
-                app.m_Config.Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
-                return -1;
-            }
-        }
-        file.bStatus = false;
-        pContext->nTotalSize += file.nSize;
-    }
-
-    if (!app.m_Config.szOutputPath.empty())
-    {
-        if (app.m_Config.bMultiMonoInput == false)
-        {
-            if (util::Utilities::MakeFullPath(app.m_Config.szOutputPath) == false)
-            {
-                app.m_Config.Log->Log(L"[Error] Failed to create output path: " + app.m_Config.szOutputPath);
-                return -1;
-            }
-        }
-        else
-        {
-            std::wstring szFile = util::Utilities::GetFileName(app.m_Config.szOutputPath);
-            std::wstring szOutputPath = app.m_Config.szOutputPath.substr(0, app.m_Config.szOutputPath.length() - szFile.length());
-            if (util::Utilities::MakeFullPath(szOutputPath) == false)
-            {
-                app.m_Config.Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
-                return -1;
-            }
-        }
-        app.m_Config.bUseOutputPath = true;
-    }
-
-    util::CTimeCount countTime;
-    countTime.Start();
-
-    std::thread m_Thread = std::thread([&app, &pContext]()
-    {
-        try
-        {
-            worker::CWorker m_Worker(pContext);
-            m_Worker.Run(&app.m_Config);
-        }
-        catch (...)
-        {
-            app.m_Config.Log->Log(L"[Error] Unknown exception thrown while encoding.");
-        }
-        pContext->bTerminate = true;
-        pContext->Close();
-    });
-
-    m_Thread.join();
-    countTime.Stop();
-
-    std::wstring szElapsedFormatted = countTime.Format(countTime.ElapsedTime());
-    double szElapsedSeconds = countTime.ElapsedTime().count() / 1000.0f;
-
-    if (pContext->nEncodedFiles <= 0)
-    {
-        app.m_Config.Log->Log(L"[Error] Failed to encode all files.");
         app.CloseLog();
         return -1;
     }
-    else
+
+    if (app.Encode() == false)
     {
-        if (app.m_Config.bMultiMonoInput == true)
-        {
-            app.m_Config.Log->Log(
-                L"[Info] Encoded " + std::to_wstring(pContext->nEncodedFiles) +
-                L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
-        }
-        else
-        {
-            app.m_Config.Log->Log(
-                L"[Info] Encoded " + std::to_wstring(pContext->nEncodedFiles) +
-                L" file" + ((pContext->nEncodedFiles == 1) ? L"" : L"s") +
-                L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
-        }
         app.CloseLog();
-        return 0;
+        return -1;
     }
+
+    return 0;
 }
