@@ -130,6 +130,7 @@ namespace dialogs
             if (IsValid())
             {
                 pWorkDlg->m_PrgCurrent.SetRange(nMin, nMax);
+                pWorkDlg->m_PrgCurrent.SetPos(0);
             }
         }
         void SetTotalProgressRange(int nMin, int nMax)
@@ -137,6 +138,7 @@ namespace dialogs
             if (IsValid())
             {
                 pWorkDlg->m_PrgTotal.SetRange32(nMin, nMax);
+                pWorkDlg->m_PrgTotal.SetPos(0);
             }
         }
         void SetCurrentProgress(int nPos)

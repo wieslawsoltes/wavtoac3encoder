@@ -507,6 +507,8 @@ namespace worker
         __int64 nInPrevCurPos = 0;
         __int64 nOutPrevCurPos = 0;
 
+        pContext->SetCurrentProgress(0);
+
         do
         {
             if (pContext->bTerminate == true)
@@ -634,8 +636,6 @@ namespace worker
     {
         pContext->SetCurrentProgressRange(0, 100);
         pContext->SetTotalProgressRange(0, 100);
-        pContext->SetCurrentProgress(0);
-        pContext->SetTotalProgress(0);
         pContext->StopCurrentTimer();
         pContext->m_ElapsedTimeTotal = 0L;
         pContext->SetTotalTimerInfo(pConfig->GetString(0x00A01006) + L" 00:00:00");
@@ -680,7 +680,6 @@ namespace worker
                 pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
                 pContext->m_ElapsedTimeFile = 0L;
                 pContext->StartCurrentTimer(250);
-                pContext->SetCurrentProgress(0);
 
                 if (this->OpenEngine(state, pConfig) == false)
                 {
@@ -759,7 +758,6 @@ namespace worker
             pContext->SetCurrentTimerInfo(pConfig->GetString(0x00A01005) + L" 00:00:00");
             pContext->m_ElapsedTimeFile = 0L;
             pContext->StartCurrentTimer(250);
-            pContext->SetCurrentProgress(0);
 
             if (this->OpenEngine(state, pConfig) == false)
             {
