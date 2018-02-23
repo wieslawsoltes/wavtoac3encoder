@@ -284,7 +284,7 @@ public:
         if (nItemsCount <= 0)
         {
             this->m_Config.Log->Log(L"[Error] Add at least one file to the file list.");
-            return false1;
+            return false;
         }
 
         if ((this->m_Config.bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
@@ -309,6 +309,7 @@ public:
         pContext->m_ElapsedTimeTotal = 0;
         pContext->nTotalSize = 0;
 
+        int nItemsCount = this->m_Config.m_Files.size();
         for (int i = 0; i < nItemsCount; i++)
         {
             config::CFile& file = this->m_Config.m_Files[i];
@@ -351,7 +352,7 @@ public:
         util::CTimeCount countTime;
         countTime.Start();
 
-        std::thread m_Thread = std::thread([&app, &pContext]()
+        std::thread m_Thread = std::thread([this, &pContext]()
         {
             try
             {
@@ -478,7 +479,7 @@ int wmain(int argc, wchar_t *argv[])
             app.m_Config.bMultiMonoInput = true;
             break;
         case OptionId::OptionInput:
-            if (app.AddFiles(Params) == false)
+            if (app.AddFiles(result.Params) == false)
             {
                 app.CloseLog();
                 return -1;
