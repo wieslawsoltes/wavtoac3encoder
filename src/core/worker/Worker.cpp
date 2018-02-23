@@ -260,7 +260,7 @@ namespace worker
     {
         void(*aften_remap)(void *samples, int n, int ch, A52SampleFormat fmt, int acmod) = nullptr;
         int nr, fs;
-        uint32_t samplecount, bytecount, t0, t1, percent;
+        uint32_t samplecount, bytecount, t0, t1, percent, previousPercent;
         FLOAT kbps, qual, bw;
         int last_frame;
         int frame_cnt;
@@ -458,6 +458,7 @@ namespace worker
             return Error(L"[Error] Failed to allocate samples memory.");
 
         samplecount = bytecount = t0 = t1 = percent = 0;
+        previousPercent = -1;
         qual = bw = 0.0;
         last_frame = 0;
         frame_cnt = 0;
@@ -585,7 +586,11 @@ namespace worker
                     {
                         pContext->bCanUpdateWindow = false;
                         nInPrevCurPos = nCurPos;
-                        pContext->SetCurrentProgress(percent);
+                        if (percent != previousPercent)
+                        {
+                            pContext->SetCurrentProgress(percent);
+                            previousPercent = percent;
+                        }
                         pContext->SetTotalProgress(nCurTotalPos);
                         pContext->bCanUpdateWindow = true;
                     }
