@@ -218,7 +218,7 @@ public:
             {
                 if (this->AddFile(file) == false)
                 {
-                    this->m_Config.Log->Log(L"[Error] Not supported input file: " + szPath);
+                    this->m_Config.Log->Log(L"[Error] Not supported input file: " + file);
                     return false;
                 }
             }
