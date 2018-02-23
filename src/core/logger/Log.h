@@ -16,7 +16,7 @@ namespace logger
     public:
         virtual bool Open() = 0;
         virtual void Close() = 0;
-        virtual void Log(const std::wstring szMessage) = 0;
+        virtual void Log(const std::wstring szMessage, const bool bNewLine = true) = 0;
     };
 
     class ConsoleLog : public ILog
@@ -37,11 +37,13 @@ namespace logger
         void Close()
         {
         }
-        void Log(const std::wstring szMessage)
+        void Log(const std::wstring szMessage, const bool bNewLine = true)
         {
             try
             {
-                std::wstring szData = szMessage + L"\n";
+                std::wstring szData = szMessage;
+                if (bNewLine)
+                    szData += L"\n";
                 std::string szAnsi = util::StringHelper::Convert(szData);
                 std::fwrite(szAnsi.data(), sizeof(char), szAnsi.size(), stderr);
                 std::fflush(stderr);
@@ -82,11 +84,13 @@ namespace logger
             }
             catch (...) { }
         }
-        void Log(const std::wstring szMessage)
+        void Log(const std::wstring szMessage, const bool bNewLine = true)
         {
             try
             {
-                std::wstring szData = szMessage + L"\n";
+                std::wstring szData = szMessage;
+                if (bNewLine)
+                    szData += L"\n";
                 if (fs)
                 {
                     std::fwrite(szData.data(), sizeof(wchar_t), szData.size(), fs);
