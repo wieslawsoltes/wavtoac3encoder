@@ -12,7 +12,7 @@ void Help(std::unique_ptr<logger::ILog>& log)
     log->Log(L"--engine,-e <index>                 Set current engine, default: 0.");
     log->Log(L"--files <input.files|input.mux>     Input files or mux file.");
     log->Log(L"--mono,-m                           Set multi-mono input files flag.");
-    log->Log(L"--input,-i <filename,...>           Input file names (one or more).");
+    log->Log(L"--input,-i <filename,...|*.wav>     Input file names or path with wildcard.");
     log->Log(L"--output,-o <path|file.ac3>         Output path or output file name.");
     log->Log(L"--help,-h                           Show command-line help.");
 }

@@ -164,8 +164,20 @@ public:
     {
         for (auto& file : files)
         {
-            if (this->AddFile(file) == false)
-                return false;
+            std::vector<std::wstring> findFiles;
+            if (util::Utilities::FindFiles(file, findFiles, true) == true)
+            {
+                for (auto& findFile : findFiles)
+                {
+                    if (this->AddFile(findFile) == false)
+                        return false;
+                }
+            }
+            else
+            {
+                if (this->AddFile(file) == false)
+                    return false;
+            }
         }
         return true;
     }
