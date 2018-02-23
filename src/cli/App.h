@@ -147,42 +147,6 @@ public:
         }
         return 0;
     }
-    bool FindFiles(const std::wstring pattern, std::vector<std::wstring>& files)
-    {
-        try
-        {
-            WIN32_FIND_DATA w32FileData;
-            ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
-            HANDLE hSearch = FindFirstFile(pattern.c_str(), &w32FileData);
-            if (hSearch == INVALID_HANDLE_VALUE)
-                return false;
-
-            BOOL fFinished = FALSE;
-            while (fFinished == FALSE)
-            {
-                if (w32FileData.cFileName[0] != '.' && !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
-                {
-                    std::wstring szFileName = w32FileData.cFileName;
-                    std::wstring szFilePath = util::Utilities::GetFilePath(pattern) + szFileName;
-                    files.push_back(szFilePath);
-                }
-                if (FindNextFile(hSearch, &w32FileData) == FALSE)
-                {
-                    if (GetLastError() == ERROR_NO_MORE_FILES)
-                        fFinished = TRUE;
-                    else
-                        return false;
-                }
-            }
-            if (FindClose(hSearch) == FALSE)
-                return false;
-        }
-        catch (...)
-        {
-            return false;
-        }
-        return true;
-    }
     bool AddFile(const std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
@@ -197,8 +161,8 @@ public:
     }
     bool AddPath(const std::wstring pattern)
     {
-        std::vector<std::wstring> files;
-        if (this->FindFiles(pattern, files) == true)
+        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
+        if (files.size() > 0)
         {
             for (auto& file : files)
                 this->AddFile(file);
