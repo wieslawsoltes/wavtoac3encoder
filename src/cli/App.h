@@ -75,7 +75,9 @@ public:
     }
     void SetCurrentProgress(int nPos)
     {
-        pLog->Log(L("\r[Info] Progress: " + std::to_wstring(nPos) + L("%%"), false);
+        pLog->Log(L"\r[Info] Progress: " + std::to_wstring(nPos) + L"%%", false);
+        if (nPoss == 100)
+            pLog->Log(L"\n[Info] Done.", true);
     }
     void SetTotalProgress(int nPos)
     {
