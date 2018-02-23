@@ -270,14 +270,17 @@ public:
             this->m_Config.Log->Log(L"[Info] Using default engines.");
         }
 
-        if (!this->m_Config.szFilesPath.empty() && this->LoadFiles(this->m_Config.szFilesPath))
+        if (!this->m_Config.szFilesPath.empty())
         {
-            this->m_Config.Log->Log(L"[Info] Loaded files: " + this->m_Config.szFilesPath);
-        }
-        else
-        {
-            this->m_Config.Log->Log(L"[Error] Failed to load files: " + this->m_Config.szFilesPath);
-            return false;
+            if (this->LoadFiles(this->m_Config.szFilesPath))
+            {
+                this->m_Config.Log->Log(L"[Info] Loaded files: " + this->m_Config.szFilesPath);
+            }
+            else
+            {
+                this->m_Config.Log->Log(L"[Error] Failed to load files: " + this->m_Config.szFilesPath);
+                return false;
+            }
         }
 
         int nItemsCount = this->m_Config.m_Files.size();
