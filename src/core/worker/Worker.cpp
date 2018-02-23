@@ -503,7 +503,8 @@ namespace worker
 
         this->SetInfo(state, pConfig);
 
-        int nCurTotalPos = 0;
+        int nTotalPercent = 0;
+        int nPreviousTotalPercent = -1;
         __int64 nCurPos = 0;
         __int64 nInPrevCurPos = 0;
         __int64 nOutPrevCurPos = 0;
@@ -580,18 +581,25 @@ namespace worker
                     }
 
                     percent = (100 * nCurPos) / state.nInTotalSize;
-                    nCurTotalPos = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
+                    nTotalPercent = (100 * (pContext->nTotalSizeCounter + nCurPos)) / pContext->nTotalSize;
 
                     if (pContext->bCanUpdateWindow == true)
                     {
                         pContext->bCanUpdateWindow = false;
                         nInPrevCurPos = nCurPos;
+
                         if (percent != previousPercent)
                         {
                             pContext->SetCurrentProgress(percent);
                             previousPercent = percent;
                         }
-                        pContext->SetTotalProgress(nCurTotalPos);
+
+                        if (nTotalPercent != nPreviousTotalPercent)
+                        {
+                            pContext->SetTotalProgress(nTotalPercent);
+                            nPreviousTotalPercent = nTotalPercent;
+                        }
+
                         pContext->bCanUpdateWindow = true;
                     }
                 }
