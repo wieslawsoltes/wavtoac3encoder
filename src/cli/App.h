@@ -176,7 +176,7 @@ public:
                 if (w32FileData.cFileName[0] != '.' && !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
                 {
                     std::wstring szFileName = w32FileData.cFileName;
-                    std::wstring szFilePath = util::Utilities::GetFullPathName(szFile);
+                    std::wstring szFilePath = util::Utilities::GetFullPathName(szFileName);
                     files.push_back(szFilePath);
                 }
                 if (FindNextFile(hSearch, &w32FileData) == FALSE)
@@ -201,7 +201,7 @@ public:
         for (auto& file : files)
         {
             std::vector<std::wstring> findFiles;
-            if (this->FindFiles(file, findFiles, true) == true)
+            if (this->FindFiles(file, findFiles) == true)
             {
                 for (auto& findFile : findFiles)
                     this->AddFile(findFile);
