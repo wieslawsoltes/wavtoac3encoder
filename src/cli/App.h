@@ -176,7 +176,7 @@ public:
                 if (w32FileData.cFileName[0] != '.' && !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
                 {
                     std::wstring szFileName = w32FileData.cFileName;
-                    std::wstring szFilePath = util::Utilities::GetFullPathName(szFileName);
+                    std::wstring szFilePath = util::Utilities::GetFilePath(pattern) + L"\\" + szFileName;
                     files.push_back(szFilePath);
                 }
                 if (FindNextFile(hSearch, &w32FileData) == FALSE)
