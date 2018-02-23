@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="ArgvParser.h" />
   </ItemGroup>
   <ItemGroup>

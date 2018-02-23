@@ -21,6 +21,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="ArgvParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
