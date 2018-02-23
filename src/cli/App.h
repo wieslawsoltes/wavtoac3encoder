@@ -160,18 +160,51 @@ public:
         this->m_Config.Log->Log(L"[Error] Not supported input file: " + szPath);
         return false;
     }
+    bool FindFiles(const std::wstring pattern, std::vector<std::wstring>& files)
+    {
+        try
+        {
+            WIN32_FIND_DATA w32FileData;
+            ZeroMemory(&w32FileData, sizeof(WIN32_FIND_DATA));
+            HANDLE hSearch = FindFirstFile(pattern.c_str(), &w32FileData);
+            if (hSearch == INVALID_HANDLE_VALUE)
+                return false;
+
+            BOOL fFinished = FALSE;
+            while (fFinished == FALSE)
+            {
+                if (w32FileData.cFileName[0] != '.' && !(w32FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+                {
+                    std::wstring szFileName = w32FileData.cFileName;
+                    std::wstring szFilePath = util::Utilities::GetFullPathName(szFile);
+                    files.push_back(szFilePath);
+                }
+                if (FindNextFile(hSearch, &w32FileData) == FALSE)
+                {
+                    if (GetLastError() == ERROR_NO_MORE_FILES)
+                        fFinished = TRUE;
+                    else
+                        return false;
+                }
+            }
+            if (FindClose(hSearch) == FALSE)
+                return false;
+        }
+        catch (...)
+        {
+            return false;
+        }
+        return true;
+    }
     bool AddFiles(const std::vector<std::wstring>& files)
     {
         for (auto& file : files)
         {
             std::vector<std::wstring> findFiles;
-            if (util::Utilities::FindFiles(file, findFiles, true) == true)
+            if (this->FindFiles(file, findFiles, true) == true)
             {
                 for (auto& findFile : findFiles)
-                {
-                    if (this->AddFile(findFile) == false)
-                        return false;
-                }
+                    this->AddFile(findFile);
             }
             else
             {
