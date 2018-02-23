@@ -147,19 +147,6 @@ public:
         }
         return 0;
     }
-    bool AddFile(const std::wstring& szPath)
-    {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (this->m_Config.IsSupportedInputExt(szExt) == true)
-        {
-            ULONGLONG nSize = this->GetFileSize(szPath);
-            config::CFile file{ szPath, nSize };
-            this->m_Config.m_Files.emplace_back(file);
-            return true;
-        }
-        this->m_Config.Log->Log(L"[Error] Not supported input file: " + szPath);
-        return false;
-    }
     bool FindFiles(const std::wstring pattern, std::vector<std::wstring>& files)
     {
         try
@@ -196,20 +183,44 @@ public:
         }
         return true;
     }
+    bool AddFile(const std::wstring& szPath)
+    {
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (this->m_Config.IsSupportedInputExt(szExt) == true)
+        {
+            ULONGLONG nSize = this->GetFileSize(szPath);
+            config::CFile file{ szPath, nSize };
+            this->m_Config.m_Files.emplace_back(file);
+            return true;
+        }
+        return false;
+    }
+    bool AddPath(const std::wstring pattern)
+    {
+        std::vector<std::wstring> files;
+        if (this->FindFiles(pattern, files) == true)
+        {
+            for (auto& file : files)
+                this->AddFile(file);
+            return true;
+        }
+        return false;
+    }
     bool AddFiles(const std::vector<std::wstring>& files)
     {
         for (auto& file : files)
         {
-            std::vector<std::wstring> findFiles;
-            if (this->FindFiles(file, findFiles) == true)
+            if (file.find('*', 0) != std::wstring::npos)
             {
-                for (auto& findFile : findFiles)
-                    this->AddFile(findFile);
+                this->AddPath(file);
             }
             else
             {
                 if (this->AddFile(file) == false)
+                {
+                    this->m_Config.Log->Log(L"[Error] Not supported input file: " + szPath);
                     return false;
+                }
             }
         }
         return true;
@@ -297,13 +308,11 @@ public:
     }
     bool LoadFiles(const std::wstring &szFileName)
     {
-        std::vector<std::wstring> fl;
-        if (this->m_Config.LoadFiles(szFileName, fl))
+        std::vector<std::wstring> files;
+        if (this->m_Config.LoadFiles(szFileName, files))
         {
             this->m_Config.m_Files.clear();
-            for (int i = 0; i < (int)fl.size(); i++)
-                this->AddFile(fl[i]);
-            return true;
+            return this->AddFiles(files);
         }
         return false;
     }
