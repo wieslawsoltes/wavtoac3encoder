@@ -215,7 +215,7 @@ namespace dialogs
         {
             try
             {
-                this->SaveAllConfiguration();
+                this->SaveConfiguration();
             }
             catch (...)
             {
@@ -963,7 +963,7 @@ namespace dialogs
             this->m_EdtThreads.SetWindowText(std::to_wstring(engine.nThreads).c_str());
     }
 
-    bool CMainDlg::LoadProgramEngines(std::wstring szFileName)
+    bool CMainDlg::LoadEngines(std::wstring szFileName)
     {
         std::vector<config::CEngine> engines;
         if (this->pConfig->LoadEngines(engines, szFileName) == true)
@@ -978,28 +978,25 @@ namespace dialogs
         return false;
     }
 
-    bool CMainDlg::SaveProgramEngines(std::wstring szFileName)
+    bool CMainDlg::SaveEngines(std::wstring szFileName)
     {
         return this->pConfig->SaveEngines(this->pConfig->m_Engines, szFileName);
     }
 
-    bool CMainDlg::LoadFilesList(std::wstring &szFileName)
+    bool CMainDlg::LoadFiles(std::wstring &szFileName)
     {
-        std::vector<std::wstring> fl;
-        if (this->pConfig->LoadFiles(szFileName, fl))
+        std::vector<std::wstring> files;
+        if (this->pConfig->LoadFiles(szFileName, files))
         {
             this->pConfig->m_Files.clear();
-            for (int i = 0; i < (int)fl.size(); i++)
-            {
-                this->AddFile(fl[i]);
-            }
+            this->AddFiles(files);
             this->RedrawFiles();
             return true;
         }
         return false;
     }
 
-    bool CMainDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
+    bool CMainDlg::SaveFiles(std::wstring &szFileName, int nFormat)
     {
         std::vector<std::wstring> fl;
         for (int i = 0; i < (int)this->pConfig->m_Files.size(); i++)
@@ -1010,7 +1007,7 @@ namespace dialogs
         return this->pConfig->SaveFiles(szFileName, fl, nFormat);
     }
 
-    void CMainDlg::LoadAllConfiguration()
+    void CMainDlg::LoadConfiguration()
     {
         bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
@@ -1038,7 +1035,7 @@ namespace dialogs
             }
         }
 
-        bool bEnginesRet = this->LoadProgramEngines(this->pConfig->szEnginesPath);
+        bool bEnginesRet = this->LoadEngines(this->pConfig->szEnginesPath);
         if (bEnginesRet == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesPath);
         else
@@ -1050,14 +1047,14 @@ namespace dialogs
         else
             this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->LoadFilesList(this->pConfig->szFilesPath);
+        bool bFilesRet = this->LoadFiles(this->pConfig->szFilesPath);
         if (bConfigRet == true)
             this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesPath);
     }
 
-    void CMainDlg::SaveAllConfiguration()
+    void CMainDlg::SaveConfiguration()
     {
         bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
         if (bPresetsRet == true)
@@ -1065,7 +1062,7 @@ namespace dialogs
         else
             this->pConfig->Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->szPresetsPath);
 
-        bool bEnginesRet = this->SaveProgramEngines(this->pConfig->szEnginesPath);
+        bool bEnginesRet = this->SaveEngines(this->pConfig->szEnginesPath);
         if (bPresetsRet == true)
             this->pConfig->Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->szEnginesPath);
         else
@@ -1077,7 +1074,7 @@ namespace dialogs
         else
             this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->SaveFilesList(this->pConfig->szFilesPath, 0);
+        bool bFilesRet = this->SaveFiles(this->pConfig->szFilesPath, 0);
         if (bFilesRet == true)
             this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesPath);
         else
@@ -1115,6 +1112,29 @@ namespace dialogs
         this->m_StcBitrate.SetWindowText(szBuff);
     }
 
+    bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
+    {
+        if (pInfoAVS == nullptr)
+            return false;
+
+        memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
+
+        CAvs2Raw decoderAVS;
+        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
+        if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
+        {
+            this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
+            this->MessageBox(this->pConfig->GetString(0x00207022).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            return false;
+        }
+        else
+        {
+            (*pInfoAVS) = decoderAVS.GetInputInfo();
+            decoderAVS.CloseAvisynth();
+            return true;
+        }
+    }
+
     ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
@@ -1147,6 +1167,38 @@ namespace dialogs
             return true;
         }
         return false;
+    }
+
+    bool CMainDlg::AddPath(const std::wstring pattern)
+    {
+        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
+        if (files.size() > 0)
+        {
+            for (auto& file : files)
+                this->AddFile(file);
+            return true;
+        }
+        return false;
+    }
+
+    bool CMainDlg::AddFiles(const std::vector<std::wstring>& files)
+    {
+        for (auto& file : files)
+        {
+            if (file.find('*', 0) != std::wstring::npos)
+            {
+                this->AddPath(file);
+            }
+            else
+            {
+                if (this->AddFile(file) == false)
+                {
+                    this->pConfig->Log->Log(L"[Error] Not supported input file: " + file);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     void CMainDlg::RedrawFiles()
@@ -1233,24 +1285,25 @@ namespace dialogs
         int nCount = ::DragQueryFile(hDropInfo, (UINT)0xFFFFFFFF, nullptr, 0);
         if (nCount > 0)
         {
+            std::vector<std::wstring> paths;
+
             for (int i = 0; i < nCount; i++)
             {
                 int nReqChars = ::DragQueryFile(hDropInfo, i, nullptr, 0);
                 CString szFile;
                 ::DragQueryFile(hDropInfo, i, szFile.GetBuffer(nReqChars * 2 + 8), nReqChars * 2 + 8);
                 szFile.ReleaseBuffer();
-
-                if (::GetFileAttributes(szFile) & FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    std::wstring szPath = szFile;
-                    this->SearchFolderForFiles(szPath, true);
-                }
-                else
-                {
-                    std::wstring szPath = szFile;
-                    this->AddFile(szPath);
-                }
+                paths.emplace_back(szFile);
             }
+
+            for (auto& path : paths)
+            {
+                if (::GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY)
+                    this->SearchFolderForFiles(path, true);
+                else
+                    this->AddFile(path);
+            }
+
             this->RedrawFiles();
         }
         ::DragFinish(hDropInfo);
@@ -1287,9 +1340,7 @@ namespace dialogs
             bool bResult = util::Utilities::FindFiles(szPath, files, bRecurse);
             if (bResult == true)
             {
-                for (auto& file : files)
-                    this->AddFile(file);
-
+                this->AddFiles(files);
                 this->RedrawFiles();
             }
         }
@@ -1816,7 +1867,7 @@ namespace dialogs
 
         try
         {
-            this->LoadAllConfiguration();
+            this->LoadConfiguration();
         }
         catch (...)
         {
@@ -2305,31 +2356,6 @@ namespace dialogs
         *pResult = 0;
     }
 
-    bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
-    {
-        if (pInfoAVS == nullptr)
-            return false;
-
-        memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
-
-        CAvs2Raw decoderAVS;
-        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
-        if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
-        {
-            this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
-            this->MessageBox(this->pConfig->GetString(0x00207022).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_ICONERROR | MB_OK);
-            return false;
-        }
-        else
-        {
-            (*pInfoAVS) = decoderAVS.GetInputInfo();
-            decoderAVS.CloseAvisynth();
-            return true;
-        }
-    }
-
     void CMainDlg::OnNMDblclkListFiles(NMHDR *pNMHDR, LRESULT *pResult)
     {
         POSITION pos = m_LstFiles.GetFirstSelectedItemPosition();
@@ -2416,11 +2442,13 @@ namespace dialogs
             if (fd.DoModal() == IDOK)
             {
                 POSITION pos = fd.GetStartPosition();
+                std::vector<std::wstring> files;
                 while (pos != nullptr)
                 {
                     std::wstring szFileName = fd.GetNextPathName(pos);
-                    this->AddFile(szFileName);
+                    files.emplace_back(szFileName);
                 }
+                this->AddFiles(files);
                 this->RedrawFiles();
             }
         }
@@ -2549,87 +2577,91 @@ namespace dialogs
             {
                 this->pConfig->m_Files.clear();
 
+                #define AddInputFile(index) this->AddFile(dlg.szInputFiles[index]);
+
                 switch (dlg.nChannelConfig)
                 {
                 case 0:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
-                    this->AddFile(dlg.szInputFiles[3]);
+                    AddInputFile(0)
+                    AddInputFile(1)
+                    AddInputFile(3)
                     break;
                 case 1:
-                    this->AddFile(dlg.szInputFiles[2]);
-                    this->AddFile(dlg.szInputFiles[3]);
+                    AddInputFile(2)
+                    AddInputFile(3)
                     break;
                 case 2:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
-                    this->AddFile(dlg.szInputFiles[3]);
+                    AddInputFile(0)
+                    AddInputFile(1)
+                    AddInputFile(3)
                     break;
                 case 3:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
-                    this->AddFile(dlg.szInputFiles[2]);
-                    this->AddFile(dlg.szInputFiles[3]);
+                    AddInputFile(0)
+                    AddInputFile(1)
+                    AddInputFile(2)
+                    AddInputFile(3)
                     break;
                 case 4:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
+                    AddInputFile(0)
+                    AddInputFile(1)
                     if (dlg.bLFE == true)
                     {
-                        this->AddFile(dlg.szInputFiles[3]);
-                        this->AddFile(dlg.szInputFiles[4]);
+                        AddInputFile(3)
+                        AddInputFile(4)
                     }
                     else
                     {
-                        this->AddFile(dlg.szInputFiles[4]);
+                        AddInputFile(4)
                     }
                     break;
                 case 5:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
-                    this->AddFile(dlg.szInputFiles[2]);
+                    AddInputFile(0)
+                    AddInputFile(1)
+                    AddInputFile(2)
                     if (dlg.bLFE == true)
                     {
-                        this->AddFile(dlg.szInputFiles[3]);
-                        this->AddFile(dlg.szInputFiles[4]);
+                        AddInputFile(3)
+                        AddInputFile(4)
                     }
                     else
                     {
-                        this->AddFile(dlg.szInputFiles[4]);
+                        AddInputFile(4)
                     }
                     break;
                 case 6:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
+                    AddInputFile(0)
+                    AddInputFile(1)
                     if (dlg.bLFE == true)
                     {
-                        this->AddFile(dlg.szInputFiles[4]);
-                        this->AddFile(dlg.szInputFiles[5]);
-                        this->AddFile(dlg.szInputFiles[3]);
+                        AddInputFile(4)
+                        AddInputFile(5)
+                        AddInputFile(3)
                     }
                     else
                     {
-                        this->AddFile(dlg.szInputFiles[4]);
-                        this->AddFile(dlg.szInputFiles[5]);
+                        AddInputFile(4)
+                        AddInputFile(5)
                     }
                     break;
                 case 7:
-                    this->AddFile(dlg.szInputFiles[0]);
-                    this->AddFile(dlg.szInputFiles[1]);
-                    this->AddFile(dlg.szInputFiles[2]);
+                    AddInputFile(0)
+                    AddInputFile(1)
+                    AddInputFile(2)
                     if (dlg.bLFE == true)
                     {
-                        this->AddFile(dlg.szInputFiles[3]);
-                        this->AddFile(dlg.szInputFiles[4]);
-                        this->AddFile(dlg.szInputFiles[5]);
+                        AddInputFile(3)
+                        AddInputFile(4)
+                        AddInputFile(5)
                     }
                     else
                     {
-                        this->AddFile(dlg.szInputFiles[4]);
-                        this->AddFile(dlg.szInputFiles[5]);
+                        AddInputFile(4)
+                        AddInputFile(5)
                     }
                     break;
                 };
+
+                #undef AddInputFile
 
                 this->RedrawFiles();
 
@@ -2689,7 +2721,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            LoadFilesList(szFileName);
+            LoadFiles(szFileName);
         }
     }
 
@@ -2711,7 +2743,7 @@ namespace dialogs
             else if (fd.GetFileExt().CompareNoCase(_T("mux")) == 0)
                 nFormat = 1;
 
-            this->SaveFilesList(szFileName, nFormat);
+            this->SaveFiles(szFileName, nFormat);
         }
     }
 
@@ -2785,7 +2817,7 @@ namespace dialogs
     {
         try
         {
-            this->LoadAllConfiguration();
+            this->LoadConfiguration();
         }
         catch (...)
         {
@@ -2797,7 +2829,7 @@ namespace dialogs
     {
         try
         {
-            this->SaveAllConfiguration();
+            this->SaveConfiguration();
         }
         catch (...)
         {
