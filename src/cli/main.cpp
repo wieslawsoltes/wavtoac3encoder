@@ -1,5 +1,5 @@
-﻿#include "targetver.h"
-#define WIN32_LEAN_AND_MEAN
+﻿#define WIN32_LEAN_AND_MEAN
+#include <SDKDDKVer.h>
 #include <Windows.h>
 #include "App.h"
 #include "utilities\ArgvParser.h"
