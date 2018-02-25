@@ -79,13 +79,13 @@ namespace app
             this->m_Config.Log->Log(L"[Error] Failed to init application.");
         }
 
+        this->m_Config.InitDefaultPreset();
+        this->m_Config.InitDefaultEngine();
+        this->m_Config.DefaultPresets();
+        this->m_Config.DefaultEngines();
+
         try
         {
-            this->m_Config.InitDefaultPreset();
-            this->m_Config.InitDefaultEngine();
-            this->m_Config.DefaultPresets();
-            this->m_Config.DefaultEngines();
-
             dialogs::CMainDlg dlg;
             m_pMainWnd = &dlg;
             dlg.pConfig = &this->m_Config;
