@@ -81,6 +81,11 @@ namespace app
 
         try
         {
+            this->m_Config.InitDefaultPreset();
+            this->m_Config.InitDefaultEngine();
+            this->m_Config.DefaultPresets();
+            this->m_Config.DefaultEngines();
+
             dialogs::CMainDlg dlg;
             m_pMainWnd = &dlg;
             dlg.pConfig = &this->m_Config;
@@ -118,8 +123,6 @@ namespace app
         this->m_Config.bDisableAllWarnings = false;
         this->m_Config.bSaveConfig = true;
         this->m_Config.nCurrentEngine = 0;
-        this->m_Config.DefaultPresets();
-        this->m_Config.DefaultEngines();
     }
 
     void CEncWAVtoAC3App::LoadConfig()

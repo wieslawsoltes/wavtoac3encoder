@@ -426,12 +426,6 @@ namespace dialogs
 
     void CMainDlg::InitDefaultPreset()
     {
-        this->pConfig->InitDefaultPreset();
-
-        this->pConfig->nCurrentPreset = 0;
-        this->m_CmbPresets.InsertString(0, pConfig->m_DefaultPreset.szName.c_str());
-        this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
-
         this->m_CmbRawSampleFormat.SetCurSel(pConfig->m_DefaultPreset.m_RawInput.nRawSampleFormat);
 
         if (pConfig->m_DefaultPreset.m_RawInput.nRawSampleRate == 0)
@@ -470,9 +464,6 @@ namespace dialogs
             this->m_SldBitrate.SetPos(pConfig->m_DefaultPreset.nQuality);
             this->m_ChkVbr.SetCheck(BST_CHECKED);
         }
-
-        auto preset = pConfig->m_DefaultPreset;
-        pConfig->m_Presets.emplace_back(preset);
     }
 
     void CMainDlg::InitRawSamleFormatComboBox()
@@ -677,11 +668,45 @@ namespace dialogs
         this->m_LstFiles.SetItemCount(this->pConfig->m_Files.size());
     }
 
+    void CMainDlg::UpdatePresets()
+    {
+        if (this->pConfig->m_Presets.size() == 0)
+        {
+            auto preset = this->pConfig->m_DefaultPreset;
+            this->pConfig->m_Presets.emplace_back(preset);
+            this->pConfig->nCurrentPreset = 0;
+
+            this->m_CmbPresets.InsertString(0, preset.szName.c_str());
+            this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
+
+            this->ApplyPresetToDlg(preset);
+        }
+        else
+        {
+            int nSize = (int)this->pConfig->m_Presets.size();
+            for (int i = 0; i < nSize; i++)
+            {
+                auto& preset = this->pConfig->m_Presets[i];
+                this->m_CmbPresets.InsertString(i, preset.szName.c_str());
+            }
+
+            if (this->pConfig->nCurrentPreset >= nSize)
+                this->pConfig->nCurrentPreset = 0;
+
+            if ((this->pConfig->nCurrentPreset >= 0) && (this->pConfig->nCurrentPreset < nSize))
+            {
+                auto& preset = this->pConfig->GetCurrentPreset();
+                this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
+                this->ApplyPresetToDlg(preset);
+            }
+        }
+    }
+
     void CMainDlg::UpdateEngines()
     {
         if (this->pConfig->m_Engines.size() == 0)
         {
-            auto engine = config::CEngine(L"Aften", L"libaften.dll");
+            auto engine = this->pConfig->m_DefaultEngine;
             this->pConfig->m_Engines.emplace_back(engine);
             this->pConfig->nCurrentEngine = 0;
 
@@ -857,15 +882,8 @@ namespace dialogs
         if (this->pConfig->LoadPresets(presets, szFileName, this->pConfig->m_DefaultPreset) == true)
         {
             this->pConfig->m_Presets = presets;
-            this->pConfig->nCurrentPreset = 0;
-
             this->m_CmbPresets.ResetContent();
-            for (int i = 0; i < (int)pConfig->m_Presets.size(); i++)
-                this->m_CmbPresets.AddString(pConfig->m_Presets[i].szName.c_str());
-
-            util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-            this->m_CmbPresets.SetCurSel(0);
-            this->OnCbnSelchangeComboPresets();
+            this->UpdatePresets();
             return true;
         }
         return false;
@@ -886,8 +904,6 @@ namespace dialogs
             this->UpdateEngines();
             return true;
         }
-        this->m_CmbEngines.ResetContent();
-        this->UpdateEngines();
         return false;
     }
 
@@ -1114,12 +1130,20 @@ namespace dialogs
         if (this->LoadPresets(this->pConfig->szPresetsPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsPath);
         else
+        {
             this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsPath);
+            this->m_CmbPresets.ResetContent();
+            this->UpdatePresets();
+        }
 
         if (this->LoadEngines(this->pConfig->szEnginesPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesPath);
         else
+        {
             this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesPath);
+            this->m_CmbEngines.ResetContent();
+            this->UpdateEngines();
+        }
 
         if (this->LoadConfig(this->pConfig->szConfigPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
@@ -1990,6 +2014,7 @@ namespace dialogs
         this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
 
         util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        this->OnCbnSelchangeComboPresets();
     }
 
     void CMainDlg::OnBnClickedButtonPresetDel()
@@ -2379,13 +2404,9 @@ namespace dialogs
         dlg.m_Engines = this->pConfig->m_Engines;
         if (dlg.DoModal() == IDOK)
         {
-            this->pConfig->m_Engines.clear();
-            this->m_CmbEngines.ResetContent();
-
             this->pConfig->m_Engines = dlg.m_Engines;
-
+            this->m_CmbEngines.ResetContent();
             this->UpdateEngines();
-            this->OnCbnSelchangeComboEngines();
         }
     }
 
@@ -2426,19 +2447,13 @@ namespace dialogs
 
     void CMainDlg::OnCbnSelchangeComboEngines()
     {
-        int nSel = this->m_CmbEngines.GetCurSel();
-        if (nSel == CB_ERR)
-            return;
-
-        this->pConfig->nCurrentEngine = nSel;
-
-        if (this->pConfig->m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        else
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
-
-        auto& engine = this->pConfig->GetCurrentEngine();
-        this->ApplyEngineToDlg(engine);
+        int nEngine = this->m_CmbEngines.GetCurSel();
+        if (nEngine != CB_ERR)
+        {
+            this->pConfig->nCurrentEngine = nEngine;
+            auto& engine = this->pConfig->GetCurrentEngine();
+            this->ApplyEngineToDlg(engine);
+        }
     }
 
     LRESULT CMainDlg::EditChangeComboPresets(WPARAM wParam, LPARAM lParam)

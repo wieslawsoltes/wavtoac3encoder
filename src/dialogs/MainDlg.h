@@ -104,6 +104,7 @@ namespace dialogs
         void HandleDropFiles(HDROP hDropInfo);
         void ShowOptionPopup(bool bUseRect);
         void RedrawFiles();
+        void UpdatePresets();
         void UpdateEngines();
         void UpdateBitrateText();
         void UpdateSettingsComboBox(int nItem);
