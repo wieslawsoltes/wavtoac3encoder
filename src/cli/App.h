@@ -225,28 +225,6 @@ public:
         this->m_Config.szEnginesPath = L"";
         this->m_Config.szFilesPath = L"";
     }
-    void DefaultPresets()
-    {
-        this->m_Config.m_Presets.clear();
-        this->m_Config.m_Presets.emplace_back(this->m_Config.m_DefaultPreset);
-        this->m_Config.nCurrentPreset = 0;
-    }
-    void DefaultEngines()
-    {
-        this->m_Config.m_Engines.clear();
-#if defined(_WIN32) & !defined(_WIN64)
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86", L"libaftendll_x86\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE)", L"libaftendll_x86_SSE\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE2)", L"libaftendll_x86_SSE2\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x86 (SSE3)", L"libaftendll_x86_SSE3\\libaften.dll"));
-#else
-        this->m_Config.m_Engines.emplace_back(this->m_Config.m_DefaultEngine);
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64", L"libaftendll_AMD64\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64 (SSE2)", L"libaftendll_AMD64_SSE2\\libaften.dll"));
-        this->m_Config.m_Engines.emplace_back(config::CEngine(L"Aften x64 (SSE3)", L"libaftendll_AMD64_SSE3\\libaften.dll"));
-#endif
-        this->m_Config.nCurrentEngine = 0;
-    }
 public:
     bool LoadPresets(const std::wstring &szFileName)
     {
@@ -289,7 +267,7 @@ public:
         }
         else
         {
-            this->DefaultPresets();
+            this->m_Config.DefaultPresets();
             this->m_Config.Log->Log(L"[Info] Using default presets.");
         }
 
@@ -299,7 +277,7 @@ public:
         }
         else
         {
-            this->DefaultEngines();
+            this->m_Config.DefaultEngines();
             this->m_Config.Log->Log(L"[Info] Using default engines.");
         }
 

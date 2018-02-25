@@ -36,7 +36,7 @@ namespace app
     public:
         config::CConfiguration m_Config;
     public:
-        void LoadDefaults();
+        void DefaultConfig();
         void LoadConfig();
         void SaveConfig();
     };
