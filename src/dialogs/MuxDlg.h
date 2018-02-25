@@ -24,27 +24,6 @@ namespace dialogs
         CMuxDlg(CWnd* pParent = nullptr);
         virtual ~CMuxDlg();
         enum { IDD = IDD_DIALOG_MUX };
-    protected:
-        virtual void DoDataExchange(CDataExchange* pDX);
-        DECLARE_MESSAGE_MAP()
-    public:
-        virtual BOOL OnInitDialog();
-    protected:
-        void InitCtrls();
-        void InitLang();
-    public:
-        void RemapFilesToChannels();
-        void SetFilePaths();
-        void SetControlsState();
-        bool LoadFilesList(std::wstring &szFileName);
-        bool SaveFilesList(std::wstring &szFileName, int nFormat);
-        void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
-    public:
-        config::CConfiguration * pConfig;
-        int nChannelConfig;
-        bool bLFE;
-        std::wstring szInputFiles[6];
-        std::wstring szTmpInputFiles[6];
     public:
         controls::CMyButton m_BtnChannelFL;
         controls::CMyButton m_BtnChannelFR;
@@ -68,6 +47,26 @@ namespace dialogs
         controls::CMyEdit m_EdtChannelSL;
         controls::CMyEdit m_EdtChannelSR;
     public:
+        config::CConfiguration * pConfig;
+        int nChannelConfig;
+        bool bLFE;
+        std::wstring szInputFiles[6];
+        std::wstring szTmpInputFiles[6];
+    protected:
+        virtual void DoDataExchange(CDataExchange* pDX);
+        DECLARE_MESSAGE_MAP()
+    public:
+        virtual BOOL OnInitDialog();
+    public:
+        void InitLang();
+        void InitCtrls();
+        void SetFilePaths();
+        void SetControlsState();
+        void ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent);
+        void RemapFiles();
+        bool LoadFiles(std::wstring &szFileName);
+        bool SaveFiles(std::wstring &szFileName, int nFormat);
+    public:
         afx_msg void OnBnClickedButtonFl();
         afx_msg void OnBnClickedButtonFr();
         afx_msg void OnBnClickedButtonFc();
@@ -83,9 +82,9 @@ namespace dialogs
         afx_msg void OnBnClickedButtonClearSr();
         afx_msg void OnBnClickedButtonExport();
         afx_msg void OnBnClickedButtonImport();
-        afx_msg void OnBnClickedCancel();
-        afx_msg void OnBnClickedOk();
         afx_msg void OnBnClickedCheckChannelConfigLfe();
         afx_msg void OnCbnSelchangeComboChannelConfig();
+        afx_msg void OnBnClickedCancel();
+        afx_msg void OnBnClickedOk();
     };
 }

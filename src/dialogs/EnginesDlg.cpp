@@ -50,7 +50,7 @@ namespace dialogs
         this->m_LstEngines.InsertColumn(0, this->pConfig->GetString(0x00B0100C).c_str(), 0, 150);
         this->m_LstEngines.InsertColumn(1, this->pConfig->GetString(0x00B0100D).c_str(), 0, 440);
 
-        this->InsertProgramEngines();
+        this->UpdateEngines();
 
         this->m_LstEngines.SetItemState(-1, 0, LVIS_SELECTED);
         this->m_LstEngines.SetItemState(this->nCurrSel, LVIS_SELECTED, LVIS_SELECTED);
@@ -60,14 +60,54 @@ namespace dialogs
         return TRUE;
     }
 
-    void CEnginesDlg::OnBnClickedOk()
+    void CEnginesDlg::InitLang()
     {
-        OnOK();
+        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00B01001)).c_str());
+        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(this->pConfig->GetString(0x00B01002).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(this->pConfig->GetString(0x00B01003).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(this->pConfig->GetString(0x00B01004).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(this->pConfig->GetString(0x00B01005).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(this->pConfig->GetString(0x00B01006).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(this->pConfig->GetString(0x00B01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(this->pConfig->GetString(0x00B01008).c_str());
+        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(this->pConfig->GetString(0x00B01009).c_str());
+        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00B0100A).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00B0100B).c_str());
     }
 
-    void CEnginesDlg::OnBnClickedCancel()
+    bool CEnginesDlg::UpdateEngines()
     {
-        OnCancel();
+        int nSize = (int)this->m_Engines.size();
+        if (nSize == 0)
+            return false;
+
+        for (int i = 0; i < nSize; i++)
+        {
+            auto& ce = this->m_Engines[i];
+            this->m_LstEngines.InsertItem(i, ce.szName.c_str());
+            this->m_LstEngines.SetItemText(i, 1, ce.szPath.c_str());
+        }
+
+        this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
+
+        return true;
+    }
+
+    bool CEnginesDlg::LoadEngines(std::wstring szFileName)
+    {
+        std::vector<config::CEngine> engines;
+        if (this->pConfig->LoadEngines(engines, szFileName) == true)
+        {
+            this->m_Engines = engines;
+            this->m_LstEngines.DeleteAllItems();
+            return UpdateEngines();
+        }
+        return false;
+    }
+
+    bool CEnginesDlg::SaveEngines(std::wstring szFileName)
+    {
+        return this->pConfig->SaveEngines(this->m_Engines, szFileName);
     }
 
     void CEnginesDlg::OnBnClickedButtonEnginesBrowse()
@@ -98,7 +138,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            this->LoadProgramEngines(szFileName);
+            this->LoadEngines(szFileName);
         }
     }
 
@@ -114,7 +154,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            this->SaveProgramEngines(szFileName);
+            this->SaveEngines(szFileName);
         }
     }
 
@@ -153,41 +193,6 @@ namespace dialogs
             this->m_LstEngines.DeleteItem(nIndex);
             this->m_Engines.erase(this->m_Engines.begin() + nIndex);
         }
-    }
-
-    bool CEnginesDlg::InsertProgramEngines()
-    {
-        int nSize = (int)this->m_Engines.size();
-        if (nSize == 0)
-            return false;
-
-        for (int i = 0; i < nSize; i++)
-        {
-            auto& ce = this->m_Engines[i];
-            this->m_LstEngines.InsertItem(i, ce.szName.c_str());
-            this->m_LstEngines.SetItemText(i, 1, ce.szPath.c_str());
-        }
-
-        this->m_LstEngines.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
-
-        return true;
-    }
-
-    bool CEnginesDlg::LoadProgramEngines(std::wstring szFileName)
-    {
-        std::vector<config::CEngine> engines;
-        if (this->pConfig->LoadEngines(engines, szFileName) == true)
-        {
-            this->m_Engines = engines;
-            this->m_LstEngines.DeleteAllItems();
-            return InsertProgramEngines();
-        }
-        return false;
-    }
-
-    bool CEnginesDlg::SaveProgramEngines(std::wstring szFileName)
-    {
-        return this->pConfig->SaveEngines(this->m_Engines, szFileName);
     }
 
     void CEnginesDlg::OnLvnItemchangedListEngines(NMHDR *pNMHDR, LRESULT *pResult)
@@ -263,18 +268,13 @@ namespace dialogs
         *pResult = 0;
     }
 
-    void CEnginesDlg::InitLang()
+    void CEnginesDlg::OnBnClickedCancel()
     {
-        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00B01001)).c_str());
-        this->GetDlgItem(IDC_STATIC_GROUP_ENGINE)->SetWindowText(this->pConfig->GetString(0x00B01002).c_str());
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_NAME)->SetWindowText(this->pConfig->GetString(0x00B01003).c_str());
-        this->GetDlgItem(IDC_STATIC_TEXT_ENGINE_PATH)->SetWindowText(this->pConfig->GetString(0x00B01004).c_str());
-        this->GetDlgItem(IDC_BUTTON_ENGINES_BROWSE)->SetWindowText(this->pConfig->GetString(0x00B01005).c_str());
-        this->GetDlgItem(IDC_BUTTON_ENGINES_IMPORT)->SetWindowText(this->pConfig->GetString(0x00B01006).c_str());
-        this->GetDlgItem(IDC_BUTTON_ENGINES_EXPORT)->SetWindowText(this->pConfig->GetString(0x00B01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_ENGINES_ADD)->SetWindowText(this->pConfig->GetString(0x00B01008).c_str());
-        this->GetDlgItem(IDC_BUTTON_ENGINES_REMOVE)->SetWindowText(this->pConfig->GetString(0x00B01009).c_str());
-        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00B0100A).c_str());
-        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00B0100B).c_str());
+        OnCancel();
+    }
+
+    void CEnginesDlg::OnBnClickedOk()
+    {
+        OnOK();
     }
 }

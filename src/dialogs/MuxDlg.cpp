@@ -121,11 +121,27 @@ namespace dialogs
 
         InitCtrls();
         InitLang();
-        this->RemapFilesToChannels();
+        this->RemapFiles();
         this->SetFilePaths();
         this->SetControlsState();
 
         return TRUE;
+    }
+
+    void CMuxDlg::InitLang()
+    {
+        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00C01001)).c_str());
+        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(this->pConfig->GetString(0x00C01002).c_str());
+        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(this->pConfig->GetString(0x00C01003).c_str());
+        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(this->pConfig->GetString(0x00C01004).c_str());
+        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00C01005).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00C01006).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
     }
 
     void CMuxDlg::InitCtrls()
@@ -151,23 +167,101 @@ namespace dialogs
         this->m_CmbChannelConfig.SetCurSel(this->nChannelConfig);
     }
 
-    void CMuxDlg::InitLang()
+    void CMuxDlg::SetFilePaths()
     {
-        this->SetWindowText((L"WAV to AC3 Encoder - " + this->pConfig->GetString(0x00C01001)).c_str());
-        this->GetDlgItem(IDC_STATIC_TEXT_CHANNEL_CONFIG)->SetWindowText(this->pConfig->GetString(0x00C01002).c_str());
-        this->GetDlgItem(IDC_BUTTON_IMPORT)->SetWindowText(this->pConfig->GetString(0x00C01003).c_str());
-        this->GetDlgItem(IDC_BUTTON_EXPORT)->SetWindowText(this->pConfig->GetString(0x00C01004).c_str());
-        this->GetDlgItem(IDOK)->SetWindowText(this->pConfig->GetString(0x00C01005).c_str());
-        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00C01006).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FC)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_FR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_LFE)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SL)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
-        this->GetDlgItem(IDC_BUTTON_CLEAR_SR)->SetWindowText(this->pConfig->GetString(0x00C01007).c_str());
+        this->m_EdtChannelFL.SetWindowText(szInputFiles[0].c_str());
+        this->m_EdtChannelFR.SetWindowText(szInputFiles[1].c_str());
+        this->m_EdtChannelFC.SetWindowText(szInputFiles[2].c_str());
+        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3].c_str());
+        this->m_EdtChannelSL.SetWindowText(szInputFiles[4].c_str());
+        this->m_EdtChannelSR.SetWindowText(szInputFiles[5].c_str());
     }
 
-    void CMuxDlg::RemapFilesToChannels()
+    void CMuxDlg::SetControlsState()
+    {
+        this->m_BtnChannelFL.EnableWindow(nChannelConfigStates[this->nChannelConfig][0] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelFR.EnableWindow(nChannelConfigStates[this->nChannelConfig][1] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelFC.EnableWindow(nChannelConfigStates[this->nChannelConfig][2] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelS.EnableWindow(nChannelConfigStates[this->nChannelConfig][3] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelSL.EnableWindow(nChannelConfigStates[this->nChannelConfig][4] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelSR.EnableWindow(nChannelConfigStates[this->nChannelConfig][5] == 1 ? TRUE : FALSE);
+        this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
+
+        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
+        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
+        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
+        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3].c_str());
+        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4].c_str());
+        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
+        this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
+
+        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
+        this->m_StcLabelFL.SetBold(nChannelConfigStates[this->nChannelConfig][0] == 1 ? true : false);
+        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
+        this->m_StcLabelFR.SetBold(nChannelConfigStates[this->nChannelConfig][1] == 1 ? true : false);
+        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
+        this->m_StcLabelFC.SetBold(nChannelConfigStates[this->nChannelConfig][2] == 1 ? true : false);
+        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4].c_str());
+        this->m_StcLabelSL.SetBold(nChannelConfigStates[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4] ? true : false);
+        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
+        this->m_StcLabelSR.SetBold(nChannelConfigStates[this->nChannelConfig][5] == 1 ? true : false);
+        this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
+        this->m_StcLabelLFE.SetBold(this->bLFE);
+
+        this->m_ChkChannelConfigLFE.SetCheck(this->bLFE ? BST_CHECKED : BST_UNCHECKED);
+
+        this->m_BtnChannelFL.SetBold((szInputFiles[0].length() > 0) ? true : false);
+        this->m_BtnChannelFR.SetBold((szInputFiles[1].length() > 0) ? true : false);
+        this->m_BtnChannelFC.SetBold((szInputFiles[2].length() > 0) ? true : false);
+
+        this->m_BtnChannelLFE.SetBold((szInputFiles[3].length() > 0) ? true : false);
+
+        if (nChannelConfigStates[nChannelConfig][3] == 1)
+        {
+            this->m_BtnChannelS.SetBold((szInputFiles[4].length() > 0) ? true : false);
+            this->m_BtnChannelSL.SetBold(false);
+            this->m_BtnChannelSL.SetWindowText(_T("-"));
+            this->m_BtnChannelSL.EnableWindow(FALSE);
+        }
+        else
+        {
+            this->m_BtnChannelSL.SetBold((szInputFiles[4].length() > 0) ? true : false);
+            this->m_BtnChannelS.SetBold(false);
+            this->m_BtnChannelS.SetWindowText(_T("-"));
+            this->m_BtnChannelS.EnableWindow(FALSE);
+        }
+
+        this->m_BtnChannelSR.SetBold((szInputFiles[5].length() > 0) ? true : false);
+    }
+
+    void CMuxDlg::ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent)
+    {
+        if (m_BtnCurrent == nullptr || m_EdtCurrent == nullptr)
+            return;
+
+        CString szCurrentFileName;
+        m_EdtCurrent->GetWindowText(szCurrentFileName);
+        std::wstring szCurrentFileNameStr = szCurrentFileName;
+        std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
+        std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
+
+        CFileDialog fd(TRUE,
+            this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
+            szFileName.c_str(),
+            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
+            szFilter.c_str(),
+            this);
+
+        if (fd.DoModal() == IDOK)
+        {
+            std::wstring szFileName = fd.GetPathName();
+            m_EdtCurrent->SetWindowText(szFileName.c_str());
+            this->szInputFiles[nID] = szFileName;
+            m_BtnCurrent->SetBold(true);
+        }
+    }
+
+    void CMuxDlg::RemapFiles()
     {
         for (int i = 0; i < 6; i++)
             this->szInputFiles[i] = L"";
@@ -259,74 +353,7 @@ namespace dialogs
         #undef SetFile
     }
 
-    void CMuxDlg::SetFilePaths()
-    {
-        this->m_EdtChannelFL.SetWindowText(szInputFiles[0].c_str());
-        this->m_EdtChannelFR.SetWindowText(szInputFiles[1].c_str());
-        this->m_EdtChannelFC.SetWindowText(szInputFiles[2].c_str());
-        this->m_EdtChannelLFE.SetWindowText(szInputFiles[3].c_str());
-        this->m_EdtChannelSL.SetWindowText(szInputFiles[4].c_str());
-        this->m_EdtChannelSR.SetWindowText(szInputFiles[5].c_str());
-    }
-
-    void CMuxDlg::SetControlsState()
-    {
-        this->m_BtnChannelFL.EnableWindow(nChannelConfigStates[this->nChannelConfig][0] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelFR.EnableWindow(nChannelConfigStates[this->nChannelConfig][1] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelFC.EnableWindow(nChannelConfigStates[this->nChannelConfig][2] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelS.EnableWindow(nChannelConfigStates[this->nChannelConfig][3] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelSL.EnableWindow(nChannelConfigStates[this->nChannelConfig][4] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelSR.EnableWindow(nChannelConfigStates[this->nChannelConfig][5] == 1 ? TRUE : FALSE);
-        this->m_BtnChannelLFE.EnableWindow(this->bLFE ? TRUE : FALSE);
-
-        this->m_BtnChannelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
-        this->m_BtnChannelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
-        this->m_BtnChannelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
-        this->m_BtnChannelS.SetWindowText(szChannelConfigNames[this->nChannelConfig][3].c_str());
-        this->m_BtnChannelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][4].c_str());
-        this->m_BtnChannelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
-        this->m_BtnChannelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
-
-        this->m_StcLabelFL.SetWindowText(szChannelConfigNames[this->nChannelConfig][0].c_str());
-        this->m_StcLabelFL.SetBold(nChannelConfigStates[this->nChannelConfig][0] == 1 ? true : false);
-        this->m_StcLabelFR.SetWindowText(szChannelConfigNames[this->nChannelConfig][1].c_str());
-        this->m_StcLabelFR.SetBold(nChannelConfigStates[this->nChannelConfig][1] == 1 ? true : false);
-        this->m_StcLabelFC.SetWindowText(szChannelConfigNames[this->nChannelConfig][2].c_str());
-        this->m_StcLabelFC.SetBold(nChannelConfigStates[this->nChannelConfig][2] == 1 ? true : false);
-        this->m_StcLabelSL.SetWindowText(szChannelConfigNames[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4].c_str());
-        this->m_StcLabelSL.SetBold(nChannelConfigStates[this->nChannelConfig][(nChannelConfigStates[this->nChannelConfig][3] == 1) ? 3 : 4] ? true : false);
-        this->m_StcLabelSR.SetWindowText(szChannelConfigNames[this->nChannelConfig][5].c_str());
-        this->m_StcLabelSR.SetBold(nChannelConfigStates[this->nChannelConfig][5] == 1 ? true : false);
-        this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
-        this->m_StcLabelLFE.SetBold(this->bLFE);
-
-        this->m_ChkChannelConfigLFE.SetCheck(this->bLFE ? BST_CHECKED : BST_UNCHECKED);
-
-        this->m_BtnChannelFL.SetBold((szInputFiles[0].length() > 0) ? true : false);
-        this->m_BtnChannelFR.SetBold((szInputFiles[1].length() > 0) ? true : false);
-        this->m_BtnChannelFC.SetBold((szInputFiles[2].length() > 0) ? true : false);
-
-        this->m_BtnChannelLFE.SetBold((szInputFiles[3].length() > 0) ? true : false);
-
-        if (nChannelConfigStates[nChannelConfig][3] == 1)
-        {
-            this->m_BtnChannelS.SetBold((szInputFiles[4].length() > 0) ? true : false);
-            this->m_BtnChannelSL.SetBold(false);
-            this->m_BtnChannelSL.SetWindowText(_T("-"));
-            this->m_BtnChannelSL.EnableWindow(FALSE);
-        }
-        else
-        {
-            this->m_BtnChannelSL.SetBold((szInputFiles[4].length() > 0) ? true : false);
-            this->m_BtnChannelS.SetBold(false);
-            this->m_BtnChannelS.SetWindowText(_T("-"));
-            this->m_BtnChannelS.EnableWindow(FALSE);
-        }
-
-        this->m_BtnChannelSR.SetBold((szInputFiles[5].length() > 0) ? true : false);
-    }
-
-    bool CMuxDlg::LoadFilesList(std::wstring &szFileName)
+    bool CMuxDlg::LoadFiles(std::wstring &szFileName)
     {
         std::vector<std::wstring> fl;
         if (this->pConfig->LoadFiles(szFileName, fl) == false)
@@ -353,12 +380,12 @@ namespace dialogs
         }
         else
         {
-            this->RemapFilesToChannels();
+            this->RemapFiles();
             return true;
         }
     }
 
-    bool CMuxDlg::SaveFilesList(std::wstring &szFileName, int nFormat)
+    bool CMuxDlg::SaveFiles(std::wstring &szFileName, int nFormat)
     {
         try
         {
@@ -456,33 +483,6 @@ namespace dialogs
         {
             this->pConfig->Log->Log(L"[Error] Exception thrown when saving files.");
             return false;
-        }
-    }
-
-    void CMuxDlg::ShowOpenFileDlg(int nID, controls::CMyButton *m_BtnCurrent, controls::CMyEdit *m_EdtCurrent)
-    {
-        if (m_BtnCurrent == nullptr || m_EdtCurrent == nullptr)
-            return;
-
-        CString szCurrentFileName;
-        m_EdtCurrent->GetWindowText(szCurrentFileName);
-        std::wstring szCurrentFileNameStr = szCurrentFileName;
-        std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
-        std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
-
-        CFileDialog fd(TRUE,
-            this->pConfig->m_EncoderOptions.szSupportedInputExt[0].c_str(),
-            szFileName.c_str(),
-            OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLESIZING,
-            szFilter.c_str(),
-            this);
-
-        if (fd.DoModal() == IDOK)
-        {
-            std::wstring szFileName = fd.GetPathName();
-            m_EdtCurrent->SetWindowText(szFileName.c_str());
-            this->szInputFiles[nID] = szFileName;
-            m_BtnCurrent->SetBold(true);
         }
     }
 
@@ -592,7 +592,7 @@ namespace dialogs
             else if (fd.GetFileExt().CompareNoCase(_T("mux")) == 0)
                 nFormat = 1;
 
-            this->SaveFilesList(szFileName, nFormat);
+            this->SaveFiles(szFileName, nFormat);
         }
     }
 
@@ -608,7 +608,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            this->LoadFilesList(szFileName);
+            this->LoadFiles(szFileName);
             this->SetFilePaths();
             this->SetControlsState();
         }
@@ -623,6 +623,16 @@ namespace dialogs
         this->m_StcLabelLFE.SetWindowText(this->bLFE ? _T("LFE") : _T("-"));
         this->m_StcLabelLFE.SetBold(this->bLFE);
         this->SetControlsState();
+    }
+
+    void CMuxDlg::OnCbnSelchangeComboChannelConfig()
+    {
+        int nSel = this->m_CmbChannelConfig.GetCurSel();
+        if (nSel != CB_ERR)
+        {
+            this->nChannelConfig = nSel;
+            this->SetControlsState();
+        }
     }
 
     void CMuxDlg::OnBnClickedCancel()
@@ -707,15 +717,5 @@ namespace dialogs
         #undef ResetFile
 
         OnOK();
-    }
-
-    void CMuxDlg::OnCbnSelchangeComboChannelConfig()
-    {
-        int nSel = this->m_CmbChannelConfig.GetCurSel();
-        if (nSel != CB_ERR)
-        {
-            this->nChannelConfig = nSel;
-            this->SetControlsState();
-        }
     }
 }

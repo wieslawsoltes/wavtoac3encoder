@@ -26,25 +26,6 @@ namespace dialogs
         CWorkDlg(CWnd* pParent = nullptr);
         virtual ~CWorkDlg();
         enum { IDD = IDD_DIALOG_WORK };
-    protected:
-        virtual void DoDataExchange(CDataExchange* pDX);
-        virtual BOOL OnInitDialog();
-    protected:
-        void HideCtrls();
-        void InitLang();
-        void FormatTime(double fTime, TCHAR szBuffer[32], int nPrefixKey);
-        void UpdateFileTimer();
-        void UpdateTotalTimer();
-        void CreateWorker();
-    protected:
-        DECLARE_MESSAGE_MAP()
-    public:
-        static int nIDIn[6];
-        static int nIDInInfo[6];
-    public:
-        config::CConfiguration * pConfig;
-        std::unique_ptr<worker::CWorkerContext> pWorkerContext;
-        std::thread m_Thread;
     public:
         controls::CMyStatic m_StcOut;
         controls::CMyStatic m_StcOutInfo;
@@ -53,6 +34,24 @@ namespace dialogs
         controls::CMyProgressCtrl m_PrgCurrent;
         controls::CMyProgressCtrl m_PrgTotal;
         controls::CMyButton m_BtnCancel;
+    public:
+        static int nIDIn[6];
+        static int nIDInInfo[6];
+        config::CConfiguration * pConfig;
+        std::unique_ptr<worker::CWorkerContext> pWorkerContext;
+        std::thread m_Thread;
+    protected:
+        virtual void DoDataExchange(CDataExchange* pDX);
+        DECLARE_MESSAGE_MAP()
+    public:
+        virtual BOOL OnInitDialog();
+    protected:
+        void InitLang();
+        void HideCtrls();
+        void FormatTime(double fTime, TCHAR szBuffer[32], int nPrefixKey);
+        void UpdateFileTimer();
+        void UpdateTotalTimer();
+        void CreateWorker();
     public:
         afx_msg void OnClose();
         afx_msg void OnDestroy();

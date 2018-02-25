@@ -35,16 +35,13 @@ namespace dialogs
         DECLARE_DYNAMIC(CMainDlg)
     public:
         CMainDlg(CWnd* pParent = nullptr);
+        virtual ~CMainDlg();
         enum { IDD = IDD_DIALOG_MAIN };
     protected:
         HICON m_hIcon;
         HACCEL m_hAccelTable;
         CImageList m_ImageListLarge;
         CImageList m_ImageListSmall;
-    public:
-        bool bVisible;
-    public:
-        config::CConfiguration * pConfig;
     public:
         controls::CMyStatusBarCtrl m_StatusBar;
         controls::CMySliderCtrl m_SldBitrate;
@@ -80,53 +77,56 @@ namespace dialogs
         controls::CMySpinButtonCtrl m_SpnRawSampleRate;
         controls::CMySpinButtonCtrl m_SpnRawChannels;
         controls::CMySpinButtonCtrl m_SpnThreads;
+    public:
+        bool bVisible;
+        config::CConfiguration * pConfig;
     protected:
         virtual void DoDataExchange(CDataExchange* pDX);
+        DECLARE_MESSAGE_MAP()
+    public:
         virtual BOOL OnInitDialog();
         virtual BOOL PreTranslateMessage(MSG* pMsg);
     public:
+        void InitLang(bool initLangMenu);
+        void InitLangButtons();
+        void InitLangStaticText();
+        void InitLangFilesList();
+        void InitLangSettingsList();
+        void InitLangMainMenu();
+        void InitLangFilesListContextMenu(CMenu &m_hMenu);
+        void InitLangMenu();
         void InitTooltips();
         void InitSettingsList();
         void InitDefaultPreset();
         void InitRawSamleFormatComboBox();
         void InitSettingsListGroups();
         void InitDialogControls();
-        void InitLang(bool initLangMenu);
-        void InitLangButtons();
-        void InitLangStaticText();
-        void InitLangFilesList();
-        void InitLangFilesListContextMenu(CMenu &m_hMenu);
-        void InitLangSettingsList();
-        void InitLangMainMenu();
-        void InitLangMenu();
-        bool LoadFiles(std::wstring &szFileName);
-        bool SaveFiles(std::wstring &szFileName, int nFormat);
-        bool LoadProgramConfig(std::wstring szFileName);
-        bool SaveProgramConfig(std::wstring szFileName);
-        void UpdateProgramEngines();
+        void HandleDropFiles(HDROP hDropInfo);
+        void ShowOptionPopup(bool bUseRect);
+        void RedrawFiles();
+        void UpdateEngines();
+        void UpdateBitrateText();
+        void UpdateSettingsComboBox(int nItem);
+        void ApplyPresetToDlg(config::CPreset &preset);
         void ApplyEngineToDlg(config::CEngine &engine);
         bool LoadEngines(std::wstring szFileName);
         bool SaveEngines(std::wstring szFileName);
+        bool LoadFiles(std::wstring &szFileName);
+        bool SaveFiles(std::wstring &szFileName, int nFormat);
+        bool LoadConfig(std::wstring szFileName);
+        bool SaveConfig(std::wstring szFileName);
         void LoadConfiguration();
         void SaveConfiguration();
-        void HandleDropFiles(HDROP hDropInfo);
         void SearchFolderForFiles(std::wstring szFile, const bool bRecurse);
         bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS);
         ULONGLONG GetFileSize(const std::wstring& szPath);
         bool AddFile(const std::wstring& szPath);
         bool AddPath(const std::wstring pattern);
         bool AddFiles(const std::vector<std::wstring>& files);
-        void RedrawFiles();
-        void UpdateBitrateText();
-        void UpdateSettingsComboBox(int nItem);
-        void ApplyPresetToDlg(config::CPreset &preset);
-        void ShowOptionPopup(bool bUseRect);
     protected:
         afx_msg void OnPaint();
         afx_msg HCURSOR OnQueryDragIcon();
         afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
-    protected:
-        DECLARE_MESSAGE_MAP()
     public:
         afx_msg void OnDropFiles(HDROP hDropInfo);
         afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
@@ -176,6 +176,7 @@ namespace dialogs
         afx_msg void OnCbnSelchangeComboPresets();
         afx_msg void OnCbnSelchangeComboRawSampleFormat();
         afx_msg void OnCbnSelchangeComboEngines();
+        afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
         afx_msg void OnLvnItemchangedListSettings(NMHDR *pNMHDR, LRESULT *pResult);
         afx_msg void OnLvnGetdispinfoListFiles(NMHDR* pNMHDR, LRESULT* pResult);
         afx_msg void OnLvnKeydownListFiles(NMHDR *pNMHDR, LRESULT *pResult);
@@ -197,6 +198,5 @@ namespace dialogs
         afx_msg void OnEnKillfocusEditRawSampleRate();
         afx_msg void OnEnKillfocusEditRawChannels();
         afx_msg void OnEnKillfocusEditThreads();
-        afx_msg LRESULT EditChangeComboPresets(WPARAM wParam, LPARAM lParam);
     };
 }

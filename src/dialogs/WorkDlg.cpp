@@ -67,50 +67,10 @@ namespace dialogs
         return TRUE;
     }
 
-    void CWorkDlg::OnClose()
+    void CWorkDlg::InitLang()
     {
-        this->KillTimer(WM_FILE_TIMER);
-        this->KillTimer(WM_TOTAL_TIMER);
-
-        if (this->pWorkerContext->bTerminate == false)
-        {
-            this->pWorkerContext->bTerminate = true;
-        }
-
-        CMyDialogEx::OnClose();
-    }
-
-    void CWorkDlg::OnDestroy()
-    {
-        CMyDialogEx::OnDestroy();
-
-        if (this->pWorkerContext->bTerminate == false)
-        {
-            this->pWorkerContext->bTerminate = true;
-        }
-    }
-
-    void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
-    {
-        switch (nIDEvent)
-        {
-        case WM_TOTAL_TIMER:
-            UpdateTotalTimer();
-            return;
-        case WM_FILE_TIMER:
-            UpdateFileTimer();
-            return;
-        };
-        CMyDialogEx::OnTimer(nIDEvent);
-    }
-
-    void CWorkDlg::OnBnClickedCancel()
-    {
-        if (this->pWorkerContext->bTerminate == false)
-        {
-            this->pWorkerContext->bTerminate = true;
-        }
-        this->EndDialog(IDOK);
+        this->SetWindowText(this->pConfig->GetString(0x00A01001).c_str());
+        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00A01002).c_str());
     }
 
     void CWorkDlg::HideCtrls()
@@ -184,12 +144,6 @@ namespace dialogs
         this->MoveWindow(rcDlg);
     }
 
-    void CWorkDlg::InitLang()
-    {
-        this->SetWindowText(this->pConfig->GetString(0x00A01001).c_str());
-        this->GetDlgItem(IDCANCEL)->SetWindowText(this->pConfig->GetString(0x00A01002).c_str());
-    }
-
     void CWorkDlg::FormatTime(double fTime, TCHAR szBuffer[32], int nPrefixKey)
     {
         std::wstring szPrefix = this->pConfig->GetString(nPrefixKey);
@@ -200,21 +154,6 @@ namespace dialogs
             _stprintf(szBuffer, _T("%s 00:%02u:%02u\0"), szPrefix.c_str(), (nTime / 60), (nTime % 60));
         else
             _stprintf(szBuffer, _T("%s %02u:%02u:%02u\0"), szPrefix.c_str(), (nTime / 60) / 60, (nTime / 60) % 60, (((nTime / 60) % 60) * 60) % 60);
-    }
-
-    void CWorkDlg::UpdateTotalTimer()
-    {
-        this->pWorkerContext->m_ElapsedTimeTotal += 0.25;
-
-        TCHAR szBuffer[32] = _T("");
-        this->FormatTime(this->pWorkerContext->m_ElapsedTimeTotal, szBuffer, 0x00A01006);
-
-        if (this->pWorkerContext->bCanUpdateWindow == true)
-        {
-            this->pWorkerContext->bCanUpdateWindow = false;
-            m_StcTimeTotal.SetWindowText(szBuffer);
-            this->pWorkerContext->bCanUpdateWindow = true;
-        }
     }
 
     void CWorkDlg::UpdateFileTimer()
@@ -228,6 +167,21 @@ namespace dialogs
         {
             this->pWorkerContext->bCanUpdateWindow = false;
             m_StcTimeCurrent.SetWindowText(szBuffer);
+            this->pWorkerContext->bCanUpdateWindow = true;
+        }
+    }
+
+    void CWorkDlg::UpdateTotalTimer()
+    {
+        this->pWorkerContext->m_ElapsedTimeTotal += 0.25;
+
+        TCHAR szBuffer[32] = _T("");
+        this->FormatTime(this->pWorkerContext->m_ElapsedTimeTotal, szBuffer, 0x00A01006);
+
+        if (this->pWorkerContext->bCanUpdateWindow == true)
+        {
+            this->pWorkerContext->bCanUpdateWindow = false;
+            m_StcTimeTotal.SetWindowText(szBuffer);
             this->pWorkerContext->bCanUpdateWindow = true;
         }
     }
@@ -257,5 +211,51 @@ namespace dialogs
             this->pConfig->Log->Log(L"[Error] Failed to create worker thread.");
             this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
         }
+    }
+
+    void CWorkDlg::OnClose()
+    {
+        this->KillTimer(WM_FILE_TIMER);
+        this->KillTimer(WM_TOTAL_TIMER);
+
+        if (this->pWorkerContext->bTerminate == false)
+        {
+            this->pWorkerContext->bTerminate = true;
+        }
+
+        CMyDialogEx::OnClose();
+    }
+
+    void CWorkDlg::OnDestroy()
+    {
+        CMyDialogEx::OnDestroy();
+
+        if (this->pWorkerContext->bTerminate == false)
+        {
+            this->pWorkerContext->bTerminate = true;
+        }
+    }
+
+    void CWorkDlg::OnTimer(UINT_PTR nIDEvent)
+    {
+        switch (nIDEvent)
+        {
+        case WM_TOTAL_TIMER:
+            UpdateTotalTimer();
+            return;
+        case WM_FILE_TIMER:
+            UpdateFileTimer();
+            return;
+        };
+        CMyDialogEx::OnTimer(nIDEvent);
+    }
+
+    void CWorkDlg::OnBnClickedCancel()
+    {
+        if (this->pWorkerContext->bTerminate == false)
+        {
+            this->pWorkerContext->bTerminate = true;
+        }
+        this->EndDialog(IDOK);
     }
 }
