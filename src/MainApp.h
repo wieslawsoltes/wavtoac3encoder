@@ -35,6 +35,12 @@ namespace app
         DECLARE_MESSAGE_MAP()
     public:
         config::CConfiguration m_Config;
+    public:
+        void OpenLog();
+        void CloseLog();
+        void DefaultConfig();
+        void LoadLang();
+        void SaveLang();
     };
 
     extern CMainApp m_App;

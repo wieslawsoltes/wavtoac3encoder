@@ -18,9 +18,38 @@ namespace app
     {
     }
 
-    BOOL CMainApp::InitInstance()
+    void CMainApp::OpenLog()
+    {
+        this->m_Config.Log = std::make_unique<logger::FileLog>(this->m_Config.szLogPath);
+        this->m_Config.Log->Open();
+
+        std::wstring szConfigMode = this->m_Config.m_bIsPortable ? L"Portable" : L"Roaming";
+        this->m_Config.Log->Log(L"[Info] Program started: " + szConfigMode);
+    }
+
+    void CMainApp::CloseLog()
+    {
+        std::wstring szConfigMode = this->m_Config.m_bIsPortable ? L"Portable" : L"Roaming";
+        this->m_Config.Log->Log(L"[Info] Program exited: " + szConfigMode);
+        this->m_Config.Log->Close();
+    }
+
+    void CMainApp::DefaultConfig()
     {
         this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
+
+        this->m_Config.m_szLangFileName = L"lang\\en-US.txt";
+        this->m_Config.m_nLangId = -1;
+
+        this->m_Config.nCurrentPreset = 0;
+        this->m_Config.szOutputPath = L"";
+        this->m_Config.szOutputFile = L"";
+        this->m_Config.bMultiMonoInput = false;
+        this->m_Config.bDisableAllWarnings = false;
+        this->m_Config.bSaveConfig = true;
+        this->m_Config.nCurrentEngine = 0;
+
+        this->m_Config.SetEncoderOptions();
 
         if (this->m_Config.m_bIsPortable == true)
         {
@@ -46,38 +75,38 @@ namespace app
             ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         else
             ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
+    }
 
-        this->m_Config.Log = std::make_unique<logger::FileLog>(this->m_Config.szLogPath);
-        this->m_Config.Log->Open();
+    void CMainApp::LoadLang()
+    {
+        if (this->m_Config.LoadLanguagePath(this->m_Config.szLangPath))
+            this->m_Config.Log->Log(L"[Info] Loaded language config: " + this->m_Config.szLangPath);
+        else
+            this->m_Config.Log->Log(L"[Error] Failed to load language config: " + this->m_Config.szLangPath);
 
-        std::wstring szConfigMode = this->m_Config.m_bIsPortable ? L"Portable" : L"Roaming";
-        this->m_Config.Log->Log(L"[Info] Program started: " + szConfigMode);
+        std::wstring szLangPath = (this->m_Config.m_bIsPortable == true) ?
+            (util::Utilities::GetExeFilePath() + L"lang") :
+            (util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
 
-        try
-        {
-            this->m_Config.m_szLangFileName = L"lang\\en-US.txt";
-            this->m_Config.m_nLangId = -1;
-            this->m_Config.m_bIsPortable = true;
-            this->m_Config.nCurrentPreset = 0;
-            this->m_Config.szOutputPath = L"";
-            this->m_Config.szOutputFile = L"";
-            this->m_Config.bMultiMonoInput = false;
-            this->m_Config.bDisableAllWarnings = false;
-            this->m_Config.bSaveConfig = true;
-            this->m_Config.nCurrentEngine = 0;
+        if (this->m_Config.LoadLanguages(szLangPath))
+            this->m_Config.Log->Log(L"[Info] Loaded languages from: " + szLangPath);
+        else
+            this->m_Config.Log->Log(L"[Error] Failed to load languages from: " + szLangPath);
+    }
 
-            this->m_Config.SetEncoderOptions();
+    void CMainApp::SaveLang()
+    {
+        if (this->m_Config.SaveLanguagePath(this->m_Config.szLangPath))
+            this->m_Config.Log->Log(L"[Info] Saved language config: " + this->m_Config.szLangPath);
+        else
+            this->m_Config.Log->Log(L"[Error] Failed to save language config: " + this->m_Config.szLangPath);
+    }
 
-            this->m_Config.LoadLanguagePath(this->m_Config.szLangPath);
-            if (this->m_Config.m_bIsPortable == true)
-                this->m_Config.LoadLanguages(util::Utilities::GetExeFilePath() + L"lang");
-            else
-                this->m_Config.LoadLanguages(util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
-        }
-        catch (...)
-        {
-            this->m_Config.Log->Log(L"[Error] Failed to load config.");
-        }
+    BOOL CMainApp::InitInstance()
+    {
+        this->DefaultConfig();
+        this->OpenLog();
+        this->LoadLang();
 
         try
         {
@@ -85,7 +114,7 @@ namespace app
             InitCtrls.dwSize = sizeof(InitCtrls);
             InitCtrls.dwICC = ICC_WIN95_CLASSES;
             InitCommonControlsEx(&InitCtrls);
-    
+
             CWinAppEx::InitInstance();
             AfxEnableControlContainer();
             InitShellManager();
@@ -112,18 +141,8 @@ namespace app
             this->m_Config.Log->Log(L"[Error] Main dialog exception.");
         }
 
-        try
-        {
-            this->m_Config.SaveLanguagePath(this->m_Config.szLangPath);
-        }
-        catch (...)
-        {
-            this->m_Config.Log->Log(L"[Error] Failed to save config.");
-        }
-
-        this->m_Config.Log->Log(L"[Info] Program exited: " + szConfigMode);
-        this->m_Config.Log->Close();
-
+        this->SaveLang();
+        this->CloseLog();
         return FALSE;
     }
 }

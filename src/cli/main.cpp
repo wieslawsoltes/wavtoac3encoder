@@ -49,8 +49,8 @@ int wmain(int argc, wchar_t *argv[])
 {
     MainApp app;
 
-    app.OpenLog();
     app.DefaultConfig();
+    app.OpenLog();
 
     std::vector<util::Result> results;
     util::ArgvParser parser { false };
@@ -118,5 +118,6 @@ int wmain(int argc, wchar_t *argv[])
         return -1;
     }
 
+    app.CloseLog();
     return 0;
 }

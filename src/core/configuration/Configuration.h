@@ -161,7 +161,7 @@ namespace config
         bool LoadStrings(const std::wstring &szFileName, std::map<int, std::wstring> &strings);
         bool LoadLanguagePath(const std::wstring &szFileName);
         bool SaveLanguagePath(const std::wstring &szFileName);
-        void LoadLanguages(const std::wstring szLangPath);
+        bool LoadLanguages(const std::wstring szLangPath);
         std::wstring CConfiguration::GetString(const int nKey);
         void ParseEngineEntries(CEngine &engine, std::vector<Entry> &entries);
         bool LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName, CEngine& defaultEngine);

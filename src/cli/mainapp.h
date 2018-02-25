@@ -120,6 +120,10 @@ public:
     void DefaultConfig()
     {
         this->m_Config.m_bIsPortable = true;
+
+        this->m_Config.m_szLangFileName = L"";
+        this->m_Config.m_nLangId = -1;
+
         this->m_Config.nCurrentPreset = 0;
         this->m_Config.szOutputPath = L"";
         this->m_Config.szOutputFile = L"";
@@ -128,11 +132,9 @@ public:
         this->m_Config.bDisableAllWarnings = true;
         this->m_Config.bSaveConfig = false;
         this->m_Config.nCurrentEngine = 0;
+
         this->m_Config.SetEncoderOptions();
-        this->m_Config.InitDefaultPreset();
-        this->m_Config.InitDefaultEngine();
-        this->m_Config.m_Presets.emplace_back(this->m_Config.m_DefaultPreset);
-        this->m_Config.m_Engines.emplace_back(this->m_Config.m_DefaultEngine);
+
         this->m_Config.szLogPath = L"";
         this->m_Config.szConfigPath = L"";
         this->m_Config.szLangPath = L"";
@@ -258,6 +260,9 @@ public:
     }
     bool LoadConfiguration()
     {
+        this->m_Config.InitDefaultPreset();
+        this->m_Config.InitDefaultEngine();
+
         if (!this->m_Config.szPresetsPath.empty() && this->LoadPresets(this->m_Config.szPresetsPath))
         {
             this->m_Config.Log->Log(L"[Info] Loaded presets: " + this->m_Config.szPresetsPath);

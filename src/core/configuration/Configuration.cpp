@@ -267,39 +267,46 @@ namespace config
         }
     }
 
-    void CConfiguration::LoadLanguages(const std::wstring szLangPath)
+    bool CConfiguration::LoadLanguages(const std::wstring szLangPath)
     {
-        FindLanguages(szLangPath, false, m_Languages);
-
-        if (m_Languages.size() > 0)
+        try
         {
-            bool haveLang = false;
-            for (int i = 0; i < (int)m_Languages.size(); i++)
+            FindLanguages(szLangPath, false, m_Languages);
+            if (m_Languages.size() > 0)
             {
-                auto& lang = m_Languages[i];
-                std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
-                std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
-                if (szNameLang == szNameConfig)
+                bool haveLang = false;
+                for (int i = 0; i < (int)m_Languages.size(); i++)
                 {
-                    m_nLangId = i;
+                    auto& lang = m_Languages[i];
+                    std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
+                    std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
+                    if (szNameLang == szNameConfig)
+                    {
+                        m_nLangId = i;
+                        pStrings = &lang.m_Strings;
+                        haveLang = true;
+                        break;
+                    }
+                }
+
+                if (haveLang == false)
+                {
+                    auto& lang = m_Languages[0];
+                    m_nLangId = 0;
                     pStrings = &lang.m_Strings;
-                    haveLang = true;
-                    break;
+                    m_szLangFileName = lang.szFileName;
                 }
             }
-
-            if (haveLang == false)
+            else
             {
-                auto& lang = m_Languages[0];
-                m_nLangId = 0;
-                pStrings = &lang.m_Strings;
-                m_szLangFileName = lang.szFileName;
+                m_nLangId = -1;
             }
         }
-        else
+        catch (...)
         {
-            m_nLangId = -1;
+            return false;
         }
+        return true;
     }
 
     std::wstring CConfiguration::GetString(const int nKey)
