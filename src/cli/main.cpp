@@ -106,7 +106,7 @@ int wmain(int argc, wchar_t *argv[])
         }
     }
 
-    if (app.Init() == false)
+    if (app.LoadConfiguration() == false)
     {
         app.CloseLog();
         return -1;

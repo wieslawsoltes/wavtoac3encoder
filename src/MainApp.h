@@ -25,21 +25,17 @@
 
 namespace app
 {
-    class CEncWAVtoAC3App : public CWinAppEx
+    class CMainApp : public CWinAppEx
     {
     public:
-        CEncWAVtoAC3App();
-        virtual ~CEncWAVtoAC3App();
+        CMainApp();
+        virtual ~CMainApp();
     public:
         virtual BOOL InitInstance();
         DECLARE_MESSAGE_MAP()
     public:
         config::CConfiguration m_Config;
-    public:
-        void DefaultConfig();
-        void LoadConfig();
-        void SaveConfig();
     };
 
-    extern CEncWAVtoAC3App m_App;
+    extern CMainApp m_App;
 }

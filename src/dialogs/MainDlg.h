@@ -111,6 +111,13 @@ namespace dialogs
         void ApplyPresetToDlg(const config::CPreset &preset);
         void ApplyEngineToDlg(const config::CEngine &engine);
         void ApplyConfigToDlg(const std::vector<config::Entry>& entries);
+        void SearchFolderForFiles(const std::wstring szFile, const bool bRecurse);
+    public:
+        bool GetAvisynthFileInfo(const std::wstring szFileName, AvsAudioInfo *pInfoAVS);
+        ULONGLONG GetFileSize(const std::wstring& szPath);
+        bool AddFile(const std::wstring& szPath);
+        bool AddPath(const std::wstring& pattern);
+        bool AddFiles(const std::vector<std::wstring>& files);
         bool LoadPresets(const std::wstring& szFileName);
         bool SavePresets(const std::wstring& szFileName);
         bool LoadEngines(const std::wstring& szFileName);
@@ -121,12 +128,7 @@ namespace dialogs
         bool SaveConfig(const std::wstring& szFileName);
         void LoadConfiguration();
         void SaveConfiguration();
-        void SearchFolderForFiles(const std::wstring szFile, const bool bRecurse);
-        bool GetAvisynthFileInfo(const std::wstring szFileName, AvsAudioInfo *pInfoAVS);
-        ULONGLONG GetFileSize(const std::wstring& szPath);
-        bool AddFile(const std::wstring& szPath);
-        bool AddPath(const std::wstring& pattern);
-        bool AddFiles(const std::vector<std::wstring>& files);
+        void Encode();
     protected:
         afx_msg void OnPaint();
         afx_msg HCURSOR OnQueryDragIcon();

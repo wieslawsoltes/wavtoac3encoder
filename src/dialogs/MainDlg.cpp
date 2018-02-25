@@ -1039,6 +1039,119 @@ namespace dialogs
         }
     }
 
+    void CMainDlg::SearchFolderForFiles(const std::wstring szPath, const bool bRecurse)
+    {
+        try
+        {
+            std::vector<std::wstring> files;
+            if (util::Utilities::FindFiles(szPath, files, bRecurse) == true)
+            {
+                this->AddFiles(files);
+                this->RedrawFiles();
+            }
+        }
+        catch (...)
+        {
+            this->pConfig->Log->Log(L"[Error] Exception thrown when searching for files.");
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x0020702A).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+            }
+        }
+    }
+
+    bool CMainDlg::GetAvisynthFileInfo(const std::wstring szFileName, AvsAudioInfo *pInfoAVS)
+    {
+        if (pInfoAVS == nullptr)
+            return false;
+
+        memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
+
+        CAvs2Raw decoderAVS;
+        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
+        if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
+        {
+            this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207022).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            }
+            return false;
+        }
+        else
+        {
+            (*pInfoAVS) = decoderAVS.GetInputInfo();
+            decoderAVS.CloseAvisynth();
+            return true;
+        }
+    }
+
+    ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
+    {
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (util::StringHelper::TowLower(szExt) == L"avs")
+        {
+            AvsAudioInfo infoAVS;
+            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
+            if (GetAvisynthFileInfo(szPath, &infoAVS) == true)
+            {
+                ULONGLONG nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
+                return nFileSize;
+            }
+        }
+        else
+        {
+            ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
+            return nFileSize;
+        }
+        return 0;
+    }
+
+    bool CMainDlg::AddFile(const std::wstring& szPath)
+    {
+        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        if (this->pConfig->IsSupportedInputExt(szExt) == true)
+        {
+            ULONGLONG nSize = this->GetFileSize(szPath);
+            config::CFile file{ szPath, nSize };
+            this->pConfig->m_Files.emplace_back(file);
+            return true;
+        }
+        return false;
+    }
+
+    bool CMainDlg::AddPath(const std::wstring& pattern)
+    {
+        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
+        if (files.size() > 0)
+        {
+            for (auto& file : files)
+                this->AddFile(file);
+            return true;
+        }
+        return false;
+    }
+
+    bool CMainDlg::AddFiles(const std::vector<std::wstring>& files)
+    {
+        for (auto& file : files)
+        {
+            if (file.find('*', 0) != std::wstring::npos)
+            {
+                this->AddPath(file);
+            }
+            else
+            {
+                if (this->AddFile(file) == false)
+                {
+                    this->pConfig->Log->Log(L"[Error] Not supported input file: " + file);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     bool CMainDlg::LoadPresets(const std::wstring& szFileName)
     {
         std::vector<config::CPreset> presets;
@@ -1188,117 +1301,196 @@ namespace dialogs
             this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
     }
 
-    void CMainDlg::SearchFolderForFiles(const std::wstring szPath, const bool bRecurse)
+    void CMainDlg::Encode()
     {
-        try
+        static bool bWorking = false;
+        if (bWorking == true)
+            return;
+
+        bWorking = true;
+
+        int nItemsCount = this->pConfig->m_Files.size();
+        if (nItemsCount <= 0)
         {
-            std::vector<std::wstring> files;
-            if (util::Utilities::FindFiles(szPath, files, bRecurse) == true)
-            {
-                this->AddFiles(files);
-                this->RedrawFiles();
-            }
-        }
-        catch (...)
-        {
-            this->pConfig->Log->Log(L"[Error] Exception thrown when searching for files.");
+            this->pConfig->Log->Log(L"[Error] Add at least one file to the file list.");
             if (this->pConfig->bDisableAllWarnings == false)
             {
-                this->MessageBox(this->pConfig->GetString(0x0020702A).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                this->MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             }
+            bWorking = false;
+            return;
         }
-    }
 
-    bool CMainDlg::GetAvisynthFileInfo(const std::wstring szFileName, AvsAudioInfo *pInfoAVS)
-    {
-        if (pInfoAVS == nullptr)
-            return false;
-
-        memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
-
-        CAvs2Raw decoderAVS;
-        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
-        if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
+        if ((this->pConfig->bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
-            this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
+            this->pConfig->Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
             if (this->pConfig->bDisableAllWarnings == false)
             {
-                this->MessageBox(this->pConfig->GetString(0x00207022).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+                this->MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
             }
-            return false;
+            bWorking = false;
+            return;
         }
+
+        if (this->pConfig->m_bIsPortable == true)
+            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
         else
-        {
-            (*pInfoAVS) = decoderAVS.GetInputInfo();
-            decoderAVS.CloseAvisynth();
-            return true;
-        }
-    }
+            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
 
-    ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
-    {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
+        CWorkDlg dlg;
+
+        dlg.pConfig = this->pConfig;
+        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(&dlg);
+        dlg.pWorkerContext->bTerminate = false;
+        dlg.pWorkerContext->bCanUpdateWindow = true;
+        dlg.pWorkerContext->nEncodedFiles = 0;
+        dlg.pWorkerContext->m_ElapsedTimeFile = 0;
+        dlg.pWorkerContext->m_ElapsedTimeTotal = 0;
+        dlg.pWorkerContext->nTotalSize = 0;
+
+        for (int i = 0; i < nItemsCount; i++)
         {
-            AvsAudioInfo infoAVS;
-            memset(&infoAVS, 0, sizeof(AvsAudioInfo));
-            if (GetAvisynthFileInfo(szPath, &infoAVS) == true)
+            config::CFile& file = this->pConfig->m_Files[i];
+            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
+            if (util::StringHelper::TowLower(szExt) == L"avs")
             {
-                ULONGLONG nFileSize = infoAVS.nAudioSamples * infoAVS.nBytesPerChannelSample * infoAVS.nAudioChannels;
-                return nFileSize;
-            }
-        }
-        else
-        {
-            ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
-            return nFileSize;
-        }
-        return 0;
-    }
-
-    bool CMainDlg::AddFile(const std::wstring& szPath)
-    {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (this->pConfig->IsSupportedInputExt(szExt) == true)
-        {
-            ULONGLONG nSize = this->GetFileSize(szPath);
-            config::CFile file { szPath, nSize };
-            this->pConfig->m_Files.emplace_back(file);
-            return true;
-        }
-        return false;
-    }
-
-    bool CMainDlg::AddPath(const std::wstring& pattern)
-    {
-        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
-        if (files.size() > 0)
-        {
-            for (auto& file : files)
-                this->AddFile(file);
-            return true;
-        }
-        return false;
-    }
-
-    bool CMainDlg::AddFiles(const std::vector<std::wstring>& files)
-    {
-        for (auto& file : files)
-        {
-            if (file.find('*', 0) != std::wstring::npos)
-            {
-                this->AddPath(file);
-            }
-            else
-            {
-                if (this->AddFile(file) == false)
+                if (this->pConfig->bMultiMonoInput == true)
                 {
-                    this->pConfig->Log->Log(L"[Error] Not supported input file: " + file);
-                    return false;
+                    this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+                    }
+                    bWorking = false;
+                    return;
+                }
+            }
+            file.bStatus = false;
+            dlg.pWorkerContext->nTotalSize += file.nSize;
+        }
+
+        CString szOutputPath;
+        this->m_EdtOutPath.GetWindowText(szOutputPath);
+        this->pConfig->szOutputPath = szOutputPath;
+        this->pConfig->bUseOutputPath = false;
+
+        int nLen = this->pConfig->szOutputPath.length();
+        if (nLen < 3)
+        {
+            this->pConfig->Log->Log(L"[Error] Invalid output path.");
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+            }
+            bWorking = false;
+            return;
+        }
+
+        std::wstring szExt = this->pConfig->szOutputPath.substr(this->pConfig->szOutputPath.length() - 4, 4);
+        if (this->pConfig->bMultiMonoInput == true)
+        {
+            if (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str())
+            {
+                if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
+                {
+                    this->pConfig->Log->Log(L"[Error] Invalid output file.");
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
+                    bWorking = false;
+                    return;
                 }
             }
         }
-        return true;
+
+        if ((!this->pConfig->szOutputPath.empty()) &&
+            ((this->pConfig->szOutputPath != this->pConfig->GetString(0x00207004).c_str() && this->pConfig->bMultiMonoInput == false) ||
+            (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str() && this->pConfig->bMultiMonoInput == true)))
+        {
+            if (this->pConfig->bMultiMonoInput == false)
+            {
+                if (util::Utilities::MakeFullPath(this->pConfig->szOutputPath) == false)
+                {
+                    this->pConfig->Log->Log(L"[Error] Failed to create output path.");
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
+                    bWorking = false;
+                    return;
+                }
+            }
+            else
+            {
+                std::wstring szFile = util::Utilities::GetFileName(this->pConfig->szOutputPath);
+                std::wstring szOutputPath = this->pConfig->szOutputPath.substr(0, this->pConfig->szOutputPath.length() - szFile.length());
+                if (util::Utilities::MakeFullPath(szOutputPath) == false)
+                {
+                    this->pConfig->Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
+                    bWorking = false;
+                    return;
+                }
+            }
+            this->pConfig->bUseOutputPath = true;
+        }
+
+        util::CTimeCount countTime;
+
+        countTime.Start();
+        dlg.DoModal();
+        countTime.Stop();
+
+        std::wstring szElapsedFormatted = countTime.Format(countTime.ElapsedTime());
+        double szElapsedSeconds = countTime.ElapsedTime().count() / 1000.0f;
+
+        for (int i = (int)this->pConfig->m_Files.size() - 1; i >= 0; i--)
+        {
+            if (this->pConfig->m_Files[i].bStatus == true)
+                this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + i);
+        }
+        this->RedrawFiles();
+
+        CString szStatus;
+        if (dlg.pWorkerContext->nEncodedFiles <= 0)
+        {
+            szStatus = _T("");
+            this->pConfig->Log->Log(L"[Error] Failed to encode all files.");
+        }
+        else
+        {
+            if (this->pConfig->bMultiMonoInput == true)
+            {
+                szStatus.Format(this->pConfig->GetString(0x00207018).c_str(),
+                    dlg.pWorkerContext->nEncodedFiles,
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds);
+
+                this->pConfig->Log->Log(
+                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
+                    L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
+            }
+            else
+            {
+                szStatus.Format(this->pConfig->GetString(0x00207019).c_str(),
+                    dlg.pWorkerContext->nEncodedFiles,
+                    dlg.pWorkerContext->nEncodedFiles == 1 ? _T("") :
+                    this->pConfig->GetString(0x0020701A).c_str(),
+                    szElapsedFormatted.c_str(),
+                    szElapsedSeconds);
+
+                this->pConfig->Log->Log(
+                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
+                    L" file" + ((dlg.pWorkerContext->nEncodedFiles == 1) ? L"" : L"s") +
+                    L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
+            }
+        }
+
+        this->m_StatusBar.SetText(szStatus, 0, 0);
+        bWorking = false;
     }
 
     void CMainDlg::OnPaint()
@@ -2067,194 +2259,7 @@ namespace dialogs
 
     void CMainDlg::OnBnClickedButtonEncode()
     {
-        static bool bWorking = false;
-        if (bWorking == true)
-            return;
-
-        bWorking = true;
-
-        int nItemsCount = this->pConfig->m_Files.size();
-        if (nItemsCount <= 0)
-        {
-            this->pConfig->Log->Log(L"[Error] Add at least one file to the file list.");
-            if (this->pConfig->bDisableAllWarnings == false)
-            {
-                this->MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
-            }
-            bWorking = false;
-            return;
-        }
-
-        if ((this->pConfig->bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
-        {
-            this->pConfig->Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
-            if (this->pConfig->bDisableAllWarnings == false)
-            {
-                this->MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
-            }
-            bWorking = false;
-            return;
-        }
-
-        if (this->pConfig->m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
-        else
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
-
-        CWorkDlg dlg;
-
-        dlg.pConfig = this->pConfig;
-        dlg.pWorkerContext = std::make_unique<CWorkDlgWorkerContext>(&dlg);
-        dlg.pWorkerContext->bTerminate = false;
-        dlg.pWorkerContext->bCanUpdateWindow = true;
-        dlg.pWorkerContext->nEncodedFiles = 0;
-        dlg.pWorkerContext->m_ElapsedTimeFile = 0;
-        dlg.pWorkerContext->m_ElapsedTimeTotal = 0;
-        dlg.pWorkerContext->nTotalSize = 0;
-
-        for (int i = 0; i < nItemsCount; i++)
-        {
-            config::CFile& file = this->pConfig->m_Files[i];
-            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
-            if (util::StringHelper::TowLower(szExt) == L"avs")
-            {
-                if (this->pConfig->bMultiMonoInput == true)
-                {
-                    this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
-                    if (this->pConfig->bDisableAllWarnings == false)
-                    {
-                        this->MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
-                    }
-                    bWorking = false;
-                    return;
-                }
-            }
-            file.bStatus = false;
-            dlg.pWorkerContext->nTotalSize += file.nSize;
-        }
-
-        CString szOutputPath;
-        this->m_EdtOutPath.GetWindowText(szOutputPath);
-        this->pConfig->szOutputPath = szOutputPath;
-        this->pConfig->bUseOutputPath = false;
-
-        int nLen = this->pConfig->szOutputPath.length();
-        if (nLen < 3)
-        {
-            this->pConfig->Log->Log(L"[Error] Invalid output path.");
-            {
-                this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
-            }
-            bWorking = false;
-            return;
-        }
-
-        std::wstring szExt = this->pConfig->szOutputPath.substr(this->pConfig->szOutputPath.length() - 4, 4);
-        if (this->pConfig->bMultiMonoInput == true)
-        {
-            if (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str())
-            {
-                if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
-                {
-                    this->pConfig->Log->Log(L"[Error] Invalid output file.");
-                    if (this->pConfig->bDisableAllWarnings == false)
-                    {
-                        this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
-                    }
-                    bWorking = false;
-                    return;
-                }
-            }
-        }
-
-        if ((!this->pConfig->szOutputPath.empty()) &&
-            ((this->pConfig->szOutputPath != this->pConfig->GetString(0x00207004).c_str() && this->pConfig->bMultiMonoInput == false) ||
-            (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str() && this->pConfig->bMultiMonoInput == true)))
-        {
-            if (this->pConfig->bMultiMonoInput == false)
-            {
-                if (util::Utilities::MakeFullPath(this->pConfig->szOutputPath) == false)
-                {
-                    this->pConfig->Log->Log(L"[Error] Failed to create output path.");
-                    if (this->pConfig->bDisableAllWarnings == false)
-                    {
-                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
-                    }
-                    bWorking = false;
-                    return;
-                }
-            }
-            else
-            {
-                std::wstring szFile = util::Utilities::GetFileName(this->pConfig->szOutputPath);
-                std::wstring szOutputPath = this->pConfig->szOutputPath.substr(0, this->pConfig->szOutputPath.length() - szFile.length());
-                if (util::Utilities::MakeFullPath(szOutputPath) == false)
-                {
-                    this->pConfig->Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
-                    if (this->pConfig->bDisableAllWarnings == false)
-                    {
-                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
-                    }
-                    bWorking = false;
-                    return;
-                }
-            }
-            this->pConfig->bUseOutputPath = true;
-        }
-
-        util::CTimeCount countTime;
-
-        countTime.Start();
-        dlg.DoModal();
-        countTime.Stop();
-
-        std::wstring szElapsedFormatted = countTime.Format(countTime.ElapsedTime());
-        double szElapsedSeconds = countTime.ElapsedTime().count() / 1000.0f;
-
-        for (int i = (int)this->pConfig->m_Files.size() - 1; i >= 0; i--)
-        {
-            if (this->pConfig->m_Files[i].bStatus == true)
-                this->pConfig->m_Files.erase(this->pConfig->m_Files.begin() + i);
-        }
-        this->RedrawFiles();
-
-        CString szStatus;
-        if (dlg.pWorkerContext->nEncodedFiles <= 0)
-        {
-            szStatus = _T("");
-            this->pConfig->Log->Log(L"[Error] Failed to encode all files.");
-        }
-        else
-        {
-            if (this->pConfig->bMultiMonoInput == true)
-            {
-                szStatus.Format(this->pConfig->GetString(0x00207018).c_str(),
-                    dlg.pWorkerContext->nEncodedFiles,
-                    szElapsedFormatted.c_str(),
-                    szElapsedSeconds);
-
-                this->pConfig->Log->Log(
-                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
-                    L" mono files in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
-            }
-            else
-            {
-                szStatus.Format(this->pConfig->GetString(0x00207019).c_str(),
-                    dlg.pWorkerContext->nEncodedFiles,
-                    dlg.pWorkerContext->nEncodedFiles == 1 ? _T("") :
-                    this->pConfig->GetString(0x0020701A).c_str(),
-                    szElapsedFormatted.c_str(),
-                    szElapsedSeconds);
-
-                this->pConfig->Log->Log(
-                    L"[Info] Encoded " + std::to_wstring(dlg.pWorkerContext->nEncodedFiles) +
-                    L" file" + ((dlg.pWorkerContext->nEncodedFiles == 1) ? L"" : L"s") +
-                    L" in " + szElapsedFormatted + L" (" + std::to_wstring(szElapsedSeconds) + L"s).");
-            }
-        }
-
-        this->m_StatusBar.SetText(szStatus, 0, 0);
-        bWorking = false;
+        this->Encode();
     }
 
     void CMainDlg::OnBnClickedCheckSimdMmx()

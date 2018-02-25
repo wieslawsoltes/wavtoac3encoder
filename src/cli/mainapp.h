@@ -106,6 +106,41 @@ class MainApp
 public:
     config::CConfiguration m_Config;
 public:
+    void OpenLog()
+    {
+        this->m_Config.Log = std::make_unique<logger::ConsoleLog>();
+        this->m_Config.Log->Open();
+        this->m_Config.Log->Log(L"[Info] Program started: CLI");
+    }
+    void CloseLog()
+    {
+        this->m_Config.Log->Log(L"[Info] Program exited: CLI");
+        this->m_Config.Log->Close();
+    }
+    void DefaultConfig()
+    {
+        this->m_Config.m_bIsPortable = true;
+        this->m_Config.nCurrentPreset = 0;
+        this->m_Config.szOutputPath = L"";
+        this->m_Config.szOutputFile = L"";
+        this->m_Config.bUseOutputPath = false;
+        this->m_Config.bMultiMonoInput = false;
+        this->m_Config.bDisableAllWarnings = true;
+        this->m_Config.bSaveConfig = false;
+        this->m_Config.nCurrentEngine = 0;
+        this->m_Config.SetEncoderOptions();
+        this->m_Config.InitDefaultPreset();
+        this->m_Config.InitDefaultEngine();
+        this->m_Config.m_Presets.emplace_back(this->m_Config.m_DefaultPreset);
+        this->m_Config.m_Engines.emplace_back(this->m_Config.m_DefaultEngine);
+        this->m_Config.szLogPath = L"";
+        this->m_Config.szConfigPath = L"";
+        this->m_Config.szLangPath = L"";
+        this->m_Config.szPresetsPath = L"";
+        this->m_Config.szEnginesPath = L"";
+        this->m_Config.szFilesPath = L"";
+    }
+public:
     bool GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
         if (pInfoAVS == nullptr)
@@ -189,43 +224,6 @@ public:
         }
         return true;
     }
-public:
-    void OpenLog()
-    {
-        this->m_Config.Log = std::make_unique<logger::ConsoleLog>();
-        this->m_Config.Log->Open();
-        this->m_Config.Log->Log(L"[Info] Program started: CLI");
-    }
-    void CloseLog()
-    {
-        this->m_Config.Log->Log(L"[Info] Program exited: CLI");
-        this->m_Config.Log->Close();
-    }
-public:
-    void DefaultConfig()
-    {
-        this->m_Config.m_bIsPortable = true;
-        this->m_Config.nCurrentPreset = 0;
-        this->m_Config.szOutputPath = L"";
-        this->m_Config.szOutputFile = L"";
-        this->m_Config.bUseOutputPath = false;
-        this->m_Config.bMultiMonoInput = false;
-        this->m_Config.bDisableAllWarnings = true;
-        this->m_Config.bSaveConfig = false;
-        this->m_Config.nCurrentEngine = 0;
-        this->m_Config.SetEncoderOptions();
-        this->m_Config.InitDefaultPreset();
-        this->m_Config.InitDefaultEngine();
-        this->m_Config.m_Presets.emplace_back(this->m_Config.m_DefaultPreset);
-        this->m_Config.m_Engines.emplace_back(this->m_Config.m_DefaultEngine);
-        this->m_Config.szLogPath = L"";
-        this->m_Config.szConfigPath = L"";
-        this->m_Config.szLangPath = L"";
-        this->m_Config.szPresetsPath = L"";
-        this->m_Config.szEnginesPath = L"";
-        this->m_Config.szFilesPath = L"";
-    }
-public:
     bool LoadPresets(const std::wstring &szFileName)
     {
         std::vector<config::CPreset> presets;
@@ -258,8 +256,7 @@ public:
         }
         return false;
     }
-public:
-    bool Init()
+    bool LoadConfiguration()
     {
         if (!this->m_Config.szPresetsPath.empty() && this->LoadPresets(this->m_Config.szPresetsPath))
         {

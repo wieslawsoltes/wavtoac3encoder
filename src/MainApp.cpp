@@ -4,21 +4,21 @@
 
 namespace app
 {
-    CEncWAVtoAC3App m_App;
+    CMainApp m_App;
 
-    BEGIN_MESSAGE_MAP(CEncWAVtoAC3App, CWinAppEx)
+    BEGIN_MESSAGE_MAP(CMainApp, CWinAppEx)
         ON_COMMAND(ID_HELP, &CWinAppEx::OnHelp)
     END_MESSAGE_MAP()
 
-    CEncWAVtoAC3App::CEncWAVtoAC3App()
+    CMainApp::CMainApp()
     {
     }
 
-    CEncWAVtoAC3App::~CEncWAVtoAC3App()
+    CMainApp::~CMainApp()
     {
     }
 
-    BOOL CEncWAVtoAC3App::InitInstance()
+    BOOL CMainApp::InitInstance()
     {
         this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
 
@@ -55,8 +55,24 @@ namespace app
 
         try
         {
-            DefaultConfig();
-            LoadConfig();
+            this->m_Config.m_szLangFileName = L"lang\\en-US.txt";
+            this->m_Config.m_nLangId = -1;
+            this->m_Config.m_bIsPortable = true;
+            this->m_Config.nCurrentPreset = 0;
+            this->m_Config.szOutputPath = L"";
+            this->m_Config.szOutputFile = L"";
+            this->m_Config.bMultiMonoInput = false;
+            this->m_Config.bDisableAllWarnings = false;
+            this->m_Config.bSaveConfig = true;
+            this->m_Config.nCurrentEngine = 0;
+
+            this->m_Config.SetEncoderOptions();
+
+            this->m_Config.LoadLanguagePath(this->m_Config.szLangPath);
+            if (this->m_Config.m_bIsPortable == true)
+                this->m_Config.LoadLanguages(util::Utilities::GetExeFilePath() + L"lang");
+            else
+                this->m_Config.LoadLanguages(util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
         }
         catch (...)
         {
@@ -98,7 +114,7 @@ namespace app
 
         try
         {
-            SaveConfig();
+            this->m_Config.SaveLanguagePath(this->m_Config.szLangPath);
         }
         catch (...)
         {
@@ -109,36 +125,5 @@ namespace app
         this->m_Config.Log->Close();
 
         return FALSE;
-    }
-
-    void CEncWAVtoAC3App::DefaultConfig()
-    {
-        this->m_Config.m_szLangFileName = L"lang\\en-US.txt";
-        this->m_Config.m_nLangId = -1;
-        this->m_Config.m_bIsPortable = true;
-        this->m_Config.nCurrentPreset = 0;
-        this->m_Config.szOutputPath = L"";
-        this->m_Config.szOutputFile = L"";
-        this->m_Config.bMultiMonoInput = false;
-        this->m_Config.bDisableAllWarnings = false;
-        this->m_Config.bSaveConfig = true;
-        this->m_Config.nCurrentEngine = 0;
-    }
-
-    void CEncWAVtoAC3App::LoadConfig()
-    {
-        this->m_Config.SetEncoderOptions();
-
-        this->m_Config.LoadLanguagePath(this->m_Config.szLangPath);
-
-        if (this->m_Config.m_bIsPortable == true)
-            this->m_Config.LoadLanguages(util::Utilities::GetExeFilePath() + L"lang");
-        else
-            this->m_Config.LoadLanguages(util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
-    }
-
-    void CEncWAVtoAC3App::SaveConfig()
-    {
-        this->m_Config.SaveLanguagePath(this->m_Config.szLangPath);
     }
 }
