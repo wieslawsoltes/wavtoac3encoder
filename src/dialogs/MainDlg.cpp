@@ -610,7 +610,10 @@ namespace dialogs
                         this->UpdateEngines();
                     }
                     else if (util::StringHelper::TowLower(szExt) == L"files")
+                    {
                         this->LoadFiles(path);
+                        this->RedrawFiles();
+                    }
                     else if (util::StringHelper::TowLower(szExt) == L"config")
                         this->LoadConfig(path);
                     else
@@ -1041,6 +1044,7 @@ namespace dialogs
         std::vector<config::CPreset> presets;
         if (this->pConfig->LoadPresets(presets, szFileName, this->pConfig->m_DefaultPreset) == true)
         {
+            this->pConfig->nCurrentPreset = 0;
             this->pConfig->m_Presets = presets;
             return true;
         }
@@ -1057,6 +1061,7 @@ namespace dialogs
         std::vector<config::CEngine> engines;
         if (this->pConfig->LoadEngines(engines, szFileName, this->pConfig->m_DefaultEngine) == true)
         {
+            this->pConfig->nCurrentEngine = 0;
             this->pConfig->m_Engines = engines;
             return true;
         }
@@ -1074,9 +1079,7 @@ namespace dialogs
         if (this->pConfig->LoadFiles(szFileName, files))
         {
             this->pConfig->m_Files.clear();
-            this->AddFiles(files);
-            this->RedrawFiles();
-            return true;
+            return this->AddFiles(files);
         }
         return false;
     }
@@ -1153,6 +1156,8 @@ namespace dialogs
             this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesPath);
+
+        this->RedrawFiles();
 
         if (this->LoadConfig(this->pConfig->szConfigPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
@@ -1734,7 +1739,8 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            LoadFiles(szFileName);
+            this->LoadFiles(szFileName);
+            this->RedrawFiles();
         }
     }
 
