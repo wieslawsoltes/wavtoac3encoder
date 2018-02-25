@@ -1,7 +1,7 @@
 ﻿#define WIN32_LEAN_AND_MEAN
 #include <SDKDDKVer.h>
 #include <Windows.h>
-#include "App.h"
+#include "mainapp.h"
 #include "utilities\ArgvParser.h"
 
 void Help(std::unique_ptr<logger::ILog>& log)
@@ -47,7 +47,7 @@ std::vector<util::Option> m_Options
 
 int wmain(int argc, wchar_t *argv[])
 {
-    App app;
+    MainApp app;
 
     app.OpenLog();
     app.DefaultConfig();

@@ -101,7 +101,7 @@ public:
     }
 };
 
-class App
+class MainApp
 {
 public:
     config::CConfiguration m_Config;
@@ -240,7 +240,7 @@ public:
     bool LoadEngines(const std::wstring &szFileName)
     {
         std::vector<config::CEngine> engines;
-        if (this->m_Config.LoadEngines(engines, szFileName) == true)
+        if (this->m_Config.LoadEngines(engines, szFileName, this->m_Config.m_DefaultEngine) == true)
         {
             this->m_Config.nCurrentEngine = 0;
             this->m_Config.m_Engines = engines;

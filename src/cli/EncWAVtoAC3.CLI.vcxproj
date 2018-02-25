@@ -169,7 +169,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="mainapp.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
