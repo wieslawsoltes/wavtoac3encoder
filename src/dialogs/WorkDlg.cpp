@@ -209,7 +209,10 @@ namespace dialogs
         catch (...)
         {
             this->pConfig->Log->Log(L"[Error] Failed to create worker thread.");
-            this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x00A0100B).c_str(), this->pConfig->GetString(0x00A0100A).c_str(), MB_OK | MB_ICONERROR);
+            }
         }
     }
 
