@@ -602,9 +602,23 @@ namespace dialogs
             for (auto& path : paths)
             {
                 if (::GetFileAttributes(path.c_str()) & FILE_ATTRIBUTE_DIRECTORY)
+                {
                     this->SearchFolderForFiles(path, true);
+                }
                 else
-                    this->AddFile(path);
+                {
+                    std::wstring szExt = util::Utilities::GetFileExtension(path);
+                    if (util::StringHelper::TowLower(szExt) == L"presets")
+                        this->LoadPresets(path);
+                    else if (util::StringHelper::TowLower(szExt) == L"engines")
+                        this->LoadEngines(path);
+                    else if (util::StringHelper::TowLower(szExt) == L"files")
+                        this->LoadFiles(path);
+                    else if (util::StringHelper::TowLower(szExt) == L"config")
+                        this->LoadConfig(path);
+                    else
+                        this->AddFile(path);
+                }
             }
 
             this->RedrawFiles();
@@ -837,7 +851,32 @@ namespace dialogs
         }
     }
 
-    bool CMainDlg::LoadEngines(std::wstring szFileName)
+    bool CMainDlg::LoadPresets(const std::wstring& szFileName)
+    {
+        std::vector<config::CPreset> presets;
+        if (this->pConfig->LoadPresets(presets, szFileName, this->pConfig->m_DefaultPreset) == true)
+        {
+            this->pConfig->m_Presets = presets;
+            this->pConfig->nCurrentPreset = 0;
+
+            this->m_CmbPresets.ResetContent();
+            for (int i = 0; i < (int)pConfig->m_Presets.size(); i++)
+                this->m_CmbPresets.AddString(pConfig->m_Presets[i].szName.c_str());
+
+            util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+            this->m_CmbPresets.SetCurSel(0);
+            this->OnCbnSelchangeComboPresets();
+            return true;
+        }
+        return false;
+    }
+
+    bool CMainDlg::SavePresets(const std::wstring& szFileName)
+    {
+        return this->pConfig->SavePresets(this->pConfig->m_Presets, szFileName, this->pConfig->m_DefaultPreset);
+    }
+
+    bool CMainDlg::LoadEngines(const std::wstring& szFileName)
     {
         std::vector<config::CEngine> engines;
         if (this->pConfig->LoadEngines(engines, szFileName) == true)
@@ -852,12 +891,12 @@ namespace dialogs
         return false;
     }
 
-    bool CMainDlg::SaveEngines(std::wstring szFileName)
+    bool CMainDlg::SaveEngines(const std::wstring& szFileName)
     {
         return this->pConfig->SaveEngines(this->pConfig->m_Engines, szFileName);
     }
 
-    bool CMainDlg::LoadFiles(std::wstring &szFileName)
+    bool CMainDlg::LoadFiles(const std::wstring& szFileName)
     {
         std::vector<std::wstring> files;
         if (this->pConfig->LoadFiles(szFileName, files))
@@ -870,18 +909,18 @@ namespace dialogs
         return false;
     }
 
-    bool CMainDlg::SaveFiles(std::wstring &szFileName, int nFormat)
+    bool CMainDlg::SaveFiles(const std::wstring& szFileName, const int nFormat)
     {
-        std::vector<std::wstring> fl;
+        std::vector<std::wstring> files;
         for (int i = 0; i < (int)this->pConfig->m_Files.size(); i++)
         {
             config::CFile& file = this->pConfig->m_Files[i];
-            fl.emplace_back(file.szPath);
+            files.emplace_back(file.szPath);
         }
-        return this->pConfig->SaveFiles(szFileName, fl, nFormat);
+        return this->pConfig->SaveFiles(szFileName, files, nFormat);
     }
 
-    bool CMainDlg::LoadConfig(std::wstring szFileName)
+    bool CMainDlg::LoadConfig(const std::wstring& szFileName)
     {
         std::vector<config::Entry> cl;
         if (this->pConfig->LoadEntries(szFileName, cl) == true)
@@ -1040,7 +1079,7 @@ namespace dialogs
         return false;
     }
 
-    bool CMainDlg::SaveConfig(std::wstring szFileName)
+    bool CMainDlg::SaveConfig(const std::wstring& szFileName)
     {
         std::vector<config::Entry> cl;
 
@@ -1072,46 +1111,22 @@ namespace dialogs
 
     void CMainDlg::LoadConfiguration()
     {
-        bool bPresetsRet = this->pConfig->LoadPresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
-        if (bPresetsRet == true)
+        if (this->LoadPresets(this->pConfig->szPresetsPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsPath);
 
-        if (bPresetsRet == true)
-        {
-            int nPresetsSize = (int)pConfig->m_Presets.size();
-            if (nPresetsSize > 0)
-            {
-                this->m_CmbPresets.ResetContent();
-                for (int i = 0; i < nPresetsSize; i++)
-                {
-                    auto& preset = pConfig->m_Presets[i];
-                    this->m_CmbPresets.InsertString(i, preset.szName.c_str());
-                }
-
-                if ((this->pConfig->nCurrentPreset >= nPresetsSize) || (this->pConfig->nCurrentPreset < 0))
-                    this->pConfig->nCurrentPreset = 0;
-
-                this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
-                this->OnCbnSelchangeComboPresets();
-            }
-        }
-
-        bool bEnginesRet = this->LoadEngines(this->pConfig->szEnginesPath);
-        if (bEnginesRet == true)
+        if (this->LoadEngines(this->pConfig->szEnginesPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesPath);
 
-        bool bConfigRet = this->LoadConfig(this->pConfig->szConfigPath);
-        if (bConfigRet == true)
+        if (this->LoadConfig(this->pConfig->szConfigPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->LoadFiles(this->pConfig->szFilesPath);
-        if (bConfigRet == true)
+        if (this->LoadFiles(this->pConfig->szFilesPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesPath);
@@ -1119,26 +1134,22 @@ namespace dialogs
 
     void CMainDlg::SaveConfiguration()
     {
-        bool bPresetsRet = this->pConfig->SavePresets(this->pConfig->m_Presets, this->pConfig->szPresetsPath, this->pConfig->m_DefaultPreset);
-        if (bPresetsRet == true)
+        if (this->SavePresets(this->pConfig->szPresetsPath) == true)
             this->pConfig->Log->Log(L"[Info] Saved encoder presets: " + this->pConfig->szPresetsPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to save encoder presets: " + this->pConfig->szPresetsPath);
 
-        bool bEnginesRet = this->SaveEngines(this->pConfig->szEnginesPath);
-        if (bPresetsRet == true)
+        if (this->SaveEngines(this->pConfig->szEnginesPath) == true)
             this->pConfig->Log->Log(L"[Info] Saved encoder engines: " + this->pConfig->szEnginesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->szEnginesPath);
 
-        bool bConfigRet = this->SaveConfig(this->pConfig->szConfigPath);
-        if (bPresetsRet == true)
+        if (this->SaveConfig(this->pConfig->szConfigPath) == true)
             this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
 
-        bool bFilesRet = this->SaveFiles(this->pConfig->szFilesPath, 0);
-        if (bFilesRet == true)
+        if (this->SaveFiles(this->pConfig->szFilesPath, 0) == true)
             this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to save files list: " + this->pConfig->szFilesPath);
@@ -1149,8 +1160,7 @@ namespace dialogs
         try
         {
             std::vector<std::wstring> files;
-            bool bResult = util::Utilities::FindFiles(szPath, files, bRecurse);
-            if (bResult == true)
+            if (util::Utilities::FindFiles(szPath, files, bRecurse) == true)
             {
                 this->AddFiles(files);
                 this->RedrawFiles();
@@ -1159,9 +1169,10 @@ namespace dialogs
         catch (...)
         {
             this->pConfig->Log->Log(L"[Error] Exception thrown when searching for files.");
-            MessageBox(this->pConfig->GetString(0x0020702A).c_str(),
-                this->pConfig->GetString(0x00207010).c_str(),
-                MB_OK | MB_ICONERROR);
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x0020702A).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+            }
         }
     }
 
@@ -1177,7 +1188,10 @@ namespace dialogs
         if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
             this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
-            this->MessageBox(this->pConfig->GetString(0x00207022).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207022).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            }
             return false;
         }
         else
@@ -1395,10 +1409,10 @@ namespace dialogs
             auto pFiles = std::make_unique<TCHAR[]>(dwMaxSize);
             if (pFiles == nullptr)
             {
-                MessageBox(
-                    this->pConfig->GetString(0x00207009).c_str(),
-                    this->pConfig->GetString(0x0020700A).c_str(),
-                    MB_OK | MB_ICONERROR);
+                if (this->pConfig->bDisableAllWarnings == false)
+                {
+                    this->MessageBox(this->pConfig->GetString(0x00207009).c_str(), this->pConfig->GetString(0x0020700A).c_str(), MB_OK | MB_ICONERROR);
+                }
                 return;
             }
 
@@ -1541,10 +1555,7 @@ namespace dialogs
 
             if (this->pConfig->bDisableAllWarnings == false)
             {
-                nRet = this->MessageBox(
-                    this->pConfig->GetString(0x0020700C).c_str(),
-                    this->pConfig->GetString(0x0020700D).c_str(),
-                    MB_YESNO | MB_ICONQUESTION);
+                nRet = this->MessageBox(this->pConfig->GetString(0x0020700C).c_str(), this->pConfig->GetString(0x0020700D).c_str(), MB_YESNO | MB_ICONQUESTION);
             }
 
             if (nRet == IDYES)
@@ -1733,22 +1744,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            if (this->pConfig->LoadPresets(this->pConfig->m_Presets, szFileName, this->pConfig->m_DefaultPreset) == true)
-            {
-                this->m_CmbPresets.ResetContent();
-
-                for (int i = 0; i < (int)pConfig->m_Presets.size(); i++)
-                {
-                    this->m_CmbPresets.AddString(pConfig->m_Presets[i].szName.c_str());
-                }
-
-                util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-
-                this->pConfig->nCurrentPreset = 0;
-                this->m_CmbPresets.SetCurSel(0);
-
-                this->OnCbnSelchangeComboPresets();
-            }
+            this->LoadPresets(szFileName);
         }
     }
 
@@ -1764,7 +1760,7 @@ namespace dialogs
         if (fd.DoModal() == IDOK)
         {
             std::wstring szFileName = fd.GetPathName();
-            this->pConfig->SavePresets(this->pConfig->m_Presets, szFileName, this->pConfig->m_DefaultPreset);
+            this->SavePresets(szFileName);
         }
     }
 
@@ -2045,7 +2041,10 @@ namespace dialogs
         if (nItemsCount <= 0)
         {
             this->pConfig->Log->Log(L"[Error] Add at least one file to the file list.");
-            MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207011).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            }
             bWorking = false;
             return;
         }
@@ -2053,7 +2052,10 @@ namespace dialogs
         if ((this->pConfig->bMultiMonoInput == true) && (nItemsCount < 1 || nItemsCount > 6))
         {
             this->pConfig->Log->Log(L"[Error] Supported are minimum 1 and maximum 6 mono input files.");
-            MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            if (this->pConfig->bDisableAllWarnings == false)
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207012).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+            }
             bWorking = false;
             return;
         }
@@ -2083,7 +2085,10 @@ namespace dialogs
                 if (this->pConfig->bMultiMonoInput == true)
                 {
                     this->pConfig->Log->Log(L"[Error] Disable 'Multiple mono input' mode in order to use Avisynth scripts.");
-                    MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207014).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_ICONERROR | MB_OK);
+                    }
                     bWorking = false;
                     return;
                 }
@@ -2101,7 +2106,9 @@ namespace dialogs
         if (nLen < 3)
         {
             this->pConfig->Log->Log(L"[Error] Invalid output path.");
-            this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+            {
+                this->MessageBox(this->pConfig->GetString(0x00207015).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+            }
             bWorking = false;
             return;
         }
@@ -2114,7 +2121,10 @@ namespace dialogs
                 if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
                 {
                     this->pConfig->Log->Log(L"[Error] Invalid output file.");
-                    this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207016).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
                     bWorking = false;
                     return;
                 }
@@ -2130,7 +2140,10 @@ namespace dialogs
                 if (util::Utilities::MakeFullPath(this->pConfig->szOutputPath) == false)
                 {
                     this->pConfig->Log->Log(L"[Error] Failed to create output path.");
-                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
                     bWorking = false;
                     return;
                 }
@@ -2142,7 +2155,10 @@ namespace dialogs
                 if (util::Utilities::MakeFullPath(szOutputPath) == false)
                 {
                     this->pConfig->Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
-                    this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    if (this->pConfig->bDisableAllWarnings == false)
+                    {
+                        this->MessageBox(this->pConfig->GetString(0x00207017).c_str(), this->pConfig->GetString(0x00207010).c_str(), MB_OK | MB_ICONERROR);
+                    }
                     bWorking = false;
                     return;
                 }
