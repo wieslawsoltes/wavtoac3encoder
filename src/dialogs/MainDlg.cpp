@@ -1049,13 +1049,13 @@ namespace dialogs
 
     bool CMainDlg::SavePresets(const std::wstring& szFileName)
     {
-        return this->pConfig->SavePresets(this->pConfig->m_Presets, szFileName, this->pConfig->m_DefaultPreset);
+        return this->pConfig->SavePresets(this->pConfig->m_Presets, szFileName);
     }
 
     bool CMainDlg::LoadEngines(const std::wstring& szFileName)
     {
         std::vector<config::CEngine> engines;
-        if (this->pConfig->LoadEngines(engines, szFileName) == true)
+        if (this->pConfig->LoadEngines(engines, szFileName, this->pConfig->m_DefaultEngine) == true)
         {
             this->pConfig->m_Engines = engines;
             return true;

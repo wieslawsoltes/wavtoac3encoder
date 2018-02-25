@@ -96,7 +96,7 @@ namespace dialogs
     bool CEnginesDlg::LoadEngines(std::wstring szFileName)
     {
         std::vector<config::CEngine> engines;
-        if (this->pConfig->LoadEngines(engines, szFileName) == true)
+        if (this->pConfig->LoadEngines(engines, szFileName, this->pConfig->m_DefaultEngine) == true)
         {
             this->m_Engines = engines;
             this->m_LstEngines.DeleteAllItems();

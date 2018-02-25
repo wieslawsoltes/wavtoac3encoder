@@ -164,11 +164,11 @@ namespace config
         void LoadLanguages(const std::wstring szLangPath);
         std::wstring CConfiguration::GetString(const int nKey);
         void ParseEngineEntries(CEngine &engine, std::vector<Entry> &entries);
-        bool LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName);
+        bool LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName, CEngine& defaultEngine);
         bool SaveEngines(std::vector<CEngine>& engines, const std::wstring& szFileName);
         void ParsePresetEntries(CPreset &preset, std::vector<Entry> &entries);
         bool LoadPresets(std::vector<CPreset>& presets, const std::wstring& szFileName, CPreset& defaultPreset);
-        bool SavePresets(std::vector<CPreset>& presets, const std::wstring& szFileName, CPreset& defaultPreset);
+        bool SavePresets(std::vector<CPreset>& presets, const std::wstring& szFileName);
         int FindValidBitrateIndex(const int nBitrate);
         int FindOptionIndex(const std::wstring szOption);
         bool IsSupportedInputExt(const std::wstring &szExt);

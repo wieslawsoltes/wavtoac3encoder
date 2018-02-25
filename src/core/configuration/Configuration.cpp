@@ -360,7 +360,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName)
+    bool CConfiguration::LoadEngines(std::vector<CEngine>& engines, const std::wstring& szFileName, CEngine& defaultEngine)
     {
         try
         {
@@ -368,7 +368,6 @@ namespace config
             if (data.empty())
                 return false;
 
-            CEngine defaultEngine(L"Aften", L"libaften.dll");
             CEngine temp;
             std::vector<Entry> cl;
             bool bHaveEngine = false;
@@ -580,7 +579,7 @@ namespace config
         }
     }
 
-    bool CConfiguration::SavePresets(std::vector<CPreset>& presets, const std::wstring& szFileName, CPreset& defaultPreset)
+    bool CConfiguration::SavePresets(std::vector<CPreset>& presets, const std::wstring& szFileName)
     {
         try
         {
