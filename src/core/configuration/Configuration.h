@@ -176,6 +176,8 @@ namespace config
         std::wstring GetSupportedInputFilesFilter();
         void InitDefaultPreset();
         void InitDefaultEngine();
+        void DefaultPresets();
+        void DefaultEngines();
         CPreset& GetCurrentPreset();
         CEngine& GetCurrentEngine();
         void SetEncoderOptions();
