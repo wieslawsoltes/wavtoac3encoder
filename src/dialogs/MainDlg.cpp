@@ -600,9 +600,15 @@ namespace dialogs
                 {
                     std::wstring szExt = util::Utilities::GetFileExtension(path);
                     if (util::StringHelper::TowLower(szExt) == L"presets")
+                    {
                         this->LoadPresets(path);
+                        this->UpdatePresets();
+                    }
                     else if (util::StringHelper::TowLower(szExt) == L"engines")
+                    {
                         this->LoadEngines(path);
+                        this->UpdateEngines();
+                    }
                     else if (util::StringHelper::TowLower(szExt) == L"files")
                         this->LoadFiles(path);
                     else if (util::StringHelper::TowLower(szExt) == L"config")
@@ -670,6 +676,8 @@ namespace dialogs
 
     void CMainDlg::UpdatePresets()
     {
+        this->m_CmbPresets.ResetContent();
+
         if (this->pConfig->m_Presets.size() == 0)
         {
             auto preset = this->pConfig->m_DefaultPreset;
@@ -704,6 +712,8 @@ namespace dialogs
 
     void CMainDlg::UpdateEngines()
     {
+        this->m_CmbEngines.ResetContent();
+
         if (this->pConfig->m_Engines.size() == 0)
         {
             auto engine = this->pConfig->m_DefaultEngine;
@@ -790,12 +800,12 @@ namespace dialogs
         }
     }
 
-    void CMainDlg::ApplyEngineToDlg(config::CEngine &engine)
+    void CMainDlg::ApplyEngineToDlg(const config::CEngine &engine)
     {
-        this->m_ChkSimdMMX.SetCheck(engine.nUsedSIMD[0] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE.SetCheck(engine.nUsedSIMD[1] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE2.SetCheck(engine.nUsedSIMD[2] == 0 ? BST_UNCHECKED : BST_CHECKED);
-        this->m_ChkSimdSSE3.SetCheck(engine.nUsedSIMD[3] == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdMMX.SetCheck(engine.nUsedSIMD.at(0) == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE.SetCheck(engine.nUsedSIMD.at(1) == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE2.SetCheck(engine.nUsedSIMD.at(2) == 0 ? BST_UNCHECKED : BST_CHECKED);
+        this->m_ChkSimdSSE3.SetCheck(engine.nUsedSIMD.at(3) == 0 ? BST_UNCHECKED : BST_CHECKED);
 
         if (engine.nThreads == 0)
             this->m_EdtThreads.SetWindowText(this->pConfig->GetString(0x00207002).c_str());
@@ -803,11 +813,11 @@ namespace dialogs
             this->m_EdtThreads.SetWindowText(std::to_wstring(engine.nThreads).c_str());
     }
 
-    void CMainDlg::ApplyPresetToDlg(config::CPreset &preset)
+    void CMainDlg::ApplyPresetToDlg(const config::CPreset &preset)
     {
         for (int i = 0; i < (int)this->pConfig->m_EncoderOptions.m_Options.size(); i++)
         {
-            int nOption = preset.nOptions[i];
+            int nOption = preset.nOptions.at(i);
             auto& option = this->pConfig->m_EncoderOptions.m_Options[i];
             std::wstring& szText = option.m_Values[nOption].first;
             this->m_LstSettings.SetItemText(i, 1, szText.c_str());
@@ -863,7 +873,7 @@ namespace dialogs
             this->m_LstSettings.SetItemState(nItem, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(nItem);
 
-            int nOptionValue = preset.nOptions[nItem];
+            int nOptionValue = preset.nOptions.at(nItem);
             this->m_CmbValue.SetCurSel(nOptionValue);
         }
         else
@@ -871,8 +881,158 @@ namespace dialogs
             this->m_LstSettings.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
             this->UpdateSettingsComboBox(0);
 
-            int nOptionValue = preset.nOptions[0];
+            int nOptionValue = preset.nOptions.at(0);
             this->m_CmbValue.SetCurSel(nOptionValue);
+        }
+    }
+
+    void CMainDlg::ApplyConfigToDlg(const std::vector<config::Entry>& entries)
+    {
+        for (auto& entry : entries)
+        {
+            if (entry.first == L"MainWindow")
+            {
+                this->SetWindowRectStr(entry.second.c_str());
+            }
+            else if (entry.first == L"ColumnSizeSettings")
+            {
+                if (!entry.second.empty())
+                {
+                    auto widths = util::StringHelper::Split(entry.second.c_str(), ' ');
+                    if (widths.size() == 2)
+                    {
+                        for (int i = 0; i < 2; i++)
+                        {
+                            int nWidth = util::StringHelper::ToInt(widths[i]);
+                            this->m_LstSettings.SetColumnWidth(i, nWidth);
+                        }
+                    }
+                }
+            }
+            else if (entry.first == L"ColumnSizeFiles")
+            {
+                auto widths = util::StringHelper::Split(entry.second.c_str(), ' ');
+                if (widths.size() == 2)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+                        int nWidth = util::StringHelper::ToInt(widths[i]);
+                        this->m_LstFiles.SetColumnWidth(i, nWidth);
+                    }
+                }
+            }
+            else if (entry.first == L"OutputPath")
+            {
+                if (!entry.second.empty() && entry.second != this->pConfig->GetString(0x00207004).c_str())
+                {
+                    this->pConfig->szOutputPath = entry.second;
+                }
+            }
+            else if (entry.first == L"OutputFile")
+            {
+                if (!entry.second.empty() && entry.second != this->pConfig->GetString(0x00207005).c_str())
+                {
+                    this->pConfig->szOutputFile = entry.second;
+                }
+            }
+            else if (entry.first == L"SelectedEngine")
+            {
+                int nEngine = util::StringHelper::ToInt(entry.second);
+                if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
+                    nEngine = 0;
+
+                if (this->pConfig->nCurrentEngine != nEngine)
+                {
+                    this->pConfig->nCurrentEngine = nEngine;
+                    this->m_CmbEngines.SetCurSel(nEngine);
+                    this->OnCbnSelchangeComboEngines();
+                }
+            }
+            else if (entry.first == L"SelectedPreset")
+            {
+                int nPreset = util::StringHelper::ToInt(entry.second);
+                if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
+                    nPreset = 0;
+
+                if (this->pConfig->nCurrentPreset != nPreset)
+                {
+                    this->pConfig->nCurrentPreset = nPreset;
+                    this->m_CmbPresets.SetCurSel(nPreset);
+                    this->OnCbnSelchangeComboPresets();
+                }
+            }
+            else if (entry.first == L"MultiMonoInput")
+            {
+                if (entry.second == L"true")
+                {
+                    this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
+                    this->pConfig->bMultiMonoInput = true;
+                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200B).c_str());
+                }
+                else if (entry.second == L"false")
+                {
+                    this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
+                    this->pConfig->bMultiMonoInput = false;
+                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
+                }
+                else
+                {
+                    this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
+                    this->pConfig->bMultiMonoInput = false;
+                    this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
+                }
+            }
+            else if (entry.first == L"DisableAllWarnings")
+            {
+                if (entry.second == L"true")
+                {
+                    this->pConfig->bDisableAllWarnings = true;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_CHECKED);
+                }
+                else if (entry.second == L"false")
+                {
+                    this->pConfig->bDisableAllWarnings = false;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
+                }
+                else
+                {
+                    this->pConfig->bDisableAllWarnings = false;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
+                }
+            }
+            else if (entry.first == L"SaveConfig")
+            {
+                if (entry.second == L"true")
+                {
+                    this->pConfig->bSaveConfig = true;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
+                }
+                else if (entry.second == L"false")
+                {
+                    this->pConfig->bSaveConfig = false;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
+                }
+                else
+                {
+                    this->pConfig->bSaveConfig = true;
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
+                }
+            }
+        }
+
+        if (this->pConfig->bMultiMonoInput == true)
+        {
+            if (this->pConfig->szOutputFile.empty())
+                this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207005).c_str());
+            else
+                this->m_EdtOutPath.SetWindowText(this->pConfig->szOutputFile.c_str());
+        }
+        else
+        {
+            if (this->pConfig->szOutputPath.empty())
+                this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207004).c_str());
+            else
+                this->m_EdtOutPath.SetWindowText(this->pConfig->szOutputPath.c_str());
         }
     }
 
@@ -882,8 +1042,6 @@ namespace dialogs
         if (this->pConfig->LoadPresets(presets, szFileName, this->pConfig->m_DefaultPreset) == true)
         {
             this->pConfig->m_Presets = presets;
-            this->m_CmbPresets.ResetContent();
-            this->UpdatePresets();
             return true;
         }
         return false;
@@ -900,8 +1058,6 @@ namespace dialogs
         if (this->pConfig->LoadEngines(engines, szFileName) == true)
         {
             this->pConfig->m_Engines = engines;
-            this->m_CmbEngines.ResetContent();
-            this->UpdateEngines();
             return true;
         }
         return false;
@@ -938,158 +1094,10 @@ namespace dialogs
 
     bool CMainDlg::LoadConfig(const std::wstring& szFileName)
     {
-        std::vector<config::Entry> cl;
-        if (this->pConfig->LoadEntries(szFileName, cl) == true)
+        std::vector<config::Entry> entries;
+        if (this->pConfig->LoadEntries(szFileName, entries) == true)
         {
-            int nSize = (int)cl.size();
-            for (int i = 0; i < nSize; i++)
-            {
-                auto& ce = cl[i];
-
-                if (ce.first == L"MainWindow")
-                {
-                    this->SetWindowRectStr(ce.second.c_str());
-                }
-                else if (ce.first == L"ColumnSizeSettings")
-                {
-                    if (!ce.second.empty())
-                    {
-                        auto widths = util::StringHelper::Split(ce.second.c_str(), ' ');
-                        if (widths.size() == 2)
-                        {
-                            for (int i = 0; i < 2; i++)
-                            {
-                                int nWidth = util::StringHelper::ToInt(widths[i]);
-                                this->m_LstSettings.SetColumnWidth(i, nWidth);
-                            }
-                        }
-                    }
-                }
-                else if (ce.first == L"ColumnSizeFiles")
-                {
-                    auto widths = util::StringHelper::Split(ce.second.c_str(), ' ');
-                    if (widths.size() == 2)
-                    {
-                        for (int i = 0; i < 2; i++)
-                        {
-                            int nWidth = util::StringHelper::ToInt(widths[i]);
-                            this->m_LstFiles.SetColumnWidth(i, nWidth);
-                        }
-                    }
-                }
-                else if (ce.first == L"OutputPath")
-                {
-                    if (!ce.second.empty() && ce.second != this->pConfig->GetString(0x00207004).c_str())
-                    {
-                        this->pConfig->szOutputPath = ce.second;
-                    }
-                }
-                else if (ce.first == L"OutputFile")
-                {
-                    if (!ce.second.empty() && ce.second != this->pConfig->GetString(0x00207005).c_str())
-                    {
-                        this->pConfig->szOutputFile = ce.second;
-                    }
-                }
-                else if (ce.first == L"SelectedEngine")
-                {
-                    int nEngine = util::StringHelper::ToInt(ce.second);
-                    if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
-                        nEngine = 0;
-
-                    if (this->pConfig->nCurrentEngine != nEngine)
-                    {
-                        this->pConfig->nCurrentEngine = nEngine;
-                        this->m_CmbEngines.SetCurSel(nEngine);
-                        this->OnCbnSelchangeComboEngines();
-                    }
-                }
-                else if (ce.first == L"SelectedPreset")
-                {
-                    int nPreset = util::StringHelper::ToInt(ce.second);
-                    if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
-                        nPreset = 0;
-
-                    if (this->pConfig->nCurrentPreset != nPreset)
-                    {
-                        this->pConfig->nCurrentPreset = nPreset;
-                        this->m_CmbPresets.SetCurSel(nPreset);
-                        this->OnCbnSelchangeComboPresets();
-                    }
-                }
-                else if (ce.first == L"MultiMonoInput")
-                {
-                    if (ce.second == L"true")
-                    {
-                        this->m_ChkMultipleMonoInput.SetCheck(BST_CHECKED);
-                        this->pConfig->bMultiMonoInput = true;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200B).c_str());
-                    }
-                    else if (ce.second == L"false")
-                    {
-                        this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
-                        this->pConfig->bMultiMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
-                    }
-                    else
-                    {
-                        this->m_ChkMultipleMonoInput.SetCheck(BST_UNCHECKED);
-                        this->pConfig->bMultiMonoInput = false;
-                        this->GetDlgItem(IDC_STATIC_OUTPUT)->SetWindowText(this->pConfig->GetString(0x0020200C).c_str());
-                    }
-                }
-                else if (ce.first == L"DisableAllWarnings")
-                {
-                    if (ce.second == L"true")
-                    {
-                        this->pConfig->bDisableAllWarnings = true;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_CHECKED);
-                    }
-                    else if (ce.second == L"false")
-                    {
-                        this->pConfig->bDisableAllWarnings = false;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
-                    }
-                    else
-                    {
-                        this->pConfig->bDisableAllWarnings = false;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS, MF_UNCHECKED);
-                    }
-                }
-                else if (ce.first == L"SaveConfig")
-                {
-                    if (ce.second == L"true")
-                    {
-                        this->pConfig->bSaveConfig = true;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
-                    }
-                    else if (ce.second == L"false")
-                    {
-                        this->pConfig->bSaveConfig = false;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
-                    }
-                    else
-                    {
-                        this->pConfig->bSaveConfig = true;
-                        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
-                    }
-                }
-            }
-            if (this->pConfig->bMultiMonoInput == true)
-            {
-                if (this->pConfig->szOutputFile.empty())
-                    this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207005).c_str());
-                else
-                    this->m_EdtOutPath.SetWindowText(this->pConfig->szOutputFile.c_str());
-            }
-            else
-            {
-                if (this->pConfig->szOutputPath.empty())
-                    this->m_EdtOutPath.SetWindowText(this->pConfig->GetString(0x00207004).c_str());
-                else
-                    this->m_EdtOutPath.SetWindowText(this->pConfig->szOutputPath.c_str());
-            }
-
+            this->ApplyConfigToDlg(entries);
             return true;
         }
         return false;
@@ -1097,32 +1105,32 @@ namespace dialogs
 
     bool CMainDlg::SaveConfig(const std::wstring& szFileName)
     {
-        std::vector<config::Entry> cl;
+        std::vector<config::Entry> entries;
 
         std::wstring mainWindow = this->GetWindowRectStr();
-        cl.emplace_back(std::make_pair(L"MainWindow", mainWindow));
+        entries.emplace_back(std::make_pair(L"MainWindow", mainWindow));
 
         int nSettingsColWidth[2];
         for (int i = 0; i < 2; i++)
             nSettingsColWidth[i] = this->m_LstSettings.GetColumnWidth(i);
         std::wstring columnSizeSettings = std::to_wstring(nSettingsColWidth[0]) + L" " + std::to_wstring(nSettingsColWidth[1]);
-        cl.emplace_back(std::make_pair(L"ColumnSizeSettings", columnSizeSettings));
+        entries.emplace_back(std::make_pair(L"ColumnSizeSettings", columnSizeSettings));
 
         int nFilesColWidth[2];
         for (int i = 0; i < 2; i++)
             nFilesColWidth[i] = this->m_LstFiles.GetColumnWidth(i);
         std::wstring columnSizeFiles = std::to_wstring(nFilesColWidth[0]) + L" " + std::to_wstring(nFilesColWidth[1]);
-        cl.emplace_back(std::make_pair(L"ColumnSizeFiles", columnSizeFiles));
+        entries.emplace_back(std::make_pair(L"ColumnSizeFiles", columnSizeFiles));
 
-        cl.emplace_back(std::make_pair(L"OutputPath", (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath));
-        cl.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
-        cl.emplace_back(std::make_pair(L"SelectedEngine", std::to_wstring(this->m_CmbEngines.GetCurSel())));
-        cl.emplace_back(std::make_pair(L"SelectedPreset", std::to_wstring(this->m_CmbPresets.GetCurSel())));
-        cl.emplace_back(std::make_pair(L"MultiMonoInput", (this->pConfig->bMultiMonoInput == true) ? L"true" : L"false"));
-        cl.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
-        cl.emplace_back(std::make_pair(L"SaveConfig", (this->pConfig->bSaveConfig == true) ? L"true" : L"false"));
+        entries.emplace_back(std::make_pair(L"OutputPath", (this->pConfig->szOutputPath == this->pConfig->GetString(0x00207004).c_str()) ? L"" : this->pConfig->szOutputPath));
+        entries.emplace_back(std::make_pair(L"OutputFile", (this->pConfig->szOutputFile == this->pConfig->GetString(0x00207005).c_str()) ? L"" : this->pConfig->szOutputFile));
+        entries.emplace_back(std::make_pair(L"SelectedEngine", std::to_wstring(this->m_CmbEngines.GetCurSel())));
+        entries.emplace_back(std::make_pair(L"SelectedPreset", std::to_wstring(this->m_CmbPresets.GetCurSel())));
+        entries.emplace_back(std::make_pair(L"MultiMonoInput", (this->pConfig->bMultiMonoInput == true) ? L"true" : L"false"));
+        entries.emplace_back(std::make_pair(L"DisableAllWarnings", (this->pConfig->bDisableAllWarnings == true) ? L"true" : L"false"));
+        entries.emplace_back(std::make_pair(L"SaveConfig", (this->pConfig->bSaveConfig == true) ? L"true" : L"false"));
 
-        return this->pConfig->SaveEntries(szFileName, cl);
+        return this->pConfig->SaveEntries(szFileName, entries);
     }
 
     void CMainDlg::LoadConfiguration()
@@ -1130,30 +1138,26 @@ namespace dialogs
         if (this->LoadPresets(this->pConfig->szPresetsPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder presets: " + this->pConfig->szPresetsPath);
         else
-        {
             this->pConfig->Log->Log(L"[Error] Failed to load encoder presets: " + this->pConfig->szPresetsPath);
-            this->m_CmbPresets.ResetContent();
-            this->UpdatePresets();
-        }
+
+        this->UpdatePresets();
 
         if (this->LoadEngines(this->pConfig->szEnginesPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded encoder engines: " + this->pConfig->szEnginesPath);
         else
-        {
             this->pConfig->Log->Log(L"[Error] Failed to load encoder engines: " + this->pConfig->szEnginesPath);
-            this->m_CmbEngines.ResetContent();
-            this->UpdateEngines();
-        }
 
-        if (this->LoadConfig(this->pConfig->szConfigPath) == true)
-            this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
-        else
-            this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigPath);
+        this->UpdateEngines();
 
         if (this->LoadFiles(this->pConfig->szFilesPath) == true)
             this->pConfig->Log->Log(L"[Info] Loaded files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to load files list: " + this->pConfig->szFilesPath);
+
+        if (this->LoadConfig(this->pConfig->szConfigPath) == true)
+            this->pConfig->Log->Log(L"[Info] Loaded program config: " + this->pConfig->szConfigPath);
+        else
+            this->pConfig->Log->Log(L"[Error] Failed to load program config: " + this->pConfig->szConfigPath);
     }
 
     void CMainDlg::SaveConfiguration()
@@ -1168,18 +1172,18 @@ namespace dialogs
         else
             this->pConfig->Log->Log(L"[Error] Failed to save encoder engines: " + this->pConfig->szEnginesPath);
 
-        if (this->SaveConfig(this->pConfig->szConfigPath) == true)
-            this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigPath);
-        else
-            this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
-
         if (this->SaveFiles(this->pConfig->szFilesPath, 0) == true)
             this->pConfig->Log->Log(L"[Info] Saved files list: " + this->pConfig->szFilesPath);
         else
             this->pConfig->Log->Log(L"[Error] Failed to save files list: " + this->pConfig->szFilesPath);
+
+        if (this->SaveConfig(this->pConfig->szConfigPath) == true)
+            this->pConfig->Log->Log(L"[Info] Saved program config: " + this->pConfig->szConfigPath);
+        else
+            this->pConfig->Log->Log(L"[Error] Failed to save program config: " + this->pConfig->szConfigPath);
     }
 
-    void CMainDlg::SearchFolderForFiles(std::wstring szPath, const bool bRecurse)
+    void CMainDlg::SearchFolderForFiles(const std::wstring szPath, const bool bRecurse)
     {
         try
         {
@@ -1200,7 +1204,7 @@ namespace dialogs
         }
     }
 
-    bool CMainDlg::GetAvisynthFileInfo(std::wstring szFileName, AvsAudioInfo *pInfoAVS)
+    bool CMainDlg::GetAvisynthFileInfo(const std::wstring szFileName, AvsAudioInfo *pInfoAVS)
     {
         if (pInfoAVS == nullptr)
             return false;
@@ -1260,7 +1264,7 @@ namespace dialogs
         return false;
     }
 
-    bool CMainDlg::AddPath(const std::wstring pattern)
+    bool CMainDlg::AddPath(const std::wstring& pattern)
     {
         std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
         if (files.size() > 0)
@@ -1769,6 +1773,7 @@ namespace dialogs
         {
             std::wstring szFileName = fd.GetPathName();
             this->LoadPresets(szFileName);
+            this->UpdatePresets();
         }
     }
 
@@ -2405,7 +2410,6 @@ namespace dialogs
         if (dlg.DoModal() == IDOK)
         {
             this->pConfig->m_Engines = dlg.m_Engines;
-            this->m_CmbEngines.ResetContent();
             this->UpdateEngines();
         }
     }

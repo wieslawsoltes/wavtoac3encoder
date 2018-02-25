@@ -159,7 +159,7 @@ public:
         }
         return false;
     }
-    bool AddPath(const std::wstring pattern)
+    bool AddPath(const std::wstring& pattern)
     {
         std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
         if (files.size() > 0)
