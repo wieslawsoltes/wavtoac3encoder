@@ -22,9 +22,6 @@
     <Filter Include="Header Files\Configuration">
       <UniqueIdentifier>{785ded21-51bf-4ad7-a04b-af8a49d822ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Logger">
-      <UniqueIdentifier>{fd2a1f6b-3cb3-4cc7-bade-1eb7caaeab2d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Worker\Aften">
       <UniqueIdentifier>{145d0699-2b79-42fb-867d-d0dbf9d7f9bb}</UniqueIdentifier>
     </Filter>
@@ -56,9 +53,6 @@
     </ClInclude>
     <ClInclude Include="configuration\Configuration.h">
       <Filter>Header Files\Configuration</Filter>
-    </ClInclude>
-    <ClInclude Include="logger\Log.h">
-      <Filter>Header Files\Logger</Filter>
     </ClInclude>
     <ClInclude Include="..\aften\libaften\aften.h">
       <Filter>Header Files\Worker\Aften</Filter>

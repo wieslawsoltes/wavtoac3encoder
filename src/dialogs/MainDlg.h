@@ -18,7 +18,7 @@
 #include "controls\MyStatusBarCtrl.h"
 #include "controls\MySpinButtonCtrl.h"
 #include "utilities\StringHelper.h"
-#include "logger\Log.h"
+#include "utilities\Log.h"
 #include "configuration\Configuration.h"
 #include "avs\src\Avs2Raw\Avs2Raw.h"
 

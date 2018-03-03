@@ -7,7 +7,7 @@
 #include "controls\MyDialogEx.h"
 #include "controls\MyButton.h"
 #include "controls\MyStatic.h"
-#include "logger\Log.h"
+#include "utilities\Log.h"
 #include "configuration\Configuration.h"
 
 namespace dialogs

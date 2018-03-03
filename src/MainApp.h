@@ -5,7 +5,7 @@
 #endif
 
 #include "res\resource.h"
-#include "logger\Log.h"
+#include "utilities\FileLog.h"
 #include "configuration\Configuration.h"
 #include "utilities\Utilities.h"
 

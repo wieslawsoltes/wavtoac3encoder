@@ -20,7 +20,7 @@ namespace app
 
     void CMainApp::OpenLog()
     {
-        this->m_Config.Log = std::make_unique<logger::FileLog>(this->m_Config.szLogPath);
+        this->m_Config.Log = std::make_unique<util::FileLog>(this->m_Config.szLogPath);
         this->m_Config.Log->Open();
 
         std::wstring szConfigMode = this->m_Config.m_bIsPortable ? L"Portable" : L"Roaming";

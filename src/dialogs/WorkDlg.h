@@ -10,7 +10,7 @@
 #include "controls\MyButton.h"
 #include "controls\MyProgressCtrl.h"
 #include "utilities\StringHelper.h"
-#include "logger\Log.h"
+#include "utilities\Log.h"
 #include "configuration\Configuration.h"
 #include "worker\Worker.h"
 

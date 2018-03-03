@@ -9,7 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include "logger\Log.h"
+#include "utilities\Log.h"
 #include "worker\AftenAPI.h"
 
 namespace config
@@ -126,7 +126,7 @@ namespace config
     class CConfiguration
     {
     public:
-        std::unique_ptr<logger::ILog> Log;
+        std::unique_ptr<util::ILog> Log;
         std::map<int, std::wstring> * pStrings;
         std::vector<CLanguage> m_Languages;
         std::wstring m_szLangFileName;

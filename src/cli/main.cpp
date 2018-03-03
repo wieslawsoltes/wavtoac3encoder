@@ -4,7 +4,7 @@
 #include "mainapp.h"
 #include "utilities\ArgvParser.h"
 
-void Help(std::unique_ptr<logger::ILog>& log)
+void Help(std::unique_ptr<util::ILog>& log)
 {
     log->Log(L"EncWAVtoAC3.CLI [options]");
     log->Log(L"options:");

@@ -4,7 +4,7 @@
 #include <utility>
 #include <algorithm>
 #include <thread>
-#include "logger\Log.h"
+#include "utilities\ConsoleLog.h"
 #include "utilities\StringHelper.h"
 #include "utilities\TimeCount.h"
 #include "utilities\Utilities.h"
@@ -15,9 +15,9 @@
 class CConsoleWorkerContext : public worker::CWorkerContext
 {
 private:
-    std::unique_ptr<logger::ILog>& pLog;
+    std::unique_ptr<util::ILog>& pLog;
 public:
-    CConsoleWorkerContext(std::unique_ptr<logger::ILog>& pLog) : pLog(pLog) { }
+    CConsoleWorkerContext(std::unique_ptr<util::ILog>& pLog) : pLog(pLog) { }
     virtual ~CConsoleWorkerContext() { }
 private:
     bool IsValid()
@@ -108,7 +108,7 @@ public:
 public:
     void OpenLog()
     {
-        this->m_Config.Log = std::make_unique<logger::ConsoleLog>();
+        this->m_Config.Log = std::make_unique<util::ConsoleLog>();
         this->m_Config.Log->Open();
         this->m_Config.Log->Log(L"[Info] Program started: CLI");
     }

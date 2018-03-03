@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 #include <atlstr.h>
-#include "logger\Log.h"
+#include "utilities\Log.h"
 #include "configuration\Configuration.h"
 #include "utilities\StringHelper.h"
 #include "utilities\Utilities.h"
