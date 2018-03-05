@@ -369,7 +369,7 @@ namespace dialogs
                 return true;
 
             std::wstring szPath = fl[i];
-            util::StringHelper::Trim(szPath, '"');
+            util::string::Trim(szPath, '"');
             szTmpInputFiles[i] = szPath;
         }
 

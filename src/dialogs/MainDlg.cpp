@@ -599,22 +599,22 @@ namespace dialogs
                 else
                 {
                     std::wstring szExt = util::Utilities::GetFileExtension(path);
-                    if (util::StringHelper::TowLower(szExt) == L"presets")
+                    if (util::string::TowLower(szExt) == L"presets")
                     {
                         this->LoadPresets(path);
                         this->UpdatePresets();
                     }
-                    else if (util::StringHelper::TowLower(szExt) == L"engines")
+                    else if (util::string::TowLower(szExt) == L"engines")
                     {
                         this->LoadEngines(path);
                         this->UpdateEngines();
                     }
-                    else if (util::StringHelper::TowLower(szExt) == L"files")
+                    else if (util::string::TowLower(szExt) == L"files")
                     {
                         this->LoadFiles(path);
                         this->RedrawFiles();
                     }
-                    else if (util::StringHelper::TowLower(szExt) == L"config")
+                    else if (util::string::TowLower(szExt) == L"config")
                         this->LoadConfig(path);
                     else
                         this->AddFile(path);
@@ -901,12 +901,12 @@ namespace dialogs
             {
                 if (!entry.second.empty())
                 {
-                    auto widths = util::StringHelper::Split(entry.second.c_str(), ' ');
+                    auto widths = util::string::Split(entry.second.c_str(), ' ');
                     if (widths.size() == 2)
                     {
                         for (int i = 0; i < 2; i++)
                         {
-                            int nWidth = util::StringHelper::ToInt(widths[i]);
+                            int nWidth = util::string::ToInt(widths[i]);
                             this->m_LstSettings.SetColumnWidth(i, nWidth);
                         }
                     }
@@ -914,12 +914,12 @@ namespace dialogs
             }
             else if (entry.first == L"ColumnSizeFiles")
             {
-                auto widths = util::StringHelper::Split(entry.second.c_str(), ' ');
+                auto widths = util::string::Split(entry.second.c_str(), ' ');
                 if (widths.size() == 2)
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        int nWidth = util::StringHelper::ToInt(widths[i]);
+                        int nWidth = util::string::ToInt(widths[i]);
                         this->m_LstFiles.SetColumnWidth(i, nWidth);
                     }
                 }
@@ -940,7 +940,7 @@ namespace dialogs
             }
             else if (entry.first == L"SelectedEngine")
             {
-                int nEngine = util::StringHelper::ToInt(entry.second);
+                int nEngine = util::string::ToInt(entry.second);
                 if ((nEngine >= this->m_CmbEngines.GetCount()) || (nEngine < 0))
                     nEngine = 0;
 
@@ -953,7 +953,7 @@ namespace dialogs
             }
             else if (entry.first == L"SelectedPreset")
             {
-                int nPreset = util::StringHelper::ToInt(entry.second);
+                int nPreset = util::string::ToInt(entry.second);
                 if ((nPreset >= this->m_CmbPresets.GetCount()) || (nPreset < 0))
                     nPreset = 0;
 
@@ -1068,7 +1068,7 @@ namespace dialogs
         memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
 
         CAvs2Raw decoderAVS;
-        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
+        std::string szInputFileAVS = util::string::Convert(szFileName);
         if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
             this->pConfig->Log->Log(L"[Error] Failed to initialize Avisynth.");
@@ -1089,7 +1089,7 @@ namespace dialogs
     ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
+        if (util::string::TowLower(szExt) == L"avs")
         {
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -1352,7 +1352,7 @@ namespace dialogs
         {
             config::CFile& file = this->pConfig->m_Files[i];
             std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
-            if (util::StringHelper::TowLower(szExt) == L"avs")
+            if (util::string::TowLower(szExt) == L"avs")
             {
                 if (this->pConfig->bMultiMonoInput == true)
                 {
@@ -1390,7 +1390,7 @@ namespace dialogs
         {
             if (this->pConfig->szOutputPath != this->pConfig->GetString(0x00207005).c_str())
             {
-                if ((nLen < 4) || (!util::StringHelper::CompareNoCase(szExt, L".ac3")))
+                if ((nLen < 4) || (!util::string::CompareNoCase(szExt, L".ac3")))
                 {
                     this->pConfig->Log->Log(L"[Error] Invalid output file.");
                     if (this->pConfig->bDisableAllWarnings == false)
@@ -2705,7 +2705,7 @@ namespace dialogs
             int nItem = m_LstFiles.GetNextSelectedItem(pos);
             config::CFile& file = this->pConfig->m_Files[nItem];
             std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
-            if (util::StringHelper::TowLower(szExt) == L"avs")
+            if (util::string::TowLower(szExt) == L"avs")
             {
                 AvsAudioInfo infoAVS;
                 memset(&infoAVS, 0, sizeof(AvsAudioInfo));

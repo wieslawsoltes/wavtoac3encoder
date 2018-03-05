@@ -60,7 +60,7 @@ namespace worker
                 if (pf_info->pcm_format)
                 {
                     std::string szLongName = pf_info->pcm_format->long_name;
-                    fmt = util::StringHelper::Convert(szLongName);
+                    fmt = util::string::Convert(szLongName);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace worker
         else
         {
             const char *version = state.api.LibAften_aften_get_version();
-            std::wstring szVersion = util::StringHelper::Convert(version);
+            std::wstring szVersion = util::string::Convert(version);
             pConfig->Log->Log( L"[Info] Loaded '" + state.engine.szName + L"' library" + L", version " + szVersion + L": " + state.engine.szPath);
         }
 
@@ -314,11 +314,11 @@ namespace worker
         state.nInTotalSize = 0;
 
         std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
-        state.bAvisynthInput = util::StringHelper::TowLower(szExt) == L"avs";
+        state.bAvisynthInput = util::string::TowLower(szExt) == L"avs";
 
         if (state.bAvisynthInput == true)
         {
-            std::string szInputFileAVS = util::StringHelper::Convert(state.szInPath[0]);
+            std::string szInputFileAVS = util::string::Convert(state.szInPath[0]);
             if (state.decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
                 return Error(L"[Error] Failed to initialize Avisynth: " + state.szInPath[0]);
 

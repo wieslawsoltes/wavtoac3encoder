@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <thread>
 #include "utilities\ConsoleLog.h"
-#include "utilities\StringHelper.h"
+#include "utilities\String.h"
 #include "utilities\TimeCount.h"
 #include "utilities\Utilities.h"
 #include "configuration\Configuration.h"
@@ -151,7 +151,7 @@ public:
         memset(pInfoAVS, 0, sizeof(AvsAudioInfo));
 
         CAvs2Raw decoderAVS;
-        std::string szInputFileAVS = util::StringHelper::Convert(szFileName);
+        std::string szInputFileAVS = util::string::Convert(szFileName);
         if (decoderAVS.OpenAvisynth(szInputFileAVS.c_str()) == false)
         {
             this->m_Config.Log->Log(L"[Error] Failed to initialize Avisynth.");
@@ -167,7 +167,7 @@ public:
     ULONGLONG GetFileSize(const std::wstring& szPath)
     {
         std::wstring szExt = util::Utilities::GetFileExtension(szPath);
-        if (util::StringHelper::TowLower(szExt) == L"avs")
+        if (util::string::TowLower(szExt) == L"avs")
         {
             AvsAudioInfo infoAVS;
             memset(&infoAVS, 0, sizeof(AvsAudioInfo));
@@ -330,7 +330,7 @@ public:
         {
             config::CFile& file = this->m_Config.m_Files[i];
             std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
-            if (util::StringHelper::TowLower(szExt) == L"avs")
+            if (util::string::TowLower(szExt) == L"avs")
             {
                 if (this->m_Config.bMultiMonoInput == true)
                 {

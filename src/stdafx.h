@@ -70,7 +70,7 @@
 
 #include "utilities\Log.h"
 #include "utilities\FileLog.h"
-#include "utilities\StringHelper.h"
+#include "utilities\String.h"
 #include "utilities\Utilities.h"
 
 #include "configuration\Configuration.h"

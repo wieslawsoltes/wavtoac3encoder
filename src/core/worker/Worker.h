@@ -8,7 +8,7 @@
 #include <atlstr.h>
 #include "utilities\Log.h"
 #include "configuration\Configuration.h"
-#include "utilities\StringHelper.h"
+#include "utilities\String.h"
 #include "utilities\Utilities.h"
 #include "avs\src\Avs2Raw\Avs2Raw.h"
 

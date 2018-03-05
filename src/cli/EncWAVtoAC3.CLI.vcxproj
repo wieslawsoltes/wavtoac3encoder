@@ -175,9 +175,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common\utilities\MFC.Utilities.vcxproj">
-      <Project>{4b291d95-c2ca-49e3-9eb5-b9f855d32aa0}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\core\EncWAVtoAC3.Core.vcxproj">
       <Project>{ab94b6e9-dc97-4472-a09c-2a3139a7f863}</Project>
     </ProjectReference>

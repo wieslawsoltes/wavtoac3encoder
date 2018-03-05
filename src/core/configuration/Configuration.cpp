@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "StdAfx.h"
-#include "utilities\StringHelper.h"
+#include "utilities\String.h"
 #include "utilities\Utilities.h"
 #include "Configuration.h"
 #include "Strings.h"
@@ -58,7 +58,7 @@ namespace config
             stream.str(data);
             for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
-                auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                auto parts = util::string::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
                     entries.emplace_back(std::make_pair(parts[0], parts[1]));
@@ -113,7 +113,7 @@ namespace config
             {
                 if (szBuffer.size() > 0)
                 {
-                    util::StringHelper::Trim(szBuffer, '"');
+                    util::string::Trim(szBuffer, '"');
                     if (IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
                     {
                         std::wstring szPath = szBuffer;
@@ -169,7 +169,7 @@ namespace config
                 for (auto& file : files)
                 {
                     std::wstring ext = util::Utilities::GetFileExtension(file);
-                    if (util::StringHelper::TowLower(ext) == L"txt")
+                    if (util::string::TowLower(ext) == L"txt")
                     {
                         CLanguage lang;
                         if (this->LoadStrings(file, lang.m_Strings) == true)
@@ -206,12 +206,12 @@ namespace config
 
             for (std::wstring szBuffer; std::getline(stream, szBuffer);)
             {
-                auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                auto parts = util::string::Split(szBuffer.c_str(), Separator);
                 if (parts.size() == 2)
                 {
-                    util::StringHelper::Replace(parts[1], szNewCharVar, szNewChar);
-                    util::StringHelper::Replace(parts[1], szTabCharVar, szTabChar);
-                    strings[util::StringHelper::ToIntFromHex(parts[0])] = parts[1];
+                    util::string::Replace(parts[1], szNewCharVar, szNewChar);
+                    util::string::Replace(parts[1], szTabCharVar, szTabChar);
+                    strings[util::string::ToIntFromHex(parts[0])] = parts[1];
                 }
                 szBuffer = L"";
             }
@@ -337,31 +337,31 @@ namespace config
 
             if (ce.first == L"mmx")
             {
-                engine.nUsedSIMD[0] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[0] = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse")
             {
-                engine.nUsedSIMD[1] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[1] = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse2")
             {
-                engine.nUsedSIMD[2] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[2] = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == L"sse3")
             {
-                engine.nUsedSIMD[3] = util::StringHelper::ToInt(ce.second);
+                engine.nUsedSIMD[3] = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szThreadsOption))
             {
-                engine.nThreads = util::StringHelper::ToInt(ce.second);
+                engine.nThreads = util::string::ToInt(ce.second);
                 continue;
             }
         }
@@ -402,7 +402,7 @@ namespace config
                     }
                     else
                     {
-                        auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                        auto parts = util::string::Split(szBuffer.c_str(), Separator);
                         if (parts.size() == 2)
                         {
                             cl.emplace_back(std::make_pair(parts[0], parts[1]));
@@ -481,37 +481,37 @@ namespace config
 
             if (ce.first == L"mode")
             {
-                preset.nMode = (AftenEncMode)util::StringHelper::ToInt(ce.second);
+                preset.nMode = (AftenEncMode)util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szCbrOption))
             {
-                preset.nBitrate = util::StringHelper::ToInt(ce.second);
+                preset.nBitrate = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szVbrOption))
             {
-                preset.nQuality = util::StringHelper::ToInt(ce.second);
+                preset.nQuality = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szRawSampleFormatOption))
             {
-                preset.m_RawInput.nRawSampleFormat = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawSampleFormat = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szRawSampleRateOption))
             {
-                preset.m_RawInput.nRawSampleRate = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawSampleRate = util::string::ToInt(ce.second);
                 continue;
             }
 
             if (ce.first == TrimOption(m_EncoderOptions.szRawChannelsOption))
             {
-                preset.m_RawInput.nRawChannels = util::StringHelper::ToInt(ce.second);
+                preset.m_RawInput.nRawChannels = util::string::ToInt(ce.second);
                 continue;
             }
 
@@ -519,7 +519,7 @@ namespace config
             {
                 if (ce.first == TrimOption(m_EncoderOptions.m_Options[i].szOption))
                 {
-                    preset.nOptions[i] = util::StringHelper::ToInt(ce.second);
+                    preset.nOptions[i] = util::string::ToInt(ce.second);
                     break;
                 }
             }
@@ -561,7 +561,7 @@ namespace config
                     }
                     else
                     {
-                        auto parts = util::StringHelper::Split(szBuffer.c_str(), Separator);
+                        auto parts = util::string::Split(szBuffer.c_str(), Separator);
                         if (parts.size() == 2)
                         {
                             cl.emplace_back(std::make_pair(parts[0], parts[1]));
@@ -683,7 +683,7 @@ namespace config
         int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
         for (int i = 0; i < nInputExtSize; i++)
         {
-            if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
+            if (util::string::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
                 return true;
         }
         return false;
@@ -694,7 +694,7 @@ namespace config
         int nInputExtSize = (int)m_EncoderOptions.szSupportedInputExt.size();
         for (int i = 0; i < nInputExtSize; i++)
         {
-            if (util::StringHelper::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
+            if (util::string::CompareNoCase(szExt, m_EncoderOptions.szSupportedInputExt[i]))
                 return m_EncoderOptions.nSupportedInputFormats[i];
         }
         return PCM_FORMAT_UNKNOWN;
@@ -708,7 +708,7 @@ namespace config
         for (int i = 0; i < (int)nInputExtSize; i++)
         {
             std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
-            szFilter += L"*." + util::StringHelper::TowLower(szExt) + ((i < (int)nInputExtSize - 1) ? L";" : L"");
+            szFilter += L"*." + util::string::TowLower(szExt) + ((i < (int)nInputExtSize - 1) ? L";" : L"");
         }
 
         szFilter = this->GetString(0x00207006) + L" (" + szFilter + L")|" + szFilter + L"|";
@@ -716,8 +716,8 @@ namespace config
         for (int i = 0; i < (int)nInputExtSize; i++)
         {
             std::wstring& szExt = m_EncoderOptions.szSupportedInputExt[i];
-            std::wstring szExtL = util::StringHelper::TowLower(szExt);
-            std::wstring szExtU = util::StringHelper::ToUpper(szExt);
+            std::wstring szExtL = util::string::TowLower(szExt);
+            std::wstring szExtU = util::string::ToUpper(szExt);
             szFilter += szExtU + L" " + this->GetString(0x00207007) + L" (*." + szExtL + L")|*." + szExtL + L"|";
         }
 

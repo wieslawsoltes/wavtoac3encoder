@@ -302,11 +302,6 @@
     </ClCompile>
     <ClCompile Include="worker\Worker.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\common\utilities\MFC.Utilities.vcxproj">
-      <Project>{4b291d95-c2ca-49e3-9eb5-b9f855d32aa0}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
