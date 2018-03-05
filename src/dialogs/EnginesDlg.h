@@ -1,16 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-#include <vector>
-#include <afxcmn.h>
-#include <afxwin.h>
-#include "controls\MyDialogEx.h"
-#include "controls\MyEdit.h"
-#include "controls\MyListCtrl.h"
-#include "utilities\StringHelper.h"
-#include "utilities\Log.h"
-#include "configuration\Configuration.h"
-
 namespace dialogs
 {
     class CEnginesDlg : public controls::CMyDialogEx

@@ -1,27 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <utility>
-#include <algorithm>
-#include <afxcmn.h>
-#include <afxwin.h>
-#include "controls\MyDialogEx.h"
-#include "controls\MyButton.h"
-#include "controls\MyStatic.h"
-#include "controls\MyEdit.h"
-#include "controls\MyComboBoxEdit.h"
-#include "controls\MyListCtrl.h"
-#include "controls\MyComboBox.h"
-#include "controls\MySliderCtrl.h"
-#include "controls\MyStatusBarCtrl.h"
-#include "controls\MySpinButtonCtrl.h"
-#include "utilities\StringHelper.h"
-#include "utilities\Log.h"
-#include "configuration\Configuration.h"
-#include "avs\src\Avs2Raw\Avs2Raw.h"
-
 #define IDC_STATUSBAR 1500
 #define IDC_COMBOBOX 1501
 #define ID_OPTIONS_MENU_START 4000

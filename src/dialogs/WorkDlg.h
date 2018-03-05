@@ -1,19 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-#include <memory>
-#include <thread>
-#include <afxwin.h>
-#include <afxcmn.h>
-#include "controls\MyDialogEx.h"
-#include "controls\MyStatic.h"
-#include "controls\MyButton.h"
-#include "controls\MyProgressCtrl.h"
-#include "utilities\StringHelper.h"
-#include "utilities\Log.h"
-#include "configuration\Configuration.h"
-#include "worker\Worker.h"
-
 #define WM_FILE_TIMER WM_USER + 0x01
 #define WM_TOTAL_TIMER WM_USER + 0x02
 

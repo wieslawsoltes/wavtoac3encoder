@@ -47,3 +47,33 @@
 #include <direct.h>
 #endif
 #include <shlwapi.h>
+
+#include <string>
+#include <vector>
+#include <memory>
+#include <utility>
+#include <algorithm>
+#include <thread>
+
+#include "controls\MyButton.h"
+#include "controls\MyComboBox.h"
+#include "controls\MyComboBoxEdit.h"
+#include "controls\MyDialogEx.h"
+#include "controls\MyEdit.h"
+#include "controls\MyHyperlink.h"
+#include "controls\MyListCtrl.h"
+#include "controls\MyProgressCtrl.h"
+#include "controls\MySliderCtrl.h"
+#include "controls\MySpinButtonCtrl.h"
+#include "controls\MyStatic.h"
+#include "controls\MyStatusBarCtrl.h"
+
+#include "utilities\Log.h"
+#include "utilities\FileLog.h"
+#include "utilities\StringHelper.h"
+#include "utilities\Utilities.h"
+
+#include "configuration\Configuration.h"
+
+#include "avs\src\Avs2Raw\Avs2Raw.h"
+#include "worker\Worker.h"

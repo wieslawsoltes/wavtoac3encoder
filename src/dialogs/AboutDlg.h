@@ -1,15 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-#include <afxcmn.h>
-#include <afxwin.h>
-#include "utilities\StringHelper.h"
-#include "controls\MyDialogEx.h"
-#include "controls\MyButton.h"
-#include "controls\MyStatic.h"
-#include "utilities\Log.h"
-#include "configuration\Configuration.h"
-
 namespace dialogs
 {
     class CAboutDlg : public controls::CMyDialogEx

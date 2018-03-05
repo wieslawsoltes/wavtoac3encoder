@@ -5,9 +5,6 @@
 #endif
 
 #include "res\resource.h"
-#include "utilities\FileLog.h"
-#include "configuration\Configuration.h"
-#include "utilities\Utilities.h"
 
 #ifdef _M_X64
 #define DIRECTORY_CONFIG _T("EncWAVtoAC3-x64")

@@ -1,20 +1,5 @@
 ﻿#pragma once
 
-#include <string>
-#include <vector>
-#include <afxwin.h>
-#include "utilities\Log.h"
-#include "configuration\Configuration.h"
-#include "utilities\StringHelper.h"
-#include "controls\MyDialogEx.h"
-#include "controls\MyButton.h"
-#include "controls\MyStatic.h"
-#include "controls\MyEdit.h"
-#include "controls\MyComboBoxEdit.h"
-#include "controls\MyListCtrl.h"
-#include "controls\MyComboBox.h"
-#include "controls\MySliderCtrl.h"
-
 namespace dialogs
 {
     class CMuxDlg : public controls::CMyDialogEx
