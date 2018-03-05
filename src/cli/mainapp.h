@@ -8,8 +8,8 @@
 #include "utilities\StringHelper.h"
 #include "utilities\TimeCount.h"
 #include "utilities\Utilities.h"
-#include "avs\src\Avs2Raw\Avs2Raw.h"
 #include "configuration\Configuration.h"
+#include "avs\src\Avs2Raw\Avs2Raw.h"
 #include "worker\Worker.h"
 
 class CConsoleWorkerContext : public worker::CWorkerContext
