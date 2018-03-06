@@ -76,9 +76,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\EncWAVtoAC3.bmp">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="res\EncWAVtoAC3.ico">
       <Filter>Resource Files</Filter>
     </None>

@@ -267,7 +267,6 @@
     <ClInclude Include="dialogs\WorkDlg.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\EncWAVtoAC3.bmp" />
     <None Include="res\EncWAVtoAC3.ico" />
     <None Include="res\EncWAVtoAC3.rc2" />
   </ItemGroup>
