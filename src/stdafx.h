@@ -4,6 +4,8 @@
 #define _SECURE_ATL 1
 #endif
 
+#define WIN32_LEAN_AND_MEAN
+
 #ifndef VC_EXTRALEAN
 #define VC_EXTRALEAN
 #endif
@@ -20,18 +22,15 @@
 #define _AFX_NO_OLEDB_SUPPORT
 #define _AFX_NO_RICHEDIT_SUPPORT
 
+#define _AFX_NO_MFC_CONTROLS_IN_DIALOGS
+
 #include <afxwin.h>
 #include <afxext.h>
 #include <afxdisp.h>
 
-#ifndef _AFX_NO_OLE_SUPPORT
-#include <afxdtctl.h>
-#endif
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>
 #endif
-
-#include <afxcontrolbars.h>
 
 #ifdef _UNICODE
 #if defined _M_IX86
@@ -42,11 +41,6 @@
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
 #endif
-
-#ifndef _UNICODE
-#include <direct.h>
-#endif
-#include <shlwapi.h>
 
 #include <string>
 #include <vector>
