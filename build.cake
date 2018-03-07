@@ -18,13 +18,12 @@ var target = Argument("target", "Default");
 
 var platforms = new [] { "Win32", "x64" }.ToList();
 var configurations = new [] { "Release" }.ToList();
+var tests = new [] { }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var versionHeaderPath = (FilePath)File("./src/version.h");
 var installerScript = MakeAbsolute((FilePath)File("./setup/setup.iss"));
 var iscc = @"C:/Program Files (x86)/Inno Setup 5/ISCC.exe";
 var artifactsDir = (DirectoryPath)Directory("./artifacts");
-var binDir = (DirectoryPath)Directory("./src/bin");
-var objDir = (DirectoryPath)Directory("./src/obj");
 
 ///////////////////////////////////////////////////////////////////////////////
 // RELEASE
@@ -56,10 +55,28 @@ Information("Defined Version: {0}.{1}.{2}.{3}", major, minor, revision, build);
 Information("Release Version: {0}", version + suffix);
 
 ///////////////////////////////////////////////////////////////////////////////
+// SETUP
+///////////////////////////////////////////////////////////////////////////////
+
+Setup(context =>
+{
+    context.Log.Verbosity = Verbosity.Normal;
+});
+
+///////////////////////////////////////////////////////////////////////////////
+// TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
+
+Teardown(context =>
+{
+    Information("Finished running tasks.");
+});
+
+///////////////////////////////////////////////////////////////////////////////
 // ACTIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var buildSolutionAction = new Action<string,string,string> ((solution, configuration, platform) => 
+var buildSolutionAction = new Action<string,string,string> ((solution, configuration, platform) =>
 {
     Information("Building: {0}, {1} / {2}", solution, configuration, platform);
     MSBuild(solution, settings => {
@@ -68,21 +85,33 @@ var buildSolutionAction = new Action<string,string,string> ((solution, configura
         settings.SetVerbosity(Verbosity.Minimal); });
 });
 
-var copyConfigAction = new Action<string> ((output) => 
+var runTestAction = new Action<string,string,string> ((test, configuration, platform) =>
+{
+    Information("Test: {0}, {1} / {2}", test, configuration, platform);
+    var pattern = "./tests/" + test + "/bin/" + configuration + "/" + platform + "/" + test + ".dll";
+    VSTest(pattern, new VSTestSettings() {
+        PlatformArchitecture = (platform == "Win32" || platform == "x86") ? VSTestPlatform.x86 : VSTestPlatform.x64,
+        InIsolation = (platform == "Win32" || platform == "x86") ? false : true,
+        Logger = "AppVeyor" });
+});
+
+var copyConfigAction = new Action<string> ((output) =>
 {
     var outputDir = artifactsDir.Combine(output);
     var langDir = outputDir.Combine("lang");
+    Information("Copy config: {0}", output);
     CopyFileToDirectory(File("./config/EncWAVtoAC3.portable"), outputDir);
     CopyFileToDirectory(File("./config/EncWAVtoAC3.presets"), outputDir);
     CleanDirectory(langDir);
     CopyFiles("./config/lang/*.txt", langDir);
 });
 
-var copyEnginesX86Action = new Action<string> ((output) => 
+var copyEnginesX86Action = new Action<string> ((output) =>
 {
     var outputDir = artifactsDir.Combine(output);
     var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
     var dirs = new [] { "libaftendll_x86", "libaftendll_x86_SSE", "libaftendll_x86_SSE2", "libaftendll_x86_SSE3" };
+    Information("Copy engines x86: {0}", output);
     foreach (var dir in dirs)
     {
         CleanDirectory(outputDir.Combine(dir));
@@ -90,11 +119,12 @@ var copyEnginesX86Action = new Action<string> ((output) =>
     }
 });
 
-var copyEnginesX64Action = new Action<string> ((output) => 
+var copyEnginesX64Action = new Action<string> ((output) =>
 {
     var outputDir = artifactsDir.Combine(output);
     var aftenBinDir = (DirectoryPath)Directory("./src/aften/windows/output");
     var dirs = new [] { "libaftendll_AMD64", "libaftendll_AMD64_SSE2", "libaftendll_AMD64_SSE3" };
+    Information("Copy engines x64: {0}", output);
     foreach (var dir in dirs)
     {
         CleanDirectory(outputDir.Combine(dir));
@@ -102,42 +132,46 @@ var copyEnginesX64Action = new Action<string> ((output) =>
     }
 });
 
-var packageConfigAction = new Action(() => 
+var packageConfigAction = new Action(() =>
 {
     var output = "EncWAVtoAC3-" + version + suffix + "-Config";
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    Information("Package config: {0}", output);
     CleanDirectory(outputDir);
     copyConfigAction(output);
     Zip(outputDir, outputZip);
 });
 
-var packageEnginesX86Action = new Action(() => 
+var packageEnginesX86Action = new Action(() =>
 {
     var output = "EncWAVtoAC3-" + version + suffix + "-Engines-x86";
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    Information("Package engines x86: {0}", output);
     CleanDirectory(outputDir);
     copyEnginesX86Action(output);
     Zip(outputDir, outputZip);
 });
 
-var packageEnginesX64Action = new Action(() => 
+var packageEnginesX64Action = new Action(() =>
 {
     var output = "EncWAVtoAC3-" + version + suffix + "-Engines-x64";
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    Information("Package engines x64: {0}", output);
     CleanDirectory(outputDir);
     copyEnginesX64Action(output);
     Zip(outputDir, outputZip);
 });
 
-var packageBinariesAction = new Action<string,string> ((configuration, platform) => 
+var packageGuiBinariesAction = new Action<string,string> ((configuration, platform) =>
 {
     var path = "./src/bin/" + configuration + "/" + platform + "/";
     var output = "EncWAVtoAC3-" + version + suffix + "-" + platform + (configuration == "Release" ? "" : ("-(" + configuration + ")"));
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    Information("Package binaries: {0}, {1} / {2}", output, configuration, platform);
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
@@ -149,12 +183,13 @@ var packageBinariesAction = new Action<string,string> ((configuration, platform)
     Zip(outputDir, outputZip);
 });
 
-var packageCliBinariesAction = new Action<string,string> ((configuration, platform) => 
+var packageCliBinariesAction = new Action<string,string> ((configuration, platform) =>
 {
     var path = "./src/cli/bin/" + configuration + "/" + platform + "/";
     var output = "EncWAVtoAC3.CLI-" + version + suffix + "-" + platform + (configuration == "Release" ? "" : ("-(" + configuration + ")"));
     var outputDir = artifactsDir.Combine(output);
     var outputZip = artifactsDir.CombineWithFilePath(output + ".zip");
+    Information("Package binaries: {0}, {1} / {2}", output, configuration, platform);
     CleanDirectory(outputDir);
     CopyFileToDirectory(File("README.md"), outputDir);
     CopyFileToDirectory(File("COPYING.TXT"), outputDir);
@@ -166,11 +201,13 @@ var packageCliBinariesAction = new Action<string,string> ((configuration, platfo
     Zip(outputDir, outputZip);
 });
 
-var packageInstallersAction = new Action<string,string> ((configuration, platform) => 
+var packageInstallersAction = new Action<string,string> ((configuration, platform) =>
 {
+    Information("Package installer: {0} / {1}", configuration, platform);
     StartProcess(iscc, new ProcessSettings { 
         Arguments = 
-            "\"" + installerScript.FullPath + "\""
+            "/Q "
+            + "\"" + installerScript.FullPath + "\""
             + " /DCONFIGURATION=" + configuration
             + " /DBUILD=" + platform
             + " /DVERSION=" + version
@@ -186,30 +223,37 @@ Task("Clean")
     .Does(() =>
 {
     CleanDirectory(artifactsDir);
-    CleanDirectory(binDir);
-    CleanDirectory(objDir);
+    CleanDirectories("./**/bin/**");
+    CleanDirectories("./**/obj/**");
 });
 
 Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    configurations.ForEach(configuration => platforms.ForEach(platform => buildSolutionAction(solution, configuration, platform)));
+    configurations.ForEach(c => platforms.ForEach(p => buildSolutionAction(solution, c, p)));
+});
+
+Task("Run-Unit-Tests")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    configurations.ForEach(c => platforms.ForEach(p => tests.ForEach(t => runTestAction(t, c, p))));
 });
 
 Task("Package-Binaries")
-    .IsDependentOn("Build")
+    .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    configurations.ForEach(configuration => platforms.ForEach(platform => packageBinariesAction(configuration, platform)));
-    configurations.ForEach(configuration => platforms.ForEach(platform => packageCliBinariesAction(configuration, platform))); 
+    configurations.ForEach(c => platforms.ForEach(p => packageGuiBinariesAction(c, p)));
+    configurations.ForEach(c => platforms.ForEach(p => packageCliBinariesAction(c, p)));
 });
 
 Task("Package-Installers")
-    .IsDependentOn("Build")
+    .IsDependentOn("Run-Unit-Tests")
     .Does(() =>
 {
-    configurations.ForEach(configuration => platforms.ForEach(platform => packageInstallersAction(configuration, platform)));
+    configurations.ForEach(c => platforms.ForEach(p => packageInstallersAction(c, p)));
 });
 
 Task("Package-Config")
@@ -219,17 +263,11 @@ Task("Package-Config")
     packageConfigAction();
 });
 
-Task("Package-Engines-X86")
+Task("Package-Engines")
     .IsDependentOn("Build")
     .Does(() =>
 {
     packageEnginesX86Action();
-});
-
-Task("Package-Engines-X64")
-    .IsDependentOn("Build")
-    .Does(() =>
-{
     packageEnginesX64Action();
 });
 
@@ -241,11 +279,10 @@ Task("Package")
   .IsDependentOn("Package-Binaries")
   .IsDependentOn("Package-Installers")
   .IsDependentOn("Package-Config")
-  .IsDependentOn("Package-Engines-X86")
-  .IsDependentOn("Package-Engines-X64");
+  .IsDependentOn("Package-Engines");
 
 Task("Default")
-  .IsDependentOn("Build");
+  .IsDependentOn("Run-Unit-Tests");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTE
