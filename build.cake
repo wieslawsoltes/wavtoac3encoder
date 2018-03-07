@@ -16,9 +16,9 @@ var target = Argument("target", "Default");
 // SETTINGS
 ///////////////////////////////////////////////////////////////////////////////
 
-var platforms = new [] { "Win32", "x64" }.ToList();
-var configurations = new [] { "Release" }.ToList();
-var tests = new [] { }.ToList();
+var platforms = new string[] { "Win32", "x64" }.ToList();
+var configurations = new string[] { "Release" }.ToList();
+var tests = new string[] { }.ToList();
 var solution = "./EncWAVtoAC3.sln";
 var versionHeaderPath = (FilePath)File("./src/version.h");
 var installerScript = MakeAbsolute((FilePath)File("./setup/setup.iss"));
