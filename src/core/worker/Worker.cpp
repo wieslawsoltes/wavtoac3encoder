@@ -313,7 +313,7 @@ namespace worker
         state.ofp = nullptr;
         state.nInTotalSize = 0;
 
-        std::wstring szExt = util::Utilities::GetFileExtension(state.szInPath[0]);
+        std::wstring szExt = util::GetFileExtension(state.szInPath[0]);
         state.bAvisynthInput = util::string::TowLower(szExt) == L"avs";
 
         if (state.bAvisynthInput == true)
@@ -334,7 +334,7 @@ namespace worker
                 if (error != 0)
                     return Error(L"[Error] Failed to open input file: " + state.szInPath[i]);
 
-                state.nInTotalSize += util::Utilities::GetFileSizeInt64(state.ifp[i]);
+                state.nInTotalSize += util::GetFileSizeInt64(state.ifp[i]);
                 pConfig->Log->Log(L"[Info] Input file: " + state.szInPath[i]);
             }
         }
@@ -672,13 +672,13 @@ namespace worker
                 {
                     std::wstring szInFile = state.szInPath[0];
                     std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
-                    std::wstring szInFileName = util::Utilities::GetOnlyFileName(szInFile);
-                    state.szOutPath = util::Utilities::CombinePath(pConfig->szOutputPath, szInFileName + L"." + szOutExt);
+                    std::wstring szInFileName = util::GetOnlyFileName(szInFile);
+                    state.szOutPath = util::CombinePath(pConfig->szOutputPath, szInFileName + L"." + szOutExt);
                 }
                 else
                 {
                     std::wstring szInFile = state.szInPath[0];
-                    std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
+                    std::wstring szInExt = util::GetFileExtension(szInFile);
                     std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
                     state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
                 }
@@ -752,7 +752,7 @@ namespace worker
             else
             {
                 std::wstring szInFile = state.szInPath[0];
-                std::wstring szInExt = util::Utilities::GetFileExtension(szInFile);
+                std::wstring szInExt = util::GetFileExtension(szInFile);
                 std::wstring szOutExt = pConfig->m_EncoderOptions.szSupportedOutputExt[0];
                 state.szOutPath = szInFile.substr(0, szInFile.length() - szInExt.length() - 1) + L"." + szOutExt;
             }

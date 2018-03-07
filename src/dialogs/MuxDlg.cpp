@@ -154,7 +154,7 @@ namespace dialogs
         this->m_CmbChannelConfig.SetTooltipText(this->pConfig->GetString(0x00C01008).c_str());
         this->m_ChkChannelConfigLFE.SetTooltipText(this->pConfig->GetString(0x00C01009).c_str());
 
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_CHANNEL_CONFIG, 15);
 
         this->m_BtnChannelFL.SetTooltipText(this->pConfig->GetString(0x00C0100A).c_str());
         this->m_BtnChannelFR.SetTooltipText(this->pConfig->GetString(0x00C0100B).c_str());
@@ -242,7 +242,7 @@ namespace dialogs
         CString szCurrentFileName;
         m_EdtCurrent->GetWindowText(szCurrentFileName);
         std::wstring szCurrentFileNameStr = szCurrentFileName;
-        std::wstring szFileName = util::Utilities::GetFileName(szCurrentFileNameStr);
+        std::wstring szFileName = util::GetFileName(szCurrentFileNameStr);
         std::wstring szFilter = this->pConfig->GetSupportedInputFilesFilter();
 
         CFileDialog fd(TRUE,

@@ -35,7 +35,7 @@ namespace app
 
     void CMainApp::DefaultConfig()
     {
-        this->m_Config.m_bIsPortable = PathFileExists((util::Utilities::GetExeFilePath() + FILENAME_PORTABLE).c_str()) == TRUE ? true : false;
+        this->m_Config.m_bIsPortable = util::PathFileExists_((util::GetExeFilePath() + FILENAME_PORTABLE));
 
         this->m_Config.m_szLangFileName = L"lang\\en-US.txt";
         this->m_Config.m_nLangId = -1;
@@ -52,28 +52,28 @@ namespace app
 
         if (this->m_Config.m_bIsPortable == true)
         {
-            this->m_Config.szLogPath = util::Utilities::GetExeFilePath() + FILENAME_LOG;
-            this->m_Config.szPresetsPath = util::Utilities::GetExeFilePath() + FILENAME_PRESETS;
-            this->m_Config.szConfigPath = util::Utilities::GetExeFilePath() + FILENAME_CONFIG;
-            this->m_Config.szEnginesPath = util::Utilities::GetExeFilePath() + FILENAME_ENGINES;
-            this->m_Config.szFilesPath = util::Utilities::GetExeFilePath() + FILENAME_FILES;
-            this->m_Config.szLangPath = util::Utilities::GetExeFilePath() + FILENAME_LANG;
+            this->m_Config.szLogPath = util::GetExeFilePath() + FILENAME_LOG;
+            this->m_Config.szPresetsPath = util::GetExeFilePath() + FILENAME_PRESETS;
+            this->m_Config.szConfigPath = util::GetExeFilePath() + FILENAME_CONFIG;
+            this->m_Config.szEnginesPath = util::GetExeFilePath() + FILENAME_ENGINES;
+            this->m_Config.szFilesPath = util::GetExeFilePath() + FILENAME_FILES;
+            this->m_Config.szLangPath = util::GetExeFilePath() + FILENAME_LANG;
         }
         else
         {
-            ::CreateDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str(), nullptr);
-            this->m_Config.szLogPath = util::Utilities::GetSettingsFilePath(FILENAME_LOG, DIRECTORY_CONFIG);
-            this->m_Config.szPresetsPath = util::Utilities::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
-            this->m_Config.szConfigPath = util::Utilities::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
-            this->m_Config.szEnginesPath = util::Utilities::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
-            this->m_Config.szFilesPath = util::Utilities::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
-            this->m_Config.szLangPath = util::Utilities::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
+            util::CreateDirectory_(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
+            this->m_Config.szLogPath = util::GetSettingsFilePath(FILENAME_LOG, DIRECTORY_CONFIG);
+            this->m_Config.szPresetsPath = util::GetSettingsFilePath(FILENAME_PRESETS, DIRECTORY_CONFIG);
+            this->m_Config.szConfigPath = util::GetSettingsFilePath(FILENAME_CONFIG, DIRECTORY_CONFIG);
+            this->m_Config.szEnginesPath = util::GetSettingsFilePath(FILENAME_ENGINES, DIRECTORY_CONFIG);
+            this->m_Config.szFilesPath = util::GetSettingsFilePath(FILENAME_FILES, DIRECTORY_CONFIG);
+            this->m_Config.szLangPath = util::GetSettingsFilePath(FILENAME_LANG, DIRECTORY_CONFIG);
         }
 
         if (this->m_Config.m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+            util::SetCurrentDirectory_(util::GetExeFilePath());
         else
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
+            util::SetCurrentDirectory_(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
     }
 
     void CMainApp::LoadLang()
@@ -84,8 +84,8 @@ namespace app
             this->m_Config.Log->Log(L"[Error] Failed to load language config: " + this->m_Config.szLangPath);
 
         std::wstring szLangPath = (this->m_Config.m_bIsPortable == true) ?
-            (util::Utilities::GetExeFilePath() + L"lang") :
-            (util::Utilities::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
+            (util::GetExeFilePath() + L"lang") :
+            (util::GetSettingsFilePath(L"", std::wstring(DIRECTORY_CONFIG) + L"\\lang"));
 
         if (this->m_Config.LoadLanguages(szLangPath))
             this->m_Config.Log->Log(L"[Info] Loaded languages from: " + szLangPath);

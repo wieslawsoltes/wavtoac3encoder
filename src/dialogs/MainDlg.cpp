@@ -166,10 +166,10 @@ namespace dialogs
             this->pConfig->Log->Log(L"[Error] Failed to load configuration.");
         }
 
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_RAW_SAMPLE_FORMAT, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_ENGINES, 15);
 
         COMBOBOXINFO cbi;
         ZeroMemory(&cbi, sizeof(COMBOBOXINFO));
@@ -598,7 +598,7 @@ namespace dialogs
                 }
                 else
                 {
-                    std::wstring szExt = util::Utilities::GetFileExtension(path);
+                    std::wstring szExt = util::GetFileExtension(path);
                     if (util::string::TowLower(szExt) == L"presets")
                     {
                         this->LoadPresets(path);
@@ -790,7 +790,7 @@ namespace dialogs
             this->m_CmbValue.AddString(option.m_Values[i].first.c_str());
         }
 
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_SETTING, 15);
 
         if (this->pConfig->m_Presets.size() <= 0)
         {
@@ -1044,7 +1044,7 @@ namespace dialogs
         try
         {
             std::vector<std::wstring> files;
-            if (util::Utilities::FindFiles(szPath, files, bRecurse) == true)
+            if (util::FindFiles(szPath, files, bRecurse) == true)
             {
                 this->AddFiles(files);
                 this->RedrawFiles();
@@ -1088,7 +1088,7 @@ namespace dialogs
 
     ULONGLONG CMainDlg::GetFileSize(const std::wstring& szPath)
     {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        std::wstring szExt = util::GetFileExtension(szPath);
         if (util::string::TowLower(szExt) == L"avs")
         {
             AvsAudioInfo infoAVS;
@@ -1101,7 +1101,7 @@ namespace dialogs
         }
         else
         {
-            ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
+            ULONGLONG nFileSize = util::GetFileSize64(szPath);
             return nFileSize;
         }
         return 0;
@@ -1109,7 +1109,7 @@ namespace dialogs
 
     bool CMainDlg::AddFile(const std::wstring& szPath)
     {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        std::wstring szExt = util::GetFileExtension(szPath);
         if (this->pConfig->IsSupportedInputExt(szExt) == true)
         {
             ULONGLONG nSize = this->GetFileSize(szPath);
@@ -1122,7 +1122,7 @@ namespace dialogs
 
     bool CMainDlg::AddPath(const std::wstring& pattern)
     {
-        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
+        std::vector<std::wstring> files = util::FindFiles(pattern);
         if (files.size() > 0)
         {
             for (auto& file : files)
@@ -1333,9 +1333,9 @@ namespace dialogs
         }
 
         if (this->pConfig->m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+            util::SetCurrentDirectory_(util::GetExeFilePath());
         else
-            ::SetCurrentDirectory(util::Utilities::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG).c_str());
+            util::SetCurrentDirectory_(util::GetSettingsFilePath(_T(""), DIRECTORY_CONFIG));
 
         CWorkDlg dlg;
 
@@ -1351,7 +1351,7 @@ namespace dialogs
         for (int i = 0; i < nItemsCount; i++)
         {
             config::CFile& file = this->pConfig->m_Files[i];
-            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
+            std::wstring szExt = util::GetFileExtension(file.szPath);
             if (util::string::TowLower(szExt) == L"avs")
             {
                 if (this->pConfig->bMultiMonoInput == true)
@@ -1409,7 +1409,7 @@ namespace dialogs
         {
             if (this->pConfig->bMultiMonoInput == false)
             {
-                if (util::Utilities::MakeFullPath(this->pConfig->szOutputPath) == false)
+                if (util::MakeFullPath(this->pConfig->szOutputPath) == false)
                 {
                     this->pConfig->Log->Log(L"[Error] Failed to create output path.");
                     if (this->pConfig->bDisableAllWarnings == false)
@@ -1422,9 +1422,9 @@ namespace dialogs
             }
             else
             {
-                std::wstring szFile = util::Utilities::GetFileName(this->pConfig->szOutputPath);
+                std::wstring szFile = util::GetFileName(this->pConfig->szOutputPath);
                 std::wstring szOutputPath = this->pConfig->szOutputPath.substr(0, this->pConfig->szOutputPath.length() - szFile.length());
-                if (util::Utilities::MakeFullPath(szOutputPath) == false)
+                if (util::MakeFullPath(szOutputPath) == false)
                 {
                     this->pConfig->Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
                     if (this->pConfig->bDisableAllWarnings == false)
@@ -2082,7 +2082,7 @@ namespace dialogs
 
     void CMainDlg::OnHelpWebsite()
     {
-        util::Utilities::LaunchAndWait(L"https://github.com/wieslawsoltes/wavtoac3encoder/", L"", FALSE);
+        util::LaunchAndWait(L"https://github.com/wieslawsoltes/wavtoac3encoder/", L"", FALSE);
     }
 
     void CMainDlg::OnHelpAbout()
@@ -2216,7 +2216,7 @@ namespace dialogs
         this->m_CmbPresets.InsertString(this->pConfig->nCurrentPreset, preset.szName.c_str());
         this->m_CmbPresets.SetCurSel(this->pConfig->nCurrentPreset);
 
-        util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+        util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
         this->OnCbnSelchangeComboPresets();
     }
 
@@ -2247,7 +2247,7 @@ namespace dialogs
                 this->pConfig->nCurrentPreset = nPreset;
             }
 
-            util::Utilities::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
+            util::SetComboBoxHeight(this->GetSafeHwnd(), IDC_COMBO_PRESETS, 15);
             this->OnCbnSelchangeComboPresets();
         }
     }
@@ -2704,7 +2704,7 @@ namespace dialogs
         {
             int nItem = m_LstFiles.GetNextSelectedItem(pos);
             config::CFile& file = this->pConfig->m_Files[nItem];
-            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
+            std::wstring szExt = util::GetFileExtension(file.szPath);
             if (util::string::TowLower(szExt) == L"avs")
             {
                 AvsAudioInfo infoAVS;

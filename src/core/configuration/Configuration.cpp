@@ -114,7 +114,7 @@ namespace config
                 if (szBuffer.size() > 0)
                 {
                     util::string::Trim(szBuffer, '"');
-                    if (IsSupportedInputExt(util::Utilities::GetFileExtension(szBuffer)) == true)
+                    if (IsSupportedInputExt(util::GetFileExtension(szBuffer)) == true)
                     {
                         std::wstring szPath = szBuffer;
                         files.emplace_back(szPath);
@@ -163,12 +163,12 @@ namespace config
         try
         {
             std::vector<std::wstring> files;
-            bool bResult = util::Utilities::FindFiles(szPath, files, false);
+            bool bResult = util::FindFiles(szPath, files, false);
             if (bResult == true)
             {
                 for (auto& file : files)
                 {
-                    std::wstring ext = util::Utilities::GetFileExtension(file);
+                    std::wstring ext = util::GetFileExtension(file);
                     if (util::string::TowLower(ext) == L"txt")
                     {
                         CLanguage lang;
@@ -278,8 +278,8 @@ namespace config
                 for (int i = 0; i < (int)m_Languages.size(); i++)
                 {
                     auto& lang = m_Languages[i];
-                    std::wstring szNameLang = util::Utilities::GetFileName(lang.szFileName);
-                    std::wstring szNameConfig = util::Utilities::GetFileName(m_szLangFileName);
+                    std::wstring szNameLang = util::GetFileName(lang.szFileName);
+                    std::wstring szNameConfig = util::GetFileName(m_szLangFileName);
                     if (szNameLang == szNameConfig)
                     {
                         m_nLangId = i;

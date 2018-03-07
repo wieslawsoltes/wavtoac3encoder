@@ -166,7 +166,7 @@ public:
     }
     ULONGLONG GetFileSize(const std::wstring& szPath)
     {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        std::wstring szExt = util::GetFileExtension(szPath);
         if (util::string::TowLower(szExt) == L"avs")
         {
             AvsAudioInfo infoAVS;
@@ -179,14 +179,14 @@ public:
         }
         else
         {
-            ULONGLONG nFileSize = util::Utilities::GetFileSize64(szPath);
+            ULONGLONG nFileSize = util::GetFileSize64(szPath);
             return nFileSize;
         }
         return 0;
     }
     bool AddFile(const std::wstring& szPath)
     {
-        std::wstring szExt = util::Utilities::GetFileExtension(szPath);
+        std::wstring szExt = util::GetFileExtension(szPath);
         if (this->m_Config.IsSupportedInputExt(szExt) == true)
         {
             ULONGLONG nSize = this->GetFileSize(szPath);
@@ -198,7 +198,7 @@ public:
     }
     bool AddPath(const std::wstring& pattern)
     {
-        std::vector<std::wstring> files = util::Utilities::FindFiles(pattern);
+        std::vector<std::wstring> files = util::FindFiles(pattern);
         if (files.size() > 0)
         {
             for (auto& file : files)
@@ -310,7 +310,7 @@ public:
         }
 
         if (this->m_Config.m_bIsPortable == true)
-            ::SetCurrentDirectory(util::Utilities::GetExeFilePath().c_str());
+            util::SetCurrentDirectory_(util::GetExeFilePath());
 
         return true;
     }
@@ -329,7 +329,7 @@ public:
         for (int i = 0; i < nItemsCount; i++)
         {
             config::CFile& file = this->m_Config.m_Files[i];
-            std::wstring szExt = util::Utilities::GetFileExtension(file.szPath);
+            std::wstring szExt = util::GetFileExtension(file.szPath);
             if (util::string::TowLower(szExt) == L"avs")
             {
                 if (this->m_Config.bMultiMonoInput == true)
@@ -346,7 +346,7 @@ public:
         {
             if (this->m_Config.bMultiMonoInput == false)
             {
-                if (util::Utilities::MakeFullPath(this->m_Config.szOutputPath) == false)
+                if (util::MakeFullPath(this->m_Config.szOutputPath) == false)
                 {
                     this->m_Config.Log->Log(L"[Error] Failed to create output path: " + this->m_Config.szOutputPath);
                     return false;
@@ -354,9 +354,9 @@ public:
             }
             else
             {
-                std::wstring szFile = util::Utilities::GetFileName(this->m_Config.szOutputPath);
+                std::wstring szFile = util::GetFileName(this->m_Config.szOutputPath);
                 std::wstring szOutputPath = this->m_Config.szOutputPath.substr(0, this->m_Config.szOutputPath.length() - szFile.length());
-                if (util::Utilities::MakeFullPath(szOutputPath) == false)
+                if (util::MakeFullPath(szOutputPath) == false)
                 {
                     this->m_Config.Log->Log(L"[Error] Failed to create output path: " + szOutputPath);
                     return false;
