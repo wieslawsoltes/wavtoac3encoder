@@ -16,13 +16,14 @@ namespace dialogs
     public:
         config::CConfiguration * pConfig;
     protected:
-        void SetBuildInfo();
         void InitLang();
     protected:
         DECLARE_MESSAGE_MAP()
     public:
-        controls::CMyStatic m_StcLicense;
-        controls::CMyStatic m_StcBuildInfo;
         controls::CMyButton m_BtnOK;
+        controls::CMyStatic m_StcMainAppName;
+        controls::CMyHyperlink m_StcWebsite;
+        controls::CMyHyperlink m_StcEmail;
+        controls::CMyStatic m_StcLicense;
     };
 }

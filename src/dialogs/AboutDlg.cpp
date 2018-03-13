@@ -18,7 +18,9 @@ namespace dialogs
     {
         CMyDialogEx::DoDataExchange(pDX);
         DDX_Control(pDX, IDOK, m_BtnOK);
-        DDX_Control(pDX, IDC_STATIC_BUILD_INFO, m_StcBuildInfo);
+        DDX_Control(pDX, IDC_STATIC_TEXT_APP_NAME, m_StcMainAppName);
+        DDX_Control(pDX, IDC_STATIC_TEXT_WEBSITE, m_StcWebsite);
+        DDX_Control(pDX, IDC_STATIC_TEXT_EMAIL, m_StcEmail);
         DDX_Control(pDX, IDC_STATIC_LICENSE, m_StcLicense);
     }
 
@@ -28,34 +30,17 @@ namespace dialogs
     BOOL CAboutDlg::OnInitDialog()
     {
         CMyDialogEx::OnInitDialog();
-        SetBuildInfo();
-        InitLang();
-        return TRUE;
-    }
 
-    void CAboutDlg::SetBuildInfo()
-    {
-        CString szBuildInfo = _T("");
-        szBuildInfo.Format(_T("%s %s,"), this->pConfig->GetString(0x00901004).c_str(), _T(VER_FILE_VERSION_SHORT_STR));
-#if defined(_WIN32) & !defined(_WIN64)
-        szBuildInfo += _T(" x86, Win32");
-#else
-        szBuildInfo += _T(" AMD64, Win64");
-#endif
-#if defined(_UNICODE)
-        szBuildInfo += _T(" Unicode");
-#else
-        szBuildInfo += _T(" Ansi");
-#endif
-#if defined(_DEBUG)
-        szBuildInfo += _T(" DEBUG");
-#endif
-        szBuildInfo += _T(", ");
-        szBuildInfo += __DATE__;
-        szBuildInfo += _T(" ");
-        szBuildInfo += __TIME__;
-        szBuildInfo += this->pConfig->m_bIsPortable ? _T(" (Portable)") : _T(" (Roaming)");
-        this->m_StcBuildInfo.SetWindowText(szBuildInfo);
+        m_StcMainAppName.SetBold(true);
+        m_StcMainAppName.SetWindowText(_T(VER_PRODUCTNAME_STR " v" VER_FILE_VERSION_SHORT_STR " " VER_COPYRIGHT_STR));
+        m_StcWebsite.SetWindowText(_T("https://github.com/wieslawsoltes/wavtoac3encoder"));
+        m_StcWebsite.SetTargetUrl(_T("https://github.com/wieslawsoltes/wavtoac3encoder"));
+        m_StcEmail.SetWindowText(_T("wieslaw.soltes@gmail.com"));
+        m_StcEmail.SetTargetUrl(_T("mailto:wieslaw.soltes@gmail.com"));
+
+        InitLang();
+
+        return TRUE;
     }
 
     void CAboutDlg::InitLang()

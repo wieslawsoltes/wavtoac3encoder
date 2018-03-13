@@ -24,14 +24,13 @@
 #define IDC_STATIC_IN_INFO_01           1010
 #define IDC_STATIC_ELAPSED_CURRENT      1011
 #define IDC_SLIDER_BITRATE              1012
-#define IDC_STATIC_IN_00                1014
-#define IDC_STATIC_OUT_INFO             1015
-#define IDC_BUTTON_PRESETS_DEFAULTS     1016
-#define IDC_STATIC_IN_INFO_00           1018
-#define IDC_STATIC_ELAPSED_TOTAL        1019
-#define IDC_CHECK_VBR                   1020
-#define IDC_STATIC_IN_02                1022
-#define IDC_STATIC_LICENSE              1024
+#define IDC_STATIC_IN_00                1013
+#define IDC_STATIC_OUT_INFO             1014
+#define IDC_BUTTON_PRESETS_DEFAULTS     1015
+#define IDC_STATIC_IN_INFO_00           1016
+#define IDC_STATIC_ELAPSED_TOTAL        1017
+#define IDC_CHECK_VBR                   1018
+#define IDC_STATIC_IN_02                1019
 #define IDC_STATIC_IN_INFO_02           1025
 #define IDC_STATIC_BITRATE              1026
 #define IDC_STATIC_IN_03                1027
@@ -114,6 +113,10 @@
 #define IDC_STATIC_TEXT_ENGINE_NAME     1111
 #define IDC_STATIC_TEXT_ENGINE_PATH     1112
 #define IDC_STATIC_TEXT_CHANNEL_CONFIG  1113
+#define IDC_STATIC_TEXT_APP_NAME        1120
+#define IDC_STATIC_TEXT_WEBSITE         1121
+#define IDC_STATIC_TEXT_EMAIL           1122
+#define IDC_STATIC_LICENSE              1123
 #define ID_LIST_ADDFILES                32771
 #define ID_LIST_ADDDIRECTORY            32772
 #define ID_LIST_DELFILES                32773
@@ -145,7 +148,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32822
-#define _APS_NEXT_CONTROL_VALUE         1114
+#define _APS_NEXT_CONTROL_VALUE         1130
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif

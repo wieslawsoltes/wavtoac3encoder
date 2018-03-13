@@ -229,15 +229,18 @@ BEGIN
     PUSHBUTTON      "&OK",IDOK,311,160,50,14
 END
 
-IDD_DIALOG_ABOUT DIALOGEX 0, 0, 349, 74
+IDD_DIALOG_ABOUT DIALOGEX 0, 0, 383, 116
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "About WAV to AC3 Encoder"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    PUSHBUTTON      "&OK",IDOK,292,53,50,14
-    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,53,7,243,23
-    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,42,335,2,WS_EX_CLIENTEDGE | WS_EX_STATICEDGE
-    LTEXT           "",IDC_STATIC_BUILD_INFO,7,53,278,14,SS_CENTERIMAGE | WS_DISABLED
+    ICON            IDR_MAINFRAME,IDC_STATIC,7,7,20,20
+    CTEXT           "Application Name",IDC_STATIC_TEXT_APP_NAME,35,7,332,20,SS_CENTERIMAGE
+    CTEXT           "Website",IDC_STATIC_TEXT_WEBSITE,35,27,332,12,SS_CENTERIMAGE
+    CTEXT           "E-mail",IDC_STATIC_TEXT_EMAIL,35,41,332,12,SS_CENTERIMAGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ | SS_SUNKEN,7,90,368,1,WS_EX_STATICEDGE
+    CTEXT           "This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; version 2 of the License.",IDC_STATIC_LICENSE,7,58,368,23
+    PUSHBUTTON      "&OK",IDOK,315,97,60,12
 END
 
 
@@ -375,10 +378,13 @@ END
 IDD_DIALOG_ABOUT AFX_DIALOG_LAYOUT
 BEGIN
     0,
-    100, 100, 0, 0,
+    0, 0, 0, 0,
+    50, 50, 0, 0,
+    50, 50, 0, 0,
     50, 50, 0, 0,
     0, 100, 100, 0,
-    0, 100, 100, 0
+    50, 50, 0, 0,
+    100, 100, 0, 0
 END
 
 IDD_DIALOG_ENGINES AFX_DIALOG_LAYOUT
