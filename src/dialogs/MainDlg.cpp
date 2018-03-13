@@ -76,7 +76,7 @@ namespace dialogs
         ON_COMMAND(ID_FILE_SAVEFILESLIST, &CMainDlg::OnFileSaveFilesList)
         ON_COMMAND(ID_FILE_EXIT, &CMainDlg::OnFileExit)
         ON_COMMAND(ID_OPTIONS_DISABLEALLWARNINGS, &CMainDlg::OnOptionsDisableAllWarnings)
-        ON_COMMAND(ID_OPTIONS_SAVECONFIGURATIONONEXIT, &CMainDlg::OnOptionsSaveConfigurationOnExit)
+        ON_COMMAND(ID_OPTIONS_SAVEONEXIT, &CMainDlg::OnOptionsSaveConfigurationOnExit)
         ON_COMMAND(ID_OPTIONS_SAVECONFIGURATION, &CMainDlg::OnOptionsSaveConfiguration)
         ON_COMMAND(ID_OPTIONS_LOADCONFIGURATION, &CMainDlg::OnOptionsLoadConfiguration)
         ON_COMMAND(ID_LANGUAGE_DEFAULT, &CMainDlg::OnLanguageChangeDefault)
@@ -300,7 +300,7 @@ namespace dialogs
 
         m_hMenu->ModifyMenuW(1, MF_STRING | MF_BYPOSITION, 1, this->pConfig->GetString(0x00102001).c_str());
         m_hMenu->ModifyMenuW(ID_OPTIONS_DISABLEALLWARNINGS, 0, ID_OPTIONS_DISABLEALLWARNINGS, this->pConfig->GetString(0x00102002).c_str());
-        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATIONONEXIT, 0, ID_OPTIONS_SAVECONFIGURATIONONEXIT, this->pConfig->GetString(0x00102003).c_str());
+        m_hMenu->ModifyMenuW(ID_OPTIONS_SAVEONEXIT, 0, ID_OPTIONS_SAVEONEXIT, this->pConfig->GetString(0x00102003).c_str());
         m_hMenu->ModifyMenuW(ID_OPTIONS_LOADCONFIGURATION, 0, ID_OPTIONS_LOADCONFIGURATION, this->pConfig->GetString(0x00102004).c_str());
         m_hMenu->ModifyMenuW(ID_OPTIONS_SAVECONFIGURATION, 0, ID_OPTIONS_SAVECONFIGURATION, this->pConfig->GetString(0x00102005).c_str());
 
@@ -314,7 +314,7 @@ namespace dialogs
         m_hMenu->CheckMenuItem(ID_OPTIONS_DISABLEALLWARNINGS,
             this->pConfig->bDisableAllWarnings ? MF_CHECKED : MF_UNCHECKED);
 
-        m_hMenu->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
+        m_hMenu->CheckMenuItem(ID_OPTIONS_SAVEONEXIT,
             this->pConfig->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
         this->DrawMenuBar();
@@ -565,7 +565,7 @@ namespace dialogs
         this->m_SpnThreads.SetRange32(0, INT_MAX);
         this->m_SpnThreads.SetPos(0);
 
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
+        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVEONEXIT,
             this->pConfig->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
 
         if (this->pConfig->bMultiMonoInput == true)
@@ -1008,17 +1008,17 @@ namespace dialogs
                 if (entry.second == L"true")
                 {
                     this->pConfig->bSaveConfig = true;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVEONEXIT, MF_CHECKED);
                 }
                 else if (entry.second == L"false")
                 {
                     this->pConfig->bSaveConfig = false;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_UNCHECKED);
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVEONEXIT, MF_UNCHECKED);
                 }
                 else
                 {
                     this->pConfig->bSaveConfig = true;
-                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT, MF_CHECKED);
+                    this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVEONEXIT, MF_CHECKED);
                 }
             }
         }
@@ -2006,7 +2006,7 @@ namespace dialogs
     void CMainDlg::OnOptionsSaveConfigurationOnExit()
     {
         this->pConfig->bSaveConfig = this->pConfig->bSaveConfig ? false : true;
-        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVECONFIGURATIONONEXIT,
+        this->GetMenu()->CheckMenuItem(ID_OPTIONS_SAVEONEXIT,
             this->pConfig->bSaveConfig ? MF_CHECKED : MF_UNCHECKED);
     }
 
