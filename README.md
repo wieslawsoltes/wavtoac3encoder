@@ -22,8 +22,8 @@ WAV to AC3 Encoder an audio encoder which generates compressed audio streams bas
 
 | Platforn              | Type        | Version       | Download                                                                                                                                     |
 |-----------------------|-------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows 32-bit        | Portable    | 8.0           | [EncWAVtoAC3.CLI-8.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/8.0/EncWAVtoAC3-8.0-Win32.zip)                |
-| Windows 64-bit        | Portable    | 8.0           | [EncWAVtoAC3.CLI-8.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/8.0/EncWAVtoAC3-8.0-x64.zip)                    |
+| Windows 32-bit        | Portable    | 8.0           | [EncWAVtoAC3.CLI-8.0-Win32.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/8.0/EncWAVtoAC3.CLI-8.0-Win32.zip)                |
+| Windows 64-bit        | Portable    | 8.0           | [EncWAVtoAC3.CLI-8.0-x64.zip](https://github.com/wieslawsoltes/wavtoac3encoder/releases/download/8.0/EncWAVtoAC3.CLI-8.0-x64.zip)                    |
 
 ### Components
 
