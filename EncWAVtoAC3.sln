@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncWAVtoAC3", "src\EncWAVto
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Controls", "src\common\controls\MFC.Controls.vcxproj", "{5936EB01-037A-4148-A512-DAD975C24CBD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC.Utilities", "src\common\utilities\MFC.Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utilities", "src\common\utilities\Utilities.vcxproj", "{4B291D95-C2CA-49E3-9EB5-B9F855D32AA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7CDF6463-5B5E-4710-8584-85429C2088B7}"
 EndProject
